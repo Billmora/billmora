@@ -36,6 +36,7 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('tabler-arrow-back')
                     ->sort(24),
             ])
+            ->sidebarFullyCollapsibleOnDesktop()
             ->colors([
                 'primary' => Color::Blue,
             ])
