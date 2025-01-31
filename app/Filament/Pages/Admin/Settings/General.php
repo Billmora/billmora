@@ -244,7 +244,7 @@ class General extends Page
                                 ->searchable()
                                 ->native(false)
                                 ->required()
-                                ->helperText('Default country for your Company.'),
+                                ->helperText('Country where your company is located.'),
                         ])
                 ]),
 
