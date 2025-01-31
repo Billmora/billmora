@@ -77,13 +77,13 @@ class General extends Page
             'company_maintenance' => null,
             'company_maintenance_url' => null,
             'company_maintenance_message' => 'We are currently performing maintenance and will be back shortly.',
-            'term_tos' => null,
+            'term_tos' => false,
             'term_tos_url' => null,
             'term_tos_content' => null,
-            'term_toc' => null,
+            'term_toc' => false,
             'term_toc_url' => null,
             'term_toc_content' => null,
-            'term_privacy' => null,
+            'term_privacy' => false,
             'term_privacy_url' => null,
             'term_privacy_content' => null,
             'social_discord' => null,
@@ -102,7 +102,19 @@ class General extends Page
         $settings = Setting::pluck('value', 'key');
     
         foreach ($defaults as $key => $defaultValue) {
-            $this->$key = $settings[$key] ?? $defaultValue;
+            $value = $settings[$key] ?? $defaultValue;
+
+            if (is_bool($defaultValue)) {
+                $this->$key = (bool) $value;
+            } elseif (is_int($defaultValue)) {
+                $this->$key = (int) $value;
+            } elseif (is_float($defaultValue)) {
+                $this->$key = (float) $value;
+            } elseif (is_null($defaultValue)) {
+                $this->$key = $value !== null ? $value : null;
+            } else {
+                $this->$key = $value;
+            }
         }
     }    
 
@@ -226,6 +238,8 @@ class General extends Page
                                     Forms\Components\Toggle::make('company_maintenance')
                                         ->label('Maintenance Mode')
                                         ->inline(false)
+                                        ->onIcon('tabler-check')
+                                        ->offIcon('tabler-x')
                                         ->onColor('success')
                                         ->offColor('danger')
                                         ->helperText('Prevents client area access when enabled.'),
@@ -255,6 +269,8 @@ class General extends Page
                             Forms\Components\Toggle::make('term_tos')
                                 ->label('Terms of Service')
                                 ->inline(false)
+                                ->onIcon('tabler-check')
+                                ->offIcon('tabler-x')
                                 ->onColor('success')
                                 ->offColor('danger')
                                 ->helperText('Enable to show the page at: https://example.com/terms-of-service.'),
@@ -286,6 +302,8 @@ class General extends Page
                             Forms\Components\Toggle::make('term_toc')
                                 ->label('Terms of Condition')
                                 ->inline(false)
+                                ->onIcon('tabler-check')
+                                ->offIcon('tabler-x')
                                 ->onColor('success')
                                 ->offColor('danger')
                                 ->helperText('Enable to show the page at: https://example.com/terms-of-condition.'),
@@ -318,6 +336,8 @@ class General extends Page
                             Forms\Components\Toggle::make('term_privacy')
                                 ->label('Privacy Policy')
                                 ->inline(false)
+                                ->onIcon('tabler-check')
+                                ->offIcon('tabler-x')
                                 ->onColor('success')
                                 ->offColor('danger')
                                 ->helperText('Enable to show the page at: https://example.com/privacy-policy.'),
