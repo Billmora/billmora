@@ -240,20 +240,7 @@ class General extends Page
                                 ->helperText('Default language for Billmora clientarea.'),
                             Forms\Components\Select::make('company_country')
                                 ->label('Country')
-                                ->options(function () {
-                                    $client = new Client();
-                                    $response = $client->get('https://restcountries.com/v3.1/all');
-                                    $countries = json_decode($response->getBody()->getContents(), true);
-                
-                                    $options = [];
-                                    foreach ($countries as $country) {
-                                        $options[$country['cca2']] = $country['name']['common'];
-                                    }
-
-                                    asort($options);
-                
-                                    return $options;
-                                })
+                                ->options(config('utils.countries'))
                                 ->searchable()
                                 ->native(false)
                                 ->required()
