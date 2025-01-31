@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
         $settings = Setting::pluck('value', 'key')->toArray();
 
         foreach ($settings as $key => $value) {
-            config([$key => $value]);
+            config(["general.$key" => $value]);
         }
     }
 }
