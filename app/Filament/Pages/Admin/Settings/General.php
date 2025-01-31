@@ -122,7 +122,7 @@ class General extends Page
             'ordering_address1' => null,
             'ordering_address2' => null,
             'ordering_city' => null,
-            'ordering_country' => null,
+            'ordering_country' => 'ID',
             'ordering_state' => null,
             'ordering_postcode' => null,
         ];
@@ -321,8 +321,10 @@ class General extends Page
                                 ->label('Street Address 2'),
                             Forms\Components\TextInput::make('ordering_city')
                                 ->label('City'),
-                            Forms\Components\TextInput::make('ordering_country')
-                                ->label('Country'),
+                            Forms\Components\Select::make('ordering_country')
+                                ->label('Country')
+                                ->options(config('utils.countries'))
+                                ->searchable(),
                             Forms\Components\Grid::make(2)
                                 ->schema([
                                     Forms\Components\TextInput::make('ordering_state')
