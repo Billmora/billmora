@@ -31,15 +31,26 @@ class General extends Page
         $company_maintenance, 
         $company_maintenance_url, 
         $company_maintenance_message,
-        $company_tos,
-        $company_tos_url,
-        $company_tos_content,
-        $company_toc,
-        $company_toc_url,
-        $company_toc_content,
-        $company_privacy,
-        $company_privacy_url,
-        $company_privacy_content;
+        $term_tos,
+        $term_tos_url,
+        $term_tos_content,
+        $term_toc,
+        $term_toc_url,
+        $term_toc_content,
+        $term_privacy,
+        $term_privacy_url,
+        $term_privacy_content,
+        $social_discord,
+        $social_youtube,
+        $social_whatsapp,
+        $social_instagram,
+        $social_facebook,
+        $social_twitter,
+        $social_linkedin,
+        $social_github,
+        $social_reddit,
+        $social_skype,
+        $social_telegram;
 
     public static function getNavigationItems(): array
     {
@@ -66,15 +77,26 @@ class General extends Page
             'company_maintenance' => null,
             'company_maintenance_url' => null,
             'company_maintenance_message' => 'We are currently performing maintenance and will be back shortly.',
-            'company_tos' => null,
-            'company_tos_url' => null,
-            'company_tos_content' => null,
-            'company_toc' => null,
-            'company_toc_url' => null,
-            'company_toc_content' => null,
-            'company_privacy' => null,
-            'company_privacy_url' => null,
-            'company_privacy_content' => null,
+            'term_tos' => null,
+            'term_tos_url' => null,
+            'term_tos_content' => null,
+            'term_toc' => null,
+            'term_toc_url' => null,
+            'term_toc_content' => null,
+            'term_privacy' => null,
+            'term_privacy_url' => null,
+            'term_privacy_content' => null,
+            'social_discord' => null,
+            'social_youtube' => null,
+            'social_whatsapp' => null,
+            'social_instagram' => null,
+            'social_facebook' => null,
+            'social_twitter' => null,
+            'social_linkedin' => null,
+            'social_github' => null,
+            'social_reddit' => null,
+            'social_skype' => null,
+            'social_telegram' => null,
         ];
     
         $settings = Setting::pluck('value', 'key');
@@ -98,6 +120,10 @@ class General extends Page
                         ->label('Term')
                         ->icon('tabler-circle-dashed-check')
                         ->schema($this->tabTerm()),
+                    Forms\Components\Tabs\Tab::make('social')
+                        ->label('Social')
+                        ->icon('tabler-social')
+                        ->schema($this->tabSocial()),
                 ]),
         ];
     }
@@ -226,20 +252,20 @@ class General extends Page
                 ->schema([
                     Forms\Components\Grid::make(2)
                         ->schema([
-                            Forms\Components\Toggle::make('company_tos')
+                            Forms\Components\Toggle::make('term_tos')
                                 ->label('Terms of Service')
                                 ->inline(false)
                                 ->onColor('success')
                                 ->offColor('danger')
                                 ->helperText('Enable to show the page at: https://example.com/terms-of-service.'),
-                            Forms\Components\TextInput::make('company_tos_url')
+                            Forms\Components\TextInput::make('term_tos_url')
                                 ->label('Terms of Service URL')
                                 ->suffixIcon('tabler-world')
                                 ->helperText('If specified, clients will be redirected to that URL when they want reading.'),
                         ]),
                     Forms\Components\Grid::make(1)
                         ->schema([
-                            Forms\Components\RichEditor::make('company_tos_content')
+                            Forms\Components\RichEditor::make('term_tos_content')
                                 ->label('Terms of Service Content')
                                 ->disableToolbarButtons([
                                     'attachFiles',
@@ -257,20 +283,20 @@ class General extends Page
                 ->schema([
                     Forms\Components\Grid::make(2)
                         ->schema([
-                            Forms\Components\Toggle::make('company_toc')
+                            Forms\Components\Toggle::make('term_toc')
                                 ->label('Terms of Condition')
                                 ->inline(false)
                                 ->onColor('success')
                                 ->offColor('danger')
                                 ->helperText('Enable to show the page at: https://example.com/terms-of-condition.'),
-                            Forms\Components\TextInput::make('company_toc_url')
+                            Forms\Components\TextInput::make('term_toc_url')
                                 ->label('Terms of Condition URL')
                                 ->suffixIcon('tabler-world')
                                 ->helperText('If specified, clients will be redirected to that URL when they want reading.'),
                         ]),
                     Forms\Components\Grid::make(1)
                         ->schema([
-                            Forms\Components\RichEditor::make('company_toc_content')
+                            Forms\Components\RichEditor::make('term_toc_content')
                                 ->label('Terms of Condition Content')
                                 ->disableToolbarButtons([
                                     'attachFiles',
@@ -289,20 +315,20 @@ class General extends Page
                 ->schema([
                     Forms\Components\Grid::make(2)
                         ->schema([
-                            Forms\Components\Toggle::make('company_privacy')
+                            Forms\Components\Toggle::make('term_privacy')
                                 ->label('Privacy Policy')
                                 ->inline(false)
                                 ->onColor('success')
                                 ->offColor('danger')
                                 ->helperText('Enable to show the page at: https://example.com/privacy-policy.'),
-                            Forms\Components\TextInput::make('company_privacy_url')
+                            Forms\Components\TextInput::make('term_privacy_url')
                                 ->label('Privacy Policy URL')
                                 ->suffixIcon('tabler-world')
                                 ->helperText('If specified, clients will be redirected to that URL when they want reading.'),
                         ]),
                     Forms\Components\Grid::make(1)
                         ->schema([
-                            Forms\Components\RichEditor::make('company_privacy_content')
+                            Forms\Components\RichEditor::make('term_privacy_content')
                                 ->label('Privacy Policy Content')
                                 ->disableToolbarButtons([
                                     'attachFiles',
@@ -319,6 +345,59 @@ class General extends Page
         ];
     }
 
+    private function tabSocial()
+    {
+        return [
+            Forms\Components\Grid::make(1)
+                ->schema([  
+                    Forms\Components\TextInput::make('social_discord')
+                        ->label('Discord')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel(),
+                    Forms\Components\TextInput::make('social_youtube')
+                        ->label('YouTube')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel(),
+                    Forms\Components\TextInput::make('social_whatsapp')
+                        ->label('WhatsApp')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel(),
+                    Forms\Components\TextInput::make('social_instagram')
+                        ->label('Instagram')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel(),
+                    Forms\Components\TextInput::make('social_facebook')
+                        ->label('Facebook')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel(),
+                    Forms\Components\TextInput::make('social_twitter')
+                        ->label('Twitter')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel(),
+                    Forms\Components\TextInput::make('social_linkedin')
+                        ->label('LinkedIn')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel(),
+                    Forms\Components\TextInput::make('social_github')
+                        ->label('GitHub')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel(),
+                    Forms\Components\TextInput::make('social_reddit')
+                        ->label('Reddit')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel(),
+                    Forms\Components\TextInput::make('social_skype')
+                        ->label('Skype')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel(),
+                    Forms\Components\TextInput::make('social_telegram')
+                        ->label('Telegram')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel(),
+                    
+                ]),
+        ];
+    }
     
     public function save()
     {
@@ -335,15 +414,26 @@ class General extends Page
                 'company_maintenance' => 'nullable|boolean',
                 'company_maintenance_url' => 'nullable|url',
                 'company_maintenance_message' => 'nullable|string|max:255',
-                'company_tos' => 'nullable|boolean',
-                'company_tos_url' => 'nullable|url',
-                'company_tos_content' => 'nullable',
-                'company_toc' => 'nullable|boolean',
-                'company_toc_url' => 'nullable|url',
-                'company_toc_content' => 'nullable',
-                'company_privacy' => 'nullable|boolean',
-                'company_privacy_url' => 'nullable|url',
-                'company_privacy_content' => 'nullable',
+                'term_tos' => 'nullable|boolean',
+                'term_tos_url' => 'nullable|url',
+                'term_tos_content' => 'nullable',
+                'term_toc' => 'nullable|boolean',
+                'term_toc_url' => 'nullable|url',
+                'term_toc_content' => 'nullable',
+                'term_privacy' => 'nullable|boolean',
+                'term_privacy_url' => 'nullable|url',
+                'term_privacy_content' => 'nullable',
+                'social_discord' => 'nullable|url',
+                'social_youtube' => 'nullable|url',
+                'social_whatsapp' => 'nullable|url',
+                'social_instagram' => 'nullable|url',
+                'social_facebook' => 'nullable|url',
+                'social_twitter' => 'nullable|url',
+                'social_linkedin' => 'nullable|url',
+                'social_github' => 'nullable|url',
+                'social_reddit' => 'nullable|url',
+                'social_skype' => 'nullable|url',
+                'social_telegram' => 'nullable|url',
             ]);
     
             collect($validated)->each(function ($value, $key) {
