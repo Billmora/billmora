@@ -19,7 +19,27 @@ class General extends Page
     protected static ?string $slug = 'settings/general';
     protected ?string $subheading = 'Configure a general settings.';
 
-    public $company_name, $company_theme, $company_logo, $company_favicon, $company_description, $company_date_format, $company_language, $company_country, $company_maintenance, $company_maintenance_url, $company_maintenance_message;
+    public 
+        $company_name, 
+        $company_theme, 
+        $company_logo, 
+        $company_favicon, 
+        $company_description, 
+        $company_date_format, 
+        $company_language, 
+        $company_country, 
+        $company_maintenance, 
+        $company_maintenance_url, 
+        $company_maintenance_message,
+        $company_tos,
+        $company_tos_url,
+        $company_tos_content,
+        $company_toc,
+        $company_toc_url,
+        $company_toc_content,
+        $company_privacy,
+        $company_privacy_url,
+        $company_privacy_content;
 
     public static function getNavigationItems(): array
     {
@@ -46,6 +66,15 @@ class General extends Page
             'company_maintenance' => null,
             'company_maintenance_url' => null,
             'company_maintenance_message' => 'We are currently performing maintenance and will be back shortly.',
+            'company_tos' => null,
+            'company_tos_url' => null,
+            'company_tos_content' => null,
+            'company_toc' => null,
+            'company_toc_url' => null,
+            'company_toc_content' => null,
+            'company_privacy' => null,
+            'company_privacy_url' => null,
+            'company_privacy_content' => null,
         ];
     
         $settings = Setting::pluck('value', 'key');
@@ -65,6 +94,10 @@ class General extends Page
                         ->label('Company')
                         ->icon('tabler-building')
                         ->schema($this->tabCompany()),
+                    Forms\Components\Tabs\Tab::make('term')
+                        ->label('Term')
+                        ->icon('tabler-circle-dashed-check')
+                        ->schema($this->tabTerm()),
                 ]),
         ];
     }
@@ -107,6 +140,7 @@ class General extends Page
                             Forms\Components\Textarea::make('company_description')
                                 ->label('Description')
                                 ->rows(3)
+                                ->helperText('The description of your Company.'),
                         ]),
                     Forms\Components\Grid::make(3)
                         ->schema([
@@ -185,6 +219,106 @@ class General extends Page
         ];
     }
 
+    private function tabTerm()
+    {
+        return [
+            Forms\Components\Section::make()
+                ->schema([
+                    Forms\Components\Grid::make(2)
+                        ->schema([
+                            Forms\Components\Toggle::make('company_tos')
+                                ->label('Terms of Service')
+                                ->inline(false)
+                                ->onColor('success')
+                                ->offColor('danger')
+                                ->helperText('Enable to show the page at: https://example.com/terms-of-service.'),
+                            Forms\Components\TextInput::make('company_tos_url')
+                                ->label('Terms of Service URL')
+                                ->suffixIcon('tabler-world')
+                                ->helperText('If specified, clients will be redirected to that URL when they want reading.'),
+                        ]),
+                    Forms\Components\Grid::make(1)
+                        ->schema([
+                            Forms\Components\RichEditor::make('company_tos_content')
+                                ->label('Terms of Service Content')
+                                ->disableToolbarButtons([
+                                    'attachFiles',
+                                ])
+                                ->extraAttributes(['x-ref' => 'editor'])
+                                ->hintAction(
+                                    Forms\Components\Actions\Action::make('fullscreen')
+                                        ->icon('tabler-arrows-maximize')
+                                        ->alpineClickHandler('$refs.editor.requestFullscreen()'))
+                                        ->helperText('This content will be displayed at: https://example.com/terms-of-service.'),
+                        ])
+                ]),
+
+            Forms\Components\Section::make()
+                ->schema([
+                    Forms\Components\Grid::make(2)
+                        ->schema([
+                            Forms\Components\Toggle::make('company_toc')
+                                ->label('Terms of Condition')
+                                ->inline(false)
+                                ->onColor('success')
+                                ->offColor('danger')
+                                ->helperText('Enable to show the page at: https://example.com/terms-of-condition.'),
+                            Forms\Components\TextInput::make('company_toc_url')
+                                ->label('Terms of Condition URL')
+                                ->suffixIcon('tabler-world')
+                                ->helperText('If specified, clients will be redirected to that URL when they want reading.'),
+                        ]),
+                    Forms\Components\Grid::make(1)
+                        ->schema([
+                            Forms\Components\RichEditor::make('company_toc_content')
+                                ->label('Terms of Condition Content')
+                                ->disableToolbarButtons([
+                                    'attachFiles',
+                                ])
+                                ->extraAttributes(['x-ref' => 'editor'])
+                                ->hintAction(
+                                    Forms\Components\Actions\Action::make('fullscreen')
+                                        ->icon('tabler-arrows-maximize')
+                                        ->alpineClickHandler('$refs.editor.requestFullscreen()'))
+                                        ->helperText('This content will be displayed at: https://example.com/terms-of-condition.'),
+
+                        ])
+                ]),
+
+            Forms\Components\Section::make()
+                ->schema([
+                    Forms\Components\Grid::make(2)
+                        ->schema([
+                            Forms\Components\Toggle::make('company_privacy')
+                                ->label('Privacy Policy')
+                                ->inline(false)
+                                ->onColor('success')
+                                ->offColor('danger')
+                                ->helperText('Enable to show the page at: https://example.com/privacy-policy.'),
+                            Forms\Components\TextInput::make('company_privacy_url')
+                                ->label('Privacy Policy URL')
+                                ->suffixIcon('tabler-world')
+                                ->helperText('If specified, clients will be redirected to that URL when they want reading.'),
+                        ]),
+                    Forms\Components\Grid::make(1)
+                        ->schema([
+                            Forms\Components\RichEditor::make('company_privacy_content')
+                                ->label('Privacy Policy Content')
+                                ->disableToolbarButtons([
+                                    'attachFiles',
+                                ])
+                                ->extraAttributes(['x-ref' => 'editor'])
+                                ->hintAction(
+                                    Forms\Components\Actions\Action::make('fullscreen')
+                                        ->icon('tabler-arrows-maximize')
+                                        ->alpineClickHandler('$refs.editor.requestFullscreen()'))
+                                        ->helperText('This content will be displayed at: https://example.com/privacy-policy.'),
+
+                        ])
+                ]),
+        ];
+    }
+
     
     public function save()
     {
@@ -201,6 +335,15 @@ class General extends Page
                 'company_maintenance' => 'nullable|boolean',
                 'company_maintenance_url' => 'nullable|url',
                 'company_maintenance_message' => 'nullable|string|max:255',
+                'company_tos' => 'nullable|boolean',
+                'company_tos_url' => 'nullable|url',
+                'company_tos_content' => 'nullable',
+                'company_toc' => 'nullable|boolean',
+                'company_toc_url' => 'nullable|url',
+                'company_toc_content' => 'nullable',
+                'company_privacy' => 'nullable|boolean',
+                'company_privacy_url' => 'nullable|url',
+                'company_privacy_content' => 'nullable',
             ]);
     
             collect($validated)->each(function ($value, $key) {
