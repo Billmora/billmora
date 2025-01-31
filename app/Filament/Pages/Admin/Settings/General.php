@@ -127,7 +127,7 @@ class General extends Page
             'ordering_postcode' => null,
         ];
     
-        $settings = Setting::pluck('value', 'key')->toArray();
+        $settings = Setting::pluck('value', 'key');
     
         foreach ($defaults as $key => $defaultValue) {
             $value = $settings[$key] ?? $defaultValue;
