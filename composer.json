@@ -12,7 +12,8 @@
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.5",
-        "secondnetwork/blade-tabler-icons": "^3.29"
+        "secondnetwork/blade-tabler-icons": "^3.29",
+        "ysfkaya/filament-phone-input": "^3.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14",

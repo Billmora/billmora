@@ -11,6 +11,8 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Request;
 use Locale;
+use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
+use Ysfkaya\FilamentPhoneInput\PhoneInputNumberType;
 
 class General extends Page
 {
@@ -50,7 +52,20 @@ class General extends Page
         $social_github,
         $social_reddit,
         $social_skype,
-        $social_telegram;
+        $social_telegram,
+        $ordering_tos,
+        $ordering_notes,
+        $ordering_firstname,
+        $ordering_lastname,
+        $ordering_email,
+        $ordering_phone,
+        $ordering_company,
+        $ordering_address1,
+        $ordering_address2,
+        $ordering_city,
+        $ordering_country,
+        $ordering_state,
+        $ordering_postcode;
 
     public static function getNavigationItems(): array
     {
@@ -97,6 +112,19 @@ class General extends Page
             'social_reddit' => null,
             'social_skype' => null,
             'social_telegram' => null,
+            'ordering_tos' => false,
+            'ordering_notes' => false,
+            'ordering_firstname' => null,
+            'ordering_lastname' => null,
+            'ordering_email' => null,
+            'ordering_phone' => null,
+            'ordering_company' => null,
+            'ordering_address1' => null,
+            'ordering_address2' => null,
+            'ordering_city' => null,
+            'ordering_country' => null,
+            'ordering_state' => null,
+            'ordering_postcode' => null,
         ];
     
         $settings = Setting::pluck('value', 'key');
@@ -128,6 +156,10 @@ class General extends Page
                         ->label('Company')
                         ->icon('tabler-building')
                         ->schema($this->tabCompany()),
+                    Forms\Components\Tabs\Tab::make('ordering')
+                        ->label('Ordering')
+                        ->icon('tabler-truck-delivery')
+                        ->schema($this->tabOrdering()),
                     Forms\Components\Tabs\Tab::make('term')
                         ->label('Term')
                         ->icon('tabler-circle-dashed-check')
@@ -256,6 +288,64 @@ class General extends Page
                                 ->helperText('The message that will be displayed when Maintenance is enabled.'),
                         ]),
                 ]),
+        ];
+    }
+
+    private function tabOrdering()
+    {
+        return [
+            Forms\Components\Grid::make(2)
+                ->schema([
+                    Forms\Components\Toggle::make('ordering_tos')
+                        ->label('Terms of Service')
+                        ->inline(false)
+                        ->onIcon('tabler-check')
+                        ->offIcon('tabler-x')
+                        ->onColor('success')
+                        ->offColor('danger')
+                        ->helperText('If enable, clients must agree to company Terms of Service.'),
+                    Forms\Components\Toggle::make('ordering_notes')
+                        ->label('Notes on Checkout')
+                        ->inline(false)
+                        ->onIcon('tabler-check')
+                        ->offIcon('tabler-x')
+                        ->onColor('success')
+                        ->offColor('danger')
+                        ->helperText('If enable, clients can enter additional info on the order form.'),
+                ]),
+            Forms\Components\Section::make('Default Billing or Contact details')
+                ->schema([
+                    Forms\Components\Grid::make(2)
+                        ->schema([
+                            Forms\Components\TextInput::make('ordering_firstname')
+                                ->label('First Name'),
+                            Forms\Components\TextInput::make('ordering_lastname')
+                                ->label('Last Name'),
+                            Forms\Components\TextInput::make('ordering_email')
+                                ->label('Email Address'),
+                            PhoneInput::make('ordering_phone')
+                                ->label('Phone Number')
+                                ->displayNumberFormat(PhoneInputNumberType::E164),
+                            Forms\Components\TextInput::make('ordering_company')
+                                ->label('Company Name'),
+                            Forms\Components\TextInput::make('ordering_address1')
+                                ->label('Street Address 1'),
+                            Forms\Components\TextInput::make('ordering_address2')
+                                ->label('Street Address 2'),
+                            Forms\Components\TextInput::make('ordering_city')
+                                ->label('City'),
+                            Forms\Components\TextInput::make('ordering_country')
+                                ->label('Country'),
+                            Forms\Components\Grid::make(2)
+                                ->schema([
+                                    Forms\Components\TextInput::make('ordering_state')
+                                        ->label('State/Region'),
+                                    Forms\Components\TextInput::make('ordering_postcode')
+                                        ->label('Postcode'),
+                                ])
+                                ->columnSpan(1),
+                        ]),
+                ])
         ];
     }
 
@@ -454,6 +544,19 @@ class General extends Page
                 'social_reddit' => 'nullable|url',
                 'social_skype' => 'nullable|url',
                 'social_telegram' => 'nullable|url',
+                'ordering_tos' => 'nullable|boolean',
+                'ordering_notes' => 'nullable|boolean',
+                'ordering_firstname' => 'nullable|string',
+                'ordering_lastname' => 'nullable|string',
+                'ordering_email' => 'nullable|email',
+                'ordering_phone' => 'nullable|string',
+                'ordering_company' => 'nullable|string',
+                'ordering_address1' => 'nullable|string',
+                'ordering_address2' => 'nullable|string',
+                'ordering_city' => 'nullable|string',
+                'ordering_country' => 'nullable|string',
+                'ordering_state' => 'nullable|string',
+                'ordering_postcode' => 'nullable|string',
             ]);
     
             collect($validated)->each(function ($value, $key) {
