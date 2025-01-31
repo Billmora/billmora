@@ -127,7 +127,7 @@ class General extends Page
             'ordering_postcode' => null,
         ];
     
-        $settings = Setting::pluck('value', 'key');
+        $settings = Setting::pluck('value', 'key')->toArray();
     
         foreach ($defaults as $key => $defaultValue) {
             $value = $settings[$key] ?? $defaultValue;
@@ -144,7 +144,7 @@ class General extends Page
                 $this->$key = $value;
             }
         }
-    }    
+    }
 
     protected function getFormSchema(): array
     {
@@ -312,7 +312,7 @@ class General extends Page
                                 ->label('Email Address'),
                             PhoneInput::make('ordering_phone')
                                 ->label('Phone Number')
-                                ->displayNumberFormat(PhoneInputNumberType::E164),
+                                ->displayNumberFormat(PhoneInputNumberType::NATIONAL),
                             Forms\Components\TextInput::make('ordering_company')
                                 ->label('Company Name'),
                             Forms\Components\TextInput::make('ordering_address1')
@@ -538,7 +538,7 @@ class General extends Page
                 'ordering_firstname' => 'nullable|string',
                 'ordering_lastname' => 'nullable|string',
                 'ordering_email' => 'nullable|email',
-                'ordering_phone' => 'nullable|string',
+                'ordering_phone' => 'nullable|numeric',
                 'ordering_company' => 'nullable|string',
                 'ordering_address1' => 'nullable|string',
                 'ordering_address2' => 'nullable|string',
@@ -547,6 +547,10 @@ class General extends Page
                 'ordering_state' => 'nullable|string',
                 'ordering_postcode' => 'nullable|string',
             ]);
+
+            if (is_null($validated['ordering_phone'])) {
+                $validated['ordering_phone'] = '';
+            }
     
             collect($validated)->each(function ($value, $key) {
                 if (!is_null($value)) {
