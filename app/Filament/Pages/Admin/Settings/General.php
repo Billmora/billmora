@@ -7,8 +7,10 @@ use Filament\Forms;
 use Filament\Pages\Page;
 use Filament\Navigation\NavigationItem;
 use Filament\Notifications\Notification;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Request;
+use Locale;
 
 class General extends Page
 {
@@ -17,7 +19,7 @@ class General extends Page
     protected static ?string $slug = 'settings/general';
     protected ?string $subheading = 'Configure a general settings.';
 
-    public $company_name, $company_theme, $company_logo, $company_favicon, $company_description, $company_maintenance, $company_maintenance_url, $company_maintenance_message;
+    public $company_name, $company_theme, $company_logo, $company_favicon, $company_description, $company_date_format, $company_language, $company_country, $company_maintenance, $company_maintenance_url, $company_maintenance_message;
 
     public static function getNavigationItems(): array
     {
@@ -38,6 +40,9 @@ class General extends Page
             'company_logo' => 'https://viidev.com/assets/img/logo/logo.png',
             'company_favicon' => 'https://viidev.com/assets/img/logo/logo.png',
             'company_description' => 'Free and Open source Billing Management Operations & Recurring Automation.',
+            'company_date_format' => 'd/m/Y',
+            'company_language' => 'en_US',
+            'company_country' => 'ID',
             'company_maintenance' => null,
             'company_maintenance_url' => null,
             'company_maintenance_message' => 'We are currently performing maintenance and will be back shortly.',
@@ -53,7 +58,7 @@ class General extends Page
     protected function getFormSchema(): array
     {
         return [
-            Forms\Components\Tabs::make('Tabs')
+            Forms\Components\Tabs::make()
                 ->persistTabInQueryString()
                 ->tabs([
                     Forms\Components\Tabs\Tab::make('company')
@@ -67,67 +72,132 @@ class General extends Page
     private function tabCompany()
     {
         return [
-            Forms\Components\Grid::make(2)
+            Forms\Components\Section::make()
                 ->schema([
-                    Forms\Components\TextInput::make('company_name')
-                        ->label('Name')
-                        ->required(),
-                    Forms\Components\Select::make('company_theme')
-                        ->label('Theme')
-                        ->options(collect(File::directories(resource_path('views/theme')))
-                            ->mapWithKeys(fn ($path) => [
-                                basename($path) => basename($path)
-                            ])
-                            ->toArray())
-                        ->native(false)
-                        ->required()
-                        ->columnSpan(1),
-                    Forms\Components\TextInput::make('company_logo')
-                        ->label('Logo URL')
-                        ->required(),
-                    Forms\Components\TextInput::make('company_favicon')
-                        ->label('Favicon URL')
-                        ->required(),
+                    Forms\Components\Grid::make(2)
+                        ->schema([
+                            Forms\Components\TextInput::make('company_name')
+                                ->label('Name')
+                                ->required()
+                                ->helperText('The name of your Company.'),
+                            Forms\Components\Select::make('company_theme')
+                                ->label('Theme')
+                                ->options(collect(File::directories(resource_path('views/theme')))
+                                    ->mapWithKeys(fn ($path) => [
+                                        basename($path) => basename($path)
+                                    ])
+                                    ->toArray())
+                                ->native(false)
+                                ->required()
+                                ->columnSpan(1)
+                                ->helperText('The theme you want Billmora to use.'),
+                            Forms\Components\TextInput::make('company_logo')
+                                ->label('Logo URL')
+                                ->suffixIcon('tabler-world')
+                                ->required()
+                                ->helperText('Enter your Company logo URL.'),
+                            Forms\Components\TextInput::make('company_favicon')
+                                ->label('Favicon URL')
+                                ->suffixIcon('tabler-world')
+                                ->required()
+                                ->helperText('Enter your Company favicon URL.'),
+                        ]),
+                    Forms\Components\Grid::make(1)
+                        ->schema([
+                            Forms\Components\Textarea::make('company_description')
+                                ->label('Description')
+                                ->rows(3)
+                        ]),
+                    Forms\Components\Grid::make(3)
+                        ->schema([
+                            Forms\Components\Select::make('company_date_format')
+                                ->label('Date Format')
+                                ->options([
+                                    'd/m/Y' => 'DD/MM/YYYY (31/12/2025)',
+                                    'm/d/Y' => 'MM/DD/YYYY (12/31/2025)',
+                                    'Y-m-d' => 'YYYY-MM-DD (2025-12-31)',
+                                    'd-m-Y' => 'DD-MM-YYYY (31-12-2025)',
+                                    'M d, Y' => 'Mon DD, YYYY (Dec 31, 2025)',
+                                    'F d, Y' => 'Month DD, YYYY (December 31, 2025)',
+                                ])
+                                ->native(false)
+                                ->required()
+                                ->helperText('Default date format for your Company.'),
+                            Forms\Components\Select::make('company_language')
+                                ->label('Language')
+                                ->options(collect(File::directories(resource_path('lang')))
+                                    ->mapWithKeys(fn ($path) => [
+                                        basename($path) => Locale::getDisplayName(basename($path), app()->getLocale())
+                                    ])
+                                    ->toArray()
+                                )
+                                ->native(false)
+                                ->required()
+                                ->helperText('Default language for Billmora clientarea.'),
+                            Forms\Components\Select::make('company_country')
+                                ->label('Country')
+                                ->options(function () {
+                                    $client = new Client();
+                                    $response = $client->get('https://restcountries.com/v3.1/all');
+                                    $countries = json_decode($response->getBody()->getContents(), true);
+                
+                                    $options = [];
+                                    foreach ($countries as $country) {
+                                        $options[$country['cca2']] = $country['name']['common'];
+                                    }
+
+                                    asort($options);
+                
+                                    return $options;
+                                })
+                                ->searchable()
+                                ->native(false)
+                                ->required()
+                                ->helperText('Default country for your Company.'),
+                        ])
                 ]),
 
-            Forms\Components\Grid::make(1)
+            Forms\Components\Section::make()
                 ->schema([
-                    Forms\Components\Textarea::make('company_description')
-                        ->label('Description')
-                        ->rows(3)
+                    Forms\Components\Grid::make(2)
+                        ->schema([
+                            Forms\Components\Grid::make(1)
+                                ->schema([
+                                    Forms\Components\Toggle::make('company_maintenance')
+                                        ->label('Maintenance Mode')
+                                        ->inline(false)
+                                        ->onColor('success')
+                                        ->offColor('danger')
+                                        ->helperText('Prevents client area access when enabled.'),
+                                    Forms\Components\TextInput::make('company_maintenance_url')
+                                        ->label('Maintenance URL')
+                                        ->suffixIcon('tabler-world')
+                                        ->helperText('If specified, clients will be redirected to that URL when Maintenance is enabled.'),
+                                ])
+                                ->columnSpan(1),
+                            Forms\Components\Textarea::make('company_maintenance_message')
+                                ->label('Maintenance Message')
+                                ->rows(5)
+                                ->columnSpan(1)
+                                ->helperText('The message that will be displayed when Maintenance is enabled.'),
+                        ]),
                 ]),
-
-                Forms\Components\Grid::make(3)
-                    ->schema([
-                        Forms\Components\Grid::make(1)
-                            ->schema([
-                                Forms\Components\Toggle::make('company_maintenance')
-                                    ->label('Maintenance Mode')
-                                    ->inline(false)
-                                    ->onColor('success')
-                                    ->offColor('danger'),
-                                Forms\Components\TextInput::make('company_maintenance_url')
-                                    ->label('Maintenance URL'),
-                            ])
-                            ->columnSpan(1),
-                        Forms\Components\Textarea::make('company_maintenance_message')
-                            ->label('Maintenance Message')
-                            ->rows(4)
-                            ->columnSpan(2), 
-                    ]),
-
         ];
     }
+
     
     public function save()
     {
         try {
             $validated = $this->validate([
                 'company_name' => 'required|string|max:255',
-                'company_theme' => 'required',
+                'company_theme' => 'required|string',
                 'company_logo' => 'required|url',
                 'company_favicon' => 'required|url',
                 'company_description' => 'nullable|string|max:255',
+                'company_date_format' => 'required|string|in:d/m/Y,m/d/Y,Y-m-d,d-m-Y,M d, Y,F d, Y',
+                'company_language' => 'required|string',
+                'company_country' => 'required|string',
                 'company_maintenance' => 'nullable|boolean',
                 'company_maintenance_url' => 'nullable|url',
                 'company_maintenance_message' => 'nullable|string|max:255',
