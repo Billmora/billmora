@@ -28,6 +28,11 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->homeUrl('/')
+            ->spa()
+            ->breadcrumbs(false)
+            ->brandLogoHeight('2.5rem')
+            ->brandLogo(fn() => billconf('setting.company_logo'))
+            ->brandName(billconf('setting.company_name'))
             ->login()
             ->userMenuItems([
                 Navigation\MenuItem::make()
