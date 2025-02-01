@@ -12,8 +12,6 @@ use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Locale;
-use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
-use Ysfkaya\FilamentPhoneInput\PhoneInputNumberType;
 
 class General extends Page
 {
@@ -69,6 +67,12 @@ class General extends Page
         $credit_min_deposit,
         $credit_max_deposit,
         $credit_max,
+        $captcha_driver,
+        $captcha_turnstile_verify_domain,
+        $captcha_turnstile_site_key,
+        $captcha_turnstile_secret_key,
+        $captcha_recaptchav2_site_key,
+        $captcha_recaptchav2_secret_key,
         $term_tos,
         $term_tos_url,
         $term_tos_content,
@@ -119,17 +123,17 @@ class General extends Page
             'ordering_grace' => 2,
             'ordering_tos' => false,
             'ordering_notes' => false,
-            'mail_driver' => env('MAIL_DRIVER', null),
-            'mail_from_address' => env('MAIL_FROM_ADDRESS', null),
-            'mail_from_name' => env('MAIL_FROM_NAME', null),
-            'mail_host' => env('MAIL_HOST', null),
-            'mail_port' => env('MAIL_PORT', null),
-            'mail_username' => env('MAIL_USERNAME', null),
-            'mail_password' => env('MAIL_PASSWORD', null),
-            'mail_encryption' => env('MAIL_ENCRYPTION', null),
-            'mail_mailgun_domain' => env('MAILGUN_DOMAIN', null),
-            'mail_mailgun_secret' => env('MAILGUN_SECRET', null),
-            'mail_mailgun_endpoint' => env('MAILGUN_ENDPOINT', null),
+            'mail_driver' => env('MAIL_DRIVER', 'sendmail'),
+            'mail_from_address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+            'mail_from_name' => env('MAIL_FROM_NAME', '${APP_NAME}'),
+            'mail_host' => env('MAIL_HOST', ''),
+            'mail_port' => env('MAIL_PORT', ''),
+            'mail_username' => env('MAIL_USERNAME', ''),
+            'mail_password' => env('MAIL_PASSWORD', ''),
+            'mail_encryption' => env('MAIL_ENCRYPTION', ''),
+            'mail_mailgun_domain' => env('MAILGUN_DOMAIN', ''),
+            'mail_mailgun_secret' => env('MAILGUN_SECRET', ''),
+            'mail_mailgun_endpoint' => env('MAILGUN_ENDPOINT', ''),
             'invoices_pdf' => false,
             'invoices_pdf_size' => 'A4',
             'invoices_pdf_font' => 'Poppins',
@@ -148,6 +152,12 @@ class General extends Page
             'credit_min_deposit' => 0,
             'credit_max_deposit' => 0,
             'credit_max' => 0,
+            'captcha_driver' => env('CAPTCHA_DRIVER', 'none'),
+            'captcha_turnstile_verify_domain' => filter_var(env('TURNSTILE_VERIFY_DOMAIN', true), FILTER_VALIDATE_BOOLEAN),
+            'captcha_turnstile_site_key' => env('TURNSTILE_SITE_KEY', ''),
+            'captcha_turnstile_secret_key' => env('TURNSTILE_SECRET_KEY', ''),
+            'captcha_recaptchav2_site_key' => env('RECAPTCHAV2_SITE_KEY', ''),
+            'captcha_recaptchav2_secret_key' => env('RECAPTCHAV2_SECRET_KEY', ''),
             'term_tos' => false,
             'term_tos_url' => null,
             'term_tos_content' => null,
@@ -215,6 +225,10 @@ class General extends Page
                         ->label('Credit')
                         ->icon('tabler-coin')
                         ->schema($this->tabCredit()),
+                    Forms\Components\Tabs\Tab::make('captcha')
+                        ->label('Captcha')
+                        ->icon('tabler-shield')
+                        ->schema($this->tabCaptcha()),
                     Forms\Components\Tabs\Tab::make('term')
                         ->label('Term')
                         ->icon('tabler-circle-dashed-check')
@@ -598,6 +612,72 @@ class General extends Page
         ];
     }
 
+    private function tabCaptcha()
+    {
+        return [
+            Forms\Components\ToggleButtons::make('captcha_driver')
+                ->label('Captcha Driver')
+                ->inline()
+                ->options([
+                    'none' => 'Disable',
+                    'turnstile' => 'Turnstile (Cloudflare)', 
+                    'recaptchav2' => 'reCaptcha v2 (Google)',
+                ])
+                ->live()
+                ->required()
+                ->helperText('Enable Captcha to protect your site from spam and suspicious activity.'),
+            Forms\Components\Section::make('Turnstile Configuration')
+                ->columns(5)
+                ->visible(fn (Forms\Get $get) => $get('captcha_driver') === 'turnstile')
+                ->headerActions([
+                    Forms\Components\Actions\Action::make('getKey')
+                        ->label('How to get Key?')
+                        ->icon('tabler-world-search')
+                        ->url('https://developers.cloudflare.com/turnstile/get-started/#get-a-sitekey-and-secret-key', true),
+                ])
+                ->schema([
+                    Forms\Components\Toggle::make('captcha_turnstile_verify_domain')
+                        ->label('Verify Domain?')
+                        ->inline(false)
+                        ->onIcon('tabler-check')
+                        ->offIcon('tabler-x')
+                        ->onColor('success')
+                        ->offColor('danger')
+                        ->required()
+                        ->columnSpan(1),
+                    Forms\Components\TextInput::make('captcha_turnstile_site_key')
+                        ->label('Site Key')
+                        ->required()
+                        ->columnSpan(2),
+                    Forms\Components\TextInput::make('captcha_turnstile_secret_key')
+                        ->label('Secret Key')
+                        ->password()
+                        ->revealable()
+                        ->required()
+                        ->columnSpan(2),
+                ]),
+            Forms\Components\Section::make('reCaptcha v2 Configuration')
+                ->columns(2)
+                ->visible(fn (Forms\Get $get) => $get('captcha_driver') === 'recaptchav2')
+                ->headerActions([
+                    Forms\Components\Actions\Action::make('getKey')
+                        ->label('How to get Key?')
+                        ->icon('tabler-world-search')
+                        ->url('https://developers.google.com/recaptcha/intro', true),
+                ])
+                ->schema([
+                    Forms\Components\TextInput::make('captcha_recaptchav2_site_key')
+                        ->label('Site Key')
+                        ->required(),
+                    Forms\Components\TextInput::make('captcha_recaptchav2_secret_key')
+                        ->label('Secret Key')
+                        ->password()
+                        ->revealable()
+                        ->required(),
+                ]),
+        ];
+    }
+
     private function tabTerm()
     {
         return [
@@ -836,22 +916,41 @@ class General extends Page
                 'mail_mailgun_secret' => 'required_if:mail_driver,mailgun|string',
                 'mail_mailgun_endpoint' => 'required_if:mail_driver,mailgun|url',
             ]);
+
             if ($validatedMail['mail_encryption'] === 'none') {
                 $validatedMail['mail_encryption'] = null;
             }
     
             $this->writeToEnv([
-                'MAIL_MAILER'     => $validatedMail['mail_driver'],
-                'MAIL_HOST'       => $validatedMail['mail_host'],
-                'MAIL_PORT'       => $validatedMail['mail_port'],
-                'MAIL_USERNAME'   => $validatedMail['mail_username'] ?? '',
-                'MAIL_PASSWORD'   => $validatedMail['mail_password'] ?? '',
-                'MAIL_ENCRYPTION' => $validatedMail['mail_encryption'] ?? '',
+                'MAIL_MAILER' => $validatedMail['mail_driver'],
+                'MAIL_HOST' => $validatedMail['mail_host'],
+                'MAIL_PORT' => $validatedMail['mail_port'],
+                'MAIL_USERNAME' => $validatedMail['mail_username'],
+                'MAIL_PASSWORD' => $validatedMail['mail_password'],
+                'MAIL_ENCRYPTION' => $validatedMail['mail_encryption'],
                 'MAIL_FROM_ADDRESS' => $validatedMail['mail_from_address'],
-                'MAIL_FROM_NAME'    => $validatedMail['mail_from_name'],
-                'MAILGUN_DOMAIN'   => $validatedMail['mail_mailgun_domain'] ?? '',
-                'MAILGUN_SECRET'   => $validatedMail['mail_mailgun_secret'] ?? '',
-                'MAILGUN_ENDPOINT' => $validatedMail['mail_mailgun_endpoint'] ?? '',
+                'MAIL_FROM_NAME' => $validatedMail['mail_from_name'],
+                'MAILGUN_DOMAIN' => $validatedMail['mail_mailgun_domain'],
+                'MAILGUN_SECRET' => $validatedMail['mail_mailgun_secret'],
+                'MAILGUN_ENDPOINT' => $validatedMail['mail_mailgun_endpoint'],
+            ]);
+
+            $validatedCaptcha = $this->validate([
+                'captcha_driver' => 'required|string|in:none,turnstile,recaptchav2',
+                'captcha_turnstile_verify_domain' => 'required_if:captcha_driver,turnstile|boolean',
+                'captcha_turnstile_site_key' => 'required_if:captcha_driver,turnstile|string',
+                'captcha_turnstile_secret_key' => 'required_if:captcha_driver,turnstile|string',
+                'captcha_recaptchav2_site_key' => 'required_if:captcha_driver,recaptchav2|string',
+                'captcha_recaptchav2_secret_key' => 'required_if:captcha_driver,recaptchav2|string',
+            ]);
+
+            $this->writeToEnv([
+                'CAPTCHA_DRIVER' => $validatedCaptcha['captcha_driver'],
+                'TURNSTILE_VERIFY_DOMAIN' => $validatedCaptcha['captcha_turnstile_verify_domain'],
+                'TURNSTILE_SITE_KEY' => $validatedCaptcha['captcha_turnstile_site_key'],
+                'TURNSTILE_SECRET_KEY' => $validatedCaptcha['captcha_turnstile_secret_key'],
+                'RECAPTCHAV2_SITE_KEY' => $validatedCaptcha['captcha_recaptchav2_site_key'],
+                'RECAPTCHAV2_SECRET_KEY' => $validatedCaptcha['captcha_recaptchav2_secret_key'],
             ]);
     
             Artisan::call('config:clear');
