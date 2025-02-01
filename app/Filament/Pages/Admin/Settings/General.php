@@ -3,7 +3,8 @@
 namespace App\Filament\Pages\Admin\Settings;
 
 use App\Models\Setting;
-use App\Notifications\MailTested;
+use App\Notifications\Mail;
+use App\Traits\EnvironmentWriter;
 use Filament\Forms;
 use Filament\Pages\Page;
 use Filament\Navigation\NavigationItem;
@@ -11,7 +12,6 @@ use Filament\Notifications\Notification;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Notification as MailNotification;
 use Illuminate\Support\Facades\Request;
 use Locale;
 use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
@@ -384,7 +384,7 @@ class General extends Page
                     Forms\Components\Actions\Action::make('test')
                         ->label('Send Test Mail')
                         ->icon('tabler-send')
-                        ->action(fn () => $this->sendTestEmail())
+                        ->action(fn () => Mail::sendTestMail())
                 ),
             Forms\Components\Grid::make(2)
                 ->schema([
@@ -613,55 +613,6 @@ class General extends Page
                 ]),
         ];
     }
-
-    private function writeToEnv(array $data)
-    {
-        $path = base_path('.env');
-        
-        if (!File::exists($path)) {
-            throw new \Exception(".env file not found!");
-        }
-
-        $env = File::get($path);
-
-        foreach ($data as $key => $value) {
-            $pattern = "/^{$key}=.*/m";
-            $replacement = "{$key}=" . (is_null($value) ? 'null' : '"' . addslashes($value) . '"');
-
-            if (preg_match($pattern, $env)) {
-                $env = preg_replace($pattern, $replacement, $env);
-            } else {
-                $env .= "\n{$replacement}";
-            }
-        }
-
-        File::put($path, $env);
-    }
-
-    public function sendTestEmail()
-    {
-        try {
-            $toEmail = auth()->user()->email;
-            $subject = 'Welcome to Billmora!';
-            $body = 'This is a test email to verify the configuration.';
-
-            \Mail::raw($body, function ($message) use ($toEmail, $subject) {
-                $message->to($toEmail)
-                    ->subject($subject);
-            });
-
-            Notification::make()
-                ->title('Test email sent successfully!')
-                ->success()
-                ->send();
-        } catch (\Exception $e) {
-            Notification::make()
-                ->title('Failed to send test email')
-                ->body($e->getMessage())
-                ->danger()
-                ->send();
-        }
-    }
     
     public function save()
     {
@@ -741,7 +692,7 @@ class General extends Page
                 $validatedMail['mail_encryption'] = null;
             }
     
-            $this->writeToEnv([
+            EnvironmentWriter::writeToEnv([
                 'MAIL_MAILER'     => $validatedMail['mail_driver'],
                 'MAIL_HOST'       => $validatedMail['mail_host'],
                 'MAIL_PORT'       => $validatedMail['mail_port'],
