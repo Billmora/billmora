@@ -76,7 +76,10 @@ class General extends Page
         $mail_port,
         $mail_username,
         $mail_password,
-        $mail_encryption;
+        $mail_encryption,
+        $mail_mailgun_domain,
+        $mail_mailgun_secret,
+        $mail_mailgun_endpoint;
 
     public static function getNavigationItems(): array
     {
@@ -144,6 +147,9 @@ class General extends Page
             'mail_username' => env('MAIL_USERNAME', null),
             'mail_password' => env('MAIL_PASSWORD', null),
             'mail_encryption' => env('MAIL_ENCRYPTION', null),
+            'mail_mailgun_domain' => env('MAILGUN_DOMAIN', null),
+            'mail_mailgun_secret' => env('MAILGUN_SECRET', null),
+            'mail_mailgun_endpoint' => env('MAILGUN_ENDPOINT', null),
         ];
     
         $settings = Setting::pluck('value', 'key');
@@ -373,14 +379,14 @@ class General extends Page
                     'sendmail' => 'Sendmail (PHP)',
                 ])
                 ->live()
+                ->required()
                 ->hintAction(
                     Forms\Components\Actions\Action::make('test')
                         ->label('Send Test Mail')
                         ->icon('tabler-send')
                         ->action(fn () => $this->sendTestEmail())
                 ),
-            Forms\Components\Section::make()
-                ->columns()
+            Forms\Components\Grid::make(2)
                 ->schema([
                     Forms\Components\TextInput::make('mail_from_address')
                         ->label('Mail From Address')
@@ -426,6 +432,24 @@ class General extends Page
                             };
                             $set('mail_port', $port);
                         }),
+                ]),
+            Forms\Components\Section::make('Mailgun Configuration')
+                ->columns(3)
+                ->visible(fn (Forms\Get $get) => $get('mail_driver') === 'mailgun')
+                ->schema([
+                    Forms\Components\TextInput::make('mail_mailgun_domain')
+                        ->label('Domain')
+                        ->suffixIcon('tabler-world')
+                        ->required(),
+                    Forms\Components\TextInput::make('mail_mailgun_secret')
+                        ->label('Secret')
+                        ->password()
+                        ->revealable()
+                        ->required(),
+                    Forms\Components\TextInput::make('mail_mailgun_endpoint')
+                        ->label('Endpoint')
+                        ->suffixIcon('tabler-world')
+                        ->required(),
                 ]),
         ];
     }
@@ -701,14 +725,17 @@ class General extends Page
             });
 
             $validatedMail = $this->validate([
-                'mail_driver'      => 'required|string|in:smtp,mailgun,sendmail',
-                'mail_from_address'=> 'required|email',
-                'mail_from_name'   => 'required|string|max:255',
-                'mail_host'        => 'required_if:mail_driver,smtp|string|max:255',
-                'mail_port'        => 'required_if:mail_driver,smtp|integer|min:1|max:65535',
-                'mail_username'    => 'nullable|string|max:255',
-                'mail_password'    => 'nullable|string|max:255',
-                'mail_encryption'  => 'nullable|string|in:tls,ssl,none',
+                'mail_driver' => 'required|string|in:smtp,mailgun,sendmail',
+                'mail_from_address' => 'required|email',
+                'mail_from_name' => 'required|string|max:255',
+                'mail_host' => 'required_if:mail_driver,smtp|string|max:255',
+                'mail_port' => 'required_if:mail_driver,smtp|integer|min:1|max:65535',
+                'mail_username' => 'nullable|string|max:255',
+                'mail_password' => 'nullable|string|max:255',
+                'mail_encryption' => 'nullable|string|in:tls,ssl,none',
+                'mail_mailgun_domain' => 'required_if:mail_driver,mailgun|string',
+                'mail_mailgun_secret' => 'required_if:mail_driver,mailgun|string',
+                'mail_mailgun_endpoint' => 'required_if:mail_driver,mailgun|url',
             ]);
             if ($validatedMail['mail_encryption'] === 'none') {
                 $validatedMail['mail_encryption'] = null;
@@ -723,6 +750,9 @@ class General extends Page
                 'MAIL_ENCRYPTION' => $validatedMail['mail_encryption'] ?? '',
                 'MAIL_FROM_ADDRESS' => $validatedMail['mail_from_address'],
                 'MAIL_FROM_NAME'    => $validatedMail['mail_from_name'],
+                'MAILGUN_DOMAIN'   => $validatedMail['mail_mailgun_domain'] ?? '',
+                'MAILGUN_SECRET'   => $validatedMail['mail_mailgun_secret'] ?? '',
+                'MAILGUN_ENDPOINT' => $validatedMail['mail_mailgun_endpoint'] ?? '',
             ]);
     
             Artisan::call('config:clear');
