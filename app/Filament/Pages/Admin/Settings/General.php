@@ -3,12 +3,15 @@
 namespace App\Filament\Pages\Admin\Settings;
 
 use App\Models\Setting;
+use App\Notifications\MailTested;
 use Filament\Forms;
 use Filament\Pages\Page;
 use Filament\Navigation\NavigationItem;
 use Filament\Notifications\Notification;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Notification as MailNotification;
 use Illuminate\Support\Facades\Request;
 use Locale;
 use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
@@ -65,7 +68,15 @@ class General extends Page
         $ordering_city,
         $ordering_country,
         $ordering_state,
-        $ordering_postcode;
+        $ordering_postcode,
+        $mail_driver,
+        $mail_from_address,
+        $mail_from_name,
+        $mail_host,
+        $mail_port,
+        $mail_username,
+        $mail_password,
+        $mail_encryption;
 
     public static function getNavigationItems(): array
     {
@@ -125,6 +136,14 @@ class General extends Page
             'ordering_country' => 'ID',
             'ordering_state' => null,
             'ordering_postcode' => null,
+            'mail_driver' => env('MAIL_DRIVER', null),
+            'mail_from_address' => env('MAIL_FROM_ADDRESS', null),
+            'mail_from_name' => env('MAIL_FROM_NAME', null),
+            'mail_host' => env('MAIL_HOST', null),
+            'mail_port' => env('MAIL_PORT', null),
+            'mail_username' => env('MAIL_USERNAME', null),
+            'mail_password' => env('MAIL_PASSWORD', null),
+            'mail_encryption' => env('MAIL_ENCRYPTION', null),
         ];
     
         $settings = Setting::pluck('value', 'key');
@@ -160,6 +179,10 @@ class General extends Page
                         ->label('Ordering')
                         ->icon('tabler-truck-delivery')
                         ->schema($this->tabOrdering()),
+                    Forms\Components\Tabs\Tab::make('mail')
+                        ->label('Mail')
+                        ->icon('tabler-mail')
+                        ->schema($this->tabMail()),
                     Forms\Components\Tabs\Tab::make('term')
                         ->label('Term')
                         ->icon('tabler-circle-dashed-check')
@@ -338,6 +361,75 @@ class General extends Page
         ];
     }
 
+    private function tabMail()
+    {
+        return [
+            Forms\Components\ToggleButtons::make('mail_driver')
+                ->label('Mail Driver')
+                ->inline()
+                ->options([
+                    'smtp' => 'SMTP Server',
+                    'mailgun' => 'Mailgun',
+                    'sendmail' => 'Sendmail (PHP)',
+                ])
+                ->live()
+                ->hintAction(
+                    Forms\Components\Actions\Action::make('test')
+                        ->label('Send Test Mail')
+                        ->icon('tabler-send')
+                        ->action(fn () => $this->sendTestEmail())
+                ),
+            Forms\Components\Section::make()
+                ->columns()
+                ->schema([
+                    Forms\Components\TextInput::make('mail_from_address')
+                        ->label('Mail From Address')
+                        ->required()
+                        ->email(),
+                    Forms\Components\TextInput::make('mail_from_name')
+                        ->label('Mail From Name')
+                        ->required(),
+                ]),
+            Forms\Components\Section::make('SMTP Configuration')
+                ->columns()
+                ->visible(fn (Forms\Get $get) => $get('mail_driver') === 'smtp')
+                ->schema([
+                    Forms\Components\TextInput::make('mail_host')
+                        ->label('Host')
+                        ->required(),
+                    Forms\Components\TextInput::make('mail_port')
+                        ->label('Port')
+                        ->required()
+                        ->numeric()
+                        ->minValue(1)
+                        ->maxValue(65535),
+                    Forms\Components\TextInput::make('mail_username')
+                        ->label('Username'),
+                    Forms\Components\TextInput::make('mail_password')
+                        ->label('Password')
+                        ->password()
+                        ->revealable(),
+                    Forms\Components\ToggleButtons::make('mail_encryption')
+                        ->label('Encryption')
+                        ->inline()
+                        ->options([
+                            'tls' => 'TLS',
+                            'ssl' => 'SSL',
+                            '' => 'None',
+                        ])
+                        ->live()
+                        ->afterStateUpdated(function ($state, Forms\Set $set) {
+                            $port = match ($state) {
+                                'tls' => 587,
+                                'ssl' => 465,
+                                default => 25,
+                            };
+                            $set('mail_port', $port);
+                        }),
+                ]),
+        ];
+    }
+
     private function tabTerm()
     {
         return [
@@ -497,6 +589,55 @@ class General extends Page
                 ]),
         ];
     }
+
+    private function writeToEnv(array $data)
+    {
+        $path = base_path('.env');
+        
+        if (!File::exists($path)) {
+            throw new \Exception(".env file not found!");
+        }
+
+        $env = File::get($path);
+
+        foreach ($data as $key => $value) {
+            $pattern = "/^{$key}=.*/m";
+            $replacement = "{$key}=" . (is_null($value) ? 'null' : '"' . addslashes($value) . '"');
+
+            if (preg_match($pattern, $env)) {
+                $env = preg_replace($pattern, $replacement, $env);
+            } else {
+                $env .= "\n{$replacement}";
+            }
+        }
+
+        File::put($path, $env);
+    }
+
+    public function sendTestEmail()
+    {
+        try {
+            $toEmail = auth()->user()->email;
+            $subject = 'Welcome to Billmora!';
+            $body = 'This is a test email to verify the configuration.';
+
+            \Mail::raw($body, function ($message) use ($toEmail, $subject) {
+                $message->to($toEmail)
+                    ->subject($subject);
+            });
+
+            Notification::make()
+                ->title('Test email sent successfully!')
+                ->success()
+                ->send();
+        } catch (\Exception $e) {
+            Notification::make()
+                ->title('Failed to send test email')
+                ->body($e->getMessage())
+                ->danger()
+                ->send();
+        }
+    }
     
     public function save()
     {
@@ -548,15 +689,43 @@ class General extends Page
                 'ordering_postcode' => 'nullable|string',
             ]);
 
+            
             if (is_null($validated['ordering_phone'])) {
                 $validated['ordering_phone'] = '';
             }
-    
+            
             collect($validated)->each(function ($value, $key) {
                 if (!is_null($value)) {
                     Setting::updateOrCreate(['key' => $key], ['value' => $value]);
                 }
             });
+
+            $validatedMail = $this->validate([
+                'mail_driver'      => 'required|string|in:smtp,mailgun,sendmail',
+                'mail_from_address'=> 'required|email',
+                'mail_from_name'   => 'required|string|max:255',
+                'mail_host'        => 'required_if:mail_driver,smtp|string|max:255',
+                'mail_port'        => 'required_if:mail_driver,smtp|integer|min:1|max:65535',
+                'mail_username'    => 'nullable|string|max:255',
+                'mail_password'    => 'nullable|string|max:255',
+                'mail_encryption'  => 'nullable|string|in:tls,ssl,none',
+            ]);
+            if ($validatedMail['mail_encryption'] === 'none') {
+                $validatedMail['mail_encryption'] = null;
+            }
+    
+            $this->writeToEnv([
+                'MAIL_MAILER'     => $validatedMail['mail_driver'],
+                'MAIL_HOST'       => $validatedMail['mail_host'],
+                'MAIL_PORT'       => $validatedMail['mail_port'],
+                'MAIL_USERNAME'   => $validatedMail['mail_username'] ?? '',
+                'MAIL_PASSWORD'   => $validatedMail['mail_password'] ?? '',
+                'MAIL_ENCRYPTION' => $validatedMail['mail_encryption'] ?? '',
+                'MAIL_FROM_ADDRESS' => $validatedMail['mail_from_address'],
+                'MAIL_FROM_NAME'    => $validatedMail['mail_from_name'],
+            ]);
+    
+            Artisan::call('config:clear');
     
             Notification::make()
                 ->title('Saved successfully!')
