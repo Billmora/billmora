@@ -54,6 +54,8 @@ class General extends Page
         $social_reddit,
         $social_skype,
         $social_telegram,
+        $ordering_redirect,
+        $ordering_grace,
         $ordering_tos,
         $ordering_notes,
         $mail_driver,
@@ -113,6 +115,8 @@ class General extends Page
             'social_reddit' => null,
             'social_skype' => null,
             'social_telegram' => null,
+            'ordering_redirect' => 'payment',
+            'ordering_grace' => 2,
             'ordering_tos' => false,
             'ordering_notes' => false,
             'mail_driver' => env('MAIL_DRIVER', null),
@@ -288,6 +292,19 @@ class General extends Page
         return [
             Forms\Components\Grid::make(2)
                 ->schema([
+                    Forms\Components\Radio::make('ordering_redirect')
+                        ->label('Auto Redirect on Checkout')
+                        ->options([
+                            'complete' => 'Just show the order completed page (no payment redirect)',
+                            'invoice' => 'Automatically take the user to the invoice',
+                            'payment' => 'Automatically forward the user to the payment gateway'
+                        ])
+                        ->required(),
+                    Forms\Components\TextInput::make('ordering_grace')
+                        ->label('Order days grace')
+                        ->numeric()
+                        ->required()
+                        ->helperText('The number of days to allow for payment of an order before being overdue.'),
                     Forms\Components\Toggle::make('ordering_tos')
                         ->label('Terms of Service')
                         ->inline(false)
@@ -564,7 +581,7 @@ class General extends Page
                 'company_logo' => 'required|url',
                 'company_favicon' => 'required|url',
                 'company_description' => 'nullable|string|max:255',
-                'company_date_format' => 'required|string|in:d/m/Y,m/d/Y,Y-m-d,d-m-Y,M d, Y,F d, Y',
+                'company_date_format' => 'required|string',
                 'company_language' => 'required|string',
                 'company_country' => 'required|string',
                 'company_maintenance' => 'nullable|boolean',
@@ -590,6 +607,8 @@ class General extends Page
                 'social_reddit' => 'nullable|url',
                 'social_skype' => 'nullable|url',
                 'social_telegram' => 'nullable|url',
+                'ordering_redirect' => 'required|in:complete,invoice,payment',
+                'ordering_grace' => 'required|int',
                 'ordering_tos' => 'nullable|boolean',
                 'ordering_notes' => 'nullable|boolean',
             ]);
