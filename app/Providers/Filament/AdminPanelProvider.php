@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages;
+use App\Helpers\Config;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -31,8 +32,8 @@ class AdminPanelProvider extends PanelProvider
             ->spa()
             ->breadcrumbs(false)
             ->brandLogoHeight('2.5rem')
-            ->brandLogo(fn() => billconf('setting.company_logo'))
-            ->brandName(billconf('setting.company_name'))
+            ->brandLogo(fn() => Config::setting('company_logo'))
+            ->brandName(Config::setting('company_name'))
             ->login()
             ->userMenuItems([
                 Navigation\MenuItem::make()

@@ -12,7 +12,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        require_once app_path('Support/helpers.php');
+        // 
     }
 
     /**
@@ -20,10 +20,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $settings = Setting::pluck('value', 'key')->toArray();
-
-        foreach ($settings as $key => $value) {
-            config(["setting.$key" => $value]);
-        }
+        // 
     }
 }
