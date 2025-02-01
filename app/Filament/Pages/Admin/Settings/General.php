@@ -34,6 +34,35 @@ class General extends Page
         $company_maintenance, 
         $company_maintenance_url, 
         $company_maintenance_message,
+        $ordering_redirect,
+        $ordering_grace,
+        $ordering_tos,
+        $ordering_notes,
+        $mail_driver,
+        $mail_from_address,
+        $mail_from_name,
+        $mail_host,
+        $mail_port,
+        $mail_username,
+        $mail_password,
+        $mail_encryption,
+        $mail_mailgun_domain,
+        $mail_mailgun_secret,
+        $mail_mailgun_endpoint,
+        $invoices_pdf,
+        $invoices_pdf_size,
+        $invoices_pdf_font,
+        $invoices_mass_payment,
+        $invoices_choose_payment,
+        $invoices_cancelation_handling,
+        $invoices_paid_numbering,
+        $invoices_next_paid_number,
+        $invoices_number_format,
+        $invoices_late_type,
+        $invoices_late_amount,
+        $invoices_late_minimum,
+        $invoices_increment,
+        $invoices_start,
         $term_tos,
         $term_tos_url,
         $term_tos_content,
@@ -53,22 +82,7 @@ class General extends Page
         $social_github,
         $social_reddit,
         $social_skype,
-        $social_telegram,
-        $ordering_redirect,
-        $ordering_grace,
-        $ordering_tos,
-        $ordering_notes,
-        $mail_driver,
-        $mail_from_address,
-        $mail_from_name,
-        $mail_host,
-        $mail_port,
-        $mail_username,
-        $mail_password,
-        $mail_encryption,
-        $mail_mailgun_domain,
-        $mail_mailgun_secret,
-        $mail_mailgun_endpoint;
+        $social_telegram;
 
     public static function getNavigationItems(): array
     {
@@ -95,6 +109,35 @@ class General extends Page
             'company_maintenance' => null,
             'company_maintenance_url' => null,
             'company_maintenance_message' => 'We are currently performing maintenance and will be back shortly.',
+            'ordering_redirect' => 'payment',
+            'ordering_grace' => 2,
+            'ordering_tos' => false,
+            'ordering_notes' => false,
+            'mail_driver' => env('MAIL_DRIVER', null),
+            'mail_from_address' => env('MAIL_FROM_ADDRESS', null),
+            'mail_from_name' => env('MAIL_FROM_NAME', null),
+            'mail_host' => env('MAIL_HOST', null),
+            'mail_port' => env('MAIL_PORT', null),
+            'mail_username' => env('MAIL_USERNAME', null),
+            'mail_password' => env('MAIL_PASSWORD', null),
+            'mail_encryption' => env('MAIL_ENCRYPTION', null),
+            'mail_mailgun_domain' => env('MAILGUN_DOMAIN', null),
+            'mail_mailgun_secret' => env('MAILGUN_SECRET', null),
+            'mail_mailgun_endpoint' => env('MAILGUN_ENDPOINT', null),
+            'invoices_pdf' => false,
+            'invoices_pdf_size' => 'A4',
+            'invoices_pdf_font' => 'Poppins',
+            'invoices_mass_payment' => true,
+            'invoices_choose_payment' => true,
+            'invoices_cancelation_handling' => false,
+            'invoices_paid_numbering' => true,
+            'invoices_next_paid_number' => 1,
+            'invoices_number_format' => '{NUMBER}',
+            'invoices_late_type' => 'percent',
+            'invoices_late_amount' => 10,
+            'invoices_late_minimum' => 0,
+            'invoices_increment' => 1,
+            'invoices_start' => null,
             'term_tos' => false,
             'term_tos_url' => null,
             'term_tos_content' => null,
@@ -115,21 +158,6 @@ class General extends Page
             'social_reddit' => null,
             'social_skype' => null,
             'social_telegram' => null,
-            'ordering_redirect' => 'payment',
-            'ordering_grace' => 2,
-            'ordering_tos' => false,
-            'ordering_notes' => false,
-            'mail_driver' => env('MAIL_DRIVER', null),
-            'mail_from_address' => env('MAIL_FROM_ADDRESS', null),
-            'mail_from_name' => env('MAIL_FROM_NAME', null),
-            'mail_host' => env('MAIL_HOST', null),
-            'mail_port' => env('MAIL_PORT', null),
-            'mail_username' => env('MAIL_USERNAME', null),
-            'mail_password' => env('MAIL_PASSWORD', null),
-            'mail_encryption' => env('MAIL_ENCRYPTION', null),
-            'mail_mailgun_domain' => env('MAILGUN_DOMAIN', null),
-            'mail_mailgun_secret' => env('MAILGUN_SECRET', null),
-            'mail_mailgun_endpoint' => env('MAILGUN_ENDPOINT', null),
         ];
     
         $settings = Setting::pluck('value', 'key');
@@ -169,6 +197,10 @@ class General extends Page
                         ->label('Mail')
                         ->icon('tabler-mail')
                         ->schema($this->tabMail()),
+                    Forms\Components\Tabs\Tab::make('invoices')
+                        ->label('Invoices')
+                        ->icon('tabler-invoice')
+                        ->schema($this->tabInvoices()),
                     Forms\Components\Tabs\Tab::make('term')
                         ->label('Term')
                         ->icon('tabler-circle-dashed-check')
@@ -312,6 +344,7 @@ class General extends Page
                         ->offIcon('tabler-x')
                         ->onColor('success')
                         ->offColor('danger')
+                        ->required()
                         ->helperText('If enable, clients must agree to company Terms of Service.'),
                     Forms\Components\Toggle::make('ordering_notes')
                         ->label('Notes on Checkout')
@@ -320,6 +353,7 @@ class General extends Page
                         ->offIcon('tabler-x')
                         ->onColor('success')
                         ->offColor('danger')
+                        ->required()
                         ->helperText('If enable, clients can enter additional info on the order form.'),
                 ]),
         ];
@@ -408,6 +442,116 @@ class General extends Page
                         ->label('Endpoint')
                         ->suffixIcon('tabler-world')
                         ->required(),
+                ]),
+        ];
+    }
+
+    private function tabInvoices()
+    {
+        return [
+            Forms\Components\Grid::make(3)
+                ->schema([
+                    Forms\Components\Toggle::make('invoices_pdf')
+                        ->label('PDF Invoices')
+                        ->inline(false)
+                        ->onIcon('tabler-check')
+                        ->offIcon('tabler-x')
+                        ->onColor('success')
+                        ->offColor('danger')
+                        ->required()
+                        ->helperText('Enables sending PDF invoices with emails and downloading PDFs directly from the invoice page.'),
+                    Forms\Components\Select::make('invoices_pdf_size')
+                        ->label('PDF Paper Size')
+                        ->options([
+                            'A4' => 'A4',
+                            'letter' => 'Letter',
+                        ])
+                        ->native(false)
+                        ->required()
+                        ->helperText('Choose the paper format to use when generating PDF files.'),
+                    Forms\Components\TextInput::make('invoices_pdf_font')
+                        ->label('PDF Font Family')
+                        ->hintAction(
+                            Forms\Components\Actions\Action::make('googleFonts')
+                                ->label('Browse Google Fonts')
+                                ->icon('tabler-world-search')
+                                ->url('https://fonts.google.com', true))
+                        ->required()
+                        ->helperText('All Google Fonts are available to use.'),
+                    Forms\Components\Toggle::make('invoices_mass_payment')
+                        ->label('Mass Payment')
+                        ->inline(false)
+                        ->onIcon('tabler-check')
+                        ->offIcon('tabler-x')
+                        ->onColor('success')
+                        ->offColor('danger')
+                        ->required()
+                        ->helperText('Enable the multiple invoice payment options on the client area.'),
+                    Forms\Components\Toggle::make('invoices_choose_payment')
+                        ->label('Clients Choose Gateway')
+                        ->inline(false)
+                        ->onIcon('tabler-check')
+                        ->offIcon('tabler-x')
+                        ->onColor('success')
+                        ->offColor('danger')
+                        ->required()
+                        ->helperText('Enable to allow clients to choose the gateway they pay with.'),
+                    Forms\Components\Toggle::make('invoices_cancelation_handling')
+                        ->label('Cancellation Request Handling')
+                        ->inline(false)
+                        ->onIcon('tabler-check')
+                        ->offIcon('tabler-x')
+                        ->onColor('success')
+                        ->offColor('danger')
+                        ->required()
+                        ->helperText('Enable to automatically cancel outstanding unpaid invoices when a cancellation request is submitted.'),
+                    Forms\Components\Toggle::make('invoices_paid_numbering')
+                        ->label('Sequential Paid Invoice Numbering')
+                        ->inline(false)
+                        ->onIcon('tabler-check')
+                        ->offIcon('tabler-x')
+                        ->onColor('success')
+                        ->offColor('danger')
+                        ->required()
+                        ->helperText('Enable automatic sequential numbering of paid invoices'),
+                    Forms\Components\TextInput::make('invoices_next_paid_number')
+                        ->label('Next Paid Invoice Number')
+                        ->numeric()
+                        ->required()
+                        ->helperText('The next invoice number that will be assigned.'),
+                    Forms\Components\TextInput::make('invoices_number_format')
+                        ->label('Sequential Invoice Number Format')
+                        ->required()
+                        ->helperText('Available auto-insert tags are: {YEAR} {MONTH} {DAY} {NUMBER}.'),
+                    Forms\Components\Radio::make('invoices_late_type')
+                        ->label('Late Fee Type')
+                        ->options([
+                            'percent' => 'Percentage',
+                            'amount' => 'Fix Amount',
+                            ])
+                            ->required(),
+                    Forms\Components\TextInput::make('invoices_late_amount')
+                        ->label('Late Fee Amount')
+                        ->numeric()
+                        ->required()
+                        ->helperText('Enter the amount (percentage or monetary value) to apply to late invoices (set to 0 to disable).'),
+                    Forms\Components\TextInput::make('invoices_late_minimum')
+                        ->label('Late Fee Minimum')
+                        ->numeric()
+                        ->required()
+                        ->helperText('Enter the minimum amount to charge in cases where the calculated late fee falls below this figure.'),
+                ]),
+            Forms\Components\Grid::make(2)
+                ->schema([
+                    Forms\Components\TextInput::make('invoices_increment')
+                        ->label('Invoice # Incrementation')
+                        ->numeric()
+                        ->required()
+                        ->helperText('Enter the desired difference between generated invoice numbers (Default: 1, Maximum: 999)'),
+                    Forms\Components\TextInput::make('invoices_start')
+                        ->label('Invoice Starting #')
+                        ->numeric()
+                        ->helperText('Enter a value to set the next invoice number (Minimum: 10,000, Maximum: 9,999,999). Blank for no change'),
                 ]),
         ];
     }
@@ -587,6 +731,24 @@ class General extends Page
                 'company_maintenance' => 'nullable|boolean',
                 'company_maintenance_url' => 'nullable|url',
                 'company_maintenance_message' => 'nullable|string|max:255',
+                'ordering_redirect' => 'required|string|in:complete,invoice,payment',
+                'ordering_grace' => 'required|integer',
+                'ordering_tos' => 'required|boolean',
+                'ordering_notes' => 'required|boolean',
+                'invoices_pdf' => 'required|boolean',
+                'invoices_pdf_size' => 'required|string|in:A4,letter',
+                'invoices_pdf_font' => 'required|string',
+                'invoices_mass_payment' => 'required|boolean',
+                'invoices_choose_payment' => 'required|boolean',
+                'invoices_cancelation_handling' => 'required|boolean',
+                'invoices_paid_numbering' => 'required|boolean',
+                'invoices_next_paid_number' => 'required|integer|min:1',
+                'invoices_number_format' => 'required|string',
+                'invoices_late_type' => 'required|string|in:percent,amount',
+                'invoices_late_amount' => 'required|integer',
+                'invoices_late_minimum' => 'required|integer',
+                'invoices_increment' => 'required|integer|min:1|max:999',
+                'invoices_start' => 'required|integer|min:10000|max:9999999',
                 'term_tos' => 'nullable|boolean',
                 'term_tos_url' => 'nullable|url',
                 'term_tos_content' => 'nullable',
@@ -607,16 +769,7 @@ class General extends Page
                 'social_reddit' => 'nullable|url',
                 'social_skype' => 'nullable|url',
                 'social_telegram' => 'nullable|url',
-                'ordering_redirect' => 'required|in:complete,invoice,payment',
-                'ordering_grace' => 'required|int',
-                'ordering_tos' => 'nullable|boolean',
-                'ordering_notes' => 'nullable|boolean',
             ]);
-
-            
-            if (is_null($validated['ordering_phone'])) {
-                $validated['ordering_phone'] = '';
-            }
             
             collect($validated)->each(function ($value, $key) {
                 if (!is_null($value)) {
@@ -641,7 +794,7 @@ class General extends Page
                 $validatedMail['mail_encryption'] = null;
             }
     
-            EnvironmentWriter::writeToEnv([
+            $this->writeToEnv([
                 'MAIL_MAILER'     => $validatedMail['mail_driver'],
                 'MAIL_HOST'       => $validatedMail['mail_host'],
                 'MAIL_PORT'       => $validatedMail['mail_port'],
