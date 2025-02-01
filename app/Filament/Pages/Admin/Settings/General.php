@@ -123,7 +123,7 @@ class General extends Page
             'ordering_grace' => 2,
             'ordering_tos' => false,
             'ordering_notes' => false,
-            'mail_driver' => env('MAIL_DRIVER', 'sendmail'),
+            'mail_driver' => env('MAIL_MAILER', 'sendmail'),
             'mail_from_address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
             'mail_from_name' => env('MAIL_FROM_NAME', '${APP_NAME}'),
             'mail_host' => env('MAIL_HOST', ''),
