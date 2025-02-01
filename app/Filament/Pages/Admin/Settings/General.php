@@ -9,10 +9,8 @@ use Filament\Forms;
 use Filament\Pages\Page;
 use Filament\Navigation\NavigationItem;
 use Filament\Notifications\Notification;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Request;
 use Locale;
 use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 use Ysfkaya\FilamentPhoneInput\PhoneInputNumberType;
@@ -58,17 +56,6 @@ class General extends Page
         $social_telegram,
         $ordering_tos,
         $ordering_notes,
-        $ordering_firstname,
-        $ordering_lastname,
-        $ordering_email,
-        $ordering_phone,
-        $ordering_company,
-        $ordering_address1,
-        $ordering_address2,
-        $ordering_city,
-        $ordering_country,
-        $ordering_state,
-        $ordering_postcode,
         $mail_driver,
         $mail_from_address,
         $mail_from_name,
@@ -128,17 +115,6 @@ class General extends Page
             'social_telegram' => null,
             'ordering_tos' => false,
             'ordering_notes' => false,
-            'ordering_firstname' => null,
-            'ordering_lastname' => null,
-            'ordering_email' => null,
-            'ordering_phone' => null,
-            'ordering_company' => null,
-            'ordering_address1' => null,
-            'ordering_address2' => null,
-            'ordering_city' => null,
-            'ordering_country' => 'ID',
-            'ordering_state' => null,
-            'ordering_postcode' => null,
             'mail_driver' => env('MAIL_DRIVER', null),
             'mail_from_address' => env('MAIL_FROM_ADDRESS', null),
             'mail_from_name' => env('MAIL_FROM_NAME', null),
@@ -329,41 +305,6 @@ class General extends Page
                         ->offColor('danger')
                         ->helperText('If enable, clients can enter additional info on the order form.'),
                 ]),
-            Forms\Components\Section::make('Default Billing or Contact details')
-                ->schema([
-                    Forms\Components\Grid::make(2)
-                        ->schema([
-                            Forms\Components\TextInput::make('ordering_firstname')
-                                ->label('First Name'),
-                            Forms\Components\TextInput::make('ordering_lastname')
-                                ->label('Last Name'),
-                            Forms\Components\TextInput::make('ordering_email')
-                                ->label('Email Address'),
-                            PhoneInput::make('ordering_phone')
-                                ->label('Phone Number')
-                                ->displayNumberFormat(PhoneInputNumberType::NATIONAL),
-                            Forms\Components\TextInput::make('ordering_company')
-                                ->label('Company Name'),
-                            Forms\Components\TextInput::make('ordering_address1')
-                                ->label('Street Address 1'),
-                            Forms\Components\TextInput::make('ordering_address2')
-                                ->label('Street Address 2'),
-                            Forms\Components\TextInput::make('ordering_city')
-                                ->label('City'),
-                            Forms\Components\Select::make('ordering_country')
-                                ->label('Country')
-                                ->options(config('utils.countries'))
-                                ->searchable(),
-                            Forms\Components\Grid::make(2)
-                                ->schema([
-                                    Forms\Components\TextInput::make('ordering_state')
-                                        ->label('State/Region'),
-                                    Forms\Components\TextInput::make('ordering_postcode')
-                                        ->label('Postcode'),
-                                ])
-                                ->columnSpan(1),
-                        ]),
-                ])
         ];
     }
 
@@ -651,17 +592,6 @@ class General extends Page
                 'social_telegram' => 'nullable|url',
                 'ordering_tos' => 'nullable|boolean',
                 'ordering_notes' => 'nullable|boolean',
-                'ordering_firstname' => 'nullable|string',
-                'ordering_lastname' => 'nullable|string',
-                'ordering_email' => 'nullable|email',
-                'ordering_phone' => 'nullable|numeric',
-                'ordering_company' => 'nullable|string',
-                'ordering_address1' => 'nullable|string',
-                'ordering_address2' => 'nullable|string',
-                'ordering_city' => 'nullable|string',
-                'ordering_country' => 'nullable|string',
-                'ordering_state' => 'nullable|string',
-                'ordering_postcode' => 'nullable|string',
             ]);
 
             
