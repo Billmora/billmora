@@ -65,6 +65,10 @@ class General extends Page
         $invoices_late_minimum,
         $invoices_increment,
         $invoices_start,
+        $credit_use,
+        $credit_min_deposit,
+        $credit_max_deposit,
+        $credit_max,
         $term_tos,
         $term_tos_url,
         $term_tos_content,
@@ -140,6 +144,10 @@ class General extends Page
             'invoices_late_minimum' => 0,
             'invoices_increment' => 1,
             'invoices_start' => null,
+            'credit_use' => false,
+            'credit_min_deposit' => 0,
+            'credit_max_deposit' => 0,
+            'credit_max' => 0,
             'term_tos' => false,
             'term_tos_url' => null,
             'term_tos_content' => null,
@@ -203,6 +211,10 @@ class General extends Page
                         ->label('Invoices')
                         ->icon('tabler-invoice')
                         ->schema($this->tabInvoices()),
+                    Forms\Components\Tabs\Tab::make('credit')
+                        ->label('Credit')
+                        ->icon('tabler-coin')
+                        ->schema($this->tabCredit()),
                     Forms\Components\Tabs\Tab::make('term')
                         ->label('Term')
                         ->icon('tabler-circle-dashed-check')
@@ -556,6 +568,36 @@ class General extends Page
         ];
     }
 
+    private function tabCredit()
+    {
+        return [
+            Forms\Components\Grid::make(2)
+            ->schema([
+                Forms\Components\Toggle::make('credit_use')
+                    ->label('Credit')
+                    ->inline(false)
+                    ->onIcon('tabler-check')
+                    ->offIcon('tabler-x')
+                    ->onColor('success')
+                    ->offColor('danger')
+                    ->required()
+                    ->helperText('Enable adding and use of funds by clients from the client area.'),
+                Forms\Components\TextInput::make('credit_min_deposit')
+                    ->label('Minimum Deposit')
+                    ->required()
+                    ->helperText('Enter the minimum amount that can be deposited.'),
+                Forms\Components\TextInput::make('credit_max_deposit')
+                    ->label('Maximum Deposit')
+                    ->required()
+                    ->helperText('Enter the maximum amount that can be deposited.'),
+                Forms\Components\TextInput::make('credit_max')
+                    ->label('Maximum Balance')
+                    ->required()
+                    ->helperText('Enter the maximum balance that can be deposited.'),
+            ]),
+        ];
+    }
+
     private function tabTerm()
     {
         return [
@@ -749,6 +791,10 @@ class General extends Page
                 'invoices_late_minimum' => 'required|numeric',
                 'invoices_increment' => 'required|integer|min:1|max:999',
                 'invoices_start' => 'nullable|integer|min:10000|max:9999999',
+                'credit_use' => 'required|boolean',
+                'credit_min_deposit' => 'required|numeric',
+                'credit_max_deposit' => 'required|numeric',
+                'credit_max' => 'required|numeric',
                 'term_tos' => 'nullable|boolean',
                 'term_tos_url' => 'nullable|url',
                 'term_tos_content' => 'nullable',
