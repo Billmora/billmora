@@ -18,7 +18,7 @@ use Ysfkaya\FilamentPhoneInput\PhoneInputNumberType;
 class General extends Page
 {
     use EnvironmentWriter;
-    
+
     protected static ?string $navigationIcon = 'tabler-nut';
     protected static string $view = 'filament.pages.admin.settings.general';
     protected static ?string $slug = 'settings/general';
@@ -534,12 +534,10 @@ class General extends Page
                             ->required(),
                     Forms\Components\TextInput::make('invoices_late_amount')
                         ->label('Late Fee Amount')
-                        ->numeric()
                         ->required()
                         ->helperText('Enter the amount (percentage or monetary value) to apply to late invoices (set to 0 to disable).'),
                     Forms\Components\TextInput::make('invoices_late_minimum')
                         ->label('Late Fee Minimum')
-                        ->numeric()
                         ->required()
                         ->helperText('Enter the minimum amount to charge in cases where the calculated late fee falls below this figure.'),
                 ]),
@@ -747,8 +745,8 @@ class General extends Page
                 'invoices_next_paid_number' => 'required|integer|min:1',
                 'invoices_number_format' => 'required|string',
                 'invoices_late_type' => 'required|string|in:percent,amount',
-                'invoices_late_amount' => 'required|integer',
-                'invoices_late_minimum' => 'required|integer',
+                'invoices_late_amount' => 'required|numeric',
+                'invoices_late_minimum' => 'required|numeric',
                 'invoices_increment' => 'required|integer|min:1|max:999',
                 'invoices_start' => 'nullable|integer|min:10000|max:9999999',
                 'term_tos' => 'nullable|boolean',
