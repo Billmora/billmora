@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\File;
 
 trait EnvironmentWriter
 {
-    private function writeToEnv(array $data)
+    protected function writeToEnv(array $data)
     {
         $path = base_path('.env');
         

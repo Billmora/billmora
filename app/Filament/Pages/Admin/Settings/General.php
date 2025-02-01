@@ -17,6 +17,8 @@ use Ysfkaya\FilamentPhoneInput\PhoneInputNumberType;
 
 class General extends Page
 {
+    use EnvironmentWriter;
+    
     protected static ?string $navigationIcon = 'tabler-nut';
     protected static string $view = 'filament.pages.admin.settings.general';
     protected static ?string $slug = 'settings/general';
