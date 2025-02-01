@@ -748,7 +748,7 @@ class General extends Page
                 'invoices_late_amount' => 'required|integer',
                 'invoices_late_minimum' => 'required|integer',
                 'invoices_increment' => 'required|integer|min:1|max:999',
-                'invoices_start' => 'required|integer|min:10000|max:9999999',
+                'invoices_start' => 'nullable|integer|min:10000|max:9999999',
                 'term_tos' => 'nullable|boolean',
                 'term_tos_url' => 'nullable|url',
                 'term_tos_content' => 'nullable',
