@@ -266,7 +266,7 @@ class General extends Page
                                 ->helperText('The name of your Company.'),
                             Forms\Components\Select::make('company_theme')
                                 ->label('Theme')
-                                ->options(collect(File::directories(resource_path('views/theme')))
+                                ->options(collect(File::directories(resource_path('themes')))
                                     ->mapWithKeys(fn ($path) => [
                                         basename($path) => basename($path)
                                     ])
