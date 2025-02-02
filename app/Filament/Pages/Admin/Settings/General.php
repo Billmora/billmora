@@ -67,6 +67,10 @@ class General extends Page
         $credit_min_deposit,
         $credit_max_deposit,
         $credit_max,
+        $affiliates_use,
+        $affiliates_min_payment,
+        $affiliates_reward,
+        $affiliates_discount,
         $captcha_driver,
         $captcha_turnstile_verify_domain,
         $captcha_turnstile_site_key,
@@ -152,6 +156,10 @@ class General extends Page
             'credit_min_deposit' => 0,
             'credit_max_deposit' => 0,
             'credit_max' => 0,
+            'affiliates_use' => false,
+            'affiliates_min_payment' => 0,
+            'affiliates_reward' => 0,
+            'affiliates_discount' => 0,
             'captcha_driver' => env('CAPTCHA_DRIVER', 'none'),
             'captcha_turnstile_verify_domain' => filter_var(env('TURNSTILE_VERIFY_DOMAIN', true), FILTER_VALIDATE_BOOLEAN),
             'captcha_turnstile_site_key' => env('TURNSTILE_SITE_KEY', ''),
@@ -225,6 +233,10 @@ class General extends Page
                         ->label('Credit')
                         ->icon('tabler-coin')
                         ->schema($this->tabCredit()),
+                    Forms\Components\Tabs\Tab::make('affiliates')
+                        ->label('Affiliates')
+                        ->icon('tabler-affiliate')
+                        ->schema($this->tabAffiliates()),
                     Forms\Components\Tabs\Tab::make('captcha')
                         ->label('Captcha')
                         ->icon('tabler-shield')
@@ -612,6 +624,38 @@ class General extends Page
         ];
     }
 
+    private function tabAffiliates()
+    {
+        return [
+            Forms\Components\Grid::make(2)
+            ->schema([
+                Forms\Components\Toggle::make('affiliates_use')
+                    ->label('Affiliates')
+                    ->inline(false)
+                    ->onIcon('tabler-check')
+                    ->offIcon('tabler-x')
+                    ->onColor('success')
+                    ->offColor('danger')
+                    ->required()
+                    ->helperText('Enable the affiliate system.'),
+                Forms\Components\TextInput::make('affiliates_min_payment')
+                    ->label('Minimum Payment')
+                    ->required()
+                    ->helperText('Enter the minimum payment that can use affiliates.'),
+                Forms\Components\TextInput::make('affiliates_reward')
+                    ->label('Creator Reward in %')
+                    ->suffixIcon('tabler-percentage')
+                    ->required()
+                    ->helperText('Percentage of the sale amount that the affiliate earns for each successful referral.'),
+                Forms\Components\TextInput::make('affiliates_discount')
+                    ->label('Invited Discount in %')
+                    ->suffixIcon('tabler-percentage')
+                    ->required()
+                    ->helperText('Discount percentage for referred customers when they use the affiliates link.'),
+            ]),
+        ];
+    }
+
     private function tabCaptcha()
     {
         return [
@@ -875,6 +919,10 @@ class General extends Page
                 'credit_min_deposit' => 'required|numeric',
                 'credit_max_deposit' => 'required|numeric',
                 'credit_max' => 'required|numeric',
+                'affiliates_use' => 'required|boolean',
+                'affiliates_min_payment' => 'required|numeric',
+                'affiliates_reward' => 'required|numeric',
+                'affiliates_discount' => 'required|numeric',
                 'term_tos' => 'nullable|boolean',
                 'term_tos_url' => 'nullable|url',
                 'term_tos_content' => 'nullable',
