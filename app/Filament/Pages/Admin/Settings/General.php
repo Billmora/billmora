@@ -946,7 +946,7 @@ class General extends Page
 
             $this->writeToEnv([
                 'CAPTCHA_DRIVER' => $validatedCaptcha['captcha_driver'],
-                'TURNSTILE_VERIFY_DOMAIN' => $validatedCaptcha['captcha_turnstile_verify_domain'],
+                'TURNSTILE_VERIFY_DOMAIN' => $validatedCaptcha['captcha_turnstile_verify_domain'] ?? false,
                 'TURNSTILE_SITE_KEY' => $validatedCaptcha['captcha_turnstile_site_key'],
                 'TURNSTILE_SECRET_KEY' => $validatedCaptcha['captcha_turnstile_secret_key'],
                 'RECAPTCHAV2_SITE_KEY' => $validatedCaptcha['captcha_recaptchav2_site_key'],
