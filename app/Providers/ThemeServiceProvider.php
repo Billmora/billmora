@@ -24,7 +24,7 @@ class ThemeServiceProvider extends ServiceProvider
     {
         $theme = session('theme',  Config::setting('company_theme', 'default'));
 
-        $themePath = resource_path("views/theme/$theme");
+        $themePath = resource_path("themes/$theme");
 
         if (File::isDirectory($themePath)) {
             View::addLocation($themePath);

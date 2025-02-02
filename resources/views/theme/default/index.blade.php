@@ -1,1 +1,0 @@
-Welcome to {{ Config::setting('company_name') }}!!
