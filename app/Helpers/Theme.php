@@ -20,7 +20,8 @@ class Theme
             'name' => 'Default',
             'version' => '1.0.0',
             'author' => 'Billmora',
-            'url' => 'https://billmora.com',    
+            'url' => 'https://billmora.com',
+            'assets' => '/assets/themes/default',
         ];
     }
 }
