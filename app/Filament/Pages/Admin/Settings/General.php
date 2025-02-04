@@ -943,12 +943,6 @@ class General extends Page
                 'social_skype' => 'nullable|url',
                 'social_telegram' => 'nullable|url',
             ]);
-            
-            collect($validated)->each(function ($value, $key) {
-                if (!is_null($value)) {
-                    Setting::updateOrCreate(['key' => $key], ['value' => $value]);
-                }
-            });
 
             $validatedMail = $this->validate([
                 'mail_driver' => 'required|string|in:smtp,mailgun,sendmail',
@@ -967,20 +961,6 @@ class General extends Page
             if ($validatedMail['mail_encryption'] === 'none') {
                 $validatedMail['mail_encryption'] = null;
             }
-    
-            $this->writeToEnv([
-                'MAIL_MAILER' => $validatedMail['mail_driver'],
-                'MAIL_HOST' => $validatedMail['mail_host'],
-                'MAIL_PORT' => $validatedMail['mail_port'],
-                'MAIL_USERNAME' => $validatedMail['mail_username'],
-                'MAIL_PASSWORD' => $validatedMail['mail_password'],
-                'MAIL_ENCRYPTION' => $validatedMail['mail_encryption'],
-                'MAIL_FROM_ADDRESS' => $validatedMail['mail_from_address'],
-                'MAIL_FROM_NAME' => $validatedMail['mail_from_name'],
-                'MAILGUN_DOMAIN' => $validatedMail['mail_mailgun_domain'],
-                'MAILGUN_SECRET' => $validatedMail['mail_mailgun_secret'],
-                'MAILGUN_ENDPOINT' => $validatedMail['mail_mailgun_endpoint'],
-            ]);
 
             $validatedCaptcha = $this->validate([
                 'captcha_driver' => 'required|string|in:none,turnstile,recaptchav2',
@@ -991,22 +971,40 @@ class General extends Page
                 'captcha_recaptchav2_secret_key' => 'required_if:captcha_driver,recaptchav2|string',
             ]);
 
-            $this->writeToEnv([
+            $validatedLanguage = $this->validate([
+                'company_language' => 'required|string',
+            ]);
+
+            collect($validated)->each(function ($value, $key) {
+                if (!is_null($value)) {
+                    Setting::updateOrCreate(['key' => $key], ['value' => $value]);
+                }
+            });
+
+            $envUpdates = [
+                'APP_LOCALE' => $validatedLanguage['company_language'],
+
+                'MAIL_MAILER' => $validatedMail['mail_driver'],
+                'MAIL_HOST' => $validatedMail['mail_host'],
+                'MAIL_PORT' => $validatedMail['mail_port'],
+                'MAIL_USERNAME' => $validatedMail['mail_username'],
+                'MAIL_PASSWORD' => $validatedMail['mail_password'],
+                'MAIL_ENCRYPTION' => $validatedMail['mail_encryption'] === 'none' ? null : $validatedMail['mail_encryption'],
+                'MAIL_FROM_ADDRESS' => $validatedMail['mail_from_address'],
+                'MAIL_FROM_NAME' => $validatedMail['mail_from_name'],
+                'MAILGUN_DOMAIN' => $validatedMail['mail_mailgun_domain'],
+                'MAILGUN_SECRET' => $validatedMail['mail_mailgun_secret'],
+                'MAILGUN_ENDPOINT' => $validatedMail['mail_mailgun_endpoint'],
+    
                 'CAPTCHA_DRIVER' => $validatedCaptcha['captcha_driver'],
                 'TURNSTILE_VERIFY_DOMAIN' => $validatedCaptcha['captcha_turnstile_verify_domain'] ?? false,
                 'TURNSTILE_SITE_KEY' => $validatedCaptcha['captcha_turnstile_site_key'],
                 'TURNSTILE_SECRET_KEY' => $validatedCaptcha['captcha_turnstile_secret_key'],
                 'RECAPTCHAV2_SITE_KEY' => $validatedCaptcha['captcha_recaptchav2_site_key'],
                 'RECAPTCHAV2_SECRET_KEY' => $validatedCaptcha['captcha_recaptchav2_secret_key'],
-            ]);
+            ];
 
-            $validatedLanguage = $this->validate([
-                'company_language' => 'required|string',
-            ]);
-
-            $this->writeToEnv([
-                'APP_LOCALE' => $validatedLanguage['company_language'],
-            ]);
+            $this->writeToEnv($envUpdates);
     
             Artisan::call('config:clear');
     
@@ -1022,5 +1020,4 @@ class General extends Page
                 ->send();
         }
     }
-    
 }
