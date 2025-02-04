@@ -162,3 +162,32 @@ main {
 .modal.active .card {
     transform: scale(1);
 }
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.form-group label {
+    font-weight: 600;
+}
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: var(--color-1);
+    color: #00155F;
+    border: 2px solid var(--color-3);
+    padding: 0.6rem 2rem 0.6rem 0.7rem;
+    border-radius: 0.5rem;
+    outline: none;
+    background-image: url('https://www.svgrepo.com/show/12432/down-chevron.svg');
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 1rem;
+}
+
+select:focus {
+    background-color: var(--color-1);
+    border: 2px solid var(--color-primary);
+    border-radius: 0.5rem;
+}

@@ -28,9 +28,9 @@ class General extends Page
         $company_logo, 
         $company_favicon, 
         $company_description, 
+        $company_portal, 
         $company_date_format, 
         $company_language, 
-        $company_country, 
         $company_maintenance, 
         $company_maintenance_url, 
         $company_maintenance_message,
@@ -117,9 +117,9 @@ class General extends Page
             'company_logo' => 'https://viidev.com/assets/img/logo/logo.png',
             'company_favicon' => 'https://viidev.com/assets/img/logo/logo.png',
             'company_description' => 'Free and Open source Billing Management Operations & Recurring Automation.',
+            'company_portal' => false,
             'company_date_format' => 'd/m/Y',
             'company_language' => 'en',
-            'company_country' => 'ID',
             'company_maintenance' => null,
             'company_maintenance_url' => null,
             'company_maintenance_message' => 'We are currently performing maintenance and will be back shortly.',
@@ -295,6 +295,15 @@ class General extends Page
                         ]),
                     Forms\Components\Grid::make(3)
                         ->schema([
+                            Forms\Components\Toggle::make('company_portal')
+                                ->label('Disable Portal')
+                                ->inline(false)
+                                ->onIcon('tabler-check')
+                                ->offIcon('tabler-x')
+                                ->onColor('success')
+                                ->offColor('danger')
+                                ->required()
+                                ->helperText('Disable area portal will be automated redirect to clientarea.'),
                             Forms\Components\Select::make('company_date_format')
                                 ->label('Date Format')
                                 ->options([
@@ -319,13 +328,6 @@ class General extends Page
                                 ->native(false)
                                 ->required()
                                 ->helperText('Default language for Billmora clientarea.'),
-                            Forms\Components\Select::make('company_country')
-                                ->label('Country')
-                                ->options(config('utils.countries'))
-                                ->searchable()
-                                ->native(false)
-                                ->required()
-                                ->helperText('Country where your company is located.'),
                         ])
                 ]),
 
@@ -890,9 +892,9 @@ class General extends Page
                 'company_theme' => 'required|string',
                 'company_logo' => 'required|url',
                 'company_favicon' => 'required|url',
+                'company_portal' => 'required|boolean',
                 'company_description' => 'nullable|string|max:255',
                 'company_date_format' => 'required|string',
-                'company_country' => 'required|string',
                 'company_maintenance' => 'nullable|boolean',
                 'company_maintenance_url' => 'nullable|url',
                 'company_maintenance_message' => 'nullable|string|max:255',
