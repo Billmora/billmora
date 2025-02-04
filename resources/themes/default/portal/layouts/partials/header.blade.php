@@ -59,16 +59,16 @@
         <a href="/auth/register" class="btn btn-primary">{{ __('portal.sign_up') }}</a>
     </div>
 </div>
-<div class="modal" id="modalPreference">
-    <div class="card">
-        <div class="header">
-            <h2>{{ __('portal.modal_preference') }}</h2>
-            <button class="btn btn-secondary btn-square" id="modal-close">
-                <x-tabler-x/>
-            </button>
-        </div>
-        <form action="{{ route('preference.language') }}" method="POST">
-            @csrf
+<form action="{{ route('preference.language') }}" method="POST">
+    @csrf
+    <div class="modal" id="modalPreference">
+        <div class="card">
+            <div class="header">
+                <h2>{{ __('portal.modal_preference') }}</h2>
+                <button class="btn btn-secondary btn-square" id="modal-close">
+                    <x-tabler-x/>
+                </button>
+            </div>
             <div class="body">
                 <div class="form-group">
                     <label for="language">{{ __('portal.language') }}</label>
@@ -85,6 +85,6 @@
                 <button type="button" class="btn btn-secondary" id="modal-close">{{ __('portal.modal_cancel') }}</button>
                 <button type="submit" class="btn btn-primary">{{ __('portal.modal_save') }}</button>
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
