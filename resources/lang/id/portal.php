@@ -9,6 +9,7 @@ return [
     'tos' => 'Ketentuan Layanan',
     'toc' => 'Syarat dan Ketentuan',
     'privacy_policy' => 'Kebijakan Privasi',
+    'language' => 'Bahasa',
     'modal_preference' => 'Preferensi',
     'modal_cancel' => 'Batan',
     'modal_save' => 'Simpan',

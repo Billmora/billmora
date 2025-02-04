@@ -136,5 +136,5 @@ return [
 
     'aliases' => [
         'Config' => App\Helpers\Config::class,
-],
+    ],
 ];

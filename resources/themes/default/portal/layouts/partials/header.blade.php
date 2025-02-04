@@ -13,7 +13,7 @@
             <button class="btn btn-secondary btn-square preference" id="modal-open" modal-data="modalPreference">
                 <div class="language">
                     <x-tabler-language />
-                    <span>English</span>
+                    <span>{{ $langActive }}</span>
                 </div>
                 <span class="currency">(USD)</span>
             </button>
@@ -50,7 +50,7 @@
         <button class="btn btn-secondary preference" id="modal-open" modal-data="modalPreference">
             <div class="language">
                 <x-tabler-language />
-                <span>English</span>
+                <span>{{ $langActive }}</span>
             </div>
             <span class="currency">(USD)</span>
         </button>
@@ -67,12 +67,24 @@
                 <x-tabler-x/>
             </button>
         </div>
-        <div class="body">
-            <span>body</span>
-        </div>
-        <div class="footer">
-            <button class="btn btn-secondary" id="modal-close">{{ __('portal.modal_cancel') }}</button>
-            <button class="btn btn-primary">{{ __('portal.modal_save') }}</button>
-        </div>
+        <form action="{{ route('preference.language') }}" method="POST">
+            @csrf
+            <div class="body">
+                <div class="form-group">
+                    <label for="language">{{ __('portal.language') }}</label>
+                    <select name="language" id="language">
+                        @foreach ($langs as $lang => $name)
+                            <option value="{{ $lang }}" {{ session('locale', config('app.locale')) == $lang ? 'selected' : '' }}>
+                                {{ $name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="footer">
+                <button type="button" class="btn btn-secondary" id="modal-close">{{ __('portal.modal_cancel') }}</button>
+                <button type="submit" class="btn btn-primary">{{ __('portal.modal_save') }}</button>
+            </div>
+        </form>
     </div>
 </div>

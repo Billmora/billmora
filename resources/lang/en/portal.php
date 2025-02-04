@@ -9,6 +9,7 @@ return [
     'tos' => 'Terms of Service',
     'toc' => 'Terms of Condition',
     'privacy_policy' => 'Privacy Policy',
+    'language' => 'Language',
     'modal_preference' => 'Preference',
     'modal_cancel' => 'Cancel',
     'modal_save' => 'Save',
