@@ -118,7 +118,7 @@ class General extends Page
             'company_favicon' => 'https://viidev.com/assets/img/logo/logo.png',
             'company_description' => 'Free and Open source Billing Management Operations & Recurring Automation.',
             'company_date_format' => 'd/m/Y',
-            'company_language' => 'en_US',
+            'company_language' => 'en',
             'company_country' => 'ID',
             'company_maintenance' => null,
             'company_maintenance_url' => null,
@@ -892,7 +892,6 @@ class General extends Page
                 'company_favicon' => 'required|url',
                 'company_description' => 'nullable|string|max:255',
                 'company_date_format' => 'required|string',
-                'company_language' => 'required|string',
                 'company_country' => 'required|string',
                 'company_maintenance' => 'nullable|boolean',
                 'company_maintenance_url' => 'nullable|url',
@@ -999,6 +998,14 @@ class General extends Page
                 'TURNSTILE_SECRET_KEY' => $validatedCaptcha['captcha_turnstile_secret_key'],
                 'RECAPTCHAV2_SITE_KEY' => $validatedCaptcha['captcha_recaptchav2_site_key'],
                 'RECAPTCHAV2_SECRET_KEY' => $validatedCaptcha['captcha_recaptchav2_secret_key'],
+            ]);
+
+            $validatedLanguage = $this->validate([
+                'company_language' => 'required|string',
+            ]);
+
+            $this->writeToEnv([
+                'APP_LOCALE' => $validatedLanguage['company_language'],
             ]);
     
             Artisan::call('config:clear');

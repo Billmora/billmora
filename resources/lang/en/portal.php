@@ -12,7 +12,6 @@ return [
     'modal_preference' => 'Preference',
     'modal_cancel' => 'Cancel',
     'modal_save' => 'Save',
-    'store' => 'Store',
     'support' => 'Support',
     'ticket' => 'Ticket',
     'company' => 'Company',
