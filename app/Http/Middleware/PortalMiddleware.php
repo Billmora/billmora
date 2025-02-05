@@ -16,7 +16,6 @@ class PortalMiddleware
      */
     public function handle(Request $request, Closure $next, $route): Response
     {
-        // dd(Config::setting('company_portal'));
         if (Config::setting('company_portal', '1') == '0' && $request->is($route)) {
             return redirect('/client');
         }
