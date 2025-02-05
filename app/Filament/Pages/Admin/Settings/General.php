@@ -117,7 +117,7 @@ class General extends Page
             'company_logo' => 'https://viidev.com/assets/img/logo/logo.png',
             'company_favicon' => 'https://viidev.com/assets/img/logo/logo.png',
             'company_description' => 'Free and Open source Billing Management Operations & Recurring Automation.',
-            'company_portal' => false,
+            'company_portal' => true,
             'company_date_format' => 'd/m/Y',
             'company_language' => 'en',
             'company_maintenance' => null,
@@ -296,14 +296,14 @@ class General extends Page
                     Forms\Components\Grid::make(3)
                         ->schema([
                             Forms\Components\Toggle::make('company_portal')
-                                ->label('Disable Portal')
+                                ->label('Portal')
                                 ->inline(false)
                                 ->onIcon('tabler-check')
                                 ->offIcon('tabler-x')
                                 ->onColor('success')
                                 ->offColor('danger')
                                 ->required()
-                                ->helperText('Disable area portal will be automated redirect to clientarea.'),
+                                ->helperText('If disable, area portal will be automated redirect to clientarea.'),
                             Forms\Components\Select::make('company_date_format')
                                 ->label('Date Format')
                                 ->options([
