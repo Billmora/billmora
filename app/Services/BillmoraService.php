@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Services;
 
+use App\Models\Setting;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Validator;
@@ -8,63 +10,64 @@ use Illuminate\Validation\ValidationException;
 
 class BillmoraService
 {
-    public function getSetting(string $key, mixed $default = null): mixed
+    public static function getSetting(string $key, mixed $default = null): mixed
     {
-        return \DB::table('settings')->where('key', $key)->value('value') ?? $default;
+        return Setting::where('key', $key)->value('value') ?? $default;
     }
 
-    public function setSetting(array $data): void
+    public static function setSetting(array $data): void
     {
-        $validated = $this->validateData($data);
+        $validated = self::validateData($data);
 
         foreach ($validated as $key => $value) {
-            \DB::table('settings')->updateOrInsert(['key' => $key], ['value' => $value]);
+            Setting::updateOrCreate(['key' => $key], ['value' => $value]);
         }
     }
 
-    public function setEnv(array $data): void
+    public static function setEnv(array $data): void
     {
-        $validated = $this->validateData($data);
+        $validated = self::validateData($data);
         $path = base_path('.env');
 
-        if (File::exists($path)) {
-            $env = File::get($path);
-
-            foreach ($validated as $key => $value) {
-                $formattedValue = $this->formatEnv($value);
-
-                if (preg_match("/^{$key}=.*/m", $env)) {
-                    $env = preg_replace("/^{$key}=.*/m", "{$key}={$formattedValue}", $env);
-                } else {
-                    $env .= "\n{$key}={$formattedValue}";
-                }
-            }
-
-            File::put($path, $env);
-            Artisan::call('config:clear');
+        if (!File::exists($path)) {
+            throw new \RuntimeException('.env file not found.');
         }
+
+        $env = File::get($path);
+
+        foreach ($validated as $key => $value) {
+            $formattedValue = self::formatEnv($value);
+
+            if (preg_match("/^{$key}=.*/m", $env)) {
+                $env = preg_replace("/^{$key}=.*/m", "{$key}={$formattedValue}", $env);
+            } else {
+                $env .= "\n{$key}={$formattedValue}";
+            }
+        }
+
+        File::put($path, $env);
+        Artisan::call('config:clear');
     }
 
-    private function validateData(array $data): array
+    private static function validateData(array $data): array
     {
-        $validator = Validator::make($data, [
-            '*.key' => 'required|string|max:255',
-            '*.value' => 'nullable',
+        $validator = Validator::make(['keys' => array_keys($data)], [
+            'keys.*' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
 
-        return collect($data)->pluck('value', 'key')->toArray();
+        return $data;
     }
 
-    private function formatEnv(mixed $value): string
+    private static function formatEnv(mixed $value): string
     {
         return match (gettype($value)) {
             'boolean' => $value ? 'true' : 'false',
             'integer', 'double' => (string) $value,
-            'array', 'object' => '"' . json_encode($value) . '"',
+            'array', 'object' => '"' . json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '"',
             default => "\"{$value}\"",
         };
     }
