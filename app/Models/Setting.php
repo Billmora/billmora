@@ -10,11 +10,22 @@ class Setting extends Model
 
     public function getValueAttribute($value)
     {
-        return json_decode($value, true) ?? $value;
+        if ($this->isJson($value)) {
+            return json_decode($value, true);
+        }
+        return $value;
     }
 
     public function setValueAttribute($value)
     {
-        $this->attributes['value'] = is_array($value) ? json_encode($value) : $value;
+        $this->attributes['value'] = is_array($value) || is_object($value)
+            ? json_encode($value)
+            : $value;
+    }
+
+    private function isJson($string): bool
+    {
+        json_decode($string);
+        return json_last_error() === JSON_ERROR_NONE;
     }
 }
