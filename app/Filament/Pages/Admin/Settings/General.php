@@ -47,6 +47,10 @@ class General extends Page
                         ->label('Company')
                         ->icon('tabler-building')
                         ->schema($this->tabCompany()),
+                    Forms\Components\Tabs\Tab::make('ordering')
+                        ->label('Ordering')
+                        ->icon('tabler-truck-delivery')
+                        ->schema($this->tabOrdering()),
                 ]),
         ];
     }
@@ -183,6 +187,50 @@ class General extends Page
         ];
     }
 
+    private function tabOrdering(): array
+    {
+        return [
+            Forms\Components\Grid::make(2)
+                ->schema([
+                    Forms\Components\Radio::make('ordering_redirect')
+                        ->label('Auto Redirect on Checkout')
+                        ->options([
+                            'complete' => 'Just show the order completed page (no payment redirect)',
+                            'invoice' => 'Automatically take the user to the invoice',
+                            'payment' => 'Automatically forward the user to the payment gateway'
+                        ])
+                        ->required()
+                        ->default(Billmora::getSetting('ordering_redirect', 'payment')),
+                    Forms\Components\TextInput::make('ordering_grace')
+                        ->label('Order days grace')
+                        ->numeric()
+                        ->required()
+                        ->helperText('The number of days to allow for payment of an order before being overdue.')
+                        ->default(Billmora::getSetting('ordering_grace', 0)),
+                    Forms\Components\Toggle::make('ordering_tos')
+                        ->label('Terms of Service')
+                        ->inline(false)
+                        ->onIcon('tabler-check')
+                        ->offIcon('tabler-x')
+                        ->onColor('success')
+                        ->offColor('danger')
+                        ->required()
+                        ->helperText('If enable, clients must agree to company Terms of Service.')
+                        ->default(Billmora::getSetting('ordering_tos', true)),
+                    Forms\Components\Toggle::make('ordering_notes')
+                        ->label('Notes on Checkout')
+                        ->inline(false)
+                        ->onIcon('tabler-check')
+                        ->offIcon('tabler-x')
+                        ->onColor('success')
+                        ->offColor('danger')
+                        ->required()
+                        ->helperText('If enable, clients can enter additional notes on the order form.')
+                        ->default(Billmora::getSetting('ordering_notes', false)),
+                ]),
+        ];
+    }
+
     protected function getFormStatePath(): ?string
     {
         return 'data';
@@ -204,6 +252,11 @@ class General extends Page
                 'company_maintenance' => ['nullable', 'boolean'],
                 'company_maintenance_url' => ['nullable', 'url'],
                 'company_maintenance_message' => ['nullable', 'string'],
+
+                'ordering_redirect' => ['required', 'string'],
+                'ordering_grace' => ['required', 'integer'],
+                'ordering_tos' => ['required', 'boolean'],
+                'ordering_notes' => ['required', 'boolean'],
             ])->validate();
 
             Billmora::setSetting($validated);
