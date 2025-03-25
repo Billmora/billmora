@@ -64,11 +64,22 @@ class BillmoraService
 
     private static function formatEnv(mixed $value): string
     {
-        return match (gettype($value)) {
-            'boolean' => $value ? 'true' : 'false',
-            'integer', 'double' => (string) $value,
-            'array', 'object' => '"' . json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '"',
-            default => "\"{$value}\"",
-        };
+        if (is_null($value) || $value === '') {
+            return '';
+        }
+    
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+    
+        if (is_numeric($value)) {
+            return (string) $value;
+        }
+    
+        if (is_string($value) && preg_match('/[^\w.\-+\/]/', $value)) {
+            return sprintf('"%s"', addcslashes($value, '\\"'));
+        }
+    
+        return $value;
     }
 }
