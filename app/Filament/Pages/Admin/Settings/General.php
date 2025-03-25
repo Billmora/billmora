@@ -54,11 +54,15 @@ class General extends Page
                     Forms\Components\Tabs\Tab::make('invoice')
                         ->label('Invoice')
                         ->icon('tabler-invoice')
-                        ->schema($this->tabInvoices()),
+                        ->schema($this->tabInvoice()),
                     Forms\Components\Tabs\Tab::make('credit')
                         ->label('Credit')
                         ->icon('tabler-coin')
                         ->schema($this->tabCredit()),
+                    Forms\Components\Tabs\Tab::make('affiliate')
+                        ->label('Affiliate')
+                        ->icon('tabler-affiliate')
+                        ->schema($this->tabAffiliate()),
                 ]),
         ];
     }
@@ -239,7 +243,7 @@ class General extends Page
         ];
     }
 
-    private function tabInvoices()
+    private function tabInvoice()
     {
         return [
             Forms\Components\Grid::make(3)
@@ -326,7 +330,7 @@ class General extends Page
                     ->numeric()
                     ->required()
                     ->helperText('Enter the minimum amount that can be deposited.')
-                    ->default(Billmora::getSetting('credit_min_deposit', 1000)),
+                    ->default(Billmora::getSetting('credit_min_deposit', 1)),
                 Forms\Components\TextInput::make('credit_max_deposit')
                     ->label('Maximum Deposit')
                     ->numeric()
@@ -339,6 +343,43 @@ class General extends Page
                     ->required()
                     ->helperText('Enter the maximum balance that can be deposited.')
                     ->default(Billmora::getSetting('credit_max', 10000000)),
+            ]),
+        ];
+    }
+
+    private function tabAffiliate()
+    {
+        return [
+            Forms\Components\Grid::make(2)
+            ->schema([
+                Forms\Components\Toggle::make('affiliate_use')
+                    ->label('Affiliate')
+                    ->inline(false)
+                    ->onIcon('tabler-check')
+                    ->offIcon('tabler-x')
+                    ->onColor('success')
+                    ->offColor('danger')
+                    ->helperText('Enable the affiliate system.')
+                    ->default(Billmora::getSetting('affiliate_use', false)),
+                Forms\Components\TextInput::make('affiliate_min_payment')
+                    ->label('Minimum Payment')
+                    ->numeric()
+                    ->required()
+                    ->helperText('Enter the minimum payment that can use affiliates.')
+                    ->default(Billmora::getSetting('affiliate_min_payment', 1)),
+                Forms\Components\TextInput::make('affiliate_reward')
+                    ->label('Creator Reward in %')
+                    ->numeric()
+                    ->suffixIcon('tabler-percentage')
+                    ->required()
+                    ->helperText('Percentage of the sale amount that the affiliate earns for each successful referral.')
+                    ->default(Billmora::getSetting('affiliate_reward', 5)),
+                Forms\Components\TextInput::make('affiliate_discount')
+                    ->label('Invited Discount in %')
+                    ->suffixIcon('tabler-percentage')
+                    ->required()
+                    ->helperText('Discount percentage for referred customers when they use the affiliates link.')
+                    ->default(Billmora::getSetting('affiliate_discount', 5)),
             ]),
         ];
     }
@@ -381,6 +422,11 @@ class General extends Page
                 'credit_min_deposit' => ['required', 'integer'],
                 'credit_max_deposit' => ['required', 'integer'],
                 'credit_max' => ['required', 'integer'],
+                
+                'affiliate_use' => ['nullable', 'boolean'],
+                'affiliate_min_payment' => ['nullable', 'integer'],
+                'affiliate_reward' => ['nullable', 'integer'],
+                'affiliate_discount' => ['nullable', 'integer'],
             ])->validate();
 
             Billmora::setSetting($validated);
