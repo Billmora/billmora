@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "153fb563d4a0582b464360ea2d7ecadd",
+    "content-hash": "0720f5300f0f373728dbce8411439640",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -350,6 +350,89 @@
                 }
             ],
             "time": "2024-02-09T16:56:22+00:00"
+        },
+        {
+            "name": "creagia/filament-code-field",
+            "version": "3.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/creagia/filament-code-field.git",
+                "reference": "3c5fdd1882099bc33dc7c48a2d517f94f09b64a4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/creagia/filament-code-field/zipball/3c5fdd1882099bc33dc7c48a2d517f94f09b64a4",
+                "reference": "3c5fdd1882099bc33dc7c48a2d517f94f09b64a4",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^3.2",
+                "illuminate/contracts": "^10.0|^11.0|^12.0",
+                "php": "^8.1",
+                "spatie/laravel-package-tools": "^1.16"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^6.0|^8.0",
+                "nunomaduro/larastan": "^2.0.1|^3.0",
+                "orchestra/testbench": "^8.0|^9.0|^10.0",
+                "pestphp/pest": "^1.21|^2.34|^3.7",
+                "pestphp/pest-plugin-laravel": "^1.1|^2.3|^3.1",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0|^2.0",
+                "phpstan/phpstan-phpunit": "^1.0|^2.0",
+                "phpunit/phpunit": "^9.5|^10.5|^11.5.3",
+                "spatie/laravel-ray": "^1.26"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "FilamentCodeField": "Creagia\\FilamentCodeField\\Facades\\FilamentCodeField"
+                    },
+                    "providers": [
+                        "Creagia\\FilamentCodeField\\FilamentCodeFieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Creagia\\FilamentCodeField\\": "src",
+                    "Creagia\\FilamentCodeField\\Database\\Factories\\": "database/factories"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Creagia",
+                    "email": "info@creagia.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A Filamentphp input field to edit or view code data.",
+            "homepage": "https://github.com/creagia/filament-code-field",
+            "keywords": [
+                "code editor",
+                "creagia",
+                "filament",
+                "filament field",
+                "filament-code-field",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/creagia/filament-code-field/issues",
+                "source": "https://github.com/creagia/filament-code-field/tree/3.0.4"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/creagia",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-03-11T10:20:14+00:00"
         },
         {
             "name": "danharrin/date-format-converter",
@@ -1371,17 +1454,17 @@
             "time": "2025-02-25T08:19:15+00:00"
         },
         {
-            "name": "egulias/email-validator",
-            "version": "4.0.4",
+            "name": "filament/widgets",
+            "version": "v3.3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "d42c8731f0624ad6bdc8d3e5e9a4524f68801cfa"
+                "url": "https://github.com/filamentphp/widgets.git",
+                "reference": "3bbd19044e19f93711f3690c441a3a0d35696aa1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/d42c8731f0624ad6bdc8d3e5e9a4524f68801cfa",
-                "reference": "d42c8731f0624ad6bdc8d3e5e9a4524f68801cfa",
+                "url": "https://api.github.com/repos/filamentphp/widgets/zipball/3bbd19044e19f93711f3690c441a3a0d35696aa1",
+                "reference": "3bbd19044e19f93711f3690c441a3a0d35696aa1",
                 "shasum": ""
             },
             "require": {
@@ -1409,16 +1492,10 @@
             "description": "Easily add beautiful dashboard widgets to any Livewire component.",
             "homepage": "https://github.com/filamentphp/filament",
             "support": {
-                "issues": "https://github.com/egulias/EmailValidator/issues",
-                "source": "https://github.com/egulias/EmailValidator/tree/4.0.4"
+                "issues": "https://github.com/filamentphp/filament/issues",
+                "source": "https://github.com/filamentphp/filament"
             },
-            "funding": [
-                {
-                    "url": "https://github.com/egulias",
-                    "type": "github"
-                }
-            ],
-            "time": "2025-03-06T22:45:56+00:00"
+            "time": "2025-02-19T08:42:37+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -10854,5 +10931,5 @@
         "php": "^8.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
