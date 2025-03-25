@@ -63,6 +63,10 @@ class General extends Page
                         ->label('Affiliate')
                         ->icon('tabler-affiliate')
                         ->schema($this->tabAffiliate()),
+                    Forms\Components\Tabs\Tab::make('term')
+                        ->label('Term')
+                        ->icon('tabler-circle-dashed-check')
+                        ->schema($this->tabTerm()),
                 ]),
         ];
     }
@@ -384,6 +388,121 @@ class General extends Page
         ];
     }
 
+    private function tabTerm()
+    {
+        return [
+            Forms\Components\Section::make()
+                ->schema([
+                    Forms\Components\Grid::make(2)
+                        ->schema([
+                            Forms\Components\Toggle::make('term_tos')
+                                ->label('Terms of Service')
+                                ->inline(false)
+                                ->onIcon('tabler-check')
+                                ->offIcon('tabler-x')
+                                ->onColor('success')
+                                ->offColor('danger')
+                                ->helperText('Enable to show the page at: https://example.com/terms-of-service.')
+                                ->default(Billmora::getSetting('term_tos', false)),
+                            Forms\Components\TextInput::make('term_tos_url')
+                                ->label('Terms of Service URL')
+                                ->suffixIcon('tabler-world')
+                                ->helperText('If specified, clients will be redirected to that URL when they want reading.')
+                                ->default(Billmora::getSetting('term_tos_url')),
+                        ]),
+                    Forms\Components\Grid::make(1)
+                        ->schema([
+                            Forms\Components\RichEditor::make('term_tos_content')
+                                ->label('Terms of Service Content')
+                                ->disableToolbarButtons([
+                                    'attachFiles',
+                                ])
+                                ->extraAttributes(['x-ref' => 'editor'])
+                                ->hintAction(
+                                    Forms\Components\Actions\Action::make('fullscreen')
+                                        ->icon('tabler-arrows-maximize')
+                                        ->alpineClickHandler('$refs.editor.requestFullscreen()'))
+                                        ->helperText('This content will be displayed at: https://example.com/terms-of-service.')
+                                        ->default(Billmora::getSetting('term_tos_content')),
+                        ])
+                ]),
+
+            Forms\Components\Section::make()
+                ->schema([
+                    Forms\Components\Grid::make(2)
+                        ->schema([
+                            Forms\Components\Toggle::make('term_toc')
+                                ->label('Terms of Condition')
+                                ->inline(false)
+                                ->onIcon('tabler-check')
+                                ->offIcon('tabler-x')
+                                ->onColor('success')
+                                ->offColor('danger')
+                                ->helperText('Enable to show the page at: https://example.com/terms-of-condition.')
+                                ->default(Billmora::getSetting('term_toc', false)),
+                            Forms\Components\TextInput::make('term_toc_url')
+                                ->label('Terms of Condition URL')
+                                ->suffixIcon('tabler-world')
+                                ->helperText('If specified, clients will be redirected to that URL when they want reading.')
+                                ->default(Billmora::getSetting('term_toc_url')),
+                        ]),
+                    Forms\Components\Grid::make(1)
+                        ->schema([
+                            Forms\Components\RichEditor::make('term_toc_content')
+                                ->label('Terms of Condition Content')
+                                ->disableToolbarButtons([
+                                    'attachFiles',
+                                ])
+                                ->extraAttributes(['x-ref' => 'editor'])
+                                ->hintAction(
+                                    Forms\Components\Actions\Action::make('fullscreen')
+                                        ->icon('tabler-arrows-maximize')
+                                        ->alpineClickHandler('$refs.editor.requestFullscreen()'))
+                                        ->helperText('This content will be displayed at: https://example.com/terms-of-condition.')
+                                        ->default(Billmora::getSetting('term_toc_content')),
+
+                        ])
+                ]),
+
+            Forms\Components\Section::make()
+                ->schema([
+                    Forms\Components\Grid::make(2)
+                        ->schema([
+                            Forms\Components\Toggle::make('term_privacy')
+                                ->label('Privacy Policy')
+                                ->inline(false)
+                                ->onIcon('tabler-check')
+                                ->offIcon('tabler-x')
+                                ->onColor('success')
+                                ->offColor('danger')
+                                ->helperText('Enable to show the page at: https://example.com/privacy-policy.')
+                                ->default(Billmora::getSetting('term_privacy', false)),
+                            Forms\Components\TextInput::make('term_privacy_url')
+                                ->label('Privacy Policy URL')
+                                ->suffixIcon('tabler-world')
+                                ->helperText('If specified, clients will be redirected to that URL when they want reading.')
+                                ->default(Billmora::getSetting('term_privacy_url')),
+                        ]),
+                    Forms\Components\Grid::make(1)
+                        ->schema([
+                            Forms\Components\RichEditor::make('term_privacy_content')
+                                ->label('Privacy Policy Content')
+                                ->disableToolbarButtons([
+                                    'attachFiles',
+                                ])
+                                ->extraAttributes(['x-ref' => 'editor'])
+                                ->hintAction(
+                                    Forms\Components\Actions\Action::make('fullscreen')
+                                        ->icon('tabler-arrows-maximize')
+                                        ->alpineClickHandler('$refs.editor.requestFullscreen()'))
+                                        ->helperText('This content will be displayed at: https://example.com/privacy-policy.')
+                                        ->default(Billmora::getSetting('term_privacy_content')),
+
+                        ])
+                ]),
+        ];
+    }
+
     protected function getFormStatePath(): ?string
     {
         return 'data';
@@ -427,6 +546,16 @@ class General extends Page
                 'affiliate_min_payment' => ['nullable', 'integer'],
                 'affiliate_reward' => ['nullable', 'integer'],
                 'affiliate_discount' => ['nullable', 'integer'],
+                
+                'term_tos' => ['nullable', 'boolean'],
+                'term_tos_url' => ['nullable', 'url'],
+                'term_tos_content' => ['nullable'],
+                'term_toc' => ['nullable', 'boolean'],
+                'term_toc_url' => ['nullable', 'url'],
+                'term_toc_content' => ['nullable'],
+                'term_privacy' => ['nullable', 'boolean'],
+                'term_privacy_url' => ['nullable', 'url'],
+                'term_privacy_content' => ['nullable'],
             ])->validate();
 
             Billmora::setSetting($validated);
