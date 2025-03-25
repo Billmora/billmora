@@ -51,10 +51,14 @@ class General extends Page
                         ->label('Ordering')
                         ->icon('tabler-truck-delivery')
                         ->schema($this->tabOrdering()),
-                        Forms\Components\Tabs\Tab::make('invoice')
+                    Forms\Components\Tabs\Tab::make('invoice')
                         ->label('Invoice')
                         ->icon('tabler-invoice')
                         ->schema($this->tabInvoices()),
+                    Forms\Components\Tabs\Tab::make('credit')
+                        ->label('Credit')
+                        ->icon('tabler-coin')
+                        ->schema($this->tabCredit()),
                 ]),
         ];
     }
@@ -256,6 +260,7 @@ class General extends Page
                             'letter' => 'Letter',
                         ])
                         ->native(false)
+                        ->required()
                         ->helperText('Choose the paper format to use when generating PDF files.')
                         ->default(Billmora::getSetting('invoice_pdf_size', 'A4')),
                     Forms\Components\TextInput::make('invoice_pdf_font')
@@ -265,6 +270,7 @@ class General extends Page
                                 ->label('Browse Google Fonts')
                                 ->icon('tabler-world-search')
                                 ->url('https://fonts.google.com', true))
+                        ->required()
                         ->helperText('All Google Fonts are available to use.')
                         ->default(Billmora::getSetting('invoice_pdf_font', 'Plus Jakarta Sans')),
                     Forms\Components\Toggle::make('invoice_mass_payment')
@@ -301,6 +307,42 @@ class General extends Page
         ];
     }
 
+    private function tabCredit()
+    {
+        return [
+            Forms\Components\Grid::make(2)
+            ->schema([
+                Forms\Components\Toggle::make('credit_use')
+                    ->label('Credit')
+                    ->inline(false)
+                    ->onIcon('tabler-check')
+                    ->offIcon('tabler-x')
+                    ->onColor('success')
+                    ->offColor('danger')
+                    ->helperText('Enable adding and use of funds by clients from the client area.')
+                    ->default(Billmora::getSetting('credit_use', false)),
+                Forms\Components\TextInput::make('credit_min_deposit')
+                    ->label('Minimum Deposit')
+                    ->numeric()
+                    ->required()
+                    ->helperText('Enter the minimum amount that can be deposited.')
+                    ->default(Billmora::getSetting('credit_min_deposit', 1000)),
+                Forms\Components\TextInput::make('credit_max_deposit')
+                    ->label('Maximum Deposit')
+                    ->numeric()
+                    ->required()
+                    ->helperText('Enter the maximum amount that can be deposited.')
+                    ->default(Billmora::getSetting('credit_max_deposit', 1000000)),
+                Forms\Components\TextInput::make('credit_max')
+                    ->label('Maximum Balance')
+                    ->numeric()
+                    ->required()
+                    ->helperText('Enter the maximum balance that can be deposited.')
+                    ->default(Billmora::getSetting('credit_max', 10000000)),
+            ]),
+        ];
+    }
+
     protected function getFormStatePath(): ?string
     {
         return 'data';
@@ -329,11 +371,16 @@ class General extends Page
                 'ordering_notes' => ['required', 'boolean'],
 
                 'invoice_pdf' => ['nullable', 'boolean'],
-                'invoice_pdf_size' => ['nullable', 'string'],
-                'invoice_pdf_font' => ['nullable', 'string'],
+                'invoice_pdf_size' => ['required', 'string'],
+                'invoice_pdf_font' => ['required', 'string'],
                 'invoice_mass_payment' => ['required', 'boolean'],
                 'invoice_choose_payment' => ['required', 'boolean'],
                 'invoice_cancelation_handling' => ['required', 'boolean'],
+
+                'credit_use' => ['nullable', 'boolean'],
+                'credit_min_deposit' => ['required', 'integer'],
+                'credit_max_deposit' => ['required', 'integer'],
+                'credit_max' => ['required', 'integer'],
             ])->validate();
 
             Billmora::setSetting($validated);
