@@ -2,8 +2,14 @@
 
 namespace App\Filament\Pages\Admin\Settings;
 
+use App\Services\BillmoraService as Billmora;
+use App\Notifications\MailTestedNotification;
+use Filament\Forms;
 use Filament\Navigation\NavigationItem;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class Mail extends Page
 {
@@ -28,5 +34,204 @@ class Mail extends Page
     public function mount(): void
     {
         $this->form->fill();
+    }
+
+    public function getFormSchema(): array
+    {
+        return [
+            Forms\Components\Tabs::make()
+                ->persistTabInQueryString()
+                ->tabs([
+                    Forms\Components\Tabs\Tab::make('mailer')
+                        ->label('Mailer')
+                        ->icon('tabler-mail-cog')
+                        ->schema($this->tabMailer()),
+                    Forms\Components\Tabs\Tab::make('mail-template')
+                        ->label('Mail Template')
+                        ->icon('tabler-mail-code')
+                        ->schema($this->tabMailTemplate()),
+                ]),
+        ];
+    }
+
+    private function tabMailer()
+    {
+        return [
+            Forms\Components\ToggleButtons::make('mail_driver')
+                ->label('Mail Driver')
+                ->inline()
+                ->options([
+                    'smtp' => 'SMTP Server',
+                    'mailgun' => 'Mailgun',
+                    'sendmail' => 'Sendmail (PHP)',
+                ])
+                ->live()
+                ->required()
+                ->hintAction(
+                    Forms\Components\Actions\Action::make('test')
+                        ->label('Send Test Mail')
+                        ->icon('tabler-send')
+                        ->action(function () {
+                            try {
+                                $user = auth()->user();
+                                $user->notify(new MailTestedNotification());
+            
+                                Notification::make()
+                                    ->title('Test email sent successfully!')
+                                    ->success()
+                                    ->send();
+                            } catch (Exception $e) {
+                                Notification::make()
+                                    ->title('Failed to send test email')
+                                    ->body($e->getMessage())
+                                    ->danger()
+                                    ->send();
+                            }
+                        })
+                )
+                ->default(env('MAIL_MAILER', 'smtp')),
+            Forms\Components\Grid::make(2)
+                ->schema([
+                    Forms\Components\TextInput::make('mail_from_address')
+                        ->label('Mail From Address')
+                        ->required()
+                        ->email()
+                        ->default(env('MAIL_FROM_ADDRESS', 'hellp@example.com')),
+                    Forms\Components\TextInput::make('mail_from_name')
+                        ->label('Mail From Name')
+                        ->required()
+                        ->default(env('MAIL_FROM_NAME', 'Billmora')),
+                ]),
+            Forms\Components\Section::make('SMTP Configuration')
+                ->columns()
+                ->visible(fn (Forms\Get $get) => $get('mail_driver') === 'smtp')
+                ->schema([
+                    Forms\Components\TextInput::make('mail_host')
+                        ->label('Host')
+                        ->required()
+                        ->default(env('MAIL_HOST')),
+                    Forms\Components\TextInput::make('mail_port')
+                        ->label('Port')
+                        ->required()
+                        ->numeric()
+                        ->minValue(1)
+                        ->maxValue(65535)
+                        ->default(env('MAIL_PORT')),
+                    Forms\Components\TextInput::make('mail_username')
+                        ->label('Username')
+                        ->default(env('MAIL_USERNAME')),
+                    Forms\Components\TextInput::make('mail_password')
+                        ->label('Password')
+                        ->password()
+                        ->revealable()
+                        ->default(env('MAIL_PASSWORD')),
+                    Forms\Components\ToggleButtons::make('mail_encryption')
+                        ->label('Encryption')
+                        ->inline()
+                        ->options([
+                            'tls' => 'TLS',
+                            'ssl' => 'SSL',
+                            '' => 'None',
+                        ])
+                        ->live()
+                        ->afterStateUpdated(function ($state, Forms\Set $set) {
+                            $port = match ($state) {
+                                'tls' => 587,
+                                'ssl' => 465,
+                                default => 25,
+                            };
+                            $set('mail_port', $port);
+                        })
+                        ->default(env('MAIL_ENCRYPTION')),  
+                ]),
+            Forms\Components\Section::make('Mailgun Configuration')
+                ->columns(3)
+                ->visible(fn (Forms\Get $get) => $get('mail_driver') === 'mailgun')
+                ->schema([
+                    Forms\Components\TextInput::make('mail_mailgun_domain')
+                        ->label('Domain')
+                        ->suffixIcon('tabler-world')
+                        ->required()
+                        ->default(env('MAILGUN_DOMAIN')),
+                    Forms\Components\TextInput::make('mail_mailgun_secret')
+                        ->label('Secret')
+                        ->password()
+                        ->revealable()
+                        ->required()
+                        ->default(env('MAILGUN_SECRET')),
+                    Forms\Components\TextInput::make('mail_mailgun_endpoint')
+                        ->label('Endpoint')
+                        ->suffixIcon('tabler-world')
+                        ->required()
+                        ->default(env('MAILGUN_ENDPOINT')),
+                ]),
+        ];
+    }
+
+    private function tabMailTemplate()
+    {
+        return [
+            // 
+        ];
+    }
+
+    protected function getFormStatePath(): ?string
+    {
+        return 'data';
+    }
+
+    public function save(): void
+    {
+        try {
+            $validated = Validator::make($this->data, [
+                'mail_driver' => ['required', 'string', 'in:smtp,mailgun,sendmail'],
+                'mail_from_address' => ['required', 'email'],
+                'mail_from_name' => ['required', 'string'],
+                'mail_host' => ['required_if:mail_driver,smtp', 'string'],
+                'mail_port' => ['required_if:mail_driver,smtp', 'integer', 'between:1,65535'],
+                'mail_username' => ['nullable', 'string'],
+                'mail_password' => ['nullable', 'string'],
+                'mail_encryption' => ['nullable', 'string', 'in:tls,ssl'],
+                'mail_mailgun_domain' => ['required_if:mail_driver,mailgun', 'string'],
+                'mail_mailgun_secret' => ['required_if:mail_driver,mailgun', 'string'],
+                'mail_mailgun_endpoint' => ['required_if:mail_driver,mailgun', 'string'],
+            ])->validate();
+    
+            Billmora::setEnv([
+                'MAIL_MAILER' => $validated['mail_driver'],
+                'MAIL_FROM_ADDRESS' => $validated['mail_from_address'],
+                'MAIL_FROM_NAME' => $validated['mail_from_name'],
+                'MAIL_HOST' => $validated['mail_host'],
+                'MAIL_PORT' => $validated['mail_port'],
+                'MAIL_USERNAME' => $validated['mail_username'],
+                'MAIL_PASSWORD' => $validated['mail_password'],
+                'MAIL_ENCRYPTION' => $validated['mail_encryption'],
+                'MAILGUN_DOMAIN' => $validated['mail_mailgun_domain'],
+                'MAILGUN_SECRET' => $validated['mail_mailgun_secret'],
+                'MAILGUN_ENDPOINT' => $validated['mail_mailgun_endpoint'],
+            ]);
+
+            Notification::make()
+                ->title('Success')
+                ->body('General settings have been updated successfully.')
+                ->success()
+                ->send();
+        } catch (ValidationException $e) {
+            $errorMessages = '<ul>' . collect($e->errors())
+            ->map(fn ($messages) => '<li>' . implode('</li><li>', $messages) . '</li>')
+            ->implode('') . '</ul>';
+
+            Notification::make()
+                ->title('Validation Error')
+                ->body($errorMessages)
+                ->danger()
+                ->send();
+        } catch (\Exception $e) {
+            Notification::make()
+                ->title('Error')
+                ->body('An unexpected error occurred: ' . $e->getMessage())
+                ->danger()
+                ->send();
+        }
     }
 }
