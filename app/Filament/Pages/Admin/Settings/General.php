@@ -51,6 +51,10 @@ class General extends Page
                         ->label('Ordering')
                         ->icon('tabler-truck-delivery')
                         ->schema($this->tabOrdering()),
+                        Forms\Components\Tabs\Tab::make('invoice')
+                        ->label('Invoice')
+                        ->icon('tabler-invoice')
+                        ->schema($this->tabInvoices()),
                 ]),
         ];
     }
@@ -231,6 +235,72 @@ class General extends Page
         ];
     }
 
+    private function tabInvoices()
+    {
+        return [
+            Forms\Components\Grid::make(3)
+                ->schema([
+                    Forms\Components\Toggle::make('invoice_pdf')
+                        ->label('PDF Invoices')
+                        ->inline(false)
+                        ->onIcon('tabler-check')
+                        ->offIcon('tabler-x')
+                        ->onColor('success')
+                        ->offColor('danger')
+                        ->helperText('Enables sending PDF invoices with emails and downloading PDFs directly from the invoice page.')
+                        ->default(Billmora::getSetting('invoice_pdf', false)),
+                    Forms\Components\Select::make('invoice_pdf_size')
+                        ->label('PDF Paper Size')
+                        ->options([
+                            'A4' => 'A4',
+                            'letter' => 'Letter',
+                        ])
+                        ->native(false)
+                        ->helperText('Choose the paper format to use when generating PDF files.')
+                        ->default(Billmora::getSetting('invoice_pdf_size', 'A4')),
+                    Forms\Components\TextInput::make('invoice_pdf_font')
+                        ->label('PDF Font Family')
+                        ->hintAction(
+                            Forms\Components\Actions\Action::make('googleFonts')
+                                ->label('Browse Google Fonts')
+                                ->icon('tabler-world-search')
+                                ->url('https://fonts.google.com', true))
+                        ->helperText('All Google Fonts are available to use.')
+                        ->default(Billmora::getSetting('invoice_pdf_font', 'Plus Jakarta Sans')),
+                    Forms\Components\Toggle::make('invoice_mass_payment')
+                        ->label('Mass Payment')
+                        ->inline(false)
+                        ->onIcon('tabler-check')
+                        ->offIcon('tabler-x')
+                        ->onColor('success')
+                        ->offColor('danger')
+                        ->required()
+                        ->helperText('Enable the multiple invoice payment options on the client area.')
+                        ->default(Billmora::getSetting('invoice_mass_payment', true)),
+                    Forms\Components\Toggle::make('invoice_choose_payment')
+                        ->label('Clients Choose Gateway')
+                        ->inline(false)
+                        ->onIcon('tabler-check')
+                        ->offIcon('tabler-x')
+                        ->onColor('success')
+                        ->offColor('danger')
+                        ->required()
+                        ->helperText('Enable to allow clients to choose the gateway they pay with.')
+                        ->default(Billmora::getSetting('invoice_choose_payment', true)),
+                    Forms\Components\Toggle::make('invoice_cancelation_handling')
+                        ->label('Cancellation Request Handling')
+                        ->inline(false)
+                        ->onIcon('tabler-check')
+                        ->offIcon('tabler-x')
+                        ->onColor('success')
+                        ->offColor('danger')
+                        ->required()
+                        ->helperText('Enable to automatically cancel outstanding unpaid invoices when a cancellation request is submitted.')
+                        ->default(Billmora::getSetting('invoice_cancelation_handling', false)),
+                ]),
+        ];
+    }
+
     protected function getFormStatePath(): ?string
     {
         return 'data';
@@ -257,6 +327,13 @@ class General extends Page
                 'ordering_grace' => ['required', 'integer'],
                 'ordering_tos' => ['required', 'boolean'],
                 'ordering_notes' => ['required', 'boolean'],
+
+                'invoice_pdf' => ['nullable', 'boolean'],
+                'invoice_pdf_size' => ['nullable', 'string'],
+                'invoice_pdf_font' => ['nullable', 'string'],
+                'invoice_mass_payment' => ['required', 'boolean'],
+                'invoice_choose_payment' => ['required', 'boolean'],
+                'invoice_cancelation_handling' => ['required', 'boolean'],
             ])->validate();
 
             Billmora::setSetting($validated);
