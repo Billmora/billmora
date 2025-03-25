@@ -67,6 +67,10 @@ class General extends Page
                         ->label('Term')
                         ->icon('tabler-circle-dashed-check')
                         ->schema($this->tabTerm()),
+                    Forms\Components\Tabs\Tab::make('social')
+                        ->label('Social')
+                        ->icon('tabler-social')
+                        ->schema($this->tabSocial()),
                 ]),
         ];
     }
@@ -503,6 +507,71 @@ class General extends Page
         ];
     }
 
+    private function tabSocial()
+    {
+        return [
+            Forms\Components\Grid::make(1)
+                ->schema([  
+                    Forms\Components\TextInput::make('social_discord')
+                        ->label('Discord')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel()
+                        ->default(Billmora::getSetting('social_discord')),
+                    Forms\Components\TextInput::make('social_youtube')
+                        ->label('YouTube')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel()
+                        ->default(Billmora::getSetting('social_youtube')),
+                    Forms\Components\TextInput::make('social_whatsapp')
+                        ->label('WhatsApp')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel()
+                        ->default(Billmora::getSetting('social_whatsapp')),
+                    Forms\Components\TextInput::make('social_instagram')
+                        ->label('Instagram')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel()
+                        ->default(Billmora::getSetting('social_instagram')),
+                    Forms\Components\TextInput::make('social_facebook')
+                        ->label('Facebook')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel()
+                        ->default(Billmora::getSetting('social_facebook')),
+                    Forms\Components\TextInput::make('social_twitter')
+                        ->label('Twitter')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel()
+                        ->default(Billmora::getSetting('social_twitter')),
+                    Forms\Components\TextInput::make('social_linkedin')
+                        ->label('LinkedIn')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel()
+                        ->default(Billmora::getSetting('social_linkedin')),
+                    Forms\Components\TextInput::make('social_github')
+                        ->label('GitHub')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel()
+                        ->default(Billmora::getSetting('social_github')),
+                    Forms\Components\TextInput::make('social_reddit')
+                        ->label('Reddit')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel()
+                        ->default(Billmora::getSetting('social_reddit')),
+                    Forms\Components\TextInput::make('social_skype')
+                        ->label('Skype')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel()
+                        ->default(Billmora::getSetting('social_skype')),
+                    Forms\Components\TextInput::make('social_telegram')
+                        ->label('Telegram')
+                        ->suffixIcon('tabler-world')
+                        ->inlineLabel()
+                        ->default(Billmora::getSetting('social_telegram')),
+                    
+                ]),
+        ];
+    }
+
     protected function getFormStatePath(): ?string
     {
         return 'data';
@@ -556,6 +625,18 @@ class General extends Page
                 'term_privacy' => ['nullable', 'boolean'],
                 'term_privacy_url' => ['nullable', 'url'],
                 'term_privacy_content' => ['nullable'],
+
+                'social_discord' => ['nullable', 'url'],
+                'social_youtube' => ['nullable', 'url'],
+                'social_whatsapp' => ['nullable', 'url'],
+                'social_instagram' => ['nullable', 'url'],
+                'social_facebook' => ['nullable', 'url'],
+                'social_linkedin' => ['nullable', 'url'],
+                'social_twitter' => ['nullable', 'url'],
+                'social_github' => ['nullable', 'url'],
+                'social_reddit' => ['nullable', 'url'],
+                'social_skype' => ['nullable', 'url'],
+                'social_telegram' => ['nullable', 'url'],
             ])->validate();
 
             Billmora::setSetting($validated);
