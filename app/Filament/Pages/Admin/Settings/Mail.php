@@ -3,13 +3,15 @@
 namespace App\Filament\Pages\Admin\Settings;
 
 use App\Services\BillmoraService as Billmora;
-use App\Notifications\MailTestedNotification;
+use App\Mail\TestMail;
 use Filament\Forms;
 use Filament\Navigation\NavigationItem;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail as Mailer;
 
 class Mail extends Page
 {
@@ -74,13 +76,13 @@ class Mail extends Page
                         ->action(function () {
                             try {
                                 $user = auth()->user();
-                                $user->notify(new MailTestedNotification());
+                                Mailer::to($user->email)->send(new TestMail());
             
                                 Notification::make()
                                     ->title('Test email sent successfully!')
                                     ->success()
                                     ->send();
-                            } catch (Exception $e) {
+                            } catch (\Exception $e) {
                                 Notification::make()
                                     ->title('Failed to send test email')
                                     ->body($e->getMessage())
@@ -171,7 +173,25 @@ class Mail extends Page
     private function tabMailTemplate()
     {
         return [
-            // 
+            Forms\Components\Grid::make(3)
+                ->schema([
+                    Forms\Components\Textarea::make('mail_template_signature')
+                        ->label('Global Signature')
+                        ->rows(2)
+                        ->columnSpan(2)
+                        ->default(Billmora::getSetting('mail_template_signature', "Regards,\nBillmora")),
+                    Forms\Components\Select::make('mail_template')
+                        ->label('Email Template')
+                        ->options(collect(File::directories(resource_path('themes/email')))
+                            ->mapWithKeys(fn ($path) => [
+                                basename($path) => basename($path)
+                            ])
+                            ->toArray())
+                        ->native(false)
+                        ->required()
+                        ->helperText('The template you want Billmora mail to use.')
+                        ->default(Billmora::getSetting('mail_template', 'default')),
+                ])
         ];
     }
 
@@ -195,6 +215,9 @@ class Mail extends Page
                 'mail_mailgun_domain' => ['required_if:mail_driver,mailgun', 'string'],
                 'mail_mailgun_secret' => ['required_if:mail_driver,mailgun', 'string'],
                 'mail_mailgun_endpoint' => ['required_if:mail_driver,mailgun', 'string'],
+                
+                'mail_template' => ['required', 'string'],
+                'mail_template_signature' => ['required'],
             ])->validate();
     
             Billmora::setEnv([
@@ -209,6 +232,11 @@ class Mail extends Page
                 'MAILGUN_DOMAIN' => $validated['mail_mailgun_domain'],
                 'MAILGUN_SECRET' => $validated['mail_mailgun_secret'],
                 'MAILGUN_ENDPOINT' => $validated['mail_mailgun_endpoint'],
+            ]);
+
+            Billmora::setSetting([
+                'mail_template' => $validated['mail_template'],
+                'mail_template_signature' => $validated['mail_template_signature'],
             ]);
 
             Notification::make()
