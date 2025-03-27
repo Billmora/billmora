@@ -133,7 +133,7 @@ class General extends Page
                                 ->helperText('The description of your Company.')
                                 ->default(Billmora::getGeneral('company_description', 'Free and Open source Billing Management Operations & Recurring Automation.')),
                         ]),
-                    Forms\Components\Grid::make(4)
+                    Forms\Components\Grid::make(3)
                         ->schema([
                             Forms\Components\Toggle::make('company_portal')
                                 ->label('Portal')
@@ -145,11 +145,6 @@ class General extends Page
                                 ->required()
                                 ->helperText('If disable, area portal will be automated redirect to clientarea.')
                                 ->default(Billmora::getGeneral('company_portal', true)),
-                            Forms\Components\TextInput::make('company_admin_path')
-                                ->label('Admin Path')
-                                ->required()
-                                ->helperText('The path of your Admin area.')
-                                ->default(Billmora::getGeneral('company_admin_path', 'admin')),
                             Forms\Components\Select::make('company_date_format')
                                 ->label('Date Format')
                                 ->options([
@@ -593,7 +588,6 @@ class General extends Page
                 'company_favicon' => ['required', 'url'],
                 'company_description' => ['nullable', 'string'],
                 'company_portal' => ['required', 'boolean'],
-                'company_admin_path' => ['required', 'not_in:client,auth'], //will be update the list soon
                 'company_date_format' => ['required', 'string'],
                 'company_language' => ['required', 'string'],
                 'company_maintenance' => ['nullable', 'boolean'],
