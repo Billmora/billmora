@@ -645,6 +645,10 @@ class General extends Page
                 'social_telegram' => ['nullable', 'url'],
             ])->validate();
 
+            Billmora::setEnv(['COMPANY_LANGUAGE' => $validated['company_language']]);
+
+            unset($validated['company_language']);
+            
             Billmora::setGeneral($validated);
 
             Notification::make()
