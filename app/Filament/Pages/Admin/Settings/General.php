@@ -145,11 +145,11 @@ class General extends Page
                                 ->required()
                                 ->helperText('If disable, area portal will be automated redirect to clientarea.')
                                 ->default(Billmora::getGeneral('company_portal', true)),
-                            Forms\Components\TextInput::make('company_admin')
+                            Forms\Components\TextInput::make('company_admin_path')
                                 ->label('Admin Path')
                                 ->required()
                                 ->helperText('The path of your Admin area.')
-                                ->default(Billmora::getGeneral('company_admin', 'admin')),
+                                ->default(Billmora::getGeneral('company_admin_path', 'admin')),
                             Forms\Components\Select::make('company_date_format')
                                 ->label('Date Format')
                                 ->options([
