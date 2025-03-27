@@ -593,7 +593,7 @@ class General extends Page
                 'company_favicon' => ['required', 'url'],
                 'company_description' => ['nullable', 'string'],
                 'company_portal' => ['required', 'boolean'],
-                'company_admin' => ['required', 'not_in:client,auth'], //will be update the list soon
+                'company_admin_path' => ['required', 'not_in:client,auth'], //will be update the list soon
                 'company_date_format' => ['required', 'string'],
                 'company_language' => ['required', 'string'],
                 'company_maintenance' => ['nullable', 'boolean'],
@@ -648,7 +648,7 @@ class General extends Page
             Billmora::setEnv(['COMPANY_LANGUAGE' => $validated['company_language']]);
 
             unset($validated['company_language']);
-            
+
             Billmora::setGeneral($validated);
 
             Notification::make()
