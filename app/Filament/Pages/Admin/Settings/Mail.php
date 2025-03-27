@@ -91,6 +91,7 @@ class Mail extends Page
                             }
                         })
                 )
+                ->helperText('The mail driver (or mailer) determines how Billmora sends emails. You can configure it to use SMTP, Sendmail, Mailgun.')
                 ->default(env('MAIL_MAILER', 'smtp')),
             Forms\Components\Grid::make(2)
                 ->schema([
@@ -98,10 +99,12 @@ class Mail extends Page
                         ->label('Mail From Address')
                         ->required()
                         ->email()
+                        ->helperText('Enter an email address that all outgoing emails will originate from.')
                         ->default(env('MAIL_FROM_ADDRESS', 'hellp@example.com')),
-                    Forms\Components\TextInput::make('mail_from_name')
+                        Forms\Components\TextInput::make('mail_from_name')
                         ->label('Mail From Name')
                         ->required()
+                        ->helperText('The name that emails should appear to come from.')
                         ->default(env('MAIL_FROM_NAME', 'Billmora')),
                 ]),
             Forms\Components\Section::make('SMTP Configuration')
@@ -111,6 +114,7 @@ class Mail extends Page
                     Forms\Components\TextInput::make('mail_host')
                         ->label('Host')
                         ->required()
+                        ->helperText('Enter the SMTP server address that mail should be sent through.')
                         ->default(env('MAIL_HOST')),
                     Forms\Components\TextInput::make('mail_port')
                         ->label('Port')
@@ -118,17 +122,23 @@ class Mail extends Page
                         ->numeric()
                         ->minValue(1)
                         ->maxValue(65535)
+                        ->helperText('Enter the SMTP server port that mail should be sent through.')
                         ->default(env('MAIL_PORT')),
                     Forms\Components\TextInput::make('mail_username')
                         ->label('Username')
+                        ->required()
+                        ->helperText('The username to use when connecting to the SMTP server.')
                         ->default(env('MAIL_USERNAME')),
                     Forms\Components\TextInput::make('mail_password')
                         ->label('Password')
+                        ->required()
                         ->password()
                         ->revealable()
+                        ->helperText('The password to use in conjunction with the SMTP username. ')
                         ->default(env('MAIL_PASSWORD')),
                     Forms\Components\ToggleButtons::make('mail_encryption')
                         ->label('Encryption')
+                        ->required()
                         ->inline()
                         ->options([
                             'tls' => 'TLS',
@@ -144,6 +154,7 @@ class Mail extends Page
                             };
                             $set('mail_port', $port);
                         })
+                        ->helperText('Select the type of encryption to use when sending mail.')
                         ->default(env('MAIL_ENCRYPTION')),  
                 ]),
             Forms\Components\Section::make('Mailgun Configuration')
@@ -154,17 +165,20 @@ class Mail extends Page
                         ->label('Domain')
                         ->suffixIcon('tabler-world')
                         ->required()
+                        ->helperText('The Mailgun Domain is the domain registered with Mailgun.')
                         ->default(env('MAILGUN_DOMAIN')),
                     Forms\Components\TextInput::make('mail_mailgun_secret')
                         ->label('Secret')
                         ->password()
                         ->revealable()
                         ->required()
+                        ->helperText('The Mailgun Secret is the API key used to authenticate.')
                         ->default(env('MAILGUN_SECRET')),
                     Forms\Components\TextInput::make('mail_mailgun_endpoint')
                         ->label('Endpoint')
                         ->suffixIcon('tabler-world')
                         ->required()
+                        ->helperText('The Mailgun Endpoint specifies the API base URL.')
                         ->default(env('MAILGUN_ENDPOINT')),
                 ]),
         ];
@@ -179,6 +193,7 @@ class Mail extends Page
                         ->label('Global Signature')
                         ->rows(2)
                         ->columnSpan(2)
+                        ->helperText('The Mail Global Signature is a predefined signature that will be appended to all outgoing emails.')
                         ->default(Billmora::getSetting('mail_template_signature', "Regards,\nBillmora")),
                     Forms\Components\Select::make('mail_template')
                         ->label('Email Template')
