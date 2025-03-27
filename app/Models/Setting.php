@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
 {
-    protected $fillable = ['key', 'value'];
+    protected $fillable = ['category', 'key', 'value'];
 
     public function getValueAttribute($value)
     {
