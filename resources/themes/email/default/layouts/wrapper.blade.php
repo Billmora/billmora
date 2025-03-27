@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="color-scheme" content="light">
   <meta name="supported-color-schemes" content="light">
-  <title>{{ Billmora::getSetting('company_name') }}</title>
+  <title>{{ Billmora::getGeneral('company_name', 'Billmora') }}</title>
 
   <style>
     body {
@@ -83,15 +83,15 @@
   <div class="container">
     <div class="bar"></div>
     <div class="header">
-      <h2>{{ Billmora::getSetting('company_name') }}</h2>
+      <h2>{{ Billmora::getGeneral('company_name', 'Billmora') }}</h2>
     </div>
     <div class="body">
       @yield('message')
 
-      <p>{!! nl2br(e(Billmora::getSetting('mail_template_signature'))) !!}</p>
+      <p>{!! nl2br(e(Billmora::getGeneral('mail_template_signature', "Regards,\nBillmora"))) !!}</p>
     </div>
     <div class="footer">
-      <p>&copy; 2025 <a href="{{ config('app.url') }}" target="_blank">{{ Billmora::getSetting('company_name') }}</a>. All rights reserved.</p>
+      <p>&copy; 2025 <a href="{{ config('app.url') }}" target="_blank">{{ Billmora::getGeneral('company_name', 'Billmora') }}</a>. All rights reserved.</p>
     </div>
   </div>
 </body>

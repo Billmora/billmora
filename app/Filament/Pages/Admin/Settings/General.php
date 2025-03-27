@@ -86,7 +86,7 @@ class General extends Page
                                 ->label('Name')
                                 ->required()
                                 ->helperText('The name of your Company.')
-                                ->default(Billmora::getSetting('company_name', 'Billmora')),
+                                ->default(Billmora::getGeneral('company_name', 'Billmora')),
                             Forms\Components\Select::make('company_portal_theme')
                                 ->label('Portal Theme')
                                 ->options(collect(File::directories(resource_path('themes/portal')))
@@ -97,7 +97,7 @@ class General extends Page
                                 ->native(false)
                                 ->required()
                                 ->helperText('The theme you want Billmora portal area to use.')
-                                ->default(Billmora::getSetting('company_portal_theme', 'default')),
+                                ->default(Billmora::getGeneral('company_portal_theme', 'default')),
                             Forms\Components\Select::make('company_client_theme')
                                 ->label('Client Theme')
                                 ->options(collect(File::directories(resource_path('themes/client')))
@@ -108,7 +108,7 @@ class General extends Page
                                 ->native(false)
                                 ->required()
                                 ->helperText('The theme you want Billmora client area to use.')
-                                ->default(Billmora::getSetting('company_client_theme', 'default')),
+                                ->default(Billmora::getGeneral('company_client_theme', 'default')),
                         ]),
                     Forms\Components\Grid::make(2)
                         ->schema([
@@ -117,13 +117,13 @@ class General extends Page
                                 ->suffixIcon('tabler-world')
                                 ->required()
                                 ->helperText('Enter your Company logo URL.')
-                                ->default(Billmora::getSetting('company_logo', 'https://viidev.com/assets/img/logo/logo.png')),
+                                ->default(Billmora::getGeneral('company_logo', 'https://viidev.com/assets/img/logo/logo.png')),
                             Forms\Components\TextInput::make('company_favicon')
                                 ->label('Favicon URL')
                                 ->suffixIcon('tabler-world')
                                 ->required()
                                 ->helperText('Enter your Company favicon URL.')
-                                ->default(Billmora::getSetting('company_favicon', 'https://viidev.com/assets/img/logo/logo.png')),
+                                ->default(Billmora::getGeneral('company_favicon', 'https://viidev.com/assets/img/logo/logo.png')),
                         ]),
                     Forms\Components\Grid::make(1)
                         ->schema([
@@ -131,7 +131,7 @@ class General extends Page
                                 ->label('Description')
                                 ->rows(3)
                                 ->helperText('The description of your Company.')
-                                ->default(Billmora::getSetting('company_description', 'Free and Open source Billing Management Operations & Recurring Automation.')),
+                                ->default(Billmora::getGeneral('company_description', 'Free and Open source Billing Management Operations & Recurring Automation.')),
                         ]),
                     Forms\Components\Grid::make(3)
                         ->schema([
@@ -144,7 +144,7 @@ class General extends Page
                                 ->offColor('danger')
                                 ->required()
                                 ->helperText('If disable, area portal will be automated redirect to clientarea.')
-                                ->default(Billmora::getSetting('company_portal', true)),
+                                ->default(Billmora::getGeneral('company_portal', true)),
                             Forms\Components\Select::make('company_date_format')
                                 ->label('Date Format')
                                 ->options([
@@ -158,7 +158,7 @@ class General extends Page
                                 ->native(false)
                                 ->required()
                                 ->helperText('Default date format for your Company.')
-                                ->default(Billmora::getSetting('company_date_format', 'd/m/Y')),
+                                ->default(Billmora::getGeneral('company_date_format', 'd/m/Y')),
                             Forms\Components\Select::make('company_language')
                                 ->label('Language')
                                 ->options(collect(File::directories(resource_path('langs')))
@@ -170,7 +170,7 @@ class General extends Page
                                 ->native(false)
                                 ->required()
                                 ->helperText('Default language for Billmora clientarea.')
-                                ->default(Billmora::getSetting('company_language', 'en')),
+                                ->default(Billmora::getGeneral('company_language', 'en')),
                         ])
                 ]),
 
@@ -188,12 +188,12 @@ class General extends Page
                                         ->onColor('success')
                                         ->offColor('danger')
                                         ->helperText('Prevents client area access when enabled.')
-                                        ->default(Billmora::getSetting('company_maintenance', false)),
+                                        ->default(Billmora::getGeneral('company_maintenance', false)),
                                     Forms\Components\TextInput::make('company_maintenance_url')
                                         ->label('Maintenance URL')
                                         ->suffixIcon('tabler-world')
                                         ->helperText('If specified, clients will be redirected to that URL when Maintenance is enabled.')
-                                        ->default(Billmora::getSetting('company_maintenance_url')),
+                                        ->default(Billmora::getGeneral('company_maintenance_url')),
                                 ])
                                 ->columnSpan(1),
                             Forms\Components\Textarea::make('company_maintenance_message')
@@ -201,7 +201,7 @@ class General extends Page
                                 ->rows(5)
                                 ->columnSpan(1)
                                 ->helperText('The message that will be displayed when Maintenance is enabled.')
-                                ->default(Billmora::getSetting('company_maintenance_message', 'We are currently performing maintenance and will be back shortly.')),
+                                ->default(Billmora::getGeneral('company_maintenance_message', 'We are currently performing maintenance and will be back shortly.')),
                         ]),
                 ]),
         ];
@@ -220,13 +220,13 @@ class General extends Page
                             'payment' => 'Automatically forward the user to the payment gateway'
                         ])
                         ->required()
-                        ->default(Billmora::getSetting('ordering_redirect', 'payment')),
+                        ->default(Billmora::getGeneral('ordering_redirect', 'payment')),
                     Forms\Components\TextInput::make('ordering_grace')
                         ->label('Order days grace')
                         ->numeric()
                         ->required()
                         ->helperText('The number of days to allow for payment of an order before being overdue.')
-                        ->default(Billmora::getSetting('ordering_grace', 0)),
+                        ->default(Billmora::getGeneral('ordering_grace', 0)),
                     Forms\Components\Toggle::make('ordering_tos')
                         ->label('Terms of Service')
                         ->inline(false)
@@ -236,7 +236,7 @@ class General extends Page
                         ->offColor('danger')
                         ->required()
                         ->helperText('If enable, clients must agree to company Terms of Service.')
-                        ->default(Billmora::getSetting('ordering_tos', true)),
+                        ->default(Billmora::getGeneral('ordering_tos', true)),
                     Forms\Components\Toggle::make('ordering_notes')
                         ->label('Notes on Checkout')
                         ->inline(false)
@@ -246,7 +246,7 @@ class General extends Page
                         ->offColor('danger')
                         ->required()
                         ->helperText('If enable, clients can enter additional notes on the order form.')
-                        ->default(Billmora::getSetting('ordering_notes', false)),
+                        ->default(Billmora::getGeneral('ordering_notes', false)),
                 ]),
         ];
     }
@@ -264,7 +264,7 @@ class General extends Page
                         ->onColor('success')
                         ->offColor('danger')
                         ->helperText('Enables sending PDF invoices with emails and downloading PDFs directly from the invoice page.')
-                        ->default(Billmora::getSetting('invoice_pdf', false)),
+                        ->default(Billmora::getGeneral('invoice_pdf', false)),
                     Forms\Components\Select::make('invoice_pdf_size')
                         ->label('PDF Paper Size')
                         ->options([
@@ -274,7 +274,7 @@ class General extends Page
                         ->native(false)
                         ->required()
                         ->helperText('Choose the paper format to use when generating PDF files.')
-                        ->default(Billmora::getSetting('invoice_pdf_size', 'A4')),
+                        ->default(Billmora::getGeneral('invoice_pdf_size', 'A4')),
                     Forms\Components\TextInput::make('invoice_pdf_font')
                         ->label('PDF Font Family')
                         ->hintAction(
@@ -284,7 +284,7 @@ class General extends Page
                                 ->url('https://fonts.google.com', true))
                         ->required()
                         ->helperText('All Google Fonts are available to use.')
-                        ->default(Billmora::getSetting('invoice_pdf_font', 'Plus Jakarta Sans')),
+                        ->default(Billmora::getGeneral('invoice_pdf_font', 'Plus Jakarta Sans')),
                     Forms\Components\Toggle::make('invoice_mass_payment')
                         ->label('Mass Payment')
                         ->inline(false)
@@ -294,7 +294,7 @@ class General extends Page
                         ->offColor('danger')
                         ->required()
                         ->helperText('Enable the multiple invoice payment options on the client area.')
-                        ->default(Billmora::getSetting('invoice_mass_payment', true)),
+                        ->default(Billmora::getGeneral('invoice_mass_payment', true)),
                     Forms\Components\Toggle::make('invoice_choose_payment')
                         ->label('Clients Choose Gateway')
                         ->inline(false)
@@ -304,7 +304,7 @@ class General extends Page
                         ->offColor('danger')
                         ->required()
                         ->helperText('Enable to allow clients to choose the gateway they pay with.')
-                        ->default(Billmora::getSetting('invoice_choose_payment', true)),
+                        ->default(Billmora::getGeneral('invoice_choose_payment', true)),
                     Forms\Components\Toggle::make('invoice_cancelation_handling')
                         ->label('Cancellation Request Handling')
                         ->inline(false)
@@ -314,7 +314,7 @@ class General extends Page
                         ->offColor('danger')
                         ->required()
                         ->helperText('Enable to automatically cancel outstanding unpaid invoices when a cancellation request is submitted.')
-                        ->default(Billmora::getSetting('invoice_cancelation_handling', false)),
+                        ->default(Billmora::getGeneral('invoice_cancelation_handling', false)),
                 ]),
         ];
     }
@@ -332,25 +332,25 @@ class General extends Page
                     ->onColor('success')
                     ->offColor('danger')
                     ->helperText('Enable adding and use of funds by clients from the client area.')
-                    ->default(Billmora::getSetting('credit_use', false)),
+                    ->default(Billmora::getGeneral('credit_use', false)),
                 Forms\Components\TextInput::make('credit_min_deposit')
                     ->label('Minimum Deposit')
                     ->numeric()
                     ->required()
                     ->helperText('Enter the minimum amount that can be deposited.')
-                    ->default(Billmora::getSetting('credit_min_deposit', 1)),
+                    ->default(Billmora::getGeneral('credit_min_deposit', 1)),
                 Forms\Components\TextInput::make('credit_max_deposit')
                     ->label('Maximum Deposit')
                     ->numeric()
                     ->required()
                     ->helperText('Enter the maximum amount that can be deposited.')
-                    ->default(Billmora::getSetting('credit_max_deposit', 1000000)),
+                    ->default(Billmora::getGeneral('credit_max_deposit', 1000000)),
                 Forms\Components\TextInput::make('credit_max')
                     ->label('Maximum Balance')
                     ->numeric()
                     ->required()
                     ->helperText('Enter the maximum balance that can be deposited.')
-                    ->default(Billmora::getSetting('credit_max', 10000000)),
+                    ->default(Billmora::getGeneral('credit_max', 10000000)),
             ]),
         ];
     }
@@ -368,26 +368,26 @@ class General extends Page
                     ->onColor('success')
                     ->offColor('danger')
                     ->helperText('Enable the affiliate system.')
-                    ->default(Billmora::getSetting('affiliate_use', false)),
+                    ->default(Billmora::getGeneral('affiliate_use', false)),
                 Forms\Components\TextInput::make('affiliate_min_payment')
                     ->label('Minimum Payment')
                     ->numeric()
                     ->required()
                     ->helperText('Enter the minimum payment that can use affiliates.')
-                    ->default(Billmora::getSetting('affiliate_min_payment', 1)),
+                    ->default(Billmora::getGeneral('affiliate_min_payment', 1)),
                 Forms\Components\TextInput::make('affiliate_reward')
                     ->label('Creator Reward in %')
                     ->numeric()
                     ->suffixIcon('tabler-percentage')
                     ->required()
                     ->helperText('Percentage of the sale amount that the affiliate earns for each successful referral.')
-                    ->default(Billmora::getSetting('affiliate_reward', 5)),
+                    ->default(Billmora::getGeneral('affiliate_reward', 5)),
                 Forms\Components\TextInput::make('affiliate_discount')
                     ->label('Invited Discount in %')
                     ->suffixIcon('tabler-percentage')
                     ->required()
                     ->helperText('Discount percentage for referred customers when they use the affiliates link.')
-                    ->default(Billmora::getSetting('affiliate_discount', 5)),
+                    ->default(Billmora::getGeneral('affiliate_discount', 5)),
             ]),
         ];
     }
@@ -407,12 +407,12 @@ class General extends Page
                                 ->onColor('success')
                                 ->offColor('danger')
                                 ->helperText('Enable to show the page at: https://example.com/terms-of-service.')
-                                ->default(Billmora::getSetting('term_tos', false)),
+                                ->default(Billmora::getGeneral('term_tos', false)),
                             Forms\Components\TextInput::make('term_tos_url')
                                 ->label('Terms of Service URL')
                                 ->suffixIcon('tabler-world')
                                 ->helperText('If specified, clients will be redirected to that URL when they want reading.')
-                                ->default(Billmora::getSetting('term_tos_url')),
+                                ->default(Billmora::getGeneral('term_tos_url')),
                         ]),
                     Forms\Components\Grid::make(1)
                         ->schema([
@@ -427,7 +427,7 @@ class General extends Page
                                         ->icon('tabler-arrows-maximize')
                                         ->alpineClickHandler('$refs.editor.requestFullscreen()'))
                                         ->helperText('This content will be displayed at: https://example.com/terms-of-service.')
-                                        ->default(Billmora::getSetting('term_tos_content')),
+                                        ->default(Billmora::getGeneral('term_tos_content')),
                         ])
                 ]),
 
@@ -443,12 +443,12 @@ class General extends Page
                                 ->onColor('success')
                                 ->offColor('danger')
                                 ->helperText('Enable to show the page at: https://example.com/terms-of-condition.')
-                                ->default(Billmora::getSetting('term_toc', false)),
+                                ->default(Billmora::getGeneral('term_toc', false)),
                             Forms\Components\TextInput::make('term_toc_url')
                                 ->label('Terms of Condition URL')
                                 ->suffixIcon('tabler-world')
                                 ->helperText('If specified, clients will be redirected to that URL when they want reading.')
-                                ->default(Billmora::getSetting('term_toc_url')),
+                                ->default(Billmora::getGeneral('term_toc_url')),
                         ]),
                     Forms\Components\Grid::make(1)
                         ->schema([
@@ -463,7 +463,7 @@ class General extends Page
                                         ->icon('tabler-arrows-maximize')
                                         ->alpineClickHandler('$refs.editor.requestFullscreen()'))
                                         ->helperText('This content will be displayed at: https://example.com/terms-of-condition.')
-                                        ->default(Billmora::getSetting('term_toc_content')),
+                                        ->default(Billmora::getGeneral('term_toc_content')),
 
                         ])
                 ]),
@@ -480,12 +480,12 @@ class General extends Page
                                 ->onColor('success')
                                 ->offColor('danger')
                                 ->helperText('Enable to show the page at: https://example.com/privacy-policy.')
-                                ->default(Billmora::getSetting('term_privacy', false)),
+                                ->default(Billmora::getGeneral('term_privacy', false)),
                             Forms\Components\TextInput::make('term_privacy_url')
                                 ->label('Privacy Policy URL')
                                 ->suffixIcon('tabler-world')
                                 ->helperText('If specified, clients will be redirected to that URL when they want reading.')
-                                ->default(Billmora::getSetting('term_privacy_url')),
+                                ->default(Billmora::getGeneral('term_privacy_url')),
                         ]),
                     Forms\Components\Grid::make(1)
                         ->schema([
@@ -500,7 +500,7 @@ class General extends Page
                                         ->icon('tabler-arrows-maximize')
                                         ->alpineClickHandler('$refs.editor.requestFullscreen()'))
                                         ->helperText('This content will be displayed at: https://example.com/privacy-policy.')
-                                        ->default(Billmora::getSetting('term_privacy_content')),
+                                        ->default(Billmora::getGeneral('term_privacy_content')),
 
                         ])
                 ]),
@@ -516,57 +516,57 @@ class General extends Page
                         ->label('Discord')
                         ->suffixIcon('tabler-world')
                         ->inlineLabel()
-                        ->default(Billmora::getSetting('social_discord')),
+                        ->default(Billmora::getGeneral('social_discord')),
                     Forms\Components\TextInput::make('social_youtube')
                         ->label('YouTube')
                         ->suffixIcon('tabler-world')
                         ->inlineLabel()
-                        ->default(Billmora::getSetting('social_youtube')),
+                        ->default(Billmora::getGeneral('social_youtube')),
                     Forms\Components\TextInput::make('social_whatsapp')
                         ->label('WhatsApp')
                         ->suffixIcon('tabler-world')
                         ->inlineLabel()
-                        ->default(Billmora::getSetting('social_whatsapp')),
+                        ->default(Billmora::getGeneral('social_whatsapp')),
                     Forms\Components\TextInput::make('social_instagram')
                         ->label('Instagram')
                         ->suffixIcon('tabler-world')
                         ->inlineLabel()
-                        ->default(Billmora::getSetting('social_instagram')),
+                        ->default(Billmora::getGeneral('social_instagram')),
                     Forms\Components\TextInput::make('social_facebook')
                         ->label('Facebook')
                         ->suffixIcon('tabler-world')
                         ->inlineLabel()
-                        ->default(Billmora::getSetting('social_facebook')),
+                        ->default(Billmora::getGeneral('social_facebook')),
                     Forms\Components\TextInput::make('social_twitter')
                         ->label('Twitter')
                         ->suffixIcon('tabler-world')
                         ->inlineLabel()
-                        ->default(Billmora::getSetting('social_twitter')),
+                        ->default(Billmora::getGeneral('social_twitter')),
                     Forms\Components\TextInput::make('social_linkedin')
                         ->label('LinkedIn')
                         ->suffixIcon('tabler-world')
                         ->inlineLabel()
-                        ->default(Billmora::getSetting('social_linkedin')),
+                        ->default(Billmora::getGeneral('social_linkedin')),
                     Forms\Components\TextInput::make('social_github')
                         ->label('GitHub')
                         ->suffixIcon('tabler-world')
                         ->inlineLabel()
-                        ->default(Billmora::getSetting('social_github')),
+                        ->default(Billmora::getGeneral('social_github')),
                     Forms\Components\TextInput::make('social_reddit')
                         ->label('Reddit')
                         ->suffixIcon('tabler-world')
                         ->inlineLabel()
-                        ->default(Billmora::getSetting('social_reddit')),
+                        ->default(Billmora::getGeneral('social_reddit')),
                     Forms\Components\TextInput::make('social_skype')
                         ->label('Skype')
                         ->suffixIcon('tabler-world')
                         ->inlineLabel()
-                        ->default(Billmora::getSetting('social_skype')),
+                        ->default(Billmora::getGeneral('social_skype')),
                     Forms\Components\TextInput::make('social_telegram')
                         ->label('Telegram')
                         ->suffixIcon('tabler-world')
                         ->inlineLabel()
-                        ->default(Billmora::getSetting('social_telegram')),
+                        ->default(Billmora::getGeneral('social_telegram')),
                     
                 ]),
         ];
@@ -639,7 +639,7 @@ class General extends Page
                 'social_telegram' => ['nullable', 'url'],
             ])->validate();
 
-            Billmora::setSetting($validated);
+            Billmora::setGeneral($validated);
 
             Notification::make()
                 ->title('Success')

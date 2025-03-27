@@ -194,7 +194,7 @@ class Mail extends Page
                         ->rows(2)
                         ->columnSpan(2)
                         ->helperText('The Mail Global Signature is a predefined signature that will be appended to all outgoing emails.')
-                        ->default(Billmora::getSetting('mail_template_signature', "Regards,\nBillmora")),
+                        ->default(Billmora::getMail('mail_template_signature', "Regards,\nBillmora")),
                     Forms\Components\Select::make('mail_template')
                         ->label('Email Template')
                         ->options(collect(File::directories(resource_path('themes/email')))
@@ -205,7 +205,7 @@ class Mail extends Page
                         ->native(false)
                         ->required()
                         ->helperText('The template you want Billmora mail to use.')
-                        ->default(Billmora::getSetting('mail_template', 'default')),
+                        ->default(Billmora::getMail('mail_template', 'default')),
                 ])
         ];
     }
@@ -249,7 +249,7 @@ class Mail extends Page
                 'MAILGUN_ENDPOINT' => $validated['mail_mailgun_endpoint'],
             ]);
 
-            Billmora::setSetting([
+            Billmora::setMail([
                 'mail_template' => $validated['mail_template'],
                 'mail_template_signature' => $validated['mail_template_signature'],
             ]);

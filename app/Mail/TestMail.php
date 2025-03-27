@@ -28,7 +28,7 @@ class TestMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Welcome to ' . Billmora::getSetting('company_name'),
+            subject: 'Welcome to ' . Billmora::getGeneral('company_name', 'Billmora'),
         );
     }
 

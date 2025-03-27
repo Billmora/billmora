@@ -10,18 +10,43 @@ use Illuminate\Validation\ValidationException;
 
 class BillmoraService
 {
-    public static function getSetting(string $key, mixed $default = null): mixed
+    public static function getSetting(string $category, string $key, mixed $default = null): mixed
     {
-        return Setting::where('key', $key)->value('value') ?? $default;
+        return Setting::where('category', $category)
+            ->where('key', $key)
+            ->value('value') ?? $default;
     }
 
-    public static function setSetting(array $data): void
+    public static function setSetting(string $category, array $data): void
     {
         $validated = self::validateData($data);
 
         foreach ($validated as $key => $value) {
-            Setting::updateOrCreate(['key' => $key], ['value' => $value]);
+            Setting::updateOrCreate(
+                ['category' => $category, 'key' => $key],
+                ['value' => $value]
+            );
         }
+    }
+
+    public static function getGeneral(string $key, mixed $default = null): mixed
+    {
+        return self::getSetting('general', $key, $default);
+    }
+
+    public static function setGeneral(array $data): void
+    {
+        self::setSetting('general', $data);
+    }
+
+    public static function getMail(string $key, mixed $default = null): mixed
+    {
+        return self::getSetting('mail', $key, $default);
+    }
+
+    public static function setMail(array $data): void
+    {
+        self::setSetting('mail', $data);
     }
 
     public static function setEnv(array $data): void
