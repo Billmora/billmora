@@ -1,3 +1,7 @@
+.tiptap-editor:focus,
+.tiptap-editor:focus-within {
+    outline: solid 2px rgba(var(--primary-500), 1) !important;
+}
 button.tiptap-tool {
     box-shadow: none !important;
 }
