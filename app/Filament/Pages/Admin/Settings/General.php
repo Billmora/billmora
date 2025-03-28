@@ -4,6 +4,7 @@ namespace App\Filament\Pages\Admin\Settings;
 
 use App\Services\BillmoraService as Billmora;
 use Filament\Forms;
+use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Navigation\NavigationItem;
 use Filament\Notifications\Notification;
@@ -37,9 +38,11 @@ class General extends Page
         $this->form->fill();
     }
 
-    public function getFormSchema(): array
+    public function form(Form $form): Form
     {
-        return [
+        return $form
+        ->statePath('data')
+        ->schema([
             Forms\Components\Tabs::make()
                 ->persistTabInQueryString()
                 ->tabs([
@@ -72,7 +75,7 @@ class General extends Page
                         ->icon('tabler-social')
                         ->schema($this->tabSocial()),
                 ]),
-        ];
+        ]);
     }
 
     private function tabCompany(): array
@@ -570,11 +573,6 @@ class General extends Page
                     
                 ]),
         ];
-    }
-
-    protected function getFormStatePath(): ?string
-    {
-        return 'data';
     }
 
     public function save(): void

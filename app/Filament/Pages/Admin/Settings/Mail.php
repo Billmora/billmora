@@ -6,6 +6,7 @@ use App\Services\BillmoraService as Billmora;
 use App\Mail\TestMail;
 use App\Models\EmailTemplates;
 use Filament\Forms;
+use Filament\Forms\Form;
 use Filament\Navigation\NavigationItem;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -45,9 +46,11 @@ class Mail extends Page implements HasTable
         $this->form->fill();
     }
 
-    public function getFormSchema(): array
+    public function form(Form $form): Form 
     {
-        return [
+        return $form
+        ->statePath('data')
+        ->schema([
             Forms\Components\Tabs::make()
                 ->persistTabInQueryString()
                 ->tabs([
@@ -60,7 +63,7 @@ class Mail extends Page implements HasTable
                         ->icon('tabler-mail-code')
                         ->schema($this->tabMailTemplate()),
                 ]),
-        ];
+        ]);
     }
 
     public function table(Table $table): Table
@@ -122,7 +125,7 @@ class Mail extends Page implements HasTable
                         ->required()
                         ->email()
                         ->helperText('Enter an email address that all outgoing emails will originate from.')
-                        ->default(env('MAIL_FROM_ADDRESS', 'hellp@example.com')),
+                        ->default(env('MAIL_FROM_ADDRESS', 'hello@example.com')),
                         Forms\Components\TextInput::make('mail_from_name')
                         ->label('Mail From Name')
                         ->required()
@@ -232,11 +235,6 @@ class Mail extends Page implements HasTable
         ];
     }
 
-    protected function getFormStatePath(): ?string
-    {
-        return 'data';
-    }
-
     public function save(): void
     {
         try {
@@ -278,7 +276,7 @@ class Mail extends Page implements HasTable
 
             Notification::make()
                 ->title('Success')
-                ->body('General settings have been updated successfully.')
+                ->body('Mail settings have been updated successfully.')
                 ->success()
                 ->send();
         } catch (ValidationException $e) {
