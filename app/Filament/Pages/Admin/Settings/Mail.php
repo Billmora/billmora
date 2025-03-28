@@ -81,6 +81,58 @@ class Mail extends Page implements HasTable
                     ->label('Name')
                     ->searchable(),
             ])
+            ->actions([
+                Tables\Actions\EditAction::make()
+                    ->modalHeading('Edit Email Template')
+                    ->modalButton('Update')
+                    ->successNotificationTitle('Email Template have been updated successfully.')
+                    ->form([
+                        Forms\Components\Grid::make(2)
+                            ->schema([
+                                Forms\Components\TextInput::make('key')
+                                    ->label('Key')
+                                    ->disabled(),
+                                Forms\Components\TextInput::make('name')
+                                    ->label('Name')
+                                    ->disabled(),
+                            ]),
+                        Forms\Components\TextInput::make('subject')
+                            ->label('Subject')
+                            ->required(),
+                        Forms\Components\RichEditor::make('body')
+                            ->label('Body')
+                            ->extraAttributes(['x-ref' => 'editor'])
+                            ->hintAction(
+                                Forms\Components\Actions\Action::make('fullscreen')
+                                    ->icon('tabler-arrows-maximize')
+                                    ->alpineClickHandler('$refs.editor.requestFullscreen()')),
+                        Forms\Components\Toggle::make('status')
+                            ->label('Enable Email')
+                            ->required(),
+                        Forms\Components\Grid::make(2)
+                            ->schema([
+                                Forms\Components\TagsInput::make('cc')
+                                    ->label('CC Emails')
+                                    ->nullable()
+                                    ->placeholder('')
+                                    ->separator(','),
+                                Forms\Components\TagsInput::make('bcc')
+                                    ->label('BCC Emails')
+                                    ->nullable()
+                                    ->placeholder('')
+                                    ->separator(','),
+                            ]),
+                        Forms\Components\Textarea::make('placeholder')
+                            ->label('List available placeholder')
+                            ->autosize()
+                            ->disabled()
+                            ->formatStateUsing(fn ($state) => $state ?: <<<'PLACEHOLDER'
+                            Client Name = {name}
+                            Global Signature = {signature}
+                            PLACEHOLDER
+                            ),
+                    ]),
+            ])
             ->defaultPaginationPageOption(50);
     }
 
