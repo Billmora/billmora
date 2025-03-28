@@ -4,17 +4,24 @@ namespace App\Filament\Pages\Admin\Settings;
 
 use App\Services\BillmoraService as Billmora;
 use App\Mail\TestMail;
+use App\Models\EmailTemplates;
 use Filament\Forms;
 use Filament\Navigation\NavigationItem;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Tables;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Table;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail as Mailer;
 
-class Mail extends Page
+class Mail extends Page implements HasTable
 {
+    use InteractsWithTable;
+
     protected static ?string $navigationIcon = 'tabler-mail';
     protected static string $view = 'filament.pages.admin.settings.mail';
     protected static ?string $slug = 'settings/mail';
@@ -54,6 +61,21 @@ class Mail extends Page
                         ->schema($this->tabMailTemplate()),
                 ]),
         ];
+    }
+
+    public function table(Table $table): Table
+    {
+        return $table
+            ->query(EmailTemplates::query())
+            ->columns([
+                Tables\Columns\IconColumn::make('status')
+                    ->label('Status')
+                    ->boolean(),
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Name')
+                    ->searchable(),
+            ])
+            ->defaultPaginationPageOption(50);
     }
 
     private function tabMailer()
