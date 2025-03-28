@@ -49,18 +49,16 @@
       border-bottom: 2px dashed #0000001a;
       color: #7c8088;
     }
-    .detail {
+    details {
       padding: 0.25rem 0.75rem;
       border: 2px dashed #0000001a;
       border-radius: 0.5rem;
       background-color: #F5F9FF;
       color: #6d7178;
-      font-weight: bold;
+      font-weight: 600;
     }
-    .detail .item {
-      display: flex;
-      justify-content: space-between;
-      line-height: 0;
+    details [data-type="details-content"] {
+      line-height: 0.5rem;
     }
     .footer {
       text-align: center;
