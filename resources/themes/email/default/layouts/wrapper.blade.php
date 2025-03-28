@@ -86,9 +86,7 @@
       <h2>{{ Billmora::getGeneral('company_name', 'Billmora') }}</h2>
     </div>
     <div class="body">
-      @yield('message')
-
-      <p>{!! nl2br(e(Billmora::getGeneral('mail_template_signature', "Regards,\nBillmora"))) !!}</p>
+      @yield('body')
     </div>
     <div class="footer">
       <p>&copy; 2025 <a href="{{ config('app.url') }}" target="_blank">{{ Billmora::getGeneral('company_name', 'Billmora') }}</a>. All rights reserved.</p>

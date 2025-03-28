@@ -3,8 +3,8 @@
 namespace App\Filament\Pages\Admin\Settings;
 
 use App\Services\BillmoraService as Billmora;
-use App\Mail\TestMail;
-use App\Models\EmailTemplates;
+use App\Mail\NotificationMail;
+use App\Models\EmailTemplate;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Navigation\NavigationItem;
@@ -69,11 +69,14 @@ class Mail extends Page implements HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(EmailTemplates::query())
+            ->query(EmailTemplate::query())
             ->columns([
                 Tables\Columns\IconColumn::make('status')
                     ->label('Status')
                     ->boolean(),
+                Tables\Columns\TextColumn::make('key')
+                    ->label('Key')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Name')
                     ->searchable(),
@@ -101,7 +104,10 @@ class Mail extends Page implements HasTable
                         ->action(function () {
                             try {
                                 $user = auth()->user();
-                                Mailer::to($user->email)->send(new TestMail());
+                                Mailer::to($user->email)->send(new NotificationMail('test_message', [
+                                    'name' => auth()->user()->name,
+                                    'signature' => nl2br(e(Billmora::getGeneral('mail_template_signature', "Regards,\nBillmora"))),
+                                ]));
             
                                 Notification::make()
                                     ->title('Test email sent successfully!')
