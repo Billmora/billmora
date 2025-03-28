@@ -12,6 +12,7 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Tables;
 use Filament\Tables\Contracts\HasTable;
+use FilamentTiptapEditor\TiptapEditor;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Table;
 use Illuminate\Validation\ValidationException;
@@ -99,13 +100,9 @@ class Mail extends Page implements HasTable
                         Forms\Components\TextInput::make('subject')
                             ->label('Subject')
                             ->required(),
-                        Forms\Components\RichEditor::make('body')
+                        TiptapEditor::make('body')
                             ->label('Body')
-                            ->extraAttributes(['x-ref' => 'editor'])
-                            ->hintAction(
-                                Forms\Components\Actions\Action::make('fullscreen')
-                                    ->icon('tabler-arrows-maximize')
-                                    ->alpineClickHandler('$refs.editor.requestFullscreen()')),
+                            ->required(),
                         Forms\Components\Toggle::make('status')
                             ->label('Enable Email')
                             ->required(),
