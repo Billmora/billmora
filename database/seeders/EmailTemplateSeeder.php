@@ -21,7 +21,7 @@ class EmailTemplateSeeder extends Seeder
                 'body' => <<<'BODY'
                 <p>Hello, {name}!</p>
                 <p>This is a test email to verify the configuration.</p>
-                <p>{signature}</p>
+                {signature}
                 BODY,
             ],
         ]);

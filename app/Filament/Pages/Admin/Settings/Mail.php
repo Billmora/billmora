@@ -155,7 +155,7 @@ class Mail extends Page implements HasTable
                                 $user = auth()->user();
                                 Mailer::to($user->email)->send(new NotificationMail('test_message', [
                                     'name' => auth()->user()->name,
-                                    'signature' => nl2br(e(Billmora::getGeneral('mail_template_signature', "Regards,\nBillmora"))),
+                                    'signature' => Billmora::getMail('mail_template_signature', '<p>Regards,<br/>Billmora<p/>'),
                                 ]));
             
                                 Notification::make()
@@ -269,12 +269,15 @@ class Mail extends Page implements HasTable
         return [
             Forms\Components\Grid::make(3)
                 ->schema([
-                    Forms\Components\Textarea::make('mail_template_signature')
+                    Forms\Components\RichEditor::make('mail_template_signature')
                         ->label('Global Signature')
-                        ->rows(2)
+                        ->toolbarButtons([])
+                        ->extraInputAttributes([
+                            'style' => 'min-height: auto; max-height: 50vh; overflow-y: auto;'
+                        ])
                         ->columnSpan(2)
                         ->helperText('The Mail Global Signature is a predefined signature that will be appended to all outgoing emails.')
-                        ->default(Billmora::getMail('mail_template_signature', "Regards,\nBillmora")),
+                        ->default(Billmora::getMail('mail_template_signature', '<p>Regards,<br/>Billmora<p/>')),
                     Forms\Components\Select::make('mail_template')
                         ->label('Email Template')
                         ->options(collect(File::directories(resource_path('themes/email')))
