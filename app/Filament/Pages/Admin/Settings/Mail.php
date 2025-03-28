@@ -120,7 +120,7 @@ class Mail extends Page implements HasTable
                                     ->separator(','),
                             ]),
                         Forms\Components\Textarea::make('placeholder')
-                            ->label('List available placeholder')
+                            ->label('Available placeholder (inc for subject and body)')
                             ->autosize()
                             ->disabled()
                             ->formatStateUsing(fn ($state) => $state ?: <<<'PLACEHOLDER'
