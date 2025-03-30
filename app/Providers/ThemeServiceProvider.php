@@ -17,8 +17,8 @@ class ThemeServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $portalTheme = Billmora::getGeneral('company_portal_theme', 'default');
-        $clientTheme = Billmora::getGeneral('company_client_theme', 'default');;
-        $emailTheme = Billmora::getGeneral('mail_template', 'default');;
+        $clientTheme = Billmora::getGeneral('company_client_theme', 'default');
+        $emailTheme = Billmora::getGeneral('mail_template', 'default');
 
         $portalThemePath = resource_path("themes/portal/{$portalTheme}/theme.php");
         $clientThemePath = resource_path("themes/client/{$clientTheme}/theme.php");

@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Models\Setting;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -12,6 +13,10 @@ class BillmoraService
 {
     public static function getSetting(string $category, string $key, mixed $default = null): mixed
     {
+        if (!Schema::hasTable('settings')) {
+            return $default;
+        }
+        
         return Setting::where('category', $category)
             ->where('key', $key)
             ->value('value') ?? $default;
