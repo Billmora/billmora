@@ -120,13 +120,13 @@ class General extends Page
                                 ->suffixIcon('tabler-world')
                                 ->required()
                                 ->helperText('Enter your Company logo URL.')
-                                ->default(Billmora::getGeneral('company_logo', 'https://viidev.com/assets/img/logo/logo.png')),
+                                ->default(Billmora::getGeneral('company_logo', 'https://media.billmora.com/billmora-icon.svg')),
                             Forms\Components\TextInput::make('company_favicon')
                                 ->label('Favicon URL')
                                 ->suffixIcon('tabler-world')
                                 ->required()
                                 ->helperText('Enter your Company favicon URL.')
-                                ->default(Billmora::getGeneral('company_favicon', 'https://viidev.com/assets/img/logo/logo.png')),
+                                ->default(Billmora::getGeneral('company_favicon', 'https://media.billmora.com/billmora-icon.svg')),
                         ]),
                     Forms\Components\Grid::make(1)
                         ->schema([
