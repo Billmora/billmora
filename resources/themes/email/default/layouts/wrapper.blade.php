@@ -28,7 +28,7 @@
       border-top-left-radius: 0.5rem;
       border-top-right-radius: 0.5rem;
       width: 100%;
-      background-color: #3384FF;
+      background-color: #FF8600;
       background-image: repeating-linear-gradient(
         -45deg,
         transparent,
@@ -38,7 +38,7 @@
       );
     }
     .header {
-      color: #3384FF;
+      color: #FF8600;
       text-align: center;
       margin: 1.5rem 0;
     }
@@ -68,7 +68,7 @@
       margin: 0.5rem 0
     }
     a {
-      color: #3384FF;
+      color: #FF8600;
       text-decoration: none;
       font-weight: bold;
     }
