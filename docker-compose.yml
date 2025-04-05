@@ -1,0 +1,43 @@
+services:
+    billmora-db:
+        image: mysql:8.4
+        container_name: billmora-db
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: billmora
+            MYSQL_USER: billmora
+            MYSQL_PASSWORD: byviidev
+        volumes:
+            - mysqldata:/var/lib/mysql
+        ports:
+            - "3306:3306"
+        networks:
+            - billmora_network
+
+    billmora-app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: billmora-app
+        restart: unless-stopped
+        depends_on:
+            - billmora-db
+        environment:
+            DB_HOST: billmora-db
+            DB_PORT: 3306
+            DB_DATABASE: billmora
+            DB_USERNAME: billmora
+            DB_PASSWORD: byviidev
+        volumes:
+            - .:/var/www
+        ports:
+            - "8000:8000"
+        networks:
+            - billmora_network
+
+volumes:
+    mysqldata:
+
+networks:
+    billmora_network:
