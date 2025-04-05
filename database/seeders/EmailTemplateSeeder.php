@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\EmailTemplate;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +14,7 @@ class EmailTemplateSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('email_templates')->insert([
+        $templates = [
             [
                 'key' => 'test_message',
                 'name' => 'Test Message',
@@ -24,6 +25,17 @@ class EmailTemplateSeeder extends Seeder
                 {signature}
                 BODY,
             ],
-        ]);
+        ];
+
+        foreach ($templates as $template) {
+            EmailTemplate::updateOrCreate(
+                ['key' => $template['key']],
+                [
+                    'name' => $template['name'],
+                    'subject' => $template['subject'],
+                    'body' => $template['body'],
+                ]
+            );
+        }
     }
 }

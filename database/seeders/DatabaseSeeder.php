@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             GeneralSettingSeeder::class,
+            MailSettingSeeder::class,
+            EmailTemplateSeeder::class,
         ]);
     }
 }
