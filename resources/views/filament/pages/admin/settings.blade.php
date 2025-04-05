@@ -9,7 +9,7 @@
                             <span class="text-sm">Configure a general settings.</span>
                         </div>
                     </div>
-                    <x-filament::button href="settings/general" size="lg" color="primary" tag="a" class="w-full">
+                    <x-filament::button href="{{ request()->url() }}/general" size="lg" color="primary" tag="a" class="w-full">
                         <div class="flex items-center gap-1">
                             <span>Configure</span>
                         </div>
@@ -25,7 +25,7 @@
                             <span class="text-sm">Configure a mail settings.</span>
                         </div>
                     </div>
-                    <x-filament::button href="settings/mail" size="lg" color="primary" tag="a" class="w-full">
+                    <x-filament::button href="{{ request()->url() }}/mail" size="lg" color="primary" tag="a" class="w-full">
                         <div class="flex items-center gap-1">
                             <span>Configure</span>
                         </div>
