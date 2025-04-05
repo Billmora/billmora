@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Services\BillmoraService as Billmora;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -29,9 +30,12 @@ class AdminPanelProvider extends PanelProvider
             ->homeUrl('/')
             ->spa()
             ->breadcrumbs(false)
+            ->favicon(Billmora::getGeneral('company_logo', 'https://media.billmora.com/billmora-icon.svg'))
+            ->brandLogoHeight('2rem')
+            ->brandName(Billmora::getGeneral('company_name', 'Billmora'))
             ->login()
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => '#FF8600',
             ])
             ->font('Plus Jakarta Sans')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
