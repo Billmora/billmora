@@ -3,6 +3,7 @@
 return [
     'sign_in' => 'Masuk',
     'sign_up' => 'Daftar',
+    'go_to_clientarea' => 'Pergi ke Area Klien',
     'homepage' => 'Beranda',
     'store' => 'Toko',
     'news' => 'Berita',
