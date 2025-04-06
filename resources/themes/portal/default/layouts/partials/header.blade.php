@@ -19,7 +19,7 @@
             </button>
             <div class="divider-y"></div>
             @auth
-                <a href="/client" class="btn btn-secondary">{{ __('portal.go_to_clientarea') }}</a>
+                <a href="/client" class="btn btn-primary">{{ __('portal.go_to_clientarea') }}</a>
             @else
                 <a href="/auth/login" class="btn btn-secondary">{{ __('portal.sign_in') }}</a>
                 <a href="/auth/register" class="btn btn-primary">{{ __('portal.sign_up') }}</a>
