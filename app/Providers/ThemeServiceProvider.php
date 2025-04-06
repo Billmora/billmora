@@ -29,7 +29,7 @@ class ThemeServiceProvider extends ServiceProvider
             'version' => '1.0.0',
             'author' => 'Billmora',
             'url' => 'https://billmora.com',
-            'assets' => "/assets/themes/portal/{$portalTheme}",
+            'assets' => "/themes/portal/{$portalTheme}",
         ];
 
         $clientThemeInfo = File::exists($clientThemePath) ? require $clientThemePath : [
@@ -37,7 +37,7 @@ class ThemeServiceProvider extends ServiceProvider
             'version' => '1.0.0',
             'author' => 'Billmora',
             'url' => 'https://billmora.com',
-            'assets' => "/assets/themes/client/{$clientTheme}",
+            'assets' => "/themes/client/{$clientTheme}",
         ];
 
         $emailThemeInfo = File::exists($emailThemePath) ? require $emailThemePath : [
