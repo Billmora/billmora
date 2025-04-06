@@ -35,7 +35,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandName(Billmora::getGeneral('company_name', 'Billmora'))
             ->login()
             ->colors([
-                'primary' => '#247BFF',
+                'primary' => '#3384FF',
             ])
             ->font('Plus Jakarta Sans')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
