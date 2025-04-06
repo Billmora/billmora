@@ -1,0 +1,42 @@
+footer {
+    background-color: var(--color-2);
+    border-top: 3px solid var(--color-3);
+    height: auto;
+    padding: 1rem;
+    @media (min-width: 992px) { 
+        padding: 2rem 0;
+    }
+}
+footer .detail {
+    display: grid;
+    grid-template-columns: none;
+    gap: 2rem;
+    @media (min-width: 992px) { 
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+footer .detail div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+footer .detail .brand img {
+    max-width: 6rem;
+}
+footer .copyright {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    @media (min-width: 992px) { 
+        flex-direction: row;
+    }
+}
+footer .copyright .social {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}

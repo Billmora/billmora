@@ -164,7 +164,7 @@ class General extends Page
                                 ->default(Billmora::getGeneral('company_date_format', 'd/m/Y')),
                             Forms\Components\Select::make('company_language')
                                 ->label('Language')
-                                ->options(collect(File::directories(resource_path('langs')))
+                                ->options(collect(File::directories(resource_path('lang')))
                                     ->mapWithKeys(fn ($path) => [
                                         basename($path) => Locale::getDisplayName(basename($path), app()->getLocale())
                                     ])
@@ -172,7 +172,7 @@ class General extends Page
                                 )
                                 ->native(false)
                                 ->required()
-                                ->helperText('Default language for Billmora clientarea.')
+                                ->helperText('Default language for Billmora (exclude admin area).')
                                 ->default(Billmora::getGeneral('company_language', 'en')),
                         ])
                 ]),
