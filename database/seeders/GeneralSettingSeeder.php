@@ -17,7 +17,7 @@ class GeneralSettingSeeder extends Seeder
             ['category' => 'general', 'key' => 'company_name', 'value' => 'Billmora'],
             ['category' => 'general', 'key' => 'company_portal_theme', 'value' => 'default'],
             ['category' => 'general', 'key' => 'company_client_theme', 'value' => 'default'],
-            ['category' => 'general', 'key' => 'company_logo', 'value' => 'https://media.billmora.com/billmora-icon.svg'],
+            ['category' => 'general', 'key' => 'company_logo', 'value' => 'https://media.billmora.com/billmora-icon.png'],
             ['category' => 'general', 'key' => 'company_favicon', 'value' => 'https://media.billmora.com/billmora-icon.svg'],
             ['category' => 'general', 'key' => 'company_description', 'value' => 'Free and Open source Billing Management Operations & Recurring Automation.'],
             ['category' => 'general', 'key' => 'company_portal', 'value' => true],
