@@ -3,7 +3,7 @@
 return [
     'sign_in' => 'Sign In',
     'sign_up' => 'Sign Up',
-    'go_to_clientarea' => 'Go to Client Area',
+    'client_area' => 'Client Area',
     'homepage' => 'Home',
     'store' => 'Store',
     'news' => 'News',

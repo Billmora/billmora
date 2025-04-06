@@ -18,12 +18,7 @@
                 <span class="currency">(USD)</span>
             </button>
             <div class="divider-y"></div>
-            @auth
-                <a href="/client" class="btn btn-primary">{{ __('portal.go_to_clientarea') }}</a>
-            @else
-                <a href="/auth/login" class="btn btn-secondary">{{ __('portal.sign_in') }}</a>
-                <a href="/auth/register" class="btn btn-primary">{{ __('portal.sign_up') }}</a>
-            @endauth
+            <a href="/client" class="btn btn-primary">{{ __('portal.client_area') }}</a>
         </div>
     </div>
 </header>
@@ -59,8 +54,7 @@
             <span class="currency">(USD)</span>
         </button>
         <div class="divider-y"></div>
-        <a href="/auth/login" class="btn btn-secondary">{{ __('portal.sign_in') }}</a>
-        <a href="/auth/register" class="btn btn-primary">{{ __('portal.sign_up') }}</a>
+        <a href="/client" class="btn btn-primary">{{ __('portal.client_area') }}</a>
     </div>
 </div>
 <form action="{{ route('preference.language') }}" method="POST">
