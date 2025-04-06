@@ -33,6 +33,7 @@ services:
             - .:/var/www
         ports:
             - "8000:8000"
+        command: bash -c "echo 'Waiting for services to be ready, this may take a moment...' && php artisan serve --host=0.0.0.0 --port=8000"
         networks:
             - billmora_network
 
