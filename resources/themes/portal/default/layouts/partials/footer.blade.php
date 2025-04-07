@@ -7,17 +7,37 @@
             </div>
             <div class="support">
                 <h4>{{ __('portal.support') }}</h4>
-                <a href="/client/ticket" target="_blank">{{ __('portal.ticket') }}</a>
+                <a href="/ticket" target="_blank">{{ __('portal.ticket') }}</a>
             </div>
             <div class="company">
-                <h4>{{ __('portal.company') }}</h4>
-                <a href="{{ Billmora::getGeneral('term_tos_url') ?? '/terms-of-service' }}">{{ __('portal.tos') }}</a>
-                <a href="{{ Billmora::getGeneral('term_toc_url') ?? '/terms-of-condition' }}">{{ __('portal.toc') }}</a>
-                <a href="{{ Billmora::getGeneral('term_privacy_url') ?? '/terms-of-service' }}">{{ __('portal.privacy_policy') }}</a>
+                @if (Billmora::getGeneral('term_tos') || Billmora::getGeneral('term_toc') || Billmora::getGeneral('term_privacy'))
+                    <h4>{{ __('portal.company') }}</h4>
+                @endif
+                @if (Billmora::getGeneral('term_tos'))
+                    @if (Billmora::getGeneral('term_tos_url'))
+                        <a href="{{ Billmora::getGeneral('term_tos_url') }}" target="_blank">{{ __('portal.tos') }}</a>
+                    @else
+                        <a href="/terms-of-service">{{ __('portal.tos') }}</a>
+                    @endif
+                @endif
+                @if (Billmora::getGeneral('term_toc'))
+                    @if (Billmora::getGeneral('term_toc_url'))
+                        <a href="{{ Billmora::getGeneral('term_toc_url') }}" target="_blank">{{ __('portal.toc') }}</a>
+                    @else
+                        <a href="/terms-of-condition">{{ __('portal.toc') }}</a>
+                    @endif
+                @endif
+                @if (Billmora::getGeneral('term_privacy'))
+                    @if (Billmora::getGeneral('term_privacy_url'))
+                        <a href="{{ Billmora::getGeneral('term_privacy_url') }}" target="_blank">{{ __('portal.privacy_policy') }}</a>
+                    @else
+                        <a href="/privacy-policy">{{ __('portal.privacy_policy') }}</a>
+                    @endif
+                @endif
             </div>
             <div class="brand">
-                <img src="{{ Billmora::getGeneral('company_logo') ?? 'https://viidev.com/assets/img/logo/logo.png' }}">
-                <p>{{ Billmora::getGeneral('company_description') ?? 'Free and Open source Billing Management Operations & Recurring Automation' }}</p>
+                <img src="{{ Billmora::getGeneral('company_logo') }}">
+                <p>{{ Billmora::getGeneral('company_description') }}</p>
             </div>
         </div>
         <div class="copyright">

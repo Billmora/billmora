@@ -25,22 +25,31 @@
 <nav>
     <div class="container">
         <div class="menu">
-            <a href="/" class="btn nav-btn active">
+            <a href="/" class="btn nav-btn {{ request()->is('/') ? 'active' : '' }}">
                 <x-tabler-home/>
                 {{ __('portal.homepage') }}
             </a>
-            <button class="btn nav-btn">
+            <a href="/store" class="btn nav-btn {{ request()->is('/store*') ? 'active' : '' }}">
                 <x-tabler-building-store />
                 {{ __('portal.store') }}
-            </button>
-            <a href="/news" class="btn nav-btn">
+            </a>
+            <a href="/news" class="btn nav-btn {{ request()->is('/news*') ? 'active' : '' }}">
                 <x-tabler-news/>
                 {{ __('portal.news') }}
             </a>
-            <a href="{{ Billmora::getGeneral('term_tos_url') ?? '/terms-of-service' }}" class="btn nav-btn">
-                <x-tabler-circle-dashed-check/>
-                {{ __('portal.tos') }}
-            </a>
+            @if (Billmora::getGeneral('term_tos'))
+                @if (Billmora::getGeneral('term_tos_url'))
+                    <a href="{{ Billmora::getGeneral('term_tos_url') }}" target="_blank" class="btn nav-btn">
+                        <x-tabler-circle-dashed-check/>
+                        {{ __('portal.tos') }}
+                    </a>
+                @else
+                    <a href="/terms-of-service" class="btn nav-btn {{ request()->is('/terms-of-service*') ? 'active' : '' }}">
+                        <x-tabler-circle-dashed-check/>
+                        {{ __('portal.tos') }}
+                    </a>
+                @endif
+            @endif
         </div>
     </div>
 </nav>
@@ -55,6 +64,35 @@
         </button>
         <div class="divider-y"></div>
         <a href="/client" class="btn btn-primary">{{ __('portal.client_area') }}</a>
+    </div>
+</div>
+<div class="nav-menu">
+    <div class="menu">
+        <a href="/" class="btn nav-btn {{ request()->is('/') ? 'active' : '' }}">
+            <x-tabler-home/>
+            {{ __('portal.homepage') }}
+        </a>
+        <a href="/store" class="btn nav-btn {{ request()->is('/store*') ? 'active' : '' }}">
+            <x-tabler-building-store />
+            {{ __('portal.store') }}
+        </a>
+        <a href="/news" class="btn nav-btn {{ request()->is('/news*') ? 'active' : '' }}">
+            <x-tabler-news/>
+            {{ __('portal.news') }}
+        </a>
+        @if (Billmora::getGeneral('term_tos'))
+            @if (Billmora::getGeneral('term_tos_url'))
+                <a href="{{ Billmora::getGeneral('term_tos_url') }}" target="_blank" class="btn nav-btn">
+                    <x-tabler-circle-dashed-check/>
+                    {{ __('portal.tos') }}
+                </a>
+            @else
+                <a href="/terms-of-service" class="btn nav-btn {{ request()->is('/terms-of-service*') ? 'active' : '' }}">
+                    <x-tabler-circle-dashed-check/>
+                    {{ __('portal.tos') }}
+                </a>
+            @endif
+        @endif
     </div>
 </div>
 <form action="{{ route('preference.language') }}" method="POST">
