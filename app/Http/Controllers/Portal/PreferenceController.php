@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Session;
 
 class PreferenceController extends Controller
 {
-    public function setLanguage(Request $request)
+    public function update(Request $request)
     {
         $language = $request->language;
         $langsAllowed = collect(File::directories(resource_path('lang')))

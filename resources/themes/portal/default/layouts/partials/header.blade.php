@@ -95,7 +95,7 @@
         @endif
     </div>
 </div>
-<form action="{{ route('preference.language') }}" method="POST">
+<form action="{{ route('preference.update') }}" method="POST">
     @csrf
     <div class="modal" id="modalPreference">
         <div class="card">
