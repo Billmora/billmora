@@ -1,7 +1,9 @@
 @charset "UTF-8";
-@import url('https://fonts.googleapis.com/css?family=Plus Jakarta Sans');
+@import url("https://fonts.googleapis.com/css?family=Plus Jakarta Sans");
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
@@ -11,22 +13,36 @@
     font-family: "Plus Jakarta Sans", sans-serif;
 }
 
-img, picture, video, canvas, svg {
+img,
+picture,
+video,
+canvas,
+svg {
     display: block;
     max-width: 100%;
 }
 
-input, button, textarea, select {
+input,
+button,
+textarea,
+select {
     font: inherit;
 }
 
-p, h1, h2, h3, h4, h5, h6, button {
-    color: #00155F;
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button {
+    color: #00155f;
     overflow-wrap: break-word;
 }
 
 a {
-    color: #00155F;
+    color: #00155f;
     text-decoration: none;
 }
 
@@ -43,21 +59,22 @@ button {
     font: inherit;
 }
 
-#root, #__next {
-  isolation: isolate;
+#root,
+#__next {
+    isolation: isolate;
 }
 
 :root {
-    --color-1: #FBFDFF;
-    --color-2: #F5F9FF;
-    --color-3: #EAF3FF;
-    --color-4: #DBECFF;
-    --color-5: #CAE2FF;
-    --color-6: #B7D4FF;
-    --color-primary: #3384FF;
+    --color-1: #fbfdff;
+    --color-2: #f5f9ff;
+    --color-3: #eaf3ff;
+    --color-4: #dbecff;
+    --color-5: #cae2ff;
+    --color-6: #b7d4ff;
+    --color-primary: #3384ff;
     --color-primary-hover: #4f95fe;
-    --color-secondary: #006EFF15;
-    --color-secondary-hover: #3384FF;
+    --color-secondary: #006eff15;
+    --color-secondary-hover: #3384ff;
 }
 
 body {
@@ -65,17 +82,38 @@ body {
     flex-direction: column;
     background-color: var(--color-1);
     min-height: 100vh;
-    color: #00155F;
+    color: #00155f;
 }
 main {
-    margin-top: 9rem;
     flex-grow: 1;
+}
+section {
+    position: relative;
+    margin-top: 12rem;
+    margin-bottom: 4rem;
 }
 
 .container {
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
+}
+.dotted {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    min-width: 100%;
+    min-height: 100%;
+    aspect-ratio: 1;
+    background-image: radial-gradient(
+        circle at center,
+        #3385ff68 1px,
+        transparent 0
+    );
+    background-size: 1.5rem 1.5rem;
+    background-repeat: round;
+    background-position: center;
 }
 .btn-square {
     padding: 0.55rem !important;
@@ -85,7 +123,7 @@ main {
     padding: 0.5rem 0.75rem;
     border-radius: 0.5rem;
     position: relative;
-    font-size: .875rem;
+    font-size: 0.875rem;
     line-height: 1.25rem;
 }
 .btn svg {
@@ -175,19 +213,97 @@ select {
     -webkit-appearance: none;
     -moz-appearance: none;
     background-color: var(--color-1);
-    color: #00155F;
+    color: #00155f;
     border: 2px solid var(--color-3);
     padding: 0.6rem 2rem 0.6rem 0.7rem;
     border-radius: 0.5rem;
     outline: none;
-    background-image: url('https://www.svgrepo.com/show/12432/down-chevron.svg');
+    background-image: url("https://www.svgrepo.com/show/12432/down-chevron.svg");
     background-repeat: no-repeat;
     background-position: right 0.7rem center;
     background-size: 1rem;
 }
-
 select:focus {
     background-color: var(--color-1);
     border: 2px solid var(--color-primary);
     border-radius: 0.5rem;
+}
+
+.badge {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4rem;
+}
+.badge p {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    border: 2px dashed var(--color-primary);
+    color: var(--color-primary);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.75rem;
+    align-items: center;
+    font-weight: bold;
+}
+.hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: 0 1rem;
+    @media (min-width: 992px) {
+        padding: 0;
+    }
+}
+.hero .label h1 {
+    font-size: 3.5rem;
+    color: var(--color-primary);
+    text-align: center;
+}
+.hero .label p {
+    font-size: 1.5rem;
+    text-align: center;
+}
+.hero .action {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+.feature {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 12rem;
+    @media (min-width: 992px) {
+        flex-direction: row;
+    }
+}
+.feature .card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem;
+    background-color: var(--color-2);
+    border: 2px solid var(--color-3);
+    border-radius: 1rem;
+}
+.feature .card .label {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+.feature .card .label div {
+    color: var(--color-primary);
+    background-color: var(--color-4);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+}
+.feature .card .label div svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+.feature .card .label h2 {
+    color: var(--color-primary);
 }
