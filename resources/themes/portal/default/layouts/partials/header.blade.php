@@ -18,7 +18,7 @@
                 <span class="currency">(USD)</span>
             </button>
             <div class="divider-y"></div>
-            <a href="/client" class="btn btn-primary">{{ __('portal.client_area') }}</a>
+            <a href="/dashboard" class="btn btn-primary">{{ __('portal.client_area') }}</a>
         </div>
     </div>
 </header>
@@ -63,7 +63,7 @@
             <span class="currency">(USD)</span>
         </button>
         <div class="divider-y"></div>
-        <a href="/client" class="btn btn-primary">{{ __('portal.client_area') }}</a>
+        <a href="/dashboard" class="btn btn-primary">{{ __('portal.client_area') }}</a>
     </div>
 </div>
 <div class="nav-menu">

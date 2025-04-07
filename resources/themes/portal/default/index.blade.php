@@ -13,7 +13,7 @@
                 <p>{{ Billmora::getGeneral('company_description') }}</p>
             </div>
             <div class="action">
-                <a class="btn btn-secondary" href="/client">Client Area</a>
+                <a class="btn btn-secondary" href="/dashboard">Client Area</a>
                 <a class="btn btn-primary" href="/store">Get Started Now</a>
             </div>
         </div>
