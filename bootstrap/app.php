@@ -16,9 +16,6 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append(StartSession::class);
         $middleware->append(LanguageMiddleware::class);
-        $middleware->alias([
-            'portal.check' => PortalMiddleware::class,
-        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
