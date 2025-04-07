@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use App\Http\Middleware\LanguageMiddleware;
 use App\Http\Middleware\PortalMiddleware;
 use Illuminate\Foundation\Application;
@@ -16,6 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append(StartSession::class);
         $middleware->append(LanguageMiddleware::class);
+        $middleware->redirectGuestsTo(fn (Request $request) => route('client.login'));
+        $middleware->redirectUsersTo(fn (Request $request) => route('client.dashboard'));
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
