@@ -25,6 +25,8 @@ class Setting extends Model
 
     private function isJson($string): bool
     {
+        if (!is_string($string) || $string === '') return false;
+    
         json_decode($string);
         return json_last_error() === JSON_ERROR_NONE;
     }
