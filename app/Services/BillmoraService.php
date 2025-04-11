@@ -13,7 +13,13 @@ class BillmoraService
 {
     public static function getSetting(string $category, string $key, mixed $default = null): mixed
     {
-        if (!Schema::hasTable('settings')) {
+        static $tableExists = null;
+
+        if ($tableExists === null) {
+            $tableExists = Schema::hasTable('settings');
+        }
+
+        if (!$tableExists) {
             return $default;
         }
         
