@@ -15,5 +15,6 @@ Route::group(['middleware' => 'auth'], function () {
 Route::group(['prefix' => 'auth'], function () {
     Route::group(['middleware' => 'guest'], function () {
         Route::get('/login', [Auth\LoginController::class, 'index'])->name('client.login');
+        Route::post('/login', [Auth\LoginController::class, 'login'])->name('client.login.store');
     });
 });

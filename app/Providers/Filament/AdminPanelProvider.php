@@ -33,7 +33,6 @@ class AdminPanelProvider extends PanelProvider
             ->favicon(Billmora::getGeneral('company_logo', 'https://media.billmora.com/billmora-icon.svg'))
             ->brandLogoHeight('2rem')
             ->brandName(Billmora::getGeneral('company_name', 'Billmora'))
-            ->login()
             ->colors([
                 'primary' => '#3384FF',
             ])

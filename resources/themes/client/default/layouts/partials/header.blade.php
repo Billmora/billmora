@@ -18,7 +18,12 @@
                 <span class="currency">(USD)</span>
             </button>
             <div class="divider-y"></div>
-            <a href="/dashboard" class="btn btn-primary">{{ __('portal.client_area') }}</a>
+            @auth
+                <a href="/dashboard" class="btn btn-primary">{{ __('auth.client_area') }}</a>
+            @else
+                <a href="/auth/login" class="btn btn-secondary">{{ __('auth.sign_in') }}</a>
+                <a href="/auth/register" class="btn btn-primary">{{ __('auth.sign_up') }}</a>
+            @endauth
         </div>
     </div>
 </header>
@@ -63,7 +68,12 @@
             <span class="currency">(USD)</span>
         </button>
         <div class="divider-y"></div>
-        <a href="/dashboard" class="btn btn-primary">{{ __('portal.client_area') }}</a>
+        @auth
+            <a href="/dashboard" class="btn btn-primary">{{ __('auth.client_area') }}</a>
+        @else
+            <a href="/auth/login" class="btn btn-secondary">{{ __('auth.sign_in') }}</a>
+            <a href="/auth/register" class="btn btn-primary">{{ __('auth.sign_up') }}</a>
+        @endauth
     </div>
 </div>
 <div class="nav-menu">
