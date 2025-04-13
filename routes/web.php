@@ -18,6 +18,6 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('/login', [Auth\LoginController::class, 'login'])->name('client.login.store');
 
         Route::get('/register', [Auth\RegisterController::class, 'index'])->name('client.register');
-        Route::get('/register', [Auth\RegisterController::class, 'register'])->name('client.register.store');
+        Route::post('/register', [Auth\RegisterController::class, 'register'])->name('client.register.store');
     });
 });
