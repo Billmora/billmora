@@ -19,6 +19,13 @@ class RegisterController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'phone_number' => 'nullable|string',
+            'company_name' => 'nullable|string',
+            'street_address_1' => 'required|string',
+            'street_address_2' => 'nullable|string',
+            'city' => 'required|string',
+            'country' => 'required|string',
+            'state' => 'required|string',
+            'postcode' => 'required|string',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
@@ -27,6 +34,13 @@ class RegisterController extends Controller
             'last_name' => $request->last_name,
             'email' => $request->email,
             'phone_number' => $request->phone_number,
+            'company_name' => $request->company_name,
+            'street_address_1' => $request->street_address_1,
+            'street_address_2' => $request->street_address_2,
+            'city' => $request->city,
+            'country' => $request->country,
+            'state' => $request->state,
+            'postcode' => $request->postcode,
             'password' => bcrypt($request->password),
             'email_verified_at' => null,
         ]);
