@@ -94,14 +94,6 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
-     * Relationship: All email verification records (optional).
-     */
-    public function emailVerifications()
-    {
-        return $this->hasMany(UserEmailVerification::class);
-    }
-
-    /**
      * Relationship: Billing Address.
      */
     public function billing()
