@@ -77,6 +77,8 @@ button {
     --color-secondary-hover: #3384ff;
     --color-danger: #ff4d4f;
     --color-danger-hover: #ff7875;
+    --color-success: #52c41a;
+    --color-success-hover: #73d13d;
 }
 
 body {
@@ -289,12 +291,18 @@ select:focus {
     gap: 0.5rem;
     padding: 1rem;
     border-radius: 1rem;
-    background-color: var(--color-2);
-    border: 2px solid var(--color-danger);
     margin-bottom: 1rem;
 }
 .alert-danger {
+    background-color: var(--color-2);
+    border: 2px solid var(--color-danger);
     color: var(--color-danger);
+    font-weight: 600;
+}
+.alert-success {
+    background-color: var(--color-2);
+    border: 2px solid var(--color-success);
+    color: var(--color-success);
     font-weight: 600;
 }
 

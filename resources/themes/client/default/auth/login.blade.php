@@ -3,6 +3,11 @@
 @section('body')
 <div class="container">
   <div class="auth login">
+    @if(session('success'))
+    <p class="alert alert-success">
+      {{ session('success') }}
+    </p>
+    @endif
     @if(session('error'))
     <p class="alert alert-danger">
       {{ session('error') }}
