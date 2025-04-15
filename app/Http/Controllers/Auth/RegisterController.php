@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AuthMail;
+use App\Models\User;
+use App\Services\BillmoraService as Billmora;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
@@ -44,6 +48,14 @@ class RegisterController extends Controller
             'password' => bcrypt($request->password),
             'email_verified_at' => null,
         ]);
+
+        Mail::to($user->email)->send(new AuthMail('user_registration', [
+            'name' => $user->fullname,
+            'company_name' => Billmora::getGeneral('company_name'),
+            'company_url' => config('app.url'),
+            'verify_url' => 'httpsL//billmora.com',
+            'signature' => Billmora::getMail('mail_template_signature', '<p>Regards,<br/>Billmora<p/>'),
+        ]));
 
         return redirect()->route('client.login')->with('success', 'Thank you for registering. We have sent you an email for verification. Please check your inbox and follow the instructions to verify your email.');
     }
