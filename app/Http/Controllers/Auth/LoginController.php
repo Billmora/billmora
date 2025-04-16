@@ -26,21 +26,25 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
     
-        if ($validator) {
-            if (Auth::attempt($request->only('email', 'password'))) {
-                $user = Auth::user();
+        if (Auth::attempt($request->only('email', 'password'))) {
+            $user = Auth::user();
     
-                // if (!$user->hasVerifiedEmail()) {
-                //     Auth::logout();
-                //     return back()->with('error', 'Your email has not been verified.');
-                // }
+            if (! $user->hasVerifiedEmail()) {
+                Auth::logout();
     
-                $request->session()->regenerate();
-                return redirect()->intended('/');
+                $verification = $user->emailVerification()->latest()->first();
+                $token = $verification ? encrypt($verification->id) : null;
+    
+                return back()
+                    ->with('error', __('auth.email_not_verified'))
+                    ->with('resend_token', $token);
             }
+    
+            $request->session()->regenerate();
+            return redirect()->intended('/');
         }
     
-        return back()->with('error', 'Email or password is incorrect.')->onlyInput('email');;
+        return back()->with('error', __('auth.invalid_credentials')->onlyInput('email'));
     }
 
     /**

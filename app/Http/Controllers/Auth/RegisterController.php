@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Mail\AuthMail;
 use App\Models\User;
+use App\Models\UserEmailVerification;
 use App\Services\BillmoraService as Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -49,14 +51,21 @@ class RegisterController extends Controller
             'email_verified_at' => null,
         ]);
 
+        $token = Str::random(64);
+        UserEmailVerification::create([
+            'user_id' => $user->id,
+            'token' => $token,
+            'expires_at' => now()->addMinutes(60),
+        ]);
+
         Mail::to($user->email)->send(new AuthMail('user_registration', [
-            'name' => $user->fullname,
+            'name' => $user->full_name,
             'company_name' => Billmora::getGeneral('company_name'),
             'company_url' => config('app.url'),
-            'verify_url' => 'httpsL//billmora.com',
-            'signature' => Billmora::getMail('mail_template_signature', '<p>Regards,<br/>Billmora<p/>'),
+            'verify_url' => route('client.email.verify', ['token' => $token]),
+            'signature' => Billmora::getMail('mail_template_signature'),
         ]));
 
-        return redirect()->route('client.login')->with('success', 'Thank you for registering. We have sent you an email for verification. Please check your inbox and follow the instructions to verify your email.');
+        return redirect()->route('client.login')->with('success', __('auth.email_registering'));
     }
 }

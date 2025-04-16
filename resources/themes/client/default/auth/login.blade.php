@@ -9,9 +9,17 @@
     </p>
     @endif
     @if(session('error'))
-    <p class="alert alert-danger">
-      {{ session('error') }}
-    </p>
+    <div class="alert alert-danger">
+      <p>{{ session('error') }}</p>
+      
+      @if(session('resend_token'))
+        <form action="{{ route('client.email.resend') }}" method="POST">
+          @csrf
+          <input type="hidden" name="resend_token" value="{{ session('resend_token') }}">
+          <button type="submit" class="btn btn-primary">Resend Verification</button>
+        </form>
+      @endif
+    </div>
     @endif
     <form action="{{ route('client.login.store') }}" method="POST">
       @csrf

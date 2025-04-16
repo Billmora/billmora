@@ -44,6 +44,24 @@ class EmailTemplateSeeder extends Seeder
                 {signature}
                 BODY,
             ],
+            [
+                'key' => 'user_resend_verification',
+                'name' => 'User Resend Verification',
+                'subject' => 'Verify your email address',
+                'body' => <<<'BODY'
+                <p>Hello, {name}!</p>
+
+                <p>Please click on the link below to verify your email address. This is required to confirm ownership of the email address.</p>
+                <a href="{verify_url}" target="_blank">Verify Email</a>
+
+                <p>If you're having trouble, try copying and pasting the following URL into your browser:</p>
+                <a href="{verify_url}" target="_blank">{verify_url}</a>
+
+                <p>This link is valid for 60 minutes only. If it has expired, login to our <a href="{company_url}" target="_blank">Client Area</a> to request a new link.</p>
+
+                {signature}
+                BODY,
+            ],
         ];
 
         foreach ($templates as $template) {
