@@ -287,7 +287,7 @@ select:focus {
 }
 .alert {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 0.5rem;
     padding: 1rem;
     border-radius: 1rem;
