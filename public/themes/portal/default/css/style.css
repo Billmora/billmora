@@ -37,13 +37,16 @@ h4,
 h5,
 h6,
 button {
-    color: #00155f;
+    color: var(--text-color-primary);
     overflow-wrap: break-word;
 }
 
 a {
-    color: #00155f;
+    color: var(--text-color-primary);
     text-decoration: none;
+}
+a:hover {
+    color: var(--text-color-secondary);
 }
 
 button {
@@ -75,6 +78,12 @@ button {
     --color-primary-hover: #4f95fe;
     --color-secondary: #006eff15;
     --color-secondary-hover: #3384ff;
+    --color-danger: #ff4d4f;
+    --color-danger-hover: #ff7875;
+    --color-success: #52c41a;
+    --color-success-hover: #73d13d;
+    --text-color-primary: #2b303c;
+    --text-color-secondary: #030712;
 }
 
 body {
@@ -82,7 +91,7 @@ body {
     flex-direction: column;
     background-color: var(--color-1);
     min-height: 100vh;
-    color: #00155f;
+    color: var(--text-color-primary);
 }
 main {
     flex-grow: 1;
@@ -213,7 +222,7 @@ select {
     -webkit-appearance: none;
     -moz-appearance: none;
     background-color: var(--color-1);
-    color: #00155f;
+    color: var(--text-color-primary);
     border: 2px solid var(--color-3);
     padding: 0.6rem 2rem 0.6rem 0.7rem;
     border-radius: 0.5rem;
