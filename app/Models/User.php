@@ -44,7 +44,7 @@ class User extends Authenticatable implements FilamentUser
      * @var list<string>
      */
     protected $appends = [
-        'full_name',
+        'name',
     ];
 
     /**
@@ -72,7 +72,7 @@ class User extends Authenticatable implements FilamentUser
     /**
      * Get the user's full name.
      */
-    public function getFullNameAttribute(): string
+    public function getNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";
     }
