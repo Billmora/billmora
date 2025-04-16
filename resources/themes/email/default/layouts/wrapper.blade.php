@@ -9,8 +9,11 @@
   <title>{{ Billmora::getGeneral('company_name', 'Billmora') }}</title>
 
   <style>
+    @import url("https://fonts.googleapis.com/css?family=Plus Jakarta Sans");
+
+    .a3s,
     body {
-      font-family: "Plus Jakarta Sans", sans-serif;
+      font-family: "Plus Jakarta Sans", sans-serif !important;
       background-color: #fff;
       margin: 0;
       padding: 0;
