@@ -45,6 +45,7 @@ class User extends Authenticatable implements FilamentUser
      */
     protected $appends = [
         'name',
+        'avatar',
     ];
 
     /**
@@ -62,19 +63,33 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
-     * Determine if the user can access Filament admin panel.
-     */
-    public function canAccessPanel(Panel $panel): bool
-    {
-        return $this->is_admin === true;
-    }
-
-    /**
      * Get the user's full name.
      */
     public function getNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    /**
+     * Avatar URL for the user.
+     *
+     */
+    public function getAvatarAttribute(): string
+    {
+        return 'https://www.gravatar.com/avatar/' . md5(strtolower($this->email));
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return 'https://www.gravatar.com/avatar/' . md5(strtolower($this->email));
+    }
+
+    /**
+     * Determine if the user can access Filament admin panel.
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->is_admin === true;
     }
 
     /**
