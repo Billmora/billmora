@@ -19,7 +19,17 @@
             </button>
             <div class="divider-y"></div>
             @auth
-                <a href="/dashboard" class="btn btn-primary">{{ __('auth.client_area') }}</a>
+                <div class="account">
+                    <button id="dropdown-open" dropdown-data="dropdownAccount">
+                        <img src="{{ auth()->user()->avatar }}">
+                    </button>
+                    <div class="dropdown" id="dropdownAccount">
+                        <div class="card">
+                            <a href="/admin">Admin Area</a>
+                            <a href="/dashboard">Client Area</a>
+                        </div>
+                    </div>
+                </div>
             @else
                 <a href="/auth/login" class="btn btn-secondary">{{ __('auth.sign_in') }}</a>
                 <a href="/auth/register" class="btn btn-primary">{{ __('auth.sign_up') }}</a>
@@ -69,7 +79,17 @@
         </button>
         <div class="divider-y"></div>
         @auth
-            <a href="/dashboard" class="btn btn-primary">{{ __('auth.client_area') }}</a>
+            <div class="account">
+                <button id="dropdown-open" dropdown-data="dropdownAccount">
+                    <img src="{{ auth()->user()->avatar }}">
+                </button>
+                <div class="dropdown" id="dropdownAccount">
+                    <div class="card">
+                        <a href="/admin">Admin Area</a>
+                        <a href="/dashboard">Client Area</a>
+                    </div>
+                </div>
+            </div>
         @else
             <a href="/auth/login" class="btn btn-secondary">{{ __('auth.sign_in') }}</a>
             <a href="/auth/register" class="btn btn-primary">{{ __('auth.sign_up') }}</a>
