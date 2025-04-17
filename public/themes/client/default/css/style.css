@@ -157,9 +157,31 @@ section {
     color: var(--color-1);
     background-color: var(--color-secondary-hover);
 }
+.btn-danger {
+    color: var(--color-1);
+    background-color: var(--color-danger);
+    transition: background-color 0.3s ease-in-out;
+    font-weight: 600;
+}
+.btn-danger:hover {
+    color: var(--color-1);
+    background-color: var(--color-danger-hover);
+}
+.btn-logout {
+    color: var(--color-danger);
+    font-weight: 600;
+}
+.btn-logout:hover {
+    color: var(--color-danger-hover);
+}
 .divider-y {
     width: 3px;
     height: 100%;
+    background-color: var(--color-3);
+}
+.divider-x {
+    width: 100%;
+    height: 3px;
     background-color: var(--color-3);
 }
 .modal {
@@ -229,7 +251,7 @@ section {
     background-color: var(--color-2);
     border-radius: 0.5rem;
     border: 2px solid var(--color-3);
-    padding: 1.5rem;
+    padding: 1rem;
     transition: transform 0.3s ease;
 }
 .dropdown.active {
