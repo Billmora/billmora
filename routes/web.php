@@ -23,4 +23,8 @@ Route::group(['prefix' => 'auth'], function () {
         Route::get('/email/verify/{token}', [Auth\EmailVerificationController::class, 'handle'])->name('client.email.verify');
         Route::post('/email/resend', [Auth\EmailVerificationController::class, 'resend'])->name('client.email.resend');
     });
+
+    Route::group(['middleware' => 'auth'], function () {
+        Route::post('/logout', [Auth\LoginController::class, 'logout'])->name('client.logout');
+    });
 });

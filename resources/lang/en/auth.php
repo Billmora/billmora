@@ -5,6 +5,7 @@ return [
   'register_title' => 'Sign Up your Account',
   'sign_in' => 'Sign In',
   'sign_up' => 'Sign Up',
+  'sign_out' => 'Logout',
   'client_area' => 'Client Area',
   'personal_information' => 'Personal Information',
   'first_name' => 'First Name',
