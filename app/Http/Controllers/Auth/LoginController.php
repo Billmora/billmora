@@ -44,7 +44,7 @@ class LoginController extends Controller
             return redirect()->intended('/');
         }
     
-        return back()->with('error', __('auth.invalid_credentials')->onlyInput('email'));
+        return back()->with('error', __('auth.invalid_credentials'));
     }
 
     /**
