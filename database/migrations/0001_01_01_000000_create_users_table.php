@@ -28,12 +28,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('phone_number')->nullable();
             $table->string('company_name')->nullable();
-            $table->string('street_address_1');
+            $table->string('street_address_1')->nullable();
             $table->string('street_address_2')->nullable();
-            $table->string('city');
-            $table->string('country');
-            $table->string('state');
-            $table->string('postcode');
+            $table->string('city')->nullable();
+            $table->string('country')->nullable();
+            $table->string('state')->nullable();
+            $table->string('postcode')->nullable();
             $table->timestamps();
         });
 
