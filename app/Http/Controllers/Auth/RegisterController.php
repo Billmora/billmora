@@ -39,6 +39,11 @@ class RegisterController extends Controller
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'email_verified_at' => null,
+        ]);
+
+        $user->billing()->create([
             'phone_number' => $request->phone_number,
             'company_name' => $request->company_name,
             'street_address_1' => $request->street_address_1,
@@ -47,8 +52,6 @@ class RegisterController extends Controller
             'country' => $request->country,
             'state' => $request->state,
             'postcode' => $request->postcode,
-            'password' => bcrypt($request->password),
-            'email_verified_at' => null,
         ]);
 
         $token = Str::random(64);
