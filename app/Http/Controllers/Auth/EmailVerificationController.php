@@ -81,7 +81,7 @@ class EmailVerificationController extends Controller
             ]);
 
             Mail::to($user->email)->send(new AuthMail('user_resend_verification', [
-                'name' => $user->full_name,
+                'name' => $user->name,
                 'company_name' => Billmora::getGeneral('company_name'),
                 'company_url' => config('app.url'),
                 'verify_url' => route('client.email.verify', ['token' => $newToken]),
