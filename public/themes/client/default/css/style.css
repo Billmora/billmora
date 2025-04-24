@@ -444,7 +444,6 @@ select:focus {
 .feature .card .label h2 {
     color: var(--color-primary);
 }
-
 .auth {
     display: flex;
     flex-direction: column;
@@ -455,6 +454,7 @@ select:focus {
 .auth.login {
     max-width: 500px;
     padding: 1rem;
+    min-height: 100vh;
     @media (min-width: 992px) {
         padding: 0;
     }
