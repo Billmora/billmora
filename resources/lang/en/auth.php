@@ -36,4 +36,6 @@ return [
   'email_have_token' => 'You have already requested a verification email. Please check your inbox.',
   'email_resend_token' => 'We have resent an email to you for verification. Please check your inbox.',
   'email_invalid_request_token' => 'Invalid request token verification.',
+  'required_symbol' => '*',
+  'optional_symbol' => '(Optional)',
 ];

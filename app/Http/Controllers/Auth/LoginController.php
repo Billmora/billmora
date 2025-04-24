@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\BillmoraService as Billmora;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -29,15 +30,17 @@ class LoginController extends Controller
         if (Auth::attempt($request->only('email', 'password'))) {
             $user = Auth::user();
     
-            if (! $user->hasVerifiedEmail()) {
-                Auth::logout();
-    
-                $verification = $user->emailVerification()->latest()->first();
-                $token = $verification ? encrypt($verification->id) : null;
-    
-                return back()
-                    ->with('error', __('auth.email_not_verified'))
-                    ->with('resend_token', $token);
+            if (!Billmora::getAuth('user_verified')) {
+                if (!$user->hasVerifiedEmail()) {
+                    Auth::logout();
+        
+                    $verification = $user->emailVerification()->latest()->first();
+                    $token = $verification ? encrypt($verification->id) : null;
+        
+                    return back()
+                        ->with('error', __('auth.email_not_verified'))
+                        ->with('resend_token', $token);
+                }
             }
     
             $request->session()->regenerate();

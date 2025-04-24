@@ -60,6 +60,31 @@ class BillmoraService
         self::setSetting('mail', $data);
     }
 
+    public static function getAuth(string $key, mixed $default = null): mixed
+    {
+        $value = self::getSetting('auth', $key, $default);
+
+        return self::isJson($value) ? json_decode($value, true) : $value;
+    }
+
+    public static function hasAuth(string $key, string $search): bool
+    {
+        $value = self::getAuth($key, []);
+        return is_array($value) && in_array($search, $value);
+    }
+
+    public static function setAuth(array $data): void
+    {
+        $validated = self::validateData($data);
+
+        foreach ($validated as $key => $value) {
+            Setting::updateOrCreate(
+                ['category' => 'auth', 'key' => $key],
+                ['value' => is_array($value) ? json_encode($value) : $value]
+            );
+        }
+    }
+
     public static function setEnv(array $data): void
     {
         $validated = self::validateData($data);
@@ -117,5 +142,15 @@ class BillmoraService
         }
     
         return $value;
+    }
+
+    private static function isJson(mixed $value): bool
+    {
+        if (!is_string($value)) {
+            return false;
+        }
+
+        json_decode($value);
+        return json_last_error() === JSON_ERROR_NONE;
     }
 }

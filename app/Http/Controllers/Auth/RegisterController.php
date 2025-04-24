@@ -20,20 +20,35 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        $request->validate([
+        $requiredFields = Billmora::getAuth('form_required', []);
+        $disabledFields = Billmora::getAuth('form_disable', []);
+
+        $validation = [
             'first_name' => 'required|string|min:3|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'phone_number' => 'nullable|string',
             'company_name' => 'nullable|string',
-            'street_address_1' => 'required|string',
+            'street_address_1' => 'nullable|string',
             'street_address_2' => 'nullable|string',
-            'city' => 'required|string',
-            'country' => 'required|string',
-            'state' => 'required|string',
-            'postcode' => 'required|string',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
+            'city' => 'nullable|string',
+            'country' => 'nullable|string',
+            'state' => 'nullable|string',
+            'postcode' => 'nullable|string',
+            'password' => 'nullable|string|min:8|confirmed',
+        ];
+
+        foreach ($disabledFields as $field) {
+            unset($validation[$field]);
+        }
+    
+        foreach ($requiredFields as $field) {
+            if (isset($validation[$field])) {
+                $validation[$field] = str_replace('nullable', 'required', $validation[$field]);
+            }
+        }
+
+        $request->validate($validation);
 
         $user = User::create([
             'first_name' => $request->first_name,
