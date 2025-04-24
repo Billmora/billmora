@@ -316,31 +316,33 @@ select:focus {
     border: 2px solid var(--color-primary);
     border-radius: 0.5rem;
 }
-.col-sm-2 {
-    display: grid;
+.row {
+    display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
-    @media (min-width: 576px) {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1rem;
+}
+.col-sm-2 {
+    flex: 1 1 100%;
+}
+@media (min-width: 576px) {
+    .col-sm-2 {
+        flex: 1 1 0%;
     }
 }
 .col-md-2 {
-    display: grid;
-    gap: 1rem;
-    @media (min-width: 768px) {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1rem;
+    flex: 1 1 100%;
+}
+@media (min-width: 768px) {
+    .col-md-2 {
+        flex: 1 1 0%;
     }
 }
 .col-lg-2 {
-    display: grid;
-    gap: 1rem;
-    @media (min-width: 992px) {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1rem;
+    flex: 1 1 100%;
+}
+@media (min-width: 992px) {
+    .col-lg-2 {
+        flex: 1 1 0%;
     }
 }
 .alert {
@@ -448,7 +450,6 @@ select:focus {
     flex-direction: column;
     justify-content: center;
     min-width: 500px;
-    min-height: 100vh;
     margin: 0 auto;
 }
 .auth.login {
