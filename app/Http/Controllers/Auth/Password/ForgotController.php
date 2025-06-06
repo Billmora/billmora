@@ -25,18 +25,18 @@ class ForgotController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
+        
+        if ($user) {
+            $activeToken = UserPasswordReset::where('user_id', $user->id)
+                    ->whereNull('verified_at')
+                    ->where('expires_at', '>', now())
+                    ->latest()
+                    ->first();
+    
+            if ($activeToken) {
+                return redirect()->route('client.login')->with('error', __('auth.password_have_request'));
+            }
 
-        $activeToken = UserPasswordReset::where('user_id', $user->id)
-                ->whereNull('verified_at')
-                ->where('expires_at', '>', now())
-                ->latest()
-                ->first();
-
-        if ($activeToken) {
-            return redirect()->route('client.login')->with('error', __('auth.password_have_request'));
-        }
-
-        if ($user->exists()) {
             $newToken = Str::random(64);
             UserPasswordReset::create([
                 'user_id' => $user->id,
@@ -45,6 +45,6 @@ class ForgotController extends Controller
             ]);
         }
 
-        return redirect()->route('client.login')->with('success', __('auth.password_reset_request'));
+        return redirect()->route('client.password.forgot')->with('success', __('auth.password_reset_request'));
     }
 }
