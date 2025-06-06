@@ -24,6 +24,7 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('/email/resend', [Auth\EmailVerificationController::class, 'resend'])->name('client.email.resend');
 
         Route::get('/password/forgot', [Auth\Password\ForgotController::class, 'index'])->name('client.password.forgot');
+        Route::post('/password/forgot', [Auth\Password\ForgotController::class, 'store'])->name('client.password.forgot.store');
     });
 
     Route::group(['middleware' => 'auth'], function () {

@@ -13,7 +13,7 @@
       <p>{{ session('error') }}</p>
     </div>
     @endif
-    <form action="" method="POST">
+    <form action="{{ route('client.password.forgot.store') }}" method="POST">
       @csrf
       <div class="card">
         <div class="header">
