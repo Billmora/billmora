@@ -46,7 +46,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('user_password_reset', function (Blueprint $table) {
+        Schema::create('user_password_resets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('token')->unique();
@@ -72,7 +72,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('user_billings');
         Schema::dropIfExists('user_email_verifications');
-        Schema::dropIfExists('user_password_reset');
+        Schema::dropIfExists('user_password_resets');
         Schema::dropIfExists('sessions');
         Schema::dropIfExists('users');
     }
