@@ -22,6 +22,8 @@ Route::group(['prefix' => 'auth'], function () {
 
         Route::get('/email/verify/{token}', [Auth\EmailVerificationController::class, 'handle'])->name('client.email.verify');
         Route::post('/email/resend', [Auth\EmailVerificationController::class, 'resend'])->name('client.email.resend');
+
+        Route::get('/password/forgot', [Auth\Password\ForgotController::class, 'index'])->name('client.password.forgot');
     });
 
     Route::group(['middleware' => 'auth'], function () {

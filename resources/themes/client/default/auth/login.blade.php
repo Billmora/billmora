@@ -38,7 +38,7 @@
           <div class="form-group">
             <div class="form-label-group">
               <label for="password" class="form-label">{{ __('auth.password') }}</label>
-              <a href="/auth/password" class="form-label">{{ __('auth.forgot_password') }}</a>
+              <a href="/auth/password/forgot" class="form-label">{{ __('auth.forgot_password') }}</a>
             </div>
             <input name="password" id="password" type="password" class="form-control @error('password') is-invalid @enderror">
             @error('password')

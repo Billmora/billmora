@@ -3,9 +3,11 @@
 return [
   'login_title' => 'Sign In to your Account',
   'register_title' => 'Sign Up your Account',
+  'forgot_password_title' => 'Request Reset Password',
   'sign_in' => 'Sign In',
   'sign_up' => 'Sign Up',
   'sign_out' => 'Logout',
+  "send_request" => 'Send Request',
   'client_area' => 'Client Area',
   'personal_information' => 'Personal Information',
   'first_name' => 'First Name',
@@ -24,6 +26,7 @@ return [
   'password' => 'Password',
   'password_confirmation' => 'Confirm Password',
   'forgot_password' => 'Forgot Password?',
+  'remembered_password' => 'Remembered your password?',
   'dont_have_account' => 'Don\'t have an account?',
   'have_account' => 'Already have an account?',
   'invalid_credentials' => 'No account matching those credentials could be found.',
@@ -36,6 +39,8 @@ return [
   'email_have_token' => 'You have already requested a verification email. Please check your inbox.',
   'email_resend_token' => 'We have resent an email to you for verification. Please check your inbox.',
   'email_invalid_request_token' => 'Invalid request token verification.',
+  'password_reset_request' => 'We have sent you an email to reset your password. Please check your inbox.',
+  'password_have_request' => 'You have already requested a password reset. Please check your inbox.',
   'required_symbol' => '*',
   'optional_symbol' => '(Optional)',
 ];

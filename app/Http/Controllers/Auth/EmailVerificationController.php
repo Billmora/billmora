@@ -22,7 +22,7 @@ class EmailVerificationController extends Controller
             return redirect()->route('client.login')->with('error', __('auth.email_already_verified'));
         }
 
-        if (! $verification) {
+        if (!$verification) {
             return redirect()->route('client.login')->with('error', __('auth.email_invalid_token'));
         }
         
@@ -68,10 +68,6 @@ class EmailVerificationController extends Controller
             if ($activeToken) {
                 return redirect()->route('client.login')->with('error', __('auth.email_have_token'));
             }
-
-            $oldVerification->update([
-                'expires_at' => now()->subMinute(),
-            ]);
 
             $newToken = Str::random(64);
             UserEmailVerification::create([
