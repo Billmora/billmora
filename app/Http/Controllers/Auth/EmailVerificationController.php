@@ -74,7 +74,7 @@ class EmailVerificationController extends Controller
             ]);
 
             $newToken = Str::random(64);
-            $newVerification = UserEmailVerification::create([
+            UserEmailVerification::create([
                 'user_id' => $user->id,
                 'token' => $newToken,
                 'expires_at' => now()->addMinutes(60),
