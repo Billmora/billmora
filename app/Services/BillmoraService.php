@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Setting;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
@@ -11,6 +12,9 @@ use Illuminate\Validation\ValidationException;
 
 class BillmoraService
 {
+    protected const CACHE_PREFIX = 'setting_';
+    protected const CACHE_TTL = 86400;
+
     public static function getSetting(string $category, string $key, mixed $default = null): mixed
     {
         static $tableExists = null;
@@ -22,10 +26,14 @@ class BillmoraService
         if (!$tableExists) {
             return $default;
         }
-        
-        return Setting::where('category', $category)
-            ->where('key', $key)
-            ->value('value') ?? $default;
+
+        $cacheKey = self::CACHE_PREFIX . $category . '_' . $key;
+
+        return Cache::remember($cacheKey, self::CACHE_TTL, function() use ($category, $key, $default) {
+            return Setting::where('category', $category)
+                ->where('key', $key)
+                ->value('value') ?? $default;
+        });
     }
 
     public static function setSetting(string $category, array $data): void
@@ -37,6 +45,8 @@ class BillmoraService
                 ['category' => $category, 'key' => $key],
                 ['value' => $value]
             );
+            
+            Cache::forget(self::CACHE_PREFIX . $category . '_' . $key);
         }
     }
 
