@@ -22,7 +22,7 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        $validator = $request->validate([
+        $request->validate([
             'email' => 'required|string|email:dns',
             'password' => 'required',
         ]);
@@ -30,7 +30,7 @@ class LoginController extends Controller
         if (Auth::attempt($request->only('email', 'password'))) {
             $user = Auth::user();
     
-            if (!Billmora::getAuth('user_verified')) {
+            if (Billmora::getAuth('user_verified')) {
                 if (!$user->hasVerifiedEmail()) {
                     Auth::logout();
         
