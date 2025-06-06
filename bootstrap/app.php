@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -11,7 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->web(\App\Http\Middleware\LanguageMiddleware::class);
+        $middleware->redirectGuestsTo(fn (Request $request) => route('client.login'));
+        $middleware->redirectUsersTo(fn (Request $request) => route('client.dashboard'));
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

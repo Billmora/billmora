@@ -1,0 +1,487 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css?family=Plus Jakarta Sans");
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    color-scheme: dark;
+    margin: 0;
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button {
+    color: var(--text-color-primary);
+    overflow-wrap: break-word;
+}
+
+a {
+    color: var(--text-color-primary);
+    text-decoration: none;
+}
+a:hover {
+    color: var(--text-color-secondary);
+}
+
+button {
+    -webkit-appearance: none;
+    border-radius: 0;
+    text-align: inherit;
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    cursor: pointer;
+    border: none;
+    color: inherit;
+    font: inherit;
+}
+
+#root,
+#__next {
+    isolation: isolate;
+}
+
+:root {
+    --color-1: #fbfdff;
+    --color-2: #f5f9ff;
+    --color-3: #eaf3ff;
+    --color-4: #dbecff;
+    --color-5: #cae2ff;
+    --color-6: #b7d4ff;
+    --color-primary: #3384ff;
+    --color-primary-hover: #4f95fe;
+    --color-secondary: #006eff15;
+    --color-secondary-hover: #3384ff;
+    --color-danger: #ff4d4f;
+    --color-danger-hover: #ff7875;
+    --color-success: #52c41a;
+    --color-success-hover: #73d13d;
+    --text-color-primary: #2b303c;
+    --text-color-secondary: #030712;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-1);
+    min-height: 100vh;
+    color: var(--text-color-primary);
+}
+main {
+    flex-grow: 1;
+}
+section {
+    position: relative;
+    margin-top: 12rem;
+    margin-bottom: 4rem;
+}
+
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+.dotted {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    min-width: 100%;
+    min-height: 100%;
+    aspect-ratio: 1;
+    background-image: radial-gradient(
+        circle at center,
+        #3385ff68 1px,
+        transparent 0
+    );
+    background-size: 1.5rem 1.5rem;
+    background-repeat: round;
+    background-position: center;
+}
+.btn-square {
+    padding: 0.55rem !important;
+}
+.btn {
+    display: inline-grid;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    position: relative;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+.btn svg {
+    width: 20px;
+    height: 20px;
+}
+.btn-primary {
+    color: var(--color-1);
+    background-color: var(--color-primary);
+    transition: background-color 0.3s ease-in-out;
+    font-weight: 600;
+}
+.btn-primary:hover {
+    background-color: var(--color-primary-hover);
+}
+.btn-secondary {
+    background-color: var(--color-secondary);
+    transition: background-color 0.3s ease-in-out;
+    font-weight: 600;
+}
+.btn-secondary:hover {
+    color: var(--color-1);
+    background-color: var(--color-secondary-hover);
+}
+.btn-danger {
+    color: var(--color-1);
+    background-color: var(--color-danger);
+    transition: background-color 0.3s ease-in-out;
+    font-weight: 600;
+}
+.btn-danger:hover {
+    color: var(--color-1);
+    background-color: var(--color-danger-hover);
+}
+.btn-logout {
+    color: var(--color-danger);
+    font-weight: 600;
+}
+.btn-logout:hover {
+    color: var(--color-danger-hover);
+}
+.divider-y {
+    width: 3px;
+    height: 100%;
+    background-color: var(--color-3);
+}
+.divider-x {
+    width: 100%;
+    height: 3px;
+    background-color: var(--color-3);
+}
+.modal {
+    position: fixed;
+    z-index: -1;
+    background-color: rgb(0, 0, 0, 0.4);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease, z-index 0.3s ease;
+}
+.modal .card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    background-color: var(--color-1);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    transition: transform 0.3s ease;
+    @media (min-width: 992px) {
+        width: 100%;
+        max-width: 500px;
+    }
+}
+.modal .card .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.modal .card .footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    gap: 0.5rem;
+}
+.modal.active {
+    display: flex;
+    opacity: 1;
+    z-index: 100;
+}
+.modal.active .card {
+    transform: scale(1);
+}
+.dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: -1;
+    border-radius: 0.5rem;
+    margin-top: 0;
+    width: 240px;
+    opacity: 0;
+    transition: opacity 0.3s ease, z-index 0.3s ease, margin-top 0.3s ease;
+}
+.dropdown .card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: auto;
+    height: auto;
+    background-color: var(--color-2);
+    border-radius: 0.5rem;
+    border: 2px solid var(--color-3);
+    padding: 1rem;
+    transition: transform 0.3s ease;
+}
+.dropdown.active {
+    opacity: 1;
+    z-index: 2;
+    margin-top: 1rem;
+}
+.dropdown.active .card {
+    transform: scale(1);
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.form-label {
+    font-weight: 600;
+}
+.form-label-group {
+    display: flex;
+    justify-content: space-between;
+}
+.form-control {
+    background-color: var(--color-1);
+    color: var(--text-color-primary);
+    border: 2px solid var(--color-3);
+    padding: 0.6rem 0.7rem;
+    border-radius: 0.5rem;
+    outline: none;
+}
+.form-control:focus {
+    background-color: var(--color-1);
+    border: 2px solid var(--color-primary);
+    border-radius: 0.5rem;
+}
+.form-button {
+    text-align: center;
+}
+.form-control.is-invalid {
+    border: 2px solid var(--color-danger);
+}
+.form-group .invalid-feedback {
+    color: var(--color-danger);
+}
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: var(--color-1);
+    color: var(--text-color-primary);
+    border: 2px solid var(--color-3);
+    padding: 0.6rem 2rem 0.6rem 0.7rem;
+    border-radius: 0.5rem;
+    outline: none;
+    background-image: url("https://www.svgrepo.com/show/12432/down-chevron.svg");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 1rem;
+}
+select:focus {
+    background-color: var(--color-1);
+    border: 2px solid var(--color-primary);
+    border-radius: 0.5rem;
+}
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.col-sm-2 {
+    flex: 1 1 100%;
+}
+@media (min-width: 576px) {
+    .col-sm-2 {
+        flex: 1 1 0%;
+    }
+}
+.col-md-2 {
+    flex: 1 1 100%;
+}
+@media (min-width: 768px) {
+    .col-md-2 {
+        flex: 1 1 0%;
+    }
+}
+.col-lg-2 {
+    flex: 1 1 100%;
+}
+@media (min-width: 992px) {
+    .col-lg-2 {
+        flex: 1 1 0%;
+    }
+}
+.alert {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+}
+.alert-danger {
+    background-color: var(--color-2);
+    border: 2px solid var(--color-danger);
+    color: var(--color-danger);
+    font-weight: 600;
+}
+.alert-success {
+    background-color: var(--color-2);
+    border: 2px solid var(--color-success);
+    color: var(--color-success);
+    font-weight: 600;
+}
+
+.badge {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4rem;
+}
+.badge p {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    border: 2px dashed var(--color-primary);
+    color: var(--color-primary);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.75rem;
+    align-items: center;
+    font-weight: bold;
+}
+.hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: 0 1rem;
+    @media (min-width: 992px) {
+        padding: 0;
+    }
+}
+.hero .label h1 {
+    font-size: 3.5rem;
+    color: var(--color-primary);
+    text-align: center;
+}
+.hero .label p {
+    font-size: 1.5rem;
+    text-align: center;
+}
+.hero .action {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+.feature {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 12rem;
+    @media (min-width: 992px) {
+        flex-direction: row;
+    }
+}
+.feature .card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem;
+    background-color: var(--color-2);
+    border: 2px solid var(--color-3);
+    border-radius: 1rem;
+}
+.feature .card .label {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+.feature .card .label div {
+    color: var(--color-primary);
+    background-color: var(--color-4);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+}
+.feature .card .label div svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+.feature .card .label h2 {
+    color: var(--color-primary);
+}
+.auth {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 500px;
+    margin: 0 auto;
+}
+.auth.login {
+    max-width: 500px;
+    padding: 1rem;
+    min-height: 100vh;
+    @media (min-width: 992px) {
+        padding: 0;
+    }
+}
+.auth.register {
+    max-width: 700px;
+    padding: 1rem;
+    margin: 8rem auto 4rem auto;
+    @media (min-width: 992px) {
+        padding: 0;
+        margin: 14rem auto 5rem auto;
+    }
+}
+.auth .card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-2);
+    border: 3px solid var(--color-3);
+    border-radius: 1rem;
+    padding: 2rem;
+    gap: 2rem;
+}
+.auth .card .header {
+    text-align: center;
+}
+.auth .card .body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
