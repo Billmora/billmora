@@ -287,6 +287,11 @@ section {
     border: 2px solid var(--color-primary);
     border-radius: 0.5rem;
 }
+.form-control[disabled] {
+    background-color: var(--color-3);
+    color: var(--text-color-secondary);
+    border: 2px solid var(--color-3);
+}
 .form-button {
     text-align: center;
 }
