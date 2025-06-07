@@ -41,6 +41,10 @@ return [
   'email_invalid_request_token' => 'Invalid request token verification.',
   'password_reset_request' => 'We have sent you an email to reset your password. Please check your inbox.',
   'password_have_request' => 'You have already requested a password reset. Please check your inbox.',
+  'password_invalid_request' => 'Invalid password reset request.',
+  'password_expired_request' => 'Your requested password reset has expired.',
+  'password_email_mismatch' => 'The email address does not match our records. Please try again.',
+  'password_reset_success' => 'Your password has been successfully reset. You can login now.',
   'required_symbol' => '*',
   'optional_symbol' => '(Optional)',
 ];
