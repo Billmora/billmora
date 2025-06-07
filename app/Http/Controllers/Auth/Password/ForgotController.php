@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth\Password;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AuthMail;
 use App\Models\User;
 use App\Models\UserPasswordReset;
 use App\Services\BillmoraService as Billmora;
@@ -43,6 +44,13 @@ class ForgotController extends Controller
                 'token' => $newToken,
                 'expires_at' => now()->addMinutes(60),
             ]);
+
+            Mail::to($user->email)->send(new AuthMail('user_password_reset', [
+                'name' => $user->name,
+                'company_url' => config('app.url'),
+                'reset_url' => route('client.password.reset', ['token' => $newToken]),
+                'signature' => Billmora::getMail('mail_template_signature'),
+            ]));
         }
 
         return redirect()->route('client.password.forgot')->with('success', __('auth.password_reset_request'));

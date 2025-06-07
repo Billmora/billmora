@@ -62,6 +62,27 @@ class EmailTemplateSeeder extends Seeder
                 {signature}
                 BODY,
             ],
+            [
+                'key' => 'user_password_reset',
+                'name' => 'User Password Reset',
+                'subject' => 'Reset Your Password',
+                'body' => <<<'BODY'
+                <p>Hello, {name}!</p>
+
+                <p>If you did not request a password reset, please ignore this email. Your password will remain unchanged.</p>
+                
+                <p>Please click the link below to set a new password.</p>
+                <a href="{reset_url}" target="_blank">Reset Password</a>
+
+                <p>If you're having trouble, try copying and pasting the following URL into your browser:</p>
+                <a href="{reset_url}" target="_blank">{reset_url}</a>
+
+
+                <p>This link is valid for 60 minutes only. If it has expired, login to our <a href="{company_url}" target="_blank">Client Area</a> to request a new link.</p>
+
+                {signature}
+                BODY,
+            ],
         ];
 
         foreach ($templates as $template) {
