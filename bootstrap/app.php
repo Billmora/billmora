@@ -16,6 +16,9 @@ return Application::configure(dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(\App\Http\Middleware\LanguageMiddleware::class);
+        $middleware->group('maintenance', [
+            \App\Http\Middleware\MaintenanceMiddleware::class,
+        ]);
         $middleware->redirectGuestsTo(fn (Request $request) => route('client.login'));
         $middleware->redirectUsersTo(fn (Request $request) => route('client.dashboard'));
     })
