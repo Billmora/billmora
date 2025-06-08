@@ -54,6 +54,12 @@ class ResetController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
+        if ($user->email_verified_at === null) {
+            $user->update([
+                'email_verified_at' => now(),
+            ]);
+        }
+
         $verification->markAsVerified();
 
         return redirect()->route('client.login')->with('success', __('auth.password_reset_success'));
