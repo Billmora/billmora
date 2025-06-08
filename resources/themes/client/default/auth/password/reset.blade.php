@@ -17,7 +17,7 @@
       @csrf
       <div class="card">
         <div class="header">
-            <h2>{{ __('auth.forgot_password_title') }}</h2>
+            <h2>{{ __('auth.reset_password_title') }}</h2>
         </div>
         <div class="body">
           <input name="token" id="token" type="text" value="{{ $token }}" hidden>
@@ -42,12 +42,7 @@
               <span class="invalid-feedback">{{ $message }}</span>
             @enderror
           </div>
-          <button type="submit" class="btn btn-primary form-button">{{ __('auth.send_request') }}</button>
-        </div>
-        <div class="footer">
-          <div class="form-group">
-            <p>{{ __('auth.remembered_password') }} <a href="/auth/login" class="form-label">{{ __('auth.sign_in') }}</a></p>
-          </div>
+          <button type="submit" class="btn btn-primary form-button">{{ __('auth.confirm_update') }}</button>
         </div>
       </div>
     </form>
