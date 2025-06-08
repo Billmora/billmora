@@ -31,7 +31,9 @@
                             <a href="/user/security">Security</a>
                             <a href="/user/emails">Email History</a>
                             <div class="divider-x"></div>
-                            <a href="/admin">Admin</a> {{-- Soon will be condition --}}
+                            @if (auth()->user()->is_admin)
+                                <a href="/admin">Admin</a>
+                            @endif
                             <form action="{{ route('client.logout') }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn-logout">
@@ -102,7 +104,9 @@
                         <a href="/user/security">Security</a>
                         <a href="/user/emails">Email History</a>
                         <div class="divider-x"></div>
-                        <a href="/admin">Admin</a> {{-- Soon will be condition --}}
+                        @if (auth()->user()->is_admin)
+                            <a href="/admin">Admin</a>
+                        @endif
                         <form action="{{ route('client.logout') }}" method="POST">
                             @csrf
                             <button type="submit" class="btn-logout">
