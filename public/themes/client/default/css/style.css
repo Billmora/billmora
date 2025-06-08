@@ -370,6 +370,12 @@ select:focus {
     color: var(--color-success);
     font-weight: 600;
 }
+.alert-action {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    gap: 0.5rem;
+}
 
 .badge {
     display: flex;
