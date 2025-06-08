@@ -124,6 +124,30 @@ section {
     background-repeat: round;
     background-position: center;
 }
+.text-primary {
+    color: var(--color-primary);
+}
+.text-primary-hover:hover {
+    color: var(--color-primary-hover);
+}
+.text-secondary {
+    color: var(--color-secondary);
+}
+.text-secondary-hover:hover {
+    color: var(--color-secondary-hover);
+}
+.text-success {
+    color: var(--color-success);
+}
+.text-success-hover:hover {
+    color: var(--color-success-hover);
+}
+.text-danger {
+    color: var(--color-danger);
+}
+.text-danger-hover:hover {
+    color: var(--color-danger-hover);
+}
 .btn-square {
     padding: 0.55rem !important;
 }
@@ -393,6 +417,40 @@ select:focus {
     align-items: center;
     font-weight: bold;
 }
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem;
+    background-color: var(--color-2);
+    border: 2px solid var(--color-3);
+    border-radius: 1rem;
+}
+.card .header {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+.card .body {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+.card .footer {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+.card > .start {
+    justify-content: start;
+}
+.card > .center {
+    justify-content: center;
+}
+.card > .end {
+    justify-content: end;
+}
 .hero {
     display: flex;
     flex-direction: column;
@@ -455,6 +513,21 @@ select:focus {
 .feature .card .label h2 {
     color: var(--color-primary);
 }
+
+.maintenance {
+    display: flex;
+    width: 100vdw;
+    height: 100vdh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: 0 1rem;
+    @media (min-width: 992px) {
+        padding: 0;
+    }
+}
+
 .auth {
     display: flex;
     flex-direction: column;
