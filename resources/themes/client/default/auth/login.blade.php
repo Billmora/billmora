@@ -13,7 +13,7 @@
       <p>{{ session('error') }}</p>
       
       @if(session('resend_token'))
-        <form action="{{ route('client.email.resend') }}" method="POST">
+        <form action="{{ route('client.email.resend') }}" method="POST" class="alert-action">
           @csrf
           <input type="hidden" name="resend_token" value="{{ session('resend_token') }}">
           <button type="submit" class="btn btn-primary">Resend Verification</button>
