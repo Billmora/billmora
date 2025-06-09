@@ -11,6 +11,7 @@ use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use function PHPUnit\Framework\returnArgument;
 
 class Authentication extends Page
 {
@@ -49,6 +50,10 @@ class Authentication extends Page
                         ->label('User')
                         ->icon('tabler-user-plus')
                         ->schema($this->tabUser()),
+                    Forms\Components\Tabs\Tab::make('captcha')
+                        ->label('Captcha')
+                        ->icon('tabler-shield')
+                        ->schema($this->tabCaptcha()),
                 ]),
         ]);
     }
@@ -108,6 +113,82 @@ class Authentication extends Page
         ];
     }
 
+    private function tabCaptcha(): array
+    {
+        return [
+            Forms\Components\ToggleButtons::make('captcha_driver')
+                ->label('Captcha Driver')
+                ->inline()
+                ->options([
+                    '' => 'None',
+                    'turnstile' => 'Turnstile',
+                    'recaptchav2' => 'reCaptcha v2',
+                    'hcaptcha' => 'hCaptcha',
+                ])
+                ->live()
+                ->required()
+                ->helperText('Select which captcha service to use for authentication. Choose "None" to disable captcha protection.')
+                ->default(env('CAPTCHA_DRIVER')),
+            Forms\Components\Section::make('Turnstile Configuration')
+                ->columns()
+                ->visible(fn (Forms\Get $get) => $get('captcha_driver') === 'turnstile')
+                ->schema([
+                    Forms\Components\TextInput::make('turnstile_site_key')
+                        ->label('Site Key')
+                        ->required()
+                        ->password()
+                        ->revealable()
+                        ->helperText('Enter the Cloudflare Turnstile Site Key.')
+                        ->default(env('TURNSTILE_SITE_KEY')),
+                    Forms\Components\TextInput::make('turnstile_secret_key')
+                        ->label('Secret Key')
+                        ->required()
+                        ->password()
+                        ->revealable()
+                        ->helperText('Enter the Cloudflare Turnstile Secret Key.')
+                        ->default(env('TURNSTILE_SECRET_KEY')),
+                ]),
+            Forms\Components\Section::make('reCaptcha v2 Configuration')
+                ->columns()
+                ->visible(fn (Forms\Get $get) => $get('captcha_driver') === 'recaptchav2')
+                ->schema([
+                    Forms\Components\TextInput::make('recaptchav2_site_key')
+                        ->label('Site Key')
+                        ->required()
+                        ->password()
+                        ->revealable()
+                        ->helperText('Enter the reCaptcha v2 Site Key.')
+                        ->default(env('RECAPTCHAV2_SITE_KEY')),
+                    Forms\Components\TextInput::make('recaptchav2_secret_key')
+                        ->label('Secret Key')
+                        ->required()
+                        ->password()
+                        ->revealable()
+                        ->helperText('Enter the reCaptcha v2 Secret Key.')
+                        ->default(env('RECAPTCHAV2_SECRET_KEY')),
+                ]),
+            Forms\Components\Section::make('hCaptcha Configuration')
+                ->columns()
+                ->visible(fn (Forms\Get $get) => $get('captcha_driver') === 'hcaptcha')
+                ->schema([
+                    Forms\Components\TextInput::make('hcaptcha_site_key')
+                        ->label('Site Key')
+                        ->required()
+                        ->password()
+                        ->revealable()
+                        ->helperText('Enter the hCaptcha Site Key.')
+                        ->default(env('RECAPTCHAV2_SITE_KEY')),
+                    Forms\Components\TextInput::make('hcaptcha_secret_key')
+                        ->label('Secret Key')
+                        ->required()
+                        ->password()
+                        ->revealable()
+                        ->helperText('Enter the hCaptcha Secret Key.')
+                        ->default(env('RECAPTCHAV2_SECRET_KEY')),
+                ]),
+        ];
+    }
+
     public function save(): void
     {
         try {
@@ -115,9 +196,49 @@ class Authentication extends Page
                 'user_verified' => ['required', 'boolean'],
                 'form_disable' => ['nullable', 'array'],
                 'form_required' => ['nullable', 'array'],
+                'captcha_driver' => ['nullable', 'string'],
+                'turnstile_site_key' => ['nullable', 'string'],
+                'turnstile_secret_key' => ['nullable', 'string'],
+                'recaptchav2_site_key' => ['nullable', 'string'],
+                'recaptchav2_secret_key' => ['nullable', 'string'],
+                'hcaptcha_site_key' => ['nullable', 'string'],
+                'hcaptcha_secret_key' => ['nullable', 'string'],
             ])->validate();
 
-            Billmora::setAuth($validated);
+            
+            switch ($validated['captcha_driver']) {
+                case 'turnstile':
+                    Billmora::setEnv([
+                        'CAPTCHA_DRIVER' => $validated['captcha_driver'],
+                        'TURNSTILE_SITE_KEY' => $validated['turnstile_site_key'],
+                        'TURNSTILE_SECRET_KEY' => $validated['turnstile_secret_key'],
+                    ]);
+                    break;
+                case 'recaptchav2':
+                    Billmora::setEnv([
+                        'CAPTCHA_DRIVER' => $validated['captcha_driver'],
+                        'RECAPTCHAV2_SITE_KEY' => $validated['recaptchav2_site_key'],
+                        'RECAPTCHAV2_SECRET_KEY' => $validated['recaptchav2_secret_key'],
+                    ]);
+                    break;
+                case 'hcaptcha':
+                    Billmora::setEnv([
+                        'CAPTCHA_DRIVER' => $validated['captcha_driver'],
+                        'HCAPTCHA_SITE_KEY' => $validated['hcaptcha_site_key'],
+                        'HCAPTCHA_SECRET_KEY' => $validated['hcaptcha_secret_key'],
+                    ]);
+                    break;
+                default:
+                    Billmora::setAuth([
+                        'CAPTCHA_DRIVER' => $validated['captcha_driver'],
+                    ]);
+                    break;
+            }
+
+            Billmora::setEnv([
+                'CAPTCHA_DRIVER' => $validated['captcha_driver'],
+            ]);
+
 
             Notification::make()
                 ->title('Success')
