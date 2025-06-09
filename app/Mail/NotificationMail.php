@@ -46,9 +46,31 @@ class NotificationMail extends Mailable
      */
     public function envelope(): Envelope
     {
-        return new Envelope(
+        $envelope = new Envelope(
             subject: $this->placeholder($this->emailTemplate->subject),
         );
+
+        if (!empty($this->emailTemplate->cc)) {
+            $ccEmails = is_string($this->emailTemplate->cc) 
+                ? json_decode($this->emailTemplate->cc, true) 
+                : $this->emailTemplate->cc;
+            
+            if (!empty($ccEmails)) {
+                $envelope->cc($ccEmails);
+            }
+        }
+
+        if (!empty($this->emailTemplate->bcc)) {
+            $bccEmails = is_string($this->emailTemplate->bcc) 
+                ? json_decode($this->emailTemplate->bcc, true) 
+                : $this->emailTemplate->bcc;
+            
+            if (!empty($bccEmails)) {
+                $envelope->bcc($bccEmails);
+            }
+        }
+
+        return $envelope;
     }
 
     /**
