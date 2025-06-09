@@ -103,21 +103,19 @@ class Mail extends Page implements HasTable
                         TiptapEditor::make('body')
                             ->label('Body')
                             ->required(),
-                        Forms\Components\Toggle::make('status')
-                            ->label('Enable Email')
+                        Forms\Components\Toggle::make('active')
+                            ->label('Activate Email?')
                             ->required(),
                         Forms\Components\Grid::make(2)
                             ->schema([
                                 Forms\Components\TagsInput::make('cc')
                                     ->label('CC Emails')
                                     ->nullable()
-                                    ->placeholder('')
-                                    ->separator(','),
+                                    ->placeholder('example@email.com'),
                                 Forms\Components\TagsInput::make('bcc')
                                     ->label('BCC Emails')
                                     ->nullable()
-                                    ->placeholder('')
-                                    ->separator(','),
+                                    ->placeholder('example@email.com'),
                             ]),
                         Forms\Components\Textarea::make('placeholder')
                             ->label('Available placeholder (inc for subject and body)')
