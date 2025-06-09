@@ -47,6 +47,7 @@ class ForgotController extends Controller
 
             Mail::to($user->email)->send(new AuthMail('user_password_reset', [
                 'name' => $user->name,
+                'company_name' => Billmora::getGeneral('company_name'),
                 'company_url' => config('app.url'),
                 'reset_url' => route('client.password.reset', ['token' => $newToken]),
                 'signature' => Billmora::getMail('mail_template_signature'),
