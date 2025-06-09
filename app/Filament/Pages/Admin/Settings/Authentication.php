@@ -129,6 +129,20 @@ class Authentication extends Page
                 ->required()
                 ->helperText('Select which captcha service to use for authentication. Choose "None" to disable captcha protection.')
                 ->default(env('CAPTCHA_DRIVER')),
+            Forms\Components\Section::make()
+                ->visible(fn (Forms\Get $get) => $get('captcha_driver') != '')
+                ->schema([
+                    Forms\Components\CheckboxList::make('captcha_active')
+                    ->label('Enable Captcha on?')
+                    ->options([
+                        'user_register' => 'User registration',
+                        'user_login' => 'User login',
+                    ])
+                    ->columns(4)
+                    ->required()
+                    ->helperText('Select the fields you want to enable the Captcha.')
+                    ->default(Billmora::getAuth('captcha_active')),
+                ]),
             Forms\Components\Section::make('Turnstile Configuration')
                 ->columns()
                 ->visible(fn (Forms\Get $get) => $get('captcha_driver') === 'turnstile')
@@ -197,6 +211,7 @@ class Authentication extends Page
                 'form_disable' => ['nullable', 'array'],
                 'form_required' => ['nullable', 'array'],
                 'captcha_driver' => ['nullable', 'string'],
+                'captcha_active' => ['nullable', 'array'],
                 'turnstile_site_key' => ['nullable', 'string'],
                 'turnstile_secret_key' => ['nullable', 'string'],
                 'recaptchav2_site_key' => ['nullable', 'string'],
@@ -205,7 +220,8 @@ class Authentication extends Page
                 'hcaptcha_secret_key' => ['nullable', 'string'],
             ])->validate();
 
-            
+            Billmora::setAuth($validated);
+
             switch ($validated['captcha_driver']) {
                 case 'turnstile':
                     Billmora::setEnv([
@@ -234,11 +250,6 @@ class Authentication extends Page
                     ]);
                     break;
             }
-
-            Billmora::setEnv([
-                'CAPTCHA_DRIVER' => $validated['captcha_driver'],
-            ]);
-
 
             Notification::make()
                 ->title('Success')
