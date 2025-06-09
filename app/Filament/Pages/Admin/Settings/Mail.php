@@ -121,10 +121,11 @@ class Mail extends Page implements HasTable
                             ->label('Available placeholder (inc for subject and body)')
                             ->autosize()
                             ->disabled()
-                            ->formatStateUsing(fn ($state) => $state ?: <<<'PLACEHOLDER'
-                            Client Name = {name}
-                            Global Signature = {signature}
-                            PLACEHOLDER
+                            ->formatStateUsing(fn ($record) => is_array($record->placeholder)
+                                ? collect($record->placeholder)
+                                    ->map(fn ($desc, $key) => '{' . $key . '} = ' . $desc)
+                                    ->implode("\n")
+                                : ''
                             ),
                     ]),
             ])
