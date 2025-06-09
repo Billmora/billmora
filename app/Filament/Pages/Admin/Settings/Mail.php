@@ -72,8 +72,8 @@ class Mail extends Page implements HasTable
         return $table
             ->query(EmailTemplate::query())
             ->columns([
-                Tables\Columns\IconColumn::make('status')
-                    ->label('Status')
+                Tables\Columns\IconColumn::make('active')
+                    ->label('Active')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('key')
                     ->label('Key')
@@ -104,7 +104,7 @@ class Mail extends Page implements HasTable
                             ->label('Body')
                             ->required(),
                         Forms\Components\Toggle::make('active')
-                            ->label('Activate Email?')
+                            ->label('Activate Email')
                             ->required(),
                         Forms\Components\Grid::make(2)
                             ->schema([

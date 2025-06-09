@@ -22,7 +22,7 @@ class NotificationMail extends Mailable
      */
     public function __construct(string $key, array $data = [])
     {
-        $this->emailTemplate = EmailTemplate::where('key', $key)->where('status', true)->first();
+        $this->emailTemplate = EmailTemplate::where('key', $key)->where('active', true)->first();
 
         if (!$this->emailTemplate) {
             throw new \Exception("Email template '{$key}' not found or disabled.");
