@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('email_templates', function (Blueprint $table) {
             $table->id();
             $table->string('key')->unique();
-            $table->boolean('status')->default(true);
             $table->string('name');
             $table->string('subject');
             $table->text('body');
+            $table->boolean('active')->default(true);
             $table->json('cc')->nullable();
             $table->json('bcc')->nullable();
+            $table->json('placeholder')->nullable();
             $table->timestamps();
         });
     }
