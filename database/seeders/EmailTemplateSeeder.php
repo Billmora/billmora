@@ -117,6 +117,7 @@ class EmailTemplateSeeder extends Seeder
                     'name' => $template['name'],
                     'subject' => $template['subject'],
                     'body' => $template['body'],
+                    'placeholder' => $template['placeholder'],
                 ]
             );
         }
