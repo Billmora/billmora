@@ -24,6 +24,10 @@ class EmailTemplateSeeder extends Seeder
                 <p>This is a test email to verify the configuration.</p>
                 {signature}
                 BODY,
+                'placeholder' => [
+                    'name' => 'Client name',
+                    'signature' => 'Global signature',
+                ],
             ],
             [
                 'key' => 'user_registration',
@@ -43,6 +47,13 @@ class EmailTemplateSeeder extends Seeder
 
                 {signature}
                 BODY,
+                'placeholder' => [
+                    'name' => 'Client name',
+                    'signature' => 'Global signature',
+                    'company_name' => 'Name of company',
+                    'company_url' => 'URL of company',
+                    'verify_url' => 'Email verification URL',
+                ],
             ],
             [
                 'key' => 'user_resend_verification',
@@ -61,6 +72,13 @@ class EmailTemplateSeeder extends Seeder
 
                 {signature}
                 BODY,
+                'placeholder' => [
+                    'name' => 'Client name',
+                    'signature' => 'Global signature',
+                    'company_name' => 'Name of company',
+                    'company_url' => 'URL of company',
+                    'verify_url' => 'Email verification URL',
+                ],
             ],
             [
                 'key' => 'user_password_reset',
@@ -82,6 +100,13 @@ class EmailTemplateSeeder extends Seeder
 
                 {signature}
                 BODY,
+                'placeholder' => [
+                    'name' => 'Client name',
+                    'signature' => 'Global signature',
+                    'company_name' => 'Name of company',
+                    'company_url' => 'URL of company',
+                    'reset_url' => 'User password reset URL',
+                ],
             ],
         ];
 
