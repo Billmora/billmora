@@ -14,5 +14,6 @@ class EmailTemplate extends Model
     protected $casts = [
         'cc' => 'array',
         'bcc' => 'array',
+        'placeholder' => 'array',
     ];
 }
