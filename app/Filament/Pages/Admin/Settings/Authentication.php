@@ -191,14 +191,14 @@ class Authentication extends Page
                         ->password()
                         ->revealable()
                         ->helperText('Enter the hCaptcha Site Key.')
-                        ->default(env('RECAPTCHAV2_SITE_KEY')),
+                        ->default(env('HCAPTCHA_SITE_KEY')),
                     Forms\Components\TextInput::make('hcaptcha_secret_key')
                         ->label('Secret Key')
                         ->required()
                         ->password()
                         ->revealable()
                         ->helperText('Enter the hCaptcha Secret Key.')
-                        ->default(env('RECAPTCHAV2_SECRET_KEY')),
+                        ->default(env('HCAPTCHA_SECRET_KEY')),
                 ]),
         ];
     }
