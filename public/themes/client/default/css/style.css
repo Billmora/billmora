@@ -291,6 +291,19 @@ section {
     flex-direction: column;
     gap: 0.5rem;
 }
+.form-group.start {
+    justify-content: start;
+    margin-right: auto;
+}
+.form-group.center {
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+}
+.form-group.end {
+    justify-content: end;
+    margin-left: auto;
+}
 .form-label {
     font-weight: 600;
 }
