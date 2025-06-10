@@ -32,6 +32,7 @@ return [
   'dont_have_account' => 'Don\'t have an account?',
   'have_account' => 'Already have an account?',
   'invalid_credentials' => 'No account matching those credentials could be found.',
+  'invalid_captcha' => 'Captcha verification failed, please try again.',
   'email_registering' => 'Thank you for registering. We have sent you an email for verification. Please check your inbox and follow the instructions to verify your email.',
   'email_not_verified' => 'Your email has not been verified. Please check your inbox or resend the verification email.',
   'email_already_verified' => 'Your email already verified. Please login.',
