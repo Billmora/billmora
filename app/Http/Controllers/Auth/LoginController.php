@@ -23,12 +23,12 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        CaptchaService::verifyOrFail('user_login', $request);
-        
         $request->validate([
             'email' => 'required|string|email:dns',
             'password' => 'required',
         ]);
+
+        CaptchaService::verifyOrFail('user_login', $request);
     
         if (Auth::attempt($request->only('email', 'password'))) {
             $user = Auth::user();

@@ -21,8 +21,6 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        CaptchaService::verifyOrFail('user_register', $request);
-        
         $requiredFields = Billmora::getAuth('form_required', []);
         $disabledFields = Billmora::getAuth('form_disable', []);
 
@@ -40,6 +38,8 @@ class RegisterController extends Controller
             'postcode' => 'nullable|string',
             'password' => 'nullable|string|min:8|confirmed',
         ];
+        
+        CaptchaService::verifyOrFail('user_register', $request);
 
         foreach ($disabledFields as $field) {
             unset($validation[$field]);
