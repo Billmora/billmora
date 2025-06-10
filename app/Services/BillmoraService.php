@@ -92,6 +92,8 @@ class BillmoraService
                 ['category' => 'auth', 'key' => $key],
                 ['value' => is_array($value) ? json_encode($value) : $value]
             );
+
+            Cache::forget(self::CACHE_PREFIX . 'auth_' . $key);
         }
     }
 
