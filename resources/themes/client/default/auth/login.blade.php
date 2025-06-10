@@ -45,6 +45,7 @@
               <span class="invalid-feedback">{{ $message }}</span>
             @enderror
           </div>
+          <x-client.forms.captcha form="user_login"/>
           <button type="submit" class="btn btn-primary form-button">{{ __('auth.sign_in') }}</button>
         </div>
         <div class="footer">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\BillmoraService as Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\CaptchaService;
 
 class LoginController extends Controller
 {
@@ -22,6 +23,8 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
+        CaptchaService::verifyOrFail('user_login', $request);
+        
         $request->validate([
             'email' => 'required|string|email:dns',
             'password' => 'required',
