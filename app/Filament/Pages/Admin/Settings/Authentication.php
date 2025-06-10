@@ -220,7 +220,12 @@ class Authentication extends Page
                 'hcaptcha_secret_key' => ['nullable', 'string'],
             ])->validate();
 
-            Billmora::setAuth($validated);
+            Billmora::setAuth([
+                'user_verified' => $validated['user_verified'],
+                'form_disable' => $validated['form_disable'],
+                'form_required' => $validated['form_required'],
+                'captcha_active' => $validated['captcha_active'],
+            ]);
 
             switch ($validated['captcha_driver']) {
                 case 'turnstile':
