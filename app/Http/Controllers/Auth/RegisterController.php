@@ -10,6 +10,7 @@ use App\Services\BillmoraService as Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use App\Services\CaptchaService;
 
 class RegisterController extends Controller
 {
@@ -20,6 +21,8 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
+        CaptchaService::verifyOrFail('user_register', $request);
+        
         $requiredFields = Billmora::getAuth('form_required', []);
         $disabledFields = Billmora::getAuth('form_disable', []);
 

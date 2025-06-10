@@ -155,6 +155,7 @@
               @enderror
             </div>
           </div>
+          <x-client.forms.captcha form="user_register"/>
           <button type="submit" class="btn btn-primary form-button">{{ __('auth.sign_up') }}</button>
         </div>
         <div class="footer">
