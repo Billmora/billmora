@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Services\BillmoraService as Billmora;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class ThemeServiceProvider extends ServiceProvider
@@ -52,6 +53,7 @@ class ThemeServiceProvider extends ServiceProvider
         View::share('emailTheme', $emailThemeInfo);
 
         View::addNamespace('portal', resource_path("themes/portal/{$portalTheme}"));
+        Blade::anonymousComponentPath(resource_path("themes/client/{$clientTheme}/components"), 'client');
         View::addNamespace('client', resource_path("themes/client/{$clientTheme}"));
         View::addNamespace('email', resource_path("themes/email/{$emailTheme}"));
     }
