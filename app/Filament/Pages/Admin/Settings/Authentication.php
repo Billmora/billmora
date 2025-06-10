@@ -250,7 +250,7 @@ class Authentication extends Page
                     ]);
                     break;
                 default:
-                    Billmora::setAuth([
+                    Billmora::setEnv([
                         'CAPTCHA_DRIVER' => $validated['captcha_driver'],
                     ]);
                     break;
