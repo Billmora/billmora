@@ -487,6 +487,10 @@ select:focus {
     padding: 0.5rem 0.5rem;
     color: var(--color-3);
 }
+.breadcrumb .link .active {
+    color: var(--text-color-secondary);
+    font-weight: 600;
+}
 
 .maintenance {
     display: flex;
