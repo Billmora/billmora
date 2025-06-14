@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth;
 use App\Http\Controllers\Client;
+use App\Http\Controllers\Client\User;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth', 'maintenance']], function () {
@@ -29,4 +30,8 @@ Route::group(['prefix' => 'auth'], function () {
   Route::group(['middleware' => 'auth'], function () {
     Route::post('/logout', [Auth\LoginController::class, 'logout'])->name('client.logout');
   });
+});
+
+Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
+  Route::get('/account', [User\AccountController::class, 'index'])->name('client.user.account');
 });

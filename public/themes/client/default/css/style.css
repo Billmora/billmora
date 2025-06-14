@@ -107,6 +107,13 @@ section {
     max-width: 1400px;
     margin: 0 auto;
 }
+.container.client {
+    position: relative;
+    margin: 7rem 1rem 4rem 1rem;
+    @media (min-width: 768px) {
+        margin: 11rem auto 4rem auto;
+    }
+}
 .dotted {
     position: fixed;
     top: 0;
@@ -464,67 +471,19 @@ select:focus {
 .card > .end {
     justify-content: end;
 }
-.hero {
+.breadcrumb {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    padding: 0 1rem;
-    @media (min-width: 992px) {
-        padding: 0;
-    }
 }
-.hero .label h1 {
-    font-size: 3.5rem;
-    color: var(--color-primary);
-    text-align: center;
-}
-.hero .label p {
-    font-size: 1.5rem;
-    text-align: center;
-}
-.hero .action {
+.breadcrumb .link {
     display: flex;
     flex-direction: row;
-    gap: 1rem;
 }
-.feature {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    margin-top: 12rem;
-    @media (min-width: 992px) {
-        flex-direction: row;
-    }
-}
-.feature .card {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 2rem;
-    background-color: var(--color-2);
-    border: 2px solid var(--color-3);
-    border-radius: 1rem;
-}
-.feature .card .label {
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    align-items: center;
-}
-.feature .card .label div {
-    color: var(--color-primary);
-    background-color: var(--color-4);
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-}
-.feature .card .label div svg {
-    width: 1.5rem;
-    height: 1.5rem;
-}
-.feature .card .label h2 {
-    color: var(--color-primary);
+.breadcrumb .link > :not(:first-child)::before {
+    content: "/";
+    margin: 0;
+    padding: 0.5rem 0.5rem;
+    color: var(--color-3);
 }
 
 .maintenance {
