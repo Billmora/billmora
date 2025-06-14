@@ -271,6 +271,7 @@ section {
     margin-top: 0;
     width: 240px;
     opacity: 0;
+    pointer-events: none;
     transition: opacity 0.3s ease, z-index 0.3s ease, margin-top 0.3s ease;
 }
 .dropdown .card {
@@ -289,6 +290,7 @@ section {
     opacity: 1;
     z-index: 2;
     margin-top: 1rem;
+    pointer-events: auto;
 }
 .dropdown.active .card {
     transform: scale(1);

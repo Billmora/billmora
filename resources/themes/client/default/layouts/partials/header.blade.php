@@ -20,10 +20,10 @@
             <div class="divider-y"></div>
             @auth
                 <div class="account">
-                    <button id="dropdown-open" dropdown-data="dropdownAccount">
+                    <button id="dropdown-open" dropdown-data="dropdownAccountA">
                         <img src="{{ auth()->user()->avatar }}">
                     </button>
-                    <div class="dropdown" id="dropdownAccount">
+                    <div class="dropdown" id="dropdownAccountA">
                         <div class="card">
                             <h3>{{ auth()->user()->name }}</h3>
                             <div class="divider-x"></div>
@@ -93,10 +93,10 @@
         <div class="divider-y"></div>
         @auth
             <div class="account">
-                <button id="dropdown-open" dropdown-data="dropdownAccount">
+                <button id="dropdown-open" dropdown-data="dropdownAccountB">
                     <img src="{{ auth()->user()->avatar }}">
                 </button>
-                <div class="dropdown" id="dropdownAccount">
+                <div class="dropdown" id="dropdownAccountB">
                     <div class="card">
                         <h3>{{ auth()->user()->name }}</h3>
                         <div class="divider-x"></div>
