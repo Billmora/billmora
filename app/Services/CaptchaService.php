@@ -10,19 +10,19 @@ use Illuminate\Validation\ValidationException;
 class CaptchaService
 {
     public static function enabled(string $context = null): bool
-  {
-      $captchaEnabled = in_array(env('CAPTCHA_DRIVER'), ['turnstile', 'recaptchav2', 'hcaptcha']);
+    {
+        $captchaEnabled = in_array(env('CAPTCHA_DRIVER'), ['turnstile', 'recaptchav2', 'hcaptcha']);
 
-      if (!$captchaEnabled) {
-          return false;
-      }
+        if (!$captchaEnabled) {
+            return false;
+        }
 
-      if ($context) {
-          return in_array($context, Billmora::getAuth('captcha_active'));
-      }
+        if ($context) {
+            return in_array($context, Billmora::getAuth('captcha_active'));
+        }
 
-      return true;
-  }
+        return true;
+    }
 
 
     public static function render(): string

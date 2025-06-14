@@ -1,6 +1,7 @@
-<div class="form-group start">
-    {!! \App\Services\CaptchaService::render() !!}
-    @error('captcha')
-        <span class="invalid-feedback">{{ $message }}</span>
-    @enderror
-</div>
+@props(['form' => null])
+
+@if (\App\Services\CaptchaService::enabled($form))
+    <div class="form-group">
+        {!! \App\Services\CaptchaService::render() !!}
+    </div>
+@endif
