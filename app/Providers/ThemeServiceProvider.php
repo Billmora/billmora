@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class ThemeServiceProvider extends ServiceProvider
 {
@@ -53,8 +54,24 @@ class ThemeServiceProvider extends ServiceProvider
         View::share('emailTheme', $emailThemeInfo);
 
         View::addNamespace('portal', resource_path("themes/portal/{$portalTheme}"));
-        Blade::anonymousComponentPath(resource_path("themes/client/{$clientTheme}/components"), 'client');
         View::addNamespace('client', resource_path("themes/client/{$clientTheme}"));
         View::addNamespace('email', resource_path("themes/email/{$emailTheme}"));
+
+        $clientComponentPath = resource_path("themes/client/{$clientTheme}/components");
+
+        Blade::anonymousComponentPath($clientComponentPath, 'client');
+
+        collect(File::allFiles($clientComponentPath))->each(function ($file) use ($clientComponentPath) {
+            $relativePath = Str::of($file->getRealPath())
+                ->replace('\\', '/')
+                ->after(Str::of($clientComponentPath)->replace('\\', '/') . '/')
+                ->before('.blade.php')
+                ->replace('/', '.');
+
+            $view = "client::components.{$relativePath}";
+            $alias = "client.{$relativePath}";
+
+            Blade::component($view, $alias);
+        });
     }
 }
