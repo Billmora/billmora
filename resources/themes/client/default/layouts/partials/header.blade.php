@@ -23,25 +23,7 @@
                     <button id="dropdown-open" dropdown-data="dropdownAccountA">
                         <img src="{{ auth()->user()->avatar }}">
                     </button>
-                    <div class="dropdown" id="dropdownAccountA">
-                        <div class="card">
-                            <h3>{{ auth()->user()->name }}</h3>
-                            <div class="divider-x"></div>
-                            <a href="/user/account">Account</a>
-                            <a href="/user/security">Security</a>
-                            <a href="/user/emails">Email History</a>
-                            <div class="divider-x"></div>
-                            @if (auth()->user()->is_admin)
-                                <a href="/admin">Admin</a>
-                            @endif
-                            <form action="{{ route('client.logout') }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn-logout">
-                                    {{ __('auth.sign_out') }}
-                                </button>
-                            </form>
-                        </div>
-                    </div>
+                    <x-client.dropdowns.account dropdown_data="dropdownAccountA" />
                 </div>
             @else
                 <a href="/auth/login" class="btn btn-secondary">{{ __('auth.sign_in') }}</a>
@@ -96,25 +78,7 @@
                 <button id="dropdown-open" dropdown-data="dropdownAccountB">
                     <img src="{{ auth()->user()->avatar }}">
                 </button>
-                <div class="dropdown" id="dropdownAccountB">
-                    <div class="card">
-                        <h3>{{ auth()->user()->name }}</h3>
-                        <div class="divider-x"></div>
-                        <a href="/user/account">Account</a>
-                        <a href="/user/security">Security</a>
-                        <a href="/user/emails">Email History</a>
-                        <div class="divider-x"></div>
-                        @if (auth()->user()->is_admin)
-                            <a href="/admin">Admin</a>
-                        @endif
-                        <form action="{{ route('client.logout') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="btn-logout">
-                                {{ __('auth.sign_out') }}
-                            </button>
-                        </form>
-                    </div>
-                </div>
+                <x-client.dropdowns.account dropdown_data="dropdownAccountB" />
             </div>
         @else
             <a href="/auth/login" class="btn btn-secondary">{{ __('auth.sign_in') }}</a>
