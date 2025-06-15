@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Auth;
 use App\Http\Controllers\Client;
-use App\Http\Controllers\Client\User;
+use App\Http\Controllers\Client\Account;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth', 'maintenance']], function () {
@@ -32,6 +32,6 @@ Route::group(['prefix' => 'auth'], function () {
   });
 });
 
-Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
-  Route::get('/account', [User\AccountController::class, 'index'])->name('client.user.account');
+Route::group(['prefix' => 'account', 'middleware' => 'auth'], function () {
+  Route::get('/detail', [Account\DetailController::class, 'index'])->name('client.account.detail');
 });
