@@ -34,4 +34,6 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::group(['prefix' => 'account', 'middleware' => 'auth'], function () {
   Route::get('/detail', [Account\DetailController::class, 'index'])->name('client.account.detail');
+  Route::post('/detail/personal', [Account\DetailController::class, 'updatePersonalInformation'])->name('client.account.detail.personal');
+  Route::post('/detail/billing', [Account\DetailController::class, 'updateBillingInformation'])->name('client.account.detail.billing');
 });
