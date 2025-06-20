@@ -4,7 +4,7 @@
     <div class="card">
       <div class="header">
         <h2>{{ __('client.modal_preference') }}</h2>
-        <button class="btn btn-secondary btn-square" id="modal-close">
+        <button type="button" class="btn btn-secondary btn-square" id="modal-close">
           <x-tabler-x/>
         </button>
       </div>
