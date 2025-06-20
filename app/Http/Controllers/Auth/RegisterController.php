@@ -33,7 +33,7 @@ class RegisterController extends Controller
             'street_address_1' => 'nullable|string',
             'street_address_2' => 'nullable|string',
             'city' => 'nullable|string',
-            'country' => 'nullable|string',
+            'country' => 'nullable|string|in:' . implode(',', array_keys(config('utils.countries'))),
             'state' => 'nullable|string',
             'postcode' => 'nullable|string',
             'password' => 'nullable|string|min:8|confirmed',

@@ -142,7 +142,11 @@
                     <span class="text-muted">{{ __('auth.optional_symbol') }}</span>
                   @endif
                 </label>
-                <input name="country" id="country" type="text" class="form-control @error('country') is-invalid @enderror" value="{{ old('country') }}">
+                <select name="country" id="country" class="form-control @error('country') is-invalid @enderror">
+                  @foreach (config('utils.countries') as $code => $name)
+                    <option value="{{ $code }}" {{ old('country') == $code ? 'selected' : '' }}>{{ $name }}</option>
+                  @endforeach
+                </select>
                 @error('country')
                   <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
