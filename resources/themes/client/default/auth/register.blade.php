@@ -50,7 +50,7 @@
                     <span class="text-muted">{{ __('auth.optional_symbol') }}</span>
                   @endif
                 </label>
-                <input name="phone_number" id="phone_number" type="text" class="form-control @error('phone_number') is-invalid @enderror" value="{{ old('phone_number') }}">
+                <input name="phone_number" id="phone_number" type="tel" class="form-control @error('phone_number') is-invalid @enderror" value="{{ old('phone_number') }}">
                 @error('phone_number')
                   <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
