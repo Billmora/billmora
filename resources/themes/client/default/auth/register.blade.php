@@ -74,9 +74,9 @@
                     <label for="{{ $field }}" class="form-label">
                       {{ __('auth.' . $field) }}
                       @if (Billmora::hasAuth('form_required', $field))
-                        <span class="text-danger">*</span> 
+                        <span class="text-danger">{{ __('auth.required_symbol') }}</span> 
                       @else
-                        <span class="text-muted">(Optional)</span>
+                        <span class="text-muted">{{ __('auth.optional_symbol') }}</span>
                       @endif
                     </label>
                     <input name="{{ $field }}" id="{{ $field }}" type="text" class="form-control @error($field) is-invalid @enderror" value="{{ old($field) }}">
