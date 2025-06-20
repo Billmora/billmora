@@ -580,6 +580,17 @@ select:focus {
     border-radius: 50%;
     overflow: hidden;
 }
+.client .profile .header .info {
+    flex: 1;
+    min-width: 0;
+}
+.client .profile .header .info h2 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: block;
+}
 .client .profile .action {
     display: flex;
     flex-direction: column;

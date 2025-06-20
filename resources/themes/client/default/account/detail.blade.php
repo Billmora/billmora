@@ -18,7 +18,7 @@
         <div class="profile">
           <div class="header">
             <img class="avatar" src="{{ $user->avatar }}" alt="user avatar">
-            <div>
+            <div class="info">
               <h2>{{ $user->name }}</h2>
               <p>{{ $user->billing->company_name }}</p>
             </div>
@@ -26,7 +26,7 @@
           <div class="action">
             <a href="https://gravatar.com" target="_blank" class="btn btn-primary">
               <x-tabler-external-link/>
-              Change Picture
+              {{ __('client.update_avatar') }}
             </a>
           </div>
         </div>
@@ -34,7 +34,7 @@
           <form action="{{ route('client.account.detail.personal') }}" class="card" method="POST">
             @csrf
             <div class="header">
-              <h3>Personal information</h3>
+              <h3>{{ __('client.personal_information') }}</h3>
             </div>
             <div class="body">
               <div class="row">

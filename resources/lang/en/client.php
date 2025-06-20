@@ -31,6 +31,7 @@ return [
     'postcode' => 'Postcode',
     'required_symbol' => '*',
     'optional_symbol' => '(Optional)',
+    'update_avatar' => 'Update Avatar',
     'save_changes' => 'Save Changes',
     'update_detail_success' => 'Your account details have been updated successfully.',
 ];
