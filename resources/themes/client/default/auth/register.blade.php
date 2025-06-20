@@ -68,73 +68,119 @@
           )
             <h3>{{ __('auth.billing_information') }}</h3>
             <div class="row">
-              @foreach(['company_name', 'street_address_1', 'street_address_2', 'city'] as $field)
-                @if (!Billmora::hasAuth('form_disable', $field))
-                  <div class="form-group col-lg-2">
-                    <label for="{{ $field }}" class="form-label">
-                      {{ __('auth.' . $field) }}
-                      @if (Billmora::hasAuth('form_required', $field))
-                        <span class="text-danger">{{ __('auth.required_symbol') }}</span> 
-                      @else
-                        <span class="text-muted">{{ __('auth.optional_symbol') }}</span>
-                      @endif
-                    </label>
-                    <input name="{{ $field }}" id="{{ $field }}" type="text" class="form-control @error($field) is-invalid @enderror" value="{{ old($field) }}">
-                    @error($field)
-                      <span class="invalid-feedback">{{ $message }}</span>
-                    @enderror
-                  </div>
-                @endif
-              @endforeach
+              @if (!Billmora::hasAuth('form_disable', 'company_name'))
+              <div class="form-group col-lg-2">
+                <label for="company_name" class="form-label">
+                  {{ __('auth.company_name') }}
+                  @if (Billmora::hasAuth('form_required', 'company_name'))
+                    <span class="text-danger">{{ __('auth.required_symbol') }}</span>
+                  @else
+                    <span class="text-muted">{{ __('auth.optional_symbol') }}</span>
+                  @endif
+                </label>
+                <input name="company_name" id="company_name" type="text" class="form-control @error('company_name') is-invalid @enderror" value="{{ old('company_name') }}">
+                @error('company_name')
+                  <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+              </div>
+              @endif
+              @if (!Billmora::hasAuth('form_disable', 'street_address_1'))
+              <div class="form-group col-lg-2">
+                <label for="street_address_1" class="form-label">
+                  {{ __('auth.street_address_1') }}
+                  @if (Billmora::hasAuth('form_required', 'street_address_1'))
+                    <span class="text-danger">{{ __('auth.required_symbol') }}</span>
+                  @else
+                    <span class="text-muted">{{ __('auth.optional_symbol') }}</span>
+                  @endif
+                </label>
+                <input name="street_address_1" id="street_address_1" type="text" class="form-control @error('street_address_1') is-invalid @enderror" value="{{ old('street_address_1') }}">
+                @error('street_address_1')
+                  <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+              </div>
+              @endif
+              @if (!Billmora::hasAuth('form_disable', 'street_address_2'))
+              <div class="form-group col-lg-2">
+                <label for="street_address_2" class="form-label">
+                  {{ __('auth.street_address_2') }}
+                  @if (Billmora::hasAuth('form_required', 'street_address_2'))
+                    <span class="text-danger">{{ __('auth.required_symbol') }}</span>
+                  @else
+                    <span class="text-muted">{{ __('auth.optional_symbol') }}</span>
+                  @endif
+                </label>
+                <input name="street_address_2" id="street_address_2" type="text" class="form-control @error('street_address_2') is-invalid @enderror" value="{{ old('street_address_2') }}">
+                @error('street_address_2')
+                  <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+              </div>
+              @endif
+              @if (!Billmora::hasAuth('form_disable', 'city'))
+              <div class="form-group col-lg-2">
+                <label for="city" class="form-label">
+                  {{ __('auth.city') }}
+                  @if (Billmora::hasAuth('form_required', 'city'))
+                    <span class="text-danger">{{ __('auth.required_symbol') }}</span>
+                  @else
+                    <span class="text-muted">{{ __('auth.optional_symbol') }}</span>
+                  @endif
+                </label>
+                <input name="city" id="city" type="text" class="form-control @error('city') is-invalid @enderror" value="{{ old('city') }}">
+                @error('city')
+                  <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+              </div>
+              @endif
               @if (!Billmora::hasAuth('form_disable', 'country'))
-                <div class="form-group col-lg-2">
-                  <label for="country" class="form-label">
-                    {{ __('auth.country') }}
-                    @if (Billmora::hasAuth('form_required', 'country'))
-                      <span class="text-danger">{{ __('auth.required_symbol') }}</span> 
-                    @else
-                      <span class="text-muted">{{ __('auth.optional_symbol') }}</span>
-                    @endif
-                  </label>
-                  <input name="country" id="country" type="text" class="form-control @error('country') is-invalid @enderror" value="{{ old('country') }}">
-                  @error('country')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                  @enderror
-                </div>
+              <div class="form-group col-lg-2">
+                <label for="country" class="form-label">
+                  {{ __('auth.country') }}
+                  @if (Billmora::hasAuth('form_required', 'country'))
+                    <span class="text-danger">{{ __('auth.required_symbol') }}</span>
+                  @else
+                    <span class="text-muted">{{ __('auth.optional_symbol') }}</span>
+                  @endif
+                </label>
+                <input name="country" id="country" type="text" class="form-control @error('country') is-invalid @enderror" value="{{ old('country') }}">
+                @error('country')
+                  <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+              </div>
               @endif
             </div>
             <div class="row">
               @if (!Billmora::hasAuth('form_disable', 'state'))
-                <div class="form-group col-lg-2">
-                  <label for="state" class="form-label">
-                    {{ __('auth.state') }}
-                    @if (Billmora::hasAuth('form_required', 'state'))
-                      <span class="text-danger">{{ __('auth.required_symbol') }}</span> 
-                    @else
-                      <span class="text-muted">{{ __('auth.optional_symbol') }}</span>
-                    @endif
-                  </label>
-                  <input name="state" id="state" type="text" class="form-control @error('state') is-invalid @enderror" value="{{ old('state') }}">
-                  @error('state')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                  @enderror
-                </div>
+              <div class="form-group col-lg-2">
+                <label for="state" class="form-label">
+                  {{ __('auth.state') }}
+                  @if (Billmora::hasAuth('form_required', 'state'))
+                    <span class="text-danger">{{ __('auth.required_symbol') }}</span>
+                  @else
+                    <span class="text-muted">{{ __('auth.optional_symbol') }}</span>
+                  @endif
+                </label>
+                <input name="state" id="state" type="text" class="form-control @error('state') is-invalid @enderror" value="{{ old('state') }}">
+                @error('state')
+                  <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+              </div>
               @endif
               @if (!Billmora::hasAuth('form_disable', 'postcode'))
-                <div class="form-group col-lg-2">
-                  <label for="postcode" class="form-label">
-                    {{ __('auth.postcode') }}
-                    @if (Billmora::hasAuth('form_required', 'postcode'))
-                      <span class="text-danger">{{ __('auth.required_symbol') }}</span> 
-                    @else
-                      <span class="text-muted">{{ __('auth.optional_symbol') }}</span>
-                    @endif
-                  </label>
-                  <input name="postcode" id="postcode" type="text" class="form-control @error('postcode') is-invalid @enderror" value="{{ old('postcode') }}">
-                  @error('postcode')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                  @enderror
-                </div>
+              <div class="form-group col-lg-2">
+                <label for="postcode" class="form-label">
+                  {{ __('auth.postcode') }}
+                  @if (Billmora::hasAuth('form_required', 'postcode'))
+                    <span class="text-danger">{{ __('auth.required_symbol') }}</span>
+                  @else
+                    <span class="text-muted">{{ __('auth.optional_symbol') }}</span>
+                  @endif
+                </label>
+                <input name="postcode" id="postcode" type="text" class="form-control @error('postcode') is-invalid @enderror" value="{{ old('postcode') }}">
+                @error('postcode')
+                  <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+              </div>
               @endif
             </div>
           @endif
