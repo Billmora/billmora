@@ -18,14 +18,20 @@
           <h3>{{ __('auth.personal_information') }}</h3>
           <div class="row">
             <div class="form-group col-lg-2">
-              <label for="first_name" class="form-label">{{ __('auth.first_name') }} {{ __('auth.required_symbol') }}</label>
+              <label for="first_name" class="form-label">
+                {{ __('auth.first_name') }}
+                <span class="text-danger">{{ __('auth.required_symbol') }}</span>
+              </label>
               <input name="first_name" id="first_name" type="text" class="form-control @error('first_name') is-invalid @enderror" value="{{ old('first_name') }}">
               @error('first_name')
               <span class="invalid-feedback">{{ $message }}</span>
               @enderror
             </div>
             <div class="form-group col-lg-2">
-              <label for="last_name" class="form-label">{{ __('auth.last_name') }} {{ __('auth.required_symbol') }}</label>
+              <label for="last_name" class="form-label">
+                {{ __('auth.last_name') }}
+                <span class="text-danger">{{ __('auth.required_symbol') }}</span>
+              </label>
               <input name="last_name" id="last_name" type="text" class="form-control @error('last_name') is-invalid @enderror" value="{{ old('last_name') }}">
               @error('last_name')
               <span class="invalid-feedback">{{ $message }}</span>
@@ -34,7 +40,10 @@
           </div>
           <div class="row">
             <div class="form-group col-lg-2">
-              <label for="email" class="form-label">{{ __('auth.email') }} {{ __('auth.required_symbol') }}</label>
+              <label for="email" class="form-label">
+                {{ __('auth.email') }}
+                <span class="text-danger">{{ __('auth.required_symbol') }}</span>
+              </label>
               <input name="email" id="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}">
               @error('email')
                 <span class="invalid-feedback">{{ $message }}</span>
