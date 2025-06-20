@@ -11,6 +11,8 @@ class UserBilling extends Model
 
     protected $fillable = [
         'user_id',
+        'phone_number',
+        'company_name',
         'street_address_1',
         'street_address_2',
         'city',
