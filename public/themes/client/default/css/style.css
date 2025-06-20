@@ -545,7 +545,7 @@ select:focus {
     gap: 1rem;
 }
 
-.client {
+.account {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -554,7 +554,7 @@ select:focus {
         flex-direction: row;
     }
 }
-.client .profile {
+.account .profile {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -568,40 +568,40 @@ select:focus {
         width: 23rem;
     }
 }
-.client .profile .header {
+.account .profile .header {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 1rem;
 }
-.client .profile .header .avatar {
+.account .profile .header .avatar {
     width: 96px;
     height: 96px;
     border-radius: 50%;
     overflow: hidden;
 }
-.client .profile .header .info {
+.account .profile .header .info {
     flex: 1;
     min-width: 0;
 }
-.client .profile .header .info h2 {
+.account .profile .header .info h2 {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
     display: block;
 }
-.client .profile .action {
+.account .profile .action {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
-.client .profile .action .btn {
+.account .profile .action .btn {
     display: inline-flex;
     gap: 0.25rem;
     justify-content: center;
 }
-.client .detail {
+.account .detail {
     display: flex;
     flex-direction: column;
     gap: 1rem;

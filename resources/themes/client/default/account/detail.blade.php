@@ -14,7 +14,7 @@
       </p>
       @endif
       <x-client.breadcrumb title="Account Details" route="{{ route('client.account.detail') }}" />
-      <div class="client">
+      <div class="account">
         <div class="profile">
           <div class="header">
             <img class="avatar" src="{{ $user->avatar }}" alt="user avatar">
