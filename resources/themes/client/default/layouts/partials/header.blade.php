@@ -19,7 +19,7 @@
             </button>
             <div class="divider-y"></div>
             @auth
-                <div class="account">
+                <div class="my-account">
                     <button id="dropdown-open" dropdown-data="dropdownAccountA">
                         <img src="{{ auth()->user()->avatar }}">
                     </button>
@@ -74,7 +74,7 @@
         </button>
         <div class="divider-y"></div>
         @auth
-            <div class="account">
+            <div class="my-account">
                 <button id="dropdown-open" dropdown-data="dropdownAccountB">
                     <img src="{{ auth()->user()->avatar }}">
                 </button>
