@@ -58,20 +58,29 @@ class ThemeServiceProvider extends ServiceProvider
         View::addNamespace('email', resource_path("themes/email/{$emailTheme}"));
 
         $clientComponentPath = resource_path("themes/client/{$clientTheme}/components");
+        $portalComponentPath = resource_path("themes/portal/{$portalTheme}/components");
 
         Blade::anonymousComponentPath($clientComponentPath, 'client');
+        Blade::anonymousComponentPath($portalComponentPath, 'portal');
 
-        collect(File::allFiles($clientComponentPath))->each(function ($file) use ($clientComponentPath) {
-            $relativePath = Str::of($file->getRealPath())
+        foreach ([
+            'client' => $clientComponentPath,
+            'portal' => $portalComponentPath,
+        ] as $namespace => $componentPath) {
+            if (File::exists($componentPath)) {
+            collect(File::allFiles($componentPath))->each(function ($file) use ($componentPath, $namespace) {
+                $relativePath = Str::of($file->getRealPath())
                 ->replace('\\', '/')
-                ->after(Str::of($clientComponentPath)->replace('\\', '/') . '/')
+                ->after(Str::of($componentPath)->replace('\\', '/') . '/')
                 ->before('.blade.php')
                 ->replace('/', '.');
 
-            $view = "client::components.{$relativePath}";
-            $alias = "client.{$relativePath}";
+                $view = "{$namespace}::components.{$relativePath}";
+                $alias = "{$namespace}.{$relativePath}";
 
-            Blade::component($view, $alias);
-        });
+                Blade::component($view, $alias);
+            });
+            }
+        }
     }
 }
