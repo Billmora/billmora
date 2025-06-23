@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+* {
+    color-scheme: dark;
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+@theme {
+    /* dark
+    --color-billmora-1: #171717;
+    --color-billmora-2: #1f1f1f;
+    --color-billmora-3: #212121;
+    --color-billmora-4: #353535;
+    --color-billmora-5: #404040;
+    --color-billmora-6: #595959;
+    */
+
+    /* light */
+    --color-billmora-1: #fbfdff;
+    --color-billmora-2: #f5f9ff;
+    --color-billmora-3: #eaf3ff;
+    --color-billmora-4: #dbecff;
+    --color-billmora-5: #cae2ff;
+    --color-billmora-6: #b7d4ff;
+
+    --color-billmora-primary: #3384ff;
+    --color-billmora-primary-hover: #4f95fe;
+    --color-billmora-secondary: #3384ff20;
+    --color-billmora-secondary-hover: #3384ff;
+
+    --color-billmora-ring-1: #3385ff88;
+}

@@ -1,0 +1,13 @@
+{
+  "resources/themes/portal/tailwind/layouts/tailwind/css/app.css": {
+    "file": "css/style.css",
+    "src": "resources/themes/portal/tailwind/layouts/tailwind/css/app.css",
+    "isEntry": true
+  },
+  "resources/themes/portal/tailwind/layouts/tailwind/js/app.js": {
+    "file": "js/app.js",
+    "name": "app",
+    "src": "resources/themes/portal/tailwind/layouts/tailwind/js/app.js",
+    "isEntry": true
+  }
+}
