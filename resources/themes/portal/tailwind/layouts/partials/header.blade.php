@@ -84,7 +84,7 @@
             <span class="font-semibold">{{ __('common.news') }}</span>
           </x-portal::link>
           @if (Billmora::getGeneral('term_tos'))
-            <x-portal::link variant="{{ request()->is('/terms-of-service*') ? 'primary' : 'text' }}" href="{{ Billmora::getGeneral('term_tos_url') ? Billmora::getGeneral('term_tos_url') : '' }}" icon="lucide-handshake" active="{{ request()->is('/terms') ? true : false }}">
+            <x-portal::link variant="{{ request()->is('/terms-of-service*') ? 'primary' : 'text' }}" href="{{ Billmora::getGeneral('term_tos_url') ? Billmora::getGeneral('term_tos_url') : '' }}" icon="lucide-handshake" active="{{ request()->is('/terms-of-service*') ? true : false }}">
               <span class="font-semibold">{{ __('common.terms_of_service') }}</span>
             </x-portal::link>
           @endif
