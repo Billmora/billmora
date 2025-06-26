@@ -1,9 +1,9 @@
-<x-portal::modal modal="preferenceModal" title="Preference" description="Choose your language and currency are using." icon="lucide-bolt">
+<x-portal::modal modal="preferenceModal" title="{{ __('common.preference_title') }}" description="{{ __('common.preference_description') }}" icon="lucide-bolt">
   <form action="{{ route('preference.update') }}" method="POST">
     @csrf
     <div class="flex flex-col gap-2 mb-6">
-      <label for="language" class="text-slate-700 font-semibold">Language</label>
-      <x-portal::select label="Languages" name="language">
+      <label for="language" class="text-slate-700 font-semibold">{{ __('common.language') }}</label>
+      <x-portal::select label="{{ __('common.language') }}" name="language">
         @foreach ($langs as $lang => $name)
           <option value="{{ $lang }}" {{ session('locale', config('app.locale')) == $lang ? 'selected' : '' }}>
             {{ $name }}
@@ -11,9 +11,12 @@
         @endforeach
       </x-portal::select>
     </div>
-    <div class="flex justify-end">
+    <div class="flex justify-end gap-2">
+      <x-portal::button type="button" x-on:click="$store.modal.close()" variant="secondary">
+        <span class="font-semibold">{{ __('common.cancel') }}</span>
+      </x-portal::button>
       <x-portal::button type="submit">
-        <span class="font-semibold">Save changes</span>
+        <span class="font-semibold">{{ __('common.save') }}</span>
       </x-portal::button>
     </div>
   </form>
@@ -36,20 +39,20 @@
         x-transition:leave-start="translate-y-0"
         x-transition:leave-end="-translate-y-100">
         <x-portal::button variant="secondary" icon="lucide-languages" modal="preferenceModal">
-          <span class="font-semibold">English (USD)</span>
+          <span class="font-semibold">{{ $langActive }} (USD)</span>
         </x-portal::button>
         <span class="hidden mx-2 w-1 h-auto bg-billmora-3 md:inline"></span>
         @auth
           <x-portal::link variant="secondary" href="/dashboard">
-            <span class="font-semibold">Client Area</span>
+            <span class="font-semibold">{{ __('common.client_area') }}</span>
           </x-portal::link>
-        @else
+        @else 
           <div class="flex items-center gap-2 ml-auto">
             <x-portal::link variant="secondary" href="/auth/login">
-              <span class="font-semibold">Sign In</span>
+              <span class="font-semibold">{{ __('common.sign_in') }}</span>
             </x-portal::link>
             <x-portal::link variant="primary" href="/auth/login">
-              <span class="font-semibold">Sign Up</span>
+              <span class="font-semibold">{{ __('common.sign_up') }}</span>
             </x-portal::link>
           </div>
         @endauth
@@ -72,14 +75,19 @@
         </div>
         <div class="space-y-2 md:flex md:flex-row md:space-y-0 md:space-x-2">
           <x-portal::link variant="primary" href="/home" icon="lucide-home" active="{{ request()->is('/') ? true : false }}">
-            <span class="font-semibold">Home</span>
+            <span class="font-semibold">{{ __('common.home') }}</span>
           </x-portal::link>
           <x-portal::link variant="{{ request()->is('/store*') ? 'primary' : 'text' }}" href="/" icon="lucide-store" active="{{ request()->is('/store*') ? true : false }}">
-            <span class="font-semibold">Store</span>
+            <span class="font-semibold">{{ __('common.store') }}</span>
           </x-portal::link>
-          <x-portal::link variant="{{ request()->is('/terms') ? 'primary' : 'text' }}" href="/" icon="lucide-newspaper" active="{{ request()->is('/terms') ? true : false }}">
-            <span class="font-semibold">News</span>
+          <x-portal::link variant="{{ request()->is('/news') ? 'primary' : 'text' }}" href="/" icon="lucide-newspaper" active="{{ request()->is('/news') ? true : false }}">
+            <span class="font-semibold">{{ __('common.news') }}</span>
           </x-portal::link>
+          @if (Billmora::getGeneral('term_tos'))
+            <x-portal::link variant="{{ request()->is('/terms-of-service*') ? 'primary' : 'text' }}" href="{{ Billmora::getGeneral('term_tos_url') ? Billmora::getGeneral('term_tos_url') : '' }}" icon="lucide-handshake" active="{{ request()->is('/terms') ? true : false }}">
+              <span class="font-semibold">{{ __('common.terms_of_service') }}</span>
+            </x-portal::link>
+          @endif
         </div>
       </nav>
     </div>
