@@ -31,17 +31,17 @@
             <h4 class="text-slate-800 font-bold">{{ __('common.company') }}</h4>
             <div>
               @if (Billmora::getGeneral('term_tos'))
-              <x-portal::link href="{{ Billmora::getGeneral('term_tos_url') ? Billmora::getGeneral('term_tos_url') : '' }}">
+              <x-portal::link href="{{ Billmora::getGeneral('term_tos_url') ? Billmora::getGeneral('term_tos_url') : '/terms-of-service' }}">
                 <span>{{ __('common.terms_of_service') }}</span>
               </x-portal::link>
               @endif
               @if (Billmora::getGeneral('term_toc'))
-              <x-portal::link href="{{ Billmora::getGeneral('term_toc_url') ? Billmora::getGeneral('term_toc_url') : '' }}">
+              <x-portal::link href="{{ Billmora::getGeneral('term_toc_url') ? Billmora::getGeneral('term_toc_url') : '/terms-of-condition' }}">
                 <span>{{ __('common.terms_of_condition') }}</span>
               </x-portal::link>
               @endif
               @if (Billmora::getGeneral('term_privacy'))
-              <x-portal::link href="{{ Billmora::getGeneral('term_privacy_url') ? Billmora::getGeneral('term_privacy_url') : '' }}">
+              <x-portal::link href="{{ Billmora::getGeneral('term_privacy_url') ? Billmora::getGeneral('term_privacy_url') : '/privacy-policy' }}">
                 <span>{{ __('common.privacy_policy') }}</span>
               </x-portal::link>
               @endif
