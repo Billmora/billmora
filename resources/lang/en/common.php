@@ -5,6 +5,8 @@ return [
   'client_area' => 'Client Area',
   'store' =>  'Store',
   'news' => 'News',
+  'support' => 'Support',
+  'company' => 'Company',
   'terms_of_service' => "Terms of Service",
   'terms_of_condition' => "Terms of Conditon",
   'privacy_policy' => "Privacy Policy",
