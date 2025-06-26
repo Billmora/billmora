@@ -74,17 +74,17 @@
           <x-lucide-x class="h-8 w-auto text-slate-400 cursor-pointer" x-on:click="navOpen = false"/>
         </div>
         <div class="space-y-2 md:flex md:flex-row md:space-y-0 md:space-x-2">
-          <x-portal::link variant="primary" href="/home" icon="lucide-home" active="{{ request()->is('/') ? true : false }}">
+          <x-portal::link href="/" variant="primary" icon="lucide-home" active="{{ request()->is('/') ? true : false }}">
             <span class="font-semibold">{{ __('common.home') }}</span>
           </x-portal::link>
-          <x-portal::link variant="{{ request()->is('/store*') ? 'primary' : 'text' }}" href="/" icon="lucide-store" active="{{ request()->is('/store*') ? true : false }}">
+          <x-portal::link href="/store" variant="{{ request()->is('/store*') ? 'primary' : 'text' }}" icon="lucide-store" active="{{ request()->is('/store*') ? true : false }}">
             <span class="font-semibold">{{ __('common.store') }}</span>
           </x-portal::link>
-          <x-portal::link variant="{{ request()->is('/news') ? 'primary' : 'text' }}" href="/" icon="lucide-newspaper" active="{{ request()->is('/news') ? true : false }}">
+          <x-portal::link href="/news" variant="{{ request()->is('/news') ? 'primary' : 'text' }}" icon="lucide-newspaper" active="{{ request()->is('/news') ? true : false }}">
             <span class="font-semibold">{{ __('common.news') }}</span>
           </x-portal::link>
           @if (Billmora::getGeneral('term_tos'))
-            <x-portal::link variant="{{ request()->is('/terms-of-service*') ? 'primary' : 'text' }}" href="{{ Billmora::getGeneral('term_tos_url') ? Billmora::getGeneral('term_tos_url') : '' }}" icon="lucide-handshake" active="{{ request()->is('/terms-of-service*') ? true : false }}">
+            <x-portal::link variant="{{ request()->is('/terms-of-service*') ? 'primary' : 'text' }}" href="{{ Billmora::getGeneral('term_tos_url') ? Billmora::getGeneral('term_tos_url') : '/terms-of-service' }}" icon="lucide-handshake" active="{{ request()->is('/terms-of-service*') ? true : false }}">
               <span class="font-semibold">{{ __('common.terms_of_service') }}</span>
             </x-portal::link>
           @endif
