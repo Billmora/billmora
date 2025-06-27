@@ -59,7 +59,7 @@
       </div>
     </div>
     <div x-show="navOpen" class="md:block!">
-      <div class="bg-black w-full h-full fixed top-0 opacity-40 z-10 md:-z-10"></div>
+      <div class="bg-black w-full h-full fixed top-0 opacity-40 z-10 md:-z-10 md:hidden"></div>
       <nav class="fixed md:static md:block! top-0 left-0 z-10 w-[20rem] md:w-full h-full bg-billmora-2 p-6 md:py-4 border-r-4 border-r-billmora-3 md:border-r-0" x-show="navOpen" x-on:click.away="navOpen = false"
         x-transition:enter="transition ease-out duration-400"
         x-transition:enter-start="-translate-x-100"
