@@ -22,16 +22,16 @@
   </form>
 </x-portal::modal>
 <div class="xl:bg-billmora-2 md:border-b-4 border-b-billmora-3">
-  <div x-data="{ navOpen: false }" class="xl:max-w-[87.5rem] mx-auto">
+  <div x-data="{ navOpen: false }" class="xl:max-w-[87.5rem] mx-auto md:px-4 2xl:px-0">
     <div x-data="{ actionOpen: false}" class="md:flex md:justify-between md:items-center md:bg-billmora-2 relative z-10">
-      <header class="flex items-center bg-billmora-2 py-4 px-6 relative z-9 border-b-4 border-b-billmora-3 md:border-b-0">
+      <header class="flex items-center bg-billmora-2 py-4 px-6 md:px-0 relative z-9 border-b-4 border-b-billmora-3 md:border-b-0">
         <x-lucide-menu class="h-6 w-auto md:hidden text-slate-700 cursor-pointer" x-on:click="navOpen = !navOpen"/>
         <a href="/" class="mx-auto md:ml-0">
           <img src="{{ Billmora::getGeneral('company_logo') }}" alt="company logo" class="h-12 w-auto">
         </a>
         <x-lucide-layout-panel-left class="h-6 w-auto md:hidden text-slate-700 cursor-pointer" x-on:click="actionOpen = !actionOpen"/>
       </header>
-      <div x-show="actionOpen" x-on:click.away="actionOpen = false" class="flex md:flex! justify-between flex-wrap gap-2 bg-billmora-2 md:bg-billmora-2 py-4 px-6 z-8 border-b-4 border-b-billmora-3 md:border-b-0"
+      <div x-show="actionOpen" x-on:click.away="actionOpen = false" class="flex md:flex! justify-between flex-wrap gap-2 bg-billmora-2 md:bg-billmora-2 py-4 px-6 md:px-0 z-8 border-b-4 border-b-billmora-3 md:border-b-0"
         x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="-translate-y-100"
         x-transition:enter-end="translate-y-0"
@@ -60,7 +60,7 @@
     </div>
     <div x-show="navOpen" class="md:block!">
       <div class="bg-black w-full h-full fixed top-0 opacity-40 z-10 md:-z-10 md:hidden"></div>
-      <nav class="fixed md:static md:block! top-0 left-0 z-10 w-[20rem] md:w-full h-full bg-billmora-2 p-6 md:py-4 border-r-4 border-r-billmora-3 md:border-r-0" x-show="navOpen" x-on:click.away="navOpen = false"
+      <nav class="fixed md:static md:block! top-0 left-0 z-10 w-[20rem] md:w-full h-full bg-billmora-2 p-6 md:py-4 md:px-0 border-r-4 border-r-billmora-3 md:border-r-0" x-show="navOpen" x-on:click.away="navOpen = false"
         x-transition:enter="transition ease-out duration-400"
         x-transition:enter-start="-translate-x-100"
         x-transition:enter-end="translate-x-0"
