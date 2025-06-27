@@ -2,7 +2,7 @@
 <html lang="en">
  @include('portal::layouts.wrapper')
  <body class="bg-billmora-1">
-    {{-- @include('portal::layouts.partials.preload') --}}
+    @include('portal::layouts.partials.preload')
     @include('portal::layouts.partials.header')
     <main>
         @yield('body')
