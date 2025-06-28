@@ -2,7 +2,7 @@
 
 <div class="w-full">      
   <div class="relative">
-    <select name="{{ $name }}" id="{{ $name }}" class="w-full bg-billmora-2 text-gray-700 text-sm border-2 border-billmora-3 rounded-md px-3 py-2.5 focus:outline-none focus:border-billmora-ring-1 hover:border-billmora-ring-1 appearance-none cursor-pointer">
+    <select name="{{ $name }}" id="{{ $name }}" class="w-full bg-billmora-2 text-gray-700 border-2 border-billmora-3 rounded-lg px-3 py-2 focus:outline-none focus:border-billmora-ring-1 hover:border-billmora-ring-1 appearance-none cursor-pointer">
       <option class="text-slate-400" selected disabled>Choose a {{ $label }}</option>
       {{ $slot }}
     </select>
