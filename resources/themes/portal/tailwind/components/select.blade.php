@@ -9,7 +9,7 @@
     <label for="{{ $name }}" class="block text-slate-500 font-semibold mb-0.5">
       {{ $label }}
       @if ($required)
-        <span class="text-red-500">{{ __('auth.required_symbol') }}</span> 
+        <span class="text-red-500">{{ __('common.required_symbol') }}</span> 
       @else
         <span class="text-slate-400">{{ __('auth.optional_symbol') }}</span>
       @endif
