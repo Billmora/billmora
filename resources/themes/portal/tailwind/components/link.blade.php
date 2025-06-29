@@ -39,7 +39,7 @@
     @break
   @default
     <a {{ $attributes->class([
-      'flex items-center gap-2 w-fit rounded-lg transition-colors duration-300 ease-in-out cursor-pointer focus:outline-none focus:ring-3 focus:ring-billmora-ring-1',
+      'flex items-center gap-2 w-fit rounded-lg transition-colors duration-300 ease-in-out cursor-pointer',
       'text-billmora-primary' => $active,
       'text-slate-700 hover:text-billmora-primary' => !$active,
     ]) }}>
