@@ -51,7 +51,7 @@
             <x-portal::link variant="secondary" href="/auth/login">
               <span class="font-semibold">{{ __('common.sign_in') }}</span>
             </x-portal::link>
-            <x-portal::link variant="primary" href="/auth/login">
+            <x-portal::link variant="primary" href="/auth/register">
               <span class="font-semibold">{{ __('common.sign_up') }}</span>
             </x-portal::link>
           </div>
