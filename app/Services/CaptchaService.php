@@ -24,20 +24,6 @@ class CaptchaService
         return true;
     }
 
-
-    public static function render(): string
-    {
-        return match (env('CAPTCHA_DRIVER')) {
-            'turnstile' => '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>' .
-                '<div class="cf-turnstile" data-sitekey="' . env('TURNSTILE_SITE_KEY') . '"></div>',
-            'recaptchav2' => '<script src="https://www.google.com/recaptcha/api.js" async defer></script>' .
-                '<div class="g-recaptcha" data-sitekey="' . env('RECAPTCHAV2_SITE_KEY') . '"></div>',
-            'hcaptcha' => '<script src="https://hcaptcha.com/1/api.js" async defer></script>' .
-                '<div class="h-captcha" data-sitekey="' . env('HCAPTCHA_SITE_KEY') . '"></div>',
-            default => '',
-        };
-    }
-
     public static function verifyRequest(Request $request): bool
     {
         return match (env('CAPTCHA_DRIVER')) {
