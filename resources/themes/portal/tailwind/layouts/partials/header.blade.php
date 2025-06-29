@@ -2,7 +2,7 @@
   <form action="{{ route('preference.update') }}" method="POST">
     @csrf
     <div class="flex flex-col gap-2 mb-6">
-      <x-portal::select label="{{ __('common.language') }}" name="language">
+      <x-portal::select label="{{ __('common.language') }}" name="language" required>
         @foreach ($langs as $lang => $name)
           <option value="{{ $lang }}" {{ session('locale', config('app.locale')) == $lang ? 'selected' : '' }}>
             {{ $name }}
