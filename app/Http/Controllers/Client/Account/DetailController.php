@@ -15,7 +15,7 @@ class DetailController extends Controller
         return view('client::account.detail', compact('user'));
     }
 
-    public function updatePersonalInformation(Request $request) {
+    public function update(Request $request) {
         $requiredFields = Billmora::getAuth('form_required', []);
         
         $user = Auth::user();
@@ -23,7 +23,15 @@ class DetailController extends Controller
         $validation = [
             'first_name' => 'required|string|min:3|max:255',
             'last_name' => 'required|string|max:255',
-            'phone_number' => 'nullable|string',
+            'phone_number' => 'nullable|numeric',
+            'company_name' => 'nullable|string',
+            'street_address_1' => 'nullable|string',
+            'street_address_2' => 'nullable|string',
+            'city' => 'nullable|string',
+            'country' => 'nullable|string|in:' . implode(',', array_keys(config('utils.countries'))),
+            'state' => 'nullable|string',
+            'postcode' => 'nullable|string',
+            'password' => 'nullable|string|min:8|confirmed',
         ];
 
         foreach ($requiredFields as $field) {
@@ -45,39 +53,6 @@ class DetailController extends Controller
             ['user_id' => $user->id],
             [
                 'phone_number' => $request->phone_number,
-            ]
-        );
-
-        return redirect()->back()->with('success', __('client.update_detail_success'));
-    }
-
-    public function updateBillingInformation(Request $request) {
-        $requiredFields = Billmora::getAuth('form_required', []);
-        
-        $user = Auth::user();
-
-        $validation = [
-            'company_name' => 'nullable|string',
-            'street_address_1' => 'nullable|string',
-            'street_address_2' => 'nullable|string',
-            'city' => 'nullable|string',
-            'country' => 'nullable|string|in:' . implode(',', array_keys(config('utils.countries'))),
-            'state' => 'nullable|string',
-            'postcode' => 'nullable|string',
-            'password' => 'nullable|string|min:8|confirmed',
-        ];
-
-        foreach ($requiredFields as $field) {
-            if (isset($validation[$field])) {
-                $validation[$field] = str_replace('nullable', 'required', $validation[$field]);
-            }
-        }
-
-        $request->validate($validation);
-
-        $user->billing()->updateOrCreate(
-            ['user_id' => $user->id],
-            [
                 'company_name' => $request->company_name,
                 'street_address_1' => $request->street_address_1,
                 'street_address_2' => $request->street_address_2,
