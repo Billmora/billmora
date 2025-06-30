@@ -28,7 +28,7 @@ class RegisterController extends Controller
             'first_name' => 'required|string|min:3|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'phone_number' => 'nullable|string',
+            'phone_number' => 'nullable|numeric',
             'company_name' => 'nullable|string',
             'street_address_1' => 'nullable|string',
             'street_address_2' => 'nullable|string',
