@@ -25,7 +25,7 @@
   <form action="{{ route('client.account.detail.update') }}" method="POST" class="w-full h-auto bg-billmora-2 p-6 rounded-lg border-3 border-billmora-3">
   @csrf
   <div class="flex flex-col gap-2">
-    <h3 class="text-lg text-slate-600 font-bold">{{ __('client.personal_information') }}</h3>
+    <h3 class="text-xl text-slate-600 font-bold">{{ __('client.personal_information') }}</h3>
     <div class="w-full flex flex-col md:flex-row gap-4">
       <x-client::input type="text" name="first_name" label="{{ __('client.first_name') }}" value="{{ old('first_name', $user->first_name) }}" required/>
       <x-client::input type="text" name="last_name" label="{{ __('client.last_name') }}" value="{{ old('last_name', $user->last_name) }}" required/>
@@ -36,7 +36,7 @@
         <x-client::input type="tel" name="phone_number" label="{{ __('client.phone_number') }}" value="{{ old('phone_number', $user->billing->phone_number) }}" :required="Billmora::hasAuth('form_required', 'phone_number')"/>
       @endif
     </div>
-    <h3 class="text-lg text-slate-600 font-bold mt-4">{{ __('client.billing_information') }}</h3>
+    <h3 class="text-xl text-slate-600 font-bold mt-4">{{ __('client.billing_information') }}</h3>
     <div class="w-full flex flex-col md:flex-row gap-4">
       @if (!Billmora::hasAuth('form_disable', 'company_name'))
         <x-client::input type="text" name="company_name" label="{{ __('client.company_name') }}" value="{{ old('company_name', $user->billing->company_name) }}" :required="Billmora::hasAuth('form_required', 'company_name')"/>
