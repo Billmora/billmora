@@ -37,4 +37,5 @@ Route::group(['prefix' => 'account', 'middleware' => 'auth'], function () {
   Route::post('/detail', [Account\DetailController::class, 'update'])->name('client.account.detail.update');
 
   Route::get('/security', [Account\SecurityController::class, 'index'])->name('client.account.security');
+  Route::post('/security/password', [Account\SecurityController::class, 'updatePassword'])->name('client.account.security.password.update');
 });
