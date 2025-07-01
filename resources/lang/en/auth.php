@@ -30,4 +30,5 @@ return [
   'password_expired_request' => 'Your requested password reset has expired.',
   'password_email_mismatch' => 'The email address does not match our records. Please try again.',
   'password_reset_success' => 'Your password has been successfully reset. You can login now.',
+  'password_current_mismatch' => 'The provided password does not match your current password.',
 ];
