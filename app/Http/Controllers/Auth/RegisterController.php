@@ -36,7 +36,7 @@ class RegisterController extends Controller
             'country' => 'nullable|string|in:' . implode(',', array_keys(config('utils.countries'))),
             'state' => 'nullable|string',
             'postcode' => 'nullable|string',
-            'password' => 'nullable|string|min:8|confirmed',
+            'password' => 'required|string|min:8|confirmed',
         ];
         
         CaptchaService::verifyOrFail('user_register', $request);
