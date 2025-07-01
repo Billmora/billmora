@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+* {
+    color-scheme: light;
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+@theme {
+    /* light */
+    --color-billmora-1: #f5f9ff;
+    --color-billmora-2: #fbfdff;
+    --color-billmora-3: #eaf3ff;
+    --color-billmora-4: #dbecff;
+    --color-billmora-5: #cae2ff;
+    --color-billmora-6: #b7d4ff;
+
+    --color-billmora-primary: #3384ff;
+    --color-billmora-primary-hover: #4f95fe;
+    --color-billmora-secondary: #3384ff20;
+    --color-billmora-secondary-hover: #3384ff;
+
+    --color-billmora-ring-1: #3385ff88;
+}
