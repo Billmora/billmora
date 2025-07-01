@@ -3,6 +3,7 @@
 return [
   'home' => 'Home',
   'client_area' => 'Client Area',
+  'dashboard' => 'Dashboard',
   'store' =>  'Store',
   'news' => 'News',
   'support' => 'Support',
@@ -12,11 +13,12 @@ return [
   'privacy_policy' => "Privacy Policy",
   'sign_in' => 'Sign In',
   'sign_up' => 'Sign Up',
-
+  'sign_out' => 'Sign Out',
   'preference_title' => 'Preference',
   'preference_description' => 'Choose your language and currency are using.',
   'language' => 'Language',
-
   'save' => 'Save',
   'cancel' => 'Cancel',
+  'required_symbol' => '*',
+  'optional_symbol' => '(Optional)',
 ];
