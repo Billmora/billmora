@@ -31,7 +31,6 @@ class DetailController extends Controller
             'country' => 'nullable|string|in:' . implode(',', array_keys(config('utils.countries'))),
             'state' => 'nullable|string',
             'postcode' => 'nullable|string',
-            'password' => 'nullable|string|min:8|confirmed',
         ];
 
         foreach ($requiredFields as $field) {
