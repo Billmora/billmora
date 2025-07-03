@@ -12,17 +12,28 @@
   </div>
 @endif
 <div class="flex flex-col md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-3">
-  <form action="{{ route('client.account.security.password.update') }}" method="POST" class="w-full h-auto bg-billmora-2 p-6 rounded-lg border-3 border-billmora-3">
+  <form action="{{ route('client.account.security.password.update') }}" method="POST" class="w-full h-h-fit bg-billmora-2 p-6 rounded-lg border-3 border-billmora-3">
     @csrf
-      <div class="flex flex-col gap-4">
-        <h3 class="text-xl text-slate-600 font-bold">{{ __('client.update_password') }}</h3>
-        <div class="space-y-2">
-          <x-client::input type="password" name="current_password" label="{{ __('client.current_password') }}" required />
-          <x-client::input type="password" name="new_password" label="{{ __('client.new_password') }}" required />
-          <x-client::input type="password" name="new_password_confirmation" label="{{ __('client.confirm_new_password') }}" required />
-        </div>
-        <x-client::button icon="lucide-save" class="ml-auto">{{ __('common.save') }}</x-client::button>
+    <div class="flex flex-col gap-4">
+      <h3 class="text-xl text-slate-600 font-bold">{{ __('client.update_password') }}</h3>
+      <div class="space-y-2">
+        <x-client::input type="password" name="current_password" label="{{ __('client.current_password') }}" required />
+        <x-client::input type="password" name="new_password" label="{{ __('client.new_password') }}" required />
+        <x-client::input type="password" name="new_password_confirmation" label="{{ __('client.confirm_new_password') }}" required />
       </div>
+      <x-client::button icon="lucide-save" class="ml-auto">{{ __('common.save') }}</x-client::button>
+    </div>
+  </form>
+  <form action="{{ route('client.account.security.email.update') }}" method="POST" class="w-full h-fit bg-billmora-2 p-6 rounded-lg border-3 border-billmora-3">
+    @csrf
+    <div class="flex flex-col gap-4">
+      <h3 class="text-xl text-slate-600 font-bold">{{ __('client.update_email') }}</h3>
+      <div class="space-y-2">
+        <x-client::input type="email" name="new_email" label="{{ __('client.new_email') }}" required />
+        <x-client::input type="password" name="password" label="{{ __('client.password') }}" required />
+      </div>
+      <x-client::button icon="lucide-save" class="ml-auto">{{ __('common.save') }}</x-client::button>
+    </div>
   </form>
 </div>
 @endsection

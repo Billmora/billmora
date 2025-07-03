@@ -38,4 +38,5 @@ Route::group(['prefix' => 'account', 'middleware' => 'auth'], function () {
 
   Route::get('/security', [Account\SecurityController::class, 'index'])->name('client.account.security');
   Route::post('/security/password', [Account\SecurityController::class, 'updatePassword'])->name('client.account.security.password.update');
+  Route::post('/security/email', [Account\SecurityController::class, 'updateEmail'])->name('client.account.security.email.update');
 });
