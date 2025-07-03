@@ -23,6 +23,7 @@ return [
     'new_password' => 'New Password',
     'confirm_new_password' => 'Confirm New Password',
     'update_email' => 'Update Email Address',
+    'new_email' => 'New Email',
     '2fa_title' => 'Two-Factor Authentication',
     '2fa_description' => 'Two-Factor Authentication (2FA) adds an extra layer of security to your account by requiring a second form of verification in addition to your password.',
     'save_changes' => 'Save Changes',
