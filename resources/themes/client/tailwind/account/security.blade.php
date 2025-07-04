@@ -30,7 +30,7 @@
       <h3 class="text-xl text-slate-600 font-bold">{{ __('client.update_email') }}</h3>
       <div class="space-y-2">
         <x-client::input type="email" name="new_email" label="{{ __('client.new_email') }}" required />
-        <x-client::input type="password" name="password" label="{{ __('client.password') }}" required />
+        <x-client::input type="password" name="password" label="{{ __('client.confirm_password') }}" required />
       </div>
       <x-client::button icon="lucide-save" class="ml-auto">{{ __('common.save') }}</x-client::button>
     </div>
