@@ -19,6 +19,8 @@ return [
   'language' => 'Language',
   'save' => 'Save',
   'cancel' => 'Cancel',
+  'enable' => 'Enable',
+  'disable' => 'Disable',
   'required_symbol' => '*',
   'optional_symbol' => '(Optional)',
 ];
