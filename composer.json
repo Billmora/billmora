@@ -22,6 +22,7 @@
         "laravel/framework": "^12.1.1",
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.6",
+        "mallardduck/blade-lucide-icons": "^1.23",
         "pragmarx/google2fa-laravel": "^2.3",
         "secondnetwork/blade-tabler-icons": "^3.31"
     },
