@@ -1,6 +1,10 @@
 @extends('client::layouts.app')
 
 @section('body')
+<x-client::modal modal="2faModal" title="Test" description="Test 123" icon="lucide-fingerprint">
+  {{--  --}}
+  <p>Test 123</p>
+</x-client::modal>
 @if(session('success'))
   <div class="w-full flex mx-auto mb-6">
     <x-client::alert variant="success" icon="lucide-badge-check" description="{{ session('success') }}" />
@@ -21,7 +25,7 @@
         <x-client::input type="password" name="new_password" label="{{ __('client.new_password') }}" required />
         <x-client::input type="password" name="new_password_confirmation" label="{{ __('client.confirm_new_password') }}" required />
       </div>
-      <x-client::button icon="lucide-save" class="ml-auto">{{ __('common.save') }}</x-client::button>
+      <x-client::button icon="lucide-save" class="ml-auto font-semibold">{{ __('common.save') }}</x-client::button>
     </div>
   </form>
   <form action="{{ route('client.account.security.email.update') }}" method="POST" class="w-full h-fit bg-billmora-2 p-6 rounded-lg border-3 border-billmora-3">
@@ -32,8 +36,17 @@
         <x-client::input type="email" name="new_email" label="{{ __('client.new_email') }}" required />
         <x-client::input type="password" name="password" label="{{ __('client.confirm_password') }}" required />
       </div>
-      <x-client::button icon="lucide-save" class="ml-auto">{{ __('common.save') }}</x-client::button>
+      <x-client::button icon="lucide-save" class="ml-auto font-semibold">{{ __('common.save') }}</x-client::button>
     </div>
   </form>
+  <div class="w-full h-fit bg-billmora-2 p-6 rounded-lg border-3 border-billmora-3">
+    <div class="flex flex-col gap-4">
+      <h3 class="text-xl text-slate-600 font-bold">{{ __('client.2fa_title') }}</h3>
+      <div class="space-y-2">
+        <p class="text-slate-500">{{ __('client.2fa_description') }}</p>
+        <x-client::button modal="2faModal" icon="lucide-check" class="ml-auto font-semibold">{{ __('common.enable') }}</x-client::button>
+      </div>
+    </div>
+  </div>
 </div>
 @endsection
