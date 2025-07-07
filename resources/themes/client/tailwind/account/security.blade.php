@@ -1,10 +1,6 @@
 @extends('client::layouts.app')
 
 @section('body')
-<x-client::modal modal="2faModal" title="Test" description="Test 123" icon="lucide-fingerprint">
-  {{--  --}}
-  <p>Test 123</p>
-</x-client::modal>
 @if(session('success'))
   <div class="w-full flex mx-auto mb-6">
     <x-client::alert variant="success" icon="lucide-badge-check" description="{{ session('success') }}" />
@@ -44,7 +40,7 @@
       <h3 class="text-xl text-slate-600 font-bold">{{ __('client.2fa_title') }}</h3>
       <div class="space-y-2">
         <p class="text-slate-500">{{ __('client.2fa_description') }}</p>
-        <x-client::button modal="2faModal" icon="lucide-check" class="ml-auto font-semibold">{{ __('common.enable') }}</x-client::button>
+        <x-client::link href="/auth/two-factor/setup" variant="primary" icon="lucide-check" class="w-fit ml-auto font-semibold">{{ __('common.enable') }}</x-client::link>
       </div>
     </div>
   </div>
