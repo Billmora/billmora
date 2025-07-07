@@ -64,10 +64,10 @@
   @default
     <button
       {{ $attributes->class("
-        flex items-center gap-2 w-fit rounded-lg text-white transition-colors duration-300 ease-in-out cursor-pointer focus:outline-none focus:ring-3 focus:ring-billmora-ring-1
+        flex items-center gap-2 px-3 py-2 rounded-lg text-white transition-colors duration-300 ease-in-out cursor-pointer focus:outline-none focus:ring-3 focus:ring-billmora-ring-1
         " . ($active
-            ? ' text-billmora-primary'
-            : ' text-slate-700 hover:text-billmora-primary')
+            ? ' bg-billmora-primary text-white'
+            : ' bg-billmora-primary hover:bg-billmora-primary-hover hover:text-white')
         )
       }}
       @if ($modal)
