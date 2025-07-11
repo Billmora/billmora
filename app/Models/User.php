@@ -6,6 +6,7 @@ use App\Models\UserEmailVerification;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -113,5 +114,13 @@ class User extends Authenticatable implements FilamentUser
     public function billing()
     {
         return $this->hasOne(UserBilling::class);
+    }
+
+    /**
+     * Relationship: Two-Factor Authentication.
+     */
+    public function twoFactor(): HasOne
+    {
+        return $this->hasOne(UserTwoFactor::class);
     }
 }
