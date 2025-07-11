@@ -21,6 +21,9 @@ return [
   'cancel' => 'Cancel',
   'enable' => 'Enable',
   'disable' => 'Disable',
+  'continue' => 'Continue',
+  'download' => 'Download',
+  'disable_alert' => 'Are you sure want to disable :title?',
   'required_symbol' => '*',
   'optional_symbol' => '(Optional)',
 ];

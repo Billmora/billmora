@@ -31,4 +31,8 @@ return [
   'password_email_mismatch' => 'The email address does not match our records. Please try again.',
   'password_reset_success' => 'Your password has been successfully reset. You can login now.',
   'password_current_mismatch' => 'The provided password does not match your current password.',
+  '2fa_step_1' => '1. Scan QR code using an authenticator app or enter the key manually',
+  '2fa_step_2' => '2. Enter the 6 digit code from your authenticator app',
+  '2fa_step_3' => '3. Continue to the next step',
+  'totp_invalid' => 'The entered TOTP Code is invalid.',
 ];
