@@ -22,38 +22,6 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
-        
-        Schema::create('user_billings', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('phone_number')->nullable();
-            $table->string('company_name')->nullable();
-            $table->string('street_address_1')->nullable();
-            $table->string('street_address_2')->nullable();
-            $table->string('city')->nullable();
-            $table->string('country')->nullable();
-            $table->string('state')->nullable();
-            $table->string('postcode')->nullable();
-            $table->timestamps();
-        });
-
-        Schema::create('user_email_verifications', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('token')->unique();
-            $table->timestamp('expires_at');
-            $table->timestamp('verified_at')->nullable();
-            $table->timestamps();
-        });
-
-        Schema::create('user_password_resets', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('token')->unique();
-            $table->timestamp('expires_at');
-            $table->timestamp('verified_at')->nullable();
-            $table->timestamps();
-        });
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
