@@ -19,6 +19,9 @@ return Application::configure(dirname(__DIR__))
         $middleware->group('maintenance', [
             \App\Http\Middleware\MaintenanceMiddleware::class,
         ]);
+        $middleware->group('2fa', [
+            \App\Http\Middleware\TwoFactorMiddleware::class,
+        ]);
         $middleware->redirectGuestsTo(fn (Request $request) => route('client.login'));
         $middleware->redirectUsersTo(fn (Request $request) => route('client.dashboard'));
     })

@@ -5,7 +5,7 @@ use App\Http\Controllers\Client;
 use App\Http\Controllers\Client\Account;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => ['auth', 'maintenance']], function () {
+Route::group(['middleware' => ['auth', 'maintenance', '2fa']], function () {
   Route::get('/dashboard', [Client\DashboardController::class, 'index'])->name('client.dashboard');
 });
 
@@ -47,7 +47,7 @@ Route::group(['prefix' => 'auth'], function () {
   });
 });
 
-Route::group(['prefix' => 'account', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'account', 'middleware' => ['auth', '2fa']], function () {
   Route::get('/detail', [Account\DetailController::class, 'index'])->name('client.account.detail');
   Route::post('/detail', [Account\DetailController::class, 'update'])->name('client.account.detail.update');
 
