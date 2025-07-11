@@ -44,6 +44,6 @@ class VerifyController extends Controller
         $user->twoFactor()->update(['enabled' => true]);
         session()->put('2fa_passed', true);
 
-        return redirect()->route('client.account.security')->with('success', __('client.2fa_enabled'));
+        return redirect()->route('client.dashboard')->with('success', __('client.2fa_enabled'));
     }
 }
