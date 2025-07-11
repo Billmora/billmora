@@ -47,6 +47,12 @@ class LoginController extends Controller
             }
     
             $request->session()->regenerate();
+            
+            if ($user->twoFactor?->enabled) {
+                session()->forget('2fa_passed');
+                return redirect()->route('client.two-factor.verify');
+            }
+
             return redirect()->intended('/');
         }
     
@@ -66,6 +72,8 @@ class LoginController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        session()->forget('2fa_passed');
 
         return redirect('/');
     }
