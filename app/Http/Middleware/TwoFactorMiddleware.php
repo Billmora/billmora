@@ -18,7 +18,7 @@ class TwoFactorMiddleware
     {
         $user = Auth::user();
 
-        if ($user->twoFactor?->enabled) {
+        if ($user->twoFactor?->enabled && !session()->get('2fa_passed')) {
             return redirect()->route('client.two-factor.verify');
         }
 
