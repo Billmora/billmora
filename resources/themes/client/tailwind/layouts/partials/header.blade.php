@@ -94,17 +94,17 @@
           <x-lucide-x class="h-8 w-auto text-slate-400 cursor-pointer" x-on:click="navOpen = false"/>
         </div>
         <div class="space-y-2 md:flex md:flex-row md:space-y-0 md:space-x-2">
-          <x-client::link href="/dashboard" variant="{{ request()->is('/dasboard*') ? 'primary' : 'text' }}" icon="lucide-layout-dashboard" active="{{ request()->is('/dashboard*') ? true : false }}">
+          <x-client::link href="/dashboard" variant="{{ request()->is('dashboard*') ? 'primary' : 'text' }}" icon="lucide-layout-dashboard" active="{{ request()->is('dashboard') ? true : false }}">
             <span class="font-semibold">{{ __('common.dashboard') }}</span>
           </x-client::link>
-          <x-client::link href="/store" variant="{{ request()->is('/store*') ? 'primary' : 'text' }}" icon="lucide-store" active="{{ request()->is('/store*') ? true : false }}">
+          <x-client::link href="/store" variant="{{ request()->is('store*') ? 'primary' : 'text' }}" icon="lucide-store" active="{{ request()->is('store*') ? true : false }}">
             <span class="font-semibold">{{ __('common.store') }}</span>
           </x-client::link>
-          <x-client::link href="/news" variant="{{ request()->is('/news') ? 'primary' : 'text' }}" icon="lucide-newspaper" active="{{ request()->is('/news') ? true : false }}">
+          <x-client::link href="/news" variant="{{ request()->is('news') ? 'primary' : 'text' }}" icon="lucide-newspaper" active="{{ request()->is('news') ? true : false }}">
             <span class="font-semibold">{{ __('common.news') }}</span>
           </x-client::link>
           @if (Billmora::getGeneral('term_tos'))
-            <x-client::link variant="{{ request()->is('/terms-of-service*') ? 'primary' : 'text' }}" href="{{ Billmora::getGeneral('term_tos_url') ? Billmora::getGeneral('term_tos_url') : '/terms-of-service' }}" icon="lucide-handshake" active="{{ request()->is('/terms-of-service*') ? true : false }}">
+            <x-client::link variant="{{ request()->is('terms-of-service*') ? 'primary' : 'text' }}" href="{{ Billmora::getGeneral('term_tos_url') ? Billmora::getGeneral('term_tos_url') : 'terms-of-service' }}" icon="lucide-handshake" active="{{ request()->is('terms-of-service*') ? true : false }}">
               <span class="font-semibold">{{ __('common.terms_of_service') }}</span>
             </x-client::link>
           @endif
