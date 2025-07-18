@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cleanup for Release
+        run: |
+          rm -rf node_modules tests .github .vscode
+          rm -f .env .env.* .gitignore README.md package*.json vite.config.js
+
+      - name: Archive Release
+        run: |
+          tar -czf billmora.tar.gz * .*
+
+      - name: Add checksum to changelog
+        run: |
+          SUM=`sha256sum billmora.tar.gz`
+          echo $SUM > checksum.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          prerelease: ${{ contains(github.ref, 'rc') || contains(github.ref, 'beta') || contains(github.ref, 'alpha') }}
+          files: |
+            billmora.tar.gz
+            checksum.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
