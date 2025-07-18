@@ -24,9 +24,6 @@ jobs:
           extensions: bcmath, curl, mbstring, openssl, pdo, tokenizer, xml, zip
           tools: composer:v2
 
-      - name: Install PHP dependencies
-        run: composer install --no-interaction --no-dev --optimize-autoloader
-
       - name: Cleanup unnecessary files
         run: |
           rm -rf node_modules vendor tests .git .github
