@@ -7,45 +7,42 @@ on:
 
 jobs:
   release:
-    name: Release
+    name: Release Billmora
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
-      - name: Checkout source
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          node-version: 20
-          cache: npm
+          php-version: 8.4
+          extensions: bcmath, curl, mbstring, openssl, pdo, tokenizer, xml, zip
+          tools: composer:v2
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --no-dev --optimize-autoloader
 
-      - name: Cleanup for Release
+      - name: Cleanup unnecessary files
         run: |
-          rm -rf node_modules tests .github .vscode
-          rm -f .env .env.* .gitignore README.md package*.json vite.config.js
+          rm -rf node_modules vendor tests .git .github
 
-      - name: Archive Release
-        run: |
-          tar -czf billmora.tar.gz * .*
+      - name: Create release archive
+        run: tar -czf billmora.tar.gz * .env.example
 
-      - name: Add checksum to changelog
-        run: |
-          SUM=`sha256sum billmora.tar.gz`
-          echo $SUM > checksum.txt
+      - name: Generate checksum
+        run: sha256sum billmora.tar.gz > checksum.txt
 
-      - name: Create GitHub Release
+      - name: Create GitHub release
         uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           draft: true
           prerelease: ${{ contains(github.ref, 'rc') || contains(github.ref, 'beta') || contains(github.ref, 'alpha') }}
           files: |
             billmora.tar.gz
             checksum.txt
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
