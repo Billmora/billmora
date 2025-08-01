@@ -45,7 +45,8 @@ class ThemeServiceProvider extends ServiceProvider
 
             View::share("{$role}Theme", $themeInfo);
 
-            View::addNamespace($role, $basePath);
+            $viewPath = "{$basePath}/views";
+            View::addNamespace($role, $viewPath);
 
             $componentPath = "{$basePath}/views/components";
             Blade::anonymousComponentPath($componentPath, $role);
