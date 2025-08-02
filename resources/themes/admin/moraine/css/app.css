@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+* {
+    color-scheme: light;
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+@theme {
+    --color-billmora-1: #f4f7fe;
+    --color-billmora-2: #eceeff;
+    --color-billmora-3: #e0e2ff;
+    --color-billmora-4: #d6d9ff;
+    --color-billmora-5: #cdd0ff;
+    --color-billmora-6: #c3c6ff;
+
+    --color-billmora-primary: #7267ef;
+    --color-billmora-primary-hover: #6659e0;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-billmora-2);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-billmora-primary);
+    border-radius: 4px;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-billmora-primary) var(--color-billmora-2);
+}
+
+#sidemenu {
+    scrollbar-gutter: stable;
+}
+#sidemenu::-webkit-scrollbar {
+    width: 6px;
+}
+#sidemenu::-webkit-scrollbar-thumb {
+    background-color: var(--color-billmora-primary);
+    border-radius: 4px;
+}
+#sidemenu::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+#sidemenu {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-billmora-primary) transparent;
+}
