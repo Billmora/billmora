@@ -16,6 +16,8 @@
 /public/build
 /public/hot
 /public/storage
+# Exclude build assets themes during active development
+/public/themes
 /storage/*.key
 /storage/pail
 /vendor
