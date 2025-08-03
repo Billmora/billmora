@@ -1,6 +1,6 @@
 <header class="sticky top-5 right-0 flex justify-between items-center w-full bg-white p-4 border-2 border-billmora-2 rounded-2xl">
   <!-- Toggle Sidebar -->
-  <button id="toggleSidebar" class="block xl:hidden bg-billmora-1 hover:bg-billmora-primary p-2.5 mr-4 text-slate-600 hover:text-white rounded-full transition-colors duration-300">
+  <button id="toggleSidebar" class="block xl:hidden bg-billmora-1 hover:bg-billmora-primary p-2.5 mr-4 text-slate-600 hover:text-white rounded-full transition-colors duration-300 cursor-pointer">
     <x-lucide-menu class="w-auto h-5" />
   </button>
 
@@ -11,12 +11,12 @@
   </div>
 
   <!-- Search (MOBILE) -->
-  <button class="block md:hidden bg-billmora-1 hover:bg-billmora-primary p-2.5 mr-auto text-slate-600 hover:text-white rounded-full transition-colors duration-300">
+  <button class="block md:hidden bg-billmora-1 hover:bg-billmora-primary p-2.5 mr-auto text-slate-600 hover:text-white rounded-full transition-colors duration-300 cursor-pointer">
     <x-lucide-search class="w-auto h-5" />
   </button>
 
   <!-- Language -->
-  <button class="flex gap-2 items-center bg-billmora-1 hover:bg-billmora-primary p-2 rounded-lg transition-colors duration-300 group">
+  <button class="flex gap-2 items-center bg-billmora-1 hover:bg-billmora-primary p-2 rounded-lg transition-colors duration-300 group cursor-pointer">
     <x-flag-country-uk class="w-auto h-5 pointer-events-none" />
     <span class="font-semibold text-slate-600 group-hover:text-white">English</span>
   </button>
