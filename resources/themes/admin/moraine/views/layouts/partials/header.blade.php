@@ -7,7 +7,11 @@
   <!-- Search (DESKTOP) -->
   <div class="hidden md:block relative mr-auto group">
     <x-lucide-search class="w-auto h-5 absolute top-1/2 left-2 -translate-y-1/2 pointer-events-none text-slate-400 group-focus-within:text-billmora-primary transition-colors duration-150" />
-    <input type="text" placeholder="Search something..." class="bg-billmora-1 px-2 py-2 pl-9 placeholder:text-slate-500 outline-none ring-billmora-primary group-focus-within:ring-2 rounded-lg transition-all" />
+    <input type="text" placeholder="Search something..." class="w-[400px] bg-billmora-1 px-2 py-2 pl-9 placeholder:text-slate-500 outline-none ring-billmora-primary group-focus-within:ring-2 rounded-lg transition-all" />
+    <div class="absolute top-1/2 right-2 -translate-y-1/2 flex gap-2 pointer-events-none text-slate-400 group-focus-within:text-billmora-primary transition-colors duration-150">
+      <span class="bg-white px-1 py-0.25 text-sm font-semibold rounded-lg">CTRL</span>
+      <span class="bg-white px-1 py-0.25 text-sm font-semibold rounded-lg">K</span>
+    </div>
   </div>
 
   <!-- Search (MOBILE) -->
