@@ -4,19 +4,21 @@
     <x-lucide-menu class="w-auto h-5" />
   </button>
 
-  <!-- Search (DESKTOP) -->
-  <div class="hidden md:block relative mr-auto group">
-    <x-lucide-search class="w-auto h-5 absolute top-1/2 left-2 -translate-y-1/2 pointer-events-none text-slate-400 group-focus-within:text-billmora-primary transition-colors duration-150" />
-    <input type="text" placeholder="Search something..." class="w-[400px] bg-billmora-1 px-2 py-2 pl-9 placeholder:text-slate-500 outline-none ring-billmora-primary group-focus-within:ring-2 rounded-lg transition-all" />
-    <div class="absolute top-1/2 right-2 -translate-y-1/2 flex gap-2 pointer-events-none text-slate-400 group-focus-within:text-billmora-primary transition-colors duration-150">
-      <span class="bg-white px-1 py-0.25 text-sm font-semibold rounded-lg">CTRL</span>
-      <span class="bg-white px-1 py-0.25 text-sm font-semibold rounded-lg">K</span>
-    </div>
+  <!-- Quick Search (DESKTOP) -->
+  <div class="hidden md:block w-[400px] mr-auto">
+    <button type="button" id="quickSearch" class="flex gap-2 items-center w-full bg-billmora-1 px-2 py-2 text-slate-500 text-start outline-none ring-billmora-primary hover:ring-2 rounded-lg transition-all cursor-pointer group">
+      <x-lucide-search class="w-auto h-5 pointer-events-none group-hover:text-billmora-primary transition-colors duration-150" />
+      <span class="text-slate-400">Quick Search...</span>
+      <div class="flex gap-2 ml-auto pointer-events-none text-slate-400 group-hover:text-billmora-primary transition-colors duration-150">
+        <span class="bg-white px-1 py-0.25 text-sm font-semibold rounded-lg">CTRL</span>
+        <span class="bg-white px-1 py-0.25 text-sm font-semibold rounded-lg">K</span>
+      </div>
+    </button>
   </div>
 
-  <!-- Search (MOBILE) -->
-  <button class="block md:hidden bg-billmora-1 hover:bg-billmora-primary p-2.5 mr-auto text-slate-600 hover:text-white rounded-full transition-colors duration-300 cursor-pointer">
-    <x-lucide-search class="w-auto h-5" />
+  <!-- Quick Search (MOBILE) -->
+  <button type="button" id="quickSearch" class="block md:hidden bg-billmora-1 hover:bg-billmora-primary p-2.5 mr-auto text-slate-600 hover:text-white rounded-full transition-colors duration-150 cursor-pointer">
+    <x-lucide-search class="w-auto h-5 pointer-events-none" />
   </button>
 
   <!-- Language -->
@@ -37,7 +39,7 @@
     <!-- Dropdown Menu -->
     <div class="absolute top-16 right-0 flex w-[300px] flex-col gap-2 bg-white p-4 border-2 border-billmora-2 rounded-2xl" role="menu"
         x-cloak x-show="isOpen || openedWithKeyboard"
-        x-transition x-trap="openedWithKeyboard"
+        x-transition
         x-on:click.outside="isOpen = false, openedWithKeyboard = false">
       {{-- Dropdown Content --}}
       <div class="flex flex-col gap-2">
