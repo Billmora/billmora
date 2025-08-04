@@ -14,7 +14,7 @@
                 <input x-ref="input" x-model="query" @keydown.escape="close"
                     @keydown.arrow-up.prevent="moveSelection(-1)" @keydown.arrow-down.prevent="moveSelection(1)"
                     @keydown.enter.prevent="selectItem()" type="text"
-                    placeholder="Quick Search... e.g. setting:General"
+                    placeholder="{{ __('admin/common.quick_search') }} e.g. setting:General"
                     class="w-full bg-billmora-1 p-2 pl-9 placeholder:text-slate-500 rounded-lg outline-none focus:ring-2 ring-billmora-primary" />
                 <button
                     class="block bg-billmora-1 hover:bg-billmora-primary p-2.5 text-slate-600 hover:text-white rounded-full transition-colors duration-300 cursor-pointer"
@@ -47,7 +47,7 @@
                 </template>
                 <!-- Empty state -->
                 <div x-show="!results.length && query" class="text-center text-slate-500">
-                    No results found.
+                    {{ __('admin/common.quick_search_not_found') }}
                 </div>
             </div>
 
@@ -60,16 +60,16 @@
                     <div class="bg-billmora-1 p-1 text-sm text-slate-600 font-semibold rounded-lg">
                         <x-lucide-arrow-down class="w-auto h-5" />
                     </div>
-                    <span class="font-semibold text-slate-600">to navigate</span>
+                    <span class="font-semibold text-slate-600">{{ __('admin/common.quick_search_navigate') }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
                     <span
                         class="bg-billmora-1 p-1 text-sm text-slate-600 font-semibold rounded-lg uppercase">enter</span>
-                    <span class="font-semibold text-slate-600">to select</span>
+                    <span class="font-semibold text-slate-600">{{ __('admin/common.quick_search_select') }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
                     <span class="bg-billmora-1 p-1 text-sm text-slate-600 font-semibold rounded-lg uppercase">esc</span>
-                    <span class="font-semibold text-slate-600">to close</span>
+                    <span class="font-semibold text-slate-600">{{ __('admin/common.quick_search_close') }}</span>
                 </div>
             </div>
         </div>

@@ -8,7 +8,7 @@
   <div class="hidden md:block w-[400px] mr-auto">
     <button type="button" id="quickSearch" class="flex gap-2 items-center w-full bg-billmora-1 px-2 py-2 text-slate-500 text-start outline-none ring-billmora-primary hover:ring-2 rounded-lg transition-all cursor-pointer group">
       <x-lucide-search class="w-auto h-5 pointer-events-none group-hover:text-billmora-primary transition-colors duration-150" />
-      <span class="text-slate-400">Quick Search...</span>
+      <span class="text-slate-400">{{ __('admin/common.quick_search') }}</span>
       <div class="flex gap-2 ml-auto pointer-events-none text-slate-400 group-hover:text-billmora-primary transition-colors duration-150">
         <span class="bg-white px-1 py-0.25 text-sm font-semibold rounded-lg">CTRL</span>
         <span class="bg-white px-1 py-0.25 text-sm font-semibold rounded-lg">K</span>
@@ -68,16 +68,16 @@
       <hr class="border-t-2 border-billmora-2 mt-2 mb-4">
       <a href="#" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
         <x-lucide-layers-2 class="w-5 h-auto" />
-        <span class="font-semibold">Portal Area</span>
+        <span class="font-semibold">{{ __('admin/common.portal_area') }}</span>
       </a>
       <a href="#" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
         <x-lucide-copy class="w-5 h-auto" />
-        <span class="font-semibold">Client Area</span>
+        <span class="font-semibold">{{ __('admin/common.client_area') }}</span>
       </a>
       <hr class="border-t-2 border-billmora-2 mt-4 mb-2">
       <button class="flex gap-2 items-center hover:bg-red-400 px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300 cursor-pointer" role="menuitem">
         <x-lucide-log-out class="w-5 h-auto" />
-        <span class="font-semibold">Sign Out</span>
+        <span class="font-semibold">{{ __('admin/common.sign_out') }}</span>
       </button>
     </div>
 </div>
