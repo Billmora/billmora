@@ -22,10 +22,29 @@
   </button>
 
   <!-- Language -->
-  <button class="flex gap-2 items-center bg-billmora-1 hover:bg-billmora-primary p-2 rounded-lg transition-colors duration-300 group cursor-pointer">
-    <x-flag-country-uk class="w-auto h-5 pointer-events-none" />
-    <span class="font-semibold text-slate-600 group-hover:text-white">English</span>
-  </button>
+  <div class="relative w-fit"
+      x-data="{ isOpen: false, openedWithKeyboard: false }">
+    {{-- Language Toggle Button --}}
+    <button type="button" class="flex gap-2 items-center bg-billmora-1 hover:bg-billmora-primary p-2 rounded-lg transition-colors duration-300 group cursor-pointer"
+        x-on:click="isOpen = ! isOpen" 
+        aria-haspopup="true">
+      <x-dynamic-component component="flag-country-{{ strtolower($langActive['country']) }}" class="w-auto h-5 pointer-events-none" />
+      <span class="font-semibold text-slate-600 group-hover:text-white">{{ $langActive['name'] }}</span>
+    </button>
+    {{-- Language Dropdown Menu --}}
+    <div class="absolute top-16 right-0 flex w-[300px] max-h-[500px] flex-col gap-2 bg-white p-4 border-2 border-billmora-2 rounded-2xl overflow-y-auto " role="menu"
+        x-cloak x-show="isOpen || openedWithKeyboard"
+        x-transition
+        x-on:click.outside="isOpen = false, openedWithKeyboard = false">
+      {{-- Language Dropdown Content --}}
+      @foreach ($langs as $lang)
+        <a href="{{ route('common.language.update', ['lang' => $lang['lang']]) }}" class="w-full flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300 cursor-pointer">
+          <x-dynamic-component component="flag-country-{{ strtolower($lang['country']) }}" class="w-auto h-5 pointer-events-none" />
+          <span class="font-semibold">{{ $lang['name'] }}</span>
+        </a>
+      @endforeach
+    </div>
+  </div>
 
   <!-- Profile -->
   <div class="relative w-fit"
