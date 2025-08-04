@@ -14,9 +14,11 @@ use Locale;
 class LanguageMiddleware
 {
     /**
-     * Handle an incoming request.
+     * Set active locale for the request and share available languages with all views.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  \Illuminate\Http\Request  $request  Incoming HTTP request instance.
+     * @param  \Closure  $next  Callback that forwards the request to the next middleware/controller.
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle(Request $request, Closure $next): Response
     {

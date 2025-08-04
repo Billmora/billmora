@@ -8,8 +8,9 @@ use Illuminate\Http\Request;
 class QuickSearchController extends Controller
 {
     /**
-     * Handle quick search request (AlpineJS).
-     * Returns JSON result to be consumed by command bar search UI.
+     * Return list of searchable admin items for the global quick-search modal.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function search()
     {
@@ -48,7 +49,6 @@ class QuickSearchController extends Controller
             ],
         ];
 
-        // Return search results as JSON for frontend consumption
         return response()->json($data);
     }
 }

@@ -19,7 +19,13 @@ class ThemeServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap services.
+     * Register default theme information, view namespaces, and Blade anonymous components
+     * for each predefined role (admin, client, portal, email).
+     *
+     * This dynamically shares theme metadata with views, registers paths for Blade templates,
+     * and auto-registers component aliases found under each theme’s components directory.
+     *
+     * @return void
      */
     public function boot(): void
     {
