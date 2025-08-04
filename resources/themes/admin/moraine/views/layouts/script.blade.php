@@ -26,3 +26,11 @@
   backdrop.addEventListener('click', closeSidebar);
   close.addEventListener('click', closeSidebar);
 </script>
+<script>
+    // Bind click on any #quickSearch element to trigger opening the global quick-search modal
+    document.querySelectorAll('#quickSearch').forEach(button => {
+        button.addEventListener('click', () => {
+            window.dispatchEvent(new CustomEvent('openQuickSearch'));
+        });
+    });
+</script>

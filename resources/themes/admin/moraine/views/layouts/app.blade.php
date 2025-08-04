@@ -25,6 +25,7 @@
 
     </div>
   </div>
+  <x-admin::quick-search />
   {{-- Scripts --}}
   @include('admin::layouts.script')
   @livewireScripts
