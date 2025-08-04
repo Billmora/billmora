@@ -9,18 +9,17 @@ use Illuminate\Support\Facades\Session;
 
 class LanguageController extends Controller
 {
-    public function update(Request $request)
+    public function update($lang)
     {
-        $language = $request->language;
         $langsAllowed = collect(File::directories(resource_path('lang')))
-        ->map(fn ($path) => basename($path))
-        ->toArray();
+            ->map(fn ($path) => basename($path))
+            ->toArray();
 
-        if (!in_array($language, $langsAllowed)) {
+        if (!in_array($lang, $langsAllowed)) {
             return redirect()->back();
         }
 
-        Session::put('locale', $language);
+        Session::put('locale', $lang);
         
         return redirect()->back();
     }
