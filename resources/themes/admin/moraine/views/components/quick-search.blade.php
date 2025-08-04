@@ -24,7 +24,7 @@
             </div>
 
             <!-- Search result list -->
-            <div class="h-full md:max-h-80 overflow-y-auto">
+            <div x-ref="resultsContainer" class="h-full md:max-h-80 overflow-y-auto">
                 <template x-if="results.length">
                     <div class="space-y-2">
                         <!-- Result items -->
@@ -138,11 +138,11 @@
 
                 // auto-scroll to keep selected item visible
                 this.$nextTick(() => {
-                    const selectedElement = this.$el.querySelector(`a:nth-child(${this.selectedIndex + 1})`);
-                    selectedElement?.scrollIntoView({
-                        block: 'nearest'
-                    });
-                });
+                    const container = this.$refs.resultsContainer
+                    const items = container.querySelectorAll('a')
+                    const selectedElement = items[this.selectedIndex]
+                    selectedElement?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+                })
             },
 
             // redirect to selected item URL
