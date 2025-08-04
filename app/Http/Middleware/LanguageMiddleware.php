@@ -22,19 +22,31 @@ class LanguageMiddleware
     {
         $locale = Session::get('locale', config('app.locale'));
         App::setLocale($locale);
-
+        
         $langsDirectory = File::directories(resource_path('lang'));
-
+        
         $langs = collect($langsDirectory)->mapWithKeys(function ($path) use ($locale) {
-            $code = basename($path);
-            return [$code => Locale::getDisplayName($code, $locale)];
-        })->toArray();
+            $localeCode = basename($path);
+            
+            $name = Locale::getDisplayLanguage($localeCode, $locale);
+            $country = strtolower(Locale::getRegion($localeCode));
 
-        $langActive = Locale::getDisplayName($locale, $locale);
+            return [
+                $localeCode => [
+                    'name' => $name,
+                    'lang' => $localeCode,
+                    'country' => $country,
+                ]
+            ];
+        })->toArray();
 
         View::share([
             'langs' => $langs,
-            'langActive' => $langActive,
+            'langActive' => [
+                'name' => Locale::getDisplayLanguage($locale, $locale),
+                'lang' => $locale,
+                'country' => strtolower(Locale::getRegion($locale)),
+            ]
         ]);
 
         return $next($request);
