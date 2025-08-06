@@ -17,7 +17,7 @@
 
       <!-- Content -->
       <main>
-        @section('body')
+        @yield('body')
       </main>
 
       {{-- Footer --}}
