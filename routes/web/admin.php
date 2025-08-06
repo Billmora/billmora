@@ -3,13 +3,27 @@
 use App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Route;
 
+/**
+ * Admin interface routes.
+ *
+ * Prefix: /admin
+ */
 Route::group(['prefix' => 'admin'], function () {
-  Route::get('/', [Admin\DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/', [Admin\DashboardController::class, 'index'])->name('admin.dashboard');
 
-  Route::group(['prefix' => 'settings'], function () {
-    Route::get('/', [Admin\SettingsController::class, 'index'])->name('admin.settings');
-  });
+    /**
+     * Admin settings interface routes.
+     *
+     * Prefix: /admin/settings
+     */
+    Route::group(['prefix' => 'settings'], function () {
+        Route::get('/', [Admin\SettingsController::class, 'index'])->name('admin.settings');
+    });
 
-  // Global command-bar search endpoint (used by AlpineJS component in admin UI)
-  Route::get('/quick-search', [Admin\QuickSearchController::class, 'search'])->name('admin.quick-search');
+    /**
+     * Admin quick search routes.
+     *
+     * Prefix: /admin/quick-search
+     */
+    Route::get('/quick-search', [Admin\QuickSearchController::class, 'search'])->name('admin.quick-search');
 });
