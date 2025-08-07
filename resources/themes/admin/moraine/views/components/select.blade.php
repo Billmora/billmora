@@ -28,7 +28,7 @@
                 errorVisible ? 'border-red-400' : 'border-billmora-2'
             ]"
             {{ $attributes }}>
-            <option class="text-slate-500" selected disabled>Choose an options</option>
+            <option class="text-slate-500" selected disabled>{{ __('admin/common.choose_option') }}</option>
             {{ $slot }}
         </select>
         <x-lucide-chevrons-up-down

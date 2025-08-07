@@ -13,6 +13,7 @@ return [
 
     'symbol_required' => '*',
     'symbol_optional' => '(optional)',
+    'choose_option' => 'Choose an options',
 
     'enable' => 'Enable',
     'disable' => 'Disable',
