@@ -7,8 +7,8 @@
             <x-lucide-bolt class="w-auto h-10 text-white" />
         </div>
         <div>
-           <h4 class="text-lg text-slate-700 font-semibold">General</h4> 
-           <p class="text-slate-500">Configure a general settings.</p>
+           <h4 class="text-lg text-slate-700 font-semibold">{{ __('admin/settings/general.title') }}</h4> 
+           <p class="text-slate-500">{{ __('admin/settings/general.description') }}</p>
         </div>
     </a>
 </div>
