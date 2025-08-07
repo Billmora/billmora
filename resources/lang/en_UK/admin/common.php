@@ -11,5 +11,8 @@ return [
     'quick_search_select' => 'to select',
     'quick_search_close' => 'to close',
 
+    'symbol_required' => '*',
+    'symbol_optional' => '(optional)',
+
     'footer' => 'Copyright © :year :brand - Made with ❤️',
 ];
