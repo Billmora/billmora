@@ -17,6 +17,9 @@ return [
 
     'enable' => 'Enable',
     'disable' => 'Disable',
+    'save' => 'Save',
+    'cancel' => 'Cancel',
+    'update' => 'Update',
 
     'footer' => 'Copyright © :year :brand - Made with ❤️',
 ];
