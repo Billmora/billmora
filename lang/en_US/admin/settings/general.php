@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'title' => 'General',
-    'description' => 'Configure a general setting.',
+    'title' => 'General settings',
+    'description' => 'Configure general settings for the system.',
     'tabs' => [
         'company' => 'Company',
     ],
