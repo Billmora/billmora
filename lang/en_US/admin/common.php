@@ -21,5 +21,8 @@ return [
     'cancel' => 'Cancel',
     'update' => 'Update',
 
+    'save_success' => ':item have been saved',
+    'save_failed' => 'Failed to save :item',
+
     'footer' => 'Copyright © :year :brand - Made with ❤️',
 ];
