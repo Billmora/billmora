@@ -5,6 +5,7 @@
     'value' => old($name),
     'error' => $errors->first($name),
     'required' => null,
+    'helper' => null,
 ])
 
 <div x-data="{ errorVisible: {{ $error ? 'true' : 'false' }} }" class="w-full">
@@ -33,5 +34,9 @@
 
     <template x-if="errorVisible">
         <p class="mt-1 text-sm text-red-400 font-semibold">{{ $error }}</p>
+    </template>
+
+    <template x-if="!errorVisible && {{ $helper ? 'true' : 'false' }}">
+        <p class="mt-1 text-sm text-slate-500">{{ $helper }}</p>
     </template>
 </div>
