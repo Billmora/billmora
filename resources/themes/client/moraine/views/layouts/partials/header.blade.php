@@ -30,13 +30,13 @@
   </div>
 
   <!-- Profile -->
-  <div class="relative w-fit"
+  <div class="relative w-fit flex items-center"
       x-data="{ isOpen: false, openedWithKeyboard: false }">
     <!-- Toggle Button -->
     <button type="button" class="cursor-pointer ml-4"
         x-on:click="isOpen = ! isOpen" 
         aria-haspopup="true">
-      <img src="https://media.billmora.com/logo/main-invert-bgwhite-small.png" alt="billmora profile" class="w-10 h-10 rounded-full">
+      <img src="{{ Billmora::getGeneral('company_logo') }}" alt="billmora profile" class="w-10 h-10 rounded-full">
     </button>
     <!-- Dropdown Menu -->
     <div class="absolute top-16 right-0 flex w-[300px] flex-col gap-2 bg-white p-4 border-2 border-billmora-2 rounded-2xl" role="menu"
