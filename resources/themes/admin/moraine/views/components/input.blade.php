@@ -26,7 +26,7 @@
         <input type="{{ $type }}" name="{{ $name }}" id="{{ $name }}" value="{{ $value }}"
             x-on:input="errorVisible = false"
             :class="[
-                'w-full text-slate-700 rounded-lg px-3 py-2 border-2 border-billmora-2 outline-none focus:ring-2 ring-billmora-primary cursor-text',
+                'w-full text-slate-700 rounded-lg px-3 py-2 border-2 border-billmora-2 outline-none focus:ring-2 ring-billmora-primary placeholder:text-slate-500 cursor-text',
                 errorVisible ? 'border-red-400' : 'border-billmora-2'
             ]"
             {{ $attributes }} />
