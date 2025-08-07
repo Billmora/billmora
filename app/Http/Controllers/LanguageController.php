@@ -12,7 +12,7 @@ class LanguageController extends Controller
     /**
      * Update the currently active language (locale) for the session.
      *
-     * @param  string  $lang  Locale code requested by the user, e.g. “en_UK”, “id_ID”.
+     * @param  string  $lang  Locale code requested by the user, e.g. “en_US”, “id_ID”.
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update($lang)

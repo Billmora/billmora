@@ -31,7 +31,7 @@ class SettingSeeder extends Seeder
             ['category' => 'general', 'key' => 'company_description', 'value' => 'Billmora is a free and open-source billing management platform designed to automate recurring services and simplify operations for hosting businesses.'],
             ['category' => 'general', 'key' => 'company_portal', 'value' => true],
             ['category' => 'general', 'key' => 'company_date_format', 'value' => 'd/m/Y'],
-            ['category' => 'general', 'key' => 'company_language', 'value' => 'en_UK'],
+            ['category' => 'general', 'key' => 'company_language', 'value' => 'en_US'],
             ['category' => 'general', 'key' => 'company_maintenance', 'value' => false],
             ['category' => 'general', 'key' => 'company_maintenance_url', 'value' => null],
             ['category' => 'general', 'key' => 'company_maintenance_message', 'value' => 'We are currently performing maintenance and will be back shortly.'],
