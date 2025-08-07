@@ -92,4 +92,36 @@ class BillmoraService
 
         return $data;
     }
+    
+    /**
+     * Retrieve a general setting value by its key.
+     *
+     * This is a shortcut method that internally calls 'getSetting()' using
+     * the 'general' category.
+     *
+     * @param string $key     The key of the setting to retrieve.
+     * @param mixed  $default The default value to return if the setting is not found.
+     *
+     * @return mixed The value of the setting or the default if not found.
+     */
+    public static function getGeneral(string $key, mixed $default = null): mixed
+    {
+        return self::getSetting('general', $key, $default);
+    }
+
+    /**
+     * Store or update general settings.
+     *
+     * This is a shortcut method that internally calls 'setSetting()' using
+     * the 'general' category.
+     *
+     * @param array $data An associative array of key-value pairs to store or update.
+     *
+     * @return void
+     */
+    public static function setGeneral(array $data): void
+    {
+        self::setSetting('general', $data);
+    }
+
 }
