@@ -26,7 +26,7 @@ Route::group(['prefix' => 'admin'], function () {
          * Prefix: /admin/settings/general
          */
         Route::group(['prefix' => 'general'], function () {
-            Route::get('/', [Settings\General\CompanyController::class, 'index'])->name('admin.settings.general');
+            Route::get('/', [Settings\General\CompanyController::class, 'index'])->name('admin.settings.general.company');
             Route::post('/', [Settings\General\CompanyController::class, 'store'])->name('admin.settings.general.company.store');
         });
     });
