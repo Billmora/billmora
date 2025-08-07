@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Admin\Settings;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -18,6 +19,15 @@ Route::group(['prefix' => 'admin'], function () {
      */
     Route::group(['prefix' => 'settings'], function () {
         Route::get('/', [Admin\SettingsController::class, 'index'])->name('admin.settings');
+
+        /**
+         * Admin general settings interface routes.
+         *
+         * Prefix: /admin/settings/general
+         */
+        Route::group(['prefix' => 'general'], function () {
+            Route::get('/', [Settings\General\CompanyController::class, 'index'])->name('admin.settings.general');
+        });
     });
 
     /**
