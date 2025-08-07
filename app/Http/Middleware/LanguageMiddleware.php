@@ -25,7 +25,7 @@ class LanguageMiddleware
         $locale = Session::get('locale', config('app.locale'));
         App::setLocale($locale);
         
-        $langsDirectory = File::directories(resource_path('lang'));
+        $langsDirectory = File::directories(base_path('lang'));
         
         $langs = collect($langsDirectory)->mapWithKeys(function ($path) use ($locale) {
             $localeCode = basename($path);

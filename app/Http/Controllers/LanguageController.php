@@ -17,7 +17,7 @@ class LanguageController extends Controller
      */
     public function update($lang)
     {
-        $langsAllowed = collect(File::directories(resource_path('lang')))
+        $langsAllowed = collect(File::directories(base_path('lang')))
             ->map(fn ($path) => basename($path))
             ->toArray();
 
