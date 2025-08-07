@@ -14,5 +14,8 @@ return [
     'symbol_required' => '*',
     'symbol_optional' => '(optional)',
 
+    'enable' => 'Enable',
+    'disable' => 'Disable',
+
     'footer' => 'Copyright © :year :brand - Made with ❤️',
 ];
