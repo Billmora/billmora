@@ -80,9 +80,9 @@ return [
 
     'locale' => env('APP_LOCALE', 'en_UK'),
 
-    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en_UK'),
+    'fallback_locale' => env('APP_FALLBACK_LOCALE', env('APP_LOCALE', 'en_UK')),
 
-    'faker_locale' => env('APP_FAKER_LOCALE', 'en_UK'),
+    'faker_locale' => env('APP_FAKER_LOCALE', env('APP_LOCALE', 'en_UK')),
 
     /*
     |--------------------------------------------------------------------------
