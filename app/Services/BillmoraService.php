@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Models\Setting;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -122,6 +124,68 @@ class BillmoraService
     public static function setGeneral(array $data): void
     {
         self::setSetting('general', $data);
+    }
+
+    /**
+     * Update or append environment variables in the '.env' file.
+     *
+     * This method accepts an array of key-value pairs and updates or appends them to the '.env' file.
+     * If a key already exists, its value will be replaced; otherwise, it will be appended.
+     *
+     * @param array<string, mixed> $data  The environment variables to set.
+     *
+     * @throws \RuntimeException If the '.env' file does not exist.
+     */
+    public static function setEnv(array $data): void
+    {
+        $validated = self::validateData($data);
+        $path = base_path('.env');
+
+        $env = File::get($path);
+
+        foreach ($validated as $key => $value) {
+            $formattedValue = self::formatEnv($value);
+
+            if (preg_match("/^{$key}=.*/m", $env)) {
+                $env = preg_replace("/^{$key}=.*/m", "{$key}={$formattedValue}", $env);
+            } else {
+                $env .= "\n{$key}={$formattedValue}";
+            }
+        }
+
+        File::put($path, $env);
+        Artisan::call('config:clear');
+    }
+
+    /**
+     * Format a value for use in a '.env' file.
+     *
+     * This method ensures the value is properly escaped and wrapped in quotes if needed.
+     * Handles booleans, nulls, numbers, and strings with special characters.
+     *
+     * @param mixed $value The value to format.
+     *
+     * @return string The formatted value ready for insertion into the '.env' file.
+     */
+    private static function formatEnv(mixed $value): string
+    {
+        if (empty($value)) {
+            return '';
+        }
+    
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+    
+        if (is_numeric($value)) {
+            return (string) $value;
+        }
+    
+        if (is_string($value) && preg_match('/[^\w.\-+\/]/', $value)) {
+            return sprintf('"%s"', addcslashes($value, '\\"'));
+        }
+    
+        return $value;
     }
 
 }
