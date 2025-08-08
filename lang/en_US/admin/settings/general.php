@@ -5,6 +5,7 @@ return [
     'description' => 'Configure general settings for the system.',
     'tabs' => [
         'company' => 'Company',
+        'ordering' => 'Ordering',
     ],
 
     'company_name_label' => 'Company Name',
@@ -29,13 +30,18 @@ return [
     'company_maintenance_message_helper' => 'Enter a short message to display on the maintenance page.',
 
     'ordering_redirect_label' => 'Ordering Redirect',
-    'ordering_redirect_helper' => 'on progress',
+    'ordering_redirect_helper' => 'Choose where customers are redirected after placing an order.',
+    'ordering_redirect_option' => [
+        'complete' => 'Just show the order completed page (no payment redirect)',
+        'invoice' => 'Automatically take the user to the invoice',
+        'payment' => 'Automatically forward the user to the payment gateway',
+    ],
     'ordering_grace_label' => 'Ordering Grace',
-    'ordering_grace_helper' => 'on progress',
+    'ordering_grace_helper' => 'Set the number of days before an unpaid order is automatically canceled.',
     'ordering_tos_label' => 'Ordering Tos',
-    'ordering_tos_helper' => 'on progress',
+    'ordering_tos_helper' => 'Require customers to agree to the Terms of Service before placing an order.',
     'ordering_notes_label' => 'Ordering Notes',
-    'ordering_notes_helper' => 'on progress',
+    'ordering_notes_helper' => 'Allow customers to add special notes or instructions when placing an order.',
 
     'invoice_pdf_label' => 'Invoice Pdf',
     'invoice_pdf_helper' => 'on progress',
