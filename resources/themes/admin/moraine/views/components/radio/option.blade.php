@@ -1,7 +1,7 @@
 @props([
     'name',
     'label' => null,
-    'value' => old($name),
+    'value' => null,
     'checked' => false,
 ])
 

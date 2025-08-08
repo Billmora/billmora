@@ -2,7 +2,7 @@
     'name',
     'type' => 'text',
     'label' => null,
-    'value' => old($name),
+    'value' => null,
     'error' => $errors->first($name),
     'required' => null,
     'helper' => null,
