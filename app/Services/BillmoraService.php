@@ -33,16 +33,6 @@ class BillmoraService
      */
     public static function getSetting(string $category, string $key, mixed $default = null): mixed
     {
-        static $tableExists = null;
-
-        if ($tableExists === null) {
-            $tableExists = Schema::hasTable('settings');
-        }
-
-        if (!$tableExists) {
-            return $default;
-        }
-
         $cacheKey = self::CACHE_PREFIX . $category . '_' . $key;
 
         return Cache::remember($cacheKey, self::CACHE_TTL, function() use ($category, $key, $default) {
