@@ -14,11 +14,7 @@
             <label for="{{ $name }}" class="block text-slate-600 font-semibold mb-0.5">
                 {{ $label }}
             </label>
-            @if ($required)
-                <span class="text-slate-600">{{ __('admin/common.symbol_required') }}</span>
-            @else
-                <span class="text-slate-600">{{ __('admin/common.symbol_optional') }}</span>
-            @endif
+            <span class="text-slate-600">{{ $required ? __('admin/common.symbol_required') : __('admin/common.symbol_optional') }}</span>
         </div>
     @endif
 
