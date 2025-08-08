@@ -28,11 +28,9 @@
             {{ $attributes }} />
     </div>
 
-    <template x-if="errorVisible">
-        <p class="mt-1 text-sm text-red-400 font-semibold">{{ $error }}</p>
-    </template>
-
-    <template x-if="!errorVisible && {{ $helper ? 'true' : 'false' }}">
+    @if ($error)
+        <p class="mt-1 text-sm text-red-400 font-semibold" x-show="errorVisible">{{ $error }}</p>
+    @elseif ($helper)
         <p class="mt-1 text-sm text-slate-500">{{ $helper }}</p>
-    </template>
+    @endif
 </div>
