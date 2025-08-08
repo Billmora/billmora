@@ -20,6 +20,7 @@
     @endif
 
     <label class="inline-flex items-center cursor-pointer">
+        <input type="hidden" name="{{ $name }}" value="0">
         <input type="checkbox" name="{{ $name }}" id="{{ $name }}" value="{{ $value }}"
             class="sr-only peer" @checked($checked)>
         <div
