@@ -6,13 +6,18 @@
         @if (session('success'))
             <x-admin::alert variant="success" title="{{ session('success') }}" />
         @endif
-        <div class="flex gap-4 bg-white w-full p-4 border-2 border-billmora-2 rounded-2xl overflow-x-auto">
-            <a href="{{ route('admin.settings.general.company') }}"
-                class="flex items-center gap-2 px-3 py-2 hover:bg-billmora-primary text-slate-700 hover:text-white rounded-lg transition ease-in-out duration-150">
-                <x-lucide-building class="w-auto h-5" />
-                <span>{{ __('admin/settings/general.tabs.company') }}</span>
-            </a>
-        </div>
+        <x-admin::settings.tabs :tabs="[
+            [
+                'route' => 'admin.settings.general.company',
+                'icon' => 'lucide-building',
+                'label' => 'admin/settings/general.tabs.company',
+            ],
+            [
+                'route' => 'admin.settings.general.ordering',
+                'icon' => 'lucide-truck',
+                'label' => 'admin/settings/general.tabs.ordering',
+            ],
+        ]" active="{{ Route::currentRouteName() }}" />
         <div class="grid md:grid-cols-2 gap-5">
             <div class="flex flex-col gap-4 bg-white p-4 border-2 border-billmora-2 rounded-2xl">
                 <x-admin::input type="text" name="company_name"
