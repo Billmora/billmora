@@ -59,7 +59,7 @@
                     helper="{{ __('admin/settings/general.company_language_helper') }}" required>
                     @foreach ($langs as $lang)
                         <option value="{{ $lang['lang'] }}"
-                            {{ Billmora::getGeneral('company_language') == $lang['lang'] ? 'selected' : '' }}>
+                            {{ old('company_language', Billmora::getGeneral('company_language')) == $lang['lang'] ? 'selected' : '' }}>
                             {{ $lang['name'] }}</option>
                     @endforeach
                 </x-admin::select>
