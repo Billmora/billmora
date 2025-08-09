@@ -7,6 +7,7 @@ return [
         'company' => 'Company',
         'ordering' => 'Ordering',
         'invoice' => 'Invoice',
+        'credit' => 'Credit',
     ],
 
     'company_name_label' => 'Company Name',
@@ -58,13 +59,13 @@ return [
     'invoice_cancelation_handling_helper' => 'Automatically cancel unpaid invoices when a service cancellation request is submitted.',
 
     'credit_use_label' => 'Credit Use',
-    'credit_use_helper' => 'on progress',
+    'credit_use_helper' => 'Allow customers to top up account credit and use it to pay invoices.',
     'credit_min_deposit_label' => 'Credit Min Deposit',
-    'credit_min_deposit_helper' => 'on progress',
+    'credit_min_deposit_helper' => 'Set the minimum amount customers can deposit into their account credit.',
     'credit_max_deposit_label' => 'Credit Max Deposit',
-    'credit_max_deposit_helper' => 'on progress',
+    'credit_max_deposit_helper' => 'Set the maximum amount customers can deposit into their account credit.',
     'credit_max_label' => 'Credit Max',
-    'credit_max_helper' => 'on progress',
+    'credit_max_helper' => 'Set the maximum account credit balance a customer can hold.',
 
     'affiliate_use_label' => 'Affiliate Use',
     'affiliate_use_helper' => 'on progress',

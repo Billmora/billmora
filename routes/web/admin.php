@@ -32,6 +32,8 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('/ordering', [Settings\General\OrderingController::class, 'store'])->name('admin.settings.general.ordering.store');
             Route::get('/invoice', [Settings\General\InvoiceController::class, 'index'])->name('admin.settings.general.invoice');
             Route::post('/invoice', [Settings\General\InvoiceController::class, 'store'])->name('admin.settings.general.invoice.store');
+            Route::get('/credit', [Settings\General\CreditController::class, 'index'])->name('admin.settings.general.credit');
+            Route::post('/credit', [Settings\General\CreditController::class, 'store'])->name('admin.settings.general.credit.store');
         });
     });
 
