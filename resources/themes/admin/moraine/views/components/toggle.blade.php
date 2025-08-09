@@ -21,7 +21,7 @@
     <label class="inline-flex items-center cursor-pointer">
         <input type="hidden" name="{{ $name }}" value="0">
         <input type="checkbox" name="{{ $name }}" id="{{ $name }}" value="1"
-            class="sr-only peer" @checked($checked)>
+            class="sr-only peer" @checked(old($name, $checked))>
         <div
             class="relative w-11 h-6 bg-billmora-2 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-billmora-primary after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-billmora-2 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-billmora-primary">
         </div>
