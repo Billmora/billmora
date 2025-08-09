@@ -22,6 +22,11 @@
                 'icon' => 'lucide-file',
                 'label' => 'admin/settings/general.tabs.invoice',
             ],
+            [
+                'route' => 'admin.settings.general.credit',
+                'icon' => 'lucide-badge-cent',
+                'label' => 'admin/settings/general.tabs.credit',
+            ],
         ]" active="{{ Route::currentRouteName() }}" />
         <div class="grid md:grid-cols-2 gap-5">
             <div class="flex flex-col gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
