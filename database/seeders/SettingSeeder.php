@@ -43,6 +43,8 @@ class SettingSeeder extends Seeder
             ['category' => 'general', 'key' => 'invoice_pdf_size', 'value' => 'A4'],
             ['category' => 'general', 'key' => 'invoice_pdf_font', 'value' => 'Plus Jakarta Sans'],
             ['category' => 'general', 'key' => 'invoice_mass_payment', 'value' => true],
+            ['category' => 'general', 'key' => 'invoice_choose_payment', 'value' => false],
+            ['category' => 'general', 'key' => 'invoice_cancelation_handling', 'value' => false],
             ['category' => 'general', 'key' => 'credit_use', 'value' => false],
             ['category' => 'general', 'key' => 'credit_min_deposit', 'value' => 1],
             ['category' => 'general', 'key' => 'credit_max_deposit', 'value' => 1000000],

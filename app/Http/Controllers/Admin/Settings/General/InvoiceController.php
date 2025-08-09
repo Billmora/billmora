@@ -20,6 +20,8 @@ class InvoiceController extends Controller
             'invoice_pdf_size' => ['required', 'in:letter,A4'],
             'invoice_pdf_font' => ['required', 'string'],
             'invoice_mass_payment' => ['nullable', 'boolean'],
+            'invoice_choose_payment' => ['nullable', 'boolean'],
+            'invoice_cancelation_handling' => ['nullable', 'boolean'],
         ]);
 
         Billmora::setGeneral($validated);
