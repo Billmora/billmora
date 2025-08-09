@@ -55,7 +55,7 @@
                     helper="{{ __('admin/settings/general.company_date_format_helper') }}" required>
                     @foreach (config('utils.date_format') as $value => $label)
                         <option value="{{ $value }}"
-                            {{ Billmora::getGeneral('company_date_format') == $value ? 'selected' : '' }}>
+                            {{ old('company_date_format', Billmora::getGeneral('company_date_format')) == $value ? 'selected' : '' }}>
                             {{ $label }}
                         </option>
                     @endforeach
