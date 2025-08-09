@@ -18,7 +18,7 @@
                 'label' => 'admin/settings/general.tabs.ordering',
             ],
         ]" active="{{ Route::currentRouteName() }}" />
-        <div class="grid md:grid-cols-2 gap-4 bg-white p-4 border-2 border-billmora-2 rounded-2xl">
+        <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
             <x-admin::radio.group
                 name="ordering_redirect"
                 label="{{ __('admin/settings/general.ordering_redirect_label') }}"

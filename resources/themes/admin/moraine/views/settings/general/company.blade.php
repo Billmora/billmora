@@ -19,7 +19,7 @@
             ],
         ]" active="{{ Route::currentRouteName() }}" />
         <div class="grid md:grid-cols-2 gap-5">
-            <div class="flex flex-col gap-4 bg-white p-4 border-2 border-billmora-2 rounded-2xl">
+            <div class="flex flex-col gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
                 <x-admin::input type="text" name="company_name"
                     label="{{ __('admin/settings/general.company_name_label') }}"
                     helper="{{ __('admin/settings/general.company_name_helper') }}"
@@ -37,7 +37,7 @@
                     helper="{{ __('admin/settings/general.company_description_helper') }}"
                     required>{{ old('company_description', Billmora::getGeneral('company_description')) }}</x-admin::textarea>
             </div>
-            <div class="flex flex-col gap-4 bg-white p-4 border-2 border-billmora-2 rounded-2xl">
+            <div class="flex flex-col gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
                 <x-admin::select name="company_portal" label="{{ __('admin/settings/general.company_portal_label') }}"
                     helper="{{ __('admin/settings/general.company_portal_helper') }}" required>
                     <option value="1" {{ Billmora::getGeneral('company_portal') ? 'selected' : '' }}>
@@ -65,7 +65,7 @@
                 </x-admin::select>
             </div>
         </div>
-        <div class="grid md:grid-cols-2 gap-4 bg-white p-4 border-2 border-billmora-2 rounded-2xl">
+        <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
             <div class="flex flex-col gap-4">
                 <x-admin::select name="company_maintenance"
                     label="{{ __('admin/settings/general.company_maintenance_label') }}"
