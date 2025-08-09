@@ -17,6 +17,11 @@
                 'icon' => 'lucide-truck',
                 'label' => 'admin/settings/general.tabs.ordering',
             ],
+            [
+                'route' => 'admin.settings.general.invoice',
+                'icon' => 'lucide-file',
+                'label' => 'admin/settings/general.tabs.invoice',
+            ],
         ]" active="{{ Route::currentRouteName() }}" />
         <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
             <x-admin::radio.group
