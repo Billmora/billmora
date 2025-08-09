@@ -6,6 +6,7 @@ return [
     'tabs' => [
         'company' => 'Company',
         'ordering' => 'Ordering',
+        'invoice' => 'Invoice',
     ],
 
     'company_name_label' => 'Company Name',
@@ -43,14 +44,14 @@ return [
     'ordering_notes_label' => 'Ordering Notes',
     'ordering_notes_helper' => 'Allow customers to add special notes or instructions when placing an order.',
 
-    'invoice_pdf_label' => 'Invoice Pdf',
-    'invoice_pdf_helper' => 'on progress',
-    'invoice_pdf_size_label' => 'Invoice Pdf Size',
-    'invoice_pdf_size_helper' => 'on progress',
-    'invoice_pdf_font_label' => 'Invoice Pdf Font',
-    'invoice_pdf_font_helper' => 'on progress',
+    'invoice_pdf_label' => 'Invoice PDF',
+    'invoice_pdf_helper' => 'Enable PDF generation for invoices, allowing customers to download or receive them via email.',
+    'invoice_pdf_size_label' => 'Invoice PDF Size',
+    'invoice_pdf_size_helper' => 'Select the paper size for generated invoice PDFs.',
+    'invoice_pdf_font_label' => 'Invoice PDF Font',
+    'invoice_pdf_font_helper' => 'Enter the Google Font name to use in invoice PDFs.',
     'invoice_mass_payment_label' => 'Invoice Mass Payment',
-    'invoice_mass_payment_helper' => 'on progress',
+    'invoice_mass_payment_helper' => 'Allow customers to pay multiple unpaid invoices in a single transaction.',
 
     'credit_use_label' => 'Credit Use',
     'credit_use_helper' => 'on progress',
