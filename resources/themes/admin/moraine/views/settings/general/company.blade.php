@@ -43,13 +43,8 @@
                     required>{{ old('company_description', Billmora::getGeneral('company_description')) }}</x-admin::textarea>
             </div>
             <div class="flex flex-col gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
-                <x-admin::select name="company_portal" label="{{ __('admin/settings/general.company_portal_label') }}"
-                    helper="{{ __('admin/settings/general.company_portal_helper') }}" required>
-                    <option value="1" {{ Billmora::getGeneral('company_portal') ? 'selected' : '' }}>
-                        {{ __('admin/common.enable') }}</option>
-                    <option value="0" {{ !Billmora::getGeneral('company_portal') ? 'selected' : '' }}>
-                        {{ __('admin/common.disable') }}</option>
-                </x-admin::select>
+                <x-admin::toggle name="company_portal" label="{{ __('admin/settings/general.company_portal_label') }}"
+                    helper="{{ __('admin/settings/general.company_portal_helper') }}" :checked="Billmora::getGeneral('company_portal')" />
                 <x-admin::select name="company_date_format"
                     label="{{ __('admin/settings/general.company_date_format_label') }}"
                     helper="{{ __('admin/settings/general.company_date_format_helper') }}" required>
@@ -72,18 +67,13 @@
         </div>
         <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
             <div class="flex flex-col gap-4">
-                <x-admin::select name="company_maintenance"
+                <x-admin::toggle name="company_maintenance"
                     label="{{ __('admin/settings/general.company_maintenance_label') }}"
-                    helper="{{ __('admin/settings/general.company_maintenance_helper') }}">
-                    <option value="1" {{ !Billmora::getGeneral('company_portal') ? 'selected' : '' }}>
-                        {{ __('admin/common.enable') }}</option>
-                    <option value="0" {{ Billmora::getGeneral('company_portal') ? 'selected' : '' }}>
-                        {{ __('admin/common.disable') }}</option>
-                </x-admin::select>
+                    helper="{{ __('admin/settings/general.company_maintenance_helper') }}" :checked="Billmora::getGeneral('company_maintenance')" />
                 <x-admin::input type="url" name="company_maintenance_url"
                     label="{{ __('admin/settings/general.company_maintenance_url_label') }}"
                     helper="{{ __('admin/settings/general.company_maintenance_url_helper') }}"
-                    value="{{ old('company_maintenance_url', Billmora::getGeneral('company_maintenance_url')) }}"/>
+                    value="{{ old('company_maintenance_url', Billmora::getGeneral('company_maintenance_url')) }}" />
             </div>
             <x-admin::textarea rows="5" name="company_maintenance_message"
                 label="{{ __('admin/settings/general.company_maintenance_message_label') }}"
