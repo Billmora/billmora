@@ -23,7 +23,7 @@ class InvoiceController extends Controller
     /**
      * Store general invoice settings.
      *
-     * @param \Illuminate\Http\Request $request The incoming HTTP request containing company settings.
+     * @param \Illuminate\Http\Request $request The incoming HTTP request containing invoice settings.
      *
      * @return \Illuminate\Http\RedirectResponse Redirects back with a success flash message.
      *
