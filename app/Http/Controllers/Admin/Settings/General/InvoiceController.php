@@ -8,11 +8,27 @@ use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
+
+    /**
+     * Display the invoice settings view.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         return view('admin::settings.general.invoice');
     }
 
+
+    /**
+     * Store general invoice settings.
+     *
+     * @param \Illuminate\Http\Request $request The incoming HTTP request containing company settings.
+     *
+     * @return \Illuminate\Http\RedirectResponse Redirects back with a success flash message.
+     *
+     * @throws \Illuminate\Validation\ValidationException If validation fails.
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
