@@ -1,6 +1,6 @@
 <div x-data="globalSearch()" x-init="init()" @keydown.window.ctrl.k.prevent="openModal()"
     @keydown.window.meta.k.prevent="openModal()" x-cloak>
-    <div x-show="open" x-transition.opacity class="fixed inset-0 z-50 flex items-start justify-center md:pt-28">
+    <div x-show="open" x-transition.opacity class="fixed inset-0 z-110 flex items-start justify-center md:pt-28">
         <!-- Backdrop -->
         <div class="fixed inset-0 bg-black/25 backdrop-blur-sm" @click="close()" aria-hidden="true"></div>
 
