@@ -51,5 +51,6 @@
         spellcheck: false,
         imageUpload: true,
         charCounterCount: true,
+        toolbarSticky: false,
     });
 </script>
