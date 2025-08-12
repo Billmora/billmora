@@ -14,6 +14,7 @@ return [
     'symbol_required' => '*',
     'symbol_optional' => '(optional)',
     'choose_option' => 'Choose an options',
+    'none' => 'None',
 
     'enable' => 'Enable',
     'disable' => 'Disable',
