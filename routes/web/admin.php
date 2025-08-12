@@ -34,6 +34,8 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('/invoice', [Settings\General\InvoiceController::class, 'store'])->name('admin.settings.general.invoice.store');
             Route::get('/credit', [Settings\General\CreditController::class, 'index'])->name('admin.settings.general.credit');
             Route::post('/credit', [Settings\General\CreditController::class, 'store'])->name('admin.settings.general.credit.store');
+            Route::get('/affiliate', [Settings\General\AffiliateController::class, 'index'])->name('admin.settings.general.affiliate');
+            Route::post('/affiliate', [Settings\General\AffiliateController::class, 'store'])->name('admin.settings.general.affiliate.store');
         });
     });
 

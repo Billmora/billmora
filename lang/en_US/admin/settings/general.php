@@ -8,6 +8,7 @@ return [
         'ordering' => 'Ordering',
         'invoice' => 'Invoice',
         'credit' => 'Credit',
+        'affiliate' => 'Affiliate',
     ],
 
     'company_name_label' => 'Company Name',
@@ -68,13 +69,13 @@ return [
     'credit_max_helper' => 'Set the maximum account credit balance a customer can hold.',
 
     'affiliate_use_label' => 'Affiliate Use',
-    'affiliate_use_helper' => 'on progress',
+    'affiliate_use_helper' => 'Enable the affiliate program, allowing customers to earn commissions for referrals.',
     'affiliate_min_payment_label' => 'Affiliate Min Payment',
-    'affiliate_min_payment_helper' => 'on progress',
+    'affiliate_min_payment_helper' => 'Set the minimum payment amount required for a customer to qualify for the affiliate program.',
     'affiliate_reward_label' => 'Affiliate Reward',
-    'affiliate_reward_helper' => 'on progress',
+    'affiliate_reward_helper' => 'Set the commission percentage affiliates earn from referred customer payments.',
     'affiliate_discount_label' => 'Affiliate Discount',
-    'affiliate_discount_helper' => 'on progress',
+    'affiliate_discount_helper' => 'Set the discount percentage affiliates can offer to referred customers.',
 
     'term_tos_label' => 'Term Tos',
     'term_tos_helper' => 'on progress',
