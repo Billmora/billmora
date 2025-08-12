@@ -6,43 +6,45 @@
         @if (session('success'))
             <x-admin::alert variant="success" title="{{ session('success') }}" />
         @endif
-        <x-admin::settings.tabs :tabs="[
-            [
-                'route' => 'admin.settings.general.company',
-                'icon' => 'lucide-building',
-                'label' => 'admin/settings/general.tabs.company',
-            ],
-            [
-                'route' => 'admin.settings.general.ordering',
-                'icon' => 'lucide-truck',
-                'label' => 'admin/settings/general.tabs.ordering',
-            ],
-            [
-                'route' => 'admin.settings.general.invoice',
-                'icon' => 'lucide-file',
-                'label' => 'admin/settings/general.tabs.invoice',
-            ],
-            [
-                'route' => 'admin.settings.general.credit',
-                'icon' => 'lucide-badge-cent',
-                'label' => 'admin/settings/general.tabs.credit',
-            ],
-            [
-                'route' => 'admin.settings.general.affiliate',
-                'icon' => 'lucide-handshake',
-                'label' => 'admin/settings/general.tabs.affiliate',
-            ],
-            [
-                'route' => 'admin.settings.general.term',
-                'icon' => 'lucide-badge-check',
-                'label' => 'admin/settings/general.tabs.term',
-            ],
-            [
-                'route' => 'admin.settings.general.social',
-                'icon' => 'lucide-circle-fading-plus',
-                'label' => 'admin/settings/general.tabs.social',
-            ],
-        ]" active="{{ Route::currentRouteName() }}" />
+        <x-admin::tabs 
+            :tabs="[
+                [
+                    'route' => route('admin.settings.general.company'),
+                    'icon' => 'lucide-building',
+                    'label' => __('admin/settings/general.tabs.company'),
+                ],
+                [
+                    'route' => route('admin.settings.general.ordering'),
+                    'icon' => 'lucide-truck',
+                    'label' => __('admin/settings/general.tabs.ordering'),
+                ],
+                [
+                    'route' => route('admin.settings.general.invoice'),
+                    'icon' => 'lucide-file',
+                    'label' => __('admin/settings/general.tabs.invoice'),
+                ],
+                [
+                    'route' => route('admin.settings.general.credit'),
+                    'icon' => 'lucide-badge-cent',
+                    'label' => __('admin/settings/general.tabs.credit'),
+                ],
+                [
+                    'route' => route('admin.settings.general.affiliate'),
+                    'icon' => 'lucide-handshake',
+                    'label' => __('admin/settings/general.tabs.affiliate'),
+                ],
+                [
+                    'route' => route('admin.settings.general.term'),
+                    'icon' => 'lucide-badge-check',
+                    'label' => __('admin/settings/general.tabs.term'),
+                ],
+                [
+                    'route' => route('admin.settings.general.social'),
+                    'icon' => 'lucide-circle-fading-plus',
+                    'label' => __('admin/settings/general.tabs.social'),
+                ],
+            ]" 
+            active="{{ request()->fullUrl() }}" />
         <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
             <x-admin::input type="url" min="1" name="social_discord" label="{{ __('admin/settings/general.social_discord_label') }}" helper="{{ __('admin/settings/general.social_discord_helper') }}" value="{{ old('social_discord', Billmora::getGeneral('social_discord')) }}" required/>
             <x-admin::input type="url" min="1" name="social_youtube" label="{{ __('admin/settings/general.social_youtube_label') }}" helper="{{ __('admin/settings/general.social_youtube_helper') }}" value="{{ old('social_youtube', Billmora::getGeneral('social_youtube')) }}" required/>
