@@ -32,6 +32,11 @@
                 'icon' => 'lucide-handshake',
                 'label' => 'admin/settings/general.tabs.affiliate',
             ],
+            [
+                'route' => 'admin.settings.general.term',
+                'icon' => 'lucide-badge-check',
+                'label' => 'admin/settings/general.tabs.term',
+            ],
         ]" active="{{ Route::currentRouteName() }}" />
         <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
             <x-admin::toggle name="affiliate_use" label="{{ __('admin/settings/general.affiliate_use_label') }}" helper="{{ __('admin/settings/general.affiliate_use_helper') }}" :checked="Billmora::getGeneral('affiliate_use')" />
