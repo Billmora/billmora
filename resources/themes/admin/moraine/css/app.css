@@ -17,6 +17,25 @@
     --color-billmora-primary-hover: #6659e0;
 }
 
+.fr-box {
+    @apply border-2 border-billmora-2;
+}
+.fr-error .fr-box {
+    @apply border-red-400;
+}
+.fr-toolbar .fr-newline {
+    @apply hidden!;
+}
+.fr-box .fr-toolbar {
+    @apply border-x-0! border-t-0! border-b-2! border-billmora-2!;
+}
+.fr-box .fr-second-toolbar {
+    @apply border-x-0! border-b-0! border-t-2! border-billmora-2!;
+}
+.fr-box .fr-wrapper {
+    @apply border-none!;
+}
+
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
