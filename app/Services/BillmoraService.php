@@ -117,6 +117,37 @@ class BillmoraService
     }
 
     /**
+     * Retrieve a mail setting value by its key.
+     *
+     * This is a shortcut method that internally calls 'getSetting()' using
+     * the 'mail' category.
+     *
+     * @param string $key     The key of the setting to retrieve.
+     * @param mixed  $default The default value to return if the setting is not found.
+     *
+     * @return mixed The value of the setting or the default if not found.
+     */
+    public static function getMail(string $key, mixed $default = null): mixed
+    {
+        return self::getSetting('mail', $key, $default);
+    }
+
+    /**
+     * Store or update mail settings.
+     *
+     * This is a shortcut method that internally calls 'setSetting()' using
+     * the 'mail' category.
+     *
+     * @param array $data An associative array of key-value pairs to store or update.
+     *
+     * @return void
+     */
+    public static function setMail(array $data): void
+    {
+        self::setSetting('mail', $data);
+    }
+
+    /**
      * Update or append environment variables in the '.env' file.
      *
      * This method accepts an array of key-value pairs and updates or appends them to the '.env' file.
