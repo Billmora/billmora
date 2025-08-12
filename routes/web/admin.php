@@ -38,6 +38,8 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('/affiliate', [Settings\General\AffiliateController::class, 'store'])->name('admin.settings.general.affiliate.store');
             Route::get('/term', [Settings\General\TermController::class, 'index'])->name('admin.settings.general.term');
             Route::post('/term', [Settings\General\TermController::class, 'store'])->name('admin.settings.general.term.store');
+            Route::get('/social', [Settings\General\SocialController::class, 'index'])->name('admin.settings.general.social');
+            Route::post('/social', [Settings\General\SocialController::class, 'store'])->name('admin.settings.general.social.store');
         });
     });
 
