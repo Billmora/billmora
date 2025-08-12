@@ -37,6 +37,11 @@
                 'icon' => 'lucide-badge-check',
                 'label' => 'admin/settings/general.tabs.term',
             ],
+            [
+                'route' => 'admin.settings.general.social',
+                'icon' => 'lucide-circle-fading-plus',
+                'label' => 'admin/settings/general.tabs.social',
+            ],
         ]" active="{{ Route::currentRouteName() }}" />
         <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
             <x-admin::toggle name="credit_use" label="{{ __('admin/settings/general.credit_use_label') }}" helper="{{ __('admin/settings/general.credit_use_helper') }}" :checked="Billmora::getGeneral('credit_use')" />
