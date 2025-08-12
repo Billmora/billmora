@@ -5,7 +5,7 @@
 
 @switch($variant)
   @case('primary')
-    <div class="w-full flex flex-col items-start gap-4 bg-blue-100 p-4 text-blue-800 border-2 border-blue-600 rounded-2xl" role="alert">
+    <div class="w-full flex flex-col items-start gap-4 bg-violet-100 p-4 text-violet-800 border-2 border-violet-600 rounded-2xl" role="alert">
         <div class="flex gap-2 items-center">
             <x-lucide-info class="w-auto h-6" />
             <p class="font-semibold">{{ $title }}</p>
