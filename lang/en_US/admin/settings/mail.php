@@ -5,6 +5,7 @@ return [
     'description' => 'Configure mail settings for the system.',
     'tabs' => [
         'mailer' => 'Mailer',
+        'template' => 'Template',
     ],
 
     'mailer_alert_label' => 'Important: Mailer Settings Source',
