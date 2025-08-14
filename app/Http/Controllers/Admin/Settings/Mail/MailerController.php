@@ -58,6 +58,6 @@ class MailerController extends Controller
             'MAILGUN_ENDPOINT' => $validated['mailer_mailgun_endpoint'],
         ]);
 
-        return redirect()->back()->with('success', __('admin/common.save_success', ['item' => __('admin/settings/general.title')]));
+        return redirect()->back()->with('success', __('admin/common.save_success', ['item' => __('admin/settings/mail.title')]));
     }
 }
