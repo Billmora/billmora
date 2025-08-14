@@ -44,7 +44,7 @@
         toolbarButtons: [
           'bold', 'italic', 'underline', 'strikeThrough', 'fontSize', 'color', 'paragraphStyle', 'paragraphFormat',
           'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'insertLink', 'insertImage', 'insertTable',
-          'emoticons', 'specialCharacters', 'insertHR', 'selectAll', 'help', 'fullscreen',
+          'specialCharacters', 'insertHR', 'selectAll', 'help', 'fullscreen',
         ],
         quickInsertTags: [],
         height: 500,
