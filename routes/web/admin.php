@@ -41,6 +41,16 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/social', [Settings\General\SocialController::class, 'index'])->name('admin.settings.general.social');
             Route::post('/social', [Settings\General\SocialController::class, 'store'])->name('admin.settings.general.social.store');
         });
+
+        /**
+         * Admin mail settings interface routes.
+         *
+         * Prefix: /admin/settings/mail
+         */
+        Route::group(['prefix' => 'mail'], function () {
+            Route::get('/', [Settings\Mail\MailerController::class, 'index'])->name('admin.settings.mail.mailer');
+            Route::post('/', [Settings\Mail\MailerController::class, 'store'])->name('admin.settings.mail.mailer.store');
+        });
     });
 
     /**
