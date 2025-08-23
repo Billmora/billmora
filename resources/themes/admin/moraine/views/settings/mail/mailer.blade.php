@@ -13,6 +13,11 @@
                     'icon' => 'lucide-send',
                     'label' => __('admin/settings/mail.tabs.mailer'),
                 ],
+                [
+                    'route' => route('admin.settings.mail.template'),
+                    'icon' => 'lucide-mailbox',
+                    'label' => __('admin/settings/mail.tabs.template'),
+                ],
             ]" 
             active="{{ request()->fullUrl() }}" />
             <x-admin::alert variant="primary" title="{{ __('admin/settings/mail.mailer_alert_label') }}">{{ __('admin/settings/mail.mailer_alert_helper') }}</x-admin::alert>
