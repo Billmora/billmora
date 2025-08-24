@@ -28,9 +28,30 @@
             <x-admin::tags name="template_cc" label="{{ __('admin/settings/mail.template_cc_label') }}" helper="{{ __('admin/settings/mail.template_cc_helper') }}" :value="old('template_cc', $template->cc)" required />
             <x-admin::tags name="template_bcc" label="{{ __('admin/settings/mail.template_bcc_label') }}" helper="{{ __('admin/settings/mail.template_bcc_helper') }}" :value="old('template_bcc', $template->bcc)" required />
         </div>
-        <x-admin::textarea rows="5" name="template_placeholder" label="{{ __('admin/settings/mail.template_placeholder_label') }}" helper="{{ __('admin/settings/mail.template_placeholder_helper') }}" readonly>
-            {{ collect($template->placeholder)->map(fn ($desc, $key) => '{' . $key . '} = ' . $desc)->implode("\n") }}
-        </x-admin::textarea>
+        <div class="min-w-full flex flex-col gap-1">
+            <label class="block text-slate-600 font-semibold mb-0.5">
+                {{ __('admin/settings/mail.template_placeholder_label') }}
+            </label>
+            <div class="border-2 border-billmora-2 rounded-xl overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="text-slate-600">
+                            <th class="bg-billmora-2 border-r-2 border-billmora-2 px-4 py-2">{{ __('admin/common.key') }}</th>
+                            <th class="bg-billmora-2 border-billmora-2 px-4 py-2">{{ __('admin/common.value') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($template->placeholder as $key => $desc)
+                            <tr class="text-slate-500">
+                                <td class="border-t-2 border-r-2 border-billmora-2 px-4 py-2"><pre>{{ '{' . $key . '}' }}</pre></td>
+                                <td class="border-t-2 border-billmora-2 px-4 py-2"><pre>{{ $desc }}</pre></td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <p class="mt-1 text-sm text-slate-500">{{ __('admin/settings/mail.template_placeholder_helper') }}</p>
+        </div>
     </div>
     <div class="flex gap-4 ml-auto">
         <a href="{{ route('admin.settings.mail.template') }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('admin/common.cancel') }}</a>
