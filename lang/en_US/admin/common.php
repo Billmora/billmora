@@ -15,6 +15,8 @@ return [
     'symbol_optional' => '(optional)',
     'choose_option' => 'Choose an options',
     'none' => 'None',
+    'key' => 'Key',
+    'value' => 'Value',
 
     'active' => 'Active',
     'inactive' => 'Inactive',
