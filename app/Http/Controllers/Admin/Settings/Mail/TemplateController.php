@@ -67,10 +67,14 @@ class TemplateController extends Controller
             'template_subject' => ['required', 'string', 'max:255'],
             'template_body' => ['required', 'string'],
             'template_active' => ['required', 'boolean'],
+            'template_cc' => ['nullable', 'array'],
+            'template_bcc' => ['nullable', 'array'],
         ]);
 
         $template->update([
             'active' => $validated['template_active'],
+            'cc' => $validated['template_cc'],
+            'bcc' => $validated['template_bcc'],
         ]);
 
         $template->translations()->updateOrCreate(
