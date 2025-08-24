@@ -33,6 +33,11 @@ return [
     'mailer_mailgun_endpoint_label' => 'Mailgun Endpoint',
     'mailer_mailgun_endpoint_helper' => 'Enter your Mailgun API endpoint.',
 
+    'translation_missing_title' => 'Translation not found',
+    'translation_missing_desc'  => 'The template for ":lang" does not exist yet. The English (en_US) version is shown instead. If you update, a new translation for ":lang" will be created automatically.',
+    
+    'template_language_label' => 'Template Language',
+    'template_language_helper' => 'Select the language version of this email template. Each template can have multiple translations.',
     'template_key_label' => 'Template Key',
     'template_key_helper' => 'Unique identifier for this email template. Cannot be changed.',
     'template_name_label' => 'Template Name',

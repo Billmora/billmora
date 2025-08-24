@@ -4,15 +4,27 @@
 <form action="{{ route('admin.settings.mail.template.update', $template->id) }}" method="POST" class="flex flex-col gap-5">
     @csrf
     @method('PUT')
+    @if ($noTranslation)
+        <x-admin::alert variant="warning" title="{{ __('admin/settings/mail.translation_missing_title') }}">{{ __('admin/settings/mail.translation_missing_desc', ['lang' => request()->query('lang', config('app.fallback_locale'))]) }}</x-admin::alert>
+    @endif
+    <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+        <x-admin::select name="template_language" label="{{ __('admin/settings/mail.template_language_label') }}" onchange="window.location='{{ url()->current() }}?lang=' + this.value" required>
+            @foreach ($langs as $lang)
+                <option value="{{ $lang['lang'] }}" @selected(request()->query('lang', config('app.fallback_locale')) === $lang['lang'])>
+                    {{ $lang['name'] }}
+                </option>
+            @endforeach
+        </x-admin::select>
+    </div>
     <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <div class="grid md:grid-cols-2 gap-4">
             <x-admin::input type="text" name="template_key" label="{{ __('admin/settings/mail.template_key_label') }}" helper="{{ __('admin/settings/mail.template_key_helper') }}" value="{{ old('key', $template->key) }}" disabled required />
             <x-admin::input type="text" name="template_name" label="{{ __('admin/settings/mail.template_name_label') }}" helper="{{ __('admin/settings/mail.template_name_helper') }}" value="{{ old('name', $template->name) }}" disabled required />
         </div>
-        <x-admin::input type="text" name="template_subject" label="{{ __('admin/settings/mail.template_subject_label') }}" helper="{{ __('admin/settings/mail.template_subject_helper') }}" value="{{ old('subject', $template->subject) }}" required />
-        <x-admin::editor.text name="template_body" label="{{ __('admin/settings/mail.template_body_label') }}" helper="{{ __('admin/settings/mail.template_body_helper') }}" required>{{ old('body', $template->body) }}</x-admin::editor.text>
+        <x-admin::input type="text" name="template_subject" label="{{ __('admin/settings/mail.template_subject_label') }}" helper="{{ __('admin/settings/mail.template_subject_helper') }}" value="{{ old('subject', $translation->subject) }}" required />
+        <x-admin::editor.text name="template_body" label="{{ __('admin/settings/mail.template_body_label') }}" helper="{{ __('admin/settings/mail.template_body_helper') }}" required>{{ old('body', $translation->body) }}</x-admin::editor.text>
         <x-admin::toggle name="template_active" label="{{ __('admin/settings/mail.template_active_label') }}" helper="{{ __('admin/settings/mail.template_active_helper') }}" :checked="old('active', $template->active)" required />
-        <x-admin::textarea rows="5" name="template_placeholder" label="{{ __('admin/settings/mail.template_placeholder_label') }}" helper="{{ __('admin/settings/mail.template_placeholder_helper') }}" disabled>
+        <x-admin::textarea rows="5" name="template_placeholder" label="{{ __('admin/settings/mail.template_placeholder_label') }}" helper="{{ __('admin/settings/mail.template_placeholder_helper') }}" readonly>
             {{ old('template_placeholder', collect($template->placeholder)->map(fn ($desc, $key) => '{' . $key . '} = ' . $desc)->implode("\n")) }}
         </x-admin::textarea>
     </div>
