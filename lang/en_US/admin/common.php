@@ -16,6 +16,8 @@ return [
     'choose_option' => 'Choose an options',
     'none' => 'None',
 
+    'active' => 'Active',
+    'inactive' => 'Inactive',
     'enable' => 'Enable',
     'disable' => 'Disable',
     'save' => 'Save',
