@@ -27,5 +27,16 @@ class MailTemplate extends Model
         'cc' => 'array',
         'bcc' => 'array',
         'placeholder' => 'array',
+        'active' => 'boolean',
     ];
+
+    /**
+     * Get all translations associated with the mail template.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function translations()
+    {
+        return $this->hasMany(MailTemplateTranslation::class);
+    }
 }
