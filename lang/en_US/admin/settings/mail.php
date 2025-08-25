@@ -8,7 +8,7 @@ return [
         'template' => 'Template',
     ],
 
-    'mailer_alert_label' => 'Important: Mailer Settings Source',
+    'mailer_alert_label' => 'Mailer Settings Source',
     'mailer_alert_helper' => 'Mailer settings are stored and retrieved from the ".env" file. Changes made here will override the current ".env" configuration until it is updated.',
     'mailer_driver_label' => 'Mailer Driver',
     'mailer_driver_helper' => 'Select the email sending method (driver).',
@@ -32,6 +32,7 @@ return [
     'mailer_mailgun_secret_helper' => 'Enter your Mailgun API key for authentication.',
     'mailer_mailgun_endpoint_label' => 'Mailgun Endpoint',
     'mailer_mailgun_endpoint_helper' => 'Enter your Mailgun API endpoint.',
+    'mailer_test_label' => 'Test Email',
 
     'translation_missing_title' => 'Translation not found',
     'translation_missing_desc'  => 'The template for ":lang" does not exist yet. The English (en_US) version is shown instead. If you update, a new translation for ":lang" will be created automatically.',

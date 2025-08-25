@@ -26,6 +26,8 @@ return [
     'cancel' => 'Cancel',
     'update' => 'Update',
 
+    'send_success' => ':item have been sent',
+    'send_failed' => 'Failed to send :item',
     'save_success' => ':item have been saved',
     'save_failed' => 'Failed to save :item',
 

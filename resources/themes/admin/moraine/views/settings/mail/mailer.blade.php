@@ -6,6 +6,9 @@
         @if (session('success'))
             <x-admin::alert variant="success" title="{{ session('success') }}" />
         @endif
+        @if (session('error'))
+            <x-admin::alert variant="danger" title="{{ session('error') }}" />
+        @endif
         <x-admin::tabs 
             :tabs="[
                 [
@@ -54,7 +57,14 @@
                     <x-admin::input type="text" name="mailer_mailgun_endpoint" label="{{ __('admin/settings/mail.mailer_mailgun_endpoint_label') }}" helper="{{ __('admin/settings/mail.mailer_mailgun_endpoint_helper') }}" value="{{ old('mailer_mailgun_endpoint', env('MAILGUN_ENDPOINT')) }}" />
                 </div>
             </div>
-        <button type="submit"
-            class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('admin/common.save') }}</button>
+        <div class="flex gap-2 ml-auto">
+            <button type="button" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
+                onclick="document.getElementById('testMail').submit()">{{ __('admin/settings/mail.mailer_test_label') }}</button>
+            <button type="submit"
+                class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('admin/common.save') }}</button>
+        </div>
+    </form>
+    <form id="testMail" action="{{ route('admin.settings.mail.mailer.test') }}" method="POST" class="hidden">
+        @csrf
     </form>
 @endsection

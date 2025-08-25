@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Settings\Mail;
 
+use App\Mail\TemplateMail;
 use Billmora;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class MailerController extends Controller
 {
@@ -59,5 +61,26 @@ class MailerController extends Controller
         ]);
 
         return redirect()->back()->with('success', __('admin/common.save_success', ['item' => __('admin/settings/mail.title')]));
+    }
+
+
+    /**
+     * Send a test email using the configured mailer and template system.
+     *
+     * @return \Illuminate\Http\RedirectResponse Redirects back to the previous page with either success or error status.
+     */
+    public function test()
+    {
+        try {
+            $user = auth()->user();
+            Mail::to($user->email)->send(new TemplateMail('test_message', [
+                'client_name' => 'Billmora', // TODO: will be replaced with name of user.
+                'company_name' => Billmora::getGeneral('company_name'),
+            ]));
+
+            return redirect()->back()->with('success', __('admin/common.send_success', ['item' => __('admin/settings/mail.mailer_test_label')]));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 }

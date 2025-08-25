@@ -50,6 +50,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::group(['prefix' => 'mail'], function () {
             Route::get('/', [Settings\Mail\MailerController::class, 'index'])->name('admin.settings.mail.mailer');
             Route::post('/', [Settings\Mail\MailerController::class, 'store'])->name('admin.settings.mail.mailer.store');
+            Route::post('/test', [Settings\Mail\MailerController::class, 'test'])->name('admin.settings.mail.mailer.test');
             Route::get('/template', [Settings\Mail\TemplateController::class, 'index'])->name('admin.settings.mail.template');
             Route::get('/template/{id}/edit', [Settings\Mail\TemplateController::class, 'edit'])->name('admin.settings.mail.template.edit');
             Route::put('/template/{id}/edit', [Settings\Mail\TemplateController::class, 'update'])->name('admin.settings.mail.template.update');
