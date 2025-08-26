@@ -45,7 +45,7 @@ class TemplateController extends Controller
             $noTranslation = true;
         }
 
-        return view('admin::settings.mail.template.show', compact('template', 'translation', 'noTranslation'));
+        return view('admin::settings.mail.template.edit', compact('template', 'translation', 'noTranslation'));
     }
 
     /**
