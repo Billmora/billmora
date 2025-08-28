@@ -25,8 +25,8 @@
         <x-admin::editor.text name="template_body" label="{{ __('admin/settings/mail.template_body_label') }}" helper="{{ __('admin/settings/mail.template_body_helper') }}" required>{{ old('template_body', $translation->body) }}</x-admin::editor.text>
         <x-admin::toggle name="template_active" label="{{ __('admin/settings/mail.template_active_label') }}" helper="{{ __('admin/settings/mail.template_active_helper') }}" :checked="old('template_active', $template->active)" required />
         <div class="grid md:grid-cols-2 gap-4">
-            <x-admin::tags name="template_cc" label="{{ __('admin/settings/mail.template_cc_label') }}" helper="{{ __('admin/settings/mail.template_cc_helper') }}" :value="old('template_cc', $template->cc)" required />
-            <x-admin::tags name="template_bcc" label="{{ __('admin/settings/mail.template_bcc_label') }}" helper="{{ __('admin/settings/mail.template_bcc_helper') }}" :value="old('template_bcc', $template->bcc)" required />
+            <x-admin::tags name="template_cc" label="{{ __('admin/settings/mail.template_cc_label') }}" helper="{{ __('admin/settings/mail.template_cc_helper') }}" :value="old('template_cc', $template->cc)" />
+            <x-admin::tags name="template_bcc" label="{{ __('admin/settings/mail.template_bcc_label') }}" helper="{{ __('admin/settings/mail.template_bcc_helper') }}" :value="old('template_bcc', $template->bcc)" />
         </div>
         <div class="min-w-full flex flex-col gap-1">
             <label class="block text-slate-600 font-semibold mb-0.5">
