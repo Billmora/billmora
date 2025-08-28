@@ -5,6 +5,7 @@ return [
     'client_area' => 'Client Area',
     'sign_out' => 'Sign Out',
     
+    'search' => 'Search...',
     'quick_search' => 'Quick Search...',
     'quick_search_not_found' => 'No results found.',
     'quick_search_navigate' => 'to navigate',
@@ -25,11 +26,14 @@ return [
     'save' => 'Save',
     'cancel' => 'Cancel',
     'update' => 'Update',
+    'create' => 'Create',
 
     'send_success' => ':item have been sent',
     'send_failed' => 'Failed to send :item',
     'save_success' => ':item have been saved',
     'save_failed' => 'Failed to save :item',
+    'create_success' => ':item have been created',
+    'create_failed' => 'Failed to create :item',
 
     'footer' => 'Copyright © :year :brand - Made with ❤️',
 ];
