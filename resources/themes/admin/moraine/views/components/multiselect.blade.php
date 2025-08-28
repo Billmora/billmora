@@ -28,7 +28,7 @@
         return this.search === ''
             ? this.options
             : this.options.filter(o =>
-                o.label.toLowerCase().includes(this.search.toLowerCase())
+                o.title.toLowerCase().includes(this.search.toLowerCase())
               );
     },
     options: @js($options)
@@ -52,7 +52,7 @@
             <div class="flex flex-wrap gap-2">
                 <template x-for="id in selected" :key="id">
                     <span class="inline-flex items-center gap-1 bg-billmora-2 px-2 py-1 text-sm text-slate-600 font-semibold rounded-md break-all max-w-full">
-                        <span x-text="options.find(o => o.id === id)?.label"></span>
+                        <span x-text="options.find(o => o.id === id)?.title"></span>
                         <button type="button" @click.stop="toggle(id)" class="hover:text-red-400 cursor-pointer">
                             <x-lucide-x class="w-auto h-3" />
                         </button>
@@ -63,7 +63,7 @@
 
         <div x-show="open" @click.away="open = false"
              class="absolute z-10 mt-1 w-full bg-white border-2 border-billmora-2 rounded-xl p-3">
-            <input type="text" placeholder="Search..."
+            <input type="text" placeholder="{{ __('admin/common.search') }}"
                    x-model="search"
                    @input="errorVisible = false"
                    class="w-full mb-2 text-slate-700 rounded-lg px-3 py-2 border-2 border-billmora-2 outline-none focus:ring-2 ring-billmora-primary placeholder:text-slate-500"/>
@@ -73,7 +73,10 @@
                     <li @click="toggle(option.id)"
                         class="flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition ease-in-out duration-150"
                         :class="isSelected(option.id) ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary hover:text-white text-slate-700'">
-                        <span x-text="option.label"></span>
+                        <div class="grid gap-1">
+                            <span x-text="option.title" class="font-semibold"></span>
+                            <span x-text="option.subtitle"></span>
+                        </div>
                         <template x-if="isSelected(option.id)">
                             <x-lucide-check class="w-auto h-5" />
                         </template>
