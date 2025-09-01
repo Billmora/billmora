@@ -13,16 +13,16 @@
     search: '',
     selected: @js($selected),
     errorVisible: {{ $error ? 'true' : 'false' }},
-    toggle(id) {
-        if (this.selected.includes(id)) {
-            this.selected = this.selected.filter(i => i !== id);
+    toggle(value) {
+        if (this.selected.includes(value)) {
+            this.selected = this.selected.filter(i => i !== value);
         } else {
-            this.selected.push(id);
+            this.selected.push(value);
         }
         this.errorVisible = false
     },
-    isSelected(id) {
-        return this.selected.includes(id);
+    isSelected(value) {
+        return this.selected.includes(value);
     },
     filteredOptions() {
         return this.search === ''
@@ -50,10 +50,10 @@
                 <span class="text-slate-500">{{ __('admin/common.choose_option') }}</span>
              </template>
             <div class="flex flex-wrap gap-2">
-                <template x-for="id in selected" :key="id">
+                <template x-for="value in selected" :key="value">
                     <span class="inline-flex items-center gap-1 bg-billmora-2 px-2 py-1 text-sm text-slate-600 font-semibold rounded-md break-all max-w-full">
-                        <span x-text="options.find(o => o.id === id)?.title"></span>
-                        <button type="button" @click.stop="toggle(id)" class="hover:text-red-400 cursor-pointer">
+                        <span x-text="options.find(o => o.value === value)?.title"></span>
+                        <button type="button" @click.stop="toggle(value)" class="hover:text-red-400 cursor-pointer">
                             <x-lucide-x class="w-auto h-3" />
                         </button>
                     </span>
@@ -69,15 +69,15 @@
                    class="w-full mb-2 text-slate-700 rounded-lg px-3 py-2 border-2 border-billmora-2 outline-none focus:ring-2 ring-billmora-primary placeholder:text-slate-500"/>
 
             <ul class="max-h-50 overflow-y-auto">
-                <template x-for="option in filteredOptions()" :key="option.id">
-                    <li @click="toggle(option.id)"
+                <template x-for="option in filteredOptions()" :key="option.value">
+                    <li @click="toggle(option.value)"
                         class="flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition ease-in-out duration-150"
-                        :class="isSelected(option.id) ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary hover:text-white text-slate-700'">
+                        :class="isSelected(option.value) ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary hover:text-white text-slate-700'">
                         <div class="grid gap-1">
                             <span x-text="option.title" class="font-semibold"></span>
                             <span x-text="option.subtitle"></span>
                         </div>
-                        <template x-if="isSelected(option.id)">
+                        <template x-if="isSelected(option.value)">
                             <x-lucide-check class="w-auto h-5" />
                         </template>
                     </li>
@@ -86,8 +86,8 @@
         </div>
     </div>
 
-    <template x-for="id in selected" :key="id">
-        <input type="hidden" name="{{ $name }}[]" :value="id">
+    <template x-for="value in selected" :key="value">
+        <input type="hidden" name="{{ $name }}[]" :value="value">
     </template>
 
     @if ($error)
