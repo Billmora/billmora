@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Settings\Mail;
 
-use App\Models\User;
-use App\Mail\TemplateMail;
-use Illuminate\Http\Request;
-use App\Models\MailBroadcast;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Mail;
+use App\Jobs\MailBroadcastJob;
+use App\Models\MailBroadcast;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class BroadcastController extends Controller
 {
@@ -22,5 +21,68 @@ class BroadcastController extends Controller
         $broadcasts = MailBroadcast::select('id', 'subject', 'schedule_at', 'created_at')->get();
 
         return view('admin::settings.mail.broadcast.index', compact('broadcasts'));
+    }
+
+    /**
+     * Show the form for creating a new mail broadcast.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function create()
+    {
+        return view('admin::settings.mail.broadcast.create');
+    }
+
+    /**
+     * Store a newly created mail broadcast in the database and queue it for sending.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse Redirects to the broadcast index with a success message after storing.
+     *
+     * @throws \Illuminate\Validation\ValidationException If validation fails.
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'broadcast_subject' => ['required', 'string', 'max:255'],
+            'broadcast_body' => ['required', 'string'],
+            'broadcast_recipients' => ['required', 'in:all_users,custom_users'],
+            'custom_users' => ['required', 'array'],
+            'custom_users.*' => ['email'],
+            'broadcast_cc' => ['nullable', 'array'],
+            'broadcast_cc.*' => ['email'],
+            'broadcast_bcc' => ['nullable', 'array'],
+            'broadcast_bcc.*' => ['email'],
+            'broadcast_schedule' => ['nullable', 'date', 'after_or_equal:now'],
+        ]);
+
+        switch ($validated['broadcast_recipients']) {
+            case 'all_users':
+                $recipients = User::pluck('email')->toArray();
+                break;
+            case 'custom_users':
+                $recipients = $validated['custom_users'] ?? [];
+                break;
+            default:
+                $recipients = [];
+                break;
+        }
+
+        $broadcast = MailBroadcast::create([
+            'subject' => $validated['broadcast_subject'],
+            'body' => $validated['broadcast_body'],
+            'recipients' => $recipients,
+            'cc' => $validated['broadcast_cc'] ?? [],
+            'bcc' => $validated['broadcast_bcc'] ?? [],
+            'schedule_at' => $validated['broadcast_schedule'] ?? null,
+        ]);
+
+        if ($broadcast->schedule_at) {
+            MailBroadcastJob::dispatch($broadcast)->delay($broadcast->schedule_at);
+        } else {
+            MailBroadcastJob::dispatch($broadcast);
+        }
+
+        return redirect()->route('admin.settings.mail.broadcast')->with('success', __('admin/common.create_success', ['item' => __('admin/settings/mail.tabs.broadcast')]));
     }
 }

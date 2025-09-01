@@ -73,7 +73,7 @@ class MailerController extends Controller
     {
         try {
             $user = auth()->user();
-            Mail::to($user->email)->send(new TemplateMail('test_message', [
+            Mail::to('maflycehaa@gmail.com')->send(new TemplateMail('test_message', [
                 'client_name' => 'Billmora', // TODO: will be replaced with name of user.
                 'company_name' => Billmora::getGeneral('company_name'),
             ]));

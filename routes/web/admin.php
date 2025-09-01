@@ -55,6 +55,8 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/template/{id}/edit', [Settings\Mail\TemplateController::class, 'edit'])->name('admin.settings.mail.template.edit');
             Route::put('/template/{id}/edit', [Settings\Mail\TemplateController::class, 'update'])->name('admin.settings.mail.template.update');
             Route::get('/broadcast', [Settings\Mail\BroadcastController::class, 'index'])->name('admin.settings.mail.broadcast');
+            Route::get('/broadcast/create', [Settings\Mail\BroadcastController::class, 'create'])->name('admin.settings.mail.broadcast.create');
+            Route::post('/broadcast', [Settings\Mail\BroadcastController::class, 'store'])->name('admin.settings.mail.broadcast.store');
         });
     });
 
