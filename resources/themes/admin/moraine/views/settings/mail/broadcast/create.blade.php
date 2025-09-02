@@ -36,7 +36,7 @@
             <x-admin::tags name="broadcast_cc" label="{{ __('admin/settings/mail.broadcast_cc_label') }}" helper="{{ __('admin/settings/mail.broadcast_cc_helper') }}" :value="old('broadcast_cc')" />
             <x-admin::tags name="broadcast_bcc" label="{{ __('admin/settings/mail.broadcast_bcc_label') }}" helper="{{ __('admin/settings/mail.broadcast_bcc_helper') }}" :value="old('broadcast_bcc')" />
         </div>
-        <x-admin::input type="datetime-local" name="broadcast_schedule" label="{{ __('admin/settings/mail.broadcast_schedule_label') }}" helper="{{ __('admin/settings/mail.broadcast_schedule_helper') }}" />
+        <x-admin::input type="datetime-local" name="broadcast_schedule" label="{{ __('admin/settings/mail.broadcast_schedule_label') }}" helper="{{ __('admin/settings/mail.broadcast_schedule_helper') }}" value="{{ old('broadcast_schedule') }}" />
         <div class="min-w-full flex flex-col gap-1">
             <label class="block text-slate-600 font-semibold mb-0.5">
                 {{ __('admin/settings/mail.broadcast_placeholder_label') }}
