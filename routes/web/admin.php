@@ -57,6 +57,8 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/broadcast', [Settings\Mail\BroadcastController::class, 'index'])->name('admin.settings.mail.broadcast');
             Route::get('/broadcast/create', [Settings\Mail\BroadcastController::class, 'create'])->name('admin.settings.mail.broadcast.create');
             Route::post('/broadcast', [Settings\Mail\BroadcastController::class, 'store'])->name('admin.settings.mail.broadcast.store');
+            Route::get('/broadcast/{id}/edit', [Settings\Mail\BroadcastController::class, 'edit'])->name('admin.settings.mail.broadcast.edit');
+            Route::put('/broadcast/{id}/edit', [Settings\Mail\BroadcastController::class, 'update'])->name('admin.settings.mail.broadcast.update');
         });
     });
 

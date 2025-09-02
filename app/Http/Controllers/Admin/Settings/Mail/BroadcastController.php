@@ -85,4 +85,75 @@ class BroadcastController extends Controller
 
         return redirect()->route('admin.settings.mail.broadcast')->with('success', __('admin/common.create_success', ['item' => __('admin/settings/mail.tabs.broadcast')]));
     }
+
+    /**
+     * Show the form for editing an existing mail broadcast.
+     *
+     * @param  int  $id  The ID of the mail broadcast to edit.
+     * @return \Illuminate\View\View The view containing the edit form.
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the broadcast is not found.
+     */
+    public function edit($id)
+    {
+        $broadcast = MailBroadcast::findOrFail($id);
+        return view("admin::settings.mail.broadcast.edit", compact('broadcast'));
+    }
+
+    /**
+     * Update an existing mail broadcast.
+     *
+     * @param  \Illuminate\Http\Request  $request  The incoming request containing broadcast update data.
+     * @param  int  $id  The ID of the mail broadcast to update.
+     * @return \Illuminate\Http\RedirectResponse Redirects back to the broadcast index with success message.
+     *
+     * @throws \Illuminate\Validation\ValidationException If validation fails.
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the broadcast is not found.
+     */
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'broadcast_subject' => ['required', 'string', 'max:255'],
+            'broadcast_body' => ['required', 'string'],
+            'broadcast_recipient_group' => ['required', 'in:all_users,custom_users'],
+            'broadcast_recipient_custom' => ['required', 'array'],
+            'broadcast_recipient_custom.*' => ['email'],
+            'broadcast_cc' => ['nullable', 'array'],
+            'broadcast_cc.*' => ['email'],
+            'broadcast_bcc' => ['nullable', 'array'],
+            'broadcast_bcc.*' => ['email'],
+            'broadcast_schedule' => ['nullable', 'date', 'after_or_equal:now'],
+        ]);
+
+        switch ($validated['broadcast_recipient_group']) {
+            case 'all_users':
+                $recipient_group = $validated['broadcast_recipient_group'];
+                $recipient_custom = [];
+                break;
+            case 'custom_users':
+                $recipient_group = $validated['broadcast_recipient_group'];
+                $recipient_custom = $validated['broadcast_recipient_custom'] ?? [];
+                break;
+        }
+
+        $broadcast = MailBroadcast::findOrFail($id);
+
+        $broadcast->update([
+            'subject' => $validated['broadcast_subject'],
+            'body' => $validated['broadcast_body'],
+            'recipient_group' => $recipient_group,
+            'recipient_custom' => $recipient_custom,
+            'cc' => $validated['broadcast_cc'] ?? [],
+            'bcc' => $validated['broadcast_bcc'] ?? [],
+            'schedule_at' => $validated['broadcast_schedule'] ?? null,
+        ]);
+
+        if ($broadcast->schedule_at) {
+            MailBroadcastJob::dispatch($broadcast)->delay($broadcast->schedule_at);
+        } else {
+            MailBroadcastJob::dispatch($broadcast);
+        }
+
+        return redirect()->route('admin.settings.mail.broadcast')->with('success', __('admin/common.save_success', ['item' => __('admin/settings/mail.tabs.broadcast')]));
+    }
 }

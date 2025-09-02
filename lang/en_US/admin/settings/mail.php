@@ -57,6 +57,8 @@ return [
     'template_placeholder_label' => 'Template Placeholders',
     'template_placeholder_helper' => 'List of available placeholders you can use in the email subject or body.',
 
+    'broadcast_alert_label' => 'Updating this broadcast will resend emails',
+    'broadcast_alert_helper' => 'Once you update this broadcast, the emails will be re-scheduled and sent again according to the defined schedule. Make sure your changes are final before saving.',
     'broadcast_subject_label' => 'Broadcast Subject',
     'broadcast_subject_helper' => 'Enter the subject line for the email.',
     'broadcast_body_label' => 'Broadcast Body',
