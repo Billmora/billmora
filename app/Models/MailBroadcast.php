@@ -23,7 +23,7 @@ class MailBroadcast extends Model
      * @var list<string>
      */
     protected $casts = [
-        'recipients' => 'array',
+        'recipient_custom' => 'array',
         'cc' => 'array',
         'bcc' => 'array',
         'schedule_at' => 'datetime',

@@ -9,25 +9,26 @@
     <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <x-admin::input type="text" name="broadcast_subject" label="{{ __('admin/settings/mail.broadcast_subject_label') }}" helper="{{ __('admin/settings/mail.broadcast_subject_helper') }}" value="{{ old('broadcast_subject') }}" required />
         <x-admin::editor.text name="broadcast_body" label="{{ __('admin/settings/mail.broadcast_body_label') }}" helper="{{ __('admin/settings/mail.broadcast_body_helper') }}" required>{{ old('broadcast_body') }}</x-admin::editor.text>
-        <div x-data="{ recipients: '{{ old('broadcast_recipients') }}' }" class="grid gap-4">
+        <div x-data="{ recipient_custom: '{{ old('broadcast_recipient_group') }}' }" class="grid gap-4">
             <x-admin::select 
-                name="broadcast_recipients" 
-                label="{{ __('admin/settings/mail.broadcast_recipients_label') }}" 
-                helper="{{ __('admin/settings/mail.broadcast_recipients_helper') }}" 
-                x-model="recipients"
+                name="broadcast_recipient_group" 
+                label="{{ __('admin/settings/mail.broadcast_recipient_group_label') }}" 
+                helper="{{ __('admin/settings/mail.broadcast_recipient_group_helper') }}" 
+                x-model="recipient_custom"
                 required
             >
-                <option value="all_users">All Users</option>
-                <option value="custom_users">Custom Users</option>
+                <option value="all_users" @if (old('broadcast_recipient_group') === 'all_users') selected @endif>All Users</option>
+                <option value="custom_users" @if (old('broadcast_recipient_group') === 'custom_users') selected @endif>Custom Users</option>
             </x-admin::select>
 
-            <div x-show="recipients === 'custom_users'">
+            <div x-show="recipient_custom === 'custom_users'">
                 <x-admin::multiselect
-                    name="custom_users"
+                    name="broadcast_recipient_custom"
                     :options="[
                         ['value' => 'billmora@billmora.com', 'title' => 'Billmora', 'subtitle' => 'billmora@billmora.com'], // TODO: Will be replaced by real user
                     ]"
-                    helper="{{ __('admin/settings/mail.broadcast_recipients_custom_helper') }}"
+                    :selected="old('broadcast_recipient_custom', [])"
+                    helper="{{ __('admin/settings/mail.broadcast_recipient_custom_helper') }}"
                 />
             </div>
         </div>

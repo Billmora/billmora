@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('subject');
             $table->text('body');
-            $table->json('recipients');
+            $table->string('recipient_group');
+            $table->json('recipient_custom')->nullable();
             $table->json('cc')->nullable();
             $table->json('bcc')->nullable();
             $table->timestamp('schedule_at')->nullable();
