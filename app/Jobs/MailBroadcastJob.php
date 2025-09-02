@@ -26,8 +26,19 @@ class MailBroadcastJob implements ShouldQueue
 
     public function handle(): void
     {
-        foreach ($this->broadcast->recipients as $email) {
-            Mail::to($email)
+        switch ($this->broadcast->recipient_group) {
+            case 'all_users':
+                $recipients = User::pluck('email')->toArray();
+                break;
+            case 'custom_users':
+                $recipients = $this->broadcast->recipient_custom ?? [];
+                break;
+            default:
+                $recipients = [];
+        }
+
+        foreach ($recipients as $recipient) {
+            Mail::to($recipient)
                 ->cc($this->broadcast->cc ?? [])
                 ->bcc($this->broadcast->bcc ?? [])
                 ->send(new BroadcastMail(

@@ -46,9 +46,9 @@ class BroadcastController extends Controller
         $validated = $request->validate([
             'broadcast_subject' => ['required', 'string', 'max:255'],
             'broadcast_body' => ['required', 'string'],
-            'broadcast_recipients' => ['required', 'in:all_users,custom_users'],
-            'custom_users' => ['required', 'array'],
-            'custom_users.*' => ['email'],
+            'broadcast_recipient_group' => ['required', 'in:all_users,custom_users'],
+            'broadcast_recipient_custom' => ['required', 'array'],
+            'broadcast_recipient_custom.*' => ['email'],
             'broadcast_cc' => ['nullable', 'array'],
             'broadcast_cc.*' => ['email'],
             'broadcast_bcc' => ['nullable', 'array'],
@@ -56,22 +56,22 @@ class BroadcastController extends Controller
             'broadcast_schedule' => ['nullable', 'date', 'after_or_equal:now'],
         ]);
 
-        switch ($validated['broadcast_recipients']) {
+        switch ($validated['broadcast_recipient_group']) {
             case 'all_users':
-                $recipients = User::pluck('email')->toArray();
+                $recipient_group = $validated['broadcast_recipient_group'];
+                $recipient_custom = [];
                 break;
             case 'custom_users':
-                $recipients = $validated['custom_users'] ?? [];
-                break;
-            default:
-                $recipients = [];
+                $recipient_group = $validated['broadcast_recipient_group'];
+                $recipient_custom = $validated['broadcast_recipient_custom'] ?? [];
                 break;
         }
 
         $broadcast = MailBroadcast::create([
             'subject' => $validated['broadcast_subject'],
             'body' => $validated['broadcast_body'],
-            'recipients' => $recipients,
+            'recipient_group' => $recipient_group,
+            'recipient_custom' => $recipient_custom,
             'cc' => $validated['broadcast_cc'] ?? [],
             'bcc' => $validated['broadcast_bcc'] ?? [],
             'schedule_at' => $validated['broadcast_schedule'] ?? null,
