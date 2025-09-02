@@ -32,11 +32,12 @@
         <div class="-m-1.5 overflow-x-auto">
             <div class="p-1.5 min-w-full inline-block align-middle">
                 <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
-                    <table class="min-w-full divide-y divide-gray-200">
+                    <table class="min-w-full divide-y divide-billmora-2">
                         <thead class="bg-billmora-2">
                             <tr>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">#</th>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Subject</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Recipient Group</th>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Schedule At</th>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Created At</th>
                                 <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">Action</th>
@@ -47,6 +48,7 @@
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $loop->iteration }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $broadcast->subject }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $broadcast->recipient_group }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $broadcast->schedule_at ?? 'N/A' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $broadcast->created_at }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">

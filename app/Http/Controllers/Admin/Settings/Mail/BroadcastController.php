@@ -18,7 +18,7 @@ class BroadcastController extends Controller
      */
     public function index()
     {
-        $broadcasts = MailBroadcast::select('id', 'subject', 'schedule_at', 'created_at')->get();
+        $broadcasts = MailBroadcast::select('id', 'subject', 'recipient_group', 'schedule_at', 'created_at')->get();
 
         return view('admin::settings.mail.broadcast.index', compact('broadcasts'));
     }
