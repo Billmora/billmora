@@ -3,12 +3,15 @@
     'variant' => 'open',
 ])
 
-<button x-data 
-        @if ($variant === 'open')
-            x-on:click="$store.modal.show('{{ $modal }}')"
-        @elseif ($variant === 'close')
-            x-on:click="$store.modal.close()"
-        @endif
+<button x-data
+        @switch($variant)
+            @case('open')
+                x-on:click="$store.modal.show('{{ $modal }}')"
+                @break
+            @case('close')
+                x-on:click="$store.modal.close()"
+                @break
+        @endswitch
         {{ $attributes }}>
     {{ $slot }}
 </button>

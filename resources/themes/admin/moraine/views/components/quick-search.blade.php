@@ -1,24 +1,45 @@
-<div x-data="globalSearch()" x-init="init()" @keydown.window.ctrl.k.prevent="openModal()"
-    @keydown.window.meta.k.prevent="openModal()" x-cloak>
-    <div x-show="open" x-transition.opacity class="fixed inset-0 z-110 flex items-start justify-center md:pt-28">
+<div 
+    x-data="globalSearch()" 
+    x-init="init()" 
+    x-cloak
+    x-on:keydown.window.ctrl.k.prevent="openModal()"
+    x-on:keydown.window.meta.k.prevent="openModal()"
+>
+    <div 
+        x-show="open" 
+        x-transition.opacity 
+        class="fixed inset-0 z-110 flex items-start justify-center md:pt-28"
+    >
         <!-- Backdrop -->
-        <div class="fixed inset-0 bg-black/25 backdrop-blur-sm" @click="close()" aria-hidden="true"></div>
+        <div 
+            class="fixed inset-0 bg-black/25 backdrop-blur-sm" 
+            x-on:click="close()" 
+            aria-hidden="true"
+        ></div>
 
         <!-- Modal box -->
-        <div
-            class="relative flex flex-col gap-6 bg-white w-full h-full md:w-[600px] md:h-fit p-4 md:p-8 md:rounded-xl overflow-hidden z-50">
+        <div class="relative flex flex-col gap-6 bg-white w-full h-full md:w-[600px] md:h-fit p-4 md:p-8 md:rounded-xl overflow-hidden z-50">
             <!-- Search Input -->
             <div class="flex gap-4 relative w-full mr-auto group">
-                <x-lucide-search
-                    class="w-auto h-5 absolute top-1/2 left-2 -translate-y-1/2 pointer-events-none text-slate-400 group-focus-within:text-billmora-primary transition-colors duration-150" />
-                <input x-ref="input" x-model="query" @keydown.escape="close"
-                    @keydown.arrow-up.prevent="moveSelection(-1)" @keydown.arrow-down.prevent="moveSelection(1)"
-                    @keydown.enter.prevent="selectItem()" type="text"
+                <x-lucide-search 
+                    class="w-auto h-5 absolute top-1/2 left-2 -translate-y-1/2 pointer-events-none text-slate-400 group-focus-within:text-billmora-primary transition-colors duration-150" 
+                />
+                <input 
+                    x-ref="input" 
+                    x-model="query"
+                    type="text"
                     placeholder="{{ __('admin/common.quick_search') }} e.g. setting:General"
-                    class="w-full bg-billmora-1 p-2 pl-9 placeholder:text-slate-500 rounded-lg outline-none focus:ring-2 ring-billmora-primary" />
-                <button
+                    x-on:keydown.escape="close"
+                    x-on:keydown.arrow-up.prevent="moveSelection(-1)"
+                    x-on:keydown.arrow-down.prevent="moveSelection(1)"
+                    x-on:keydown.enter.prevent="selectItem()"
+                    class="w-full bg-billmora-1 p-2 pl-9 placeholder:text-slate-500 rounded-lg outline-none focus:ring-2 ring-billmora-primary" 
+                />
+                <button 
+                    type="button"
                     class="block bg-billmora-1 hover:bg-billmora-primary p-2.5 text-slate-600 hover:text-white rounded-full transition-colors duration-300 cursor-pointer"
-                    @click="close()">
+                    x-on:click="close()"
+                >
                     <x-lucide-x class="w-auto h-5" />
                 </button>
             </div>
@@ -27,26 +48,36 @@
             <div x-ref="resultsContainer" class="h-full md:max-h-80 overflow-y-auto">
                 <template x-if="results.length">
                     <div class="space-y-2">
-                        <!-- Result items -->
                         <template x-for="(item, index) in results" :key="item.url">
-                            <a :href="item.url"
+                            <a 
+                                :href="item.url"
+                                x-on:mouseenter="selectedIndex = index"
                                 class="flex flex-col px-4 py-3 rounded-xl transition-colors duration-150"
                                 :class="{
                                     'bg-billmora-primary text-white': selectedIndex === index,
                                     'hover:bg-billmora-100': selectedIndex !== index
                                 }"
-                                @mouseenter="selectedIndex = index">
-                                <span class="font-semibold"
+                            >
+                                <span 
+                                    x-text="item.title" 
+                                    class="font-semibold" 
                                     :class="selectedIndex === index ? 'text-white' : 'text-slate-600'"
-                                    x-text="item.title"></span>
-                                <span class="text-md" :class="selectedIndex === index ? 'text-white' : 'text-slate-500'"
-                                    x-text="item.category"></span>
+                                ></span>
+                                <span 
+                                    x-text="item.category" 
+                                    class="text-md" 
+                                    :class="selectedIndex === index ? 'text-white' : 'text-slate-500'"
+                                ></span>
                             </a>
                         </template>
                     </div>
                 </template>
+
                 <!-- Empty state -->
-                <div x-show="!results.length && query" class="text-center text-slate-500">
+                <div 
+                    x-show="!results.length && query" 
+                    class="text-center text-slate-500"
+                >
                     {{ __('admin/common.quick_search_not_found') }}
                 </div>
             </div>
@@ -63,8 +94,7 @@
                     <span class="font-semibold text-slate-600">{{ __('admin/common.quick_search_navigate') }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
-                    <span
-                        class="bg-billmora-1 p-1 text-sm text-slate-600 font-semibold rounded-lg uppercase">enter</span>
+                    <span class="bg-billmora-1 p-1 text-sm text-slate-600 font-semibold rounded-lg uppercase">enter</span>
                     <span class="font-semibold text-slate-600">{{ __('admin/common.quick_search_select') }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
