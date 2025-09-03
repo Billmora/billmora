@@ -70,7 +70,7 @@
         <x-lucide-layers-2 class="w-5 h-auto" />
         <span class="font-semibold">{{ __('admin/common.portal_area') }}</span>
       </a>
-      <a href="#" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
+      <a href="{{ route('client.dashboard') }}" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
         <x-lucide-copy class="w-5 h-auto" />
         <span class="font-semibold">{{ __('admin/common.client_area') }}</span>
       </a>
