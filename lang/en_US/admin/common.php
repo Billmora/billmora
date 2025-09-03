@@ -35,6 +35,10 @@ return [
     'save_failed' => 'Failed to save :item',
     'create_success' => ':item have been created',
     'create_failed' => 'Failed to create :item.',
+    'update_success' => ':item have been updated',
+    'update_failed' => 'Failed to update :item.',
+    'delete_success' => ':item have been deleted',
+    'delete_failed' => 'Failed to delete :item.',
 
     'enable_modal_title' => 'Enable the item',
     'enable_modal_desc' => 'Are you sure you want to enable this :item?',
