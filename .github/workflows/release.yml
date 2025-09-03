@@ -1,0 +1,67 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    strategy:
+      matrix:
+        theme:
+          - resources/themes/admin/moraine/vite.config.js
+          # client and portal theme under development
+          # - resources/themes/client/default/vite.config.js
+          # - resources/themes/portal/moraine/vite.config.js
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: bcmath, curl, mbstring, openssl, pdo, tokenizer, xml, zip
+          tools: composer:v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install PHP dependencies (no dev)
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build theme assets
+        run: npx vite build --config=${{ matrix.theme }}
+
+      - name: Cleanup unnecessary files
+        run: |
+          rm -rf node_modules vendor tests .git .github
+
+      - name: Create release archive
+        run: tar -czf billmora.tar.gz * .env.example
+
+      - name: Generate checksum
+        run: sha256sum billmora.tar.gz > checksum.txt
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          draft: true
+          prerelease: ${{ contains(github.ref, 'rc') || contains(github.ref, 'beta') || contains(github.ref, 'alpha') }}
+          files: |
+            billmora.tar.gz
+            checksum.txt
