@@ -156,4 +156,12 @@ class BroadcastController extends Controller
 
         return redirect()->route('admin.settings.mail.broadcast')->with('success', __('admin/common.save_success', ['item' => __('admin/settings/mail.tabs.broadcast')]));
     }
+
+    public function destroy($id)
+    {
+        $broadcast = MailBroadcast::findOrFail($id);
+        $broadcast->delete();
+
+        return redirect()->route('admin.settings.mail.broadcast')->with('success', __('admin/common.delete_success', ['item' => __('admin/settings/mail.tabs.broadcast')]));
+    }
 }

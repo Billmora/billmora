@@ -51,8 +51,9 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $broadcast->recipient_group }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $broadcast->schedule_at ?? 'N/A' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $broadcast->created_at }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                    <a href="{{ route('admin.settings.mail.broadcast.edit', ['id' => $broadcast->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover underline">Edit</a>
+                                <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
+                                    <a href="{{ route('admin.settings.mail.broadcast.edit', ['id' => $broadcast->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">Edit</a>
+                                    <x-admin::modal.trigger modal="deleteModal-{{ $broadcast->id }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('admin/common.delete') }}</x-admin::modal.trigger>
                                 </td>
                             </tr>
                             @endforeach
@@ -61,6 +62,25 @@
                 </div>
             </div>
         </div>
+        
+        @foreach ($broadcasts as $broadcast)
+        <x-admin::modal.content
+            modal="deleteModal-{{ $broadcast->id }}"
+            variant="danger"
+            size="xl"
+            position="centered"
+            title="{{ __('admin/common.delete_modal_title', ['item' => $broadcast->subject]) }}"
+            description="{{ __('admin/common.delete_modal_desc', ['item' => $broadcast->subject]) }}">
+            <form action="{{ route('admin.settings.mail.broadcast.destroy', ['id' => $broadcast->id]) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="flex justify-end gap-2 mt-4">
+                    <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('admin/common.cancel') }}</x-admin::modal.trigger>
+                    <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('admin/common.delete') }}</button>
+                </div>
+            </form>
+        </x-admin::modal.content>
+        @endforeach
     </div>
 </div>
 @endsection
