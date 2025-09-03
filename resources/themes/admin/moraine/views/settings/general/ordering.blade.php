@@ -1,5 +1,7 @@
 @extends('admin::layouts.app')
 
+@section('title', 'Ordering Settings')
+
 @section('body')
     <form action="{{ route('admin.settings.general.ordering.store') }}" method="POST" class="flex flex-col gap-5">
         @csrf

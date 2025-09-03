@@ -1,5 +1,7 @@
 @extends('admin::layouts.app')
 
+@section('title', 'Credit Settings')
+
 @section('body')
     <form action="{{ route('admin.settings.general.credit.store') }}" method="POST" class="flex flex-col gap-5">
         @csrf

@@ -1,5 +1,7 @@
 @extends('admin::layouts.app')
 
+@section('title', 'System Settings')
+
 @section('body')
 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
     <a href="{{ route('admin.settings.general.company') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary rounded-2xl transition ease-in-out duration-150">

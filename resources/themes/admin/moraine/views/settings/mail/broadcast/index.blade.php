@@ -1,5 +1,7 @@
 @extends('admin::layouts.app')
 
+@section('title', 'Broadcast Mail')
+
 @section('body')
 <div class="flex flex-col gap-5">
     @if (session('success'))

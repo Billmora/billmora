@@ -1,5 +1,7 @@
 @extends('admin::layouts.app')
 
+@section('title', 'Mailer Settings')
+
 @section('body')
     <form action="{{ route('admin.settings.mail.mailer.store') }}" method="POST" class="flex flex-col gap-5">
         @csrf
