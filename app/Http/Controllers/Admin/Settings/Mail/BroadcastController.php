@@ -157,6 +157,14 @@ class BroadcastController extends Controller
         return redirect()->route('admin.settings.mail.broadcast')->with('success', __('admin/common.save_success', ['item' => __('admin/settings/mail.tabs.broadcast')]));
     }
 
+    /**
+     * Remove the specified mail broadcast from storage.
+     *
+     * @param  int  $id  The ID of the mail broadcast to delete.
+     * @return \Illuminate\Http\RedirectResponse Redirects back to the broadcast index with success message.
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the broadcast is not found.
+     */
     public function destroy($id)
     {
         $broadcast = MailBroadcast::findOrFail($id);
