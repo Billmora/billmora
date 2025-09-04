@@ -36,7 +36,7 @@
     <button type="button" class="cursor-pointer ml-4"
         x-on:click="isOpen = ! isOpen" 
         aria-haspopup="true">
-      <img src="{{ Billmora::getGeneral('company_logo') }}" alt="billmora profile" class="w-10 h-10 rounded-full">
+      <img src="{{ auth()->user()->avatar }}" alt="user profile" class="w-10 h-10 rounded-full">
     </button>
     <!-- Dropdown Menu -->
     <div class="absolute top-16 right-0 flex w-[300px] flex-col gap-2 bg-white p-4 border-2 border-billmora-2 rounded-2xl" role="menu"
@@ -45,7 +45,7 @@
         x-on:click.outside="isOpen = false, openedWithKeyboard = false">
       {{-- Dropdown Content --}}
       <div class="flex flex-col gap-2">
-        <span class="text-xl text-slate-600 font-bold">Mafly</span>
+        <span class="text-xl text-slate-600 font-bold">{{ auth()->user()->fullname }}</span>
         <span class="text-lg text-slate-500 font-semibold">Administrator</span>
       </div>
       <hr class="border-t-2 border-billmora-2 mt-2 mb-4">
@@ -58,10 +58,13 @@
         <span class="font-semibold">{{ __('client/common.admin_area') }}</span>
       </a>
       <hr class="border-t-2 border-billmora-2 mt-4 mb-2">
-      <button class="flex gap-2 items-center hover:bg-red-400 px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300 cursor-pointer" role="menuitem">
-        <x-lucide-log-out class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('client/common.sign_out') }}</span>
-      </button>
+      <form action="{{ route('client.logout.store') }}" method="POST">
+        @csrf
+        <button class="w-full flex gap-2 items-center hover:bg-red-400 px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300 cursor-pointer" role="menuitem">
+          <x-lucide-log-out class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('client/common.sign_out') }}</span>
+        </button>
+      </form>
     </div>
 </div>
 </header>
