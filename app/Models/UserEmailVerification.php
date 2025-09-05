@@ -28,6 +28,16 @@ class UserEmailVerification extends Model
     ];
 
     /**
+     * Get the user that owns the email verification.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
      * Determine if the verification token is active.
      *
      * @return bool
