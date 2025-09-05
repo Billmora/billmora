@@ -38,6 +38,7 @@ return [
     'delete' => 'Delete',
     'send' => 'Send',
     'resend' => 'Resend',
+    'submit' => 'Submit',
 
     'back_to' => 'Back to :page'
 ];
