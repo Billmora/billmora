@@ -34,7 +34,7 @@ class EmailVerificationController extends Controller
         if ($verification->isExpired()) {
             return redirect()->route('client.login')
                 ->with('error', __('auth.email.expired_token'))
-                ->with('expired_token', encrypt($verification->id));
+                ->with('email_token', encrypt($verification->id));
         }
 
         $verification->update([
@@ -57,11 +57,11 @@ class EmailVerificationController extends Controller
     public function resend(Request $request)
     {
         $request->validate([
-            'expired_token' => 'required|string',
+            'email_token' => 'required|string',
         ]);
 
         try {
-            $verificationId = decrypt($request->expired_token);
+            $verificationId = decrypt($request->email_token);
             $oldVerification = UserEmailVerification::findOrFail($verificationId);
 
             if ($oldVerification->isVerified()) {

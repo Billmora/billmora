@@ -24,7 +24,7 @@
                     @if (session('error'))
                         <x-client::alert variant="danger">
                             {{ session('error') }}
-                            @if (session('expired_token'))
+                            @if (session('email_token'))
                                 <button type="button" onclick="document.getElementById('resendEmail').submit()" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.resend') }}</button>
                             @endif
                         </x-client::alert>
@@ -49,7 +49,7 @@
         </div>
         <form id="resendEmail" action="{{ route('client.email.resend') }}" method="POST">
             @csrf
-            <input type="hidden" name="expired_token" value="{{ session('expired_token') }}">
+            <input type="hidden" name="email_token" value="{{ session('email_token') }}">
         </form>
     </div>
     @livewireScripts
