@@ -21,6 +21,9 @@ Route::group(['prefix' => 'auth'], function () {
 
         Route::get('/register', [Auth\RegisterController::class, 'index'])->name('client.register');
         Route::post('/register', [Auth\RegisterController::class, 'store'])->name('client.register.store');
+
+        Route::get('/email/verify/{token}', [Auth\EmailVerificationController::class, 'verify'])->name('client.email.verify');
+        Route::post('/email/resend', [Auth\EmailVerificationController::class, 'resend'])->name('client.email.resend');
     });
 
     Route::group(['middleware' => 'auth'], function () {
