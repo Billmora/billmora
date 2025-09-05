@@ -57,7 +57,7 @@ class MailTemplateSeeder extends Seeder
                             <p>If you're having trouble, try copying and pasting the following URL into your browser:</p>
                             <a href="{verify_url}" target="_blank">{verify_url}</a>
                             <br /><br />
-                            <p>This link is valid for 60 minutes only. If it has expired, login to our <a href="{company_url}" target="_blank">Client Area</a> to request a new link.</p>
+                            <p>This link is valid for 60 minutes only. If it has expired, login to our <a href="{client_url}" target="_blank">Client Area</a> to request a new link.</p>
                             <br />
                             <p>Best Regards,</p>
                             <p>{company_name}</p>
