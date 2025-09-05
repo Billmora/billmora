@@ -1,6 +1,6 @@
 @props([
   'variant' => 'primary',
-  'title',
+  'title' => null,
 ])
 
 <div
@@ -14,20 +14,22 @@
   role="alert"
 >
   <div class="flex gap-2 items-center">
-    @switch($variant)
-      @case('success')
-        <x-lucide-check-circle class="w-auto h-6"/>
-        @break
-      @case('warning')
-        <x-lucide-circle-alert class="w-auto h-6"/>
-        @break
-      @case('danger')
-        <x-lucide-triangle-alert class="w-auto h-6"/>
-        @break
-      @default
-        <x-lucide-info class="w-auto h-6"/>
-    @endswitch
-    <p class="font-semibold">{{ $title }}</p>
+    @if ($title)
+      @switch($variant)
+        @case('success')
+          <x-lucide-check-circle class="w-auto h-6"/>
+          @break
+        @case('warning')
+          <x-lucide-circle-alert class="w-auto h-6"/>
+          @break
+        @case('danger')
+          <x-lucide-triangle-alert class="w-auto h-6"/>
+          @break
+        @default
+          <x-lucide-info class="w-auto h-6"/>
+      @endswitch
+      <p class="font-semibold">{{ $title }}</p>
+    @endif
   </div>
   {{ $slot }}
 </div>
