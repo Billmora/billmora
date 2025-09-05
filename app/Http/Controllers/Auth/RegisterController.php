@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Mail\TemplateMail;
-use App\Models\User;
-use App\Http\Controllers\Controller;
 use Billmora;
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Mail\TemplateMail;
+use App\Models\UserEmailVerification;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Mail;
@@ -66,10 +68,17 @@ class RegisterController extends Controller
             'postcode' => $validated['postcode'],
         ]);
 
+        $token = Str::random(64);
+        UserEmailVerification::create([
+            'user_id' => $user->id,
+            'token' => $token,
+            'expires_at' => now()->addMinutes(60),
+        ]);
+
         Mail::to($user->email)->send(new TemplateMail('user_registration', [
             'client_name' => $user->fullname,
             'company_name' => Billmora::getGeneral('company_name'),
-            'verify_url' => 'https://billmora.com', // TODO: Will be replace from real url verification
+            'verify_url' => route('client.email.verify', ['token' => $token]),
             'client_url' => config('app.url'),
         ]));
 
