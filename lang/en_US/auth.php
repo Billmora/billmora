@@ -26,4 +26,14 @@ return [
         'resent' => 'We have resent a verification email to you. Please check your inbox.',
         'invalid_request' => 'Invalid request token for email verification.',
     ],
+
+    'password' => [
+        'reset_request_sent' => 'We have sent you an email to reset your password. Please check your inbox.',
+        'already_requested' => 'You have already requested a password reset. Please check your inbox.',
+        'invalid_request' => 'Invalid password reset request.',
+        'expired_request' => 'Your password reset request has expired. Please request again.',
+        'email_not_found' => 'The email address does not match our records. Please try again.',
+        'reset_success' => 'Your password has been successfully reset. You can login now.',
+        'current_mismatch' => 'The provided password does not match your current password.',
+    ],
 ];
