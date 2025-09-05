@@ -13,8 +13,8 @@
   ])
   role="alert"
 >
-  <div class="flex gap-2 items-center">
-    @if ($title)
+  @if ($title)
+    <div class="flex gap-2 items-center">
       @switch($variant)
         @case('success')
           <x-lucide-check-circle class="w-auto h-6"/>
@@ -29,7 +29,7 @@
           <x-lucide-info class="w-auto h-6"/>
       @endswitch
       <p class="font-semibold">{{ $title }}</p>
-    @endif
-  </div>
+    </div>
+  @endif
   {{ $slot }}
 </div>
