@@ -42,7 +42,7 @@ class MailTemplateSeeder extends Seeder
                     'client_name' => 'Client name',
                     'company_name' => 'Company name',
                     'verify_url' => 'Email verification URL',
-                    'client_url' => 'Client Area URL',
+                    'clientarea_url' => 'Client Area URL',
                 ],
                 'translations' => [
                     'en_US' => [
@@ -57,7 +57,7 @@ class MailTemplateSeeder extends Seeder
                             <p>If you're having trouble, try copying and pasting the following URL into your browser:</p>
                             <a href="{verify_url}" target="_blank">{verify_url}</a>
                             <br /><br />
-                            <p>This link is valid for 60 minutes only. If it has expired, login to our <a href="{client_url}" target="_blank">Client Area</a> to request a new link.</p>
+                            <p>This link is valid for 60 minutes only. If it has expired, login to our <a href="{clientarea_url}" target="_blank">Client Area</a> to request a new link.</p>
                             <br />
                             <p>Best Regards,</p>
                             <p>{company_name}</p>
@@ -72,7 +72,7 @@ class MailTemplateSeeder extends Seeder
                     'client_name' => 'Client name',
                     'company_name' => 'Company name',
                     'verify_url' => 'Email verification URL',
-                    'client_url' => 'Client Area URL',
+                    'clientarea_url' => 'Client Area URL',
                 ],
                 'translations' => [
                     'en_US' => [
@@ -86,7 +86,7 @@ class MailTemplateSeeder extends Seeder
                             <p>If you're having trouble, try copying and pasting the following URL into your browser:</p>
                             <a href="{verify_url}" target="_blank">{verify_url}</a>
                             <br /><br />
-                            <p>This link is valid for 60 minutes only. If it has expired, login to our <a href="{client_url}" target="_blank">Client Area</a> to request a new link.</p>
+                            <p>This link is valid for 60 minutes only. If it has expired, login to our <a href="{clientarea_url}" target="_blank">Client Area</a> to request a new link.</p>
                             <br />
                             <p>Best Regards,</p>
                             <p>{company_name}</p>

@@ -90,7 +90,7 @@ class EmailVerificationController extends Controller
                 'client_name' => $user->fullname,
                 'company_name' => Billmora::getGeneral('company_name'),
                 'verify_url' => route('client.email.verify', ['token' => $newToken]),
-                'client_url' => config('app.url'),
+                'clientarea_url' => config('app.url'),
             ]));
 
             return redirect()->route('client.login')->with('success', __('auth.email.resent'));
