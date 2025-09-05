@@ -28,7 +28,9 @@ class UserEmailVerification extends Model
     ];
 
     /**
-     * Check if the token has expired.
+     * Determine if the verification token is expired.
+     *
+     * @return bool
      */
     public function isExpired()
     {
@@ -36,7 +38,9 @@ class UserEmailVerification extends Model
     }
 
     /**
-     * Check if the token has been verified.
+     * Check if the email verification has already been completed.
+     *
+     * @return bool
      */
     public function isVerified()
     {
@@ -44,7 +48,9 @@ class UserEmailVerification extends Model
     }
 
     /**
-     * Verify the token and mark it as verified.
+     * Mark the email verification as completed.
+     *
+     * @return void
      */
     public function markAsVerified()
     {

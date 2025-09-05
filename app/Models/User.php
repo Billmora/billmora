@@ -56,7 +56,9 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the user's full name.
+     * Accessor for the user's full name. Combines the first name and last name attributes.
+     *
+     * @return string
      */
     public function getFullnameAttribute()
     {
@@ -64,8 +66,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Avatar URL for the user.
+     * Accessor for the user's avatar URL. Generates a Gravatar URL based on the user's email address.
      *
+     * @return string
      */
     public function getAvatarAttribute()
     {
@@ -73,7 +76,9 @@ class User extends Authenticatable
     }
 
     /**
-     * Relationship: Billing Address.
+     * Get the billing information associated with the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function billing()
     {

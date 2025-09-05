@@ -17,6 +17,11 @@ class UserBilling extends Model
         'updated_at'
     ];
 
+    /**
+     * Get the user that owns the billing information.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
