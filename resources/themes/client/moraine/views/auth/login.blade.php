@@ -18,9 +18,15 @@
                     @if (session('success'))
                         <x-client::alert variant="success">{{ session('success') }}</x-client::alert>
                     @endif
+                    @if (session('warning'))
+                        <x-client::alert variant="warning">{{ session('warning') }}</x-client::alert>
+                    @endif
                     @if (session('error'))
                         <x-client::alert variant="danger">
                             {{ session('error') }}
+                            @if (session('expired_token'))
+                                <button type="button" onclick="document.getElementById('resendEmail').submit()" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.resend') }}</button>
+                            @endif
                         </x-client::alert>
                     @endif
                     <h3 class="font-semibold text-2xl text-slate-700">{{ __('auth.page.login') }}</h3>
@@ -41,6 +47,10 @@
                 <p class="text-slate-200">Billmora is a free and open-source billing management platform designed to automate recurring services and simplify operations for hosting businesses.</p>
             </div>
         </div>
+        <form id="resendEmail" action="{{ route('client.email.resend') }}" method="POST">
+            @csrf
+            <input type="hidden" name="expired_token" value="{{ session('expired_token') }}">
+        </form>
     </div>
     @livewireScripts
 </body>
