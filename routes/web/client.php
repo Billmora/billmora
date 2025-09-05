@@ -24,6 +24,12 @@ Route::group(['prefix' => 'auth'], function () {
 
         Route::get('/email/verify/{token}', [Auth\EmailVerificationController::class, 'verify'])->name('client.email.verify');
         Route::post('/email/resend', [Auth\EmailVerificationController::class, 'resend'])->name('client.email.resend');
+
+        Route::get('/password/forgot', [Auth\Password\ForgotController::class, 'index'])->name('client.password.forgot');
+        Route::post('/password/forgot', [Auth\Password\ForgotController::class, 'store'])->name('client.password.forgot.store');
+
+        Route::get('/password/reset/{token}', [Auth\Password\ResetController::class, 'index'])->name('client.password.reset');
+        Route::post('/password/reset', [Auth\Password\ResetController::class, 'store'])->name('client.password.reset.store');
     });
 
     Route::group(['middleware' => 'auth'], function () {
