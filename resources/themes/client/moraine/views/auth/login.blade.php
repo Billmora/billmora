@@ -16,10 +16,12 @@
                 </a>
                 <div class="grid gap-6 my-auto">
                     @if (session('success'))
-                        <x-admin::alert variant="success" title="{{ session('success') }}" />
+                        <x-client::alert variant="success">{{ session('success') }}</x-client::alert>
                     @endif
                     @if (session('error'))
-                        <x-admin::alert variant="danger" title="{{ session('error') }}" />
+                        <x-client::alert variant="danger">
+                            {{ session('error') }}
+                        </x-client::alert>
                     @endif
                     <h3 class="font-semibold text-2xl text-slate-700">{{ __('auth.page.login') }}</h3>
                     <div class="grid gap-3">
