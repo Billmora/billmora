@@ -28,6 +28,16 @@ class UserEmailVerification extends Model
     ];
 
     /**
+     * Determine if the verification token is active.
+     *
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->expires_at->isFuture();
+    }
+
+    /**
      * Determine if the verification token is expired.
      *
      * @return bool
