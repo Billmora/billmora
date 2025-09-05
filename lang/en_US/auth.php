@@ -8,10 +8,10 @@ return [
         'reset_password' => 'Update your Password',
     ],
     
+    'remembered_password' => 'Already remembered your password?',
     'forgot_password' => 'Forgot Password?',
-
-    'dont_have_account' => 'Don\'t have an account?',
     'have_account' => 'Already have an account?',
+    'dont_have_account' => 'Don\'t have an account?',
 
     'invalid_credentials' => 'No account matching those credentials could be found.',
     'registration_successful' => 'Thank you for registering. We have sent you an email for verification. Please check your inbox and follow the instructions to verify your email.',
