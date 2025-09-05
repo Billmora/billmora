@@ -70,4 +70,12 @@ class User extends Authenticatable
     {
         return 'https://www.gravatar.com/avatar/' . md5(strtolower($this->email));
     }
+
+    /**
+     * Relationship: Billing Address.
+     */
+    public function billing()
+    {
+        return $this->hasOne(UserBilling::class);
+    }
 }
