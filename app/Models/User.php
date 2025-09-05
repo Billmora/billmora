@@ -52,6 +52,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'password' => 'hashed',
+        'email_verified_at' => 'datetime',
     ];
 
     /**
@@ -77,5 +78,25 @@ class User extends Authenticatable
     public function billing()
     {
         return $this->hasOne(UserBilling::class);
+    }
+
+    /**
+     * Get the latest email verification record associated with the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function getEmailVerification()
+    {
+        return $this->hasOne(UserEmailVerification::class)->latestOfMany();
+    }
+
+    /**
+     * Determine if the user's email address has been verified.
+     *
+     * @return bool True if the user has a non-null email_verified_at timestamp, false otherwise.
+     */
+    public function isEmailVerified()
+    {
+        return $this->email_verified_at !== null;
     }
 }
