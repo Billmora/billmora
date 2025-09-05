@@ -55,6 +55,17 @@ class RegisterController extends Controller
             'password' => bcrypt($validated['password']),
         ]);
 
+        $user->billing()->create([
+            'phone_number' => $validated['phone_number'],
+            'company_name' => $validated['company_name'],
+            'street_address_1' => $validated['street_address_1'],
+            'street_address_2' => $validated['street_address_2'],
+            'city' => $validated['city'],
+            'country' => $validated['country'],
+            'state' => $validated['state'],
+            'postcode' => $validated['postcode'],
+        ]);
+
         Mail::to($user->email)->send(new TemplateMail('user_registration', [
             'client_name' => $user->fullname,
             'company_name' => Billmora::getGeneral('company_name'),
