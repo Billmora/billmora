@@ -27,5 +27,17 @@ return [
     'password' => 'Password',
     'confirm_password' => 'Confirm Password',
 
+    'active' => 'Active',
+    'inactive' => 'Inactive',
+    'enable' => 'Enable',
+    'disable' => 'Disable',
+    'save' => 'Save',
+    'cancel' => 'Cancel',
+    'create' => 'Create',
+    'update' => 'Update',
+    'delete' => 'Delete',
+    'send' => 'Send',
+    'resend' => 'Resend',
+
     'back_to' => 'Back to :page'
 ];
