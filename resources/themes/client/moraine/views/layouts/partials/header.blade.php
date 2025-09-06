@@ -48,7 +48,7 @@
         <span class="text-xl text-slate-600 font-bold">{{ auth()->user()->fullname }}</span>
         <span class="text-md text-slate-500 font-semibold">{{ auth()->user()->email }}</span>
       </div>
-      <hr class="border-t-2 border-billmora-2 mt-2 mb-4">
+      <hr class="border-t-2 border-billmora-2 my-2">
       <a href="#" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
         <x-lucide-layers-2 class="w-5 h-auto" />
         <span class="font-semibold">{{ __('client/common.portal_area') }}</span>
@@ -57,7 +57,7 @@
         <x-lucide-shield class="w-5 h-auto" />
         <span class="font-semibold">{{ __('client/common.admin_area') }}</span>
       </a>
-      <hr class="border-t-2 border-billmora-2 mt-4 mb-2">
+      <hr class="border-t-2 border-billmora-2 my-2">
       <form action="{{ route('client.logout.store') }}" method="POST">
         @csrf
         <button class="w-full flex gap-2 items-center hover:bg-red-400 px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300 cursor-pointer" role="menuitem">
