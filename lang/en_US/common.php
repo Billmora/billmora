@@ -59,5 +59,16 @@ return [
     'disable_success' => ':attribute have been disabled.',
     'disable_failed' => 'Failed to disable :attribute.',
 
+    'create_modal_title' => 'Create a new item',
+    'create_modal_description' => 'Are you sure you want to create this :item?',
+    'update_modal_title' => 'Update the item',
+    'update_modal_description' => 'Are you sure you want to update this :item?',
+    'delete_modal_title' => 'Delete the item',
+    'delete_modal_description' => 'Are you sure you want to delete this :item?',
+    'enable_modal_title' => 'Enable the item',
+    'enable_modal_description' => 'Are you sure you want to enable this :item?',
+    'disable_modal_title' => 'Disable the item',
+    'disable_modal_description' => 'Are you sure you want to disable this :item?',
+
     'back_to' => 'Back to :page'
 ];
