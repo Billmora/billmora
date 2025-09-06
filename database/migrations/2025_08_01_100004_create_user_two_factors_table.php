@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('user_two_factors', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('secret_key');
+            $table->text('secret_key');
             $table->json('recovery_codes');
-            $table->boolean('enabled')->default(false);
-            $table->boolean('downloaded')->default(false);
+            $table->timestamp('enabled_at')->nullable(); 
+            $table->timestamp('acknowledged_at')->nullable();
             $table->timestamps();
         });
     }
