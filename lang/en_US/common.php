@@ -11,6 +11,7 @@ return [
     'sign_up' => 'Sign Up',
     
     'account_settings' => 'Account Settings',
+    'account_security' => 'Account Security',
     'personal_information' => 'Personal Information',
     'first_name' => 'First Name',
     'last_name' => 'Last Name',
