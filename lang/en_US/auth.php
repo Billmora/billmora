@@ -70,6 +70,7 @@ return [
             'description' => 'If you have lost access to your authenticator app, use your backup codes or contact support to regain access to your account.',
             'lost_access' => 'Lost access to Authenticator App?',
             'have_access' => 'Have access to Authenticator App?',
+            'invalid_code' => 'The entered Recovery Code is invalid.',
         ],
     ],
 ];
