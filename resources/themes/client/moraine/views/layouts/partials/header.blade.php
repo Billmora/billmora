@@ -44,9 +44,9 @@
         x-transition
         x-on:click.outside="isOpen = false, openedWithKeyboard = false">
       {{-- Dropdown Content --}}
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col">
         <span class="text-xl text-slate-600 font-bold">{{ auth()->user()->fullname }}</span>
-        <span class="text-lg text-slate-500 font-semibold">Administrator</span>
+        <span class="text-md text-slate-500 font-semibold">{{ auth()->user()->email }}</span>
       </div>
       <hr class="border-t-2 border-billmora-2 mt-2 mb-4">
       <a href="#" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
