@@ -52,6 +52,10 @@ return [
     'update_failed' => 'Failed to update :attribute.',
     'delete_success' => ':attribute have been deleted.',
     'delete_failed' => 'Failed to delete :attribute.',
+    'enable_success' => ':attribute have been enabled.',
+    'enable_failed' => 'Failed to enable :attribute.',
+    'disable_success' => ':attribute have been disabled.',
+    'disable_failed' => 'Failed to disable :attribute.',
 
     'back_to' => 'Back to :page'
 ];
