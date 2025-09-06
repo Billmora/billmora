@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth;
 use App\Http\Controllers\Client;
+use App\Http\Controllers\Client\Account;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -9,6 +10,16 @@ use Illuminate\Support\Facades\Route;
  */
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [Client\DashboardController::class, 'index'])->name('client.dashboard');
+
+    /**
+     * Client account routes.
+     * 
+     * Prefix: /account
+     */
+    Route::group(['prefix' => 'account'], function () {
+        Route::get('/settings', [Account\SettingsController::class, 'index'])->name('client.account.settings');
+        Route::put('/settings', [Account\SettingsController::class, 'update'])->name('client.account.settings.update');
+    });
 });
 
 /**
