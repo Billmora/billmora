@@ -41,15 +41,15 @@ return [
     'resend' => 'Resend',
     'submit' => 'Submit',
 
-    'send_success' => ':attribute have been sent',
-    'send_failed' => 'Failed to send :attribute',
-    'save_success' => ':attribute have been saved',
-    'save_failed' => 'Failed to save :attribute',
-    'create_success' => ':attribute have been created',
+    'send_success' => ':attribute have been sent.',
+    'send_failed' => 'Failed to send :attribute.',
+    'save_success' => ':attribute have been saved.',
+    'save_failed' => 'Failed to save :attribute.',
+    'create_success' => ':attribute have been created.',
     'create_failed' => 'Failed to create :attribute.',
-    'update_success' => ':attribute have been updated',
+    'update_success' => ':attribute have been updated.',
     'update_failed' => 'Failed to update :attribute.',
-    'delete_success' => ':attribute have been deleted',
+    'delete_success' => ':attribute have been deleted.',
     'delete_failed' => 'Failed to delete :attribute.',
 
     'back_to' => 'Back to :page'
