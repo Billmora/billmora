@@ -42,6 +42,7 @@ return [
     'resend' => 'Resend',
     'submit' => 'Submit',
     'continue' => 'Continue',
+    'download' => 'Download',
 
     'send_success' => ':attribute have been sent.',
     'send_failed' => 'Failed to send :attribute.',
