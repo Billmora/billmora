@@ -36,4 +36,40 @@ return [
         'reset_success' => 'Your password has been successfully reset. You can login now.',
         'current_mismatch' => 'The provided password does not match your current password.',
     ],
+
+    '2fa' => [
+        'title' => 'Two-Factor Authentication',
+        'description' => 'Two-Factor Authentication (2FA) adds an extra layer of security to your account by requiring a second form of verification in addition to your password.',
+
+        'setup' => [
+            'title' => 'Set Up Two-Factor Authentication',
+            'description' => 'Secure your account by enabling Two-Factor Authentication (2FA). Follow the steps below to set up 2FA using an authentication app.',
+            'step_1' => '1. Scan QR code using an authenticator app or enter the key manually',
+            'step_2' => '2. Enter the 6 digit code from your authenticator app',
+            'step_3' => '3. Continue to the next step',
+            'has_setup' => 'You have setup Two-Factor Authentication on your account.',
+            'not_setup' => 'You have not setup Two-Factor Authentication on your account.',
+        ],
+
+        'backup' => [
+            'title' => 'Backup Codes Two-Factor Authentication',
+            'description' => 'Backup codes can be used to access your account if you lose access to your authentication device. Store them in a safe place.',
+            'not_downloaded' => 'You have not downloaded your backup codes. Please download and store them in a safe place.',
+            'recovery_code' => 'Recovery Code from the Backup Codes',
+        ],
+
+        'verify' => [
+            'title' => 'Verify Two-Factor Authentication',
+            'description' => 'Enter the verification code from your authentication app to complete the Two-Factor Authentication.',
+            'totp' => 'TOTP Code from the app',
+            'invalid_totp' => 'The entered TOTP Code is invalid.',
+        ],
+
+        'recovery' => [
+            'title' => 'Recover Two-Factor Authentication',
+            'description' => 'If you have lost access to your authenticator app, use your backup codes or contact support to regain access to your account.',
+            'lost_access' => 'Lost access to Authenticator App?',
+            'have_access' => 'Have access to Authenticator App?',
+        ],
+    ],
 ];
