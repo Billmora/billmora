@@ -50,6 +50,21 @@ Route::group(['prefix' => 'auth'], function () {
     });
 
     Route::group(['middleware' => 'auth'], function () {
+        Route::get('/two-factor/setup', [Auth\TwoFactor\SetupController::class, 'index'])->name('client.two-factor.setup');
+        Route::post('/two-factor/setup', [Auth\TwoFactor\SetupController::class, 'store'])->name('client.two-factor.setup.store');
+        
+        Route::get('/two-factor/backup', [Auth\TwoFactor\BackupController::class, 'index'])->name('client.two-factor.backup');
+        Route::post('/two-factor/backup', [Auth\TwoFactor\BackupController::class, 'store'])->name('client.two-factor.backup.store');
+        Route::post('/two-factor/backup/download', [Auth\TwoFactor\BackupController::class, 'download'])->name('client.two-factor.backup.download');
+        
+        Route::get('/two-factor/verify', [Auth\TwoFactor\VerifyController::class, 'index'])->name('client.two-factor.verify');
+        Route::post('/two-factor/verify', [Auth\TwoFactor\VerifyController::class, 'store'])->name('client.two-factor.verify.store');
+        
+        Route::get('/two-factor/recovery', [Auth\TwoFactor\RecoveryController::class, 'index'])->name('client.two-factor.recovery');
+        Route::post('/two-factor/recovery', [Auth\TwoFactor\RecoveryController::class, 'store'])->name('client.two-factor.recovery.store');
+
+        Route::post('/two-factor/disable', [Auth\TwoFactor\SetupController::class, 'disable'])->name('client.two-factor.disable');
+
         Route::post('/logout', [Auth\LoginController::class, 'logout'])->name('client.logout.store');
     });
 });
