@@ -11,7 +11,8 @@
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.6",
         "mallardduck/blade-lucide-icons": "^1.23",
-        "outhebox/blade-flags": "^1.5"
+        "outhebox/blade-flags": "^1.5",
+        "pragmarx/google2fa-laravel": "^2.3"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.16",
