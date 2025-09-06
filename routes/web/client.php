@@ -19,6 +19,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'account'], function () {
         Route::get('/settings', [Account\SettingsController::class, 'index'])->name('client.account.settings');
         Route::put('/settings', [Account\SettingsController::class, 'update'])->name('client.account.settings.update');
+
+        Route::get('/security', [Account\SecurityController::class, 'index'])->name('client.account.security');
+        Route::put('/security/email', [Account\SecurityController::class, 'updateEmail'])->name('client.account.security.email.update');
+        Route::put('/security/password', [Account\SecurityController::class, 'updatePassword'])->name('client.account.security.password.update');
     });
 });
 
