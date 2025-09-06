@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('secret_key');
             $table->json('recovery_codes');
             $table->timestamp('enabled_at')->nullable(); 
-            $table->timestamp('acknowledged_at')->nullable();
+            $table->timestamp('downloaded_at')->nullable();
             $table->timestamps();
         });
     }

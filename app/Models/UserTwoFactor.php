@@ -25,7 +25,7 @@ class UserTwoFactor extends Model
     protected $casts = [
         'recovery_codes' => 'array',
         'enabled_at' => 'datetime',
-        'acknowledged_at' => 'datetime',
+        'downloaded_at' => 'datetime',
     ];
 
     /**
@@ -49,12 +49,12 @@ class UserTwoFactor extends Model
     }
 
     /**
-     * Determine if the two-factor recovery codes have been acknowledged by the user.
+     * Determine if the two-factor recovery codes have been downloaded by the user.
      *
      * @return bool
      */
-    public function isAcknowledged()
+    public function isDownloaded()
     {
-        return $this->acknowledged_at !== null;
+        return $this->downloaded_at !== null;
     }
 }
