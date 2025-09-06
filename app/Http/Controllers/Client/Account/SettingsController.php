@@ -66,6 +66,6 @@ class SettingsController extends Controller
             ]
         );
 
-        return redirect()->back()->with('success', __('common.update_success', ['attribute' => __('common.account_information')]));
+        return redirect()->back()->with('success', __('common.update_success', ['attribute' => __('common.account_settings')]));
     }
 }

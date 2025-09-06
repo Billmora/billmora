@@ -10,7 +10,7 @@ return [
     'sign_in' => 'Sign In',
     'sign_up' => 'Sign Up',
     
-    'account_information' => 'Account Information',
+    'account_settings' => 'Account Settings',
     'personal_information' => 'Personal Information',
     'first_name' => 'First Name',
     'last_name' => 'Last Name',
