@@ -16,6 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(\App\Http\Middleware\LanguageMiddleware::class);
+        $middleware->redirectGuestsTo(fn () => route('client.login'));
+        $middleware->redirectUsersTo(fn () => route('client.dashboard'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
