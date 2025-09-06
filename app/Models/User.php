@@ -87,6 +87,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the two-factor authentication settings associated with the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function twoFactor()
+    {
+        return $this->hasOne(UserTwoFactor::class);
+    }
+
+    /**
      * Get the latest email verification record associated with the user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
