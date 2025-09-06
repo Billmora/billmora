@@ -49,6 +49,11 @@
         <span class="text-md text-slate-500 font-semibold">{{ auth()->user()->email }}</span>
       </div>
       <hr class="border-t-2 border-billmora-2 my-2">
+      <a href="{{ route('client.account.settings') }}" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
+        <x-lucide-circle-user-round class="w-5 h-auto" />
+        <span class="font-semibold">{{ __('common.account_settings') }}</span>
+      </a>
+      <hr class="border-t-2 border-billmora-2 my-2">
       <a href="#" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
         <x-lucide-layers-2 class="w-5 h-auto" />
         <span class="font-semibold">{{ __('client/common.portal_area') }}</span>
