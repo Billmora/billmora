@@ -11,7 +11,7 @@
     <hr class="border-t-2 border-billmora-2 my-7 mr-8">
     <div class="space-y-2 overflow-y-auto pr-6" id="sidemenu">
       {{-- Sidebar content --}}
-      <a href="{{ route('client.dashboard') }}" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+      <a href="{{ route('client.dashboard') }}" class="flex gap-2 items-center {{ request()->routeIs('client.dashboard') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
         <x-lucide-layout-grid class="w-5 h-auto" />
         <span class="font-semibold">{{ __('client/navigation.dashboard') }}</span>
       </a>
