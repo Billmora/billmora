@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Template Mail')
+@section('title', 'Template Settings - Mail')
 
 @section('body')
 <div class="flex flex-col gap-5">

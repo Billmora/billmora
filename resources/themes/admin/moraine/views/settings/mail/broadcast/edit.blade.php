@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Broadcast Mail - Edit')
+@section('title', 'Broadcast Edit - Mail')
 
 @section('body')
 <form action="{{ route('admin.settings.mail.broadcast.update', ['id' => $broadcast->id]) }}" method="POST" class="flex flex-col gap-5">

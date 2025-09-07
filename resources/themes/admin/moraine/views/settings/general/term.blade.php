@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Term Settings')
+@section('title', 'Term Settings - General')
 
 @section('body')
     <form action="{{ route('admin.settings.general.term.store') }}" method="POST" class="flex flex-col gap-5">
