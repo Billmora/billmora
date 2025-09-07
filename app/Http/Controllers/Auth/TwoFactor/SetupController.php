@@ -114,6 +114,7 @@ class SetupController extends Controller
 
         $user->twoFactor->update([
             'enabled_at' => null,
+            'downloaded_at' => null,
         ]);
 
         return redirect()->back()->with('success', __('common.disable_success', ['attribute' => __('auth.2fa.title')]));
