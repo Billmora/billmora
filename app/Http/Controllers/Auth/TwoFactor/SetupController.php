@@ -42,7 +42,7 @@ class SetupController extends Controller
 
         $twofa = $user->twoFactor;
 
-        if ($user->twoFactor?->enabled) {
+        if ($user->twoFactor?->isActive()) {
             return redirect()->route('client.account.security')->with('error',__('auth.2fa.setup.has_setup'));
         }
 
