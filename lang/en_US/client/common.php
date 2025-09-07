@@ -10,6 +10,4 @@ return [
     'quick_search_navigate' => 'to navigate',
     'quick_search_select' => 'to select',
     'quick_search_close' => 'to close',
-
-    'footer' => 'Copyright © :year :brand - Made with ❤️',
 ];

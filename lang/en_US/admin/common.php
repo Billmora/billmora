@@ -50,6 +50,4 @@ return [
     'update_modal_desc' => 'Are you sure you want to update this :item?',
     'delete_modal_title' => 'Delete the item',
     'delete_modal_desc' => 'Are you sure you want to delete this :item?',
-
-    'footer' => 'Copyright © :year :brand - Made with ❤️',
 ];
