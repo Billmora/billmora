@@ -21,7 +21,8 @@ class BackupController extends Controller
 
         if (!$user->twoFactor) {
             return redirect()->route('client.account.security')->with('error', __('auth.2fa.setup.not_setup'));
-        } elseif ($user->twoFactor->isActive()) {
+        }
+        if ($user->twoFactor->isActive()) {
             return redirect()->route('client.account.security')->with('error', __('auth.2fa.setup.has_setup'));
         }
 
