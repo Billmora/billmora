@@ -40,6 +40,9 @@ class VerifyController extends Controller
         if (!$user->twoFactor) {
             return redirect()->route('client.account.security')->with('error', __('auth.2fa.setup.not_setup'));
         }
+        if (!$user->twoFactor->isDownloaded()) {
+            return redirect()->route('client.two-factor.backup')->with('error', __('auth.2fa.backup.not_downloaded'));
+        }
 
         return view('client::auth.two-factor.verify');
     }
@@ -63,11 +66,17 @@ class VerifyController extends Controller
             return back()->withErrors(['totp' => __('auth.2fa.verify.invalid_totp')])->withInput();
         }
 
-        $user->twoFactor()->update([
-            'enabled_at' => now()
-        ]);
-        session()->put('2fa_passed', true);
+        if ($user->twoFactor->isActive()) {
+            session()->put('2fa_passed', true);
 
-        return redirect()->route('client.account.security')->with('success', __('common.enable_success', ['attribute' => __('auth.2fa.title')]));
+            return redirect()->route('client.dashboard');
+        } else {
+            $user->twoFactor()->update([
+                'enabled_at' => now()
+            ]);
+            session()->put('2fa_passed', true);
+    
+            return redirect()->route('client.account.security')->with('success', __('common.enable_success', ['attribute' => __('auth.2fa.title')]));
+        };
     } 
 }
