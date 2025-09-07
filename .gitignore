@@ -19,7 +19,7 @@
 /public/build
 /public/hot
 /public/storage
-# Exclude build assets themes during active development
+# Exclude theme build assets (only generated during GitHub Actions release workflow)
 /public/themes
 /storage/*.key
 /storage/pail
