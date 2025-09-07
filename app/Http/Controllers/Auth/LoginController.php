@@ -56,6 +56,8 @@ class LoginController extends Controller
 
         $request->session()->regenerateToken();
 
+        session()->forget('2fa_passed');
+
         return redirect('/');
     }
 }
