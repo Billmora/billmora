@@ -18,10 +18,14 @@ class RegisterController extends Controller
     /**
      * Show the client registration form.
      *
-     * @return \Illuminate\View\View The registration view.
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse Returns the registration view if enabled, otherwise redirects to login.
      */
     public function index()
     {
+        if (!Billmora::getAuth('user_registration')) {
+            return redirect()->route('client.login')->with('warning', __('auth.registration_disabled'));
+        }
+
         return view('client::auth.register');
     }
 
@@ -35,6 +39,10 @@ class RegisterController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Billmora::getAuth('user_registration')) {
+            return redirect()->route('client.login')->with('warning', __('auth.registration_disabled'));
+        }
+
         $validated = $request->validate([
             'first_name' => ['required', 'string', 'min:3', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
