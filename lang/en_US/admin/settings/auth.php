@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'Auth settings',
+    'title' => 'Authentication settings',
     'description' => 'Configure authentication settings for the system.',
     'tabs' => [
         'user' => 'User',
