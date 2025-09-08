@@ -41,6 +41,7 @@ return [
     '2fa' => [
         'title' => 'Two-Factor Authentication',
         'description' => 'Two-Factor Authentication (2FA) adds an extra layer of security to your account by requiring a second form of verification in addition to your password.',
+        'required' => 'Two-Factor Authentication (2FA) is required for your account. You must set up 2FA before you can continue.',
 
         'setup' => [
             'title' => 'Set Up Two-Factor Authentication',
