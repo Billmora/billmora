@@ -13,6 +13,9 @@
                     @if (session('success'))
                         <x-client::alert variant="success">{{ session('success') }}</x-client::alert>
                     @endif
+                    @if (session('warning'))
+                        <x-client::alert variant="warning">{{ session('warning') }}</x-client::alert>
+                    @endif
                     @if (session('error'))
                         <x-client::alert variant="danger">{{ session('error') }}</x-client::alert>
                     @endif
