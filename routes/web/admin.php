@@ -61,6 +61,16 @@ Route::group(['prefix' => 'admin'], function () {
             Route::put('/broadcast/{id}/edit', [Settings\Mail\BroadcastController::class, 'update'])->name('admin.settings.mail.broadcast.update');
             Route::delete('/broadcast/{id}', [Settings\Mail\BroadcastController::class, 'destroy'])->name('admin.settings.mail.broadcast.destroy');
         });
+
+        /**
+         * Admin authentication settings interface routes.
+         *
+         * Prefix: /admin/settings/auth
+         */
+        Route::group(['prefix' => 'auth'], function () {
+            Route::get('/', [Settings\Auth\UserController::class, 'index'])->name('admin.settings.auth.user');
+            Route::post('/', [Settings\Auth\UserController::class, 'store'])->name('admin.settings.auth.user.store');
+        });
     });
 
     /**
