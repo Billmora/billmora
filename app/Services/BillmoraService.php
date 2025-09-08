@@ -164,6 +164,27 @@ class BillmoraService
     }
 
     /**
+     * Determine if the given authentication key contains the specified value(s).
+     *
+     * @param string       $key   The authentication key to check.
+     * @param string|array $value The value or list of values to compare against the stored authentication values.
+     *
+     * @return bool True if the value exists in the authentication settings, false otherwise.
+     */
+    public static function hasAuth(string $key, string|array $value): bool
+    {
+        $values = self::getAuth($key, []);
+
+        if (!is_array($values)) {
+            return false;
+        }
+
+        return is_array($value)
+            ? !empty(array_intersect($value, $values))
+            : in_array($value, $values, true);
+    }
+
+    /**
      * Store or update auth settings.
      *
      * This is a shortcut method that internally calls 'setAuth()' using
