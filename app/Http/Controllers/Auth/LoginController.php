@@ -36,6 +36,17 @@ class LoginController extends Controller
         if (Auth::attempt($request->only('email', 'password'))) {
             $user = Auth::user();
 
+            if (Billmora::getAuth('user_require_verified') && !$user->isEmailVerified()) {
+                Auth::logout();
+        
+                $verification = $user->getEmailVerification()->latest()->first();
+                $token = $verification ? encrypt($verification->id) : null;
+
+                return redirect()->back()
+                        ->with('error', __('auth.email.not_verified'))
+                        ->with('email_token', $token);
+            }
+
             $request->session()->regenerate();
 
             if ($user->twoFactor?->isActive()) {
