@@ -15,6 +15,7 @@ return [
 
     'invalid_credentials' => 'No account matching those credentials could be found.',
     'registration_successful' => 'Thank you for registering. We have sent you an email for verification. Please check your inbox and follow the instructions to verify your email.',
+    'registration_disabled' => 'User registration is currently disabled. New accounts cannot be created at this time.',
 
     'email' => [
         'not_verified' => 'Your email has not been verified. Please check your inbox or resend the verification email.',
