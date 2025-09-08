@@ -25,36 +25,121 @@
                     <div class="grid gap-4">
                         <h4 class="text-xl font-semibold text-slate-700">{{ __('common.personal_information') }}</h4>
                         <div class="flex flex-col sm:flex-row gap-4">
-                            <x-client::input type="text" name="first_name" label="{{ __('common.first_name') }}" value="{{ old('first_name') }}" required />
-                            <x-client::input type="text" name="last_name" label="{{ __('common.last_name') }}" value="{{ old('last_name') }}" required />
+                            @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'first_name'))
+                                <x-client::input 
+                                    type="text" 
+                                    name="first_name" 
+                                    label="{{ __('common.first_name') }}" 
+                                    value="{{ old('first_name') }}" 
+                                    required
+                                />
+                            @endunless
+                            @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'last_name'))
+                                <x-client::input 
+                                    type="text" 
+                                    name="last_name" 
+                                    label="{{ __('common.last_name') }}" 
+                                    value="{{ old('last_name') }}" 
+                                    required
+                                />
+                            @endunless
                         </div>
                         <div class="flex flex-col sm:flex-row gap-4">
-                            <x-client::input type="email" name="email" label="{{ __('common.email') }}" value="{{ old('email') }}" required />
-                            <x-client::input type="tel" name="phone_number" label="{{ __('common.phone_number') }}" value="{{ old('phone_number') }}" />
+                            @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'email'))
+                                <x-client::input 
+                                    type="email" 
+                                    name="email" 
+                                    label="{{ __('common.email') }}" 
+                                    value="{{ old('email') }}" 
+                                    required
+                                />
+                            @endunless
+                            @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'phone_number'))
+                                <x-client::input 
+                                    type="tel" 
+                                    name="phone_number" 
+                                    label="{{ __('common.phone_number') }}" 
+                                    value="{{ old('phone_number') }}" 
+                                    :required="Billmora::hasAuth('user_registration_required_inputs', 'phone_number')" 
+                                />
+                            @endunless
                         </div>
                     </div>
                     <div class="grid gap-4">
                         <h4 class="text-xl font-semibold text-slate-700">{{ __('common.billing_information') }}</h4>
                         <div class="flex flex-col sm:flex-row gap-4">
-                            <x-client::input type="text" name="company_name" label="{{ __('common.company_name') }}" value="{{ old('company_name') }}" required />
-                            <x-client::input type="text" name="street_address_1" label="{{ __('common.street_address_1') }}" value="{{ old('street_address_1') }}" required />
+                            @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'company_name'))
+                                <x-client::input 
+                                    type="text" 
+                                    name="company_name" 
+                                    label="{{ __('common.company_name') }}" 
+                                    value="{{ old('company_name') }}" 
+                                    :required="Billmora::hasAuth('user_registration_required_inputs', 'company_name')" 
+                                />
+                            @endunless
+                            @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'street_address_1'))
+                                <x-client::input 
+                                    type="text" 
+                                    name="street_address_1" 
+                                    label="{{ __('common.street_address_1') }}" 
+                                    value="{{ old('street_address_1') }}" 
+                                    :required="Billmora::hasAuth('user_registration_required_inputs', 'street_address_1')" 
+                                />
+                            @endunless
                         </div>
                         <div class="flex flex-col sm:flex-row gap-4">
-                            <x-client::input type="text" name="street_address_2" label="{{ __('common.street_address_2') }}" value="{{ old('street_address_2') }}" />
-                            <x-client::input type="text" name="city" label="{{ __('common.city') }}" value="{{ old('city') }}" required />
+                            @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'street_address_2'))
+                                <x-client::input 
+                                    type="text" 
+                                    name="street_address_2" 
+                                    label="{{ __('common.street_address_2') }}" 
+                                    value="{{ old('street_address_2') }}" 
+                                    :required="Billmora::hasAuth('user_registration_required_inputs', 'street_address_2')" 
+                                />
+                            @endunless
+                            @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'city'))
+                                <x-client::input 
+                                    type="text" 
+                                    name="city" 
+                                    label="{{ __('common.city') }}" 
+                                    value="{{ old('city') }}" 
+                                    :required="Billmora::hasAuth('user_registration_required_inputs', 'city')" 
+                                />
+                            @endunless
                         </div>
                         <div class="flex flex-col sm:flex-row gap-4">
-                            <x-client::input type="text" name="state" label="{{ __('common.state') }}" value="{{ old('state') }}" required />
-                            <x-client::input type="number" name="postcode" label="{{ __('common.postcode') }}" value="{{ old('postcode') }}" required />
+                            @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'state'))
+                                <x-client::input 
+                                    type="text" 
+                                    name="state" 
+                                    label="{{ __('common.state') }}" 
+                                    value="{{ old('state') }}" 
+                                    :required="Billmora::hasAuth('user_registration_required_inputs', 'state')" 
+                                />
+                            @endunless
+                            @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'postcode'))
+                                <x-client::input 
+                                    type="number" 
+                                    name="postcode" 
+                                    label="{{ __('common.postcode') }}" 
+                                    value="{{ old('postcode') }}" 
+                                    :required="Billmora::hasAuth('user_registration_required_inputs', 'postcode')" 
+                                />
+                            @endunless
                         </div>
-                        <x-client::select name="country" label="{{ __('common.country') }}" required>
-                            @foreach (config('utils.countries') as $country => $label)
-                                <option value="{{ $country }}"
-                                    {{ old('country') == $country ? 'selected' : '' }}>
-                                    {{ $label }}
-                                </option>
-                            @endforeach
-                        </x-client::select>
+                        @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'country'))
+                            <x-client::select 
+                                name="country" 
+                                label="{{ __('common.country') }}" 
+                                :required="Billmora::hasAuth('user_registration_required_inputs', 'country')"
+                            >
+                                @foreach (config('utils.countries') as $country => $label)
+                                    <option value="{{ $country }}" {{ old('country') == $country ? 'selected' : '' }}>
+                                        {{ $label }}
+                                    </option>
+                                @endforeach
+                            </x-client::select>
+                        @endunless
                     </div>
                     <div class="grid gap-4">
                         <h4 class="text-xl font-semibold text-slate-700">{{ __('common.security_information') }}</h4>
