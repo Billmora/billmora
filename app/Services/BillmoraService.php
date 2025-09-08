@@ -148,6 +148,37 @@ class BillmoraService
     }
 
     /**
+     * Retrieve a auth setting value by its key.
+     *
+     * This is a shortcut method that internally calls 'getAuth()' using
+     * the 'auth' category.
+     *
+     * @param string $key     The key of the setting to retrieve.
+     * @param mixed  $default The default value to return if the setting is not found.
+     *
+     * @return mixed The value of the setting or the default if not found.
+     */
+    public static function getAuth(string $key, mixed $default = null): mixed
+    {
+        return self::getSetting('auth', $key, $default);
+    }
+
+    /**
+     * Store or update auth settings.
+     *
+     * This is a shortcut method that internally calls 'setAuth()' using
+     * the 'auth' category.
+     *
+     * @param array $data An associative array of key-value pairs to store or update.
+     *
+     * @return void
+     */
+    public static function setAuth(array $data): void
+    {
+        self::setSetting('auth', $data);
+    }
+
+    /**
      * Update or append environment variables in the '.env' file.
      *
      * This method accepts an array of key-value pairs and updates or appends them to the '.env' file.
