@@ -38,7 +38,7 @@ class LoginController extends Controller
 
             $request->session()->regenerate();
 
-            if ($user->twoFactor->isActive()) {
+            if ($user->twoFactor?->isActive()) {
                 session()->forget('2fa_passed');
                 return redirect()->route('client.two-factor.verify');
             }
