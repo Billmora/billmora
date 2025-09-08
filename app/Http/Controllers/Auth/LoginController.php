@@ -34,7 +34,14 @@ class LoginController extends Controller
         ]);
     
         if (Auth::attempt($request->only('email', 'password'))) {
+            $user = Auth::user();
+
             $request->session()->regenerate();
+
+            if ($user->twoFactor->isActive()) {
+                session()->forget('2fa_passed');
+                return redirect()->route('client.two-factor.verify');
+            }
 
             return redirect()->intended('/');
         }
