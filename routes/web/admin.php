@@ -71,6 +71,16 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/', [Settings\Auth\UserController::class, 'index'])->name('admin.settings.auth.user');
             Route::post('/', [Settings\Auth\UserController::class, 'store'])->name('admin.settings.auth.user.store');
         });
+
+        /**
+         * Admin authentication settings interface routes.
+         *
+         * Prefix: /admin/settings/auth
+         */
+        Route::group(['prefix' => 'captcha'], function () {
+            Route::get('/', [Settings\Captcha\ProviderController::class, 'index'])->name('admin.settings.captcha.provider');
+            Route::post('/', [Settings\Captcha\ProviderController::class, 'store'])->name('admin.settings.captcha.provider.store');
+        });
     });
 
     /**
