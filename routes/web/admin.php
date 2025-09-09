@@ -80,6 +80,8 @@ Route::group(['prefix' => 'admin'], function () {
         Route::group(['prefix' => 'captcha'], function () {
             Route::get('/', [Settings\Captcha\ProviderController::class, 'index'])->name('admin.settings.captcha.provider');
             Route::post('/', [Settings\Captcha\ProviderController::class, 'store'])->name('admin.settings.captcha.provider.store');
+            Route::get('/placement', [Settings\Captcha\PlacementController::class, 'index'])->name('admin.settings.captcha.placement');
+            Route::post('/placement', [Settings\Captcha\PlacementController::class, 'store'])->name('admin.settings.captcha.placement.store');
         });
     });
 

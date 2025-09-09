@@ -1,0 +1,41 @@
+@extends('admin::layouts.app')
+
+@section('title', 'Provider Settings - Captcha')
+
+@section('body')
+<form action="{{ route('admin.settings.captcha.placement.store') }}" method="POST" class="flex flex-col gap-5">
+    @csrf
+    @if (session('success'))
+        <x-admin::alert variant="success" title="{{ session('success') }}" />
+    @endif
+    <x-admin::tabs 
+        :tabs="[
+            [
+                'route' => route('admin.settings.captcha.provider'),
+                'icon' => 'lucide-earth-lock',
+                'label' => __('admin/settings/captcha.tabs.provider'),
+            ],
+            [
+                'route' => route('admin.settings.captcha.placement'),
+                'icon' => 'lucide-waypoints',
+                'label' => __('admin/settings/captcha.tabs.placement'),
+            ],
+        ]" 
+        active="{{ request()->fullUrl() }}" />
+    <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+        <x-admin::multiselect
+            name="placements_enabled_forms"
+            :options="[
+                ['value' => 'login_form', 'title' => 'Login Form'],
+                ['value' => 'register_form', 'title' => 'Register Form'],
+                ['value' => 'ticket_form', 'title' => 'Ticket Form'],
+            ]"
+            :selected="old('placements_enabled_forms', Billmora::getCaptcha('placements_enabled_forms'))"
+            label="{{ __('admin/settings/captcha.placements_enabled_forms_label') }}"
+            helper="{{ __('admin/settings/captcha.placements_enabled_forms_helper') }}"
+        />
+    </div>
+    <button type="submit"
+        class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('admin/common.save') }}</button>
+</form>
+@endsection
