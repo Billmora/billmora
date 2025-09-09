@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Services\CaptchaService;
 use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +33,8 @@ class LoginController extends Controller
             'email' => 'required|string|email:dns',
             'password' => 'required',
         ]);
+
+        CaptchaService::verifyOrFail('login_form', $request);
     
         if (Auth::attempt($request->only('email', 'password'))) {
             $user = Auth::user();

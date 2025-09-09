@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Mail\TemplateMail;
 use App\Models\UserEmailVerification;
+use App\Services\CaptchaService;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -90,6 +91,8 @@ class RegisterController extends Controller
             ],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
+
+        CaptchaService::verifyOrFail('register_form', $request);
 
         $user = User::create([
             'first_name' => $validated['first_name'],

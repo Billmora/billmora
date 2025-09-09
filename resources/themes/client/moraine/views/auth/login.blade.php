@@ -34,6 +34,7 @@
                         <x-client::input type="email" name="email" label="{{ __('common.email') }}" required />
                         <x-client::input type="password" name="password" label="{{ __('common.password') }}" required />
                         <a href="{{ route('client.password.forgot') }}" class="text-billmora-primary hover:text-billmora-primary-hover font-semibold ml-auto">{{ __('auth.forgot_password') }}</a>
+                        <x-client::captcha form="login_form" class="mx-auto" />
                     </div>
                     <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.sign_in') }}</button>
                     <span class="text-slate-600">{{ __('auth.dont_have_account') }} <a href="{{ route('client.register') }}" class="text-billmora-primary hover:text-billmora-primary-hover font-semibold">{{ __('common.sign_up') }}</a></span>
