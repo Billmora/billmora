@@ -42,7 +42,7 @@
                 {{ $label }}
             </label>
             <span class="text-slate-600">
-                {{ $required ? __('admin/common.symbol_required') : __('admin/common.symbol_optional') }}
+                {{ $required ? __('common.symbol_required') : __('common.symbol_optional') }}
             </span>
         </div>
     @endif
@@ -58,7 +58,7 @@
             ])
         >
             <template x-if="selected.length === 0">
-                <span class="text-slate-500">{{ __('admin/common.choose_option') }}</span>
+                <span class="text-slate-500">{{ __('common.choose_option') }}</span>
             </template>
             <div class="flex flex-wrap gap-2">
                 <template x-for="value in selected" :key="value">

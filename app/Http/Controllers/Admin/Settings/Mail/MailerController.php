@@ -60,7 +60,7 @@ class MailerController extends Controller
             'MAILGUN_ENDPOINT' => $validated['mailer_mailgun_endpoint'],
         ]);
 
-        return redirect()->back()->with('success', __('admin/common.save_success', ['item' => __('admin/settings/mail.title')]));
+        return redirect()->back()->with('success', __('common.save_success', ['attribute' => __('admin/settings/mail.title')]));
     }
 
 
@@ -78,7 +78,7 @@ class MailerController extends Controller
                 'company_name' => Billmora::getGeneral('company_name'),
             ]));
 
-            return redirect()->back()->with('success', __('admin/common.send_success', ['item' => __('admin/settings/mail.mailer_test_label')]));
+            return redirect()->back()->with('success', __('common.send_success', ['attribute' => __('admin/settings/mail.mailer_test_label')]));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

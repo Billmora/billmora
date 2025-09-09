@@ -59,6 +59,6 @@
             <x-admin::toggle name="invoice_cancelation_handling" label="{{ __('admin/settings/general.invoice_cancelation_handling_label') }}" helper="{{ __('admin/settings/general.invoice_cancelation_handling_helper') }}" :checked="Billmora::getGeneral('invoice_cancelation_handling')" />
         </div>
         <button type="submit"
-            class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('admin/common.save') }}</button>
+            class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.save') }}</button>
     </form>
 @endsection

@@ -85,6 +85,6 @@ class TemplateController extends Controller
             ]
         );
 
-        return redirect()->route('admin.settings.mail.template')->with('success', __('admin/common.save_success', ['item' => __('admin/settings/mail.title')]));
+        return redirect()->route('admin.settings.mail.template')->with('success', __('common.save_success', ['attribute' => __('admin/settings/mail.title')]));
     }
 }

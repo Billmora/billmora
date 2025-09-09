@@ -1,10 +1,6 @@
 <?php
 
 return [
-    'portal_area' => 'Portal Area',
-    'client_area' => 'Client Area',
-    'sign_out' => 'Sign Out',
-    
     'search' => 'Search...',
     'quick_search' => 'Quick Search...',
     'quick_search_not_found' => 'No results found.',
@@ -12,42 +8,7 @@ return [
     'quick_search_select' => 'to select',
     'quick_search_close' => 'to close',
 
-    'symbol_required' => '*',
-    'symbol_optional' => '(optional)',
-    'choose_option' => 'Choose an options',
     'none' => 'None',
     'key' => 'Key',
     'value' => 'Value',
-
-    'active' => 'Active',
-    'inactive' => 'Inactive',
-    'enable' => 'Enable',
-    'disable' => 'Disable',
-    'save' => 'Save',
-    'cancel' => 'Cancel',
-    'create' => 'Create',
-    'update' => 'Update',
-    'delete' => 'Delete',
-
-    'send_success' => ':item have been sent',
-    'send_failed' => 'Failed to send :item',
-    'save_success' => ':item have been saved',
-    'save_failed' => 'Failed to save :item',
-    'create_success' => ':item have been created',
-    'create_failed' => 'Failed to create :item.',
-    'update_success' => ':item have been updated',
-    'update_failed' => 'Failed to update :item.',
-    'delete_success' => ':item have been deleted',
-    'delete_failed' => 'Failed to delete :item.',
-
-    'enable_modal_title' => 'Enable the item',
-    'enable_modal_desc' => 'Are you sure you want to enable this :item?',
-    'disable_modal_title' => 'Disable the item',
-    'disable_modal_desc' => 'Are you sure you want to disable this :item?',
-    'create_modal_title' => 'Create a new item',
-    'create_modal_desc' => 'Are you sure you want to create this :item?',
-    'update_modal_title' => 'Update the item',
-    'update_modal_desc' => 'Are you sure you want to update this :item?',
-    'delete_modal_title' => 'Delete the item',
-    'delete_modal_desc' => 'Are you sure you want to delete this :item?',
 ];

@@ -83,7 +83,7 @@ class BroadcastController extends Controller
             MailBroadcastJob::dispatch($broadcast);
         }
 
-        return redirect()->route('admin.settings.mail.broadcast')->with('success', __('admin/common.create_success', ['item' => __('admin/settings/mail.tabs.broadcast')]));
+        return redirect()->route('admin.settings.mail.broadcast')->with('success', __('common.create_success', ['attribute' => __('admin/settings/mail.tabs.broadcast')]));
     }
 
     /**
@@ -154,7 +154,7 @@ class BroadcastController extends Controller
             MailBroadcastJob::dispatch($broadcast);
         }
 
-        return redirect()->route('admin.settings.mail.broadcast')->with('success', __('admin/common.save_success', ['item' => __('admin/settings/mail.tabs.broadcast')]));
+        return redirect()->route('admin.settings.mail.broadcast')->with('success', __('common.save_success', ['attribute' => __('admin/settings/mail.tabs.broadcast')]));
     }
 
     /**
@@ -170,6 +170,6 @@ class BroadcastController extends Controller
         $broadcast = MailBroadcast::findOrFail($id);
         $broadcast->delete();
 
-        return redirect()->route('admin.settings.mail.broadcast')->with('success', __('admin/common.delete_success', ['item' => __('admin/settings/mail.tabs.broadcast')]));
+        return redirect()->route('admin.settings.mail.broadcast')->with('success', __('common.delete_success', ['attribute' => __('admin/settings/mail.tabs.broadcast')]));
     }
 }

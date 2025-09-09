@@ -68,16 +68,16 @@
       <hr class="border-t-2 border-billmora-2 mt-2 mb-4">
       <a href="#" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
         <x-lucide-layers-2 class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('admin/common.portal_area') }}</span>
+        <span class="font-semibold">{{ __('common.page.portal') }}</span>
       </a>
       <a href="{{ route('client.dashboard') }}" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
         <x-lucide-copy class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('admin/common.client_area') }}</span>
+        <span class="font-semibold">{{ __('common.page.client') }}</span>
       </a>
       <hr class="border-t-2 border-billmora-2 mt-4 mb-2">
       <button class="flex gap-2 items-center hover:bg-red-400 px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300 cursor-pointer" role="menuitem">
         <x-lucide-log-out class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('admin/common.sign_out') }}</span>
+        <span class="font-semibold">{{ __('common.sign_out') }}</span>
       </button>
     </div>
   </div>

@@ -19,7 +19,7 @@
                 {{ $label }}
             </label>
             <span class="text-slate-600">
-                {{ $required ? __('admin/common.symbol_required') : __('admin/common.symbol_optional') }}
+                {{ $required ? __('common.symbol_required') : __('common.symbol_optional') }}
             </span>
         </div>
     @endif
@@ -39,7 +39,7 @@
             {{ $attributes }}
         >
             <option class="text-slate-500" selected disabled>
-                {{ __('admin/common.choose_option') }}
+                {{ __('common.choose_option') }}
             </option>
             {{ $slot }}
         </select>

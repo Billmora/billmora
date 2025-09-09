@@ -45,9 +45,9 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $template->key }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $template->name }}</td>
                                 @if ($template->active)
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ __('admin/common.active') }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ __('common.active') }}</td>
                                 @else
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ __('admin/common.inactive') }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ __('common.inactive') }}</td>
                                 @endif
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                                     <a href="{{ route('admin.settings.mail.template.edit', $template->id) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover underline">Edit</a>

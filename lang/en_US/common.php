@@ -9,6 +9,11 @@ return [
 
     'sign_in' => 'Sign In',
     'sign_up' => 'Sign Up',
+    'sign_out' => 'Sign Out',
+
+    'symbol_required' => '*',
+    'symbol_optional' => '(optional)',
+    'choose_option' => 'Choose an options',
     
     'account_settings' => 'Account Settings',
     'account_security' => 'Account Security',

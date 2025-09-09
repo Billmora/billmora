@@ -39,6 +39,6 @@ class CreditController extends Controller
 
         Billmora::setGeneral($validated);
 
-        return redirect()->back()->with('success', __('admin/common.save_success', ['item' => __('admin/settings/general.title')]));
+        return redirect()->back()->with('success', __('common.save_success', ['attribute' => __('admin/settings/general.title')]));
     }
 }

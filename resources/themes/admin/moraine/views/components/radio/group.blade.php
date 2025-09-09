@@ -11,7 +11,7 @@
         <label for="{{ $name }}" class="flex gap-1 mb-2 text-slate-600 font-semibold">
             {{ $label }}
             <span class="font-normal">
-                {{ $required ? __('admin/common.symbol_required') : __('admin/common.symbol_optional') }}
+                {{ $required ? __('common.symbol_required') : __('common.symbol_optional') }}
             </span>
         </label>
     @endif
