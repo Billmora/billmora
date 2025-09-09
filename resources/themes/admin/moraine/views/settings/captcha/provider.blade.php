@@ -15,6 +15,11 @@
                 'icon' => 'lucide-earth-lock',
                 'label' => __('admin/settings/captcha.tabs.provider'),
             ],
+            [
+                'route' => route('admin.settings.captcha.placement'),
+                'icon' => 'lucide-waypoints',
+                'label' => __('admin/settings/captcha.tabs.placement'),
+            ],
         ]" 
         active="{{ request()->fullUrl() }}" />
     <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
