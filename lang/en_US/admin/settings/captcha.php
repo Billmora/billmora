@@ -5,6 +5,7 @@ return [
     'description' => 'Configure captcha settings for the system.',
     'tabs' => [
         'provider' => 'Provider',
+        'placement' => 'Placement',
     ],
 
     'provider_type_label' => 'Captcha Provider',
