@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Provider Settings - Captcha')
+@section('title', 'Placement Settings - Captcha')
 
 @section('body')
 <form action="{{ route('admin.settings.captcha.placement.store') }}" method="POST" class="flex flex-col gap-5">
