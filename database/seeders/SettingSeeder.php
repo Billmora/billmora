@@ -84,6 +84,14 @@ class SettingSeeder extends Seeder
             ['category' => 'auth', 'key' => 'user_require_two_factor', 'value' => false],
             ['category' => 'auth', 'key' => 'user_registration_disabled_inputs', 'value' => []],
             ['category' => 'auth', 'key' => 'user_registration_required_inputs', 'value' => ["street_address_1", "city", "state", "postcode", "country"]],
+
+            /**
+             * Run seeder of captcha category.
+             *
+             * Seeds initial data into the 'captcha' category.
+             */
+            ['category' => 'captcha', 'key' => 'provider_type', 'value' => null],
+            ['category' => 'captcha', 'key' => 'placements_enabled_forms', 'value' => []],
         ];
 
         /**
