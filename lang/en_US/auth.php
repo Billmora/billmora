@@ -75,4 +75,8 @@ return [
             'invalid_code' => 'The entered Recovery Code is invalid.',
         ],
     ],
+
+    'captcha' => [
+        'invalid' => 'Captcha verification failed, please try again.',
+    ],
 ];
