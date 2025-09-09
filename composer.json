@@ -13,7 +13,8 @@
         "livewire/livewire": "^3.6",
         "mallardduck/blade-lucide-icons": "^1.23",
         "outhebox/blade-flags": "^1.5",
-        "pragmarx/google2fa-laravel": "^2.3"
+        "pragmarx/google2fa-laravel": "^2.3",
+        "spatie/laravel-permission": "^6.21"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.16",
