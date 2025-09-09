@@ -75,7 +75,7 @@ class BillmoraService
     private static function validateData(array $data): array
     {
         $validator = Validator::make(['keys' => array_keys($data)], [
-            'keys.*' => 'required|string|max:255',
+            'keys.*' => ['required', 'string', 'max:255'],
         ]);
 
         if ($validator->fails()) {

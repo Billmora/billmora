@@ -30,8 +30,8 @@ class LoginController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'email' => 'required|string|email:dns',
-            'password' => 'required',
+            'email' => ['required', 'string', 'email:dns'],
+            'password' => ['required'],
         ]);
 
         CaptchaService::verifyOrFail('login_form', $request);

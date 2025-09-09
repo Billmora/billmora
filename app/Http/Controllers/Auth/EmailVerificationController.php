@@ -57,7 +57,7 @@ class EmailVerificationController extends Controller
     public function resend(Request $request)
     {
         $request->validate([
-            'email_token' => 'required|string',
+            'email_token' => ['required', 'string'],
         ]);
 
         try {
