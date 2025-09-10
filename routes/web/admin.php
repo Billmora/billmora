@@ -73,9 +73,9 @@ Route::group(['prefix' => 'admin'], function () {
         });
 
         /**
-         * Admin authentication settings interface routes.
+         * Admin captcha settings interface routes.
          *
-         * Prefix: /admin/settings/auth
+         * Prefix: /admin/settings/captcha
          */
         Route::group(['prefix' => 'captcha'], function () {
             Route::get('/', [Settings\Captcha\ProviderController::class, 'index'])->name('admin.settings.captcha.provider');
