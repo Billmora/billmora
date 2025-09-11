@@ -75,5 +75,7 @@ return [
     'disable_modal_title' => 'Disable the item',
     'disable_modal_description' => 'Are you sure you want to disable this :item?',
 
-    'back_to' => 'Back to :page'
+    'back_to' => 'Back to :page',
+
+    'unauthorized_admin' => 'You do not have permission to access the admin area.',
 ];
