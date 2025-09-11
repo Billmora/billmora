@@ -20,30 +20,31 @@
         </div>
     @endif
     
-    @foreach ($options as $value => $optionLabel)
-        <div class="flex items-center gap-2 mb-1">
-            <input
-                type="checkbox"
-                name="{{ $name }}[]"
-                id="{{ "{$name}_{$value}" }}"
-                value="{{ $value }}"
-                x-on:input="errorVisible = false"
-                @checked(in_array($value, $checked))
-                @class([
-                    'w-4 h-4 accent-billmora-primary text-red border-2 outline-none focus:ring-2 ring-billmora-primary',
-                    'bg-billmora-1 cursor-not-allowed' => $attributes->has('disabled'),
-                    'cursor-pointer' => !$attributes->has('disabled'),
-                    'border-red-400' => $error,
-                    'border-billmora-2' => !$error,
-                ])
-                {{ $attributes }}
-            />
-
-            <label for="{{ "{$name}_{$value}" }}" class="text-slate-600 font-semibold cursor-pointer">
-                {{ $optionLabel }}
-            </label>
-        </div>
-    @endforeach
+    <div {{ $attributes }}>
+        @foreach ($options as $value => $optionLabel)
+            <div class="flex items-center gap-2 mb-1">
+                <input
+                    type="checkbox"
+                    name="{{ $name }}[]"
+                    id="{{ "{$name}_{$value}" }}"
+                    value="{{ $value }}"
+                    x-on:input="errorVisible = false"
+                    @checked(in_array($value, $checked))
+                    @class([
+                        'w-4 h-4 accent-billmora-primary text-red border-2 outline-none focus:ring-2 ring-billmora-primary',
+                        'bg-billmora-1 cursor-not-allowed' => $attributes->has('disabled'),
+                        'cursor-pointer' => !$attributes->has('disabled'),
+                        'border-red-400' => $error,
+                        'border-billmora-2' => !$error,
+                    ])
+                />
+    
+                <label for="{{ "{$name}_{$value}" }}" class="text-slate-600 font-semibold cursor-pointer">
+                    {{ $optionLabel }}
+                </label>
+            </div>
+        @endforeach
+    </div>
 
     @if ($error)
         <p class="mt-1 text-sm text-red-400 font-semibold" x-show="errorVisible">

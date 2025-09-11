@@ -83,6 +83,21 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/placement', [Settings\Captcha\PlacementController::class, 'index'])->name('admin.settings.captcha.placement');
             Route::post('/placement', [Settings\Captcha\PlacementController::class, 'store'])->name('admin.settings.captcha.placement.store');
         });
+
+        
+        /**
+         * Admin role and permission settings interface routes.
+         *
+         * Prefix: /admin/settings/roles
+         */
+        Route::group(['prefix' => 'roles'], function () {
+            Route::get('/', [Settings\RoleController::class, 'index'])->name('admin.settings.roles');
+            Route::get('/create', [Settings\RoleController::class, 'create'])->name('admin.settings.roles.create');
+            Route::post('/', [Settings\RoleController::class, 'store'])->name('admin.settings.roles.store');
+            Route::get('/{id}/edit', [Settings\RoleController::class, 'edit'])->name('admin.settings.roles.edit');
+            Route::put('/{id}', [Settings\RoleController::class, 'update'])->name('admin.settings.roles.update');
+            Route::delete('/{id}', [Settings\RoleController::class, 'destroy'])->name('admin.settings.roles.destroy');
+        });
     });
 
     /**
