@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -53,6 +54,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'password' => 'hashed',
+        'is_root_admin' => 'boolean',
         'email_verified_at' => 'datetime',
     ];
 
@@ -114,5 +116,29 @@ class User extends Authenticatable
     public function isEmailVerified()
     {
         return $this->email_verified_at !== null;
+    }
+
+    /**
+     * Determine if the user is a root administrator.
+     *
+     * @return bool True if the user is marked as root admin, false otherwise.
+     */
+    public function isRootAdmin(): bool
+    {
+        return $this->is_root_admin === true;
+    }
+
+    /**
+     * Determine if the user has administrative privileges.
+     *
+     * @return bool True if the user is an admin, false otherwise.
+     */
+    public function isAdmin(): bool
+    {
+        if ($this->isRootAdmin()) {
+            return true;
+        }
+
+        return $this->permissions()->exists() || $this->roles()->whereHas('permissions')->exists();
     }
 }
