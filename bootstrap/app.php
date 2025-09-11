@@ -16,7 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(\App\Http\Middleware\LanguageMiddleware::class);
-        $middleware->group('2fa', [\App\Http\Middleware\TwoFactorMiddleware::class]);
+        $middleware->alias([
+            '2fa'   => \App\Http\Middleware\TwoFactorMiddleware::class,
+        ]);
         $middleware->redirectGuestsTo(fn () => route('client.login'));
         $middleware->redirectUsersTo(fn () => route('client.dashboard'));
     })
