@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'Role & Permission settings',
+    'title' => 'Role and Permission settings',
     'description' => 'Configure role & permission settings for the system.',
 
     'role_name_label' => 'Role Name',
