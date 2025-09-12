@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
  *
  * Prefix: /admin
  */
-Route::group(['prefix' => 'admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('admin.dashboard');
 
     /**
