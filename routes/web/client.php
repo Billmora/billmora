@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 /**
  * Client interface routes.
  */
-Route::group(['middleware' => ['auth', '2fa']], function () {
+Route::group(['middleware' => ['auth', 'maintenance', '2fa']], function () {
     Route::get('/dashboard', [Client\DashboardController::class, 'index'])->name('client.dashboard');
 
     /**

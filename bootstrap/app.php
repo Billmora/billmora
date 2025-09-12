@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(\App\Http\Middleware\LanguageMiddleware::class);
         $middleware->alias([
             'admin'   => \App\Http\Middleware\AdminMiddleware::class,
+            'maintenance'   => \App\Http\Middleware\MaintenanceMiddleware::class,
             '2fa'   => \App\Http\Middleware\TwoFactorMiddleware::class,
         ]);
         $middleware->redirectGuestsTo(fn () => route('client.login'));
