@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\Settings;
+use App\Http\Controllers\Admin\Users;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -98,6 +99,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::put('/{id}', [Settings\RoleController::class, 'update'])->name('admin.settings.roles.update');
             Route::delete('/{id}', [Settings\RoleController::class, 'destroy'])->name('admin.settings.roles.destroy');
         });
+    });
+
+    /**
+     * Admin users interface routes.
+     *
+     * Prefix: /admin/users
+     */
+    Route::group(['prefix' => 'users'], function () {
+        Route::get('/', [Admin\UsersController::class, 'index'])->name('admin.users');
     });
 
     /**
