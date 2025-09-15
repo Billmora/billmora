@@ -22,6 +22,6 @@ class UsersController extends Controller
                     ->latest()
                     ->paginate(25);
         
-        return view('admin::users.index', compact('users'));
+        return view('admin::users', compact('users'));
     }
 }
