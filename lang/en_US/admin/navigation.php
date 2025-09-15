@@ -2,8 +2,10 @@
 
 return [
     'dashboard' => 'Dashboard',
+    'users' => 'Users',
     'settings' => 'Settings',
     'group' => [
-        'system' => 'System'
+        'administration' => 'Administration',
+        'system' => 'System',
     ],
 ];
