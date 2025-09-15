@@ -27,6 +27,17 @@ class SummaryController extends Controller
         return view('admin::users.edit.summary', compact('user'));
     }
 
+    /**
+     * Impersonate a specific user account.
+     *
+     * @param \Illuminate\Http\Request $request The current HTTP request instance.
+     * @param int                      $id      The ID of the user to impersonate.
+     *
+     * @return \Illuminate\Http\RedirectResponse Redirects to the client dashboard on success,
+     *                                           or back with an error message if impersonation fails.
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the target user does not exist.
+     */
     public function impersonate(Request $request, $id)
     {
         $user = User::findOrFail($id);
