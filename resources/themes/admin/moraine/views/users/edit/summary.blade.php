@@ -7,6 +7,9 @@
     @if (session('success'))
         <x-admin::alert variant="success" title="{{ session('success') }}" />
     @endif
+    @if (session('error'))
+        <x-admin::alert variant="danger" title="{{ session('error') }}" />
+    @endif
     <x-admin::tabs 
         :tabs="[
             [
@@ -66,10 +69,13 @@
                     <span class="text-slate-200 font-semibold break-all">{{ config('utils.countries')[$user->billing->country] ?? $user->billing->country }}</span>
                 </div>
             </div>
-            <button type="button" class="w-full flex gap-2 justify-center items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
-                <x-lucide-user class="w-auto h-5" />
-                Loggin as User
-            </button>
+            <form action="{{ route('admin.users.impersonate', ['id' => $user->id]) }}" method="POST">
+                @csrf
+                <button type="submit" class="w-full flex gap-2 justify-center items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
+                    <x-lucide-user class="w-auto h-5" />
+                    {{ __('admin/users/edit.login_as_user') }}
+                </button>
+            </form>
         </div>
         <div class="w-full lg:w-3/4 h-fit grid gap-5">
             <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-3 gap-5">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Users\Edit;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SummaryController extends Controller
 {
@@ -24,5 +25,20 @@ class SummaryController extends Controller
         $user = User::with('billing')->findOrFail($id);
         
         return view('admin::users.edit.summary', compact('user'));
+    }
+
+    public function impersonate(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->id === Auth::id()) {
+            return redirect()->back()->with('error', __('admin/users/edit.login_as_user_error'));
+        }
+
+        Auth::logout();
+        $request->session()->flush();
+        Auth::login($user, true);
+
+        return redirect()->route('client.dashboard')->with('success', __('admin/users/edit.login_as_user_success', ['email' => $user->email]));
     }
 }
