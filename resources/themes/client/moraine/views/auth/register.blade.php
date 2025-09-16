@@ -60,7 +60,7 @@
                                     name="phone_number" 
                                     label="{{ __('common.phone_number') }}" 
                                     value="{{ old('phone_number') }}" 
-                                    :required="Billmora::hasAuth('user_registration_required_inputs', 'phone_number')" 
+                                    :required="Billmora::hasAuth('user_billing_required_inputs', 'phone_number')" 
                                 />
                             @endunless
                         </div>
@@ -74,7 +74,7 @@
                                     name="company_name" 
                                     label="{{ __('common.company_name') }}" 
                                     value="{{ old('company_name') }}" 
-                                    :required="Billmora::hasAuth('user_registration_required_inputs', 'company_name')" 
+                                    :required="Billmora::hasAuth('user_billing_required_inputs', 'company_name')" 
                                 />
                             @endunless
                             @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'street_address_1'))
@@ -83,7 +83,7 @@
                                     name="street_address_1" 
                                     label="{{ __('common.street_address_1') }}" 
                                     value="{{ old('street_address_1') }}" 
-                                    :required="Billmora::hasAuth('user_registration_required_inputs', 'street_address_1')" 
+                                    :required="Billmora::hasAuth('user_billing_required_inputs', 'street_address_1')" 
                                 />
                             @endunless
                         </div>
@@ -94,7 +94,7 @@
                                     name="street_address_2" 
                                     label="{{ __('common.street_address_2') }}" 
                                     value="{{ old('street_address_2') }}" 
-                                    :required="Billmora::hasAuth('user_registration_required_inputs', 'street_address_2')" 
+                                    :required="Billmora::hasAuth('user_billing_required_inputs', 'street_address_2')" 
                                 />
                             @endunless
                             @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'city'))
@@ -103,7 +103,7 @@
                                     name="city" 
                                     label="{{ __('common.city') }}" 
                                     value="{{ old('city') }}" 
-                                    :required="Billmora::hasAuth('user_registration_required_inputs', 'city')" 
+                                    :required="Billmora::hasAuth('user_billing_required_inputs', 'city')" 
                                 />
                             @endunless
                         </div>
@@ -114,7 +114,7 @@
                                     name="state" 
                                     label="{{ __('common.state') }}" 
                                     value="{{ old('state') }}" 
-                                    :required="Billmora::hasAuth('user_registration_required_inputs', 'state')" 
+                                    :required="Billmora::hasAuth('user_billing_required_inputs', 'state')" 
                                 />
                             @endunless
                             @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'postcode'))
@@ -123,7 +123,7 @@
                                     name="postcode" 
                                     label="{{ __('common.postcode') }}" 
                                     value="{{ old('postcode') }}" 
-                                    :required="Billmora::hasAuth('user_registration_required_inputs', 'postcode')" 
+                                    :required="Billmora::hasAuth('user_billing_required_inputs', 'postcode')" 
                                 />
                             @endunless
                         </div>
@@ -131,7 +131,7 @@
                             <x-client::select 
                                 name="country" 
                                 label="{{ __('common.country') }}" 
-                                :required="Billmora::hasAuth('user_registration_required_inputs', 'country')"
+                                :required="Billmora::hasAuth('user_billing_required_inputs', 'country')"
                             >
                                 @foreach (config('utils.countries') as $country => $label)
                                     <option value="{{ $country }}" {{ old('country') == $country ? 'selected' : '' }}>

@@ -35,7 +35,7 @@
                     </div>
                     <div class="flex flex-col sm:flex-row gap-4">
                         <x-client::input type="email" name="email" label="{{ __('common.email') }}" value="{{ old('email', $user->email) }}" required disabled />
-                        <x-client::input type="tel" name="phone_number" label="{{ __('common.phone_number') }}" value="{{ old('phone_number', $user->billing->phone_number) }}" :required="Billmora::hasAuth('user_registration_required_inputs', 'phone_number')" />
+                        <x-client::input type="tel" name="phone_number" label="{{ __('common.phone_number') }}" value="{{ old('phone_number', $user->billing->phone_number) }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'phone_number')" />
                     </div>
                     <div class="flex flex-col sm:flex-row gap-4">
                         <x-client::select name="currency" label="{{ __('common.currency') }}" required>
@@ -55,18 +55,18 @@
                 <div class="grid gap-4">
                     <h4 class="text-xl font-semibold text-slate-700">{{ __('common.billing_information') }}</h4>
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <x-client::input type="text" name="company_name" label="{{ __('common.company_name') }}" value="{{ old('company_name', $user->billing->company_name) }}" :required="Billmora::hasAuth('user_registration_required_inputs', 'company_name')" />
-                        <x-client::input type="text" name="street_address_1" label="{{ __('common.street_address_1') }}" value="{{ old('street_address_1', $user->billing->street_address_1) }}" :required="Billmora::hasAuth('user_registration_required_inputs', 'street_address_1')" />
+                        <x-client::input type="text" name="company_name" label="{{ __('common.company_name') }}" value="{{ old('company_name', $user->billing->company_name) }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'company_name')" />
+                        <x-client::input type="text" name="street_address_1" label="{{ __('common.street_address_1') }}" value="{{ old('street_address_1', $user->billing->street_address_1) }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'street_address_1')" />
                     </div>
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <x-client::input type="text" name="street_address_2" label="{{ __('common.street_address_2') }}" value="{{ old('street_address_2', $user->billing->street_address_2) }}" :required="Billmora::hasAuth('user_registration_required_inputs', 'street_address_2')" />
-                        <x-client::input type="text" name="city" label="{{ __('common.city') }}" value="{{ old('city', $user->billing->city) }}" :required="Billmora::hasAuth('user_registration_required_inputs', 'city')" />
+                        <x-client::input type="text" name="street_address_2" label="{{ __('common.street_address_2') }}" value="{{ old('street_address_2', $user->billing->street_address_2) }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'street_address_2')" />
+                        <x-client::input type="text" name="city" label="{{ __('common.city') }}" value="{{ old('city', $user->billing->city) }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'city')" />
                     </div>
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <x-client::input type="text" name="state" label="{{ __('common.state') }}" value="{{ old('state', $user->billing->state) }}" :required="Billmora::hasAuth('user_registration_required_inputs', 'state')" />
-                        <x-client::input type="number" name="postcode" label="{{ __('common.postcode') }}" value="{{ old('postcode', $user->billing->postcode) }}" :required="Billmora::hasAuth('user_registration_required_inputs', 'postcode')" />
+                        <x-client::input type="text" name="state" label="{{ __('common.state') }}" value="{{ old('state', $user->billing->state) }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'state')" />
+                        <x-client::input type="number" name="postcode" label="{{ __('common.postcode') }}" value="{{ old('postcode', $user->billing->postcode) }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'postcode')" />
                     </div>
-                    <x-client::select name="country" label="{{ __('common.country') }}" :required="Billmora::hasAuth('user_registration_required_inputs', 'country')">
+                    <x-client::select name="country" label="{{ __('common.country') }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'country')">
                         @foreach (config('utils.countries') as $country => $label)
                             <option value="{{ $country }}"
                                 {{ old('country', $user->billing->country) == $country ? 'selected' : '' }}>

@@ -15,6 +15,6 @@ return [
     'user_require_two_factor_helper' => 'Force all users to enable Two-Factor Authentication (2FA) for increased account security.',
     'user_registration_disabled_inputs_label' => 'Disabled Registration Inputs',
     'user_registration_disabled_inputs_helper' => 'Select the fields to hide from the registration form. Users will not see or fill in these fields.',
-    'user_registration_required_inputs_label' => 'Required Registration Inputs',
-    'user_registration_required_inputs_helper' => 'Select the fields that new users must fill in during registration. Unselected fields remain optional.',
+    'user_billing_required_inputs_label' => 'Required Billing Information Inputs',
+    'user_billing_required_inputs_helper' => 'Select the fields that users must fill in as required. Unselected fields remain optional.',
 ];

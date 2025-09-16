@@ -36,13 +36,13 @@ class UserController extends Controller
             'user_require_two_factor' => ['nullable', 'boolean'],
             'user_registration_disabled_inputs' => ['nullable', 'array'],
             'user_registration_disabled_inputs.*' => ['in:phone_number,company_name,street_address_1,street_address_2,city,state,postcode,country,'],
-            'user_registration_required_inputs' => ['nullable', 'array'],
-            'user_registration_required_inputs.*' => ['in:phone_number,company_name,street_address_1,street_address_2,city,state,postcode,country,'],
+            'user_billing_required_inputs' => ['nullable', 'array'],
+            'user_billing_required_inputs.*' => ['in:phone_number,company_name,street_address_1,street_address_2,city,state,postcode,country,'],
         ]);
 
         $validated += [
             'user_registration_disabled_inputs' => [],
-            'user_registration_required_inputs' => [],
+            'user_billing_required_inputs' => [],
         ];
 
         Billmora::setAuth($validated);

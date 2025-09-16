@@ -41,7 +41,7 @@
                     helper="{{ __('admin/settings/auth.user_registration_disabled_inputs_helper') }}"
                 />
             <x-admin::multiselect
-                    name="user_registration_required_inputs"
+                    name="user_billing_required_inputs"
                     :options="[
                         ['value' => 'phone_number', 'title' => 'Phone Number'],
                         ['value' => 'company_name', 'title' => 'Company Name'],
@@ -52,9 +52,9 @@
                         ['value' => 'postcode', 'title' => 'Postcode'],
                         ['value' => 'country', 'title' => 'Country'],
                     ]"
-                    :selected="old('user_registration_required_inputs', Billmora::getAuth('user_registration_required_inputs'))"
-                    label="{{ __('admin/settings/auth.user_registration_required_inputs_label') }}"
-                    helper="{{ __('admin/settings/auth.user_registration_required_inputs_helper') }}"
+                    :selected="old('user_billing_required_inputs', Billmora::getAuth('user_billing_required_inputs'))"
+                    label="{{ __('admin/settings/auth.user_billing_required_inputs_label') }}"
+                    helper="{{ __('admin/settings/auth.user_billing_required_inputs_helper') }}"
                 />
         </div>
     </div>
