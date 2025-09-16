@@ -5,7 +5,7 @@
 
 <div
   @class([
-    "w-full flex flex-col items-start gap-4 p-4 border-2 rounded-2xl",
+    "w-full flex flex-col items-start gap-2 p-4 border-2 rounded-2xl",
     "bg-violet-100 text-violet-800 border-violet-600" => $variant === 'primary',
     "bg-green-100 text-green-800 border-green-600" => $variant === 'success',
     "bg-yellow-100 text-yellow-800 border-yellow-600" => $variant === 'warning',
