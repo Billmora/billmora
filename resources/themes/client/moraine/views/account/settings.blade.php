@@ -37,6 +37,20 @@
                         <x-client::input type="email" name="email" label="{{ __('common.email') }}" value="{{ old('email', $user->email) }}" required disabled />
                         <x-client::input type="tel" name="phone_number" label="{{ __('common.phone_number') }}" value="{{ old('phone_number', $user->billing->phone_number) }}" />
                     </div>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <x-client::select name="currency" label="{{ __('common.currency') }}" required>
+                            <option value="USD" {{ old('currency', $user->currency) === 'USD' ? 'selected' : '' }}>USD</option>
+                            <option value="IDR" {{ old('currency', $user->currency) === 'IDR' ? 'selected' : '' }}>IDR</option>
+                        </x-client::select>
+                        <x-client::select name="language" label="{{ __('common.language') }}" required>
+                            @foreach ($langs as $lang)
+                                <option value="{{ $lang['lang'] }}"
+                                    {{ old('language', $user->language) == $lang['lang'] ? 'selected' : '' }}>
+                                    {{ $lang['name'] }}
+                                </option>
+                            @endforeach
+                        </x-client::select>
+                    </div>
                 </div>
                 <div class="grid gap-4">
                     <h4 class="text-xl font-semibold text-slate-700">{{ __('common.billing_information') }}</h4>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class SettingsController extends Controller
 {
@@ -35,6 +36,8 @@ class SettingsController extends Controller
         $validated = $request->validate([
             'first_name' => ['required', 'string', 'min:3', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
+            'currency' => ['required', 'string'], // TODO: Add currency validation rule
+            'language' => ['required', 'string', Rule::in(array_map('basename', File::directories(lang_path())))],
             'phone_number' => ['nullable', 'numeric'],
             'company_name' => ['nullable', 'string'],
             'street_address_1' => ['nullable', 'string'],
@@ -48,6 +51,8 @@ class SettingsController extends Controller
         $user->update([
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
+            'currency' => $validated['currency'],
+            'language' => $validated['language'],
         ]);
 
         $user->refresh();
