@@ -17,6 +17,11 @@
                 'icon' => 'lucide-contact',
                 'label' => __('admin/users/edit.tabs.summary'),
             ],
+            [
+                'route' => route('admin.users.profile', ['id' => $user->id]),
+                'icon' => 'lucide-user-pen',
+                'label' => __('admin/users/edit.tabs.profile'),
+            ],
         ]" 
         active="{{ request()->fullUrl() }}" />
     @if (!$user->isEmailVerified())
