@@ -5,7 +5,7 @@ return [
     'users' => 'Users',
     'settings' => 'Settings',
     'group' => [
-        'administration' => 'Administration',
+        'management' => 'Management',
         'system' => 'System',
     ],
 ];

@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'User Summary - UserEmail')
+@section('title', 'Manage Users')
 
 @section('body')
 <div class="flex flex-col gap-5">
