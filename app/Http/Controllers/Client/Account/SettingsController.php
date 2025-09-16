@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client\Account;
 
 use App\Http\Controllers\Controller;
+use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -38,14 +39,47 @@ class SettingsController extends Controller
             'last_name' => ['required', 'string', 'max:255'],
             'currency' => ['required', 'string'], // TODO: Add currency validation rule
             'language' => ['required', 'string', Rule::in(array_map('basename', File::directories(lang_path())))],
-            'phone_number' => ['nullable', 'numeric'],
-            'company_name' => ['nullable', 'string'],
-            'street_address_1' => ['nullable', 'string'],
-            'street_address_2' => ['nullable', 'string'],
-            'city' => ['nullable', 'string'],
-            'state' => ['nullable', 'string'],
-            'postcode' => ['nullable', 'string'],
-            'country' => ['nullable', 'string', Rule::in(array_keys(config('utils.countries'))) ],
+            'phone_number' => [
+                Rule::requiredIf(Billmora::hasAuth('user_registration_required_inputs', 'phone_number')),
+                Rule::prohibitedIf(Billmora::hasAuth('user_registration_disabled_inputs', 'phone_number')),
+                'nullable', 'numeric',
+            ],
+            'company_name' => [
+                Rule::requiredIf(Billmora::hasAuth('user_registration_required_inputs', 'company_name')),
+                Rule::prohibitedIf(Billmora::hasAuth('user_registration_disabled_inputs', 'company_name')),
+                'nullable', 'string',
+            ],
+            'street_address_1' => [
+                Rule::requiredIf(Billmora::hasAuth('user_registration_required_inputs', 'street_address_1')),
+                Rule::prohibitedIf(Billmora::hasAuth('user_registration_disabled_inputs', 'street_address_1')),
+                'nullable', 'string',
+            ],
+            'street_address_2' => [
+                Rule::requiredIf(Billmora::hasAuth('user_registration_required_inputs', 'street_address_2')),
+                Rule::prohibitedIf(Billmora::hasAuth('user_registration_disabled_inputs', 'street_address_2')),
+                'nullable', 'string',
+            ],
+            'city' => [
+                Rule::requiredIf(Billmora::hasAuth('user_registration_required_inputs', 'city')),
+                Rule::prohibitedIf(Billmora::hasAuth('user_registration_disabled_inputs', 'city')),
+                'nullable', 'string',
+            ],
+            'state' => [
+                Rule::requiredIf(Billmora::hasAuth('user_registration_required_inputs', 'state')),
+                Rule::prohibitedIf(Billmora::hasAuth('user_registration_disabled_inputs', 'state')),
+                'nullable', 'string',
+            ],
+            'postcode' => [
+                Rule::requiredIf(Billmora::hasAuth('user_registration_required_inputs', 'postcode')),
+                Rule::prohibitedIf(Billmora::hasAuth('user_registration_disabled_inputs', 'postcode')),
+                'nullable', 'string',
+            ],
+            'country' => [
+                Rule::requiredIf(Billmora::hasAuth('user_registration_required_inputs', 'country')),
+                Rule::prohibitedIf(Billmora::hasAuth('user_registration_disabled_inputs', 'country')),
+                'nullable', 'string',
+                Rule::in(array_keys(config('utils.countries'))),
+            ],
         ]);
 
         $user->update([

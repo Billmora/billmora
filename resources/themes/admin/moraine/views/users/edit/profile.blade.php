@@ -46,14 +46,14 @@
                         <x-admin::input type="password" name="password" label="{{ __('common.password') }}" />
                     </div>
                     <div class="flex flex-col gap-4">
-                        <x-admin::input type="tel" name="phone_number" label="{{ __('common.phone_number') }}" value="{{ old('phone_number', $user->billing->phone_number) }}" />
-                        <x-admin::input type="text" name="company_name" label="{{ __('common.company_name') }}" value="{{ old('company_name', $user->billing->company_name) }}" required />
-                        <x-admin::input type="text" name="street_address_1" label="{{ __('common.street_address_1') }}" value="{{ old('street_address_1', $user->billing->street_address_1) }}" required />
-                        <x-admin::input type="text" name="street_address_2" label="{{ __('common.street_address_2') }}" value="{{ old('street_address_2', $user->billing->street_address_2) }}" />
-                        <x-admin::input type="text" name="city" label="{{ __('common.city') }}" value="{{ old('city', $user->billing->city) }}" required />
-                        <x-admin::input type="text" name="state" label="{{ __('common.state') }}" value="{{ old('state', $user->billing->state) }}" required />
-                        <x-admin::input type="number" name="postcode" label="{{ __('common.postcode') }}" value="{{ old('postcode', $user->billing->postcode) }}" required />
-                        <x-admin::select name="country" label="{{ __('common.country') }}" required>
+                        <x-admin::input type="tel" name="phone_number" label="{{ __('common.phone_number') }}" value="{{ old('phone_number', $user->billing->phone_number) }}" :required="Billmora::hasAuth('user_registration_required_inputs', 'phone_number')" />
+                        <x-admin::input type="text" name="company_name" label="{{ __('common.company_name') }}" value="{{ old('company_name', $user->billing->company_name) }}" :required="Billmora::hasAuth('user_registration_required_inputs', 'company_name')" />
+                        <x-admin::input type="text" name="street_address_1" label="{{ __('common.street_address_1') }}" value="{{ old('street_address_1', $user->billing->street_address_1) }}" :required="Billmora::hasAuth('user_registration_required_inputs', 'street_address_1')" />
+                        <x-admin::input type="text" name="street_address_2" label="{{ __('common.street_address_2') }}" value="{{ old('street_address_2', $user->billing->street_address_2) }}" :required="Billmora::hasAuth('user_registration_required_inputs', 'street_address_1')" />
+                        <x-admin::input type="text" name="city" label="{{ __('common.city') }}" value="{{ old('city', $user->billing->city) }}" :required="Billmora::hasAuth('user_registration_required_inputs', 'city')" />
+                        <x-admin::input type="text" name="state" label="{{ __('common.state') }}" value="{{ old('state', $user->billing->state) }}" :required="Billmora::hasAuth('user_registration_required_inputs', 'state')" />
+                        <x-admin::input type="number" name="postcode" label="{{ __('common.postcode') }}" value="{{ old('postcode', $user->billing->postcode) }}" :required="Billmora::hasAuth('user_registration_required_inputs', 'postcode')" />
+                        <x-admin::select name="country" label="{{ __('common.country') }}" :required="Billmora::hasAuth('user_registration_required_inputs', 'country')">
                             @foreach (config('utils.countries') as $country => $label)
                                 <option value="{{ $country }}"
                                     {{ old('country', $user->billing->country) == $country ? 'selected' : '' }}>
