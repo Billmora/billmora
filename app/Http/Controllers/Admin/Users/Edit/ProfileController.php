@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Billmora;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
 
 class ProfileController extends Controller
 {
@@ -24,8 +27,9 @@ class ProfileController extends Controller
     public function index($id)
     {
         $user = User::with('billing')->findOrFail($id);
+        $roles = Role::pluck('name', 'id');
         
-        return view('admin::users.edit.profile', compact('user'));
+        return view('admin::users.edit.profile', compact('user', 'roles'));
     }
 
     /**
@@ -48,9 +52,10 @@ class ProfileController extends Controller
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8'],
+            'role' => ['required', Rule::when($request->input('role') !== 'root', 'exists:roles,name')],
             'status' => ['required', 'in:active,inactive,suspended,closed'],
             'currency' => ['required', 'string'], // TODO: Add currency validation rule
-            'language' => ['required', 'string'], // TODO: Add language validation rule
+            'language' => ['required', 'string', Rule::in(array_map('basename', File::directories(lang_path())))],
             'phone_number' => [
                 Rule::requiredIf(Billmora::hasAuth('user_registration_required_inputs', 'phone_number')),
                 Rule::prohibitedIf(Billmora::hasAuth('user_registration_disabled_inputs', 'phone_number')),
@@ -103,6 +108,16 @@ class ProfileController extends Controller
             'currency' => $validated['currency'],
             'language' => $validated['language'],
         ]);
+
+        if ($validated['role'] !== 'root') {
+            $user->syncRoles([$validated['role']]);
+            $user->update(['is_root_admin' => false]);
+        }
+
+        if ($validated['role'] === 'root' && Auth::user()->isRootAdmin()) {
+            $user->syncRoles([]);
+            $user->update(['is_root_admin' => true]);
+        }
 
         $user->billing()->updateOrCreate(
             ['user_id' => $user->id],
