@@ -19,6 +19,15 @@
             ],
         ]" 
         active="{{ request()->fullUrl() }}" />
+    @if (!$user->isEmailVerified())
+        <x-admin::alert variant="warning" title="{{ __('admin/users/edit.email_verification_alert_label') }}">
+            {{ __('admin/users/edit.email_verification_alert_helper') }}
+            <form action="{{ route('admin.users.verify', ['id' => $user->id]) }}" method="POST" class="ml-auto">
+                @csrf
+                <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('admin/users/edit.marked_as_verified') }}</button>
+            </form>
+        </x-admin::alert>
+    @endif
     <div class="flex flex-col lg:flex-row gap-5">
         <div class="w-full lg:w-1/4 h-fit grid gap-6 items-center bg-white p-8 text-center border-2 border-billmora-2 rounded-2xl">
             <img src="{{ $user->avatar }}?s=128" alt="user avatar" class="rounded-full w-32 h-auto mx-auto">
