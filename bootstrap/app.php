@@ -17,6 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(\App\Http\Middleware\LanguageMiddleware::class);
         $middleware->alias([
+            'permission' => Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role' => Spatie\Permission\Middleware\RoleMiddleware::class,
+            'role_or_permission' => Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'admin'   => \App\Http\Middleware\AdminMiddleware::class,
             'maintenance'   => \App\Http\Middleware\MaintenanceMiddleware::class,
             '2fa'   => \App\Http\Middleware\TwoFactorMiddleware::class,
