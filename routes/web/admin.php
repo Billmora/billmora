@@ -111,6 +111,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::post('/{id}/verify', [Admin\UsersController::class, 'verify'])->name('admin.users.verify');
         Route::get('/{id}/summary', [Users\Edit\SummaryController::class, 'index'])->name('admin.users.summary');
         Route::post('/{id}/impersonate', [Users\Edit\SummaryController::class, 'impersonate'])->name('admin.users.impersonate');
+        Route::get('/{id}/profile', [Users\Edit\ProfileController::class, 'index'])->name('admin.users.profile');
+        Route::put('/{id}/profile', [Users\Edit\ProfileController::class, 'update'])->name('admin.users.profile.update');
     });
 
     /**
