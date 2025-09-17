@@ -84,17 +84,21 @@
                     <span class="text-slate-200 font-semibold break-all">{{ config('utils.countries')[$user->billing->country] ?? $user->billing->country }}</span>
                 </div>
             </div>
-            <form action="{{ route('admin.users.impersonate', ['id' => $user->id]) }}" method="POST">
-                @csrf
-                <button type="submit" class="w-full flex gap-2 justify-center items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
-                    <x-lucide-user class="w-auto h-5" />
-                    {{ __('admin/users/manage.login_as_user') }}
-                </button>
-            </form>
-            <x-admin::modal.trigger modal="deleteModal-{{ $user->id }}" variant="open" class="w-full flex gap-2 justify-center items-center bg-red-500 hover:bg-red-600 px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
-                <x-lucide-trash class="w-auto h-5" />
-                {{ __('common.delete') }}
-            </x-admin::modal.trigger>
+            @if (Auth::id() !== $user->id)
+                <div class="flex flex-col gap-2">
+                    <form action="{{ route('admin.users.impersonate', ['id' => $user->id]) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="w-full flex gap-2 justify-center items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
+                            <x-lucide-user class="w-auto h-5" />
+                            {{ __('admin/users/manage.login_as_user') }}
+                        </button>
+                    </form>
+                    <x-admin::modal.trigger modal="deleteModal-{{ $user->id }}" variant="open" class="w-full flex gap-2 justify-center items-center bg-red-500 hover:bg-red-600 px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
+                        <x-lucide-trash class="w-auto h-5" />
+                        {{ __('common.delete') }}
+                    </x-admin::modal.trigger>
+                </div>
+            @endif
         </div>
         <div class="w-full lg:w-3/4 h-fit grid gap-5">
             <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -156,21 +160,23 @@
             </div>
         </div>
     </div>
-    <x-admin::modal.content
-        modal="deleteModal-{{ $user->id }}"
-        variant="danger"
-        size="xl"
-        position="centered"
-        title="{{ __('common.delete_modal_title') }}"
-        description="{{ __('common.delete_modal_description', ['item' => $user->email]) }}">
-        <form action="{{ route('admin.users.destroy', ['id' => $user->id]) }}" method="POST">
-            @csrf
-            @method('DELETE')
-            <div class="flex justify-end gap-2 mt-4">
-                <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
-                <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
-            </div>
-        </form>
-    </x-admin::modal.content>
+    @if (Auth::id() !== $user->id)
+        <x-admin::modal.content
+            modal="deleteModal-{{ $user->id }}"
+            variant="danger"
+            size="xl"
+            position="centered"
+            title="{{ __('common.delete_modal_title') }}"
+            description="{{ __('common.delete_modal_description', ['item' => $user->email]) }}">
+            <form action="{{ route('admin.users.destroy', ['id' => $user->id]) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="flex justify-end gap-2 mt-4">
+                    <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                    <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
+                </div>
+            </form>
+        </x-admin::modal.content>
+    @endif
 </div>
 @endsection
