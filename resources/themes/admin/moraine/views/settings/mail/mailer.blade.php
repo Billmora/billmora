@@ -66,10 +66,14 @@
                 </div>
             </div>
         <div class="flex gap-2 ml-auto">
-            <button type="button" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
-                onclick="document.getElementById('testMail').submit()">{{ __('admin/settings/mail.mailer_test_label') }}</button>
-            <button type="submit"
-                class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.save') }}</button>
+            @can('settings.mail.update')
+                <button type="button" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer" onclick="document.getElementById('testMail').submit()">
+                    {{ __('admin/settings/mail.mailer_test_label') }}
+                </button>
+                <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                    {{ __('common.save') }}
+                </button>
+            @endcan
         </div>
     </form>
     <form id="testMail" action="{{ route('admin.settings.mail.mailer.test') }}" method="POST" class="hidden">
