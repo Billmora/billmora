@@ -144,21 +144,4 @@ class User extends Authenticatable
 
         return $this->permissions()->exists() || $this->roles()->whereHas('permissions')->exists();
     }
-
-    /**
-     * Determine if the user has a given permission.
-     *
-     * @param string|\Spatie\Permission\Models\Permission $permission The permission to check.
-     * @param string|null $guardName Optional guard name.
-     *
-     * @return bool True if the user has the permission or is a root admin, false otherwise.
-     */
-    public function hasPermissionTo($permission, $guardName = null): bool
-    {
-        if ($this->isRootAdmin()) {
-            return true;
-        }
-
-        return parent::hasPermissionTo($permission, $guardName);
-    }
 }
