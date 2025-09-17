@@ -8,6 +8,17 @@ use Illuminate\Http\Request;
 
 class PlacementController extends Controller
 {
+    
+    /**
+     * Applies permission-based middleware for accessing captcha placement settings.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:settings.captcha.view')->only(['index']);
+        $this->middleware('permission:settings.captcha.update')->only(['update']);
+    }
 
     /**
      * Display the captcha placement settings page.

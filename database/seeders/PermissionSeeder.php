@@ -31,6 +31,8 @@ class PermissionSeeder extends Seeder
             'settings.mail.broadcast.delete',
             'settings.auth.view',
             'settings.auth.update',
+            'settings.captcha.view',
+            'settings.captcha.update',
             'settings.roles.view',
             'settings.roles.create',
             'settings.roles.update',

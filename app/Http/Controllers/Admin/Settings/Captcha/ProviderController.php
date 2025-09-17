@@ -11,6 +11,17 @@ class ProviderController extends Controller
 {
 
     /**
+     * Applies permission-based middleware for accessing captcha provider settings.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:settings.captcha.view')->only(['index']);
+        $this->middleware('permission:settings.captcha.update')->only(['update']);
+    }
+
+    /**
      * Display the captcha provider settings page.
      *
      * @return \Illuminate\View\View The view instance for captcha provider settings.
