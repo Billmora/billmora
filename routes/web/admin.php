@@ -108,6 +108,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
      */
     Route::group(['prefix' => 'users'], function () {
         Route::get('/', [Admin\UsersController::class, 'index'])->name('admin.users');
+        Route::get('/create', [Admin\UsersController::class, 'create'])->name('admin.users.create');
+        Route::post('/create', [Admin\UsersController::class, 'store'])->name('admin.users.store');
         Route::post('/{id}/verify', [Admin\UsersController::class, 'verify'])->name('admin.users.verify');
         Route::get('/{id}/summary', [Users\Edit\SummaryController::class, 'index'])->name('admin.users.summary');
         Route::post('/{id}/impersonate', [Users\Edit\SummaryController::class, 'impersonate'])->name('admin.users.impersonate');
