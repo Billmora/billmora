@@ -43,7 +43,9 @@ class BroadcastController extends Controller
      */
     public function create()
     {
-        return view('admin::settings.mail.broadcast.create');
+        $users = User::select('id', 'first_name', 'last_name', 'email')->get();
+
+        return view('admin::settings.mail.broadcast.create', compact('users'));
     }
 
     /**
@@ -61,7 +63,7 @@ class BroadcastController extends Controller
             'broadcast_body' => ['required', 'string'],
             'broadcast_recipient_group' => ['required', 'in:all_users,custom_users'],
             'broadcast_recipient_custom' => ['required', 'array'],
-            'broadcast_recipient_custom.*' => ['email'],
+            'broadcast_recipient_custom.*' => ['email', 'exists:users,email'],
             'broadcast_cc' => ['nullable', 'array'],
             'broadcast_cc.*' => ['email'],
             'broadcast_bcc' => ['nullable', 'array'],
@@ -110,7 +112,9 @@ class BroadcastController extends Controller
     public function edit($id)
     {
         $broadcast = MailBroadcast::findOrFail($id);
-        return view("admin::settings.mail.broadcast.edit", compact('broadcast'));
+        $users = User::select('id', 'first_name', 'last_name', 'email')->get();
+
+        return view("admin::settings.mail.broadcast.edit", compact('broadcast', 'users'));
     }
 
     /**

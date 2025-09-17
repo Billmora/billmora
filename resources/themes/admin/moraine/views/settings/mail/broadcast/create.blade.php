@@ -26,9 +26,11 @@
             <div x-show="recipient_custom === 'custom_users'">
                 <x-admin::multiselect
                     name="broadcast_recipient_custom"
-                    :options="[
-                        ['value' => 'billmora@billmora.com', 'title' => 'Billmora', 'subtitle' => 'billmora@billmora.com'], // TODO: Will be replaced by real user
-                    ]"
+                    :options="$users->map(fn($user) => [
+                        'value' => $user->email,
+                        'title' => $user->fullname,
+                        'subtitle' => $user->email,
+                    ])"
                     :selected="old('broadcast_recipient_custom', [])"
                     helper="{{ __('admin/settings/mail.broadcast_recipient_custom_helper') }}"
                 />

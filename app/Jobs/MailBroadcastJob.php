@@ -38,13 +38,15 @@ class MailBroadcastJob implements ShouldQueue
         }
 
         foreach ($recipients as $recipient) {
+            $user = User::where('email', $recipient)->first();
+
             Mail::to($recipient)
                 ->cc($this->broadcast->cc ?? [])
                 ->bcc($this->broadcast->bcc ?? [])
                 ->send(new BroadcastMail(
                     $this->broadcast,
                     [
-                        'client_name' => 'Billmora', // TODO: will be replaced with name of user.
+                        'client_name' => $user->fullname,
                         'company_name' => Billmora::getGeneral('company_name'),
                     ]
                 ));

@@ -6,6 +6,7 @@ use App\Mail\TemplateMail;
 use Billmora;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class MailerController extends Controller
@@ -83,9 +84,9 @@ class MailerController extends Controller
     public function test()
     {
         try {
-            $user = auth()->user();
-            Mail::to('maflycehaa@gmail.com')->send(new TemplateMail('test_message', [
-                'client_name' => 'Billmora', // TODO: will be replaced with name of user.
+            $user = Auth::user();
+            Mail::to($user->email)->send(new TemplateMail('test_message', [
+                'client_name' => $user->fullname,
                 'company_name' => Billmora::getGeneral('company_name'),
             ]));
 
