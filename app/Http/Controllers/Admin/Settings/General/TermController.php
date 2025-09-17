@@ -2,12 +2,23 @@
 
 namespace App\Http\Controllers\Admin\Settings\General;
 
-use App\Http\Controllers\Admin\Settings\General\Controller;
+use App\Http\Controllers\Controller;
 use Billmora;
 use Illuminate\Http\Request;
 
 class TermController extends Controller
 {
+        
+    /**
+     * Applies permission-based middleware for accessing general term settings
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:settings.general.view')->only('index');
+        $this->middleware('permission:settings.general.update')->only('update');
+    }
 
     /**
      * Display the term settings view.
