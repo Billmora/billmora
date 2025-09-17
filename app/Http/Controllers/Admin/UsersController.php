@@ -191,6 +191,6 @@ class UsersController extends Controller
             'email_verified_at' => now(),
         ]);
 
-        return redirect()->back()->with('success', __('admin/users/edit.email_verification_alert_success'));
+        return redirect()->back()->with('success', __('admin/users/manage.email_verification_alert_success'));
     }
 }

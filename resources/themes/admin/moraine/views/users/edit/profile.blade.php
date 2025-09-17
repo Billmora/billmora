@@ -15,21 +15,21 @@
             [
                 'route' => route('admin.users.summary', ['id' => $user->id]),
                 'icon' => 'lucide-contact',
-                'label' => __('admin/users/edit.tabs.summary'),
+                'label' => __('admin/users/manage.tabs.summary'),
             ],
             [
                 'route' => route('admin.users.profile', ['id' => $user->id]),
                 'icon' => 'lucide-user-pen',
-                'label' => __('admin/users/edit.tabs.profile'),
+                'label' => __('admin/users/manage.tabs.profile'),
             ],
         ]" 
         active="{{ request()->fullUrl() }}" />
     @if (!$user->isEmailVerified())
-        <x-admin::alert variant="warning" title="{{ __('admin/users/edit.email_verification_alert_label') }}">
-            {{ __('admin/users/edit.email_verification_alert_helper') }}
+        <x-admin::alert variant="warning" title="{{ __('admin/users/manage.email_verification_alert_label') }}">
+            {{ __('admin/users/manage.email_verification_alert_helper') }}
             <form action="" method="POST" class="ml-auto">
                 @csrf
-                <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('admin/users/edit.marked_as_verified') }}</button>
+                <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('admin/users/manage.marked_as_verified') }}</button>
             </form>
         </x-admin::alert>
     @endif
