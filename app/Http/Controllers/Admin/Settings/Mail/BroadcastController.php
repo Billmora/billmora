@@ -12,6 +12,19 @@ class BroadcastController extends Controller
 {
 
     /**
+     * Applies permission-based middleware for accessing mail broadcast settings.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:settings.mail.broadcast.view')->only(['index']);
+        $this->middleware('permission:settings.mail.broadcast.create')->only(['create', 'store']);
+        $this->middleware('permission:settings.mail.broadcast.update')->only(['edit', 'update']);
+        $this->middleware('permission:settings.mail.broadcast.delete')->only(['destroy']);
+    }
+
+    /**
      * Display the list mail broadcast table.
      *
      * @return \Illuminate\View\View

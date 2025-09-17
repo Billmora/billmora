@@ -10,6 +10,17 @@ class TemplateController extends Controller
 {
 
     /**
+     * Applies permission-based middleware for accessing mail template settings.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:settings.mail.template.view')->only('index');
+        $this->middleware('permission:settings.mail.template.update')->only(['edit', 'update']);
+    }
+
+    /**
      * Display the mail templates table.
      *
      * @return \Illuminate\View\View

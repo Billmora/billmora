@@ -50,7 +50,9 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ __('common.inactive') }}</td>
                                 @endif
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                    <a href="{{ route('admin.settings.mail.template.edit', $template->id) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover underline">Edit</a>
+                                    @can('settings.mail.template.update')
+                                        <a href="{{ route('admin.settings.mail.template.edit', $template->id) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover underline">Edit</a>
+                                    @endcan
                                 </td>
                             </tr>
                             @endforeach

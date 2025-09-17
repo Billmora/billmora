@@ -12,6 +12,17 @@ class MailerController extends Controller
 {
 
     /**
+     * Applies permission-based middleware for accessing mailer settings.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:settings.mail.view')->only(['index']);
+        $this->middleware('permission:settings.mail.update')->only(['update', 'test']);
+    }
+
+    /**
      * Display the mailer settings view.
      *
      * @return \Illuminate\View\View
