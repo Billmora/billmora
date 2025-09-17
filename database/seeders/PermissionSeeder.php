@@ -29,6 +29,8 @@ class PermissionSeeder extends Seeder
             'settings.mail.broadcast.create',
             'settings.mail.broadcast.update',
             'settings.mail.broadcast.delete',
+            'settings.auth.view',
+            'settings.auth.update',
             'settings.roles.view',
             'settings.roles.create',
             'settings.roles.update',

@@ -10,6 +10,17 @@ class UserController extends Controller
 {
 
     /**
+     * Applies permission-based middleware for accessing authentication user settings.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:settings.auth.view')->only(['index']);
+        $this->middleware('permission:settings.auth.update')->only(['update']);
+    }
+
+    /**
      * Display the authentication user settings page.
      *
      * @return \Illuminate\View\View

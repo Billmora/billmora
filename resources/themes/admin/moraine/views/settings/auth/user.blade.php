@@ -59,7 +59,10 @@
                 />
         </div>
     </div>
-    <button type="submit"
-        class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.save') }}</button>
+    @can('settings.auth.update')
+        <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+            {{ __('common.save') }}
+        </button>
+    @endcan
 </form>
 @endsection
