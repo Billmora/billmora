@@ -59,7 +59,9 @@
                                     @can('settings.mail.broadcast.update')
                                         <a href="{{ route('admin.settings.mail.broadcast.edit', ['id' => $broadcast->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">Edit</a>
                                     @endcan
-                                    <x-admin::modal.trigger modal="deleteModal-{{ $broadcast->id }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.delete') }}</x-admin::modal.trigger>
+                                    @can('settings.mail.broadcast.delete')
+                                        <x-admin::modal.trigger modal="deleteModal-{{ $broadcast->id }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.delete') }}</x-admin::modal.trigger>
+                                    @endcan
                                 </td>
                             </tr>
                             @endforeach
