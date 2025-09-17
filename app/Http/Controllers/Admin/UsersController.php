@@ -65,7 +65,10 @@ class UsersController extends Controller
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')],
             'password' => ['nullable', 'string', 'min:8'],
-            'role' => ['required', Rule::when($request->input('role') !== 'root', 'exists:roles,name')],
+            'role' => [
+                'required',
+                Rule::in(array_merge(['client', 'root'], Role::pluck('name')->toArray())),
+            ],
             'status' => ['required', 'in:active,inactive,suspended,closed'],
             'currency' => ['required', 'string'], // TODO: Add currency validation rule
             'language' => ['required', 'string', Rule::in(array_map('basename', File::directories(lang_path())))],
@@ -140,6 +143,11 @@ class UsersController extends Controller
 
         if ($validated['role'] !== 'root') {
             $user->syncRoles([$validated['role']]);
+            $user->update(['is_root_admin' => false]);
+        }
+
+        if ($validated['role'] === 'client') {
+            $user->syncRoles([]);
             $user->update(['is_root_admin' => false]);
         }
 

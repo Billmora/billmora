@@ -71,6 +71,9 @@
                             Administrator
                         </option>
                     @endif
+                    <option value="client" {{ old('role', $user->isClient() ? 'client' : null) === 'client' ? 'selected' : '' }}>
+                        Client
+                    </option>
                     @foreach ($roles as $id => $name)
                         <option value="{{ $name }}" {{ old('role', $user->roles->first()->name ?? null) === $name ? 'selected' : '' }}>
                             {{ ucfirst($name) }}

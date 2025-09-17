@@ -144,4 +144,18 @@ class User extends Authenticatable
 
         return $this->permissions()->exists() || $this->roles()->whereHas('permissions')->exists();
     }
+
+    /**
+     * Determine if the user is considered a client.
+     *
+     * @return bool True if the user is a client, false otherwise.
+     */
+    public function isClient(): bool
+    {
+        if ($this->isRootAdmin()) {
+            return false;
+        }
+
+        return !$this->permissions()->exists() && !$this->roles()->whereHas('permissions')->exists();
+    }
 }
