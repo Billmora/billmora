@@ -30,7 +30,9 @@
                             @foreach ($users as $user)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $user->id }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $user->fullname }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
+                                    <a href="{{ route('admin.users.summary', ['id' => $user->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $user->fullname }}</a>
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $user->email }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
                                     @if ($user->isRootAdmin())
