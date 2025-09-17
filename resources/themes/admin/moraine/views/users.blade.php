@@ -38,7 +38,7 @@
                                     @elseif ($user->roles->isNotEmpty())
                                         {{ $user->roles->pluck('name')->implode(', ') }}
                                     @else
-                                        N/A
+                                        Client
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $user->created_at }}</td>
