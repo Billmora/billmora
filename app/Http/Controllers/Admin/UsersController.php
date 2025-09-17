@@ -165,6 +165,28 @@ class UsersController extends Controller
     }
 
     /**
+     * Remove the specified user from storage.
+     *
+     * @param int $id The ID of the user to delete.
+     *
+     * @return \Illuminate\Http\RedirectResponse Redirects back with an error message if attempting to delete self, otherwise to the user list with success message.
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the user does not exist.
+     */
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        if (Auth::id() === $user->id) {
+            return redirect()->back()->with('error', __('admin/users/manage.self_delete_error'));
+        }
+
+        $user->delete();
+
+        return redirect()->route('admin.users')->with('success', __('common.delete_success', ['attribute' => $user->email]));
+    }
+
+    /**
      * Manually verify a user's email address.
      *
      * @param int $id The ID of the user whose email should be verified.
