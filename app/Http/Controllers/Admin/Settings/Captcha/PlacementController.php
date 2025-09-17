@@ -20,7 +20,7 @@ class PlacementController extends Controller
     }
 
     /**
-     * Store captcha placement settings.
+     * Update captcha placement settings.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing captcha placement settings.
      *
@@ -28,7 +28,7 @@ class PlacementController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException If the request validation fails.
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $validated = $request->validate([
             'placements_enabled_forms' => ['nullable', 'array'],

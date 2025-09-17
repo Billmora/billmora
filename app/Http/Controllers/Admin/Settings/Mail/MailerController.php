@@ -22,7 +22,7 @@ class MailerController extends Controller
     }
 
     /**
-     * Store mail mailer settings.
+     * Update mail mailer settings.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing mailer settings.
      *
@@ -30,7 +30,7 @@ class MailerController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException If validation fails.
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $validated = $request->validate([
             'mailer_driver' => ['required', 'string', 'in:smtp,mailgun'],

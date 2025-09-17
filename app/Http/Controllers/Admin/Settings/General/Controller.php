@@ -18,6 +18,6 @@ abstract class Controller extends BaseController
     public function __construct()
     {
         $this->middleware('permission:settings.general.view')->only('index');
-        $this->middleware('permission:settings.general.update')->only('store');
+        $this->middleware('permission:settings.general.update')->only('update');
     }
 }

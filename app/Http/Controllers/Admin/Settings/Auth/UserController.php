@@ -20,7 +20,7 @@ class UserController extends Controller
     }
 
     /**
-     * Store authentication user settings.
+     * Update authentication user settings.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing authentication user settings.
      *
@@ -28,7 +28,7 @@ class UserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException If the request validation fails.
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $validated = $request->validate([
             'user_registration' => ['nullable', 'boolean'],

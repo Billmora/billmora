@@ -20,7 +20,7 @@ class SocialController extends Controller
     }
 
     /**
-     * Store general social settings.
+     * Update general social settings.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing social settings.
      *
@@ -28,7 +28,7 @@ class SocialController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException If validation fails.
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $validated = $request->validate([
             'social_discord' => ['nullable', 'url'],

@@ -20,7 +20,7 @@ class OrderingController extends Controller
     }
 
     /**
-     * Store general ordering settings.
+     * Update general ordering settings.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing ordering settings.
      *
@@ -28,7 +28,7 @@ class OrderingController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException If validation fails.
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $validated = $request->validate( [
             'ordering_redirect' => ['required', 'string'],

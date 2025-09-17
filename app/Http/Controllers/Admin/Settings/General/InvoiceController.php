@@ -21,7 +21,7 @@ class InvoiceController extends Controller
 
 
     /**
-     * Store general invoice settings.
+     * Update general invoice settings.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing invoice settings.
      *
@@ -29,7 +29,7 @@ class InvoiceController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException If validation fails.
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $validated = $request->validate([
             'invoice_pdf' => ['nullable', 'boolean'],

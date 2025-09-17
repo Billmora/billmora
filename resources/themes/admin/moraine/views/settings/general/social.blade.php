@@ -3,8 +3,9 @@
 @section('title', 'Social Settings - General')
 
 @section('body')
-    <form action="{{ route('admin.settings.general.social.store') }}" method="POST" class="flex flex-col gap-5">
+    <form action="{{ route('admin.settings.general.social.update') }}" method="POST" class="flex flex-col gap-5">
         @csrf
+        @method('PUT')
         @if (session('success'))
             <x-admin::alert variant="success" title="{{ session('success') }}" />
         @endif

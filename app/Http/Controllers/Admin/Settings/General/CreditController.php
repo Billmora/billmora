@@ -20,7 +20,7 @@ class CreditController extends Controller
     }
 
     /**
-     * Store general credit settings.
+     * Update general credit settings.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing credit settings.
      *
@@ -28,7 +28,7 @@ class CreditController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException If validation fails.
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $validated = $request->validate([
             'credit_use' => ['nullable', 'boolean'],

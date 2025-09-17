@@ -28,19 +28,19 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
          */
         Route::group(['prefix' => 'general'], function () {
             Route::get('/', [Settings\General\CompanyController::class, 'index'])->name('admin.settings.general.company');
-            Route::post('/', [Settings\General\CompanyController::class, 'store'])->name('admin.settings.general.company.store');
+            Route::put('/', [Settings\General\CompanyController::class, 'update'])->name('admin.settings.general.company.update');
             Route::get('/ordering', [Settings\General\OrderingController::class, 'index'])->name('admin.settings.general.ordering');
-            Route::post('/ordering', [Settings\General\OrderingController::class, 'store'])->name('admin.settings.general.ordering.store');
+            Route::put('/ordering', [Settings\General\OrderingController::class, 'update'])->name('admin.settings.general.ordering.update');
             Route::get('/invoice', [Settings\General\InvoiceController::class, 'index'])->name('admin.settings.general.invoice');
-            Route::post('/invoice', [Settings\General\InvoiceController::class, 'store'])->name('admin.settings.general.invoice.store');
+            Route::put('/invoice', [Settings\General\InvoiceController::class, 'update'])->name('admin.settings.general.invoice.update');
             Route::get('/credit', [Settings\General\CreditController::class, 'index'])->name('admin.settings.general.credit');
-            Route::post('/credit', [Settings\General\CreditController::class, 'store'])->name('admin.settings.general.credit.store');
+            Route::put('/credit', [Settings\General\CreditController::class, 'update'])->name('admin.settings.general.credit.update');
             Route::get('/affiliate', [Settings\General\AffiliateController::class, 'index'])->name('admin.settings.general.affiliate');
-            Route::post('/affiliate', [Settings\General\AffiliateController::class, 'store'])->name('admin.settings.general.affiliate.store');
+            Route::put('/affiliate', [Settings\General\AffiliateController::class, 'update'])->name('admin.settings.general.affiliate.update');
             Route::get('/term', [Settings\General\TermController::class, 'index'])->name('admin.settings.general.term');
-            Route::post('/term', [Settings\General\TermController::class, 'store'])->name('admin.settings.general.term.store');
+            Route::put('/term', [Settings\General\TermController::class, 'update'])->name('admin.settings.general.term.update');
             Route::get('/social', [Settings\General\SocialController::class, 'index'])->name('admin.settings.general.social');
-            Route::post('/social', [Settings\General\SocialController::class, 'store'])->name('admin.settings.general.social.store');
+            Route::put('/social', [Settings\General\SocialController::class, 'update'])->name('admin.settings.general.social.update');
         });
 
         /**
@@ -50,7 +50,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
          */
         Route::group(['prefix' => 'mail'], function () {
             Route::get('/', [Settings\Mail\MailerController::class, 'index'])->name('admin.settings.mail.mailer');
-            Route::post('/', [Settings\Mail\MailerController::class, 'store'])->name('admin.settings.mail.mailer.store');
+            Route::put('/', [Settings\Mail\MailerController::class, 'update'])->name('admin.settings.mail.mailer.update');
             Route::post('/test', [Settings\Mail\MailerController::class, 'test'])->name('admin.settings.mail.mailer.test');
             Route::get('/template', [Settings\Mail\TemplateController::class, 'index'])->name('admin.settings.mail.template');
             Route::get('/template/{id}/edit', [Settings\Mail\TemplateController::class, 'edit'])->name('admin.settings.mail.template.edit');
@@ -70,7 +70,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
          */
         Route::group(['prefix' => 'auth'], function () {
             Route::get('/', [Settings\Auth\UserController::class, 'index'])->name('admin.settings.auth.user');
-            Route::post('/', [Settings\Auth\UserController::class, 'store'])->name('admin.settings.auth.user.store');
+            Route::put('/', [Settings\Auth\UserController::class, 'update'])->name('admin.settings.auth.user.update');
         });
 
         /**
@@ -80,9 +80,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
          */
         Route::group(['prefix' => 'captcha'], function () {
             Route::get('/', [Settings\Captcha\ProviderController::class, 'index'])->name('admin.settings.captcha.provider');
-            Route::post('/', [Settings\Captcha\ProviderController::class, 'store'])->name('admin.settings.captcha.provider.store');
+            Route::put('/', [Settings\Captcha\ProviderController::class, 'update'])->name('admin.settings.captcha.provider.update');
             Route::get('/placement', [Settings\Captcha\PlacementController::class, 'index'])->name('admin.settings.captcha.placement');
-            Route::post('/placement', [Settings\Captcha\PlacementController::class, 'store'])->name('admin.settings.captcha.placement.store');
+            Route::put('/placement', [Settings\Captcha\PlacementController::class, 'update'])->name('admin.settings.captcha.placement.update');
         });
 
         

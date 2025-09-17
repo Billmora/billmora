@@ -20,7 +20,7 @@ class AffiliateController extends Controller
     }
 
     /**
-     * Store general affiliate settings.
+     * Update general affiliate settings.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing affiliate settings.
      *
@@ -28,7 +28,7 @@ class AffiliateController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException If validation fails.
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $validated = $request->validate([
             'affiliate_use' => ['nullable', 'boolean'],

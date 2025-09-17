@@ -3,8 +3,9 @@
 @section('title', 'Placement Settings - Captcha')
 
 @section('body')
-<form action="{{ route('admin.settings.captcha.placement.store') }}" method="POST" class="flex flex-col gap-5">
+<form action="{{ route('admin.settings.captcha.placement.update') }}" method="POST" class="flex flex-col gap-5">
     @csrf
+    @method('PUT')
     @if (session('success'))
         <x-admin::alert variant="success" title="{{ session('success') }}" />
     @endif

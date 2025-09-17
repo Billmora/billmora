@@ -21,7 +21,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Store general company settings.
+     * Update general company settings.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing company settings.
      *
@@ -29,7 +29,7 @@ class CompanyController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException If validation fails.
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $validated = $request->validate( [
             'company_name' => ['required', 'string'],

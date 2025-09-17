@@ -21,7 +21,7 @@ class ProviderController extends Controller
     }
 
     /**
-     * Store captcha provider settings.
+     * Update captcha provider settings.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing captcha provider settings.
      *
@@ -29,7 +29,7 @@ class ProviderController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException If the request validation fails.
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $validated = $request->validate([
             'provider_type' => [

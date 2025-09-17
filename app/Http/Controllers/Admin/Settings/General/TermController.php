@@ -20,7 +20,7 @@ class TermController extends Controller
     }
 
     /**
-     * Store general term settings.
+     * Update general term settings.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing term settings.
      *
@@ -28,7 +28,7 @@ class TermController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException If validation fails.
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $validated = $request->validate([
             'term_tos' => ['nullable', 'boolean'],

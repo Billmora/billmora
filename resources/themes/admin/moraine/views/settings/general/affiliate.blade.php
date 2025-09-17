@@ -3,8 +3,9 @@
 @section('title', 'Affiliate Settings - General')
 
 @section('body')
-    <form action="{{ route('admin.settings.general.affiliate.store') }}" method="POST" class="flex flex-col gap-5">
+    <form action="{{ route('admin.settings.general.affiliate.update') }}" method="POST" class="flex flex-col gap-5">
         @csrf
+        @method('PUT')
         @if (session('success'))
             <x-admin::alert variant="success" title="{{ session('success') }}" />
         @endif
