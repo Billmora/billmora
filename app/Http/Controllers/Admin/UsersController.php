@@ -185,6 +185,10 @@ class UsersController extends Controller
             return redirect()->back()->with('error', __('admin/users/manage.self_delete_error'));
         }
 
+        $user->update([
+            'status' => 'closed',
+        ]);
+
         $user->delete();
 
         return redirect()->route('admin.users')->with('success', __('common.delete_success', ['attribute' => $user->email]));
