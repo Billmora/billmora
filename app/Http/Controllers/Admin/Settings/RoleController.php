@@ -47,7 +47,13 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'role_name' => ['required', 'string', 'max:255', 'unique:roles,name'],
+            'role_name' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:roles,name',
+                Rule::notIn(['root', 'client'])
+            ],
             'role_permissions' => ['nullable', 'array'],
             'role_permissions.*' => ['string', 'exists:permissions,name'],
         ]);
@@ -97,7 +103,13 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);
 
         $validated = $request->validate([
-            'role_name' => ['required', 'string', 'max:255', Rule::unique('roles', 'name')->ignore($role->id)],
+            'role_name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('roles', 'name')->ignore($role->id),
+                Rule::notIn(['root', 'client']),
+            ],
             'role_permissions' => ['nullable', 'array'],
             'role_permissions.*' => ['string', 'exists:permissions,name'],
         ]);
