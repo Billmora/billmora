@@ -141,19 +141,15 @@ class UsersController extends Controller
             ]));
         }
 
-        if ($validated['role'] !== 'root') {
-            $user->syncRoles([$validated['role']]);
-            $user->update(['is_root_admin' => false]);
-        }
-
-        if ($validated['role'] === 'client') {
-            $user->syncRoles([]);
-            $user->update(['is_root_admin' => false]);
-        }
-
         if ($validated['role'] === 'root' && Auth::user()->isRootAdmin()) {
             $user->syncRoles([]);
             $user->update(['is_root_admin' => true]);
+        } elseif ($validated['role'] === 'client') {
+            $user->syncRoles([]);
+            $user->update(['is_root_admin' => false]);
+        } else {
+            $user->syncRoles([$validated['role']]);
+            $user->update(['is_root_admin' => false]);
         }
 
         $user->billing()->create(
