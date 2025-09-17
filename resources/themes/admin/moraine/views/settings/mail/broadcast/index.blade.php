@@ -77,8 +77,8 @@
             variant="danger"
             size="xl"
             position="centered"
-            title="{{ __('common.delete_modal_title', ['item' => $broadcast->subject]) }}"
-            description="{{ __('common.delete_modal_desc', ['item' => $broadcast->subject]) }}">
+            title="{{ __('common.delete_modal_title') }}"
+            description="{{ __('common.delete_modal_description', ['item' => $broadcast->subject]) }}">
             <form action="{{ route('admin.settings.mail.broadcast.destroy', ['id' => $broadcast->id]) }}" method="POST">
                 @csrf
                 @method('DELETE')
