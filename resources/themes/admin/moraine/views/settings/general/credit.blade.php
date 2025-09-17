@@ -53,7 +53,10 @@
             <x-admin::input type="number" min="1" max="1000000" name="credit_max_deposit" label="{{ __('admin/settings/general.credit_max_deposit_label') }}" helper="{{ __('admin/settings/general.credit_max_deposit_helper') }}" value="{{ old('credit_max_deposit', Billmora::getGeneral('credit_max_deposit')) }}" required/>
             <x-admin::input type="number" min="1" max="10000000" name="credit_max" label="{{ __('admin/settings/general.credit_max_label') }}" helper="{{ __('admin/settings/general.credit_max_helper') }}" value="{{ old('credit_max', Billmora::getGeneral('credit_max')) }}" required/>
         </div>
-        <button type="submit"
-            class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.save') }}</button>
+        @can('settings.general.update')
+            <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                {{ __('common.save') }}
+            </button>
+        @endcan
     </form>
 @endsection

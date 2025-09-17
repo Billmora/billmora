@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Settings\General;
 
+use App\Http\Controllers\Admin\Settings\General\Controller;
 use Billmora;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class AffiliateController extends Controller

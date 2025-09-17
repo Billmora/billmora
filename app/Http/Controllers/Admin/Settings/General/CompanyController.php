@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin\Settings\General;
 
+use App\Http\Controllers\Admin\Settings\General\Controller;
 use Billmora;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class CompanyController extends Controller

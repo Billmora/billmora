@@ -104,7 +104,10 @@
                 helper="{{ __('admin/settings/general.company_maintenance_message_helper') }}">
                 {{ old('company_maintenance_message', Billmora::getGeneral('company_maintenance_message')) }}</x-admin::textarea>
         </div>
-        <button type="submit"
-            class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.save') }}</button>
+        @can('settings.general.update')
+            <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                {{ __('common.save') }}
+            </button>
+        @endcan
     </form>
 @endsection

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin\Settings\General;
 
+use App\Http\Controllers\Admin\Settings\General\Controller;
 use Billmora;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class OrderingController extends Controller
 {

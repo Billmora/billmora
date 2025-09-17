@@ -53,7 +53,10 @@
             <x-admin::input type="number" min="1" max="100" name="affiliate_reward" label="{{ __('admin/settings/general.affiliate_reward_label') }}" helper="{{ __('admin/settings/general.affiliate_reward_helper') }}" value="{{ old('affiliate_reward', Billmora::getGeneral('affiliate_reward')) }}" required/>
             <x-admin::input type="number" min="1" max="100" name="affiliate_discount" label="{{ __('admin/settings/general.affiliate_discount_label') }}" helper="{{ __('admin/settings/general.affiliate_discount_helper') }}" value="{{ old('affiliate_discount', Billmora::getGeneral('affiliate_discount')) }}" required/>
         </div>
-        <button type="submit"
-            class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.save') }}</button>
+        @can('settings.general.update')
+            <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                {{ __('common.save') }}
+            </button>
+        @endcan
     </form>
 @endsection
