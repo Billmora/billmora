@@ -39,7 +39,7 @@
             <div class="flex flex-col">
                 <span class="text-xl text-slate-600 font-bold break-all">{{ $user->fullname }}</span>
                 <span class="text-md text-slate-500 font-semibold break-all">{{ $user->email }}</span>
-                <span class="text-md text-slate-500 font-semibold break-all capitalize">{{ $user->status }}</span>
+                <span class="text-sm text-slate-500 font-semibold break-all capitalize">{{ $user->status }}</span>
                 <span class="text-sm text-slate-500 font-semibold break-all">
                     @if ($user->isRootAdmin())
                         Administrator
