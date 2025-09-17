@@ -51,7 +51,7 @@ class ForgotController extends Controller
             UserPasswordReset::create([
                 'user_id' => $user->id,
                 'token' => $newToken,
-                'expires_at' => now()->addMinutes(5),
+                'expires_at' => now()->addMinutes(60),
             ]);
 
             Mail::to($user->email)->send(new TemplateMail('user_password_reset', [
