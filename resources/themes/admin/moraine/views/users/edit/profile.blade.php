@@ -65,12 +65,10 @@
                 </div>
             </div>
             <div class="w-full lg:w-1/3 h-fit flex flex-col gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
-                <x-admin::select name="role" label="{{ __('common.role') }}" :disabled="$user->id === Auth::id()">
-                    @if (Auth::user()->isRootAdmin())
-                        <option value="root" {{ old('role', $user->isRootAdmin() ? 'root' : null) === 'root' ? 'selected' : '' }}>
-                            Administrator
-                        </option>
-                    @endif
+                <x-admin::select name="role" label="{{ __('common.role') }}" :disabled="($user->id === Auth::id()) || ($user->isRootAdmin() && !Auth::user()->isRootAdmin())">
+                    <option value="root" {{ old('role', $user->isRootAdmin() ? 'root' : null) === 'root' ? 'selected' : '' }} @disabled(!Auth::user()->isRootAdmin())>
+                        Administrator
+                    </option>
                     <option value="client" {{ old('role', $user->isClient() ? 'client' : null) === 'client' ? 'selected' : '' }}>
                         Client
                     </option>
