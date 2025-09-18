@@ -56,6 +56,9 @@
                 </div>
             </div>
         </div>
+        <div>
+            {{ $users->links('admin::layouts.partials.pagination') }}
+        </div>
     </div>
 </div>
 @endsection
