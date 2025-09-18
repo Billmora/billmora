@@ -67,7 +67,7 @@ class ProfileController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8'],
             'role' => [
-                'required',
+                Rule::requiredIf($user->id !== Auth::id()),
                 Rule::in(array_merge(['client', 'root'], Role::pluck('name')->toArray())),
             ],
             'status' => ['required', 'in:active,inactive,suspended,closed'],
@@ -126,15 +126,17 @@ class ProfileController extends Controller
             'language' => $validated['language'],
         ]);
 
-        if ($validated['role'] === 'root' && Auth::user()->isRootAdmin()) {
-            $user->syncRoles([]);
-            $user->update(['is_root_admin' => true]);
-        } elseif ($validated['role'] === 'client') {
-            $user->syncRoles([]);
-            $user->update(['is_root_admin' => false]);
-        } else {
-            $user->syncRoles([$validated['role']]);
-            $user->update(['is_root_admin' => false]);
+        if ($user->id !== Auth::id()) {
+            if ($validated['role'] === 'root' && Auth::user()->isRootAdmin()) {
+                $user->syncRoles([]);
+                $user->update(['is_root_admin' => true]);
+            } elseif ($validated['role'] === 'client') {
+                $user->syncRoles([]);
+                $user->update(['is_root_admin' => false]);
+            } else {
+                $user->syncRoles([$validated['role']]);
+                $user->update(['is_root_admin' => false]);
+            }
         }
 
         $user->billing()->updateOrCreate(
