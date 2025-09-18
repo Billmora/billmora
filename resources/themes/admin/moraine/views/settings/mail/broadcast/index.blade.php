@@ -70,6 +70,9 @@
                 </div>
             </div>
         </div>
+        <div>
+            {{ $broadcasts->links('admin::layouts.partials.pagination') }}
+        </div>
         
         @foreach ($broadcasts as $broadcast)
         <x-admin::modal.content

@@ -27,7 +27,7 @@ class TemplateController extends Controller
      */
     public function index()
     {
-        $templates = MailTemplate::select('id', 'key', 'name', 'active')->get();
+        $templates = MailTemplate::select('id', 'key', 'name', 'active')->paginate(25);
 
         return view('admin::settings.mail.template.index', compact('templates'));
     }

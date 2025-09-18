@@ -26,7 +26,7 @@
             ],
         ]" 
         active="{{ request()->fullUrl() }}" />
-    <div class="flex flex-col">
+    <div class="flex flex-col gap-4">
         <div class="-m-1.5 overflow-x-auto">
             <div class="p-1.5 min-w-full inline-block align-middle">
                 <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
@@ -60,6 +60,9 @@
                     </table>
                 </div>
             </div>
+        </div>
+        <div>
+            {{ $templates->links('admin::layouts.partials.pagination') }}
         </div>
     </div>
 </div>
