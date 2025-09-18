@@ -24,15 +24,6 @@
             ],
         ]" 
         active="{{ request()->fullUrl() }}" />
-    @if (!$user->isEmailVerified())
-        <x-admin::alert variant="warning" title="{{ __('admin/users/manage.email_verification_alert_label') }}">
-            {{ __('admin/users/manage.email_verification_alert_helper') }}
-            <form action="" method="POST" class="ml-auto">
-                @csrf
-                <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('admin/users/manage.marked_as_verified') }}</button>
-            </form>
-        </x-admin::alert>
-    @endif
     <form action="{{ route('admin.users.profile.update', ['id' => $user->id]) }}" method="POST" class="flex flex-col gap-5">
         @csrf
         @method('PUT')
@@ -66,9 +57,11 @@
             </div>
             <div class="w-full lg:w-1/3 h-fit flex flex-col gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
                 <x-admin::select name="role" label="{{ __('common.role') }}" :disabled="($user->id === Auth::id()) || ($user->isRootAdmin() && !Auth::user()->isRootAdmin())">
-                    <option value="root" {{ old('role', $user->isRootAdmin() ? 'root' : null) === 'root' ? 'selected' : '' }} @disabled(!Auth::user()->isRootAdmin())>
-                        Administrator
-                    </option>
+                    @if (Auth::user()->isRootAdmin())
+                        <option value="root" {{ old('role', $user->isRootAdmin() ? 'root' : null) === 'root' ? 'selected' : '' }}>
+                            Administrator
+                        </option>
+                    @endif
                     <option value="client" {{ old('role', $user->isClient() ? 'client' : null) === 'client' ? 'selected' : '' }}>
                         Client
                     </option>

@@ -96,7 +96,7 @@
                         </button>
                     </form>
                 @endcan
-                @can('uesrs.delete')
+                @can('delete', $user)
                     <x-admin::modal.trigger modal="deleteModal-{{ $user->id }}" variant="open" class="w-full flex gap-2 justify-center items-center bg-red-500 hover:bg-red-600 px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
                         <x-lucide-trash class="w-auto h-5" />
                         {{ __('common.delete') }}
@@ -165,7 +165,7 @@
         </div>
     </div>
     @if (Auth::id() !== $user->id)
-        @can('users.delete')
+        @can('delete', $user)
             <x-admin::modal.content
                 modal="deleteModal-{{ $user->id }}"
                 variant="danger"

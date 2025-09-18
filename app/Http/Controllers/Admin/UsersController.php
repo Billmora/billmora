@@ -194,14 +194,11 @@ class UsersController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if (Auth::id() === $user->id) {
-            return redirect()->back()->with('error', __('admin/users/manage.self_delete_error'));
-        }
+        $this->authorize('delete', $user);
 
-        $user->update([
-            'status' => 'closed',
+        $user->update(
+            ['status' => 'closed',
         ]);
-
         $user->delete();
 
         return redirect()->route('admin.users')->with('success', __('common.delete_success', ['attribute' => $user->email]));

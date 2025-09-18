@@ -38,6 +38,8 @@ class ProfileController extends Controller
     {
         $user = User::with('billing')->findOrFail($id);
         $roles = Role::pluck('name', 'id');
+
+        $this->authorize('update', $user);
         
         return view('admin::users.edit.profile', compact('user', 'roles'));
     }
@@ -56,6 +58,8 @@ class ProfileController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
+
+        $this->authorize('update', $user);
 
         $validated = $request->validate([
             'first_name' => ['required', 'string', 'min:3', 'max:255'],
