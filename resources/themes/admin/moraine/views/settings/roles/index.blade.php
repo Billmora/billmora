@@ -49,6 +49,9 @@
                 </div>
             </div>
         </div>
+        <div>
+            {{ $roles->links('admin::layouts.partials.pagination') }}
+        </div>
         @can('settings.roles.delete')
             @foreach ($roles as $role)
             <x-admin::modal.content
