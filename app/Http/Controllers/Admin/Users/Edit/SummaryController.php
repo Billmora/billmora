@@ -11,6 +11,17 @@ class SummaryController extends Controller
 {
 
     /**
+     * Applies permission-based middleware for accessing users management.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:users.view')->only(['index']);
+        $this->middleware('permission:users.impersonate')->only(['impersonate']);
+    }
+
+    /**
      * Display the summary information of a specific user.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request.

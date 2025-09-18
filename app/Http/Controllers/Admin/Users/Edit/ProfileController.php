@@ -16,6 +16,16 @@ class ProfileController extends Controller
 {
 
     /**
+     * Applies permission-based middleware for accessing users management.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:users.update')->only(['index', 'update']);
+    }
+
+    /**
      * Display the profile edit page for a specific user.
      *
      * @param int $id The ID of the user to be edited.

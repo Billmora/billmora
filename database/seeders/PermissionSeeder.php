@@ -37,6 +37,11 @@ class PermissionSeeder extends Seeder
             'settings.roles.create',
             'settings.roles.update',
             'settings.roles.delete',
+            'users.view',
+            'users.create',
+            'users.update',
+            'users.delete',
+            'users.impersonate',
         ];
 
         /**

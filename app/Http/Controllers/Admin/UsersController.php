@@ -21,6 +21,19 @@ class UsersController extends Controller
 {
     
     /**
+     * Applies permission-based middleware for accessing users management.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:users.view')->only(['index']);
+        $this->middleware('permission:users.create')->only(['create', 'store']);
+        $this->middleware('permission:users.update')->only(['verify']);
+        $this->middleware('permission:users.delete')->only(['destroy']);
+    }
+    
+    /**
      * Display a paginated list of users with their roles.
      *
      * @return \Illuminate\View\View The view instance displaying the list of users.

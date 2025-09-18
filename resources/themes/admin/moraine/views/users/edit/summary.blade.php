@@ -24,15 +24,17 @@
             ],
         ]" 
         active="{{ request()->fullUrl() }}" />
-    @if (!$user->isEmailVerified())
-        <x-admin::alert variant="warning" title="{{ __('admin/users/manage.email_verification_alert_label') }}">
-            {{ __('admin/users/manage.email_verification_alert_helper') }}
-            <form action="{{ route('admin.users.verify', ['id' => $user->id]) }}" method="POST" class="ml-auto">
-                @csrf
-                <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('admin/users/manage.marked_as_verified') }}</button>
-            </form>
-        </x-admin::alert>
-    @endif
+    @can('uses.update')
+        @if (!$user->isEmailVerified())
+            <x-admin::alert variant="warning" title="{{ __('admin/users/manage.email_verification_alert_label') }}">
+                {{ __('admin/users/manage.email_verification_alert_helper') }}
+                <form action="{{ route('admin.users.verify', ['id' => $user->id]) }}" method="POST" class="ml-auto">
+                    @csrf
+                    <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('admin/users/manage.marked_as_verified') }}</button>
+                </form>
+            </x-admin::alert>
+        @endif
+    @endcan
     <div class="flex flex-col lg:flex-row gap-5">
         <div class="w-full lg:w-1/4 h-fit grid gap-6 items-center bg-white p-8 text-center border-2 border-billmora-2 rounded-2xl">
             <img src="{{ $user->avatar }}?s=128" alt="user avatar" class="rounded-full w-32 h-auto mx-auto">
@@ -85,7 +87,7 @@
                 </div>
             </div>
             @if (Auth::id() !== $user->id)
-                <div class="flex flex-col gap-2">
+                @can('users.impersonate')
                     <form action="{{ route('admin.users.impersonate', ['id' => $user->id]) }}" method="POST">
                         @csrf
                         <button type="submit" class="w-full flex gap-2 justify-center items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
@@ -93,11 +95,13 @@
                             {{ __('admin/users/manage.login_as_user') }}
                         </button>
                     </form>
+                @endcan
+                @can('uesrs.delete')
                     <x-admin::modal.trigger modal="deleteModal-{{ $user->id }}" variant="open" class="w-full flex gap-2 justify-center items-center bg-red-500 hover:bg-red-600 px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
                         <x-lucide-trash class="w-auto h-5" />
                         {{ __('common.delete') }}
                     </x-admin::modal.trigger>
-                </div>
+                @endcan
             @endif
         </div>
         <div class="w-full lg:w-3/4 h-fit grid gap-5">
@@ -161,22 +165,24 @@
         </div>
     </div>
     @if (Auth::id() !== $user->id)
-        <x-admin::modal.content
-            modal="deleteModal-{{ $user->id }}"
-            variant="danger"
-            size="xl"
-            position="centered"
-            title="{{ __('common.delete_modal_title') }}"
-            description="{{ __('common.delete_modal_description', ['item' => $user->email]) }}">
-            <form action="{{ route('admin.users.destroy', ['id' => $user->id]) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <div class="flex justify-end gap-2 mt-4">
-                    <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
-                    <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
-                </div>
-            </form>
-        </x-admin::modal.content>
+        @can('users.delete')
+            <x-admin::modal.content
+                modal="deleteModal-{{ $user->id }}"
+                variant="danger"
+                size="xl"
+                position="centered"
+                title="{{ __('common.delete_modal_title') }}"
+                description="{{ __('common.delete_modal_description', ['item' => $user->email]) }}">
+                <form action="{{ route('admin.users.destroy', ['id' => $user->id]) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="flex justify-end gap-2 mt-4">
+                        <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                        <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
+                    </div>
+                </form>
+            </x-admin::modal.content>
+        @endcan
     @endif
 </div>
 @endsection

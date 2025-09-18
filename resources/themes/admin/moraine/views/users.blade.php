@@ -8,10 +8,12 @@
         <x-admin::alert variant="success" title="{{ session('success') }}" />
     @endif
     <div class="flex flex-col gap-4">
-        <a href="{{ route('admin.users.create') }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-            <x-lucide-plus class="w-auto h-5" />
-            {{ __('common.create') }}
-        </a>
+        @can('users.create')
+            <a href="{{ route('admin.users.create') }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <x-lucide-plus class="w-auto h-5" />
+                {{ __('common.create') }}
+            </a>
+        @endcan
         <div class="-m-1.5 overflow-x-auto">
             <div class="p-1.5 min-w-full inline-block align-middle">
                 <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
