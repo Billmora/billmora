@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="w-full lg:w-1/3 h-fit flex flex-col gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
-                <x-admin::select name="role" label="{{ __('common.role') }}">
+                <x-admin::select name="role" label="{{ __('common.role') }}" required>
                     @if (Auth::user()->isRootAdmin())
                         <option value="root" {{ old('role') === 'root' ? 'selected' : '' }}>
                             Administrator
