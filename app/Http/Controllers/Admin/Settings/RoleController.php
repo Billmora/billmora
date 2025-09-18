@@ -12,6 +12,19 @@ class RoleController extends Controller
 {
 
     /**
+     * Applies permission-based middleware for accessing role and permission settings.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:settings.roles.view')->only(['index']);
+        $this->middleware('permission:settings.roles.create')->only(['create', 'store']);
+        $this->middleware('permission:settings.roles.update')->only(['edit', 'update']);
+        $this->middleware('permission:settings.roles.delete')->only(['destroy']);
+    }
+
+    /**
      * Display a paginated list of roles with their permissions.
      *
      * @return \Illuminate\View\View The view instance showing the list of roles.
