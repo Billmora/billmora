@@ -34,10 +34,31 @@
                         <thead class="bg-billmora-2">
                             <tr>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">ID</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Fullname</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Email</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">
+                                    <x-admin::table.sorthead 
+                                        column="fullname" 
+                                        label="Fullname" 
+                                        :sort="$sort" 
+                                        :direction="$direction" 
+                                    />
+                                </th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">
+                                    <x-admin::table.sorthead 
+                                        column="email" 
+                                        label="Email" 
+                                        :sort="$sort" 
+                                        :direction="$direction" 
+                                    />
+                                </th>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Role</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Created At</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">
+                                    <x-admin::table.sorthead 
+                                        column="created_at" 
+                                        label="Created At" 
+                                        :sort="$sort" 
+                                        :direction="$direction" 
+                                    />
+                                </th>
                                 <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">Action</th>
                             </tr>
                         </thead>

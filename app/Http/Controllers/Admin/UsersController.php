@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
@@ -43,16 +44,18 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('searchUser');
+        $sort = $request->input('sort', 'created_at');
+        $direction = $request->input('direction', 'desc'); 
 
         $users = User::query()
                     ->select(['id', 'first_name', 'last_name', 'email', 'is_root_admin', 'created_at'])
                     ->with('roles:id,name')
                     ->when($search, fn ($query) => $this->searchUser($query, $search))
-                    ->latest()
+                    ->tap(fn ($query) => $this->sortUser($query, $sort, $direction))
                     ->paginate(25)
                     ->withQueryString();
         
-        return view('admin::users', compact('users', 'search'));
+        return view('admin::users', compact('users', 'search', 'sort', 'direction'));
     }
 
     /**
@@ -258,5 +261,29 @@ class UsersController extends Controller
                 "%{$search}%"
             );
         });
+    }
+
+    /**
+     * Apply sorting to the user query.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query     The base query builder for User model.
+     * @param string                                $sort      The column to sort by (e.g., "email", "fullname").
+     * @param string                                $direction The sorting direction ("asc" or "desc").
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function sortUser(Builder $query, string $sort, string $direction)
+    {
+        $direction = strtolower($direction) === 'asc' ? 'asc' : 'desc';
+
+        if ($sort === 'fullname') {
+            return $query->orderByRaw("CONCAT(first_name, ' ', last_name) {$direction}");
+        }
+
+        if (Schema::hasColumn('users', $sort)) {
+            return $query->orderBy($sort, $direction);
+        }
+
+        return $query->latest();
     }
 }
