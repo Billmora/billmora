@@ -134,8 +134,8 @@
                     </div>
                 </div>
             </div>
-            <div class="-m-1.5 overflow-x-auto">
-                <div class="p-1.5 min-w-full inline-block align-middle">
+            <div class="overflow-x-auto">
+                <div class="min-w-full inline-block align-middle">
                     <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
                         <table class="min-w-full divide-y divide-billmora-2">
                             <thead class="bg-billmora-2">

@@ -16,7 +16,7 @@
                     </div>
                     <input type="text" name="searchUser" id="searchUser" placeholder="{{ __('admin/common.search') }}" value="{{ request('searchUser') }}" class="w-full px-6 py-3 pl-10 bg-white placeholder:text-gray-400 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary">
                     <div class="absolute top-1/2 -translate-y-1/2 right-1.5">
-                        <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-1.5 text-white font-semibold rounded-lg transition duration-300 cursor-pointer">{{ __('common.submit') }}</button>
+                        <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">{{ __('common.submit') }}</button>
                     </div>
                 </form>
             </div>
@@ -27,8 +27,8 @@
                 </a>
             @endcan
         </div>
-        <div class="-m-1.5 overflow-x-auto">
-            <div class="p-1.5 min-w-full inline-block align-middle">
+        <div class="overflow-x-auto">
+            <div class="min-w-full inline-block align-middle">
                 <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
                     <table class="min-w-full divide-y divide-billmora-2">
                         <thead class="bg-billmora-2">
