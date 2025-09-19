@@ -8,8 +8,10 @@ use App\Models\UserEmailVerification;
 use App\Models\UserPasswordReset;
 use App\Http\Controllers\Controller;
 use Billmora;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -38,15 +40,19 @@ class UsersController extends Controller
      *
      * @return \Illuminate\View\View The view instance displaying the list of users.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('searchUser');
+
         $users = User::query()
                     ->select(['id', 'first_name', 'last_name', 'email', 'is_root_admin', 'created_at'])
                     ->with('roles:id,name')
+                    ->when($search, fn ($query) => $this->searchUser($query, $search))
                     ->latest()
-                    ->paginate(25);
+                    ->paginate(25)
+                    ->withQueryString();
         
-        return view('admin::users', compact('users'));
+        return view('admin::users', compact('users', 'search'));
     }
 
     /**
@@ -232,5 +238,25 @@ class UsersController extends Controller
         ]);
 
         return redirect()->back()->with('success', __('admin/users/manage.email_verification_alert_success'));
+    }
+
+    /**
+     * Apply search filters to the user query by email or full name.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query  The base query builder for User model.
+     * @param string                                $search The search keyword to filter users.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function searchUser(Builder $query, string $search)
+    {
+        return $query->where(function ($q) use ($search) {
+            $q->where('email', 'like', "%{$search}%")
+            ->orWhere(
+                DB::raw("CONCAT(first_name, ' ', last_name)"),
+                'like',
+                "%{$search}%"
+            );
+        });
     }
 }
