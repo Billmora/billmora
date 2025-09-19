@@ -14,6 +14,8 @@ return [
     'symbol_required' => '*',
     'symbol_optional' => '(optional)',
     'choose_option' => 'Choose an options',
+    'select_all' => 'Select All',
+    'deselect_all' => 'Deselect All',
     
     'account_settings' => 'Account Settings',
     'account_security' => 'Account Security',
