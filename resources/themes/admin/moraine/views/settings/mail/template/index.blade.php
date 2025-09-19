@@ -44,10 +44,10 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-billmora-2">
                             <tr>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Key</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Name</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Active</th>
-                                <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">Action</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.key') }}</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.name') }}</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.active') }}</th>
+                                <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y-2 divide-billmora-2 bg-white">

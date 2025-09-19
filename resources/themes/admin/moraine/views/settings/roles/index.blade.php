@@ -21,10 +21,10 @@
                         <thead class="bg-billmora-2">
                             <tr>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">#</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Name</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Permission Count</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Created At</th>
-                                <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">Action</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.name') }}</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/settings/role.role_table.permission_count') }}</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.created_at') }}</th>
+                                <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y-2 divide-billmora-2 bg-white">

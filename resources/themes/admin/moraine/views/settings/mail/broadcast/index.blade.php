@@ -53,11 +53,11 @@
                         <thead class="bg-billmora-2">
                             <tr>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">#</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Subject</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Recipient Group</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Schedule At</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Created At</th>
-                                <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">Action</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/settings/mail.broadcast_table.subject') }}</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/settings/mail.broadcast_table.recipient_group') }}</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.schedule_at') }}</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.created_at') }}</th>
+                                <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y-2 divide-billmora-2 bg-white">

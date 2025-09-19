@@ -37,7 +37,7 @@
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">
                                     <x-admin::table.sorthead 
                                         column="fullname" 
-                                        label="Fullname" 
+                                        label="{{ __('common.fullname') }}" 
                                         :sort="$sort" 
                                         :direction="$direction" 
                                     />
@@ -45,21 +45,21 @@
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">
                                     <x-admin::table.sorthead 
                                         column="email" 
-                                        label="Email" 
+                                        label="{{ __('common.email') }}" 
                                         :sort="$sort" 
                                         :direction="$direction" 
                                     />
                                 </th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Role</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.role') }}</th>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">
                                     <x-admin::table.sorthead 
                                         column="created_at" 
-                                        label="Created At" 
+                                        label="{{ __('common.created_at') }}" 
                                         :sort="$sort" 
                                         :direction="$direction" 
                                     />
                                 </th>
-                                <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">Action</th>
+                                <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y-2 divide-billmora-2 bg-white">

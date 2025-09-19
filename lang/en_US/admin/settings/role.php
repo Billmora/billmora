@@ -4,6 +4,9 @@ return [
     'title' => 'Role Permission settings',
     'description' => 'Configure role permission settings for the system.',
 
+    'role_table' => [
+        'permission_count' => 'Permission Count',
+    ],
     'role_name_label' => 'Role Name',
     'role_name_helper' => 'Enter a name for this role. It will be used to identify and assign permissions.',
     'role_permissions_label' => 'Role Permissions',

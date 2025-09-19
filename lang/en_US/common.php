@@ -20,6 +20,7 @@ return [
     'account_settings' => 'Account Settings',
     'account_security' => 'Account Security',
     'personal_information' => 'Personal Information',
+    'fullname' => 'Fullname',
     'first_name' => 'First Name',
     'last_name' => 'Last Name',
     'email' => 'Email',
@@ -54,6 +55,8 @@ return [
     'submit' => 'Submit',
     'continue' => 'Continue',
     'download' => 'Download',
+    'key' => 'Key',
+    'value' => 'Value',
 
     'send_success' => ':attribute have been sent.',
     'send_failed' => 'Failed to send :attribute.',
@@ -82,6 +85,14 @@ return [
     'disable_modal_description' => 'Are you sure you want to disable this :item?',
 
     'back_to' => 'Back to :page',
+
+    'name' => 'Name',
+    'description' => 'Description',
+
+    'created_at' => 'Created At',
+    'updated_at' => 'Updated At',
+    'schedule_at' => 'Schedule At',
+    'action' => 'Action',
 
     'unauthorized_admin' => 'You do not have permission to access the admin area.',
 ];
