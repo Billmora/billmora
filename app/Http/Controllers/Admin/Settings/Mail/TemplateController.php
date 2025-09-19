@@ -25,11 +25,21 @@ class TemplateController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $templates = MailTemplate::select('id', 'key', 'name', 'active')->paginate(25);
+        $search = $request->query('searchTemplateMail');
 
-        return view('admin::settings.mail.template.index', compact('templates'));
+        $templates = MailTemplate::select('id', 'key', 'name', 'active')
+                                ->when($search, function ($query, $search) {
+                                    $query->where(function ($q) use ($search) {
+                                        $q->where('key', 'like', "%{$search}%")
+                                        ->orWhere('name', 'like', "%{$search}%");
+                                    });
+                                })
+                                ->paginate(25)
+                                ->withQueryString();
+
+        return view('admin::settings.mail.template.index', compact('templates', 'search'));
     }
 
     /**
