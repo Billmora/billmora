@@ -29,9 +29,18 @@ class BroadcastController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $broadcasts = MailBroadcast::select('id', 'subject', 'recipient_group', 'schedule_at', 'created_at')->paginate(25);
+        $search = $request->query('searchBroadcastMail');
+
+        $broadcasts = MailBroadcast::select('id', 'subject', 'recipient_group', 'schedule_at', 'created_at')
+                                ->when($search, function ($query, $search) {
+                                    $query->where(function ($q) use ($search) {
+                                        $q->where('subject', 'like', "%{$search}%");
+                                    });
+                                })
+                                ->paginate(25)
+                                ->withQueryString();
 
         return view('admin::settings.mail.broadcast.index', compact('broadcasts'));
     }
