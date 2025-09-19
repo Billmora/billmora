@@ -20,7 +20,7 @@
                     checkboxes.forEach(cb => cb.checked = this.allSelected);
                 }
             }"
-            x-on:change="allSelected = Array.from($el.querySelectorAll('input[type=checkbox]')).every(cb => cb.checked)"
+            x-on:change="allSelected = Array.from($el.querySelectorAll('#role_permissions_list input[type=checkbox]')).every(cb => cb.checked)"
         >
             <div class="flex justify-end">
                 <button 
