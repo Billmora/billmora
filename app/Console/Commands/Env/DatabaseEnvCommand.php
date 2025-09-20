@@ -6,7 +6,7 @@ use Billmora;
 use Laravel\Prompts;
 use Illuminate\Console\Command;
 
-class DatabseEnvCommand extends Command
+class DatabaseEnvCommand extends Command
 {
     /**
      * The name and signature of the console command.
