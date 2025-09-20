@@ -6,7 +6,7 @@
     @include('client::layouts.meta')
 </head>
 <body class="bg-white">
-    <div class="flex flex-col lg:flex-row w-full min-h-dvh">
+    <div class="flex flex-col lg:flex-row-reverse w-full min-h-dvh">
         <div class="w-full lg:w-1/2 h-auto p-8">
             <div class="max-w-170 h-full flex flex-col justify-between mx-auto">
                 <div class="flex flex-col gap-6 my-auto">
@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-        <div class="w-auto max-w-170 lg:max-w-none lg:w-1/2 h-auto lg:flex justify-center bg-billmora-primary m-8 lg:m-0 mx-8 sm:mx-auto rounded-2xl lg:rounded-none lg:rounded-bl-[100px]">
+        <div class="w-auto max-w-170 lg:max-w-none lg:w-1/2 h-auto lg:flex justify-center bg-billmora-primary m-8 lg:m-0 mx-8 sm:mx-auto rounded-2xl lg:rounded-none lg:rounded-br-[100px]">
             <div class="max-w-170 my-8 lg:my-auto mx-8 space-y-6">
                 <img src="https://media.billmora.com/logo/main-invert-bgnone.png" alt="brand logo" class="w-auto h-32">
                 <span class="text-2xl md:text-3xl lg:text-4xl font-bold text-white">Grow your business with Billmora!</span>
