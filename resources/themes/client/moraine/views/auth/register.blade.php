@@ -65,82 +65,108 @@
                             @endunless
                         </div>
                     </div>
-                    <div class="grid gap-4">
-                        <h4 class="text-xl font-semibold text-slate-700">{{ __('common.billing_information') }}</h4>
-                        <div class="flex flex-col sm:flex-row gap-4">
-                            @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'company_name'))
-                                <x-client::input 
-                                    type="text" 
-                                    name="company_name" 
-                                    label="{{ __('common.company_name') }}" 
-                                    value="{{ old('company_name') }}" 
-                                    :required="Billmora::hasAuth('user_billing_required_inputs', 'company_name')" 
-                                />
-                            @endunless
-                            @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'street_address_1'))
-                                <x-client::input 
-                                    type="text" 
-                                    name="street_address_1" 
-                                    label="{{ __('common.street_address_1') }}" 
-                                    value="{{ old('street_address_1') }}" 
-                                    :required="Billmora::hasAuth('user_billing_required_inputs', 'street_address_1')" 
-                                />
+                    @if (!collect([
+                            'phone_number',
+                            'company_name',
+                            'street_address_1',
+                            'street_address_2',
+                            'city',
+                            'state',
+                            'postcode',
+                            'country',
+                        ])->every(fn($field) => Billmora::hasAuth('user_registration_disabled_inputs', $field)))
+                        <div class="grid gap-4">
+                            <h4 class="text-xl font-semibold text-slate-700">{{ __('common.billing_information') }}</h4>
+                            @if (!collect([
+                                'company_name',
+                                'street_address_1',
+                            ])->every(fn($field) => Billmora::hasAuth('user_registration_disabled_inputs', $field)))
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'company_name'))
+                                    <x-client::input 
+                                        type="text" 
+                                        name="company_name" 
+                                        label="{{ __('common.company_name') }}" 
+                                        value="{{ old('company_name') }}" 
+                                        :required="Billmora::hasAuth('user_billing_required_inputs', 'company_name')" 
+                                    />
+                                @endunless
+                                @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'street_address_1'))
+                                    <x-client::input 
+                                        type="text" 
+                                        name="street_address_1" 
+                                        label="{{ __('common.street_address_1') }}" 
+                                        value="{{ old('street_address_1') }}" 
+                                        :required="Billmora::hasAuth('user_billing_required_inputs', 'street_address_1')" 
+                                    />
+                                @endunless
+                            </div>
+                            @endif
+                            @if (!collect([
+                                'street_address_2',
+                                'city',
+                            ])->every(fn($field) => Billmora::hasAuth('user_registration_disabled_inputs', $field)))
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'street_address_2'))
+                                    <x-client::input 
+                                        type="text" 
+                                        name="street_address_2" 
+                                        label="{{ __('common.street_address_2') }}" 
+                                        value="{{ old('street_address_2') }}" 
+                                        :required="Billmora::hasAuth('user_billing_required_inputs', 'street_address_2')" 
+                                    />
+                                @endunless
+                                @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'city'))
+                                    <x-client::input 
+                                        type="text" 
+                                        name="city" 
+                                        label="{{ __('common.city') }}" 
+                                        value="{{ old('city') }}" 
+                                        :required="Billmora::hasAuth('user_billing_required_inputs', 'city')" 
+                                    />
+                                @endunless
+                            </div>
+                            @endif
+                            @if (!collect([
+                                'state',
+                                'postcode',
+                            ])->every(fn($field) => Billmora::hasAuth('user_registration_disabled_inputs', $field)))
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'state'))
+                                    <x-client::input 
+                                        type="text" 
+                                        name="state" 
+                                        label="{{ __('common.state') }}" 
+                                        value="{{ old('state') }}" 
+                                        :required="Billmora::hasAuth('user_billing_required_inputs', 'state')" 
+                                    />
+                                @endunless
+                                @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'postcode'))
+                                    <x-client::input 
+                                        type="number" 
+                                        name="postcode" 
+                                        label="{{ __('common.postcode') }}" 
+                                        value="{{ old('postcode') }}" 
+                                        :required="Billmora::hasAuth('user_billing_required_inputs', 'postcode')" 
+                                    />
+                                @endunless
+                            </div>
+                            @endif
+                            @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'country'))
+                                <x-client::select 
+                                    name="country" 
+                                    label="{{ __('common.country') }}" 
+                                    :required="Billmora::hasAuth('user_billing_required_inputs', 'country')"
+                                >
+                                    @foreach (config('utils.countries') as $country => $label)
+                                        <option value="{{ $country }}" {{ old('country') == $country ? 'selected' : '' }}>
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
+                                </x-client::select>
                             @endunless
                         </div>
-                        <div class="flex flex-col sm:flex-row gap-4">
-                            @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'street_address_2'))
-                                <x-client::input 
-                                    type="text" 
-                                    name="street_address_2" 
-                                    label="{{ __('common.street_address_2') }}" 
-                                    value="{{ old('street_address_2') }}" 
-                                    :required="Billmora::hasAuth('user_billing_required_inputs', 'street_address_2')" 
-                                />
-                            @endunless
-                            @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'city'))
-                                <x-client::input 
-                                    type="text" 
-                                    name="city" 
-                                    label="{{ __('common.city') }}" 
-                                    value="{{ old('city') }}" 
-                                    :required="Billmora::hasAuth('user_billing_required_inputs', 'city')" 
-                                />
-                            @endunless
-                        </div>
-                        <div class="flex flex-col sm:flex-row gap-4">
-                            @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'state'))
-                                <x-client::input 
-                                    type="text" 
-                                    name="state" 
-                                    label="{{ __('common.state') }}" 
-                                    value="{{ old('state') }}" 
-                                    :required="Billmora::hasAuth('user_billing_required_inputs', 'state')" 
-                                />
-                            @endunless
-                            @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'postcode'))
-                                <x-client::input 
-                                    type="number" 
-                                    name="postcode" 
-                                    label="{{ __('common.postcode') }}" 
-                                    value="{{ old('postcode') }}" 
-                                    :required="Billmora::hasAuth('user_billing_required_inputs', 'postcode')" 
-                                />
-                            @endunless
-                        </div>
-                        @unless(Billmora::hasAuth('user_registration_disabled_inputs', 'country'))
-                            <x-client::select 
-                                name="country" 
-                                label="{{ __('common.country') }}" 
-                                :required="Billmora::hasAuth('user_billing_required_inputs', 'country')"
-                            >
-                                @foreach (config('utils.countries') as $country => $label)
-                                    <option value="{{ $country }}" {{ old('country') == $country ? 'selected' : '' }}>
-                                        {{ $label }}
-                                    </option>
-                                @endforeach
-                            </x-client::select>
-                        @endunless
-                    </div>
+                    @endif
                     <div class="grid gap-4">
                         <h4 class="text-xl font-semibold text-slate-700">{{ __('common.security_information') }}</h4>
                         <div class="flex flex-col sm:flex-row gap-4">
