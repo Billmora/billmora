@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->string('to')->index();
-            $table->string('subject');
+            $table->string('event');
             $table->enum('status', ['pending', 'sent', 'failed'])->default('pending');
             $table->json('properties')->nullable();
             $table->timestamps();
