@@ -14,11 +14,21 @@ class HistoryController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $histories = AuditEmail::select('id', 'event', 'user_id', 'to', 'status', 'created_at')
+        $search = $request->query('searchHistoryMail');
+
+       $histories = AuditEmail::select('id', 'event', 'user_id', 'to', 'status', 'created_at')
+                                ->when($search, function ($query, $search) {
+                                    $query->where(function ($q) use ($search) {
+                                        $q->where('event', 'like', "%{$search}%")
+                                        ->orWhere('to', 'like', "%{$search}%")
+                                        ->orWhere('status', 'like', "%{$search}%");
+                                    });
+                                })
                                 ->latest()
-                                ->paginate(25);
+                                ->paginate(25)
+                                ->withQueryString();
         
         return view('admin::settings.mail.history.index', compact('histories'));
     }

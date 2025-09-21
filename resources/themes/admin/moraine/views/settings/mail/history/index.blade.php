@@ -30,11 +30,11 @@
         active="{{ request()->fullUrl() }}" />
     <div class="flex flex-col gap-4">
         <div class="w-full md:w-100">
-            <form action="{{ route('admin.settings.mail.template') }}" method="GET" class="relative inline-block max-w-150 w-full group">
+            <form action="{{ route('admin.settings.mail.history') }}" method="GET" class="relative inline-block max-w-150 w-full group">
                 <div class="absolute top-1/2 -translate-y-1/2 left-2.5 pointer-events-none">
                     <x-lucide-search class="w-5 h-auto text-slate-500 group-focus-within:text-billmora-primary" />
                 </div>
-                <input type="text" name="searchTemplateMail" id="searchTemplateMail" placeholder="{{ __('admin/common.search') }}" value="{{ request('searchTemplateMail') }}" class="w-full px-6 py-3 pl-10 bg-white placeholder:text-gray-400 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary">
+                <input type="text" name="searchHistoryMail" id="searchHistoryMail" placeholder="{{ __('admin/common.search') }}" value="{{ request('searchHistoryMail') }}" class="w-full px-6 py-3 pl-10 bg-white placeholder:text-gray-400 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary">
                 <div class="absolute top-1/2 -translate-y-1/2 right-1.5">
                     <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">{{ __('common.submit') }}</button>
                 </div>
