@@ -10,7 +10,9 @@
             <x-admin::alert variant="success" title="{{ session('success') }}" />
         @endif
         @if (session('error'))
-            <x-admin::alert variant="danger" title="{{ session('error') }}" />
+            <x-admin::alert variant="danger" title="{{ __('common.send_failed', ['attribute' =>  __('admin/settings/mail.mailer_test_label')]) }}">
+                {{ session('error') }}
+            </x-admin::alert>
         @endif
         <x-admin::tabs 
             :tabs="[
