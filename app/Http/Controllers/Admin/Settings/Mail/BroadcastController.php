@@ -7,6 +7,7 @@ use App\Jobs\MailBroadcastJob;
 use App\Models\MailBroadcast;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class BroadcastController extends Controller
 {
@@ -70,8 +71,14 @@ class BroadcastController extends Controller
         $validated = $request->validate([
             'broadcast_subject' => ['required', 'string', 'max:255'],
             'broadcast_body' => ['required', 'string'],
-            'broadcast_recipient_group' => ['required', 'in:all_users,custom_users'],
-            'broadcast_recipient_custom' => ['required', 'array'],
+            'broadcast_recipient_group' => [
+                'required',
+                Rule::in(['all_users', 'custom_users']),
+            ],
+            'broadcast_recipient_custom' => [
+                Rule::requiredIf($request->input('broadcast_recipient_group') === 'custom_users'),
+                'array',
+            ],
             'broadcast_recipient_custom.*' => ['email', 'exists:users,email'],
             'broadcast_cc' => ['nullable', 'array'],
             'broadcast_cc.*' => ['email'],
@@ -141,8 +148,14 @@ class BroadcastController extends Controller
         $validated = $request->validate([
             'broadcast_subject' => ['required', 'string', 'max:255'],
             'broadcast_body' => ['required', 'string'],
-            'broadcast_recipient_group' => ['required', 'in:all_users,custom_users'],
-            'broadcast_recipient_custom' => ['required', 'array'],
+            'broadcast_recipient_group' => [
+                'required',
+                Rule::in(['all_users', 'custom_users']),
+            ],
+            'broadcast_recipient_custom' => [
+                Rule::requiredIf($request->input('broadcast_recipient_group') === 'custom_users'),
+                'array',
+            ],
             'broadcast_recipient_custom.*' => ['email'],
             'broadcast_cc' => ['nullable', 'array'],
             'broadcast_cc.*' => ['email'],
