@@ -7,6 +7,7 @@ return [
         'mailer' => 'Mailer',
         'template' => 'Template',
         'broadcast' => 'Broadcast',
+        'history' => 'History',
     ],
 
     'mailer_alert_label' => 'Mailer Settings Source',
@@ -78,4 +79,11 @@ return [
     'broadcast_schedule_helper' => 'Set a date and time to schedule when the broadcast email will be sent. Leave empty to send immediately.',
     'broadcast_placeholder_label' => 'Broadcast Placeholders',
     'broadcast_placeholder_helper' => 'List of available placeholders you can use in the email subject or body.',
+
+    'history_field' => [
+        'event' => 'Event',
+        'to' => 'To',
+        'properties' => 'Properties',
+    ],
+    'history_label' => 'Email History',
 ];
