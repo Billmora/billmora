@@ -68,7 +68,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $history->created_at }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                                     <a href="{{ route('admin.settings.mail.history.show', ['id' => $history->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
-                                        View
+                                        {{ __('common.view') }}
                                     </a>
                                 </td>
                             </tr>

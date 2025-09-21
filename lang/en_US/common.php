@@ -48,6 +48,8 @@ return [
     'save' => 'Save',
     'cancel' => 'Cancel',
     'create' => 'Create',
+    'view' => 'View',
+    'edit' => 'Edit',
     'update' => 'Update',
     'delete' => 'Delete',
     'send' => 'Send',
