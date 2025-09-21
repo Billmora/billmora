@@ -13,7 +13,13 @@
             </div>
             <div class="grid">
                 <span class="text-slate-600 font-semibold">{{ __('admin/settings/mail.history_field.to') }}</span>
-                <a href="{{ route('admin.users.summary', ['id' => $history->user_id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $history->to }}</a>
+                @if ($history->user_id)
+                    <a href="{{ route('admin.users.summary', ['id' => $history->user_id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                        {{ $history->to }}
+                    </a>
+                @else
+                    <span class="text-slate-500">{{ $history->to }}</span>
+                @endif
             </div>
             <div class="grid">
                 <span class="text-slate-600 font-semibold">{{ __('common.status') }}</span>

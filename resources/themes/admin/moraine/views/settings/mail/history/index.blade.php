@@ -62,7 +62,13 @@
                                     <a href="{{ route('admin.settings.mail.history.show', ['id' => $history->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $history->event }}</a>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
-                                    <a href="{{ route('admin.users.summary', ['id' => $history->user_id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $history->to }}</a>
+                                    @if ($history->user_id)
+                                        <a href="{{ route('admin.users.summary', ['id' => $history->user_id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                                            {{ $history->to }}
+                                        </a>
+                                    @else
+                                        {{ $history->to }}
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $history->status }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $history->created_at }}</td>
