@@ -29,6 +29,11 @@
                     'icon' => 'lucide-megaphone',
                     'label' => __('admin/settings/mail.tabs.broadcast'),
                 ],
+                [
+                    'route' => route('admin.settings.mail.history'),
+                    'icon' => 'lucide-mails',
+                    'label' => __('admin/settings/mail.tabs.history'),
+                ],
             ]" 
             active="{{ request()->fullUrl() }}" />
             <x-admin::alert variant="primary" title="{{ __('admin/settings/mail.mailer_alert_label') }}">{{ __('admin/settings/mail.mailer_alert_helper') }}</x-admin::alert>
