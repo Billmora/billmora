@@ -12,7 +12,7 @@ class AuditService
      *
      * @param int|null $userId     The ID of the user associated with the email, or null if not applicable.
      * @param string   $to         The recipient email address.
-     * @param string   $subject    The email subject line.
+     * @param string   $event    The email event line.
      * @param string   $status     The email status (e.g., "pending", "sent", "failed"). Defaults to "pending".
      * @param array    $properties Additional metadata or properties related to the email.
      *
@@ -21,7 +21,7 @@ class AuditService
     public function email(
             ?int $userId,
             string $to,
-            string $subject,
+            string $event,
             string $status = 'pending',
             array $properties = []
         ) 
@@ -29,7 +29,7 @@ class AuditService
         return AuditEmail::create([
             'user_id' => $userId,
             'to' => $to,
-            'subject' => $subject,
+            'event' => $event,
             'status' => $status,
             'properties' => $properties,
         ]);
