@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Facades\Audit;
 use App\Mail\TemplateMail;
 use App\Models\User;
 use App\Models\UserEmailVerification;
@@ -155,12 +156,38 @@ class UsersController extends Controller
                 'expires_at' => now()->addMinutes(60),
             ]);
 
-            Mail::to($user->email)->send(new TemplateMail('user_password_reset', [
-                'client_name' => $user->fullname,
-                'company_name' => Billmora::getGeneral('company_name'),
-                'reset_url' => route('client.password.reset', ['token' => $token]),
-                'clientarea_url' => config('app.url'),
-            ]));
+            $auditEmail = Audit::email(
+                $user->id,
+                $user->email,
+                'user_password_reset',
+                'pending',
+            );
+
+            try {
+                Mail::to($user->email)->send(new TemplateMail('user_password_reset', [
+                    'client_name' => $user->fullname,
+                    'company_name' => Billmora::getGeneral('company_name'),
+                    'reset_url' => route('client.password.reset', ['token' => $token]),
+                    'clientarea_url' => config('app.url'),
+                ]));
+
+                $auditEmail->update([
+                    'status' => 'sent',
+                    'properties' => [
+                        'ip' => $request->ip(),
+                        'user_agent' => $request->userAgent(),
+                    ],
+                ]);
+            } catch (\Throwable $e) {
+                $auditEmail->update([
+                    'status' => 'failed',
+                    'properties' => [
+                        'ip' => $request->ip(),
+                        'user_agent' => $request->userAgent(),
+                        'error' => $e->getMessage(),
+                    ],
+                ]);
+            }
         }
 
         if ($validated['role'] === 'root' && Auth::user()->isRootAdmin()) {

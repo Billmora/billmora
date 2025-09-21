@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Facades\Audit;
 use App\Http\Controllers\Controller;
 use App\Mail\TemplateMail;
 use App\Models\UserEmailVerification;
@@ -86,12 +87,40 @@ class EmailVerificationController extends Controller
                 'expires_at' => now()->addMinutes(60),
             ]);
 
-            Mail::to($user->email)->send(new TemplateMail('user_resend_verification', [
-                'client_name' => $user->fullname,
-                'company_name' => Billmora::getGeneral('company_name'),
-                'verify_url' => route('client.email.verify', ['token' => $newToken]),
-                'clientarea_url' => config('app.url'),
-            ]));
+            
+
+            $auditEmail = Audit::email(
+                $user->id,
+                $user->email,
+                'user_resend_verification',
+                'pending',
+            );
+
+            try {
+                Mail::to($user->email)->send(new TemplateMail('user_resend_verification', [
+                    'client_name' => $user->fullname,
+                    'company_name' => Billmora::getGeneral('company_name'),
+                    'verify_url' => route('client.email.verify', ['token' => $newToken]),
+                    'clientarea_url' => config('app.url'),
+                ]));
+
+                $auditEmail->update([
+                    'status' => 'sent',
+                    'properties' => [
+                        'ip' => $request->ip(),
+                        'user_agent' => $request->userAgent(),
+                    ],
+                ]);
+            } catch (\Throwable $e) {
+                $auditEmail->update([
+                    'status' => 'failed',
+                    'properties' => [
+                        'ip' => $request->ip(),
+                        'user_agent' => $request->userAgent(),
+                        'error' => $e->getMessage(),
+                    ],
+                ]);
+            }
 
             return redirect()->route('client.login')->with('success', __('auth.email.resent'));
         } catch (\Exception $e) {
