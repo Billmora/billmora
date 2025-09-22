@@ -4,6 +4,9 @@
 
 @section('body')
 <div class="flex flex-col gap-5">
+    @if (session('success'))
+        <x-admin::alert variant="success" title="{{ session('success') }}" />
+    @endif
     <x-admin::tabs 
         :tabs="[
             [
@@ -29,16 +32,31 @@
         ]" 
         active="{{ request()->fullUrl() }}" />
     <div class="flex flex-col gap-4">
-        <div class="w-full md:w-100">
-            <form action="{{ route('admin.settings.mail.history') }}" method="GET" class="relative inline-block max-w-150 w-full group">
-                <div class="absolute top-1/2 -translate-y-1/2 left-2.5 pointer-events-none">
-                    <x-lucide-search class="w-5 h-auto text-slate-500 group-focus-within:text-billmora-primary" />
-                </div>
-                <input type="text" name="searchHistoryMail" id="searchHistoryMail" placeholder="{{ __('admin/common.search') }}" value="{{ request('searchHistoryMail') }}" class="w-full px-6 py-3 pl-10 bg-white placeholder:text-gray-400 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary">
-                <div class="absolute top-1/2 -translate-y-1/2 right-1.5">
-                    <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">{{ __('common.submit') }}</button>
-                </div>
-            </form>
+        <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
+            <div class="w-full md:w-100">
+                <form action="{{ route('admin.settings.mail.history') }}" method="GET" class="relative inline-block max-w-150 w-full group">
+                    <div class="absolute top-1/2 -translate-y-1/2 left-2.5 pointer-events-none">
+                        <x-lucide-search class="w-5 h-auto text-slate-500 group-focus-within:text-billmora-primary" />
+                    </div>
+                    <input type="text" name="searchHistoryMail" id="searchHistoryMail" placeholder="{{ __('admin/common.search') }}" value="{{ request('searchHistoryMail') }}" class="w-full px-6 py-3 pl-10 bg-white placeholder:text-gray-400 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary">
+                    <div class="absolute top-1/2 -translate-y-1/2 right-1.5">
+                        <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">{{ __('common.submit') }}</button>
+                    </div>
+                </form>
+            </div>
+            <div class="flex gap-4 ml-auto">
+                <form action="{{ route('admin.settings.mail.history.export') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                        <x-lucide-file-down class="w-auto h-5" />
+                        {{ __('common.export') }}
+                    </button>
+                </form>
+                <x-admin::modal.trigger modal="clearModalHistory" variant="open" class="flex gap-1 items-center bg-red-500 hover:bg-red-600 px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                    <x-lucide-eraser class="w-auto h-5" />
+                    {{ __('common.clear') }}
+                </x-admin::modal.trigger>
+            </div>
         </div>
         <div class="overflow-x-auto">
             <div class="min-w-full inline-block align-middle">
@@ -88,5 +106,20 @@
             {{ $histories->links('admin::layouts.partials.pagination') }}
         </div>
     </div>
+    <x-admin::modal.content
+        modal="clearModalHistory"
+        variant="danger"
+        size="xl"
+        position="centered"
+        title="{{ __('common.clear_modal_title') }}"
+        description="{{ __('common.clear_modal_description', ['item' => __('admin/settings/mail.history_label')]) }}">
+        <form action="{{ route('admin.settings.mail.history.clear') }}" method="POST">
+            @csrf
+            <div class="flex justify-end gap-2 mt-4">
+                <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
+            </div>
+        </form>
+    </x-admin::modal.content>
 </div>
 @endsection
