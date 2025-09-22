@@ -2,7 +2,7 @@
 
 return [
     'title' => 'Email History',
-    'description' => 'Review detailed records of all email activities.',
+    'description' => 'Review detailed records of all email histories.',
 
     'event_label' => 'Event',
     'to_label' => 'To',
