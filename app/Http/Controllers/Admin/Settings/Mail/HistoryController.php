@@ -126,6 +126,6 @@ class HistoryController extends Controller
     {
         AuditEmail::truncate();
 
-        return redirect()->back()->with('success', __('common.clear_success', ['attribute' => __('admin/settings/mail.history_label')]));
+        return redirect()->back()->with('success', __('common.clear_success', ['attribute' => __('admin/audits/email.title')]));
     }
 }

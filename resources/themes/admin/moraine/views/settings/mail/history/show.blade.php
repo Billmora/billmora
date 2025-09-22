@@ -5,14 +5,14 @@
 @section('body')
 <div class="flex flex-col gap-5">
     <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
-        <h4 class="text-lg text-slate-600 font-semibold">{{ __('admin/settings/mail.history_label') }}</h4>
+        <h4 class="text-lg text-slate-600 font-semibold">{{ __('admin/audits/email.title') }}</h4>
         <div class="grid grid-cols-none md:grid-cols-2 gap-4">
             <div class="grid">
-                <span class="text-slate-600 font-semibold">{{ __('admin/settings/mail.history_field.event') }}</span>
+                <span class="text-slate-600 font-semibold">{{ __('admin/audits/email.event_label') }}</span>
                 <span class="text-slate-500">{{ $history->event }}</span>
             </div>
             <div class="grid">
-                <span class="text-slate-600 font-semibold">{{ __('admin/settings/mail.history_field.to') }}</span>
+                <span class="text-slate-600 font-semibold">{{ __('admin/audits/email.to_label') }}</span>
                 @if ($history->user_id)
                     <a href="{{ route('admin.users.summary', ['id' => $history->user_id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                         {{ $history->to }}
@@ -32,7 +32,7 @@
         </div>
         @if($history->properties)
             <div class="space-y-2">
-                <h3 class="font-semibold text-slate-600">{{ __('admin/settings/mail.history_field.properties') }}</h3>
+                <h3 class="font-semibold text-slate-600">{{ __('admin/audits/email.properties_label') }}</h3>
                 <div class="bg-billmora-1 px-4 py-2 border-2 border-billmora-2 rounded-lg">
                     <dl class="divide-y-2 divide-billmora-2 text-sm">
                         @foreach($history->properties as $key => $value)

@@ -69,8 +69,8 @@
                         <thead class="bg-billmora-2">
                             <tr>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">#</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/settings/mail.history_field.event') }}</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/settings/mail.history_field.to') }}</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/audits/email.event_label') }}</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/audits/email.to_label') }}</th>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.status') }}</th>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.created_at') }}</th>
                                 <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
@@ -127,7 +127,7 @@
             size="xl"
             position="centered"
             title="{{ __('common.clear_modal_title') }}"
-            description="{{ __('common.clear_modal_description', ['item' => __('admin/settings/mail.history_label')]) }}">
+            description="{{ __('common.clear_modal_description', ['item' => __('admin/audits/email.title')]) }}">
             <form action="{{ route('admin.settings.mail.history.clear') }}" method="POST">
                 @csrf
                 <div class="flex justify-end gap-2 mt-4">
