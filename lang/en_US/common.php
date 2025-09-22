@@ -59,6 +59,7 @@ return [
     'download' => 'Download',
     'clear' => 'Clear',
     'export' => 'Export',
+    'preview' => 'Preview',
     'key' => 'Key',
     'value' => 'Value',
 
