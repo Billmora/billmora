@@ -107,6 +107,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin audits interface routes.
+     *
+     * Prefix: /admin/audits
+     */
+    Route::group(['prefix' => 'audits'], function () {
+        Route::get('/', [Admin\AuditsController::class, 'index'])->name('admin.audits');
+    });
+
+    /**
      * Admin users interface routes.
      *
      * Prefix: /admin/users
