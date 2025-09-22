@@ -90,9 +90,19 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $history->status }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $history->created_at }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                                <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                     <a href="{{ route('admin.settings.mail.history.show', ['id' => $history->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                                         {{ __('common.view') }}
+                                    </a>
+                                    <a href="{{ route('admin.settings.mail.history.preview', ['id' => $history->id]) }}" class="inline-flex items-center text-sm font-semibold text-yellow-400 hover:text-yellow-500"
+                                        x-data="{ windowWidth: 900, windowHeight: 600 }"
+                                        x-on:click.prevent="
+                                                const left = (screen.width/2) - (windowWidth/2);
+                                                const top = (screen.height/2) - (windowHeight/2);
+                                                window.open($event.target.href, 'preview', 
+                                                        `width=${windowWidth},height=${windowHeight},top=${top},left=${left},resizable=yes,scrollbars=yes`);
+                                        ">
+                                        {{ __('common.preview') }}
                                     </a>
                                 </td>
                             </tr>

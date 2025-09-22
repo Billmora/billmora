@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Admin\Settings\Mail;
 
 use App\Http\Controllers\Controller;
+use App\Mail\BroadcastMail;
+use App\Mail\TemplateMail;
 use App\Models\AuditEmail;
+use App\Models\MailBroadcast;
+use App\Models\MailTemplate;
 use Billmora;
 use Illuminate\Http\Request;
 
@@ -48,6 +52,35 @@ class HistoryController extends Controller
         $history = AuditEmail::findOrFail($id);
 
         return view('admin::settings.mail.history.show', compact('history'));
+    }
+
+    /**
+     * Preview the content of a specific email audit history.
+     *
+     * @param int $id The ID of the email audit record to preview.
+     *
+     * @return \Illuminate\View\View
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public function preview($id)
+    {
+        $history = AuditEmail::findOrFail($id);
+
+        if ($history->event === 'broadcast_mail') {
+            $broadcast = MailBroadcast::findOrFail($history->properties['id']);
+            $mailable = new BroadcastMail($broadcast);
+        } else {
+            $template = MailTemplate::where('key', $history->event)->firstOrFail();
+            $mailable = new TemplateMail(
+                $template->key,
+                $template->placeholder,
+            );
+        }
+
+        $content = $mailable->content();
+
+        return view($content->view, $content->with);
     }
 
     /**

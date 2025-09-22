@@ -63,6 +63,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::delete('/broadcast/{id}', [Settings\Mail\BroadcastController::class, 'destroy'])->name('admin.settings.mail.broadcast.destroy');
             Route::get('/history', [Settings\Mail\HistoryController::class, 'index'])->name('admin.settings.mail.history');
             Route::get('/history/{id}', [Settings\Mail\HistoryController::class, 'show'])->name('admin.settings.mail.history.show');
+            Route::get('history/{id}/preview', [Settings\Mail\HistoryController::class, 'preview'])->name('admin.settings.mail.history.preview');
             Route::post('/history/export', [Settings\Mail\HistoryController::class, 'export'])->name('admin.settings.mail.history.export');
             Route::post('/history/clear', [Settings\Mail\HistoryController::class, 'clear'])->name('admin.settings.mail.history.clear');
         });
