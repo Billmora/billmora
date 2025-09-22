@@ -15,6 +15,18 @@ class HistoryController extends Controller
 {
 
     /**
+     * Applies permission-based middleware for accessing email audit histories.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:audit.email.history.view')->only(['index', 'show', 'preview']);
+        $this->middleware('permission:audit.email.history.export')->only(['export']);
+        $this->middleware('permission:audit.email.history.delete')->only(['clear']);
+    }
+
+    /**
      * Display a paginated list of email audit histories.
      *
      * @return \Illuminate\View\View
