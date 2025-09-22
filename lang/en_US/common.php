@@ -57,6 +57,8 @@ return [
     'submit' => 'Submit',
     'continue' => 'Continue',
     'download' => 'Download',
+    'clear' => 'Clear',
+    'export' => 'Export',
     'key' => 'Key',
     'value' => 'Value',
 
@@ -74,6 +76,8 @@ return [
     'enable_failed' => 'Failed to enable :attribute.',
     'disable_success' => ':attribute have been disabled.',
     'disable_failed' => 'Failed to disable :attribute.',
+    'clear_success' => ':attribute have been cleared.',
+    'clear_failed' => 'Failed to clear :attribute.',
 
     'create_modal_title' => 'Create a new item',
     'create_modal_description' => 'Are you sure you want to create this :item?',
@@ -85,6 +89,8 @@ return [
     'enable_modal_description' => 'Are you sure you want to enable this :item?',
     'disable_modal_title' => 'Disable the item',
     'disable_modal_description' => 'Are you sure you want to disable this :item?',
+    'clear_modal_title' => 'Clear the item',
+    'clear_modal_description' => 'Are you sure you want to clear this :item?',
 
     'back_to' => 'Back to :page',
 
