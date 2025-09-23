@@ -117,7 +117,7 @@ class MakeUserCommand extends Command
             'last_name' => $lastName,
             'email' => $email,
             'password' => Hash::make($password),
-            'role' => $role === 'administrator',
+            'is_admin_root' => $role === 'administrator',
         ]);
 
         $user->billing()->create($billingData ?? [
