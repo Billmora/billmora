@@ -80,7 +80,7 @@ class SettingSeeder extends Seeder
              * Seeds initial data into the 'auth' category.
              */
             ['category' => 'auth', 'key' => 'user_registration', 'value' => true],
-            ['category' => 'auth', 'key' => 'user_require_verified', 'value' => true],
+            ['category' => 'auth', 'key' => 'user_require_verified', 'value' => false],
             ['category' => 'auth', 'key' => 'user_require_two_factor', 'value' => false],
             ['category' => 'auth', 'key' => 'user_registration_disabled_inputs', 'value' => []],
             ['category' => 'auth', 'key' => 'user_billing_required_inputs', 'value' => ["street_address_1", "city", "state", "postcode", "country"]],
