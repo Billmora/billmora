@@ -2,9 +2,15 @@
 
 namespace App\Console\Commands\User;
 
+use App\Facades\Audit;
+use App\Mail\TemplateMail;
 use App\Models\User;
+use App\Models\UserEmailVerification;
+use Billmora;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Laravel\Prompts;
 
 class MakeUserCommand extends Command
@@ -130,6 +136,45 @@ class MakeUserCommand extends Command
             'postcode' => null,
             'country' => null,
         ]);
+
+        $token = Str::random(64);
+        UserEmailVerification::create([
+            'user_id' => $user->id,
+            'token' => $token,
+            'expires_at' => now()->addMinutes(60),
+        ]);
+
+        $auditEmail = Audit::email(
+            $user->id,
+            $user->email,
+            'user_registration',
+            'pending',
+            [
+                'ip' => null,
+                'user_agent' => "artisan {$this->getName()}",
+                
+            ]
+        );
+
+        try {
+            Mail::to($user->email)->send(new TemplateMail('user_registration', [
+                'client_name' => $user->fullname,
+                'company_name' => Billmora::getGeneral('company_name'),
+                'verify_url' => route('client.email.verify', ['token' => $token]),
+                'clientarea_url' => config('app.url'),
+            ]));
+
+            $auditEmail->update([
+                'status' => 'sent',
+            ]);
+        } catch (\Throwable $e) {
+            $auditEmail->update([
+                'status' => 'failed',
+                'properties' => array_merge($auditEmail->properties ?? [], [
+                    'error' => $e->getMessage(),
+                ]),
+            ]);
+        }
 
         $this->newLine();
         $this->info("User has been created successfully with the following details:");
