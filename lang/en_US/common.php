@@ -101,7 +101,6 @@ return [
     'created_at' => 'Created At',
     'updated_at' => 'Updated At',
     'schedule_at' => 'Schedule At',
-    'event' => 'Event',
     'action' => 'Action',
 
     'unauthorized_admin' => 'You do not have permission to access the admin area.',
