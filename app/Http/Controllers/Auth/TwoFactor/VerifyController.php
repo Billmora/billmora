@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth\TwoFactor;
 
+use App\Facades\Audit;
 use App\Http\Controllers\Controller;
 use App\Services\TwoFactorService;
 use Illuminate\Http\Request;
@@ -75,6 +76,13 @@ class VerifyController extends Controller
                 'enabled_at' => now()
             ]);
             session()->put('2fa_passed', true);
+
+            Audit::user($user->id, 'account.two-factor.enable', [
+                'method' => 'totp',
+                'enabled_at' => now(),
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
     
             return redirect()->route('client.account.security')->with('success', __('common.enable_success', ['attribute' => __('auth.2fa.title')]));
         };

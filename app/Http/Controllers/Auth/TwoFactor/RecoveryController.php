@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth\TwoFactor;
 
+use App\Facades\Audit;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,6 +49,12 @@ class RecoveryController extends Controller
             'enabled_at' => null,
         ]);
         session()->forget('2fa_passed');
+
+        Audit::user($user->id, 'account.two-factor.disable', [
+            'method' => 'recovery',
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
 
         return redirect()->route('client.account.security')->with('success', __('common.disable_success', ['attribute' => __('auth.2fa.title')]));
     }

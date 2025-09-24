@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth\TwoFactor;
 
+use App\Facades\Audit;
 use App\Http\Controllers\Controller;
 use App\Services\TwoFactorService;
 use Billmora;
@@ -115,6 +116,12 @@ class SetupController extends Controller
         $user->twoFactor->update([
             'enabled_at' => null,
             'downloaded_at' => null,
+        ]);
+
+        Audit::user($user->id, 'account.two-factor.disable', [
+            'method' => 'totp',
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
         ]);
 
         return redirect()->back()->with('success', __('common.disable_success', ['attribute' => __('auth.2fa.title')]));
