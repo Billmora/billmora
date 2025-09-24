@@ -63,7 +63,13 @@
       {{-- Dropdown Content --}}
       <div class="flex flex-col">
         <span class="text-xl text-slate-600 font-bold">{{ auth()->user()->fullname }}</span>
-        <span class="text-md text-slate-500 font-semibold">Administrator</span>
+        <span class="text-md text-slate-500 font-semibold">
+          @if (auth()->user()->isRootAdmin())
+              Administrator
+          @elseif (auth()->user()->roles->isNotEmpty())
+              {{ auth()->user()->roles->pluck('name')->implode(', ') }}
+          @endif
+        </span>
       </div>
       <hr class="border-t-2 border-billmora-2 my-2">
       <a href="#" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
