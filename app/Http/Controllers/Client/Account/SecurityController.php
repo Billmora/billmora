@@ -113,6 +113,12 @@ class SecurityController extends Controller
             ]);
         }
 
-        return back()->with('success', __('common.update_success', ['attribute' => __('common.password')]));
+        Auth::logout();
+        
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        session()->forget('2fa_passed');
+
+        return redirect()->route('client.login')->with('success', __('common.update_success', ['attribute' => __('common.password')]));
     }
 }
