@@ -12,7 +12,7 @@ class SecurityController extends Controller
 {
     public function index()
     {
-        $user = Auth::user()->with('billing')->first();
+        $user = Auth::user();
 
         return view('client::account.security', compact('user'));
     }
