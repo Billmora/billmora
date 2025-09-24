@@ -19,7 +19,8 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        $user = Auth::user()->with('billing')->first();
+        $user = Auth::user();
+        $user->load('billing');
 
         return view('client::account.settings', compact('user'));
     }
@@ -89,8 +90,6 @@ class SettingsController extends Controller
             'language' => $validated['language'],
         ]);
 
-        $user->refresh();
-
         $user->billing()->updateOrCreate(
             ['user_id' => $user->id],
             [
@@ -104,6 +103,8 @@ class SettingsController extends Controller
                 'country' => $validated['country'],
             ]
         );
+
+        $user->refresh();
 
         return redirect()->back()->with('success', __('common.update_success', ['attribute' => __('common.account_settings')]));
     }
