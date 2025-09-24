@@ -130,6 +130,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/{id}/profile', [Users\Edit\ProfileController::class, 'index'])->name('admin.users.profile');
         Route::put('/{id}/profile', [Users\Edit\ProfileController::class, 'update'])->name('admin.users.profile.update');
         Route::delete('/{id}', [Admin\UsersController::class, 'destroy'])->name('admin.users.destroy');
+        Route::get('/{id}/activity', [Users\ActivityController::class, 'index'])->name('admin.users.activity');
+        Route::get('/{id}/activity/{activity}', [Users\ActivityController::class, 'show'])->name('admin.users.activity.show');
+        Route::post('/{id}/activity/export', [Users\ActivityController::class, 'export'])->name('admin.users.activity.export');
+        Route::post('/{id}/activity/clear', [Users\ActivityController::class, 'clear'])->name('admin.users.activity.clear');
     });
 
     /**
