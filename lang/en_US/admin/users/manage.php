@@ -4,6 +4,7 @@ return [
     'tabs' => [
         'summary' => 'Summary',
         'profile' => 'Profile',
+        'activity' => 'Activity',
     ],
 
     'email_verification_alert_label' => 'Pending Email Verification',
