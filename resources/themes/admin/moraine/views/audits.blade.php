@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'System Settings')
+@section('title', 'System Audits')
 
 @section('body')
 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
