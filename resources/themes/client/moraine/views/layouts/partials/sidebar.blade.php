@@ -2,7 +2,7 @@
   <div class="bg-white flex flex-col w-full h-full border-2 border-billmora-2 rounded-2xl p-8 pr-0">
     <a href="{{ route('client.dashboard') }}" class="relative flex gap-3 items-center mr-8">
       <img src="{{ Billmora::getGeneral('company_logo') }}" alt="billmora logo" class="w-auto h-11 rounded-lg">
-      <h3 class="text-2xl font-extrabold uppercase text-billmora-primary">Billmora</h3>
+      <h3 class="text-2xl font-extrabold uppercase text-billmora-primary">{{ Billmora::getGeneral('company_name') }}</h3>
       {{-- Sidebar close toggle --}}
       <div id="closeSidebar" role="button" class="absolute top-0 -right-13 xl:hidden bg-white hover:bg-billmora-primary border-2 border-billmora-2 text-slate-600 hover:text-white shadow p-2 rounded-full cursor-pointer transition">
         <x-lucide-x class="w-auto h-5" />
