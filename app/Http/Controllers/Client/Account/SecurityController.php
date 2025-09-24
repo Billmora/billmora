@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client\Account;
 
+use App\Facades\Audit;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
@@ -43,8 +44,28 @@ class SecurityController extends Controller
             return back()->withErrors(['confirm_password' => __('auth.password.current_mismatch')])->withInput();
         }
 
+        $oldUser = $user->replicate();
+
         $user->email = $validated['new_email'];
         $user->save();
+
+        $changes = [];
+        foreach ($user->getChanges() as $field => $new) {
+            if (!in_array($field, ['updated_at', 'created_at'])) {
+                $changes[$field] = [
+                    'old' => $oldUser->$field,
+                    'new' => $new
+                ];
+            }
+        }
+
+        if ($changes) {
+            Audit::user($user->id, 'account.security.email.update', [
+                'changes' => $changes,
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
+        }
 
         return redirect()->back()->with('success', __('common.update_success', ['attribute' => __('common.email')]));
     }
@@ -64,6 +85,8 @@ class SecurityController extends Controller
             'current_password' => ['required', 'string'],
             'new_password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
+        
+        $oldUser = $user->replicate();
 
         if (!Hash::check($validated['current_password'], $user->password)) {
             return back()->withErrors(['current_password' => __('auth.password.current_mismatch')])->withInput();
@@ -71,6 +94,24 @@ class SecurityController extends Controller
 
         $user->password = Hash::make($validated['new_password']);
         $user->save();
+
+        $changes = [];
+        foreach ($user->getChanges() as $field => $new) {
+            if (!in_array($field, ['updated_at', 'created_at'])) {
+                $changes[$field] = [
+                    'old' => $oldUser->$field,
+                    'new' => $new
+                ];
+            }
+        }
+
+        if ($changes) {
+            Audit::user($user->id, 'account.security.password.update', [
+                'changes' => $changes,
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
+        }
 
         return back()->with('success', __('common.update_success', ['attribute' => __('common.password')]));
     }

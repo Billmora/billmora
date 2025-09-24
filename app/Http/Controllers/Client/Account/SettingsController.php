@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client\Account;
 
+use App\Facades\Audit;
 use App\Http\Controllers\Controller;
 use Billmora;
 use Illuminate\Http\Request;
@@ -83,6 +84,9 @@ class SettingsController extends Controller
             ],
         ]);
 
+        $oldUser = $user->replicate();
+        $oldUserBilling = $user->billing?->replicate();
+
         $user->update([
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
@@ -90,7 +94,7 @@ class SettingsController extends Controller
             'language' => $validated['language'],
         ]);
 
-        $user->billing()->updateOrCreate(
+        $billing = $user->billing()->updateOrCreate(
             ['user_id' => $user->id],
             [
                 'phone_number' => $validated['phone_number'],
@@ -103,6 +107,35 @@ class SettingsController extends Controller
                 'country' => $validated['country'],
             ]
         );
+
+        $changes = [];
+        foreach ($user->getChanges() as $field => $new) {
+            if (!in_array($field, ['updated_at', 'created_at'])) {
+                $changes[$field] = [
+                    'old' => $oldUser->$field,
+                    'new' => $new
+                ];
+            }
+        }
+        
+        if ($billing->wasChanged()) {
+            foreach ($billing->getChanges() as $field => $new) {
+                if (!in_array($field, ['updated_at', 'created_at'])) {
+                    $changes[$field] = [
+                        'old' => $oldUserBilling ? $oldUserBilling->$field : null,
+                        'new' => $new
+                    ];
+                }
+            }
+        }
+
+        if ($changes) {
+            Audit::user($user->id, 'account.settings.update', [
+                'changes' => $changes,
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
+        }
 
         $user->refresh();
 
