@@ -19,6 +19,12 @@ class PermissionSeeder extends Seeder
          * Seeds initial data into the 'permission'.
          */
         $permissions = [
+            'audit.email.history.view',
+            'audit.email.history.export',
+            'audit.email.history.delete',
+            'audit.user.activity.view',
+            'audit.user.activity.export',
+            'audit.user.activity.delete',
             'settings.general.view',
             'settings.general.update',
             'settings.mail.view',
@@ -37,9 +43,6 @@ class PermissionSeeder extends Seeder
             'settings.roles.create',
             'settings.roles.update',
             'settings.roles.delete',
-            'audit.email.history.view',
-            'audit.email.history.export',
-            'audit.email.history.delete',
             'users.view',
             'users.create',
             'users.update',
