@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\AuditEmail;
+use App\Models\AuditUser;
 
 class AuditService
 {
@@ -31,6 +32,28 @@ class AuditService
             'to' => $to,
             'event' => $event,
             'status' => $status,
+            'properties' => $properties,
+        ]);
+    }
+
+    /**
+     * Log a user-related audit event.
+     *
+     * @param int   $userId     The ID of the user associated with the event.
+     * @param string $event     The name of the event (e.g., "login", "update_profile").
+     * @param array  $properties Optional additional data related to the event.
+     *
+     * @return \App\Models\AuditUser
+     */
+    public function user(
+            int $userId,
+            string $event,
+            array $properties = []
+        ) 
+    {
+        return AuditUser::create([
+            'user_id' => $userId,
+            'event' => $event,
             'properties' => $properties,
         ]);
     }
