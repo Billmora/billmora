@@ -101,7 +101,7 @@ class ActivityController extends Controller
     {
         $user = User::findOrFail($id);
 
-        AuditUser::where('user_id', $user->id)->truncate();
+        AuditUser::where('user_id', $user->id)->delete();
 
         return redirect()->back()->with('success', __('common.clear_success', ['attribute' => __('admin/audits/user.title')]));
     }
