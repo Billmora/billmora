@@ -40,17 +40,21 @@
                 </form>
             </div>
             <div class="flex gap-4 ml-auto">
-                <form action="{{ route('admin.users.activity.export', ['id' => $user->id]) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                        <x-lucide-file-down class="w-auto h-5" />
-                        {{ __('common.export') }}
-                    </button>
-                </form>
-                <x-admin::modal.trigger modal="clearModalHistory" variant="open" class="flex gap-1 items-center bg-red-500 hover:bg-red-600 px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                    <x-lucide-eraser class="w-auto h-5" />
-                    {{ __('common.clear') }}
-                </x-admin::modal.trigger>
+                @can('audit.user.activity.export')
+                    <form action="{{ route('admin.users.activity.export', ['id' => $user->id]) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                            <x-lucide-file-down class="w-auto h-5" />
+                            {{ __('common.export') }}
+                        </button>
+                    </form>
+                @endcan
+                @can('audit.user.activity.delete')
+                    <x-admin::modal.trigger modal="clearModalHistory" variant="open" class="flex gap-1 items-center bg-red-500 hover:bg-red-600 px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                        <x-lucide-eraser class="w-auto h-5" />
+                        {{ __('common.clear') }}
+                    </x-admin::modal.trigger>
+                @endcan
             </div>
         </div>
         <div class="overflow-x-auto">
@@ -87,20 +91,22 @@
             {{ $activities->links('admin::layouts.partials.pagination') }}
         </div>
     </div>
-    <x-admin::modal.content
-        modal="clearModalHistory"
-        variant="danger"
-        size="xl"
-        position="centered"
-        title="{{ __('common.clear_modal_title') }}"
-        description="{{ __('common.clear_modal_description', ['item' => __('admin/audits/user.title')]) }}">
-        <form action="{{ route('admin.users.activity.clear', ['id' => $user->id]) }}" method="POST">
-            @csrf
-            <div class="flex justify-end gap-2 mt-4">
-                <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
-                <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.clear') }}</button>
-            </div>
-        </form>
-    </x-admin::modal.content>
+    @can('audit.user.activity.delete')
+        <x-admin::modal.content
+            modal="clearModalHistory"
+            variant="danger"
+            size="xl"
+            position="centered"
+            title="{{ __('common.clear_modal_title') }}"
+            description="{{ __('common.clear_modal_description', ['item' => __('admin/audits/user.title')]) }}">
+            <form action="{{ route('admin.users.activity.clear', ['id' => $user->id]) }}" method="POST">
+                @csrf
+                <div class="flex justify-end gap-2 mt-4">
+                    <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                    <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.clear') }}</button>
+                </div>
+            </form>
+        </x-admin::modal.content>
+    @endcan
 </div>
 @endsection

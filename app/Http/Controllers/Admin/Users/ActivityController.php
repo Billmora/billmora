@@ -12,6 +12,18 @@ class ActivityController extends Controller
 {
 
     /**
+     * Applies permission-based middleware for accessing user audit activities.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:audit.user.activity.view')->only(['index', 'show']);
+        $this->middleware('permission:audit.user.activity.export')->only(['export']);
+        $this->middleware('permission:audit.user.activity.delete')->only(['clear']);
+    }
+
+    /**
      * Display a paginated list of user activity logs.
      *
      * @param \Illuminate\Http\Request $request The HTTP request instance.
