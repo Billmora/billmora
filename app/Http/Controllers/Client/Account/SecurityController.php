@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Hash;
 
 class SecurityController extends Controller
 {
+
+    /**
+     * Display the authenticated user's account security page.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         $user = Auth::user();
@@ -17,6 +23,13 @@ class SecurityController extends Controller
         return view('client::account.security', compact('user'));
     }
 
+    /**
+     * Update the authenticated user's email address.
+     *
+     * @param \Illuminate\Http\Request $request The HTTP request instance containing 'new_email' and 'confirm_password'.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateEmail(Request $request)
     {
         $user = Auth::user();
@@ -36,6 +49,13 @@ class SecurityController extends Controller
         return redirect()->back()->with('success', __('common.update_success', ['attribute' => __('common.email')]));
     }
 
+    /**
+     * Update the authenticated user's password.
+     *
+     * @param \Illuminate\Http\Request $request The HTTP request instance containing 'current_password', 'new_password', and 'new_password_confirmation'.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updatePassword(Request $request)
     {
         $user = Auth::user();
