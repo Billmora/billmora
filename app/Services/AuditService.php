@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\AuditEmail;
+use App\Models\AuditSystem;
 use App\Models\AuditUser;
 
 class AuditService
@@ -40,7 +41,7 @@ class AuditService
      * Log a user-related audit event.
      *
      * @param int   $userId     The ID of the user associated with the event.
-     * @param string $event     The name of the event (e.g., "login", "update_profile").
+     * @param string $event     The name of the event (e.g., "account.login", "account.email.update").
      * @param array  $properties Optional additional data related to the event.
      *
      * @return \App\Models\AuditUser
@@ -52,6 +53,28 @@ class AuditService
         ) 
     {
         return AuditUser::create([
+            'user_id' => $userId,
+            'event' => $event,
+            'properties' => $properties,
+        ]);
+    }
+
+    /**
+     * Log a system-related audit event.
+     *
+     * @param int    $userId     The ID of the user associated with the system event.
+     * @param string $event      The name of the system event (e.g., "settings.general.update", "settings.roles.create").
+     * @param array  $properties Optional additional data related to the system event.
+     *
+     * @return \App\Models\AuditSystem
+     */
+    public function system(
+            int $userId,
+            string $event,
+            array $properties = []
+        ) 
+    {
+        return AuditSystem::create([
             'user_id' => $userId,
             'event' => $event,
             'properties' => $properties,
