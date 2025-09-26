@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Facades\Audit;
 use App\Http\Controllers\Controller;
 use App\Services\CaptchaService;
 use Billmora;
@@ -56,6 +57,12 @@ class LoginController extends Controller
                 session()->forget('2fa_passed');
                 return redirect()->route('client.two-factor.verify');
             }
+
+            Audit::user($user->id, 'account.login', [
+                'method' => 'password',
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
 
             return redirect()->intended('/');
         }

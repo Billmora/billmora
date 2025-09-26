@@ -20,7 +20,7 @@ class EmailVerificationController extends Controller
      * @param  string  $token  The verification token provided in the verification link.
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function verify($token)
+    public function verify(Request $request, $token)
     {
         $verification = UserEmailVerification::where('token', $token)->first();
 
@@ -44,6 +44,14 @@ class EmailVerificationController extends Controller
 
         $verification->user->update([
             'email_verified_at' => now(),
+        ]);
+
+        $user = $verification->user;
+        
+        Audit::user($user->id, 'account.email.verify', [
+            'method' => 'token',
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
         ]);
 
         return redirect()->route('client.login')->with('success', __('auth.email.has_verified'));
@@ -86,8 +94,6 @@ class EmailVerificationController extends Controller
                 'token' => $newToken,
                 'expires_at' => now()->addMinutes(60),
             ]);
-
-            
 
             $auditEmail = Audit::email(
                 $user->id,

@@ -250,7 +250,7 @@ class UsersController extends Controller
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the user is not found.
      * @throws \Throwable If the verification record is not found or cannot be updated.
      */
-    public function verify($id)
+    public function verify(Request $request, $id)
     {
         $user = User::findOrFail($id);
 
@@ -265,6 +265,13 @@ class UsersController extends Controller
 
         $verification->user->update([
             'email_verified_at' => now(),
+        ]);
+        
+        Audit::user($user->id, 'account.email.verify', [
+            'method' => 'manual',
+            'verified_by' => Auth::user()->email,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
         ]);
 
         return redirect()->back()->with('success', __('admin/users/manage.email_verification_alert_success'));
