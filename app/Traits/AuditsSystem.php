@@ -34,7 +34,9 @@ trait AuditsSystem
         }
 
         if ($changes) {
-            Audit::system(Auth::id(), "settings.{$category}.update", $changes);
+            Audit::system(Auth::id(), "settings.{$category}.update", [
+                'changes' => $changes,
+            ]);
         }
     }
 }
