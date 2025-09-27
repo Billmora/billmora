@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin\Settings\General;
 
 use App\Http\Controllers\Controller;
+use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
 
 class SocialController extends Controller
 {
+    use AuditsSystem;
         
     /**
      * Applies permission-based middleware for accessing general social settings
@@ -54,6 +56,8 @@ class SocialController extends Controller
             'social_skype' => ['nullable', 'url'],
             'social_telegram' => ['nullable', 'url'],
         ]);
+
+        $this->updateSettings('general', $validated);
 
         Billmora::setGeneral($validated);
 

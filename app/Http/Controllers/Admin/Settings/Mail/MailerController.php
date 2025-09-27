@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Settings\Mail;
 
 use App\Mail\TemplateMail;
+use App\Traits\AuditsSystem;
 use Billmora;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 
 class MailerController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing mailer settings.
@@ -57,6 +59,8 @@ class MailerController extends Controller
             'mailer_mailgun_secret' => ['nullable', 'required_if:mailer_driver,mailgun', 'string'],
             'mailer_mailgun_endpoint' => ['nullable', 'required_if:mailer_driver,mailgun', 'string'],
         ]);
+
+        $this->updateSettings('mail', $validated);
 
         Billmora::setEnv([
             'MAIL_MAILER' => $validated['mailer_driver'],

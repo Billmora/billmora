@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin\Settings\General;
 
 use App\Http\Controllers\Controller;
+use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class CompanyController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing general company settings
@@ -54,6 +56,8 @@ class CompanyController extends Controller
             'company_maintenance_url' => ['nullable', 'url'],
             'company_maintenance_message' => ['nullable', 'string'],
         ]);
+
+        $this->updateSettings('general', $validated);
 
         Billmora::setEnv(['APP_LOCALE' => $validated['company_language']]);
 

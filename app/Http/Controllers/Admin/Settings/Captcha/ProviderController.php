@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin\Settings\Captcha;
 
 use App\Http\Controllers\Controller;
+use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class ProviderController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing captcha provider settings.
@@ -62,6 +64,8 @@ class ProviderController extends Controller
         ]);
 
         $validated['provider_type'] = $validated['provider_type'] === 'none' ? null : $validated['provider_type'];
+
+        $this->updateSettings('captcha', $validated);
 
         Billmora::setCaptcha([
             'provider_type' => $validated['provider_type'],

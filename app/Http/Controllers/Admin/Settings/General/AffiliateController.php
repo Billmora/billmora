@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin\Settings\General;
 
 use App\Http\Controllers\Controller;
+use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
 
 class AffiliateController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing general affiliate settings
@@ -47,6 +49,8 @@ class AffiliateController extends Controller
             'affiliate_reward' => ['required', 'integer', 'min:1', 'max:100'],
             'affiliate_discount' => ['required', 'integer', 'min:1', 'max:100'],
         ]);
+
+        $this->updateSettings('general', $validated);
 
         Billmora::setGeneral($validated);
 

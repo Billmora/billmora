@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin\Settings\General;
 
 use App\Http\Controllers\Controller;
+use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
 
 class CreditController extends Controller
 {
+    use AuditsSystem;
     
     /**
      * Applies permission-based middleware for accessing general credit settings
@@ -47,6 +49,8 @@ class CreditController extends Controller
             'credit_max_deposit' => ['required', 'integer', 'min:1', 'max:1000000'],
             'credit_max' => ['required', 'integer', 'min:1', 'max:10000000'],
         ]);
+
+        $this->updateSettings('general', $validated);
 
         Billmora::setGeneral($validated);
 

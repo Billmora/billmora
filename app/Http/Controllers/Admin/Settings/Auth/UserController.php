@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin\Settings\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing authentication user settings.
@@ -55,6 +57,8 @@ class UserController extends Controller
             'user_registration_disabled_inputs' => [],
             'user_billing_required_inputs' => [],
         ];
+
+        $this->updateSettings('general', $validated);
 
         Billmora::setAuth($validated);
 

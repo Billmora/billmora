@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin\Settings\General;
 
 use App\Http\Controllers\Controller;
+use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
 
 class OrderingController extends Controller
 {
+    use AuditsSystem;
         
     /**
      * Applies permission-based middleware for accessing general ordering settings
@@ -48,6 +50,8 @@ class OrderingController extends Controller
             'ordering_tos' => ['required', 'boolean'],
             'ordering_notes' => ['required', 'boolean'],
         ]);
+
+        $this->updateSettings('general', $validated);
 
         Billmora::setGeneral($validated);
 

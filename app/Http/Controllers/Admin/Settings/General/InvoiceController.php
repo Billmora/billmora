@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin\Settings\General;
 
 use App\Http\Controllers\Controller;
+use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
+    use AuditsSystem;
         
     /**
      * Applies permission-based middleware for accessing general invoice settings
@@ -50,6 +52,8 @@ class InvoiceController extends Controller
             'invoice_choose_payment' => ['nullable', 'boolean'],
             'invoice_cancelation_handling' => ['nullable', 'boolean'],
         ]);
+
+        $this->updateSettings('general', $validated);
 
         Billmora::setGeneral($validated);
 

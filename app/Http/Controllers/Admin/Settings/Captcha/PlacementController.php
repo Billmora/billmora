@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin\Settings\Captcha;
 
 use App\Http\Controllers\Controller;
+use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
 
 class PlacementController extends Controller
 {
-    
+    use AuditsSystem;
+
     /**
      * Applies permission-based middleware for accessing captcha placement settings.
      * 
@@ -49,6 +51,8 @@ class PlacementController extends Controller
         $validated += [
             'placements_enabled_forms' => [],
         ];
+
+        $this->updateSettings('captcha', $validated);
 
         Billmora::setCaptcha($validated);
 
