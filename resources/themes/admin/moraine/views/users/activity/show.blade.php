@@ -20,7 +20,7 @@
         </div>
         @if($activity->properties)
             <div class="space-y-2">
-                <h3 class="font-semibold text-slate-600">{{ __('admin/audits/email.properties_label') }}</h3>
+                <h3 class="font-semibold text-slate-600">{{ __('admin/audits/user.properties_label') }}</h3>
                 <div class="bg-billmora-1 px-4 py-2 border-2 border-billmora-2 rounded-lg">
                     <dl class="divide-y-2 divide-billmora-2 text-sm">
                         @foreach($activity->properties as $key => $value)
