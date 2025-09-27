@@ -12,6 +12,18 @@ class SystemController extends Controller
 {
 
     /**
+     * Applies permission-based middleware for accessing system audit logs.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:audit.system.logs.view')->only(['index', 'show']);
+        $this->middleware('permission:audit.system.logs.export')->only(['export']);
+        $this->middleware('permission:audit.system.logs.delete')->only(['clear']);
+    }
+
+    /**
      * Display a paginated list of system audit logs.
      *
      * @param \Illuminate\Http\Request $request The HTTP request instance.
