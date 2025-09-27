@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Jobs\MailBroadcastJob;
 use App\Models\MailBroadcast;
 use App\Models\User;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class BroadcastController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing mail broadcast settings.
@@ -108,6 +110,8 @@ class BroadcastController extends Controller
             'schedule_at' => $validated['broadcast_schedule'] ?? null,
         ]);
 
+        $this->recordCreate('mail.broadcast.create', $broadcast->toArray());
+
         if ($broadcast->schedule_at) {
             MailBroadcastJob::dispatch($broadcast)->delay($broadcast->schedule_at);
         } else {
@@ -177,6 +181,8 @@ class BroadcastController extends Controller
 
         $broadcast = MailBroadcast::findOrFail($id);
 
+        $oldBroadcast = $broadcast->replicate();
+
         $broadcast->update([
             'subject' => $validated['broadcast_subject'],
             'body' => $validated['broadcast_body'],
@@ -186,6 +192,8 @@ class BroadcastController extends Controller
             'bcc' => $validated['broadcast_bcc'] ?? [],
             'schedule_at' => $validated['broadcast_schedule'] ?? null,
         ]);
+
+        $this->recordUpdate('mail.broadcast.update', $oldBroadcast->toArray(), $broadcast->getChanges());
 
         if ($broadcast->schedule_at) {
             MailBroadcastJob::dispatch($broadcast)->delay($broadcast->schedule_at);
@@ -207,6 +215,11 @@ class BroadcastController extends Controller
     public function destroy($id)
     {
         $broadcast = MailBroadcast::findOrFail($id);
+
+        $this->recordDelete('mail.broadcast.delete', [
+            'name' => $broadcast->subject,
+        ]);
+
         $broadcast->delete();
 
         return redirect()->route('admin.settings.mail.broadcast')->with('success', __('common.delete_success', ['attribute' => __('admin/settings/mail.tabs.broadcast')]));

@@ -8,11 +8,13 @@ use App\Mail\TemplateMail;
 use App\Models\AuditEmail;
 use App\Models\MailBroadcast;
 use App\Models\MailTemplate;
+use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
 
 class HistoryController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing email audit histories.
@@ -35,7 +37,7 @@ class HistoryController extends Controller
     {
         $search = $request->query('searchHistoryMail');
 
-       $histories = AuditEmail::select('id', 'event', 'user_id', 'to', 'status', 'created_at')
+        $histories = AuditEmail::select('id', 'event', 'user_id', 'to', 'status', 'created_at')
                                 ->when($search, function ($query, $search) {
                                     $query->where(function ($q) use ($search) {
                                         $q->where('event', 'like', "%{$search}%")
@@ -122,8 +124,12 @@ class HistoryController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function clear(Request $request)
+    public function clear()
     {
+        $this->recordDelete('email.history.clear',[
+            'count' => AuditEmail::count()
+        ]);
+        
         AuditEmail::truncate();
 
         return redirect()->back()->with('success', __('common.clear_success', ['attribute' => __('admin/audits/email.title')]));

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\UserEmailVerification;
 use App\Models\UserPasswordReset;
 use App\Http\Controllers\Controller;
+use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -23,6 +24,7 @@ use Spatie\Permission\Models\Role;
 
 class UsersController extends Controller
 {
+    use AuditsSystem;
     
     /**
      * Applies permission-based middleware for accessing users management.
@@ -148,6 +150,23 @@ class UsersController extends Controller
             'language' => $validated['language'],
         ]);
 
+        $userData = [
+            'user' => $user->toArray(),
+            'role' => $validated['role'],
+            'billing' => [
+                'phone_number' => $validated['phone_number'],
+                'company_name' => $validated['company_name'],
+                'street_address_1' => $validated['street_address_1'],
+                'street_address_2' => $validated['street_address_2'],
+                'city' => $validated['city'],
+                'state' => $validated['state'],
+                'postcode' => $validated['postcode'],
+                'country' => $validated['country'],
+            ]
+        ];
+
+        $this->recordCreate('user.create', $userData);
+
         if ($validated['password'] === null) {
             $token = Str::random(64);
             UserPasswordReset::create([
@@ -232,10 +251,14 @@ class UsersController extends Controller
 
         $this->authorize('delete', $user);
 
+        $oldUser = $user->replicate();
+
         $user->update(
             ['status' => 'closed',
         ]);
         $user->delete();
+
+        $this->recordDelete('user.delete', $oldUser->toArray());
 
         return redirect()->route('admin.users')->with('success', __('common.delete_success', ['attribute' => $user->email]));
     }

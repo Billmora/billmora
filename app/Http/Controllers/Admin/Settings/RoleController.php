@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
@@ -10,6 +11,7 @@ use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing role and permission settings.
@@ -73,6 +75,8 @@ class RoleController extends Controller
 
         $role = Role::create(['name' => $validated['role_name']]);
 
+        $this->recordCreate('role.create', $role->toArray());
+
         if (!empty($validated['role_permissions'])) {
             $role->syncPermissions($validated['role_permissions']);
         }
@@ -115,6 +119,11 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
 
+        $oldRole = [
+            'name' => $role->name,
+            'permissions' => $role->permissions->pluck('name')->toArray(),
+        ];
+
         $validated = $request->validate([
             'role_name' => [
                 'required',
@@ -130,6 +139,13 @@ class RoleController extends Controller
         $role->update(['name' => $validated['role_name']]);
 
         $role->syncPermissions($validated['role_permissions'] ?? []);
+        
+        $newRole = [
+            'name' => $role->name,
+            'permissions' => $role->permissions->pluck('name')->toArray(),
+        ];
+
+        $this->recordUpdate('role.update', $oldRole, $newRole);
 
         return redirect()
             ->route('admin.settings.roles')
@@ -148,6 +164,10 @@ class RoleController extends Controller
     public function destroy($id)
     {
         $role = Role::findOrFail($id);
+
+        $this->recordDelete('role.delete', [
+            'name' => $role->name,
+        ]);
 
         $role->delete();
 

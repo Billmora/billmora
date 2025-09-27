@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin\Users;
 use App\Http\Controllers\Controller;
 use App\Models\AuditUser;
 use App\Models\User;
+use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
 
 class ActivityController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing user audit activities.
@@ -112,6 +114,14 @@ class ActivityController extends Controller
     public function clear($id)
     {
         $user = User::findOrFail($id);
+
+        $this->recordDelete('user.activity.clear', [
+            'user' => [
+                'id' => $user->id,
+                'email' => $user->email,
+            ],
+            'count' => AuditUser::where('user_id', $user->id)->count(),
+        ]);
 
         AuditUser::where('user_id', $user->id)->delete();
 
