@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Admin\Audits;
 use App\Http\Controllers\Admin\Settings;
 use App\Http\Controllers\Admin\Users;
 use Illuminate\Support\Facades\Route;
@@ -113,6 +114,18 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
      */
     Route::group(['prefix' => 'audits'], function () {
         Route::get('/', [Admin\AuditsController::class, 'index'])->name('admin.audits');
+
+        /**
+         * Admin system audits interface routes.
+         *
+         * Prefix: /admin/audits/system
+         */
+        Route::group(['prefix' => 'system'], function () {
+            Route::get('/', [Audits\SystemController::class, 'index'])->name('admin.audits.system');
+            Route::get('/{id}', [Audits\SystemController::class, 'show'])->name('admin.audits.system.show');
+            Route::post('/export', [Audits\SystemController::class, 'export'])->name('admin.audits.system.export');
+            Route::post('/clear', [Audits\SystemController::class, 'clear'])->name('admin.audits.system.clear');
+        });
     });
 
     /**
