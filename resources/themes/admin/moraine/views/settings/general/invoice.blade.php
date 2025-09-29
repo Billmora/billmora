@@ -1,10 +1,11 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Invoice Settings')
+@section('title', 'Invoice Settings - General')
 
 @section('body')
-    <form action="{{ route('admin.settings.general.invoice.store') }}" method="POST" class="flex flex-col gap-5">
+    <form action="{{ route('admin.settings.general.invoice.update') }}" method="POST" class="flex flex-col gap-5">
         @csrf
+        @method('PUT')
         @if (session('success'))
             <x-admin::alert variant="success" title="{{ session('success') }}" />
         @endif
@@ -58,7 +59,10 @@
             <x-admin::toggle name="invoice_choose_payment" label="{{ __('admin/settings/general.invoice_choose_payment_label') }}" helper="{{ __('admin/settings/general.invoice_choose_payment_helper') }}" :checked="Billmora::getGeneral('invoice_choose_payment')" />
             <x-admin::toggle name="invoice_cancelation_handling" label="{{ __('admin/settings/general.invoice_cancelation_handling_label') }}" helper="{{ __('admin/settings/general.invoice_cancelation_handling_helper') }}" :checked="Billmora::getGeneral('invoice_cancelation_handling')" />
         </div>
-        <button type="submit"
-            class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('admin/common.save') }}</button>
+        @can('settings.general.update')
+            <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                {{ __('common.save') }}
+            </button>
+        @endcan
     </form>
 @endsection

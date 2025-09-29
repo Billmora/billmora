@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Admin Dashboard')
+@section('title', 'Dashboard - Admin')
 
 @section('body')
 {{-- Code in progress --}}

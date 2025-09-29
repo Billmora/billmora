@@ -4,21 +4,44 @@ namespace App\Http\Controllers\Admin\Settings\Mail;
 
 use App\Models\MailTemplate;
 use App\Http\Controllers\Controller;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 
 class TemplateController extends Controller
 {
+    use AuditsSystem;
+
+    /**
+     * Applies permission-based middleware for accessing mail template settings.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:settings.mail.template.view')->only('index');
+        $this->middleware('permission:settings.mail.template.update')->only(['edit', 'update']);
+    }
 
     /**
      * Display the mail templates table.
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $templates = MailTemplate::select('id', 'key', 'name', 'active')->get();
+        $search = $request->query('searchTemplateMail');
 
-        return view('admin::settings.mail.template.index', compact('templates'));
+        $templates = MailTemplate::select('id', 'key', 'name', 'active')
+                                ->when($search, function ($query, $search) {
+                                    $query->where(function ($q) use ($search) {
+                                        $q->where('key', 'like', "%{$search}%")
+                                        ->orWhere('name', 'like', "%{$search}%");
+                                    });
+                                })
+                                ->paginate(25)
+                                ->withQueryString();
+
+        return view('admin::settings.mail.template.index', compact('templates', 'search'));
     }
 
     /**
@@ -71,10 +94,25 @@ class TemplateController extends Controller
             'template_bcc' => ['nullable', 'array'],
         ]);
 
+        $oldTranslation = $template->translations()
+            ->where('lang', $validated['template_language'])
+            ->first();
+
+        $oldData = [
+            'active' => $template->active,
+            'cc' => $template->cc,
+            'bcc' => $template->bcc,
+            'translation' => [
+                'lang' => $validated['template_language'],
+                'subject' => $oldTranslation->subject ?? null,
+                'body' => $oldTranslation->body ?? null,
+            ]
+        ];
+
         $template->update([
             'active' => $validated['template_active'],
-            'cc' => $validated['template_cc'],
-            'bcc' => $validated['template_bcc'],
+            'cc' => $validated['template_cc'] ?? [],
+            'bcc' => $validated['template_bcc'] ?? [],
         ]);
 
         $template->translations()->updateOrCreate(
@@ -85,6 +123,19 @@ class TemplateController extends Controller
             ]
         );
 
-        return redirect()->route('admin.settings.mail.template')->with('success', __('admin/common.save_success', ['item' => __('admin/settings/mail.title')]));
+        $newData = [
+            'active' => $validated['template_active'],
+            'cc' => $validated['template_cc'] ?? [],
+            'bcc' => $validated['template_bcc'] ?? [],
+            'translation' => [
+                'lang' => $validated['template_language'],
+                'subject' => $validated['template_subject'],
+                'body' => $validated['template_body'],
+            ]
+        ];
+
+        $this->recordUpdate('mail.template.update', $oldData, $newData);
+
+        return redirect()->route('admin.settings.mail.template')->with('success', __('common.save_success', ['attribute' => __('admin/settings/mail.title')]));
     }
 }

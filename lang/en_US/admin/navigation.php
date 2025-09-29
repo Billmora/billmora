@@ -2,8 +2,11 @@
 
 return [
     'dashboard' => 'Dashboard',
+    'users' => 'Users',
     'settings' => 'Settings',
+    'audits' => 'Audits',
     'group' => [
-        'system' => 'System'
+        'management' => 'Management',
+        'system' => 'System',
     ],
 ];

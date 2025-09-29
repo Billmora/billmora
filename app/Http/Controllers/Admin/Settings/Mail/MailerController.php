@@ -3,13 +3,27 @@
 namespace App\Http\Controllers\Admin\Settings\Mail;
 
 use App\Mail\TemplateMail;
+use App\Traits\AuditsSystem;
 use Billmora;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class MailerController extends Controller
 {
+    use AuditsSystem;
+
+    /**
+     * Applies permission-based middleware for accessing mailer settings.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:settings.mail.view')->only(['index']);
+        $this->middleware('permission:settings.mail.update')->only(['update', 'test']);
+    }
 
     /**
      * Display the mailer settings view.
@@ -22,7 +36,7 @@ class MailerController extends Controller
     }
 
     /**
-     * Store mail mailer settings.
+     * Update mail mailer settings.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing mailer settings.
      *
@@ -30,7 +44,7 @@ class MailerController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException If validation fails.
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $validated = $request->validate([
             'mailer_driver' => ['required', 'string', 'in:smtp,mailgun'],
@@ -46,6 +60,8 @@ class MailerController extends Controller
             'mailer_mailgun_endpoint' => ['nullable', 'required_if:mailer_driver,mailgun', 'string'],
         ]);
 
+        $this->updateSettings('mail', $validated);
+
         Billmora::setEnv([
             'MAIL_MAILER' => $validated['mailer_driver'],
             'MAIL_FROM_ADDRESS' => $validated['mailer_from_address'],
@@ -60,7 +76,7 @@ class MailerController extends Controller
             'MAILGUN_ENDPOINT' => $validated['mailer_mailgun_endpoint'],
         ]);
 
-        return redirect()->back()->with('success', __('admin/common.save_success', ['item' => __('admin/settings/mail.title')]));
+        return redirect()->back()->with('success', __('common.save_success', ['attribute' => __('admin/settings/mail.title')]));
     }
 
 
@@ -72,13 +88,13 @@ class MailerController extends Controller
     public function test()
     {
         try {
-            $user = auth()->user();
-            Mail::to('maflycehaa@gmail.com')->send(new TemplateMail('test_message', [
-                'client_name' => 'Billmora', // TODO: will be replaced with name of user.
+            $user = Auth::user();
+            Mail::to($user->email)->send(new TemplateMail('test_message', [
+                'client_name' => $user->fullname,
                 'company_name' => Billmora::getGeneral('company_name'),
             ]));
 
-            return redirect()->back()->with('success', __('admin/common.send_success', ['item' => __('admin/settings/mail.mailer_test_label')]));
+            return redirect()->back()->with('success', __('common.send_success', ['attribute' => __('admin/settings/mail.mailer_test_label')]));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

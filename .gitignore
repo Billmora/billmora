@@ -11,12 +11,15 @@
 /.phpunit.cache
 /.vscode
 /.zed
+/_ide_helper.php
+/_ide_helper_models.php
+/_ide_helper_models.php.stub
 /auth.json
 /node_modules
 /public/build
 /public/hot
 /public/storage
-# Exclude build assets themes during active development
+# Exclude theme build assets (only generated during GitHub Actions release workflow)
 /public/themes
 /storage/*.key
 /storage/pail

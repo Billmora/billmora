@@ -2,12 +2,25 @@
 
 namespace App\Http\Controllers\Admin\Settings\General;
 
-use Billmora;
 use App\Http\Controllers\Controller;
+use App\Traits\AuditsSystem;
+use Billmora;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
+    use AuditsSystem;
+        
+    /**
+     * Applies permission-based middleware for accessing general invoice settings
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:settings.general.view')->only('index');
+        $this->middleware('permission:settings.general.update')->only('update');
+    }
 
     /**
      * Display the invoice settings view.
@@ -21,7 +34,7 @@ class InvoiceController extends Controller
 
 
     /**
-     * Store general invoice settings.
+     * Update general invoice settings.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing invoice settings.
      *
@@ -29,7 +42,7 @@ class InvoiceController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException If validation fails.
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $validated = $request->validate([
             'invoice_pdf' => ['nullable', 'boolean'],
@@ -40,8 +53,10 @@ class InvoiceController extends Controller
             'invoice_cancelation_handling' => ['nullable', 'boolean'],
         ]);
 
+        $this->updateSettings('general', $validated);
+
         Billmora::setGeneral($validated);
 
-        return redirect()->back()->with('success', __('admin/common.save_success', ['item' => __('admin/settings/general.title')]));
+        return redirect()->back()->with('success', __('common.save_success', ['attribute' => __('admin/settings/general.title')]));
     }
 }

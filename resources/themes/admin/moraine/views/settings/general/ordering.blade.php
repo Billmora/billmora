@@ -1,10 +1,11 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Ordering Settings')
+@section('title', 'Ordering Settings - General')
 
 @section('body')
-    <form action="{{ route('admin.settings.general.ordering.store') }}" method="POST" class="flex flex-col gap-5">
+    <form action="{{ route('admin.settings.general.ordering.update') }}" method="POST" class="flex flex-col gap-5">
         @csrf
+        @method('PUT')
         @if (session('success'))
             <x-admin::alert variant="success" title="{{ session('success') }}" />
         @endif
@@ -61,13 +62,16 @@
             <div class="grid gap-4">
                 <x-admin::input type="number" min="0" name="ordering_grace"
                     label="{{ __('admin/settings/general.ordering_grace_label') }}"
-                    helper="{{ __('admin/settings/general.ordering_grace_he lper') }}"
+                    helper="{{ __('admin/settings/general.ordering_grace_helper') }}"
                     value="{{ old('ordering_grace', Billmora::getGeneral('ordering_grace')) }}" required />
                 <x-admin::toggle name="ordering_tos" label="{{ __('admin/settings/general.ordering_tos_label') }}" helper="{{ __('admin/settings/general.ordering_tos_helper') }}" :checked="Billmora::getGeneral('ordering_tos')" required />
                 <x-admin::toggle name="ordering_notes" label="{{ __('admin/settings/general.ordering_notes_label') }}" helper="{{ __('admin/settings/general.ordering_notes_helper') }}" :checked="Billmora::getGeneral('ordering_notes')" required />
             </div>
         </div>
-        <button type="submit"
-            class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('admin/common.save') }}</button>
+        @can('settings.general.update')
+            <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                {{ __('common.save') }}
+            </button>
+        @endcan
     </form>
 @endsection

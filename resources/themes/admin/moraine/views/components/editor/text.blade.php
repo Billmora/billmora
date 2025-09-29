@@ -13,7 +13,7 @@
                 {{ $label }}
             </label>
             <span class="text-slate-600">
-                {{ $required ? __('admin/common.symbol_required') : __('admin/common.symbol_optional') }}
+                {{ $required ? __('common.symbol_required') : __('common.symbol_optional') }}
             </span>
         </div>
     @endif

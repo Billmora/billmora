@@ -1,15 +1,18 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Mailer Settings')
+@section('title', 'Mailer Settings - Mail')
 
 @section('body')
-    <form action="{{ route('admin.settings.mail.mailer.store') }}" method="POST" class="flex flex-col gap-5">
+    <form action="{{ route('admin.settings.mail.mailer.update') }}" method="POST" class="flex flex-col gap-5">
         @csrf
+        @method('PUT')
         @if (session('success'))
             <x-admin::alert variant="success" title="{{ session('success') }}" />
         @endif
         @if (session('error'))
-            <x-admin::alert variant="danger" title="{{ session('error') }}" />
+            <x-admin::alert variant="danger" title="{{ __('common.send_failed', ['attribute' =>  __('admin/settings/mail.mailer_test_label')]) }}">
+                {{ session('error') }}
+            </x-admin::alert>
         @endif
         <x-admin::tabs 
             :tabs="[
@@ -27,6 +30,11 @@
                     'route' => route('admin.settings.mail.broadcast'),
                     'icon' => 'lucide-megaphone',
                     'label' => __('admin/settings/mail.tabs.broadcast'),
+                ],
+                [
+                    'route' => route('admin.settings.mail.history'),
+                    'icon' => 'lucide-mails',
+                    'label' => __('admin/settings/mail.tabs.history'),
                 ],
             ]" 
             active="{{ request()->fullUrl() }}" />
@@ -65,10 +73,14 @@
                 </div>
             </div>
         <div class="flex gap-2 ml-auto">
-            <button type="button" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
-                onclick="document.getElementById('testMail').submit()">{{ __('admin/settings/mail.mailer_test_label') }}</button>
-            <button type="submit"
-                class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('admin/common.save') }}</button>
+            @can('settings.mail.update')
+                <button type="button" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer" onclick="document.getElementById('testMail').submit()">
+                    {{ __('admin/settings/mail.mailer_test_label') }}
+                </button>
+                <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                    {{ __('common.save') }}
+                </button>
+            @endcan
         </div>
     </form>
     <form id="testMail" action="{{ route('admin.settings.mail.mailer.test') }}" method="POST" class="hidden">

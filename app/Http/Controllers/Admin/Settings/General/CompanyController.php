@@ -2,13 +2,26 @@
 
 namespace App\Http\Controllers\Admin\Settings\General;
 
+use App\Http\Controllers\Controller;
+use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class CompanyController extends Controller
 {
+    use AuditsSystem;
+
+    /**
+     * Applies permission-based middleware for accessing general company settings
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:settings.general.view')->only('index');
+        $this->middleware('permission:settings.general.update')->only('update');
+    }
 
     /**
      * Display the company settings view.
@@ -21,7 +34,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Store general company settings.
+     * Update general company settings.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing company settings.
      *
@@ -29,7 +42,7 @@ class CompanyController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException If validation fails.
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $validated = $request->validate( [
             'company_name' => ['required', 'string'],
@@ -44,10 +57,12 @@ class CompanyController extends Controller
             'company_maintenance_message' => ['nullable', 'string'],
         ]);
 
+        $this->updateSettings('general', $validated);
+
         Billmora::setEnv(['APP_LOCALE' => $validated['company_language']]);
 
         Billmora::setGeneral($validated);
 
-        return redirect()->back()->with('success', __('admin/common.save_success', ['item' => __('admin/settings/general.title')]));
+        return redirect()->back()->with('success', __('common.save_success', ['attribute' => __('admin/settings/general.title')]));
     }
 }

@@ -2,12 +2,25 @@
 
 namespace App\Http\Controllers\Admin\Settings\General;
 
-use Billmora;
 use App\Http\Controllers\Controller;
+use App\Traits\AuditsSystem;
+use Billmora;
 use Illuminate\Http\Request;
 
 class SocialController extends Controller
 {
+    use AuditsSystem;
+        
+    /**
+     * Applies permission-based middleware for accessing general social settings
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:settings.general.view')->only('index');
+        $this->middleware('permission:settings.general.update')->only('update');
+    }
 
     /**
      * Display the social settings view.
@@ -20,7 +33,7 @@ class SocialController extends Controller
     }
 
     /**
-     * Store general social settings.
+     * Update general social settings.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing social settings.
      *
@@ -28,7 +41,7 @@ class SocialController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException If validation fails.
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $validated = $request->validate([
             'social_discord' => ['nullable', 'url'],
@@ -44,8 +57,10 @@ class SocialController extends Controller
             'social_telegram' => ['nullable', 'url'],
         ]);
 
+        $this->updateSettings('general', $validated);
+
         Billmora::setGeneral($validated);
 
-        return redirect()->back()->with('success', __('admin/common.save_success', ['item' => __('admin/settings/general.title')]));
+        return redirect()->back()->with('success', __('common.save_success', ['attribute' => __('admin/settings/general.title')]));
     }
 }

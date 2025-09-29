@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Broadcast Mail - Edit')
+@section('title', 'Broadcast Edit - Mail')
 
 @section('body')
 <form action="{{ route('admin.settings.mail.broadcast.update', ['id' => $broadcast->id]) }}" method="POST" class="flex flex-col gap-5">
@@ -25,10 +25,12 @@
             <div x-show="recipient_custom === 'custom_users'">
                 <x-admin::multiselect
                     name="broadcast_recipient_custom"
-                    :options="[
-                        ['value' => 'billmora@billmora.com', 'title' => 'Billmora', 'subtitle' => 'billmora@billmora.com'], // TODO: Will be replaced by real user
-                    ]"
-                    :selected="old('broadcast_recipient_custom', $broadcast->recipient_custom)"
+                    :options="$users->map(fn($user) => [
+                        'value' => $user->email,
+                        'title' => $user->fullname,
+                        'subtitle' => $user->email,
+                    ])"
+                    :selected="old('broadcast_recipient_custom', $broadcast->recipient_custom ?? [])"
                     helper="{{ __('admin/settings/mail.broadcast_recipient_custom_helper') }}"
                 />
             </div>
@@ -66,8 +68,8 @@
         </div>
     </div>
     <div class="flex gap-4 ml-auto">
-        <a href="{{ route('admin.settings.mail.broadcast') }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('admin/common.cancel') }}</a>
-        <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('admin/common.update') }}</button>
+        <a href="{{ route('admin.settings.mail.broadcast') }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
+        <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.update') }}</button>
     </div>
 </form>
 @endsection

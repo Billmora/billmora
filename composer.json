@@ -7,14 +7,18 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "bacon/bacon-qr-code": "^3.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.6",
         "mallardduck/blade-lucide-icons": "^1.23",
-        "outhebox/blade-flags": "^1.5"
+        "outhebox/blade-flags": "^1.5",
+        "pragmarx/google2fa-laravel": "^2.3",
+        "spatie/laravel-permission": "^6.21"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.16",
+        "barryvdh/laravel-ide-helper": "^3.6",
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.13",

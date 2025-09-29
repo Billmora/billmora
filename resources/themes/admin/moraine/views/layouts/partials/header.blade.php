@@ -53,7 +53,7 @@
     <button type="button" class="cursor-pointer ml-4"
         x-on:click="isOpen = ! isOpen" 
         aria-haspopup="true">
-      <img src="{{ Billmora::getGeneral('company_logo') }}" alt="billmora profile" class="w-10 h-10 rounded-full">
+      <img src="{{ auth()->user()->avatar }}" alt="billmora profile" class="w-10 h-10 rounded-full">
     </button>
     <!-- Dropdown Menu -->
     <div class="absolute top-16 right-0 flex w-[300px] flex-col gap-2 bg-white p-4 border-2 border-billmora-2 rounded-2xl" role="menu"
@@ -61,24 +61,42 @@
         x-transition
         x-on:click.outside="isOpen = false, openedWithKeyboard = false">
       {{-- Dropdown Content --}}
-      <div class="flex flex-col gap-2">
-        <span class="text-xl text-slate-600 font-bold">Mafly</span>
-        <span class="text-lg text-slate-500 font-semibold">Administrator</span>
+      <div class="flex flex-col">
+        <span class="text-xl text-slate-600 font-bold">{{ auth()->user()->fullname }}</span>
+        <span class="text-md text-slate-500 font-semibold">
+          @if (auth()->user()->isRootAdmin())
+              Administrator
+          @elseif (auth()->user()->roles->isNotEmpty())
+              {{ auth()->user()->roles->pluck('name')->implode(', ') }}
+          @endif
+        </span>
       </div>
-      <hr class="border-t-2 border-billmora-2 mt-2 mb-4">
+      <hr class="border-t-2 border-billmora-2 my-2">
+      <a href="{{ route('client.account.settings') }}" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
+        <x-lucide-circle-user-round class="w-5 h-auto" />
+        <span class="font-semibold">{{ __('common.account_settings') }}</span>
+      </a>
+      <a href="{{ route('client.account.security') }}" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
+        <x-lucide-fingerprint class="w-5 h-auto" />
+        <span class="font-semibold">{{ __('common.account_security') }}</span>
+      </a>
+      <hr class="border-t-2 border-billmora-2 my-2">
       <a href="#" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
         <x-lucide-layers-2 class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('admin/common.portal_area') }}</span>
+        <span class="font-semibold">{{ __('common.page.portal') }}</span>
       </a>
       <a href="{{ route('client.dashboard') }}" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
         <x-lucide-copy class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('admin/common.client_area') }}</span>
+        <span class="font-semibold">{{ __('common.page.client') }}</span>
       </a>
-      <hr class="border-t-2 border-billmora-2 mt-4 mb-2">
-      <button class="flex gap-2 items-center hover:bg-red-400 px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300 cursor-pointer" role="menuitem">
-        <x-lucide-log-out class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('admin/common.sign_out') }}</span>
-      </button>
+      <hr class="border-t-2 border-billmora-2 my-2">
+      <form action="{{ route('client.logout.store') }}" method="POST">
+        @csrf
+        <button class="w-full flex gap-2 items-center hover:bg-red-400 px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300 cursor-pointer" role="menuitem">
+          <x-lucide-log-out class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('common.sign_out') }}</span>
+        </button>
+      </form>
     </div>
   </div>
 </header>

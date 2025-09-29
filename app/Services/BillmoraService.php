@@ -75,7 +75,7 @@ class BillmoraService
     private static function validateData(array $data): array
     {
         $validator = Validator::make(['keys' => array_keys($data)], [
-            'keys.*' => 'required|string|max:255',
+            'keys.*' => ['required', 'string', 'max:255'],
         ]);
 
         if ($validator->fails()) {
@@ -145,6 +145,89 @@ class BillmoraService
     public static function setMail(array $data): void
     {
         self::setSetting('mail', $data);
+    }
+
+    /**
+     * Retrieve a auth setting value by its key.
+     *
+     * This is a shortcut method that internally calls 'getAuth()' using
+     * the 'auth' category.
+     *
+     * @param string $key     The key of the setting to retrieve.
+     * @param mixed  $default The default value to return if the setting is not found.
+     *
+     * @return mixed The value of the setting or the default if not found.
+     */
+    public static function getAuth(string $key, mixed $default = null): mixed
+    {
+        return self::getSetting('auth', $key, $default);
+    }
+
+    /**
+     * Determine if the given authentication key contains the specified value(s).
+     *
+     * @param string       $key   The authentication key to check.
+     * @param string|array $value The value or list of values to compare against the stored authentication values.
+     *
+     * @return bool True if the value exists in the authentication settings, false otherwise.
+     */
+    public static function hasAuth(string $key, string|array $value): bool
+    {
+        $values = self::getAuth($key, []);
+
+        if (!is_array($values)) {
+            return false;
+        }
+
+        return is_array($value)
+            ? !empty(array_intersect($value, $values))
+            : in_array($value, $values, true);
+    }
+
+    /**
+     * Store or update auth settings.
+     *
+     * This is a shortcut method that internally calls 'setAuth()' using
+     * the 'auth' category.
+     *
+     * @param array $data An associative array of key-value pairs to store or update.
+     *
+     * @return void
+     */
+    public static function setAuth(array $data): void
+    {
+        self::setSetting('auth', $data);
+    }
+
+    /**
+     * Retrieve a captcha setting value by its key.
+     *
+     * This is a shortcut method that internally calls 'getCaptcha()' using
+     * the 'captcha' category.
+     *
+     * @param string $key     The key of the setting to retrieve.
+     * @param mixed  $default The default value to return if the setting is not found.
+     *
+     * @return mixed The value of the setting or the default if not found.
+     */
+    public static function getCaptcha(string $key, mixed $default = null): mixed
+    {
+        return self::getSetting('captcha', $key, $default);
+    }
+
+    /**
+     * Store or update captcha settings.
+     *
+     * This is a shortcut method that internally calls 'setCaptcha()' using
+     * the 'captcha' category.
+     *
+     * @param array $data An associative array of key-value pairs to store or update.
+     *
+     * @return void
+     */
+    public static function setCaptcha(array $data): void
+    {
+        self::setSetting('captcha', $data);
     }
 
     /**

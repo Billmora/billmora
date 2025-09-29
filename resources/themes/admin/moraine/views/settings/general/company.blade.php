@@ -1,10 +1,11 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Company Settings')
+@section('title', 'Company Settings - General')
 
 @section('body')
-    <form action="{{ route('admin.settings.general.company.store') }}" method="POST" class="flex flex-col gap-5">
+    <form action="{{ route('admin.settings.general.company.update') }}" method="POST" class="flex flex-col gap-5">
         @csrf
+        @method('PUT')
         @if (session('success'))
             <x-admin::alert variant="success" title="{{ session('success') }}" />
         @endif
@@ -104,7 +105,10 @@
                 helper="{{ __('admin/settings/general.company_maintenance_message_helper') }}">
                 {{ old('company_maintenance_message', Billmora::getGeneral('company_maintenance_message')) }}</x-admin::textarea>
         </div>
-        <button type="submit"
-            class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('admin/common.save') }}</button>
+        @can('settings.general.update')
+            <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                {{ __('common.save') }}
+            </button>
+        @endcan
     </form>
 @endsection
