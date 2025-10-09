@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('prefix', 10)->nullable();
             $table->string('suffix', 10)->nullable();
             $table->enum('format', ['1234.56', '1,234.56', '1.234,56', '1,234'])->default('1234.56');
-            $table->decimal('base_rate', 18, 8)->default(1.00000000);
+            $table->decimal('base_rate', 24, 12)->default(1.000000000000);
             $table->boolean('is_default')->default(false);
             $table->timestamps();
         });
