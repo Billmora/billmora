@@ -24,6 +24,6 @@ class Currency extends Model
      */
     protected $casts = [
         'is_default' => 'boolean',
-        'base_rate' => 'decimal:8',
+        'base_rate' => 'decimal:12',
     ];
 }
