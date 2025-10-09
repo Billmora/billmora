@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             MailTemplateSeeder::class,
             PermissionSeeder::class,
+            CurrencySeeder::class,
         ]);
     }
 }
