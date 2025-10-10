@@ -117,7 +117,7 @@ class CurrencyController extends Controller
             'currency_base_rate' => ['required', 'numeric', 'min:0'],
         ]);
 
-        $oldCurrency = $currency->replicate();
+        $oldCurrency = $currency->getOriginal();
 
         $currency->update([
             'code' => strtoupper($validated['currency_code']),
@@ -127,7 +127,7 @@ class CurrencyController extends Controller
             'base_rate' => $validated['currency_base_rate'],
         ]);
 
-        $this->recordUpdate('currency.update', $oldCurrency->toArray(), $currency->getChanges());
+        $this->recordUpdate('currency.update', $oldCurrency, $currency->getChanges());
 
         return redirect()
             ->route('admin.settings.currencies')
@@ -185,11 +185,11 @@ class CurrencyController extends Controller
 
         Currency::where('is_default', true)->update(['is_default' => false]);
 
-        $oldCurrency = $currency->replicate();
+        $oldCurrency = $currency->getOriginal();
 
         $currency->update(['is_default' => true]);
 
-        $this->recordUpdate('currency.update', $oldCurrency->toArray(), $currency->getChanges());
+        $this->recordUpdate('currency.update', $oldCurrency, $currency->getChanges());
 
         return redirect()
             ->route('admin.settings.currencies')

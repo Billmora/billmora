@@ -181,7 +181,7 @@ class BroadcastController extends Controller
                 break;
         }
 
-        $oldBroadcast = $broadcast->replicate();
+        $oldBroadcast = $broadcast->getOriginal();
 
         $broadcast->update([
             'subject' => $validated['broadcast_subject'],
@@ -193,7 +193,7 @@ class BroadcastController extends Controller
             'schedule_at' => $validated['broadcast_schedule'] ?? null,
         ]);
 
-        $this->recordUpdate('mail.broadcast.update', $oldBroadcast->toArray(), $broadcast->getChanges());
+        $this->recordUpdate('mail.broadcast.update', $oldBroadcast, $broadcast->getChanges());
 
         if ($broadcast->schedule_at) {
             MailBroadcastJob::dispatch($broadcast)->delay($broadcast->schedule_at);
