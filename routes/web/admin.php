@@ -105,6 +105,21 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::put('/{id}', [Settings\RoleController::class, 'update'])->name('admin.settings.roles.update');
             Route::delete('/{id}', [Settings\RoleController::class, 'destroy'])->name('admin.settings.roles.destroy');
         });
+
+        /**
+         * Admin currency settings interface routes.
+         *
+         * Prefix: /admin/settings/currency
+         */
+        Route::group(['prefix' => 'currencies'], function () {
+            Route::get('/', [Settings\CurrencyController::class, 'index'])->name('admin.settings.currencies');
+            Route::get('/create', [Settings\CurrencyController::class, 'create'])->name('admin.settings.currencies.create');
+            Route::post('/', [Settings\CurrencyController::class, 'store'])->name('admin.settings.currencies.store');
+            Route::get('/{id}/edit', [Settings\CurrencyController::class, 'edit'])->name('admin.settings.currencies.edit');
+            Route::post('/{id}', [Settings\CurrencyController::class, 'update'])->name('admin.settings.currencies.update');
+            Route::delete('/{id}', [Settings\CurrencyController::class, 'destroy'])->name('admin.settings.currencies.destroy');
+            Route::patch('/{id}/set-default', [Settings\CurrencyController::class, 'setDefault'])->name('admin.settings.currencies.set-default');
+        });
     });
 
     /**
