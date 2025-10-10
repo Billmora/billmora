@@ -11,10 +11,12 @@
         <x-admin::alert variant="danger" title="{{ session('error') }}" />
     @endif
     <div class="flex flex-col gap-4">
-        <a href="{{ route('admin.settings.currencies.create') }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-            <x-lucide-plus class="w-auto h-5" />
-            {{ __('common.create') }}
-        </a>
+        @can('settings.currencies.create')
+            <a href="{{ route('admin.settings.currencies.create') }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <x-lucide-plus class="w-auto h-5" />
+                {{ __('common.create') }}
+            </a>
+        @endcan
         <div class="overflow-x-auto">
             <div class="min-w-full inline-block align-middle">
                 <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
@@ -40,21 +42,25 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $currency->base_rate }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $currency->created_at }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
-                                    @if (!$currency->is_default)
-                                        <form action="{{ route('admin.settings.currencies.set-default', $currency->id) }}" method="POST" class="inline-flex">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="inline-flex text-sm font-semibold text-blue-400 hover:text-blue-500 cursor-pointer">
-                                                {{ __('admin/settings/currency.currency_action.set_default') }}
-                                            </button>
-                                        </form>
-                                    @endif
-                                    <a href="{{ route('admin.settings.currencies.edit', ['id' => $currency->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
-                                        {{ __('common.edit') }}
-                                    </a>
-                                    @if (!$currency->is_default)
-                                        <x-admin::modal.trigger modal="deleteModal-{{ $currency->id }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.delete') }}</x-admin::modal.trigger>
-                                    @endif
+                                    @can('settings.currencies.update')
+                                        @if (!$currency->is_default)
+                                            <form action="{{ route('admin.settings.currencies.set-default', $currency->id) }}" method="POST" class="inline-flex">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="inline-flex text-sm font-semibold text-blue-400 hover:text-blue-500 cursor-pointer">
+                                                    {{ __('admin/settings/currency.currency_action.set_default') }}
+                                                </button>
+                                            </form>
+                                        @endif
+                                        <a href="{{ route('admin.settings.currencies.edit', ['id' => $currency->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                                            {{ __('common.edit') }}
+                                        </a>
+                                    @endcan
+                                    @can('settings.currencies.delete')
+                                        @if (!$currency->is_default)
+                                            <x-admin::modal.trigger modal="deleteModal-{{ $currency->id }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.delete') }}</x-admin::modal.trigger>
+                                        @endif
+                                    @endcan
                                 </td>
                             </tr>
                             @endforeach
@@ -66,24 +72,26 @@
         <div>
             {{ $currencies->links('admin::layouts.partials.pagination') }}
         </div>
-        @foreach ($currencies as $currency)
-        <x-admin::modal.content
-            modal="deleteModal-{{ $currency->id }}"
-            variant="danger"
-            size="xl"
-            position="centered"
-            title="{{ __('common.delete_modal_title') }}"
-            description="{{ __('common.delete_modal_description', ['item' => $currency->code]) }}">
-            <form action="{{ route('admin.settings.currencies.destroy', ['id' => $currency->id]) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <div class="flex justify-end gap-2 mt-4">
-                    <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
-                    <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
-                </div>
-            </form>
-        </x-admin::modal.content>
-        @endforeach
+        @can('settings.currencies.delete')
+            @foreach ($currencies as $currency)
+            <x-admin::modal.content
+                modal="deleteModal-{{ $currency->id }}"
+                variant="danger"
+                size="xl"
+                position="centered"
+                title="{{ __('common.delete_modal_title') }}"
+                description="{{ __('common.delete_modal_description', ['item' => $currency->code]) }}">
+                <form action="{{ route('admin.settings.currencies.destroy', ['id' => $currency->id]) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="flex justify-end gap-2 mt-4">
+                        <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                        <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
+                    </div>
+                </form>
+            </x-admin::modal.content>
+            @endforeach
+        @endcan
     </div>
 </div>
 @endsection

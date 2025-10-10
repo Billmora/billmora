@@ -11,6 +11,19 @@ class CurrencyController extends Controller
 {
 
     /**
+     * Applies permission-based middleware for accessing currencies settings.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:settings.currencies.view')->only(['index']);
+        $this->middleware('permission:settings.currencies.create')->only(['create', 'store']);
+        $this->middleware('permission:settings.currencies.update')->only(['edit', 'update', 'setDefault']);
+        $this->middleware('permission:settings.currencies.delete')->only(['destroy']);
+    }
+
+    /**
      * Display a listing of currencies.
      *
      * @return \Illuminate\View\View
