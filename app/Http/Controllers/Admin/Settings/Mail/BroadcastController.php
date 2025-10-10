@@ -149,6 +149,8 @@ class BroadcastController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $broadcast = MailBroadcast::findOrFail($id);
+        
         $validated = $request->validate([
             'broadcast_subject' => ['required', 'string', 'max:255'],
             'broadcast_body' => ['required', 'string'],
@@ -178,8 +180,6 @@ class BroadcastController extends Controller
                 $recipient_custom = $validated['broadcast_recipient_custom'] ?? [];
                 break;
         }
-
-        $broadcast = MailBroadcast::findOrFail($id);
 
         $oldBroadcast = $broadcast->replicate();
 
