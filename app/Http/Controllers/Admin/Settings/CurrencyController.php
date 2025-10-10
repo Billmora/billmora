@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Models\Currency;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class CurrencyController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing currencies settings.
@@ -72,6 +74,8 @@ class CurrencyController extends Controller
             'is_default' => false,
         ]);
 
+        $this->recordCreate('currency.create', $currency->toArray());
+
         return redirect()
             ->route('admin.settings.currencies')
             ->with('success', __('common.create_success', ['attribute' => $currency->code]));
@@ -113,6 +117,8 @@ class CurrencyController extends Controller
             'currency_base_rate' => ['required', 'numeric', 'min:0'],
         ]);
 
+        $oldCurrency = $currency->replicate();
+
         $currency->update([
             'code' => strtoupper($validated['currency_code']),
             'prefix' => $validated['currency_prefix'] ?? null,
@@ -120,6 +126,8 @@ class CurrencyController extends Controller
             'format' => $validated['currency_format'],
             'base_rate' => $validated['currency_base_rate'],
         ]);
+
+        $this->recordUpdate('currency.update', $oldCurrency->toArray(), $currency->getChanges());
 
         return redirect()
             ->route('admin.settings.currencies')
@@ -148,6 +156,10 @@ class CurrencyController extends Controller
                 ]));
         }
 
+        $this->recordDelete('currency.delete', [
+            'code' => $currency->code,
+        ]);
+
         $currency->delete();
 
         return redirect()
@@ -173,7 +185,11 @@ class CurrencyController extends Controller
 
         Currency::where('is_default', true)->update(['is_default' => false]);
 
+        $oldCurrency = $currency->replicate();
+
         $currency->update(['is_default' => true]);
+
+        $this->recordUpdate('currency.update', $oldCurrency->toArray(), $currency->getChanges());
 
         return redirect()
             ->route('admin.settings.currencies')
