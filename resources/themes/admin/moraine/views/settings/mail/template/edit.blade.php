@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Template Edit - Mail')
+@section('title', "Template Edit - {$template->id}")
 
 @section('body')
 <form action="{{ route('admin.settings.mail.template.update', $template->id) }}" method="POST" class="flex flex-col gap-5">

@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Role & Permission Create - Roles')
+@section('title', "Role & Permission Edit - {$role->name}")
 
 @section('body')
 <form action="{{ route('admin.settings.roles.update', ['id' => $role->id]) }}" method="POST" class="flex flex-col gap-5">
