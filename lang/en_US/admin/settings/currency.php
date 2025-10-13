@@ -24,7 +24,7 @@ return [
     'currency_code_helper' => 'Enter the ISO currency code (e.g., USD, EUR, IDR).',
     'currency_prefix_label' => 'Currency Prefix',
     'currency_prefix_helper' => 'Enter the symbol or text to appear before the amount.',
-    'currency_suffix_label' => 'Currency Code',
+    'currency_suffix_label' => 'Currency Suffix',
     'currency_suffix_helper' => 'Enter the symbol or text to appear after the amount.',
     'currency_format_label' => 'Currency Format',
     'currency_format_helper' => 'Select how currency values should be displayed.',
