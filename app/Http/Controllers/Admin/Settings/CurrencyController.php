@@ -114,8 +114,12 @@ class CurrencyController extends Controller
             'currency_prefix' => ['nullable', 'string', 'max:10'],
             'currency_suffix' => ['nullable', 'string', 'max:10'],
             'currency_format' => ['required', Rule::in(['1234.56', '1,234.56', '1.234,56', '1,234'])],
-            'currency_base_rate' => ['required', 'numeric', 'min:0'],
+            'currency_base_rate' => [Rule::requiredIf(!$currency->is_default), 'numeric', 'min:0'],
         ]);
+
+        if ($currency->is_default) {
+            $validated['currency_base_rate'] = 1;
+        }
 
         $oldCurrency = $currency->getOriginal();
 
@@ -187,7 +191,10 @@ class CurrencyController extends Controller
 
         $oldCurrency = $currency->getOriginal();
 
-        $currency->update(['is_default' => true]);
+        $currency->update([
+            'base_rate' => 1,
+            'is_default' => true,
+        ]);
 
         $this->recordUpdate('currency.update', $oldCurrency, $currency->getChanges());
 

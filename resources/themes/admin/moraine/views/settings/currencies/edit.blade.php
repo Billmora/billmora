@@ -21,7 +21,7 @@
                 <option value="1.234,56" {{ old('currency_format', $currency->format) == '1.234,56' ? 'selected' : '' }}>1.234,56</option>
                 <option value="1,234" {{ old('currency_format', $currency->format) == '1,234' ? 'selected' : '' }}>1,234</option>
             </x-admin::select>
-            <x-admin::input type="text" name="currency_base_rate" label="{{ __('admin/settings/currency.currency_base_rate_label') }}" helper="{{ __('admin/settings/currency.currency_base_rate_helper') }}" value="{{ old('currency_base_rate', $currency->base_rate) }}" required />
+            <x-admin::input type="text" name="currency_base_rate" label="{{ __('admin/settings/currency.currency_base_rate_label') }}" helper="{{ __('admin/settings/currency.currency_base_rate_helper') }}" value="{{ old('currency_base_rate', $currency->base_rate) }}" required :disabled="$currency->is_default" />
         </div>
     </div>
     <div class="flex gap-4 ml-auto">
