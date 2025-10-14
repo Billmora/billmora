@@ -83,7 +83,7 @@ class TemplateController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $template = MailTemplate::findOrFail($id);
+        $template = MailTemplate::with('translations')->findOrFail($id);
 
         $validated = $request->validate([
             'template_language' => ['required', 'string'],
@@ -94,20 +94,7 @@ class TemplateController extends Controller
             'template_bcc' => ['nullable', 'array'],
         ]);
 
-        $oldTranslation = $template->translations()
-            ->where('lang', $validated['template_language'])
-            ->first();
-
-        $oldData = [
-            'active' => $template->active,
-            'cc' => $template->cc,
-            'bcc' => $template->bcc,
-            'translation' => [
-                'lang' => $validated['template_language'],
-                'subject' => $oldTranslation->subject ?? null,
-                'body' => $oldTranslation->body ?? null,
-            ]
-        ];
+        $oldTemplate = $template->translations->firstWhere('lang', $validated['template_language'])?->toArray();
 
         $template->update([
             'active' => $validated['template_active'],
@@ -115,7 +102,7 @@ class TemplateController extends Controller
             'bcc' => $validated['template_bcc'] ?? [],
         ]);
 
-        $template->translations()->updateOrCreate(
+        $translation = $template->translations()->updateOrCreate(
             ['lang' => $validated['template_language']],
             [
                 'subject' => $validated['template_subject'],
@@ -123,18 +110,9 @@ class TemplateController extends Controller
             ]
         );
 
-        $newData = [
-            'active' => $validated['template_active'],
-            'cc' => $validated['template_cc'] ?? [],
-            'bcc' => $validated['template_bcc'] ?? [],
-            'translation' => [
-                'lang' => $validated['template_language'],
-                'subject' => $validated['template_subject'],
-                'body' => $validated['template_body'],
-            ]
-        ];
+        $newTemplate = $translation->toArray();
 
-        $this->recordUpdate('mail.template.update', $oldData, $newData);
+        $this->recordUpdate('mail.template.update', $oldTemplate, $newTemplate);
 
         return redirect()->route('admin.settings.mail.template')->with('success', __('common.save_success', ['attribute' => __('admin/settings/mail.title')]));
     }
