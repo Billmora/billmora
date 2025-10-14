@@ -28,7 +28,9 @@
                                 <dt class="font-medium text-slate-600 md:w-1/3">{{ $key }}</dt>
                                 <dd class="text-slate-500 md:w-2/3 mt-1 md:mt-0">
                                     @if(is_array($value) || is_object($value))
-                                        <pre class="text-sm bg-white p-2 border border-billmora-2 rounded-lg overflow-x-auto">{{ json_encode($value, JSON_PRETTY_PRINT) }}</pre>
+                                        <pre class="text-sm bg-white p-2 border border-billmora-2 rounded-lg max-w-full whitespace-pre-wrap">
+                                            {{ json_encode($value, JSON_PRETTY_PRINT) }}
+                                        </pre>
                                     @else
                                         <span class="break-words">{{ $value }}</span>
                                     @endif
