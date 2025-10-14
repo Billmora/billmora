@@ -5,6 +5,6 @@ return [
     'description' => 'Review detailed records of system logs.',
 
     'event_label' => 'Event',
-    'user_label' => 'User',
+    'actor_label' => 'Actor',
     'properties_label' => 'Properties',
 ];

@@ -12,7 +12,7 @@
                 <span class="text-slate-500">{{ $log->event }}</span>
             </div>
             <div class="grid">
-                <span class="text-slate-600 font-semibold">{{ __('admin/audits/system.user_label') }}</span>
+                <span class="text-slate-600 font-semibold">{{ __('admin/audits/system.actor_label') }}</span>
                 <a href="{{ route('admin.users.summary', ['id' => $log->user_id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                     {{ $user->email }}
                 </a>
