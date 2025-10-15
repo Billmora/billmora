@@ -39,7 +39,6 @@ class SettingsController extends Controller
         $validated = $request->validate([
             'first_name' => ['required', 'string', 'min:3', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'currency' => ['required', 'string'], // TODO: Add currency validation rule
             'language' => ['required', 'string', Rule::in(array_map('basename', File::directories(lang_path())))],
             'phone_number' => [
                 Rule::requiredIf(Billmora::hasAuth('user_billing_required_inputs', 'phone_number')),

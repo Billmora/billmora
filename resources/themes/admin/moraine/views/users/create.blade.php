@@ -62,11 +62,6 @@
                     <option value="suspended" {{ old('status') === 'suspended' ? 'selected' : '' }}>Suspended</option>
                     <option value="closed" {{ old('status') === 'closed' ? 'selected' : '' }}>Closed</option>
                 </x-admin::select>
-                {{-- TODO: List currency from data and add old value --}}
-                <x-admin::select name="currency" label="{{ __('common.currency') }}" required>
-                    <option value="USD" {{ old('currency') === 'USD' ? 'selected' : '' }}>USD</option>
-                    <option value="IDR" {{ old('currency') === 'IDR' ? 'selected' : '' }}>IDR</option>
-                </x-admin::select>
                 <x-admin::select name="language" label="{{ __('common.language') }}" required>
                     @foreach ($langs as $lang)
                         <option value="{{ $lang['lang'] }}"

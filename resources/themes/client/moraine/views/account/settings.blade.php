@@ -38,10 +38,6 @@
                         <x-client::input type="tel" name="phone_number" label="{{ __('common.phone_number') }}" value="{{ old('phone_number', $user->billing->phone_number) }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'phone_number')" />
                     </div>
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <x-client::select name="currency" label="{{ __('common.currency') }}" required>
-                            <option value="USD" {{ old('currency', $user->currency) === 'USD' ? 'selected' : '' }}>USD</option>
-                            <option value="IDR" {{ old('currency', $user->currency) === 'IDR' ? 'selected' : '' }}>IDR</option>
-                        </x-client::select>
                         <x-client::select name="language" label="{{ __('common.language') }}" required>
                             @foreach ($langs as $lang)
                                 <option value="{{ $lang['lang'] }}"
