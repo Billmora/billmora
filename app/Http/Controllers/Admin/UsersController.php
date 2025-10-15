@@ -145,7 +145,6 @@ class UsersController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'status' => $validated['status'],
-            'currency' => $validated['currency'],
             'language' => $validated['language'],
         ]);
 

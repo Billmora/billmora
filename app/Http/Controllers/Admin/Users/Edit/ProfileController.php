@@ -121,7 +121,6 @@ class ProfileController extends Controller
             'email' => $validated['email'],
             'password' => $validated['password'] ? Hash::make($validated['password']) : $user->password,
             'status' => $validated['status'],
-            'currency' => $validated['currency'],
             'language' => $validated['language'],
         ]);
 

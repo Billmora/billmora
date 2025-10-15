@@ -89,7 +89,6 @@ class SettingsController extends Controller
         $user->update([
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
-            'currency' => $validated['currency'],
             'language' => $validated['language'],
         ]);
 
