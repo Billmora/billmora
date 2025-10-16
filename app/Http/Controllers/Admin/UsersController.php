@@ -148,23 +148,6 @@ class UsersController extends Controller
             'language' => $validated['language'],
         ]);
 
-        $userData = [
-            'user' => $user->toArray(),
-            'role' => $validated['role'],
-            'billing' => [
-                'phone_number' => $validated['phone_number'],
-                'company_name' => $validated['company_name'],
-                'street_address_1' => $validated['street_address_1'],
-                'street_address_2' => $validated['street_address_2'],
-                'city' => $validated['city'],
-                'state' => $validated['state'],
-                'postcode' => $validated['postcode'],
-                'country' => $validated['country'],
-            ]
-        ];
-
-        $this->recordCreate('user.create', $userData);
-
         if ($validated['password'] === null) {
             $token = Str::random(64);
             UserPasswordReset::create([
@@ -230,6 +213,12 @@ class UsersController extends Controller
                 'country' => $validated['country'],
             ]
         );
+
+       $this->recordCreate('user.create', [
+            'user' => $user->toArray(),
+            'roles' => $user->roles->toArray(),
+            'billing' => $user->billing?->toArray(),
+        ]);
 
         return redirect()->route('admin.users')->with('success', __('common.create_success', ['attribute' => $user->email]));
     }
