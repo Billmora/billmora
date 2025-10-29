@@ -8,7 +8,7 @@
         <x-admin::alert variant="success" title="{{ session('success') }}" />
     @endif
     <div class="flex flex-col gap-4">
-        @can('settings.roles.delete')
+        @can('settings.roles.create')
             <a href="{{ route('admin.settings.roles.create') }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                 <x-lucide-plus class="w-auto h-5" />
                 {{ __('common.create') }}
