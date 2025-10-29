@@ -36,6 +36,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin catalogs interface routes.
+     *
+     * Prefix: /admin/catalogs
+     */
+    Route::group(['prefix' => 'catalogs'], function () {
+        Route::get('/', [Admin\CatalogsController::class, 'index'])->name('admin.catalogs');
+        Route::get('/create', [Admin\CatalogsController::class, 'create'])->name('admin.catalogs.create');
+        Route::post('/create', [Admin\CatalogsController::class, 'store'])->name('admin.catalogs.store');
+        Route::get('/{id}/edit', [Admin\CatalogsController::class, 'edit'])->name('admin.catalogs.edit');
+        Route::put('/{id}/edit', [Admin\CatalogsController::class, 'update'])->name('admin.catalogs.update');
+        Route::delete('/{id}', [Admin\CatalogsController::class, 'destroy'])->name('admin.catalogs.destroy');
+    });
+
+    /**
      * Admin settings interface routes.
      *
      * Prefix: /admin/settings
