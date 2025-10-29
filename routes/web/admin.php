@@ -13,6 +13,27 @@ use Illuminate\Support\Facades\Route;
  */
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('admin.dashboard');
+    
+    /**
+     * Admin users interface routes.
+     *
+     * Prefix: /admin/users
+     */
+    Route::group(['prefix' => 'users'], function () {
+        Route::get('/', [Admin\UsersController::class, 'index'])->name('admin.users');
+        Route::get('/create', [Admin\UsersController::class, 'create'])->name('admin.users.create');
+        Route::post('/create', [Admin\UsersController::class, 'store'])->name('admin.users.store');
+        Route::post('/{id}/verify', [Admin\UsersController::class, 'verify'])->name('admin.users.verify');
+        Route::get('/{id}/summary', [Users\Edit\SummaryController::class, 'index'])->name('admin.users.summary');
+        Route::post('/{id}/impersonate', [Users\Edit\SummaryController::class, 'impersonate'])->name('admin.users.impersonate');
+        Route::get('/{id}/profile', [Users\Edit\ProfileController::class, 'index'])->name('admin.users.profile');
+        Route::put('/{id}/profile', [Users\Edit\ProfileController::class, 'update'])->name('admin.users.profile.update');
+        Route::delete('/{id}', [Admin\UsersController::class, 'destroy'])->name('admin.users.destroy');
+        Route::get('/{id}/activity', [Users\ActivityController::class, 'index'])->name('admin.users.activity');
+        Route::get('/{id}/activity/{activity}', [Users\ActivityController::class, 'show'])->name('admin.users.activity.show');
+        Route::post('/{id}/activity/export', [Users\ActivityController::class, 'export'])->name('admin.users.activity.export');
+        Route::post('/{id}/activity/clear', [Users\ActivityController::class, 'clear'])->name('admin.users.activity.clear');
+    });
 
     /**
      * Admin settings interface routes.
@@ -141,27 +162,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::post('/export', [Audits\SystemController::class, 'export'])->name('admin.audits.system.export');
             Route::post('/clear', [Audits\SystemController::class, 'clear'])->name('admin.audits.system.clear');
         });
-    });
-
-    /**
-     * Admin users interface routes.
-     *
-     * Prefix: /admin/users
-     */
-    Route::group(['prefix' => 'users'], function () {
-        Route::get('/', [Admin\UsersController::class, 'index'])->name('admin.users');
-        Route::get('/create', [Admin\UsersController::class, 'create'])->name('admin.users.create');
-        Route::post('/create', [Admin\UsersController::class, 'store'])->name('admin.users.store');
-        Route::post('/{id}/verify', [Admin\UsersController::class, 'verify'])->name('admin.users.verify');
-        Route::get('/{id}/summary', [Users\Edit\SummaryController::class, 'index'])->name('admin.users.summary');
-        Route::post('/{id}/impersonate', [Users\Edit\SummaryController::class, 'impersonate'])->name('admin.users.impersonate');
-        Route::get('/{id}/profile', [Users\Edit\ProfileController::class, 'index'])->name('admin.users.profile');
-        Route::put('/{id}/profile', [Users\Edit\ProfileController::class, 'update'])->name('admin.users.profile.update');
-        Route::delete('/{id}', [Admin\UsersController::class, 'destroy'])->name('admin.users.destroy');
-        Route::get('/{id}/activity', [Users\ActivityController::class, 'index'])->name('admin.users.activity');
-        Route::get('/{id}/activity/{activity}', [Users\ActivityController::class, 'show'])->name('admin.users.activity.show');
-        Route::post('/{id}/activity/export', [Users\ActivityController::class, 'export'])->name('admin.users.activity.export');
-        Route::post('/{id}/activity/clear', [Users\ActivityController::class, 'clear'])->name('admin.users.activity.clear');
     });
 
     /**
