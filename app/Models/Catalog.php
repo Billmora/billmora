@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Catalogs extends Model
+class Catalog extends Model
 {
     /**
      * The attributes that aren't mass assignable.
