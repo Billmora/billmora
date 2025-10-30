@@ -10,6 +10,20 @@ use Illuminate\Validation\Rule;
 
 class CatalogsController extends Controller
 {
+
+    /**
+     * Applies permission-based middleware for accessing currencies settings.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:catalogs.view')->only(['index']);
+        $this->middleware('permission:catalogs.create')->only(['create', 'store']);
+        $this->middleware('permission:catalogs.update')->only(['edit', 'update']);
+        $this->middleware('permission:catalogs.delete')->only(['destroy']);
+    }
+
     /**
      * Display a paginated list of catalogs.
      *
