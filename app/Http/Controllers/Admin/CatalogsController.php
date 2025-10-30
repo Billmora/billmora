@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Catalog;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class CatalogsController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing currencies settings.
@@ -74,6 +75,8 @@ class CatalogsController extends Controller
             'status' => $validated['catalog_status'],
         ]);
 
+        $this->recordCreate('catalog.create', $catalog->toArray());
+
         return redirect()->route('admin.catalogs')->with('success', __('common.create_success', ['attribute' => $catalog->name]));
     }
 
@@ -113,6 +116,8 @@ class CatalogsController extends Controller
             $iconPath = $request->file('catalog_icon')->store('public/catalogs');
         }
 
+        $oldCatalog = $catalog->getOriginal();
+
         $catalog->update([
             'name' => $validated['catalog_name'],
             'slug' => $validated['catalog_slug'],
@@ -120,6 +125,8 @@ class CatalogsController extends Controller
             'icon' => $iconPath ?? $catalog->icon,
             'status' => $validated['catalog_status'],
         ]);
+
+        $this->recordUpdate('catalog.update', $oldCatalog, $catalog->getChanges());
 
         return redirect()->route('admin.catalogs')->with('success', __('common.update_success', ['attribute' => $catalog->name]));
     }
@@ -135,6 +142,10 @@ class CatalogsController extends Controller
         $catalog = Catalog::findOrFail($id);
 
         $catalog->delete();
+
+        $this->recordDelete('catalog.delete', [
+            'name' => $catalog->name,
+        ]);
 
         return redirect()->route('admin.catalogs')->with('success', __('common.delete_success', ['attribute' => $catalog->name]));
     }
