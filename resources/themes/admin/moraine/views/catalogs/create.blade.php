@@ -33,14 +33,14 @@
                     type="text"
                     name="catalog_name"
                     x-model="name"
-                    label="{{ __('admin/product/catalogs.name_label') }}"
-                    helper="{{ __('admin/product/catalogs.name_helper') }}"
+                    label="{{ __('admin/catalogs.name_label') }}"
+                    helper="{{ __('admin/catalogs.name_helper') }}"
                     required
                 />
                 <div class="grid">
                     <div class="flex gap-1 mb-1">
                         <label for="catalog_slug" class="text-slate-600 font-semibold">
-                            {{ __('admin/product/catalogs.slug_label') }}
+                            {{ __('admin/catalogs.slug_label') }}
                         </label>
                         <span class="text-slate-600">
                             {{ __('common.symbol_required') }}
@@ -63,12 +63,12 @@
                             x-on:input="edited = true"
                         />
                     </div>
-                    <p class="mt-1 text-sm text-slate-500">{{ __('admin/product/catalogs.slug_helper') }}</p>
+                    <p class="mt-1 text-sm text-slate-500">{{ __('admin/catalogs.slug_helper') }}</p>
                 </div>
                 <x-admin::textarea
                     name="catalog_description"
-                    label="{{ __('admin/product/catalogs.description_label') }}"
-                    helper="{{ __('admin/product/catalogs.description_helper') }}"
+                    label="{{ __('admin/catalogs.description_label') }}"
+                    helper="{{ __('admin/catalogs.description_helper') }}"
                     rows="6"
                     required
                 >{{ old('catalog_description') }}</x-admin::textarea>
@@ -77,24 +77,24 @@
                 <x-admin::input
                     type="file"
                     name="catalog_icon"
-                    label="{{ __('admin/product/catalogs.icon_label') }}"
-                    helper="{{ __('admin/product/catalogs.icon_helper') }}"
+                    label="{{ __('admin/catalogs.icon_label') }}"
+                    helper="{{ __('admin/catalogs.icon_helper') }}"
                 />
                 <x-admin::radio.group 
                     name="catalog_status"
-                    label="{{ __('admin/product/catalogs.status_label') }}"
-                    helper="{{ __('admin/product/catalogs.status_helper') }}"
+                    label="{{ __('admin/catalogs.status_label') }}"
+                    helper="{{ __('admin/catalogs.status_helper') }}"
                     required
                 >
                     <x-admin::radio.option
                         name="catalog_status"
                         value="visible"
-                        label="{{ __('admin/product/catalogs.status_options.visible') }}"
+                        label="{{ __('admin/catalogs.status_options.visible') }}"
                         :checked="old('catalog_status', 'visible') === 'visible'" />
                     <x-admin::radio.option
                         name="catalog_status"
                         value="hidden"
-                        label="{{ __('admin/product/catalogs.status_options.hidden') }}"
+                        label="{{ __('admin/catalogs.status_options.hidden') }}"
                         :checked="old('catalog_status') === 'hidden'" />
                 </x-admin::radio.group>
             </div>

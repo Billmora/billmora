@@ -12,17 +12,17 @@
             [
                 'route' => route('admin.users.summary', ['id' => $user->id]),
                 'icon' => 'lucide-contact',
-                'label' => __('admin/users/manage.tabs.summary'),
+                'label' => __('admin/users.tabs.summary'),
             ],
             [
                 'route' => route('admin.users.profile', ['id' => $user->id]),
                 'icon' => 'lucide-user-pen',
-                'label' => __('admin/users/manage.tabs.profile'),
+                'label' => __('admin/users.tabs.profile'),
             ],
             [
                 'route' => route('admin.users.activity', ['id' => $user->id]),
                 'icon' => 'lucide-activity',
-                'label' => __('admin/users/manage.tabs.activity'),
+                'label' => __('admin/users.tabs.activity'),
             ],
         ]" 
         active="{{ request()->fullUrl() }}" />

@@ -151,6 +151,6 @@ class ProfileController extends Controller
             ]
         );
 
-        return redirect()->back()->with('success', __('common.update_success', ['attribute' => __('admin/users/manage.tabs.profile')]));
+        return redirect()->back()->with('success', __('common.update_success', ['attribute' => __('admin/users.tabs.profile')]));
     }
 }

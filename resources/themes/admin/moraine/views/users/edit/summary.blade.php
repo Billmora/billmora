@@ -15,27 +15,27 @@
             [
                 'route' => route('admin.users.summary', ['id' => $user->id]),
                 'icon' => 'lucide-contact',
-                'label' => __('admin/users/manage.tabs.summary'),
+                'label' => __('admin/users.tabs.summary'),
             ],
             [
                 'route' => route('admin.users.profile', ['id' => $user->id]),
                 'icon' => 'lucide-user-pen',
-                'label' => __('admin/users/manage.tabs.profile'),
+                'label' => __('admin/users.tabs.profile'),
             ],
             [
                 'route' => route('admin.users.activity', ['id' => $user->id]),
                 'icon' => 'lucide-activity',
-                'label' => __('admin/users/manage.tabs.activity'),
+                'label' => __('admin/users.tabs.activity'),
             ],
         ]" 
         active="{{ request()->fullUrl() }}" />
     @can('uses.update')
         @if (!$user->isEmailVerified())
-            <x-admin::alert variant="warning" title="{{ __('admin/users/manage.email_verification_alert_label') }}">
-                {{ __('admin/users/manage.email_verification_alert_helper') }}
+            <x-admin::alert variant="warning" title="{{ __('admin/users.email_verification_alert_label') }}">
+                {{ __('admin/users.email_verification_alert_helper') }}
                 <form action="{{ route('admin.users.verify', ['id' => $user->id]) }}" method="POST" class="ml-auto">
                     @csrf
-                    <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('admin/users/manage.marked_as_verified') }}</button>
+                    <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('admin/users.marked_as_verified') }}</button>
                 </form>
             </x-admin::alert>
         @endif
@@ -97,7 +97,7 @@
                         @csrf
                         <button type="submit" class="w-full flex gap-2 justify-center items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
                             <x-lucide-user class="w-auto h-5" />
-                            {{ __('admin/users/manage.login_as_user') }}
+                            {{ __('admin/users.login_as_user') }}
                         </button>
                     </form>
                 @endcan

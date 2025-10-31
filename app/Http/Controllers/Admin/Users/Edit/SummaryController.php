@@ -54,13 +54,13 @@ class SummaryController extends Controller
         $user = User::findOrFail($id);
 
         if ($user->id === Auth::id()) {
-            return redirect()->back()->with('error', __('admin/users/manage.login_as_user_error'));
+            return redirect()->back()->with('error', __('admin/users.login_as_user_error'));
         }
 
         Auth::logout();
         $request->session()->flush();
         Auth::login($user, true);
 
-        return redirect()->route('client.dashboard')->with('success', __('admin/users/manage.login_as_user_success', ['email' => $user->email]));
+        return redirect()->route('client.dashboard')->with('success', __('admin/users.login_as_user_success', ['email' => $user->email]));
     }
 }

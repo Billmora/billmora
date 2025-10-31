@@ -284,7 +284,7 @@ class UsersController extends Controller
             'user_agent' => $request->userAgent(),
         ]);
 
-        return redirect()->back()->with('success', __('admin/users/manage.email_verification_alert_success'));
+        return redirect()->back()->with('success', __('admin/users.email_verification_alert_success'));
     }
 
     /**
