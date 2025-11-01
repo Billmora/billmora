@@ -64,7 +64,7 @@ class CatalogsController extends Controller
         ]);
 
         if ($request->catalog_icon) {
-            $iconPath = $request->file('catalog_icon')->store('public/catalogs');
+            $iconPath = $request->file('catalog_icon')->store('catalogs', 'public');
         }
 
         $catalog = Catalog::create([
@@ -113,7 +113,7 @@ class CatalogsController extends Controller
         ]);
 
         if ($request->hasFile('catalog_icon')) {
-            $iconPath = $request->file('catalog_icon')->store('public/catalogs');
+            $iconPath = $request->file('catalog_icon')->store('catalogs', 'public');
         }
 
         $oldCatalog = $catalog->getOriginal();
