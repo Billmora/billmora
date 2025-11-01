@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', "Catalog Edit - {{ $catalog->name }}")
+@section('title', "Catalog Edit - $catalog->name")
 
 @section('body')
 <div class="flex flex-col gap-5">
