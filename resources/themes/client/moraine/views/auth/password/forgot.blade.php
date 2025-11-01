@@ -1,3 +1,5 @@
+@section('title', 'Forgot Password')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

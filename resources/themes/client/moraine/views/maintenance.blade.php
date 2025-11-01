@@ -1,3 +1,5 @@
+@section('title', 'Oopss.. Maintenance')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

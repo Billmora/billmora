@@ -1,5 +1,7 @@
 @extends('client::layouts.app')
 
+@section('title', 'Account Security')
+
 @section('body')
 <div class="grid gap-5">
     @if (session('success'))

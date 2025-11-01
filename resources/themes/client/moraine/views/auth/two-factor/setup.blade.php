@@ -1,3 +1,5 @@
+@section('title', 'Two-Factor Setup')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

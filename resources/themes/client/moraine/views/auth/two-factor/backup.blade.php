@@ -1,3 +1,5 @@
+@section('title', 'Two-Factor Backup Codes')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

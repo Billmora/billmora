@@ -1,5 +1,7 @@
 @extends('client::layouts.app')
 
+@section('title', 'Store')
+
 @section('body')
 <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-3 gap-5">
     @foreach ($catalogs as $catalog)

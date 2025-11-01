@@ -1,3 +1,5 @@
+@section('title', 'Two-Factor Verification')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

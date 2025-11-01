@@ -1,3 +1,5 @@
+@section('title', 'Register')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
