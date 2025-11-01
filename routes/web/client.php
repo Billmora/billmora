@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth', 'maintenance', '2fa']], function () {
     Route::get('/dashboard', [Client\DashboardController::class, 'index'])->name('client.dashboard');
 
+    Route::group(['prefix' => 'store'], function () {
+        Route::get('/', [Client\StoreController::class, 'index'])->name('client.store');
+    });
+
     /**
      * Client account routes.
      * 
