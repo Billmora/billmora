@@ -58,7 +58,7 @@ class UsersController extends Controller
                     ->paginate(25)
                     ->withQueryString();
         
-        return view('admin::users', compact('users', 'search', 'sort', 'direction'));
+        return view('admin::users.index', compact('users', 'search', 'sort', 'direction'));
     }
 
     /**
