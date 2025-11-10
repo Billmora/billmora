@@ -13,7 +13,7 @@ class CatalogsController extends Controller
     use AuditsSystem;
 
     /**
-     * Applies permission-based middleware for accessing currencies settings.
+     * Applies permission-based middleware for accessing catalogs product.
      * 
      * @return void
      */

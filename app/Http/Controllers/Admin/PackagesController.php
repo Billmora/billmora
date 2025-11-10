@@ -12,7 +12,7 @@ class PackagesController extends Controller
 {
 
     /**
-     * Applies permission-based middleware for accessing packages settings.
+     * Applies permission-based middleware for accessing packages product.
      * 
      * @return void
      */
