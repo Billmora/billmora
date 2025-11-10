@@ -73,6 +73,8 @@ return [
     'update_failed' => 'Failed to update :attribute.',
     'delete_success' => ':attribute have been deleted.',
     'delete_failed' => 'Failed to delete :attribute.',
+    'delete_success_related' => ':attribute was deleted successfully, including its related :related items.',
+    'delete_failed_related' => 'Unable to delete :attribute because it still has related :related items.',
     'enable_success' => ':attribute have been enabled.',
     'enable_failed' => 'Failed to enable :attribute.',
     'disable_success' => ':attribute have been disabled.',
