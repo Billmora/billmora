@@ -25,7 +25,7 @@ class PackagesController extends Controller
     }
 
     /**
-     * Display a paginated list of packages with optional search filter.
+     * Display a listing of packages with optional search filter.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing optional 'search' query.
      * @return \Illuminate\View\View
@@ -64,7 +64,7 @@ class PackagesController extends Controller
     }
 
     /**
-     * Store a newly created package with validated data and optional icon upload.
+     * Store a newly created package in database.
      *
      * @param \Illuminate\Http\Request $request The request containing package fields and optional icon file.
      * @return \Illuminate\Http\RedirectResponse
@@ -122,7 +122,7 @@ class PackagesController extends Controller
     }
 
     /**
-     * Update the specified package with validated data and optional icon replacement.
+     * Update the specified package in database.
      *
      * @param \Illuminate\Http\Request $request The request containing updated fields and optional icon file.
      * @param int $id The package identifier.
