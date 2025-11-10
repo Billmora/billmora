@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'tabs' => [
+        'summary' => 'Summary',
+        'pricing' => 'Pricing',
+    ],
     'catalog_label' => 'Catalog',
     'catalog_helper' => 'Select the catalog to which this package belongs.',
     'name_label' => 'Name',
