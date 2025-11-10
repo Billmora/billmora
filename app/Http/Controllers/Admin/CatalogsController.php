@@ -141,6 +141,13 @@ class CatalogsController extends Controller
     {
         $catalog = Catalog::findOrFail($id);
 
+        if ($catalog->packages()->count() > 0) {
+            return redirect()->route('admin.catalogs')->with('error', __('common.delete_failed_related', [
+                    'attribute' => $catalog->name,
+                    'related' => 'Package',
+                ]));
+        }
+
         $catalog->delete();
 
         $this->recordDelete('catalog.delete', [
@@ -149,5 +156,4 @@ class CatalogsController extends Controller
 
         return redirect()->route('admin.catalogs')->with('success', __('common.delete_success', ['attribute' => $catalog->name]));
     }
-
 }

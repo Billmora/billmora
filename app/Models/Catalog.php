@@ -25,4 +25,14 @@ class Catalog extends Model
     protected $casts = [
         'status' => 'string',
     ];
+
+    /**
+     * Get all packages that belong to this catalog.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function packages()
+    {
+        return $this->hasMany(Package::class);
+    }
 }
