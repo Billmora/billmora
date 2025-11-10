@@ -50,6 +50,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin packages interface routes.
+     *
+     * Prefix: /admin/packages
+     */
+    Route::group(['prefix' => 'packages'], function () {
+        Route::get('/', [Admin\PackagesController::class, 'index'])->name('admin.packages');
+        Route::get('/create', [Admin\PackagesController::class, 'create'])->name('admin.packages.create');
+        Route::post('/create', [Admin\PackagesController::class, 'store'])->name('admin.packages.store');
+        Route::get('/{id}/edit', [Admin\PackagesController::class, 'edit'])->name('admin.packages.edit');
+        Route::put('/{id}/edit', [Admin\PackagesController::class, 'update'])->name('admin.packages.update');
+        Route::delete('/{id}', [Admin\PackagesController::class, 'destroy'])->name('admin.packages.destroy');
+    });
+
+    /**
      * Admin settings interface routes.
      *
      * Prefix: /admin/settings
