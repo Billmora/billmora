@@ -23,10 +23,12 @@
                     </div>
                 </form>
             </div>
-            <a href="{{ route('admin.packages.create') }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                <x-lucide-plus class="w-auto h-5" />
-                {{ __('common.create') }}
-            </a>
+            @can('packages.create')
+                <a href="{{ route('admin.packages.create') }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                    <x-lucide-plus class="w-auto h-5" />
+                    {{ __('common.create') }}
+                </a>
+            @endcan
         </div>
         <div class="overflow-x-auto">
             <div class="min-w-full inline-block align-middle">
@@ -53,10 +55,14 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $package->status }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $package->created_at }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
-                                    <a href="{{ route('admin.packages.edit', ['id' => $package->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
-                                        {{ __('common.edit') }}
-                                    </a>
-                                    <x-admin::modal.trigger modal="deleteModal-{{ $package->id }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.delete') }}</x-admin::modal.trigger>
+                                    @can('packages.update')
+                                        <a href="{{ route('admin.packages.edit', ['id' => $package->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                                            {{ __('common.edit') }}
+                                        </a>
+                                    @endcan
+                                    @can('packages.delete')
+                                        <x-admin::modal.trigger modal="deleteModal-{{ $package->id }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.delete') }}</x-admin::modal.trigger>
+                                    @endcan
                                 </td>
                             </tr>
                             @endforeach
@@ -68,24 +74,26 @@
         <div>
             {{ $packages->links('admin::layouts.partials.pagination') }}
         </div>
-        @foreach ($packages as $package)
-        <x-admin::modal.content
-            modal="deleteModal-{{ $package->id }}"
-            variant="danger"
-            size="xl"
-            position="centered"
-            title="{{ __('common.delete_modal_title') }}"
-            description="{{ __('common.delete_modal_description', ['item' => $package->name]) }}">
-            <form action="{{ route('admin.packages.destroy', ['id' => $package->id]) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <div class="flex justify-end gap-2 mt-4">
-                    <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
-                    <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
-                </div>
-            </form>
-        </x-admin::modal.content>
-        @endforeach
+        @can('packages.delete')
+            @foreach ($packages as $package)
+            <x-admin::modal.content
+                modal="deleteModal-{{ $package->id }}"
+                variant="danger"
+                size="xl"
+                position="centered"
+                title="{{ __('common.delete_modal_title') }}"
+                description="{{ __('common.delete_modal_description', ['item' => $package->name]) }}">
+                <form action="{{ route('admin.packages.destroy', ['id' => $package->id]) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="flex justify-end gap-2 mt-4">
+                        <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                        <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
+                    </div>
+                </form>
+            </x-admin::modal.content>
+            @endforeach
+        @endcan
     </div>
 </div>
 @endsection

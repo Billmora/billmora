@@ -12,6 +12,19 @@ class PackagesController extends Controller
 {
 
     /**
+     * Applies permission-based middleware for accessing packages settings.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:packages.view')->only(['index']);
+        $this->middleware('permission:packages.create')->only(['create', 'store']);
+        $this->middleware('permission:packages.update')->only(['edit', 'update']);
+        $this->middleware('permission:packages.delete')->only(['destroy']);
+    }
+
+    /**
      * Display a paginated list of packages with optional search filter.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing optional 'search' query.
