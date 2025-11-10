@@ -4,6 +4,7 @@ return [
     'dashboard' => 'Dashboard',
     'users' => 'Users',
     'catalogs' => 'Catalogs',
+    'packages' => 'Packages',
     'settings' => 'Settings',
     'audits' => 'Audits',
     'group' => [
