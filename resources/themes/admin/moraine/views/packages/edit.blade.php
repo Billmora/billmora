@@ -10,6 +10,20 @@
     @if (session('error'))
         <x-admin::alert variant="danger" title="{{ session('error') }}" />
     @endif
+    <x-admin::tabs 
+        :tabs="[
+            [
+                'route' => route('admin.packages.edit', ['id' => $package->id]),
+                'icon' => 'lucide-package',
+                'label' => __('admin/packages.tabs.summary'),
+            ],
+            [
+                'route' => route('admin.packages.pricing', ['id' => $package->id]),
+                'icon' => 'lucide-badge-cent',
+                'label' => __('admin/packages.tabs.pricing'),
+            ],
+        ]" 
+        active="{{ request()->fullUrl() }}" />
     <form action="{{ route('admin.packages.update', ['id' => $package->id]) }}" method="POST" class="flex flex-col gap-5" enctype="multipart/form-data">
         @method('PUT')
         @csrf
