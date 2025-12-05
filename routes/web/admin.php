@@ -60,6 +60,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::post('/create', [Admin\PackagesController::class, 'store'])->name('admin.packages.store');
         Route::get('/{id}/edit', [Admin\PackagesController::class, 'edit'])->name('admin.packages.edit');
         Route::put('/{id}/edit', [Admin\PackagesController::class, 'update'])->name('admin.packages.update');
+        Route::get('/{id}/pricing', [Admin\Packages\PricingController::class, 'index'])->name('admin.packages.pricing');
+        Route::get('/{id}/pricing/create', [Admin\Packages\PricingController::class, 'create'])->name('admin.packages.pricing.create');
+        Route::post('/{id}/pricing/create', [Admin\Packages\PricingController::class, 'store'])->name('admin.packages.pricing.store');
+        Route::get('/{id}/pricing/{pricing:id}/edit', [Admin\Packages\PricingController::class, 'edit'])->name('admin.packages.pricing.edit');
+        Route::put('/{id}/pricing/{pricing:id}/edit', [Admin\Packages\PricingController::class, 'update'])->name('admin.packages.pricing.update');
+        Route::delete('/{id}/pricing/{pricing:id}', [Admin\Packages\PricingController::class, 'destroy'])->name('admin.packages.pricing.destroy');
         Route::delete('/{id}', [Admin\PackagesController::class, 'destroy'])->name('admin.packages.destroy');
     });
 
