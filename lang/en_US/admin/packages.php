@@ -27,4 +27,23 @@ return [
         'visible' => 'Visible (visible to customers)',
         'hidden' => 'Hidden (not visible to customers)',
     ],
+
+    'pricing' => [
+        'name_label' => 'Name',
+        'name_helper' => 'Enter the name for this pricing option.',
+        'type_label' => 'Type',
+        'type_helper' => 'Select the type of pricing for this package.',
+        'time_interval_label' => 'Time Interval',
+        'time_interval_helper' => 'Choose the billing interval for this pricing option.',
+        'billing_period_label' => 'Billing Period',
+        'billing_period_helper' => 'Select how often the customer will be billed for this package.',
+        'currency_code_label' => 'Currency Code',
+        'currency_code_helper' => 'Displays the currency used for this price. This value cannot be changed here.',
+        'price_label' => 'Price',
+        'price_helper' => 'Set the price for this package in the selected currency.',
+        'setup_fee_label' => 'Setup Fee',
+        'setup_fee_helper' => 'Enter any one-time setup fee for this pricing option.',
+        'enabled_label' => 'Enabled?',
+        'enabled_helper' => 'Enable or disable this pricing option without deleting it.',
+    ]
 ];
