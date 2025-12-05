@@ -36,4 +36,14 @@ class Package extends Model
     {
         return $this->belongsTo(Catalog::class);
     }
+
+    /**
+     * Get all package prices that belong to this package.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function prices()
+    {
+        return $this->hasMany(PackagePrice::class);
+    }
 }
