@@ -24,10 +24,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/create', [Admin\UsersController::class, 'create'])->name('admin.users.create');
         Route::post('/create', [Admin\UsersController::class, 'store'])->name('admin.users.store');
         Route::post('/{id}/verify', [Admin\UsersController::class, 'verify'])->name('admin.users.verify');
-        Route::get('/{id}/summary', [Users\Edit\SummaryController::class, 'index'])->name('admin.users.summary');
-        Route::post('/{id}/impersonate', [Users\Edit\SummaryController::class, 'impersonate'])->name('admin.users.impersonate');
-        Route::get('/{id}/profile', [Users\Edit\ProfileController::class, 'index'])->name('admin.users.profile');
-        Route::put('/{id}/profile', [Users\Edit\ProfileController::class, 'update'])->name('admin.users.profile.update');
+        Route::get('/{id}/summary', [Users\SummaryController::class, 'index'])->name('admin.users.summary');
+        Route::post('/{id}/impersonate', [Users\SummaryController::class, 'impersonate'])->name('admin.users.impersonate');
+        Route::get('/{id}/profile', [Users\ProfileController::class, 'index'])->name('admin.users.profile');
+        Route::put('/{id}/profile', [Users\ProfileController::class, 'update'])->name('admin.users.profile.update');
         Route::delete('/{id}', [Admin\UsersController::class, 'destroy'])->name('admin.users.destroy');
         Route::get('/{id}/activity', [Users\ActivityController::class, 'index'])->name('admin.users.activity');
         Route::get('/{id}/activity/{activity}', [Users\ActivityController::class, 'show'])->name('admin.users.activity.show');

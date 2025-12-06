@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Users\Edit;
+namespace App\Http\Controllers\Admin\Users;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -41,7 +41,7 @@ class ProfileController extends Controller
 
         $this->authorize('update', $user);
         
-        return view('admin::users.edit.profile', compact('user', 'roles'));
+        return view('admin::users.profile', compact('user', 'roles'));
     }
 
     /**

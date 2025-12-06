@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Users\Edit;
+namespace App\Http\Controllers\Admin\Users;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
@@ -35,7 +35,7 @@ class SummaryController extends Controller
     {
         $user = User::with('billing')->findOrFail($id);
         
-        return view('admin::users.edit.summary', compact('user'));
+        return view('admin::users.summary', compact('user'));
     }
 
     /**
