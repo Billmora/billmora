@@ -126,7 +126,7 @@ class PackagesController extends Controller
             'rates' => $rates,
         ]);
 
-        return redirect()->route('admin.packages')->with('success', __('common.create_success', ['attribute' => $package->name]));
+        return redirect()->route('admin.packages.edit', ['id' => $package->id])->with('success', __('common.create_success', ['attribute' => $package->name]));
     }
 
     /**
@@ -187,7 +187,7 @@ class PackagesController extends Controller
             'status' => $validated['package_status'],
         ]);
 
-        return redirect()->route('admin.packages')->with('success', __('common.update_success', ['attribute' => $package->name]));
+        return redirect()->route('admin.packages.edit', ['id' => $package->id])->with('success', __('common.update_success', ['attribute' => $package->name]));
     }
 
     /**
