@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Catalog;
+use App\Models\Currency;
 use App\Models\Package;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -102,6 +103,27 @@ class PackagesController extends Controller
             'per_user_limit' => $validated['package_per_user_limit'],
             'allow_cancellation' => $validated['package_allow_cancellation'],
             'status' => $validated['package_status'],
+        ]);
+
+        $currencies = Currency::select('code')->get();
+
+        $rates = [];
+
+        foreach ($currencies as $currency) {
+            $rates[$currency->code] = [
+                'currency' => $currency->code,
+                'price' => null,
+                'setup_fee' => null,
+                'enabled' => false,
+            ];
+        }
+
+        $package->prices()->create([
+            'name' => 'Free',
+            'type' => 'free',
+            'time_interval' => null,
+            'billing_period' => null,
+            'rates' => $rates,
         ]);
 
         return redirect()->route('admin.packages')->with('success', __('common.create_success', ['attribute' => $package->name]));
