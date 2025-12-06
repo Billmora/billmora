@@ -13,6 +13,17 @@ use Illuminate\Validation\Rule;
 
 class PricingController extends Controller
 {
+
+    /**
+     * Applies permission-based middleware for accessing packages pricing.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:packages.update')->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+    }
+
     /**
      * Display a listing of pricing options for a specific package.
      *
