@@ -119,7 +119,7 @@ class PackagesController extends Controller
         }
 
         $package->prices()->create([
-            'name' => 'Free',
+            'name' => 'Forever',
             'type' => 'free',
             'time_interval' => null,
             'billing_period' => null,
