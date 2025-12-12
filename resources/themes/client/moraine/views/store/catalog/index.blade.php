@@ -16,7 +16,7 @@
                     <p class="text-slate-500 line-clamp-3">{{ $package->description }}</p>
                 </div>
                 <a href="#" class="flex gap-2 items-center bg-billmora-primary text-white px-3 py-2 mx-auto rounded-lg hover:text-white transition-colors duration-300">
-                    Order Now
+                    {{ __('client/store.order_now') }}
                 </a>
             </div>
         </div>
