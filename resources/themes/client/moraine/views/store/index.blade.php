@@ -14,7 +14,7 @@
                     <h4 class="text-lg text-slate-600 font-semibold">{{ $catalog->name }}</h4>
                     <p class="text-slate-500 line-clamp-3">{{ $catalog->description }}</p>
                 </div>
-                <a href="#" class="flex items-center text-billmora-primary font-semibold text-end ml-auto hover:text-billmora-primary-hover transition">
+                <a href="{{ route('client.store.catalog', ['catalog' => $catalog->slug]) }}" class="flex items-center text-billmora-primary font-semibold text-end ml-auto hover:text-billmora-primary-hover transition">
                     {{ __('client/store.view_package') }}
                     <x-lucide-chevron-right class="w-5 h-auto" />
                 </a>
