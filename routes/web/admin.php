@@ -173,7 +173,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::get('/{id}/edit', [Settings\CurrencyController::class, 'edit'])->name('admin.settings.currencies.edit');
             Route::post('/{id}', [Settings\CurrencyController::class, 'update'])->name('admin.settings.currencies.update');
             Route::delete('/{id}', [Settings\CurrencyController::class, 'destroy'])->name('admin.settings.currencies.destroy');
-            Route::patch('/{id}/set-default', [Settings\CurrencyController::class, 'setDefault'])->name('admin.settings.currencies.set-default');
         });
     });
 

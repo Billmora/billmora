@@ -172,34 +172,4 @@ class CurrencyController extends Controller
                 'attribute' => $currency->code,
             ]));
     }
-
-    /**
-     * Set the specified currency as the default.
-     *
-     * Unsets any existing default currency before setting the new one.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     */
-    public function setDefault($id)
-    {
-        $currency = Currency::findOrFail($id);
-
-        Currency::where('is_default', true)->update(['is_default' => false]);
-
-        $oldCurrency = $currency->getOriginal();
-
-        $currency->update([
-            'base_rate' => 1,
-            'is_default' => true,
-        ]);
-
-        $this->recordUpdate('currency.update', $oldCurrency, $currency->getChanges());
-
-        return redirect()
-            ->route('admin.settings.currencies')
-            ->with('success', __('admin/settings/currency.currency_alert.set_default_success', ['code' => $currency->code]));
-    }
 }

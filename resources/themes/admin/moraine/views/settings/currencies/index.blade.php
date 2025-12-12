@@ -43,15 +43,6 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $currency->created_at }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                     @can('settings.currencies.update')
-                                        @if (!$currency->is_default)
-                                            <form action="{{ route('admin.settings.currencies.set-default', $currency->id) }}" method="POST" class="inline-flex">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit" class="inline-flex text-sm font-semibold text-blue-400 hover:text-blue-500 cursor-pointer">
-                                                    {{ __('admin/settings/currency.currency_action.set_default') }}
-                                                </button>
-                                            </form>
-                                        @endif
                                         <a href="{{ route('admin.settings.currencies.edit', ['id' => $currency->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                                             {{ __('common.edit') }}
                                         </a>
