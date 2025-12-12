@@ -304,13 +304,11 @@ class PricingController extends Controller
         if (!empty($validated['rates'])) {
             foreach ($validated['rates'] as $code => $data) {
 
-                if (!($data['enabled'] ?? true)) continue;
-
                 $rates[$code] = [
                     'currency' => $data['currency'],
-                    'price' => $data['price'],
-                    'setup_fee' => $data['setup_fee'],
-                    'enabled' => $data['enabled'] ?? true,
+                    'price' => $data['price'] ?? null,
+                    'setup_fee' => $data['setup_fee'] ?? null,
+                    'enabled' => (bool) ($data['enabled'] ?? false),
                 ];
             }
         }
