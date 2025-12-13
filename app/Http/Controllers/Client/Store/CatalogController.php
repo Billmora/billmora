@@ -22,8 +22,20 @@ class CatalogController extends Controller
     {
         $catalog = Catalog::where('slug', $catalogSlug)->firstOrFail();
 
-        $packages = $catalog->packages()->get();
+        $packages = $catalog->packages()
+            ->with('prices')
+            ->get();
 
-        return view('client::store.catalog.index', compact('packages'));
+        foreach ($packages as $package) {
+            $package->primaryPrice = $package->prices
+                ->sortBy('id')
+                ->first();
+        }
+
+        $catalogs = Catalog::select('id', 'name', 'slug', 'description', 'icon', 'status')
+            ->where('status', 'visible')
+            ->get();
+
+        return view('client::store.catalog.index', compact('packages', 'catalogs'));
     }
 }

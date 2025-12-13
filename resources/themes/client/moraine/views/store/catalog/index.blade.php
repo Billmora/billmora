@@ -11,9 +11,23 @@
                     <img src="{{ Storage::url($package->icon) }}" alt="package icon" class="max-w-48 h-auto mx-auto object-cover rounded-lg">
                 @endif
                 <div class="space-y-2 text-center">
-                    <h4 class="text-2xl text-slate-600 font-semibold">{{ $package->name }}</h4>
-                    <span>{{ $package->prices()->orderBy('id')->first()->name }}</span>
-                    <p class="text-slate-500 line-clamp-3">{{ $package->description }}</p>
+                    <h4 class="text-xl text-billmora-primary font-semibold">{{ $package->name }}</h4>
+                    @if ($package->primaryPrice->type === 'free')
+                        <div class="grid">
+                            <span class="text-xl text-slate-500 font-semibold">Free</span>
+                            <span class="text-sm text-slate-400 font-semibold">{{ $package->primaryPrice->name }}</span>
+                        </div>
+                    @else
+                        <div class="grid">
+                            <span class="text-xl text-slate-500 font-semibold">
+                                {{ Currency::format($package->primaryPrice->rates['USD']['price'] ?? 0) }}
+                            </span>
+                            <span class="text-sm text-slate-400 font-semibold">
+                                {{ $package->primaryPrice->name }}
+                            </span>
+                        </div>
+                    @endif
+                    <p class="text-slate-500">{!! $package->description !!}</p>
                 </div>
                 <a href="#" class="flex gap-2 items-center bg-billmora-primary text-white px-3 py-2 mx-auto rounded-lg hover:text-white transition-colors duration-300">
                     {{ __('client/store.order_now') }}
