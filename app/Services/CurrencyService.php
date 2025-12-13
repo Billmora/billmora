@@ -40,7 +40,7 @@ class CurrencyService
 
         $number = $this->formatNumber($amount, $currency->format);
 
-        return trim("{$currency->prefix} {$number} {$currency->suffix}");
+        return trim("{$currency->prefix}{$number} {$currency->suffix}");
     }
 
     /**
