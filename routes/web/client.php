@@ -14,6 +14,7 @@ Route::group(['middleware' => ['auth', 'maintenance', '2fa']], function () {
     Route::group(['prefix' => 'store'], function () {
         Route::get('/', [Client\StoreController::class, 'index'])->name('client.store');
         Route::get('/{catalog:slug}', [Client\Store\CatalogController::class, 'index'])->name('client.store.catalog');
+        Route::get('/{catalog:slug}/{package:slug}', [Client\Store\PackageController::class, 'show'])->name('client.store.catalog.package');
     });
 
     /**

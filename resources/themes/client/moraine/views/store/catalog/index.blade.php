@@ -29,7 +29,7 @@
                     @endif
                     <p class="text-slate-500">{!! $package->description !!}</p>
                 </div>
-                <a href="#" class="flex gap-2 items-center bg-billmora-primary text-white px-3 py-2 mx-auto rounded-lg hover:text-white transition-colors duration-300">
+                <a href="{{ route('client.store.catalog.package', ['catalog' => $package->catalog->slug, 'package' => $package->slug]) }}" class="flex gap-2 items-center bg-billmora-primary text-white px-3 py-2 mx-auto rounded-lg hover:text-white transition-colors duration-300">
                     {{ __('client/store.order_now') }}
                 </a>
             </div>
