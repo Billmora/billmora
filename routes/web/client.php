@@ -11,12 +11,6 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth', 'maintenance', '2fa']], function () {
     Route::get('/dashboard', [Client\DashboardController::class, 'index'])->name('client.dashboard');
 
-    Route::group(['prefix' => 'store'], function () {
-        Route::get('/', [Client\StoreController::class, 'index'])->name('client.store');
-        Route::get('/{catalog:slug}', [Client\Store\CatalogController::class, 'index'])->name('client.store.catalog');
-        Route::get('/{catalog:slug}/{package:slug}', [Client\Store\PackageController::class, 'show'])->name('client.store.catalog.package');
-    });
-
     /**
      * Client account routes.
      * 
@@ -30,6 +24,17 @@ Route::group(['middleware' => ['auth', 'maintenance', '2fa']], function () {
         Route::put('/security/email', [Account\SecurityController::class, 'updateEmail'])->name('client.account.security.email.update');
         Route::put('/security/password', [Account\SecurityController::class, 'updatePassword'])->name('client.account.security.password.update');
     });
+});
+
+/**
+ * Client store routes.
+ * 
+ * Prefix: /store
+ */
+Route::group(['prefix' => 'store', 'middleware' => ['maintenance']], function () {
+    Route::get('/', [Client\StoreController::class, 'index'])->name('client.store');
+    Route::get('/{catalog:slug}', [Client\Store\CatalogController::class, 'index'])->name('client.store.catalog');
+    Route::get('/{catalog:slug}/{package:slug}', [Client\Store\PackageController::class, 'show'])->name('client.store.catalog.package');
 });
 
 /**
