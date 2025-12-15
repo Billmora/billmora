@@ -11,5 +11,7 @@ return [
         'setup_fee' => 'Setup Fee',
         'due_today' => 'Total Due Today',
         'checkout' => 'Checkout',
-    ]
+    ],
+
+    'pricing_na_currency' => 'Not available in selected currency.',
 ];
