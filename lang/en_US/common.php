@@ -11,6 +11,9 @@ return [
     'sign_up' => 'Sign Up',
     'sign_out' => 'Sign Out',
 
+    'login' => 'Login',
+    'register' => 'Register',
+
     'symbol_required' => '*',
     'symbol_optional' => '(optional)',
     'choose_option' => 'Choose an options',
