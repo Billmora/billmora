@@ -4,15 +4,6 @@
 
 @section('body')
 <div class="grid gap-5">
-    @if (session('success'))
-        <x-client::alert variant="success">{{ session('success') }}</x-client::alert>
-    @endif
-    @if (session('warning'))
-        <x-client::alert variant="warning">{{ session('warning') }}</x-client::alert>
-    @endif
-    @if (session('error'))
-        <x-client::alert variant="danger">{{ session('error') }}</x-client::alert>
-    @endif
     <div class="flex flex-col lg:flex-row gap-5">
         <div class="w-full lg:w-1/4 h-fit flex flex-col gap-6 items-center bg-white p-8 text-center border-2 border-billmora-2 rounded-xl">
             <img src="{{ $user->avatar }}?s=128" alt="user avatar" class="rounded-full w-32 h-auto">

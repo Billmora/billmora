@@ -13,13 +13,13 @@
             <div class="max-w-170 h-full flex flex-col justify-between mx-auto">
                 <div class="flex flex-col gap-6 my-auto">
                     @if (session('success'))
-                        <x-client::alert variant="success">{{ session('success') }}</x-client::alert>
+                        <x-client::alert variant="success" title="{{ session('success') }}" />
                     @endif
                     @if (session('warning'))
-                        <x-client::alert variant="warning">{{ session('warning') }}</x-client::alert>
+                        <x-client::alert variant="warning" title="{{ session('warning') }}" />
                     @endif
                     @if (session('error'))
-                        <x-client::alert variant="danger">{{ session('error') }}</x-client::alert>
+                        <x-client::alert variant="danger" title="{{ session('error') }}" />
                     @endif
                     <form action="{{ route('client.two-factor.setup.store') }}" method="POST" class="flex flex-col gap-4 bg-white w-full p-8 rounded-xl border-2 border-billmora-2">
                       @csrf

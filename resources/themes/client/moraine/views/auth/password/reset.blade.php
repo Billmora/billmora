@@ -18,7 +18,7 @@
                 </a>
                 <div class="grid gap-6 my-auto">
                     @if (session('error'))
-                        <x-client::alert variant="danger">{{ session('error') }}</x-client::alert>
+                        <x-client::alert variant="danger" title="{{ session('error') }}" />
                     @endif
                     <input type="hidden" name="reset_token" value="{{ $token }}">
                     <h3 class="font-semibold text-2xl text-slate-700">{{ __('auth.page.reset_password') }}</h3>

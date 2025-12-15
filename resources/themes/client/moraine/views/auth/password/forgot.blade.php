@@ -18,10 +18,10 @@
                 </a>
                 <div class="grid gap-6 my-auto">
                     @if (session('success'))
-                        <x-client::alert variant="success">{{ session('success') }}</x-client::alert>
+                        <x-client::alert variant="success" title="{{ session('success') }}" />
                     @endif
                     @if (session('warning'))
-                        <x-client::alert variant="warning">{{ session('warning') }}</x-client::alert>
+                        <x-client::alert variant="warning" title="{{ session('warning') }}" />
                     @endif
                     <h3 class="font-semibold text-2xl text-slate-700">{{ __('auth.page.forgot_password') }}</h3>
                     <div class="grid gap-3">
