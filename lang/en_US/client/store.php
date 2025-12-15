@@ -4,6 +4,7 @@ return [
     'view_package' => 'View Package',
     
     'order_now' => 'Order Now',
+    'order_unavailable' => 'Order Unavailable',
 
     'package' => [
         'billing_cycle' => 'Choose billing cycle',
@@ -13,5 +14,5 @@ return [
         'checkout' => 'Checkout',
     ],
 
-    'pricing_na_currency' => 'Not available in selected currency.',
+    'unavailable_currency' => 'Unavailable in this currency.',
 ];

@@ -33,7 +33,7 @@ class CurrencyService
     public function format(float|int|string|null $amount, ?string $currencyCode = null): string
     {
         if ($amount === null) {
-            return __('client/store.pricing_na_currency');
+            return __('client/store.unavailable_currency');
         }
 
         $currency = $currencyCode
