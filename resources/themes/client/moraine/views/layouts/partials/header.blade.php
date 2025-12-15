@@ -8,7 +8,7 @@
   <div class="relative w-fit ml-auto"
       x-data="{ isOpen: false, openedWithKeyboard: false }">
     {{-- Language Toggle Button --}}
-    <button type="button" class="flex gap-2 items-center bg-billmora-1 hover:bg-billmora-primary p-2 rounded-lg transition-colors duration-300 group cursor-pointer"
+    <button type="button" class="flex gap-2 items-center bg-billmora-1 hover:bg-billmora-primary px-3 py-2 rounded-lg transition-colors duration-300 group cursor-pointer"
         x-on:click="isOpen = ! isOpen" 
         aria-haspopup="true">
       <x-dynamic-component component="flag-country-{{ strtolower($langActive['country']) }}" class="w-auto h-5 pointer-events-none" />
@@ -28,54 +28,64 @@
       @endforeach
     </div>
   </div>
-
-  <!-- Profile -->
-  <div class="relative w-fit flex items-center"
-      x-data="{ isOpen: false, openedWithKeyboard: false }">
-    <!-- Toggle Button -->
-    <button type="button" class="cursor-pointer ml-4"
-        x-on:click="isOpen = ! isOpen" 
-        aria-haspopup="true">
-      <img src="{{ auth()->user()->avatar }}" alt="user profile" class="w-10 h-10 rounded-full">
-    </button>
-    <!-- Dropdown Menu -->
-    <div class="absolute top-16 right-0 flex w-[300px] flex-col gap-2 bg-white p-4 border-2 border-billmora-2 rounded-2xl" role="menu"
-        x-cloak x-show="isOpen || openedWithKeyboard"
-        x-transition
-        x-on:click.outside="isOpen = false, openedWithKeyboard = false">
-      {{-- Dropdown Content --}}
-      <div class="flex flex-col">
-        <span class="text-xl text-slate-600 font-bold">{{ auth()->user()->fullname }}</span>
-        <span class="text-md text-slate-500 font-semibold">{{ auth()->user()->email }}</span>
-      </div>
-      <hr class="border-t-2 border-billmora-2 my-2">
-      <a href="{{ route('client.account.settings') }}" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
-        <x-lucide-circle-user-round class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('common.account_settings') }}</span>
-      </a>
-      <a href="{{ route('client.account.security') }}" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
-        <x-lucide-fingerprint class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('common.account_security') }}</span>
-      </a>
-      <hr class="border-t-2 border-billmora-2 my-2">
-      <a href="#" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
-        <x-lucide-layers-2 class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('common.page.portal') }}</span>
-      </a>
-      @if (auth()->user()->isAdmin())
-        <a href="{{ route('admin.dashboard') }}" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
-          <x-lucide-shield class="w-5 h-auto" />
-          <span class="font-semibold">{{ __('common.page.admin') }}</span>
+  @auth
+    <!-- Profile -->
+    <div class="relative w-fit flex items-center"
+        x-data="{ isOpen: false, openedWithKeyboard: false }">
+      <!-- Toggle Button -->
+      <button type="button" class="cursor-pointer ml-4"
+          x-on:click="isOpen = ! isOpen" 
+          aria-haspopup="true">
+        <img src="{{ auth()->user()->avatar }}" alt="user profile" class="w-10 h-10 rounded-full">
+      </button>
+      <!-- Dropdown Menu -->
+      <div class="absolute top-16 right-0 flex w-[300px] flex-col gap-2 bg-white p-4 border-2 border-billmora-2 rounded-2xl" role="menu"
+          x-cloak x-show="isOpen || openedWithKeyboard"
+          x-transition
+          x-on:click.outside="isOpen = false, openedWithKeyboard = false">
+        {{-- Dropdown Content --}}
+        <div class="flex flex-col">
+          <span class="text-xl text-slate-600 font-bold">{{ auth()->user()->fullname }}</span>
+          <span class="text-md text-slate-500 font-semibold">{{ auth()->user()->email }}</span>
+        </div>
+        <hr class="border-t-2 border-billmora-2 my-2">
+        <a href="{{ route('client.account.settings') }}" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
+          <x-lucide-circle-user-round class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('common.account_settings') }}</span>
         </a>
-      @endif
-      <hr class="border-t-2 border-billmora-2 my-2">
-      <form action="{{ route('client.logout.store') }}" method="POST">
-        @csrf
-        <button class="w-full flex gap-2 items-center hover:bg-red-400 px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300 cursor-pointer" role="menuitem">
-          <x-lucide-log-out class="w-5 h-auto" />
-          <span class="font-semibold">{{ __('common.sign_out') }}</span>
-        </button>
-      </form>
+        <a href="{{ route('client.account.security') }}" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
+          <x-lucide-fingerprint class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('common.account_security') }}</span>
+        </a>
+        <hr class="border-t-2 border-billmora-2 my-2">
+        <a href="#" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
+          <x-lucide-layers-2 class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('common.page.portal') }}</span>
+        </a>
+        @if (auth()->user()->isAdmin())
+          <a href="{{ route('admin.dashboard') }}" class="flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300" role="menuitem">
+            <x-lucide-shield class="w-5 h-auto" />
+            <span class="font-semibold">{{ __('common.page.admin') }}</span>
+          </a>
+        @endif
+        <hr class="border-t-2 border-billmora-2 my-2">
+        <form action="{{ route('client.logout.store') }}" method="POST">
+          @csrf
+          <button class="w-full flex gap-2 items-center hover:bg-red-400 px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300 cursor-pointer" role="menuitem">
+            <x-lucide-log-out class="w-5 h-auto" />
+            <span class="font-semibold">{{ __('common.sign_out') }}</span>
+          </button>
+        </form>
+      </div>
     </div>
-</div>
+  @else
+    <div class="hidden sm:flex gap-4 ml-4">
+      <a href="{{ route('client.login') }}" class="flex gap-1 items-center bg-billmora-2 hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white not-hover:font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+          {{ __('common.login') }}
+      </a>
+      <a href="{{ route('client.register') }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+          {{ __('common.register') }}
+      </a>
+    </div>
+  @endauth
 </header>

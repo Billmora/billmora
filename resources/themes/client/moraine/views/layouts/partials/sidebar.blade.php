@@ -21,6 +21,16 @@
       </a>
       {{-- <span class="mt-4 block text-slate-600 font-semibold text-md">{{ __('client/navigation.group.system') }}</span> --}}
     </div>
+    @guest
+      <div class="grid sm:hidden grid-cols-2 gap-4 mt-auto pt-4">
+        <a href="{{ route('client.login') }}" class="flex justify-center gap-1 bg-billmora-2 hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white not-hover:font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+            {{ __('common.login') }}
+        </a>
+        <a href="{{ route('client.register') }}" class="flex justify-center gap-1 bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+            {{ __('common.register') }}
+        </a>
+      </div>
+    @endguest
   </div>
 </nav>
 <!-- Backdrop -->
