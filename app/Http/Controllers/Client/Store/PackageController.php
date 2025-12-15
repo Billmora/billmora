@@ -26,17 +26,27 @@ class PackageController extends Controller
 
         $package = Package::where('slug', $packageSlug)
             ->where('catalog_id', $catalog->id)
+            ->with('prices')
             ->firstOrFail();
 
         $currencyCode = Session::get('currency');
-        $price = $package->primaryPrice;
 
-        $rate = $price->rates[$currencyCode] ?? null;
+        $prices = $package->prices->filter(function ($price) use ($currencyCode) {
+            if ($price->type === 'free') {
+                return true;
+            }
 
-        if ($price->type !== 'free' && (! $rate || ($rate['enabled'] ?? false) !== true || ($rate['price'] ?? null) === null)) {
+            $rate = $price->rates[$currencyCode] ?? null;
+
+            return $rate
+                && ($rate['enabled'] ?? false) === true
+                && ($rate['price'] ?? null) !== null;
+        })->values();
+
+        if ($prices->isEmpty()) {
             return back()->with('error', __('client/store.unavailable_currency'));
         }
 
-        return view('client::store.catalog.package.show', compact('package'));
+        return view('client::store.catalog.package.show', compact('package', 'prices'));
     }
 }

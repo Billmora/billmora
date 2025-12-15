@@ -14,7 +14,7 @@
         </div>
         <span class="text-xl text-slate-600 font-semibold">{{ __('client/store.package.billing_cycle') }}</span>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            @foreach ($package->prices as $price)
+            @foreach ($prices as $price)
                 <label class="group relative cursor-pointer">
                     <input
                         type="radio"
@@ -41,7 +41,7 @@
                                     @if ($price->type === 'free')
                                         Free
                                     @else
-                                        {{ Currency::format($price->rates['USD']['price'] ?? 0) }}
+                                        {{ Currency::format($price->rates[$currencyActive['code']]['price']) }}
                                     @endif
                                 </span>
                             </div>
