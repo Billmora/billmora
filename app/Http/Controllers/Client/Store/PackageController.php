@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Catalog;
 use App\Models\Package;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class PackageController extends Controller
 {
@@ -22,7 +23,19 @@ class PackageController extends Controller
     public function show($catalogSlug, $packageSlug)
     {
         $catalog = Catalog::where('slug', $catalogSlug)->firstOrFail();
-        $package = Package::where('slug', $packageSlug)->firstOrFail();
+
+        $package = Package::where('slug', $packageSlug)
+            ->where('catalog_id', $catalog->id)
+            ->firstOrFail();
+
+        $currencyCode = Session::get('currency');
+        $price = $package->primaryPrice;
+
+        $rate = $price->rates[$currencyCode] ?? null;
+
+        if ($price->type !== 'free' && (! $rate || ($rate['enabled'] ?? false) !== true || ($rate['price'] ?? null) === null)) {
+            return back()->with('error', __('client/store.unavailable_currency'));
+        }
 
         return view('client::store.catalog.package.show', compact('package'));
     }
