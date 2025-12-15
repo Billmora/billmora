@@ -20,7 +20,7 @@
                     @else
                         <div class="grid">
                             <span class="text-xl text-slate-500 font-semibold">
-                                {{ Currency::format($package->primaryPrice->rates['USD']['price'] ?? 0) }}
+                                {{ Currency::format($package->primaryPrice->rates[$currencyActive['code']]['price'], $currencyActive['code']) }}
                             </span>
                             <span class="text-sm text-slate-400 font-semibold">
                                 {{ $package->primaryPrice->name }}
@@ -29,9 +29,18 @@
                     @endif
                     <p class="text-slate-500">{!! $package->description !!}</p>
                 </div>
-                <a href="{{ route('client.store.catalog.package', ['catalog' => $package->catalog->slug, 'package' => $package->slug]) }}" class="flex gap-2 items-center bg-billmora-primary text-white px-3 py-2 mx-auto rounded-lg hover:text-white transition-colors duration-300">
-                    {{ __('client/store.order_now') }}
-                </a>
+                @if ($package->primaryPrice->type === 'free' || $package->primaryPrice->rates[$currencyActive['code']]['price'])
+                    <a 
+                        href="{{ route('client.store.catalog.package', ['catalog' => $package->catalog->slug, 'package' => $package->slug]) }}"
+                        class="flex gap-2 items-center bg-billmora-primary text-white px-3 py-2 mx-auto rounded-lg hover:text-white transition-colors duration-300"
+                    >
+                        {{ __('client/store.order_now') }}
+                    </a>
+                @else
+                    <span class="flex gap-2 items-center bg-billmora-6 text-white px-3 py-2 mx-auto rounded-lg cursor-not-allowed">
+                        {{ __('client/store.order_unavailable') }}
+                    </span>
+                @endif
             </div>
         </div>
     @endforeach
