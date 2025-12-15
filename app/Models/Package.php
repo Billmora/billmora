@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class Package extends Model
@@ -45,5 +46,15 @@ class Package extends Model
     public function prices()
     {
         return $this->hasMany(PackagePrice::class);
+    }
+
+    /**
+     * Get the primary (default) price for the package.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function primaryPrice(): Attribute
+    {
+        return Attribute::make(fn () => $this->prices->sortBy('id')->first());
     }
 }
