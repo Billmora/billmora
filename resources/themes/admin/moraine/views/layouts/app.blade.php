@@ -17,13 +17,13 @@
 
       {{-- Alert --}}
       @if (session('success'))
-        <x-client::alert variant="success" title="{{ session('success') }}" />
+        <x-admin::alert variant="success" title="{{ session('success') }}" />
       @endif
       @if (session('warning'))
-          <x-client::alert variant="warning" title="{{ session('warning') }}" />
+          <x-admin::alert variant="warning" title="{{ session('warning') }}" />
       @endif
       @if (session('error'))
-          <x-client::alert variant="danger" title="{{ session('error') }}" />
+          <x-admin::alert variant="danger" title="{{ session('error') }}" />
       @endif
       <!-- Content -->
       <main>
