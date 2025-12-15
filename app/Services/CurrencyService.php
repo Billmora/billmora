@@ -26,12 +26,16 @@ class CurrencyService
     /**
      * Format an amount into the specified or default currency format.
      *
-     * @param  float|int|string  $amount   The numeric amount to format
+     * @param  float|int|string|null  $amount   The numeric amount to format
      * @param  string|null       $currencyCode Optional currency code to override default
      * @return string            The formatted currency string
      */
-    public function format(float|int|string $amount, ?string $currencyCode = null): string
+    public function format(float|int|string|null $amount, ?string $currencyCode = null): string
     {
+        if ($amount === null) {
+            return __('client/store.pricing_na_currency');
+        }
+
         $currency = $currencyCode
             ? Currency::where('code', $currencyCode)->first()
             : $this->default;
