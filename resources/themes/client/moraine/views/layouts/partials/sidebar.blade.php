@@ -11,10 +11,12 @@
     <hr class="border-t-2 border-billmora-2 my-7">
     <div class="space-y-2 overflow-y-auto" id="sidemenu">
       {{-- Sidebar content --}}
-      <a href="{{ route('client.dashboard') }}" class="flex gap-2 items-center {{ request()->routeIs('client.dashboard') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
-        <x-lucide-layout-grid class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('client/navigation.dashboard') }}</span>
-      </a>
+      @auth
+        <a href="{{ route('client.dashboard') }}" class="flex gap-2 items-center {{ request()->routeIs('client.dashboard') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-layout-grid class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('client/navigation.dashboard') }}</span>
+        </a>
+      @endauth
       <a href="{{ route('client.store') }}" class="flex gap-2 items-center {{ request()->routeIs('client.store*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
         <x-lucide-store class="w-5 h-auto" />
         <span class="font-semibold">{{ __('client/navigation.store') }}</span>
