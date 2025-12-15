@@ -20,7 +20,7 @@
                     @else
                         <div class="grid">
                             <span class="text-xl text-slate-500 font-semibold">
-                                {{ Currency::format($package->primaryPrice->rates[$currencyActive['code']]['price'], $currencyActive['code']) }}
+                                {{ Currency::format($package->primaryPrice->rates[$currencyActive['code']]['price']) }}
                             </span>
                             <span class="text-sm text-slate-400 font-semibold">
                                 {{ $package->primaryPrice->name }}
