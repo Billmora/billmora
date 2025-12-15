@@ -82,5 +82,7 @@ class PreferenceMiddleware
             'currencies' => $currencies,
             'currencyActive' => $currency,
         ]);
+
+        App::instance(Currency::class, $currency);
     }
 }

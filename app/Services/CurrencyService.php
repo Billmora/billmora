@@ -3,44 +3,24 @@
 namespace App\Services;
 
 use App\Models\Currency;
+use Illuminate\Support\Facades\App;
 
 class CurrencyService
 {
-    /**
-     * The default currency model instance.
-     *
-     * @var \App\Models\Currency
-     */
-    protected Currency $default;
 
     /**
-     * Initialize the service and fetch the default currency.
+     * Format an amount using the active currency.
      *
-     * @return void
+     * @param float|int|string|null $amount
+     * @return string
      */
-    public function __construct()
-    {
-        $this->default = Currency::where('is_default', true)->first();
-    }
-
-    /**
-     * Format an amount into the specified or default currency format.
-     *
-     * @param  float|int|string|null  $amount   The numeric amount to format
-     * @param  string|null       $currencyCode Optional currency code to override default
-     * @return string            The formatted currency string
-     */
-    public function format(float|int|string|null $amount, ?string $currencyCode = null): string
+    public function format(float|int|string|null $amount): string
     {
         if ($amount === null) {
             return __('client/store.unavailable_currency');
         }
 
-        $currency = $currencyCode
-            ? Currency::where('code', $currencyCode)->first()
-            : $this->default;
-
-        $currency ??= $this->default;
+        $currency = $this->currency();
 
         $number = $this->formatNumber($amount, $currency->format);
 
@@ -48,61 +28,35 @@ class CurrencyService
     }
 
     /**
-     * Format a number based on the given number format.
+     * Resolve the active currency instance.
      *
-     * @param  float|int|string  $amount  The raw amount to be formatted
-     * @param  string            $format  The number formatting style
-     * @return string             The formatted number
+     * @return \App\Models\Currency
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    protected function currency(): Currency
+    {
+        if (App::bound(Currency::class)) {
+            return App::make(Currency::class);
+        }
+
+        return Currency::where('is_default', true)->firstOrFail();
+    }
+
+    /**
+     * Format a numeric amount based on the given currency format.
+     *
+     * @param float|int|string $amount
+     * @param string $format
+     * @return string
      */
     protected function formatNumber(float|int|string $amount, string $format): string
     {
-        return match($format) {
+        return match ($format) {
             '1,234.56' => number_format($amount, 2, '.', ','),
             '1.234,56' => number_format($amount, 2, ',', '.'),
             '1,234' => number_format($amount, 0, '.', ','),
             default => number_format($amount, 2, '.', ''),
         };
-    }
-
-    /**
-     * Get the prefix of the specified currency or default currency.
-     *
-     * @param  string|null  $currencyCode  Currency code, optional
-     * @return string|null  The prefix string
-     */
-    public function getPrefix(?string $currencyCode = null): ?string
-    {
-        if ($currencyCode) {
-            return Currency::where('code', $currencyCode)->value('prefix')
-                ?? $this->default->prefix;
-        }
-
-        return $this->default->prefix;
-    }
-
-    /**
-     * Get the suffix of the specified currency or default currency.
-     *
-     * @param  string|null  $currencyCode  Currency code, optional
-     * @return string|null  The suffix string
-     */
-    public function getSuffix(?string $currencyCode = null): ?string
-    {
-        if ($currencyCode) {
-            return Currency::where('code', $currencyCode)->value('suffix')
-                ?? $this->default->suffix;
-        }
-
-        return $this->default->suffix;
-    }
-
-    /**
-     * Get the default currency model.
-     *
-     * @return \App\Models\Currency
-     */
-    public function default(): Currency
-    {
-        return $this->default;
     }
 }
