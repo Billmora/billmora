@@ -21,30 +21,12 @@
     <x-lucide-search class="w-auto h-5 pointer-events-none" />
   </button>
 
-  <!-- Language -->
-  <div class="relative w-fit"
-      x-data="{ isOpen: false, openedWithKeyboard: false }">
-    {{-- Language Toggle Button --}}
-    <button type="button" class="flex gap-2 items-center bg-billmora-1 hover:bg-billmora-primary p-2 rounded-lg transition-colors duration-300 group cursor-pointer"
-        x-on:click="isOpen = ! isOpen" 
-        aria-haspopup="true">
-      <x-dynamic-component component="flag-country-{{ strtolower($langActive['country']) }}" class="w-auto h-5 pointer-events-none" />
-      <span class="font-semibold text-slate-600 group-hover:text-white">{{ $langActive['name'] }}</span>
-    </button>
-    {{-- Language Dropdown Menu --}}
-    <div class="absolute top-16 right-0 flex w-[300px] max-h-[500px] flex-col gap-2 bg-white p-4 border-2 border-billmora-2 rounded-2xl overflow-y-auto " role="menu"
-        x-cloak x-show="isOpen || openedWithKeyboard"
-        x-transition
-        x-on:click.outside="isOpen = false, openedWithKeyboard = false">
-      {{-- Language Dropdown Content --}}
-      @foreach ($langs as $lang)
-        <a href="{{ route('common.language.update', ['lang' => $lang['lang']]) }}" class="w-full flex gap-2 items-center hover:bg-billmora-primary px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300 cursor-pointer">
-          <x-dynamic-component component="flag-country-{{ strtolower($lang['country']) }}" class="w-auto h-5 pointer-events-none" />
-          <span class="font-semibold">{{ $lang['name'] }}</span>
-        </a>
-      @endforeach
-    </div>
-  </div>
+  {{-- Toggle Preferences --}}
+  <x-client::modal.trigger modal="preferenceModal" class="flex gap-3 items-center bg-billmora-2 hover:bg-billmora-primary px-3 py-2 ml-auto text-billmora-primary hover:text-white font-semibold rounded-lg transition-colors duration-300 group cursor-pointer">
+    <x-dynamic-component component="flag-country-{{ strtolower($langActive['country']) }}" class="w-auto h-5 pointer-events-none" />
+    <div class="w-1 h-5 bg-billmora-3"></div>
+    <span>{{ $currencyActive['code'] }}</span>
+  </x-client::modal.trigger>
 
   <!-- Profile -->
   <div class="relative w-fit flex items-center"
@@ -100,3 +82,31 @@
     </div>
   </div>
 </header>
+<x-client::modal.content 
+  modal="preferenceModal"
+  title="{{ __('preference.title') }}"
+  description="{{ __('preference.description') }}"
+>
+  <form action="{{ route('common.preference.update') }}" method="POST" class="space-y-4">
+    @csrf
+    <x-client::select name="language" label="{{ __('preference.language') }}" required>
+      @foreach ($langs as $lang)
+        <option value="{{ $lang['lang'] }}" @if ($lang['lang'] === app()->getLocale()) selected @endif>
+          {{ $lang['name'] }}
+        </option>
+      @endforeach
+    </x-client::select>
+    <x-client::select name="currency" label="{{ __('preference.currency') }}" required>
+      @foreach ($currencies as $currency)
+          <option value="{{ $currency->code }}"
+              @selected($currency->code === $currencyActive?->code)>
+              {{ $currency->code }}
+          </option>
+      @endforeach
+    </x-client::select>
+    <div class="flex justify-end gap-2 pt-4">
+      <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+      <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.save') }}</button>
+    </div>
+  </form>
+</x-client::modal.content>
