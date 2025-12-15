@@ -96,7 +96,7 @@ class MailerController extends Controller
 
             return redirect()->back()->with('success', __('common.send_success', ['attribute' => __('admin/settings/mail.mailer_test_label')]));
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('failed', $e->getMessage());
         }
     }
 }

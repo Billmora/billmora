@@ -6,9 +6,9 @@
     <form action="{{ route('admin.settings.mail.mailer.update') }}" method="POST" class="flex flex-col gap-5">
         @csrf
         @method('PUT')
-        @if (session('error'))
+        @if (session('failed'))
             <x-admin::alert variant="danger" title="{{ __('common.send_failed', ['attribute' =>  __('admin/settings/mail.mailer_test_label')]) }}">
-                {{ session('error') }}
+                {{ session('failed') }}
             </x-admin::alert>
         @endif
         <x-admin::tabs 
