@@ -23,7 +23,7 @@ class CatalogController extends Controller
         $catalog = Catalog::where('slug', $catalogSlug)->firstOrFail();
 
         $packages = $catalog->packages()
-            ->with('prices')
+            ->with(['prices', 'catalog'])
             ->get();
 
         $catalogs = Catalog::select('id', 'name', 'slug', 'description', 'icon', 'status')
