@@ -26,12 +26,6 @@ class CatalogController extends Controller
             ->with('prices')
             ->get();
 
-        foreach ($packages as $package) {
-            $package->primaryPrice = $package->prices
-                ->sortBy('id')
-                ->first();
-        }
-
         $catalogs = Catalog::select('id', 'name', 'slug', 'description', 'icon', 'status')
             ->where('status', 'visible')
             ->get();
