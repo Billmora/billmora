@@ -5,9 +5,6 @@
 @section('body')
 <form action="{{ route('admin.settings.mail.broadcast.store') }}" method="POST" class="flex flex-col gap-5">
     @csrf
-    @if (session('success'))
-        <x-admin::alert variant="success" title="{{ session('success') }}" />
-    @endif
     <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <x-admin::input type="text" name="broadcast_subject" label="{{ __('admin/settings/mail.broadcast_subject_label') }}" helper="{{ __('admin/settings/mail.broadcast_subject_helper') }}" value="{{ old('broadcast_subject') }}" required />
         <x-admin::editor.text name="broadcast_body" label="{{ __('admin/settings/mail.broadcast_body_label') }}" helper="{{ __('admin/settings/mail.broadcast_body_helper') }}" required>{{ old('broadcast_body') }}</x-admin::editor.text>

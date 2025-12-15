@@ -4,9 +4,6 @@
 
 @section('body')
 <div class="flex flex-col gap-5">
-    @if (session('success'))
-        <x-admin::alert variant="success" title="{{ session('success') }}" />
-    @endif
     <div class="flex flex-col gap-4">
         <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
             <div class="w-full md:w-100">

@@ -4,12 +4,6 @@
 
 @section('body')
 <div class="flex flex-col gap-5">
-    @if (session('success'))
-        <x-admin::alert variant="success" title="{{ session('success') }}" />
-    @endif
-    @if (session('error'))
-        <x-admin::alert variant="danger" title="{{ session('error') }}" />
-    @endif
     <form action="{{ route('admin.users.store') }}" method="POST" class="flex flex-col gap-5">
         @csrf
         <div class="flex flex-col lg:flex-row gap-5">

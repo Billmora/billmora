@@ -4,9 +4,6 @@
 
 @section('body')
 <div class="flex flex-col gap-5">
-    @if (session('success'))
-        <x-admin::alert variant="success" title="{{ session('success') }}" />
-    @endif
     <x-admin::tabs 
         :tabs="[
             [

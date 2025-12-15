@@ -5,9 +5,6 @@
 @section('body')
 <form action="{{ route('admin.settings.currencies.update', ['id' => $currency->id]) }}" method="POST" class="flex flex-col gap-5">
     @csrf
-    @if (session('success'))
-        <x-admin::alert variant="success" title="{{ session('success') }}" />
-    @endif
     <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-3 gap-4">
             <x-admin::input type="text" name="currency_code" label="{{ __('admin/settings/currency.currency_code_label') }}" helper="{{ __('admin/settings/currency.currency_code_helper') }}" value="{{ old('currency_code', $currency->code) }}" required />
