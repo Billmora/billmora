@@ -7,7 +7,7 @@ return [
     'order_unavailable' => 'Order Unavailable',
 
     'package' => [
-        'billing_cycle' => 'Choose billing cycle',
+        'billing_cycle' => 'Billing cycle',
         'order_summary' => 'Order Summary',
         'setup_fee' => 'Setup Fee',
         'due_today' => 'Total Due Today',
