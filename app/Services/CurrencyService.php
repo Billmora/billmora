@@ -52,6 +52,8 @@ class CurrencyService
      */
     protected function formatNumber(float|int|string $amount, string $format): string
     {
+        $amount = (float) $amount;
+        
         return match ($format) {
             '1,234.56' => number_format($amount, 2, '.', ','),
             '1.234,56' => number_format($amount, 2, ',', '.'),
