@@ -44,7 +44,7 @@ class PackageController extends Controller
         })->values();
 
         if ($prices->isEmpty()) {
-            return back()->with('error', __('client/store.unavailable_currency'));
+            return redirect()->route('client.store.catalog', ['catalog' => $catalog->slug])->with('error', __('client/store.unavailable_currency'));
         }
 
         return view('client::store.catalog.package.show', compact('package', 'prices'));
