@@ -131,10 +131,14 @@ function orderSummary() {
         totalFormatted: '{{ $prices->first()->type === "free" ? "Free" : Currency::format(($prices->first()->rates[$currencyActive["code"]]["price"] ?? 0) + ($prices->first()->rates[$currencyActive["code"]]["setup_fee"] ?? 0)) }}',
         
         init() {
-            console.log('Order summary initialized');
-            console.log('Default cycle price:', this.cyclePrice);
-            console.log('Default setup fee:', this.setupFee);
-            console.log('Default total:', this.total);
+            this.updateOrderSummary(
+                this.cycleName,
+                this.cyclePrice,
+                this.setupFee,
+                this.cyclePriceFormatted,
+                this.setupFeeFormatted,
+                this.totalFormatted
+            );
         },
         
         updateOrderSummary(name, price, setupFee, formattedPrice, formattedSetupFee, formattedTotal) {
@@ -146,16 +150,6 @@ function orderSummary() {
             this.cyclePriceFormatted = formattedPrice;
             this.setupFeeFormatted = formattedSetupFee;
             this.totalFormatted = formattedTotal;
-            
-            console.log('Order summary updated:', {
-                name: name,
-                price: price,
-                setupFee: setupFee,
-                total: this.total,
-                formattedPrice: formattedPrice,
-                formattedSetupFee: formattedSetupFee,
-                formattedTotal: formattedTotal
-            });
         }
     };
 }
