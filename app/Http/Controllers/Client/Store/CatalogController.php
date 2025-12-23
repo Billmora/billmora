@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client\Store;
 use App\Http\Controllers\Controller;
 use App\Models\Catalog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CatalogController extends Controller
 {
@@ -20,7 +21,11 @@ class CatalogController extends Controller
      */
     public function index(Request $request, $catalogSlug)
     {
-        $catalog = Catalog::where('slug', $catalogSlug)->firstOrFail();
+        $catalog = Catalog::where('slug', $catalogSlug)
+            ->when(!Auth::user() || !Auth::user()->isAdmin(), function ($query) {
+                $query->where('status', 'visible');
+            })
+            ->firstOrFail();
 
         $packages = $catalog->packages()
             ->with(['prices', 'catalog'])
