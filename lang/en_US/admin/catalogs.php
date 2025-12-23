@@ -12,7 +12,7 @@ return [
     'status_label' => 'Status',
     'status_helper' => 'Set the status of the catalog to visible or hidden.',
     'status_options' => [
-        'visible' => 'Visible (visible to customers)',
-        'hidden' => 'Hidden (not visible to customers)',
+        'visible' => 'Visible',
+        'hidden' => 'Hidden',
     ],
 ];
