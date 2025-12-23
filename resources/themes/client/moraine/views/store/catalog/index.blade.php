@@ -12,7 +12,15 @@
                 @endif
                 <div class="space-y-2 text-center">
                     <h4 class="text-xl text-billmora-primary font-semibold">{{ $package->name }}</h4>
-                    @if ($package->primaryPrice->type === 'free')
+                    @if (
+                        $package->prices->contains(fn ($p) => $p->type === 'free')
+                        || $package->prices->contains(fn ($p) =>
+                            $p->type !== 'free'
+                            && isset($p->rates[$currencyActive['code']])
+                            && ($p->rates[$currencyActive['code']]['enabled'] ?? false)
+                            && ($p->rates[$currencyActive['code']]['price'] ?? null) !== null
+                        )
+                    )
                         <div class="grid">
                             <span class="text-xl text-slate-500 font-semibold">Free</span>
                             <span class="text-sm text-slate-400 font-semibold">{{ $package->primaryPrice->name }}</span>
@@ -29,7 +37,15 @@
                     @endif
                     <p class="text-slate-500">{!! $package->description !!}</p>
                 </div>
-                @if ($package->primaryPrice->type === 'free' || $package->primaryPrice->rates[$currencyActive['code']]['price'])
+                @if (
+                    $package->prices->contains(fn ($p) => $p->type === 'free')
+                    || $package->prices->contains(fn ($p) =>
+                        $p->type !== 'free'
+                        && isset($p->rates[$currencyActive['code']])
+                        && ($p->rates[$currencyActive['code']]['enabled'] ?? false)
+                        && ($p->rates[$currencyActive['code']]['price'] ?? null) !== null
+                    )
+                )
                     <a 
                         href="{{ route('client.store.catalog.package', ['catalog' => $package->catalog->slug, 'package' => $package->slug]) }}"
                         class="flex gap-2 items-center bg-billmora-primary text-white px-3 py-2 mx-auto rounded-lg hover:text-white transition-colors duration-300"
