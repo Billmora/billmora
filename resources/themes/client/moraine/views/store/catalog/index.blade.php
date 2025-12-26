@@ -12,9 +12,15 @@
                 @endif
                 <div class="space-y-2 text-center">
                     <h4 class="text-xl text-billmora-primary font-semibold">{{ $package->name }}</h4>
-                    @if (
-                        $package->prices->contains(fn ($p) => $p->type === 'free')
-                        || $package->prices->contains(fn ($p) =>
+                    @if ($package->prices->contains(fn ($p) => $p->type === 'free'))
+                        <div class="grid">
+                            <span class="text-xl text-slate-500 font-semibold">Free</span>
+                            <span class="text-sm text-slate-400 font-semibold">
+                                {{ $package->prices->firstWhere('type', 'free')->name }}
+                            </span>
+                        </div>
+                    @elseif (
+                        $package->prices->contains(fn ($p) =>
                             $p->type !== 'free'
                             && isset($p->rates[$currencyActive['code']])
                             && ($p->rates[$currencyActive['code']]['enabled'] ?? false)
@@ -22,16 +28,20 @@
                         )
                     )
                         <div class="grid">
-                            <span class="text-xl text-slate-500 font-semibold">Free</span>
-                            <span class="text-sm text-slate-400 font-semibold">{{ $package->primaryPrice->name }}</span>
+                            <span class="text-xl text-slate-500 font-semibold">
+                                {{ Currency::format(
+                                    $package->primaryPrice->rates[$currencyActive['code']]['price'],
+                                    $currencyActive['code']
+                                ) }}
+                            </span>
+                            <span class="text-sm text-slate-400 font-semibold">
+                                {{ $package->primaryPrice->name }}
+                            </span>
                         </div>
                     @else
                         <div class="grid">
                             <span class="text-xl text-slate-500 font-semibold">
-                                {{ Currency::format($package->primaryPrice->rates[$currencyActive['code']]['price']) }}
-                            </span>
-                            <span class="text-sm text-slate-400 font-semibold">
-                                {{ $package->primaryPrice->name }}
+                                {{ __('client/store.unavailable_currency') }}
                             </span>
                         </div>
                     @endif
