@@ -29,6 +29,10 @@ class PackageController extends Controller
             ->with('prices')
             ->firstOrFail();
 
+        if ($package->stock === 0) {
+            return redirect()->route('client.store.catalog', ['catalog' => $catalog->slug])->with('error', __('client/store.stock_unavailable', ['item' => $package->name]));
+        }
+
         $currencyCode = Session::get('currency');
 
         $prices = $package->prices->filter(function ($price) use ($currencyCode) {

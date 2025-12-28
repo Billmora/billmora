@@ -56,12 +56,21 @@
                         && ($p->rates[$currencyActive['code']]['price'] ?? null) !== null
                     )
                 )
-                    <a 
-                        href="{{ route('client.store.catalog.package', ['catalog' => $package->catalog->slug, 'package' => $package->slug]) }}"
-                        class="flex gap-2 items-center bg-billmora-primary text-white px-3 py-2 mx-auto rounded-lg hover:text-white transition-colors duration-300"
-                    >
-                        {{ __('client/store.order_now') }}
-                    </a>
+                    @if ($package->stock !== 0) 
+                        <a 
+                            href="{{ route('client.store.catalog.package', ['catalog' => $package->catalog->slug, 'package' => $package->slug]) }}"
+                            class="flex gap-2 items-center bg-billmora-primary text-white px-3 py-2 mx-auto rounded-lg hover:text-white transition-colors duration-300"
+                        >
+                            {{ __('client/store.order_now') }}
+                        </a>
+                        @if ($package->stock >= 1)
+                            <span class="text-center text-sm text-slate-500 font-semibold">{{ __('client/store.stock_available', ['item' => $package->stock]) }}</span>
+                        @endif
+                    @else
+                        <span class="flex gap-2 items-center bg-billmora-6 text-white px-3 py-2 mx-auto rounded-lg cursor-not-allowed">
+                            {{ __('client/store.order_out_of_stock') }}
+                        </span>
+                    @endif
                 @else
                     <span class="flex gap-2 items-center bg-billmora-6 text-white px-3 py-2 mx-auto rounded-lg cursor-not-allowed">
                         {{ __('client/store.order_unavailable') }}
