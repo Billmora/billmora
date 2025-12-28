@@ -5,6 +5,10 @@ return [
     
     'order_now' => 'Order Now',
     'order_unavailable' => 'Order Unavailable',
+    'order_out_of_stock' => 'Out of Stock',
+
+    'stock_unavailable' => ':item Out of Stock',
+    'stock_available' => ':item Stock Available',
 
     'package' => [
         'billing_cycle' => 'Billing cycle',
