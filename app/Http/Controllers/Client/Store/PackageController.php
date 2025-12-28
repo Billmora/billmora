@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Catalog;
 use App\Models\Package;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class PackageController extends Controller
@@ -25,6 +26,9 @@ class PackageController extends Controller
         $catalog = Catalog::where('slug', $catalogSlug)->firstOrFail();
 
         $package = Package::where('slug', $packageSlug)
+            ->when(!Auth::user() || !Auth::user()->isAdmin(), function ($query) {
+                $query->where('status', 'visible');
+            })
             ->where('catalog_id', $catalog->id)
             ->with('prices')
             ->firstOrFail();

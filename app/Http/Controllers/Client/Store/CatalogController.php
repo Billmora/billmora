@@ -29,6 +29,7 @@ class CatalogController extends Controller
 
         $packages = $catalog->packages()
             ->with(['prices', 'catalog'])
+            ->where('status', 'visible')
             ->get();
 
         $catalogs = Catalog::select('id', 'name', 'slug', 'description', 'icon', 'status')
