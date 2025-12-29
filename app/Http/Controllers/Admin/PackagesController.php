@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Catalog;
 use App\Models\Currency;
 use App\Models\Package;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class PackagesController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing packages product.
@@ -126,6 +128,8 @@ class PackagesController extends Controller
             'rates' => $rates,
         ]);
 
+        $this->recordCreate('package.create', $package->toArray());
+
         return redirect()->route('admin.packages.edit', ['id' => $package->id])->with('success', __('common.create_success', ['attribute' => $package->name]));
     }
 
@@ -175,6 +179,8 @@ class PackagesController extends Controller
             $iconPath = $request->file('package_icon')->store('packages', 'public');
         }
 
+        $oldPackage = $package->getOriginal();
+
         $package->update([
             'catalog_id' => $validated['catalog_id'],
             'name' => $validated['package_name'],
@@ -186,6 +192,8 @@ class PackagesController extends Controller
             'allow_cancellation' => $validated['package_allow_cancellation'],
             'status' => $validated['package_status'],
         ]);
+
+        $this->recordUpdate('package.update', $oldPackage, $package->getChanges());
 
         return redirect()->route('admin.packages.edit', ['id' => $package->id])->with('success', __('common.update_success', ['attribute' => $package->name]));
     }
@@ -201,6 +209,10 @@ class PackagesController extends Controller
         $package = Package::findOrFail($id);
 
         $package->delete();
+        
+        $this->recordDelete('package.delete', [
+            $package->name
+        ]);
 
         return redirect()->route('admin.packages')->with('success', __('common.delete_success', ['attribute' => $package->name]));
     }

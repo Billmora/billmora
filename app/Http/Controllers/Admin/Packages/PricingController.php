@@ -7,12 +7,14 @@ use App\Models\Catalog;
 use App\Models\Currency;
 use App\Models\Package;
 use App\Models\PackagePrice;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class PricingController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing packages pricing.
@@ -171,6 +173,11 @@ class PricingController extends Controller
             'rates' => $rates,
         ]);
 
+        $this->recordCreate('package.pricing.create', [
+            'package_id' => $package->id,
+            'pricing' => $package->prices()->latest()->first()->toArray(),
+        ]);
+
         return redirect()
             ->route('admin.packages.pricing', ['id' => $package->id])
             ->with('success', __('common.create_success', [
@@ -313,6 +320,8 @@ class PricingController extends Controller
             }
         }
 
+        $oldPrice = $price->getOriginal();
+
         $price->update([
             'name' => $validated['pricing_name'],
             'type' => $validated['pricing_type'],
@@ -320,6 +329,8 @@ class PricingController extends Controller
             'billing_period' => $validated['pricing_billing_period'] ?? null,
             'rates' => $rates,
         ]);
+
+        $this->recordUpdate('package.pricing.update', $oldPrice, $price->getChanges());
 
         return redirect()
             ->route('admin.packages.pricing', ['id' => $package->id])
@@ -344,6 +355,11 @@ class PricingController extends Controller
         }
 
         $pricing->delete();
+
+        $this->recordDelete('package.pricing.delete', [
+            'package_id' => $package->id,
+            'pricing_name' => $pricing->name
+        ]);
 
         return redirect()
             ->route('admin.packages.pricing', ['id' => $package->id])
