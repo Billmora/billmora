@@ -41,7 +41,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y-2 divide-billmora-2 bg-white">
-                            @foreach ($package->prices as $price)
+                            @foreach ($package->prices->sortBy('created_at') as $price)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $loop->iteration }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $price->name }}</td>
