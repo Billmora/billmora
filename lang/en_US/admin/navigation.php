@@ -5,6 +5,7 @@ return [
     'users' => 'Users',
     'catalogs' => 'Catalogs',
     'packages' => 'Packages',
+    'variants' => 'Variants',
     'settings' => 'Settings',
     'audits' => 'Audits',
     'group' => [
