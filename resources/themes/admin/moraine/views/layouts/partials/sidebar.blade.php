@@ -29,6 +29,10 @@
         <x-lucide-package class="w-5 h-auto" />
         <span class="font-semibold">{{ __('admin/navigation.packages') }}</span>
       </a>
+      <a href="{{ route('admin.variants') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.variants*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+        <x-lucide-boxes class="w-5 h-auto" />
+        <span class="font-semibold">{{ __('admin/navigation.variants') }}</span>
+      </a>
       <span class="mt-4 block text-slate-600 font-semibold text-md">{{ __('admin/navigation.group.system') }}</span>
       <a href="{{ route('admin.settings') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.settings*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
         <x-lucide-settings class="w-5 h-auto" />
