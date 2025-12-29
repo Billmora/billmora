@@ -70,6 +70,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin variants interface routes.
+     *
+     * Prefix: /admin/variants
+     */
+    Route::group(['prefix' => 'variants'], function () {
+        Route::get('/', [Admin\VariantsController::class, 'index'])->name('admin.variants');
+    });
+
+    /**
      * Admin settings interface routes.
      *
      * Prefix: /admin/settings
