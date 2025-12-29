@@ -21,7 +21,7 @@ class CurrencyController extends Controller
     {
         $this->middleware('permission:settings.currencies.view')->only(['index']);
         $this->middleware('permission:settings.currencies.create')->only(['create', 'store']);
-        $this->middleware('permission:settings.currencies.update')->only(['edit', 'update', 'setDefault']);
+        $this->middleware('permission:settings.currencies.update')->only(['edit', 'update']);
         $this->middleware('permission:settings.currencies.delete')->only(['destroy']);
     }
 
