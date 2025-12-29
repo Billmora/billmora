@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('stock')->default(-1);
             $table->integer('per_user_limit')->default(-1);
             $table->boolean('allow_cancellation')->default(true);
-            $table->enum('status', ['visible', 'hidden', 'inactive'])->default('visible');
+            $table->enum('status', ['visible', 'hidden'])->default('visible');
             $table->timestamps();
 
             $table->unique(['catalog_id', 'slug']);
