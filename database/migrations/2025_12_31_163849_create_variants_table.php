@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('variants', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->text('description')->nullable();
             $table->string('type');
             $table->string('code');
             $table->enum('status', ['visible', 'hidden'])->default('visible');

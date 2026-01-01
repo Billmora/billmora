@@ -60,6 +60,7 @@ class VariantsController extends Controller
     {
         $validated = $request->validate([
             'variant_name' => ['required', 'string', 'max:255'],
+            'variant_description' => ['nullable', 'string'],
             'variant_type' => ['required', 'in:select,radio,slider,checkbox'],
             'variant_code' => ['required', 'string'],
             'variant_status' => ['required', 'in:visible,hidden'],
@@ -70,6 +71,7 @@ class VariantsController extends Controller
 
         $variant = Variant::create([
             'name' => $validated['variant_name'],
+            'description' => $validated['variant_description'] ?? null,
             'type' => $validated['variant_type'],
             'code' => $validated['variant_code'],
             'status' => $validated['variant_status'],
@@ -124,6 +126,7 @@ class VariantsController extends Controller
 
         $validated = $request->validate([
             'variant_name' => ['required', 'string', 'max:255'],
+            'variant_description' => ['nullable', 'string'],
             'variant_type' => ['required', 'in:select,radio,slider,checkbox'],
             'variant_code' => ['required', 'string'],
             'variant_status' => ['required', 'in:visible,hidden'],
@@ -134,6 +137,7 @@ class VariantsController extends Controller
 
         $variant->update([
             'name' => $validated['variant_name'],
+            'description' => $validated['variant_description'] ?? null,
             'type' => $validated['variant_type'],
             'code' => $validated['variant_code'],
             'status' => $validated['variant_status'],
