@@ -18,6 +18,16 @@ class Variant extends Model
     ];
 
     /**
+     * Get the attributes that should be cast.
+     *
+     * @var list<string>
+     */
+    protected $casts = [
+        'status' => 'string',
+        'is_upgradable' => 'boolean',
+    ];
+
+    /**
      * Get the packages associated with this variant.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
