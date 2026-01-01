@@ -8,6 +8,8 @@ return [
 
     'name_label' => 'Name',
     'name_helper' => 'Enter the name of the package variant.',
+    'description_label' => 'Description',
+    'description_helper' => 'Internal notes or description for this variant. This content is only visible to admin.',
     'type_label' => 'Type',
     'type_helper' => 'Select the type of this variant.',
     'code_label' => 'Code',
