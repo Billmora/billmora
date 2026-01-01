@@ -9,7 +9,12 @@
             [
                 'route' => route('admin.variants.edit', ['id' => $variant->id]),
                 'icon' => 'lucide-boxes',
-                'label' => __('admin/packages.tabs.summary'),
+                'label' => __('admin/variants.tabs.summary'),
+            ],
+            [
+                'route' => route('admin.variants.options', ['id' => $variant->id]),
+                'icon' => 'lucide-codesandbox',
+                'label' => __('admin/variants.tabs.options'),
             ],
         ]" 
         active="{{ request()->fullUrl() }}" />
