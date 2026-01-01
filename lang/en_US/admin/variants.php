@@ -3,6 +3,7 @@
 return [
     'tabs' => [
         'summary' => 'Summary',
+        'options' => 'Options',
     ],
 
     'name_label' => 'Name',
