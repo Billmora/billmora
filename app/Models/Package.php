@@ -39,6 +39,16 @@ class Package extends Model
     }
 
     /**
+     * Get the variants associated with this package.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function variants()
+    {
+        return $this->belongsToMany(Variant::class)->withTimestamps();
+    }
+
+    /**
      * Get all package prices that belong to this package.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
