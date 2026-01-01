@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('type');
+            $table->string('code');
+            $table->enum('status', ['visible', 'hidden'])->default('visible');
+            $table->boolean('is_upgradable')->default(false);
             $table->timestamps();
         });
     }
