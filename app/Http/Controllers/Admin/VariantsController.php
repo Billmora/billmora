@@ -19,7 +19,7 @@ class VariantsController extends Controller
     public function index()
     {
         $variants = Variant::query()
-            ->select(['id', 'name', 'type', 'code', 'status', 'created_at'])
+            ->select(['id', 'name', 'description', 'status', 'created_at'])
             ->with([
                 'packages:id,name,catalog_id',
                 'packages.catalog:id,name',

@@ -18,8 +18,7 @@
                         <tr>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">#</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/variants.name_label') }}</th>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/variants.type_label') }}</th>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/variants.code_label') }}</th>
+                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/variants.description_label') }}</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/variants.status_label') }}</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.created_at') }}</th>
                             <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
@@ -30,8 +29,7 @@
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $loop->iteration }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $variant->name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $variant->type }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $variant->code }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $variant->description }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $variant->status }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $variant->created_at }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
