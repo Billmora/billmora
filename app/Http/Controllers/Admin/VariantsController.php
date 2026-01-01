@@ -144,4 +144,21 @@ class VariantsController extends Controller
 
         return redirect()->route('admin.variants.edit', ['id' => $variant->id])->with('success', __('common.update_success', ['attribute' => $variant->name]));
     }
+
+    /**
+     * Remove the specified variant from storage.
+     *
+     * @param  int  $id  Variant ID
+     * @return \Illuminate\Http\RedirectResponse
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public function destroy($id)
+    {
+        $variant = Variant::findOrFail($id);
+
+        $variant->delete();
+
+        return redirect()->route('admin.variants')->with('success', __('common.delete_success', ['attribute' => $variant->name]));
+    }
 }

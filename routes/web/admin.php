@@ -80,6 +80,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::post('/create', [Admin\VariantsController::class, 'store'])->name('admin.variants.store');
         Route::get('/{id}/edit', [Admin\VariantsController::class, 'edit'])->name('admin.variants.edit');
         Route::put('/{id}/edit', [Admin\VariantsController::class, 'update'])->name('admin.variants.update');
+        Route::delete('/{id}', [Admin\VariantsController::class, 'destroy'])->name('admin.variants.destroy');
     });
 
     /**
