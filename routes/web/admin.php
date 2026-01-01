@@ -76,6 +76,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
      */
     Route::group(['prefix' => 'variants'], function () {
         Route::get('/', [Admin\VariantsController::class, 'index'])->name('admin.variants');
+        Route::get('/create', [Admin\VariantsController::class, 'create'])->name('admin.variants.create');
+        Route::post('/create', [Admin\VariantsController::class, 'store'])->name('admin.variants.store');
     });
 
     /**
