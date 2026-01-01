@@ -19,13 +19,12 @@
                 name="variant_type"
                 label="{{ __('admin/variants.type_label') }}"
                 helper="{{ __('admin/variants.type_helper') }}"
-                value="{{ old('variant_type') }}"
                 required
             >
-                <option value="select">Select</option>
-                <option value="radio">Radio</option>
-                <option value="slider">Slider</option>
-                <option value="checkbox">Checkbox</option>
+                <option value="select" {{ old('variant_type') === 'select' ? 'selected' : '' }}>Select</option>
+                <option value="radio" {{ old('variant_type') === 'radio' ? 'selected' : '' }}>Radio</option>
+                <option value="slider" {{ old('variant_type') === 'slider' ? 'selected' : '' }}>Slider</option>
+                <option value="checkbox" {{ old('variant_type') === 'checkbox' ? 'selected' : '' }}>Checkbox</option>
             </x-admin::select>
         </div>
         <x-admin::input 
