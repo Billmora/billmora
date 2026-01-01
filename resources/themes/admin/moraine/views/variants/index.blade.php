@@ -35,7 +35,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $variant->status }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $variant->created_at }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
-                                    <a href="#" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                                    <a href="{{ route('admin.variants.edit', $variant->id) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                                         {{ __('common.edit') }}
                                     </a>
                                     <x-admin::modal.trigger modal="deleteModal-{{ $variant->id }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.delete') }}</x-admin::modal.trigger>
