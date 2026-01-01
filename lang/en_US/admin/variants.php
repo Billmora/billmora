@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'tabs' => [
+        'summary' => 'Summary',
+    ],
+
     'name_label' => 'Name',
     'name_helper' => 'Enter the name of the package variant.',
     'type_label' => 'Type',
