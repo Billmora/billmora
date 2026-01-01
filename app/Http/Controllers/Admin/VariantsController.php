@@ -61,7 +61,7 @@ class VariantsController extends Controller
         $validated = $request->validate([
             'variant_name' => ['required', 'string', 'max:255'],
             'variant_type' => ['required', 'in:select,radio,slider,checkbox'],
-            'variant_code' => ['nullable', 'string'],
+            'variant_code' => ['required', 'string'],
             'variant_status' => ['required', 'in:visible,hidden'],
             'variant_is_upgradable' => ['required', 'boolean'],
             'variant_packages' => ['required', 'array'],
