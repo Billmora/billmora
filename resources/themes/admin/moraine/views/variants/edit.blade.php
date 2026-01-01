@@ -83,6 +83,12 @@
                 helper="{{ __('admin/variants.package_helper') }}"
                 required
             />
+            <x-admin::textarea
+                name="variant_description"
+                label="{{ __('admin/variants.description_label') }}"
+                helper="{{ __('admin/variants.description_helper') }}"
+                rows="2"
+            >{{ old('variant_description', $variant->description) }}</x-admin::textarea>
         </div>
         <div class="flex gap-4 ml-auto">
             <a href="{{ route('admin.variants') }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
