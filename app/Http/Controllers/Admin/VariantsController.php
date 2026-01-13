@@ -12,6 +12,19 @@ class VariantsController extends Controller
 {
 
     /**
+     * Applies permission-based middleware for accessing variants product.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:variants.view')->only(['index']);
+        $this->middleware('permission:variants.create')->only(['create', 'store']);
+        $this->middleware('permission:variants.update')->only(['edit', 'update']);
+        $this->middleware('permission:variants.delete')->only(['destroy']);
+    }
+
+    /**
      * Display a listing of variants with optional search filter.
      *
      * @return \Illuminate\View\View

@@ -15,6 +15,16 @@ class OptionController extends Controller
 {
 
     /**
+     * Applies permission-based middleware for accessing variants pricing.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:variants.update')->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+    }
+
+    /**
      * Display a listing of options for the given variant.
      *
      * @param  int  $id  Variant ID
