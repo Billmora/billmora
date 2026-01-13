@@ -84,6 +84,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/{id}/options', [Admin\Variants\OptionController::class, 'index'])->name('admin.variants.options');
         Route::get('/{id}/options/create', [Admin\Variants\OptionController::class, 'create'])->name('admin.variants.options.create');
         Route::post('/{id}/options/create', [Admin\Variants\OptionController::class, 'store'])->name('admin.variants.options.store');
+        Route::get('/{id}/options/{option:id}/edit', [Admin\Variants\OptionController::class, 'edit'])->name('admin.variants.options.edit');
+        Route::put('/{id}/options/{option:id}/edit', [Admin\Variants\OptionController::class, 'update'])->name('admin.variants.options.update');
     });
 
     /**
