@@ -36,4 +36,14 @@ class Variant extends Model
     {
         return $this->belongsToMany(Package::class)->withTimestamps();
     }
+
+    /**
+     * Get all options belonging to this variant.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function options()
+    {
+        return $this->hasMany(VariantOption::class);
+    }
 }
