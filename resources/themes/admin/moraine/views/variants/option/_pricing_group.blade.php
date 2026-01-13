@@ -2,7 +2,7 @@
     'index',
     'pricing' => [],
     'currencies',
-    'isTemplate' => false,
+    'canDelete' => false,
 ])
 
 @php
@@ -13,7 +13,7 @@
 <div class="price-group w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl mb-5"
      x-data="{ type: '{{ $type }}' }"
 >
-    @if ($isTemplate)
+    @if ($canDelete)
         <div class="flex justify-end mb-2">
             <button type="button"
                     x-on:click="$el.closest('.price-group').remove()"

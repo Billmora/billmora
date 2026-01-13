@@ -60,7 +60,7 @@
                 'index' => $index,
                 'pricing' => $pricing,
                 'currencies' => $currencies,
-                'isTemplate' => false,
+                'canDelete' => $index > 0,
             ])
         @endforeach
     </div>
@@ -73,7 +73,7 @@
             'index' => '__INDEX__',
             'pricing' => ['name' => '', 'type' => 'free', 'rates' => []],
             'currencies' => $currencies,
-            'isTemplate' => true,
+            'canDelete' => true,
         ])
     </template>
 </form>
