@@ -89,7 +89,7 @@ class PricingController extends Controller
                 Rule::requiredIf(fn () => in_array($request->pricing_type, ['onetime', 'recurring'])),
                 'array',
             ],
-            'rates.*.currency' => ['string', Rule::exists('currencies', 'code')],
+            'rates.*.currency' => ['required','string', Rule::exists('currencies', 'code')],
             'rates.*.price' => ['nullable', 'numeric', 'min:1'],
             'rates.*.setup_fee' => ['nullable', 'numeric', 'min:0'],
             'rates.*.enabled' => ['boolean'],
@@ -122,7 +122,7 @@ class PricingController extends Controller
 
                 if (empty($rate['price']) || $rate['price'] <= 0) {
                     $validator->errors()->add(
-                        "rates[$code][price]",
+                        "rates.$code.price",
                         __('validation.required_if', [
                             'attribute' => __('admin/packages.pricing.price_label'),
                             'other' => __('common.enable'),
@@ -131,9 +131,9 @@ class PricingController extends Controller
                     );
                 }
 
-                if (!isset($rate['setup_fee'])) {
+                if (!array_key_exists('setup_fee', $rate)) {
                     $validator->errors()->add(
-                        "rates[$code][setup_fee]",
+                        "rates.$code.setup_fee",
                         __('validation.required_if', [
                             'attribute' => __('admin/packages.pricing.setup_fee_label'),
                             'other' => __('common.enable'),
