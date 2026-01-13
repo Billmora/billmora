@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Currency;
 use App\Models\Variant;
 use App\Models\VariantOption;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -13,6 +14,7 @@ use Illuminate\Validation\Rule;
 
 class OptionController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing variants pricing.
@@ -180,7 +182,7 @@ class OptionController extends Controller
                 ->withInput();
         }
 
-        DB::transaction(function () use ($validated, $variant) {
+        $option = DB::transaction(function () use ($validated, $variant) {
             $option = $variant->options()->create([
                 'name' => $validated['variant_options_name'],
                 'value' => $validated['variant_options_value'],
@@ -206,7 +208,11 @@ class OptionController extends Controller
                     'rates' => $rates,
                 ]);
             }
+
+            return $option->load('prices');
         });
+
+        $this->recordCreate('variant.option.create', $option->toArray());
 
         return redirect()
             ->route('admin.variants.options', ['id' => $variant->id])
@@ -397,7 +403,9 @@ class OptionController extends Controller
                 ->withInput();
         }
 
-        DB::transaction(function () use ($validated, $option) {
+        $oldOption = $option->load('prices')->toArray();
+
+        $changesOption = DB::transaction(function () use ($validated, $option) {
             $option->update([
                 'name' => $validated['variant_options_name'],
                 'value' => $validated['variant_options_value'],
@@ -425,7 +433,11 @@ class OptionController extends Controller
                     'rates' => $rates,
                 ]);
             }
+
+            return $option->fresh()->load('prices');
         });
+
+        $this->recordUpdate('variant.option.update', $oldOption, $changesOption->toArray());
 
         return redirect()
             ->route('admin.variants.options', ['id' => $variant->id])
@@ -458,6 +470,11 @@ class OptionController extends Controller
         DB::transaction(function () use ($option) {
             $option->delete();
         });
+
+        $this->recordDelete('variant.option.delete', [
+            'id' => $option->id,
+            'name' => $option->name,
+        ]);
 
         return redirect()
             ->route('admin.variants.options', ['id' => $variant->id])

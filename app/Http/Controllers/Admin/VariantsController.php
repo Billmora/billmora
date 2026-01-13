@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Package;
 use App\Models\Variant;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class VariantsController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing variants product.
@@ -93,6 +95,8 @@ class VariantsController extends Controller
 
         $variant->packages()->sync($validated['variant_packages']);
 
+        $this->recordCreate('variant.create', $variant->toArray());
+
         return redirect()->route('admin.variants.edit', ['id' => $variant->id])->with('success', __('common.create_success', ['attribute' => $variant->name]));
     }
 
@@ -148,6 +152,9 @@ class VariantsController extends Controller
             'variant_packages.*' => ['integer', Rule::exists('packages', 'id')],
         ]);
 
+        $variantOld = $variant->getOriginal();
+        $packagesOld = $variant->packages()->pluck('packages.id')->sort()->values()->all();
+
         $variant->update([
             'name' => $validated['variant_name'],
             'description' => $validated['variant_description'] ?? null,
@@ -158,6 +165,16 @@ class VariantsController extends Controller
         ]);
 
         $variant->packages()->sync($validated['variant_packages']);
+
+        $changes = $variant->getChanges();
+
+        $packagesNew = collect($validated['variant_packages'])->sort()->values()->all();
+        if ($packagesOld !== $packagesNew) {
+            $changes['package_ids'] = $packagesNew;
+            $variantOld['package_ids'] = $packagesOld;
+        }
+
+        $this->recordUpdate('variant.update', $variantOld, $changes);
 
         return redirect()->route('admin.variants.edit', ['id' => $variant->id])->with('success', __('common.update_success', ['attribute' => $variant->name]));
     }
@@ -175,6 +192,11 @@ class VariantsController extends Controller
         $variant = Variant::findOrFail($id);
 
         $variant->delete();
+
+        $this->recordDelete('variant.delete', [
+            'id' => $variant->id,
+            'name' => $variant->name,
+        ]);
 
         return redirect()->route('admin.variants')->with('success', __('common.delete_success', ['attribute' => $variant->name]));
     }
