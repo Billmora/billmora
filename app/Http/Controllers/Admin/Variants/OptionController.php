@@ -12,6 +12,15 @@ use Illuminate\Validation\Rule;
 
 class OptionController extends Controller
 {
+
+    /**
+     * Display a listing of options for the given variant.
+     *
+     * @param  int  $id  Variant ID
+     * @return \Illuminate\View\View
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
     public function index($id)
     {
         $variant = Variant::findOrFail($id);
@@ -19,6 +28,14 @@ class OptionController extends Controller
         return view('admin::variants.option.index', compact('variant'));
     }
 
+    /**
+     * Show the form for creating a new option for the given variant.
+     *
+     * @param  int  $id  Variant ID
+     * @return \Illuminate\View\View
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
     public function create($id)
     {
         $variant = Variant::findOrFail($id);
@@ -26,6 +43,17 @@ class OptionController extends Controller
         return view('admin::variants.option.create', compact('variant'));
     }
 
+    /**
+     * Store a newly created variant option along with its pricing configurations.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id  Variant ID
+     * @return \Illuminate\Http\RedirectResponse
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws \Illuminate\Validation\ValidationException
+     * @throws \Throwable
+     */
     public function store(Request $request, $id)
     {
         $variant = Variant::findOrFail($id);
