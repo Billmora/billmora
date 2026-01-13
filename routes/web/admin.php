@@ -86,6 +86,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::post('/{id}/options/create', [Admin\Variants\OptionController::class, 'store'])->name('admin.variants.options.store');
         Route::get('/{id}/options/{option:id}/edit', [Admin\Variants\OptionController::class, 'edit'])->name('admin.variants.options.edit');
         Route::put('/{id}/options/{option:id}/edit', [Admin\Variants\OptionController::class, 'update'])->name('admin.variants.options.update');
+        Route::delete('/{id}/{option:id}', [Admin\Variants\OptionController::class, 'destroy'])->name('admin.variants.options.destroy');
     });
 
     /**

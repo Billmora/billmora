@@ -424,4 +424,36 @@ class OptionController extends Controller
                 'attribute' => $validated['variant_options_name'],
             ]));
     }
+
+    /**
+     * Delete a specific variant option.
+     *
+     * @param  int  $id  Variant ID
+     * @param  \App\Models\VariantOption  $option
+     * @return \Illuminate\Http\RedirectResponse
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws \Throwable
+     */
+    public function destroy($id, VariantOption $option)
+    {
+        $variant = Variant::query()
+            ->select(['id'])
+            ->findOrFail($id);
+
+        if ($option->variant_id !== $variant->id) {
+            abort(404);
+        }
+
+        DB::transaction(function () use ($option) {
+            $option->delete();
+        });
+
+        return redirect()
+            ->route('admin.variants.options', ['id' => $variant->id])
+            ->with('success', __('common.delete_success', [
+                'attribute' => $option->name,
+            ]));
+    }
 }
