@@ -46,7 +46,16 @@ class OptionController extends Controller
         ]);
 
         $validator  = Validator::make([], []);
-        $currencies = Currency::all()->keyBy('code');
+
+        $currencyCodes = collect($validated['pricings'])
+            ->flatMap(fn ($p) => array_keys($p['rates'] ?? []))
+            ->unique()
+            ->values()
+            ->all();
+
+        $currencies = Currency::whereIn('code', $currencyCodes)
+            ->get()
+            ->keyBy('code');
 
         foreach ($validated['pricings'] as $pIndex => $pricing) {
             $type = $pricing['type'] ?? 'free';
