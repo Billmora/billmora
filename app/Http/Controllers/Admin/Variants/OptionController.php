@@ -23,9 +23,17 @@ class OptionController extends Controller
      */
     public function index($id)
     {
-        $variant = Variant::findOrFail($id);
+        $variant = Variant::query()
+            ->select(['id', 'name'])
+            ->findOrFail($id);
 
-        return view('admin::variants.option.index', compact('variant'));
+        $options = $variant->options()
+            ->select(['id', 'variant_id', 'name', 'value', 'created_at'])
+            ->latest('id')
+            ->paginate(25)
+            ->withQueryString();
+
+        return view('admin::variants.option.index', compact('variant', 'options'));
     }
 
     /**
