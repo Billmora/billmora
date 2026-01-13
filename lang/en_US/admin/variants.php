@@ -26,6 +26,7 @@ return [
     'package_helper' => 'Select the package this variant belongs to.',
 
     'options' => [
+        'add_new_price_label' => 'Add new price',
         'pricing_label' => 'Pricing',
         'pricing_helper' => 'Manage the pricing options for this variant.',
         'name_label' => 'Name',
