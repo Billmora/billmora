@@ -80,7 +80,7 @@ class VariantsController extends Controller
 
         $variant->packages()->sync($validated['variant_packages']);
 
-        return redirect()->route('admin.variants')->with('success', __('common.create_success', ['attribute' => $variant->name]));
+        return redirect()->route('admin.variants.edit', ['id' => $variant->id])->with('success', __('common.create_success', ['attribute' => $variant->name]));
     }
 
     /**
