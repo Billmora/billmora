@@ -30,7 +30,6 @@ class OptionController extends Controller
 
         $options = $variant->options()
             ->select(['id', 'variant_id', 'name', 'value', 'created_at'])
-            ->latest('id')
             ->paginate(25)
             ->withQueryString();
 
