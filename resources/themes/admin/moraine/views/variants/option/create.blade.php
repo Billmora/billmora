@@ -41,7 +41,7 @@
             />
         </div>
     </div>
-    <div class="flex justify-between items-center">
+    <div class="flex flex-col sm:flex-row justify-between gap-4 sm:items-center">
         <div>
             <h4 class="text-lg font-semibold text-slate-600">{{ __('admin/variants.options.pricing_label') }}</h4>
             <span class="text-slate-500">{{ __('admin/variants.options.pricing_helper') }}</span>
@@ -49,7 +49,7 @@
         <button
             type="button"
             x-on:click="addPrice()"
-            class="bg-billmora-primary hover:bg-billmora-primary-hover px-4 py-2 text-white rounded-lg transition-colors duration-150 cursor-pointer"
+            class="bg-billmora-primary hover:bg-billmora-primary-hover px-4 py-2 ml-auto text-white rounded-lg transition-colors duration-150 cursor-pointer"
         >
             {{ __('admin/variants.options.add_new_price_label') }}
         </button>
