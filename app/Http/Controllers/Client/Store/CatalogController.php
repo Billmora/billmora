@@ -36,6 +36,6 @@ class CatalogController extends Controller
             ->where('status', 'visible')
             ->get();
 
-        return view('client::store.catalog.index', compact('packages', 'catalogs'));
+        return view('client::store.catalog.index', compact('packages', 'catalogs', 'catalog'));
     }
 }

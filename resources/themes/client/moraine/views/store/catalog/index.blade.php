@@ -3,6 +3,10 @@
 @section('title', "Store")
 
 @section('body')
+<div class="mb-6">
+    <h2 class="text-3xl text-billmora-primary font-semibold">{{ $catalog->name }}</h2>
+    <p class="text-slate-500">{{ $catalog->description }}</p>
+</div>
 <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-3 gap-5">
     @foreach ($packages as $package)
         <div class="w-full h-fit bg-white border-2 border-billmora-2 rounded-xl">
