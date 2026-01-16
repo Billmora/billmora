@@ -1,4 +1,4 @@
-<header class="sticky top-5 right-0 flex justify-between items-center w-full bg-white p-4 border-2 border-billmora-2 rounded-2xl">
+<header class="sticky z-90 top-5 right-0 flex justify-between items-center w-full bg-white p-4 border-2 border-billmora-2 rounded-2xl">
   <!-- Toggle Sidebar -->
   <button id="toggleSidebar" class="block xl:hidden bg-billmora-1 hover:bg-billmora-primary p-2.5 mr-4 text-slate-600 hover:text-white rounded-full transition-colors duration-300 cursor-pointer">
     <x-lucide-menu class="w-auto h-5" />
