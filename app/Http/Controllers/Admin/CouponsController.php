@@ -11,6 +11,18 @@ use Illuminate\Validation\Rule;
 
 class CouponsController extends Controller
 {
+    /**
+     * Applies permission-based middleware for accessing coupons.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:coupons.view')->only(['index']);
+        $this->middleware('permission:coupons.create')->only(['create', 'store']);
+        $this->middleware('permission:coupons.update')->only(['edit', 'update']);
+        $this->middleware('permission:coupons.delete')->only(['destroy']);
+    }
 
     /**
      * Display a listing of coupons.
