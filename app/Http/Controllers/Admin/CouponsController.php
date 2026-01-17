@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Coupon;
 use App\Models\Package;
 use App\Models\PackagePrice;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class CouponsController extends Controller
 {
+    use AuditsSystem;
     /**
      * Applies permission-based middleware for accessing coupons.
      * 
@@ -110,6 +112,8 @@ class CouponsController extends Controller
             $coupon->packages()->attach($validated['coupon_packages']);
         }
 
+        $this->recordCreate('coupon.create', $coupon->toArray());
+
         return redirect()->route('admin.coupons')->with('success',  __('common.create_success', ['attribute' => $coupon->code]));
     }
 
@@ -176,6 +180,9 @@ class CouponsController extends Controller
             'coupon_packages.*' => [Rule::exists('packages', 'id')],
         ]);
 
+        $couponOld = $coupon->getOriginal();
+        $packagesOld = $coupon->packages()->pluck('packages.id')->sort()->values()->all();
+
         $coupon->update([
             'code' => $validated['coupon_code'],
             'type' => $validated['coupon_type'],
@@ -193,6 +200,16 @@ class CouponsController extends Controller
             $coupon->packages()->detach();
         }
 
+        $changes = $coupon->getChanges();
+
+        $packagesNew = collect($validated['coupon_packages'])->sort()->values()->all();
+        if ($packagesOld !== $packagesNew) {
+            $changes['package_ids'] = $packagesNew;
+            $couponOld['package_ids'] = $packagesOld;
+        }
+
+        $this->recordUpdate('coupon.update', $couponOld, $changes);
+
         return redirect()->route('admin.coupons')->with('success', __('common.update_success', ['attribute' => $coupon->code]));
     }
 
@@ -207,6 +224,11 @@ class CouponsController extends Controller
         $coupon = Coupon::findOrFail($id);
 
         $coupon->delete();
+
+        $this->recordDelete('coupon.delete', [
+            'id' => $coupon->id,
+            'code' => $coupon->code,
+        ]);
 
         return redirect()->route('admin.coupons')->with('success', __('common.delete_success', ['attribute' => $coupon->code]));
     }
