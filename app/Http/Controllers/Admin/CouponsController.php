@@ -153,4 +153,13 @@ class CouponsController extends Controller
 
         return redirect()->route('admin.coupons')->with('success', __('common.update_success', ['attribute' => $coupon->code]));
     }
+
+    public function destroy($id)
+    {
+        $coupon = Coupon::findOrFail($id);
+
+        $coupon->delete();
+
+        return redirect()->route('admin.coupons')->with('success', __('common.delete_success', ['attribute' => $coupon->code]));
+    }
 }
