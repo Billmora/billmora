@@ -42,10 +42,7 @@ class CouponsController extends Controller
             ->values()
             ->toArray();
         
-        return view('admin::coupons.create', [
-            'packageOptions' => $packageOptions,
-            'billingCycleOptions' => $billingCycleOptions
-        ]);
+        return view('admin::coupons.create', compact('packageOptions', 'billingCycleOptions'));
     }
 
     public function store(Request $request)
