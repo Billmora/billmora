@@ -67,4 +67,14 @@ class Package extends Model
     {
         return Attribute::make(fn () => $this->prices->sortBy('id')->first());
     }
+
+    /**
+     * Get the coupons associated with this package.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function coupons()
+    {
+        return $this->belongsToMany(Coupon::class);
+    }
 }

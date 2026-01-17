@@ -92,6 +92,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the coupon usages for this user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function couponUsages()
+    {
+        return $this->hasMany(CouponUsage::class);
+    }
+
+    /**
      * Get the two-factor authentication settings associated with the user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
