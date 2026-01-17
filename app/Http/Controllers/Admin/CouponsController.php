@@ -13,7 +13,11 @@ class CouponsController extends Controller
 {
     public function index()
     {
-        return view('admin::coupons.index');
+        $coupons = Coupon::select('id', 'code', 'start_at', 'expires_at', 'total_uses', 'created_at')
+            ->orderBy('created_at', 'desc')
+            ->paginate(25);
+        
+        return view('admin::coupons.index', compact('coupons'));
     }
 
     public function create()
