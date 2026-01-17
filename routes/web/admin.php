@@ -89,6 +89,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::delete('/{id}/{option:id}', [Admin\Variants\OptionController::class, 'destroy'])->name('admin.variants.options.destroy');
     });
 
+    Route::group(['prefix' => 'coupons'], function () {
+        Route::get('/', [Admin\CouponsController::class, 'index'])->name('admin.coupons');
+    });
+
     /**
      * Admin settings interface routes.
      *
