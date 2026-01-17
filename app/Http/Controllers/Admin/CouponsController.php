@@ -11,6 +11,12 @@ use Illuminate\Validation\Rule;
 
 class CouponsController extends Controller
 {
+
+    /**
+     * Display a listing of coupons.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         $coupons = Coupon::select('id', 'code', 'start_at', 'expires_at', 'total_uses', 'created_at')
@@ -20,6 +26,11 @@ class CouponsController extends Controller
         return view('admin::coupons.index', compact('coupons'));
     }
 
+    /**
+     * Show the form for creating a new coupon.
+     *
+     * @return \Illuminate\View\View
+     */
     public function create()
     {
         $packageOptions = Package::with('catalog')
@@ -45,6 +56,12 @@ class CouponsController extends Controller
         return view('admin::coupons.create', compact('packageOptions', 'billingCycleOptions'));
     }
 
+    /**
+     * Store a newly created coupon in database.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
         $availableBillingCycles = PackagePrice::select('name')
@@ -84,6 +101,12 @@ class CouponsController extends Controller
         return redirect()->route('admin.coupons')->with('success',  __('common.create_success', ['attribute' => $coupon->code]));
     }
 
+    /**
+     * Show the form for editing the specified coupon.
+     *
+     * @param  int  $id
+     * @return \Illuminate\View\View
+     */
     public function edit($id)
     {
         $coupon = Coupon::with('packages')->findOrFail($id);
@@ -111,6 +134,13 @@ class CouponsController extends Controller
         return view('admin::coupons.edit', compact('coupon', 'packageOptions', 'billingCycleOptions'));
     }
 
+    /**
+     * Update the specified coupon in database.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request, $id)
     {
         $coupon = Coupon::findOrFail($id);
@@ -154,6 +184,12 @@ class CouponsController extends Controller
         return redirect()->route('admin.coupons')->with('success', __('common.update_success', ['attribute' => $coupon->code]));
     }
 
+    /**
+     * Remove the specified coupon from database.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy($id)
     {
         $coupon = Coupon::findOrFail($id);
