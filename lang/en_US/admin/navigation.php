@@ -6,6 +6,7 @@ return [
     'catalogs' => 'Catalogs',
     'packages' => 'Packages',
     'variants' => 'Variants',
+    'coupons' => 'Coupons',
     'settings' => 'Settings',
     'audits' => 'Audits',
     'group' => [
