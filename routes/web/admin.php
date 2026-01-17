@@ -93,6 +93,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/', [Admin\CouponsController::class, 'index'])->name('admin.coupons');
         Route::get('/create', [Admin\CouponsController::class, 'create'])->name('admin.coupons.create');
         Route::post('/create', [Admin\CouponsController::class, 'store'])->name('admin.coupons.store');
+        Route::get('/{id}/edit', [Admin\CouponsController::class, 'edit'])->name('admin.coupons.edit');
+        Route::put('/{id}/edit', [Admin\CouponsController::class, 'update'])->name('admin.coupons.update');
     });
 
     /**
