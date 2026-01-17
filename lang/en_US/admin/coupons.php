@@ -19,4 +19,5 @@ return [
     'expires_at_helper' => 'Select the date and time when the coupon expires. Leave blank for no expiration.',
     'packages_label' => 'Applicable Packages',
     'packages_helper' => 'Select the packages that this coupon can be applied to. Leave blank to allow all packages.',
+    'total_uses_label' => 'Total Uses',
 ];
