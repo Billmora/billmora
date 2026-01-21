@@ -202,7 +202,11 @@ class CouponsController extends Controller
 
         $changes = $coupon->getChanges();
 
-        $packagesNew = collect($validated['coupon_packages'])->sort()->values()->all();
+        $packagesNew = collect($validated['coupon_packages'] ?? [])
+            ->sort()
+            ->values()
+            ->all();
+            
         if ($packagesOld !== $packagesNew) {
             $changes['package_ids'] = $packagesNew;
             $couponOld['package_ids'] = $packagesOld;
