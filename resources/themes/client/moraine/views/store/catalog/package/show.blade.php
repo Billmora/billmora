@@ -44,16 +44,15 @@
             @if(($variants ?? collect())->isNotEmpty())
                 <div class="grid gap-4">
                     @foreach($variants as $variant)
-                        <div class="bg-white p-6 border-2 border-billmora-2 rounded-2xl"
-                             x-show="variantHasAvailableOptions({{ $variant->id }})">
-                            <div class="flex flex-col gap-1">
+                        <template x-if="variantHasAvailableOptions({{ $variant->id }})">
+                            <div class="bg-white p-6 border-2 border-billmora-2 rounded-2xl">
                                 <h3 class="text-lg font-semibold text-slate-600">{{ $variant->name }}</h3>
+                                @includeWhen($variant->type === 'select', 'client::store.catalog.package.variants.select', ['variant' => $variant])
+                                @includeWhen($variant->type === 'radio', 'client::store.catalog.package.variants.radio', ['variant' => $variant])
+                                @includeWhen($variant->type === 'checkbox', 'client::store.catalog.package.variants.checkbox', ['variant' => $variant])
+                                @includeWhen($variant->type === 'slider', 'client::store.catalog.package.variants.slider', ['variant' => $variant])
                             </div>
-                            @includeWhen($variant->type === 'select', 'client::store.catalog.package.variants.select', ['variant' => $variant])
-                            @includeWhen($variant->type === 'radio', 'client::store.catalog.package.variants.radio', ['variant' => $variant])
-                            @includeWhen($variant->type === 'checkbox', 'client::store.catalog.package.variants.checkbox', ['variant' => $variant])
-                            @includeWhen($variant->type === 'slider', 'client::store.catalog.package.variants.slider', ['variant' => $variant])
-                        </div>
+                        </template>
                     @endforeach
                 </div>
             @endif
