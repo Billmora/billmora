@@ -77,4 +77,25 @@ class Package extends Model
     {
         return $this->belongsToMany(Coupon::class);
     }
+
+    /**
+     * Get the orders for this package.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Get the services for this package.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function services()
+    {
+        return $this->hasMany(Service::class);
+    }
+
 }
