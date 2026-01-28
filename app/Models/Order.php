@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Billmora;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -33,9 +34,7 @@ class Order extends Model
     ];
 
     /**
-     * Bootstrap the model and its traits.
-     *
-     * @return void
+     * Boot method to auto-generate order_number.
      */
     protected static function boot()
     {
@@ -49,17 +48,48 @@ class Order extends Model
     }
 
     /**
-     * Generate a unique order number with random identifier.
+     * Generate order number based on settings.
      *
      * @return string
      */
     public static function generateOrderNumber(): string
     {
-        do {
-            $number = 'ORD-' . strtoupper(uniqid());
-        } while (static::where('order_number', $number)->exists());
+        $format = Billmora::getGeneral('ordering_number_format');
+        $padding = (int) Billmora::getGeneral('ordering_number_padding');
+        $increment = (int) Billmora::getGeneral('ordering_number_increment');
 
-        return $number;
+        $lastOrder = static::whereNotNull('order_number')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if ($lastOrder && preg_match('/(\d+)/', $lastOrder->order_number, $matches)) {
+            $lastNumber = (int) end($matches);
+            $nextNumber = $lastNumber + $increment;
+        } else {
+            $nextNumber = $increment;
+        }
+
+        $paddedNumber = str_pad($nextNumber, $padding, '0', STR_PAD_LEFT);
+
+        $orderNumber = str_replace(
+            ['{number}', '{day}', '{month}', '{year}'],
+            [
+                $paddedNumber,
+                date('d'),
+                date('m'),
+                date('Y'),
+            ],
+            $format
+        );
+
+        $counter = 0;
+        $originalNumber = $orderNumber;
+        while (static::where('order_number', $orderNumber)->exists()) {
+            $counter++;
+            $orderNumber = $originalNumber . '-' . $counter;
+        }
+
+        return $orderNumber;
     }
 
     /**
