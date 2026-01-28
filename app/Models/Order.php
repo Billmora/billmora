@@ -27,6 +27,7 @@ class Order extends Model
         'variant_selections' => 'array',
         'terms_accepted' => 'boolean',
         'completed_at' => 'datetime',
+        'cancelled_at' => 'datetime',
         'subtotal' => 'decimal:2',
         'discount' => 'decimal:2',
         'setup_fee' => 'decimal:2',
