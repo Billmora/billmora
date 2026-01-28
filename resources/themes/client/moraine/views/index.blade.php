@@ -80,7 +80,7 @@
                 <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
                     <div class="flex justify-between bg-white items-center p-4">
                         <h5 class="text-lg font-semibold text-slate-600">Your Active Services</h5>
-                        <a href="#" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                        <a href="{{ route('client.store') }}" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                             Order New Service
                         </a>
                     </div>
