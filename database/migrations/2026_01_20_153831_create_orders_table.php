@@ -32,6 +32,7 @@ return new class extends Migration
             $table->boolean('terms_accepted')->default(false);
             
             $table->timestamp('completed_at')->nullable();
+            $table->timestamp('cancelled_at')->nullable();
             $table->timestamps();
             
             $table->index(['user_id', 'status']);
