@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
+use App\Models\Service;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -15,6 +18,29 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('client::index');
+        $user = Auth::user();
+
+        $activeServicesCount = Service::where('user_id', $user->id)
+            ->where('status', 'active')
+            ->count();
+
+        $unpaidInvoicesCount = Invoice::whereHas('order', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->where('status', 'unpaid')
+            ->count();
+
+        $activeServices = Service::where('user_id', $user->id)
+            // ->where('status', 'active')
+            ->with(['package.catalog'])
+            ->select('id', 'name', 'package_id', 'next_due_date')
+            ->paginate(10);
+
+        return view('client::index',  compact([
+            'user',
+            'activeServicesCount',
+            'unpaidInvoicesCount',
+            'activeServices'
+        ]));
     }
 }
