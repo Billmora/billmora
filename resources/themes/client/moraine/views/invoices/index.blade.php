@@ -9,12 +9,12 @@
             <table class="min-w-full divide-y divide-billmora-2">
                 <thead class="bg-billmora-2">
                     <tr>
-                        <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Number</th>
-                        <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Issued Date</th>
-                        <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Due Date</th>
-                        <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Total</th>
-                        <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Status</th>
-                        <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">Action</th>
+                        <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/invoice.invoice_number') }}</th>
+                        <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/invoice.issued_date') }}</th>
+                        <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/invoice.due_date') }}</th>
+                        <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/invoice.total') }}</th>
+                        <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.status') }}</th>
+                        <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y-2 divide-billmora-2 bg-white">
