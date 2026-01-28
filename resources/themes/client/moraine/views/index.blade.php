@@ -78,6 +78,12 @@
         <div class="overflow-x-auto">
             <div class="min-w-full inline-block align-middle">
                 <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
+                    <div class="flex justify-between bg-white items-center p-4">
+                        <h5 class="text-lg font-semibold text-slate-600">Your Active Services</h5>
+                        <a href="#" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                            Order New Service
+                        </a>
+                    </div>
                     <table class="min-w-full divide-y divide-billmora-2">
                         <thead class="bg-billmora-2">
                             <tr>
