@@ -31,7 +31,7 @@ class DashboardController extends Controller
             ->count();
 
         $activeServices = Service::where('user_id', $user->id)
-            // ->where('status', 'active')
+            ->where('status', 'active')
             ->with(['package.catalog'])
             ->select('id', 'name', 'package_id', 'next_due_date')
             ->paginate(10);
