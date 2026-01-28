@@ -51,7 +51,9 @@ class CompanyController extends Controller
             'company_description' => ['required', 'string'],
             'company_portal' => ['required', 'boolean'],
             'company_date_format' => ['required', 'string'],
+            'company_timezone' => ['required', 'string'],
             'company_language' => ['required', 'string'],
+            'company_debug' => ['nullable', 'boolean'],
             'company_maintenance' => ['nullable', 'boolean'],
             'company_maintenance_url' => ['nullable', 'url'],
             'company_maintenance_message' => ['nullable', 'string'],
@@ -59,7 +61,11 @@ class CompanyController extends Controller
 
         $this->updateSettings('general', $validated);
 
-        Billmora::setEnv(['APP_LOCALE' => $validated['company_language']]);
+        Billmora::setEnv([
+            'APP_LOCALE' => $validated['company_language'],
+            'APP_DEBUG' => $validated['company_debug'],
+            'APP_TIMEZONE' => $validated['company_timezone'],
+        ]);
 
         Billmora::setGeneral($validated);
 

@@ -77,6 +77,16 @@
                     </option>
                 @endforeach
             </x-admin::select>
+            <x-admin::select name="company_timezone"
+                label="{{ __('admin/settings/general.company_timezone_label') }}"
+                helper="{{ __('admin/settings/general.company_timezone_helper') }}" required>
+                @foreach (config('utils.timezones') as $value => $label)
+                    <option value="{{ $value }}"
+                        {{ old('company_timezone', config('app.timezone')) == $value ? 'selected' : '' }}>
+                        {{ $label }}
+                    </option>
+                @endforeach
+            </x-admin::select>
             <x-admin::select name="company_language" label="{{ __('admin/settings/general.company_language_label') }}"
                 helper="{{ __('admin/settings/general.company_language_helper') }}" required>
                 @foreach ($langs as $lang)
@@ -85,6 +95,8 @@
                         {{ $lang['name'] }}</option>
                 @endforeach
             </x-admin::select>
+            <x-admin::toggle name="company_debug" label="{{ __('admin/settings/general.company_debug_label') }}"
+                helper="{{ __('admin/settings/general.company_debug_helper') }}" :checked="config('app.debug')" />
         </div>
     </div>
     <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
