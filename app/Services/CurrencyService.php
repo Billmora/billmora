@@ -7,24 +7,44 @@ use Illuminate\Support\Facades\App;
 
 class CurrencyService
 {
+    protected array $cachedCurrencies = [];
 
     /**
-     * Format an amount using the active currency.
+     * Format an amount using the active currency or provided currency.
      *
      * @param float|int|string|null $amount
+     * @param \App\Models\Currency|string|null $currency
      * @return string
      */
-    public function format(float|int|string|null $amount): string
+    public function format(float|int|string|null $amount, Currency|string|null $currency = null): string
     {
         if ($amount === null) {
             return __('client/store.unavailable_currency');
         }
 
-        $currency = $this->currency();
+        if (is_string($currency)) {
+            $currency = $this->getCurrency($currency);
+        }
 
+        $currency = $currency ?? $this->currency();
         $number = $this->formatNumber($amount, $currency->format);
 
         return trim("{$currency->prefix}{$number} {$currency->suffix}");
+    }
+
+    /**
+     * Get currency from cache or database.
+     *
+     * @param string $code
+     * @return \App\Models\Currency|null
+     */
+    protected function getCurrency(string $code): ?Currency
+    {
+        if (!isset($this->cachedCurrencies[$code])) {
+            $this->cachedCurrencies[$code] = Currency::where('code', $code)->first();
+        }
+
+        return $this->cachedCurrencies[$code];
     }
 
     /**
