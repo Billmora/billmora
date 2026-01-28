@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Billmora;
 use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
@@ -32,9 +33,7 @@ class Invoice extends Model
     ];
 
     /**
-     * Bootstrap the model and its traits.
-     *
-     * @return void
+     * Boot method to auto-generate invoice_number.
      */
     protected static function boot()
     {
@@ -48,17 +47,48 @@ class Invoice extends Model
     }
 
     /**
-     * Generate a unique invoice number with date and random suffix.
+     * Generate invoice number based on settings.
      *
      * @return string
      */
     public static function generateInvoiceNumber(): string
     {
-        do {
-            $number = 'INV-' . strtoupper(substr(uniqid(), -6));
-        } while (static::where('invoice_number', $number)->exists());
+        $format = Billmora::getGeneral('invoice_number_format');
+        $padding = (int) Billmora::getGeneral('invoice_number_padding');
+        $increment = (int) Billmora::getGeneral('invoice_number_increment');
 
-        return $number;
+        $lastInvoice = static::whereNotNull('invoice_number')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if ($lastInvoice && preg_match('/(\d+)/', $lastInvoice->invoice_number, $matches)) {
+            $lastNumber = (int) end($matches);
+            $nextNumber = $lastNumber + $increment;
+        } else {
+            $nextNumber = $increment;
+        }
+
+        $paddedNumber = str_pad($nextNumber, $padding, '0', STR_PAD_LEFT);
+
+        $invoiceNumber = str_replace(
+            ['{number}', '{day}', '{month}', '{year}'],
+            [
+                $paddedNumber,
+                date('d'),
+                date('m'),
+                date('Y'),
+            ],
+            $format
+        );
+
+        $counter = 0;
+        $originalNumber = $invoiceNumber;
+        while (static::where('invoice_number', $invoiceNumber)->exists()) {
+            $counter++;
+            $invoiceNumber = $originalNumber . '-' . $counter;
+        }
+
+        return $invoiceNumber;
     }
 
     /**
