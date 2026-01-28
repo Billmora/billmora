@@ -4,7 +4,7 @@
 
 @section('body')
 <div x-data="orderSummary()" x-init="init()">
-    <form action="#" method="POST" class="flex flex-col lg:flex-row gap-5">
+    <form action="{{ route('client.checkout.review.initiate') }}" method="POST" class="flex flex-col lg:flex-row gap-5">
         @csrf
         <div class="w-full lg:w-2/3 h-fit grid gap-4">
             <div class="bg-white p-8 border-2 border-billmora-2 rounded-2xl">

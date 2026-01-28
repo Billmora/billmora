@@ -38,6 +38,20 @@ Route::group(['prefix' => 'store', 'middleware' => ['maintenance']], function ()
 });
 
 /**
+ * Client store routes.
+ * 
+ * Prefix: /checkout
+ */
+Route::group(['prefix' => 'checkout', 'middleware' => ['maintenance']], function () {
+    Route::post('/review', [Client\Checkout\ReviewController::class, 'initiate'])->name('client.checkout.review.initiate');
+    Route::get('/review', [Client\Checkout\ReviewController::class, 'review'])->name('client.checkout.review');
+    Route::post('/process', [Client\Checkout\ReviewController::class, 'process'])->name('client.checkout.process');
+
+    Route::post('/coupon/check', [Client\Checkout\CouponController::class, 'check'])->name('client.checkout.coupon.check');
+    Route::post('/coupon/remove', [Client\Checkout\CouponController::class, 'remove'])->name('client.checkout.coupon.remove');
+});
+
+/**
  * Client authentication routes.
  * 
  * Prefix: /auth
