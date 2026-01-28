@@ -52,6 +52,15 @@ Route::group(['prefix' => 'checkout', 'middleware' => ['maintenance']], function
 });
 
 /**
+ * Client store routes.
+ * 
+ * Prefix: /invoices
+ */
+Route::group(['prefix' => 'invoices', 'middleware' => ['auth', 'maintenance', '2fa']], function () {
+    Route::get('/', [Client\InvoicesController::class, 'index'])->name('client.invoices');
+});
+
+/**
  * Client authentication routes.
  * 
  * Prefix: /auth
