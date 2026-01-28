@@ -52,8 +52,6 @@
             <x-admin::radio.option name="invoice_pdf_size" label="Letter" value="letter" :checked="Billmora::getGeneral('invoice_pdf_size') === 'letter'" />
         </x-admin::radio.group>
         <x-admin::input name="invoice_pdf_font" label="{{ __('admin/settings/general.invoice_pdf_font_label') }}" helper="{{ __('admin/settings/general.invoice_pdf_font_helper') }}" value="{{ old('invoice_pdf_font', Billmora::getGeneral('invoice_pdf_font')) }}" required />
-        <x-admin::toggle name="invoice_mass_payment" label="{{ __('admin/settings/general.invoice_mass_payment_label') }}" helper="{{ __('admin/settings/general.invoice_mass_payment_helper') }}" :checked="Billmora::getGeneral('invoice_mass_payment')" />
-        <x-admin::toggle name="invoice_choose_payment" label="{{ __('admin/settings/general.invoice_choose_payment_label') }}" helper="{{ __('admin/settings/general.invoice_choose_payment_helper') }}" :checked="Billmora::getGeneral('invoice_choose_payment')" />
     </div>
     @can('settings.general.update')
         <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">

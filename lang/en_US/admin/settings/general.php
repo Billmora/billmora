@@ -62,10 +62,6 @@ return [
     'invoice_pdf_size_helper' => 'Select the paper size for generated invoice PDFs.',
     'invoice_pdf_font_label' => 'Invoice PDF Font',
     'invoice_pdf_font_helper' => 'Enter the Google Font name to use in invoice PDFs.',
-    'invoice_mass_payment_label' => 'Invoice Mass Payment',
-    'invoice_mass_payment_helper' => 'Allow customers to pay multiple unpaid invoices in a single transaction.',
-    'invoice_choose_payment_label' => 'Invoice Choose Payment',
-    'invoice_choose_payment_helper' => 'Allow customers to choose their preferred payment method when paying an invoice.',
 
     'credit_use_label' => 'Credit Use',
     'credit_use_helper' => 'Allow customers to top up account credit and use it to pay invoices.',
