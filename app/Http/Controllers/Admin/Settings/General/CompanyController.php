@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class CompanyController extends Controller
 {
@@ -44,15 +46,19 @@ class CompanyController extends Controller
      */
     public function update(Request $request)
     {
+        $langsAllowed = collect(File::directories(base_path('lang')))
+                ->map(fn ($path) => basename($path))
+                ->toArray();
+
         $validated = $request->validate( [
             'company_name' => ['required', 'string'],
             'company_logo' => ['required', 'url'],
             'company_favicon' => ['required', 'url'],
             'company_description' => ['required', 'string'],
             'company_portal' => ['required', 'boolean'],
-            'company_date_format' => ['required', 'string'],
-            'company_timezone' => ['required', 'string'],
-            'company_language' => ['required', 'string'],
+            'company_date_format' => ['required', Rule::in(array_keys(config('utils.date_format')))],
+            'company_timezone' => ['required', Rule::in(array_keys(config('utils.timezones')))],
+            'company_language' => ['required', Rule::in(array_values($langsAllowed))],
             'company_debug' => ['nullable', 'boolean'],
             'company_maintenance' => ['nullable', 'boolean'],
             'company_maintenance_url' => ['nullable', 'url'],
