@@ -110,8 +110,8 @@
             </div>
         </div>
         <div>
-        {{ $activeServices->links('client::layouts.partials.pagination') }}
-    </div>
+            {{ $activeServices->links('client::layouts.partials.pagination') }}
+        </div>
     </div>
 </div>
 @endsection
