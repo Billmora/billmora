@@ -57,10 +57,6 @@
             <x-admin::radio.option name="ordering_redirect" label="{{ __('admin/settings/general.ordering_redirect_option.payment') }}" value="payment" :checked="Billmora::getGeneral('ordering_redirect') === 'payment'" />
         </x-admin::radio.group>
         <div class="grid gap-4">
-            <x-admin::input type="number" min="0" name="ordering_grace"
-                label="{{ __('admin/settings/general.ordering_grace_label') }}"
-                helper="{{ __('admin/settings/general.ordering_grace_helper') }}"
-                value="{{ old('ordering_grace', Billmora::getGeneral('ordering_grace')) }}" required />
             <x-admin::toggle name="ordering_tos" label="{{ __('admin/settings/general.ordering_tos_label') }}" helper="{{ __('admin/settings/general.ordering_tos_helper') }}" :checked="Billmora::getGeneral('ordering_tos')" required />
             <x-admin::toggle name="ordering_notes" label="{{ __('admin/settings/general.ordering_notes_label') }}" helper="{{ __('admin/settings/general.ordering_notes_helper') }}" :checked="Billmora::getGeneral('ordering_notes')" required />
         </div>

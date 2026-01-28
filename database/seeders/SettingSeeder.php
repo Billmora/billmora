@@ -36,7 +36,6 @@ class SettingSeeder extends Seeder
             ['category' => 'general', 'key' => 'company_maintenance_url', 'value' => null],
             ['category' => 'general', 'key' => 'company_maintenance_message', 'value' => 'We are currently performing maintenance and will be back shortly.'],
             ['category' => 'general', 'key' => 'ordering_redirect', 'value' => 'payment'],
-            ['category' => 'general', 'key' => 'ordering_grace', 'value' => 0],
             ['category' => 'general', 'key' => 'ordering_tos', 'value' => true],
             ['category' => 'general', 'key' => 'ordering_notes', 'value' => false],
             ['category' => 'general', 'key' => 'invoice_pdf', 'value' => false],

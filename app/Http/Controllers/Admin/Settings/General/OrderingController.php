@@ -46,7 +46,6 @@ class OrderingController extends Controller
     {
         $validated = $request->validate( [
             'ordering_redirect' => ['required', 'string'],
-            'ordering_grace' => ['required', 'integer', 'min:0'],
             'ordering_tos' => ['required', 'boolean'],
             'ordering_notes' => ['required', 'boolean'],
         ]);
