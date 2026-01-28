@@ -48,6 +48,15 @@ class InvoiceController extends Controller
             'invoice_pdf' => ['nullable', 'boolean'],
             'invoice_pdf_size' => ['required', 'in:letter,A4'],
             'invoice_pdf_font' => ['required', 'string'],
+            'invoice_number_increment' => ['required', 'integer', 'min:1'],
+            'invoice_number_padding' => ['required', 'integer', 'min:0'],
+            'invoice_number_format' => [
+                'required',
+                'string',
+                'regex:/^\S+$/',
+                'regex:/\{number\}/',
+                'regex:/^[^{}]*(\{(number|day|month|year)\}[^{}]*)*$/',
+            ],
         ]);
 
         $this->updateSettings('general', $validated);

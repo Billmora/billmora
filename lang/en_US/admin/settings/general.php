@@ -62,6 +62,12 @@ return [
     'invoice_pdf_size_helper' => 'Select the paper size for generated invoice PDFs.',
     'invoice_pdf_font_label' => 'Invoice PDF Font',
     'invoice_pdf_font_helper' => 'Enter the Google Font name to use in invoice PDFs.',
+    'invoice_number_increment_label' => 'Invoice Number Increment',
+    'invoice_number_increment_helper' => 'Set the increment value for invoice numbers.',
+    'invoice_number_padding_label' => 'Invoice Number Padding',
+    'invoice_number_padding_helper' => 'Set the number of digits to pad invoice numbers with leading zeros.',
+    'invoice_number_format_label' => 'Invoice Number Format',
+    'invoice_number_format_helper' => 'Define the format for invoice numbers using {number} as a required placeholder. Optional placeholders: {day}, {month}, {year}.',
 
     'credit_use_label' => 'Credit Use',
     'credit_use_helper' => 'Allow customers to top up account credit and use it to pay invoices.',
