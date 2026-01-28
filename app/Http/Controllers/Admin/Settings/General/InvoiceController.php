@@ -50,7 +50,6 @@ class InvoiceController extends Controller
             'invoice_pdf_font' => ['required', 'string'],
             'invoice_mass_payment' => ['nullable', 'boolean'],
             'invoice_choose_payment' => ['nullable', 'boolean'],
-            'invoice_cancelation_handling' => ['nullable', 'boolean'],
         ]);
 
         $this->updateSettings('general', $validated);
