@@ -70,19 +70,40 @@
     </div>
     <div class="w-full lg:w-2/7 h-fit bg-white border-2 border-billmora-2 rounded-2xl">
         <div class="grid bg-billmora-primary p-6 rounded-xl">
-            <span class="text-md font-semibold text-white">{{ __('client/invoice.total_due') }}</span>
-            <span class="text-2xl font-bold text-white">{{ Currency::format($invoice->total, $invoice->currency) }}</span>
+            <div class="grid">
+                <span class="text-md font-semibold text-white">{{ __('client/invoice.total_due') }}</span>
+                <span class="text-2xl font-bold text-white">{{ Currency::format($invoice->total, $invoice->currency) }}</span>
+            </div>
+            <hr class="border-t-2 border-billmora-2 my-4">
+            <div class="grid">
+                <span class="text-md font-semibold text-white">{{ __('common.status') }}</span>
+                @switch($invoice->status)
+                    @case('paid')
+                        <span class="text-2xl uppercase font-bold text-green-500">{{ __('client/invoice.status.paid') }}</span>
+                        @break
+                    @case('cancelled')
+                        <span class="text-2xl uppercase font-bold text-slate-300">{{ __('client/invoice.status.cancelled') }}</span>
+                        @break
+                    @case('refunded')
+                        <span class="text-2xl uppercase font-bold text-slate-300">{{ __('client/invoice.status.refunded') }}</span>
+                        @break
+                    @default
+                        <span class="text-2xl uppercase font-bold text-red-500">{{ __('client/invoice.status.unpaid') }}</span>
+                @endswitch
+            </div>
         </div>
-        <form action="#" class="grid gap-6 p-6">
-            <x-client::select
-                name="payment_gateway"
-                label="Payment Method"
-            >
-            </x-client::select>
-            <button type="submit" class="w-full bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                Proceed to Payment
-            </button>
-        </form>
+        @if ($invoice->status === 'unpaid')
+            <form action="#" class="grid gap-6 p-6">
+                <x-client::select
+                    name="payment_gateway"
+                    label="Payment Method"
+                >
+                </x-client::select>
+                <button type="submit" class="w-full bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                    Proceed to Payment
+                </button>
+            </form>
+        @endif
     </div>
 </div>
 @endsection
