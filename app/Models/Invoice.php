@@ -24,7 +24,7 @@ class Invoice extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'due_date' => 'date',
+        'due_date' => 'datetime',
         'paid_at' => 'datetime',
         'subtotal' => 'decimal:2',
         'discount' => 'decimal:2',
