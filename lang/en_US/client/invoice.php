@@ -3,7 +3,7 @@
 return [
     'title' => 'Invoices',
     'invoice_number' => 'Invoice Number',
-    'issued_date' => 'Issued Date',
+    'invoice_date' => 'Invoice Date',
     'due_date' => 'Due Date',
     'total' => 'Total',
 ];
