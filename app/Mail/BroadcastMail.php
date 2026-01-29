@@ -69,7 +69,7 @@ class BroadcastMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email::layout',
+            view: 'email::index',
             with: [
                 'body' => $this->placeholder($this->broadcast->body),
             ],
