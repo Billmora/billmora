@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->enum('type', ['free', 'onetime', 'recurring'])->default('free');
             $table->integer('time_interval')->nullable();
-            $table->enum('billing_period', ['hourly', 'daily', 'weekly', 'monthly', 'yearly'])->nullable();
+            $table->enum('billing_period', ['daily', 'weekly', 'monthly', 'yearly'])->nullable();
             $table->json('rates')->nullable();
             $table->timestamps();
 

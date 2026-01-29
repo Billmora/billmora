@@ -82,7 +82,7 @@ class PricingController extends Controller
             ],
             'pricing_billing_period' => [
                 Rule::requiredIf(fn () => $request->pricing_type === 'recurring'),
-                Rule::in(['hourly','daily','weekly','monthly','yearly']),
+                Rule::in(['daily','weekly','monthly','yearly']),
                 'nullable',
             ],
             'rates' => [
@@ -237,7 +237,7 @@ class PricingController extends Controller
             ],
             'pricing_billing_period' => [
                 Rule::requiredIf(fn () => $request->pricing_type === 'recurring'),
-                Rule::in(['hourly','daily','weekly','monthly','yearly']),
+                Rule::in(['daily','weekly','monthly','yearly']),
                 'nullable',
             ],
             'rates' => [

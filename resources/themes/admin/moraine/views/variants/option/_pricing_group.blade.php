@@ -64,7 +64,6 @@
                 helper="{{ __('admin/variants.options.pricing.billing_period_helper') }}"
                 required
             >
-                <option value="hourly"  {{ $billing === 'hourly' ? 'selected' : '' }}>Hourly</option>
                 <option value="daily"   {{ $billing === 'daily' ? 'selected' : '' }}>Daily</option>
                 <option value="weekly"  {{ $billing === 'weekly' ? 'selected' : '' }}>Weekly</option>
                 <option value="monthly" {{ $billing === 'monthly' ? 'selected' : '' }}>Monthly</option>

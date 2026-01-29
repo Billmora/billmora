@@ -134,8 +134,6 @@ class Service extends Model
         $date = now();
         
         switch ($this->billing_period) {
-            case 'hourly':
-                return $date->addHours($this->billing_interval);
             case 'daily':
                 return $date->addDays($this->billing_interval);
             case 'weekly':

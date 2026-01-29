@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('currency', 3);
             $table->enum('billing_type', ['free', 'onetime', 'recurring']);
             $table->integer('billing_interval')->nullable();
-            $table->enum('billing_period', ['hourly', 'daily', 'weekly', 'monthly', 'yearly'])->nullable();
+            $table->enum('billing_period', ['daily', 'weekly', 'monthly', 'yearly'])->nullable();
             $table->decimal('price', 15, 2);
             $table->decimal('setup_fee', 15, 2)->default(0);
             

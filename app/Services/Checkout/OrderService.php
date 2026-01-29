@@ -190,7 +190,6 @@ class OrderService
         $start = now();
         
         $end = match(strtolower($packagePrice->billing_period)) {
-            'hourly' => $start->copy()->addHours($packagePrice->time_interval),
             'daily' => $start->copy()->addDays($packagePrice->time_interval),
             'weekly' => $start->copy()->addWeeks($packagePrice->time_interval),
             'monthly' => $start->copy()->addMonths($packagePrice->time_interval),

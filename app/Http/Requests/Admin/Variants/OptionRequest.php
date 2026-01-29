@@ -77,7 +77,7 @@ class OptionRequest extends FormRequest
             'pricings.*.name' => ['required', 'string', 'max:255', 'distinct'],
             'pricings.*.type' => ['required', Rule::in(['free', 'onetime', 'recurring'])],
             'pricings.*.time_interval' => ['nullable', 'integer', 'min:1'],
-            'pricings.*.billing_period' => ['nullable', Rule::in(['hourly', 'daily', 'weekly', 'monthly', 'yearly'])],
+            'pricings.*.billing_period' => ['nullable', Rule::in(['daily', 'weekly', 'monthly', 'yearly'])],
             'pricings.*.rates' => ['nullable', 'array'],
             'pricings.*.rates.*.currency' => ['required', 'string', Rule::exists('currencies', 'code')],
             'pricings.*.rates.*.price' => ['nullable', 'numeric', 'min:0'],
