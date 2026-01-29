@@ -269,19 +269,21 @@ return [
      *
      * @var array<string, string>
      */
-    'datetimes' => [
-        'd/m/Y H:i:s' => 'DD/MM/YYYY HH:mm:ss (31/12/2025 23:59:45)',
-        'm/d/Y H:i:s' => 'MM/DD/YYYY HH:mm:ss (12/31/2025 23:59:45)',
-        'Y-m-d H:i:s' => 'YYYY-MM-DD HH:mm:ss (2025-12-31 23:59:45)',
-        'd-m-Y H:i:s' => 'DD-MM-YYYY HH:mm:ss (31-12-2025 23:59:45)',
-        'M d, Y H:i:s' => 'Mon DD, YYYY HH:mm:ss (Dec 31, 2025 23:59:45)',
-        'F d, Y H:i:s' => 'Month DD, YYYY HH:mm:ss (December 31, 2025 23:59:45)',
-        'd/m/Y h:i:s A' => 'DD/MM/YYYY hh:mm:ss AM/PM (31/12/2025 11:59:45 PM)',
-        'm/d/Y h:i:s A' => 'MM/DD/YYYY hh:mm:ss AM/PM (12/31/2025 11:59:45 PM)',
-        'Y-m-d h:i:s A' => 'YYYY-MM-DD hh:mm:ss AM/PM (2025-12-31 11:59:45 PM)',
-        'd-m-Y h:i:s A' => 'DD-MM-YYYY hh:mm:ss AM/PM (31-12-2025 11:59:45 PM)',
-        'M d, Y h:i:s A' => 'Mon DD, YYYY hh:mm:ss AM/PM (Dec 31, 2025 11:59:45 PM)',
-        'F d, Y h:i:s A' => 'Month DD, YYYY hh:mm:ss AM/PM (December 31, 2025 11:59:45 PM)',
+    'dates' => [
+        'd/m/Y' => 'DD/MM/YYYY (31/12/2025)',
+        'm/d/Y' => 'MM/DD/YYYY (12/31/2025)',
+        'Y-m-d' => 'YYYY-MM-DD (2025-12-31)',
+        'd-m-Y' => 'DD-MM-YYYY (31-12-2025)',
+        'M d, Y' => 'Mon DD, YYYY (Dec 31, 2025)',
+        'F d, Y' => 'Month DD, YYYY (December 31, 2025)',
+        'D, d/m/Y' => 'Day, DD/MM/YYYY (Wed, 31/12/2025)',
+        'D, m/d/Y' => 'Day, MM/DD/YYYY (Wed, 12/31/2025)',
+        'D, M d, Y' => 'Day, Mon DD, YYYY (Wed, Dec 31, 2025)',
+        'D d-m-Y' => 'Day DD-MM-YYYY (Wed 31-12-2025)',
+        'l, d/m/Y' => 'Day, DD/MM/YYYY (Wednesday, 31/12/2025)',
+        'l, m/d/Y' => 'Day, MM/DD/YYYY (Wednesday, 12/31/2025)',
+        'l, F d, Y' => 'Day, Month DD, YYYY (Wednesday, December 31, 2025)',
+        'l d F Y' => 'Day DD Month YYYY (Wednesday 31 December 2025)',
     ],
 
     /**

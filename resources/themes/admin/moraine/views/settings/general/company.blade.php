@@ -70,7 +70,7 @@
             <x-admin::select name="company_date_format"
                 label="{{ __('admin/settings/general.company_date_format_label') }}"
                 helper="{{ __('admin/settings/general.company_date_format_helper') }}" required>
-                @foreach (config('utils.datetimes') as $value => $label)
+                @foreach (config('utils.dates') as $value => $label)
                     <option value="{{ $value }}"
                         {{ old('company_date_format', Billmora::getGeneral('company_date_format')) == $value ? 'selected' : '' }}>
                         {{ $label }}
