@@ -21,8 +21,8 @@
                     @foreach ($invoices as $invoice)
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->invoice_number }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->created_at }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->due_date }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->created_at->toDateString() }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->due_date->toDateString() }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ Currency::format($invoice->total, $invoice->currency) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->status }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
