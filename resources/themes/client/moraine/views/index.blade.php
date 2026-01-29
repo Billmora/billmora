@@ -56,7 +56,7 @@
                     <span class="text-3xl font-bold text-slate-600">{{ $activeServicesCount }}</span>
                 </div>
             </a>
-            <a href="#" class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 hover:border-red-500 transition-colors rounded-2xl">
+            <a href="{{ route('client.invoices') }}" class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 hover:border-red-500 transition-colors rounded-2xl">
                 <div class="bg-red-200 p-3 text-red-500 rounded-full">
                     <x-lucide-receipt-text class="w-auto h-10" />
                 </div>
