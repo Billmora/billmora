@@ -20,13 +20,15 @@
                 <tbody class="divide-y-2 divide-billmora-2 bg-white">
                     @foreach ($invoices as $invoice)
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->invoice_number }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
+                                <a href="{{ route('client.invoices.show', ['invoice' => $invoice->invoice_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $invoice->invoice_number }}</a>
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->created_at->toDateString() }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->due_date->toDateString() }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ Currency::format($invoice->total, $invoice->currency) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->status }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
-                                <a href="#" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">Manage</a>
+                                <a href="{{ route('client.invoices.show', ['invoice' => $invoice->invoice_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">Manage</a>
                             </td>
                         </tr>
                     @endforeach
