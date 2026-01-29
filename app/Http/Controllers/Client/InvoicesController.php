@@ -27,4 +27,24 @@ class InvoicesController extends Controller
 
         return view('client::invoices.index', compact('invoices'));
     }
+
+    /**
+     * Display the specified invoice with related data.
+     *
+     * @param \App\Models\Invoice $invoice
+     * @return \Illuminate\View\View
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    public function show(Invoice $invoice)
+    {
+        $user = Auth::user();
+
+        $invoice->loadMissing(['order.service.package.catalog', 'order.user']);
+
+        if ($invoice->order->user_id !== $user->id) {
+            abort(403);
+        }
+
+        return view('client::invoices.show', compact('invoice'));
+    }
 }
