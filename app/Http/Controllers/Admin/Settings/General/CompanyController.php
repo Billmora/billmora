@@ -56,7 +56,7 @@ class CompanyController extends Controller
             'company_favicon' => ['required', 'url'],
             'company_description' => ['required', 'string'],
             'company_portal' => ['required', 'boolean'],
-            'company_date_format' => ['required', Rule::in(array_keys(config('utils.date_format')))],
+            'company_date_format' => ['required', Rule::in(array_keys(config('utils.datetimes')))],
             'company_timezone' => ['required', Rule::in(array_keys(config('utils.timezones')))],
             'company_language' => ['required', Rule::in(array_values($langsAllowed))],
             'company_debug' => ['nullable', 'boolean'],

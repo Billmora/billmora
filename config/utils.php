@@ -262,20 +262,26 @@ return [
     ],
 
     /**
-     * Available date format options for the application.
+     * Available datetime format options for the application.
      *
-     * The keys represent PHP date format strings used for storing or formatting dates,
+     * The keys represent PHP date format strings used for storing or formatting datetimes,
      * and the values are human-readable examples to help users understand the format.
      *
      * @var array<string, string>
      */
-    'date_format' =>  [
-        'd/m/Y' => 'DD/MM/YYYY (31/12/2025)',
-        'm/d/Y' => 'MM/DD/YYYY (12/31/2025)',
-        'Y-m-d' => 'YYYY-MM-DD (2025-12-31)',
-        'd-m-Y' => 'DD-MM-YYYY (31-12-2025)',
-        'M d, Y' => 'Mon DD, YYYY (Dec 31, 2025)',
-        'F d, Y' => 'Month DD, YYYY (December 31, 2025)',
+    'datetimes' => [
+        'd/m/Y H:i:s' => 'DD/MM/YYYY HH:mm:ss (31/12/2025 23:59:45)',
+        'm/d/Y H:i:s' => 'MM/DD/YYYY HH:mm:ss (12/31/2025 23:59:45)',
+        'Y-m-d H:i:s' => 'YYYY-MM-DD HH:mm:ss (2025-12-31 23:59:45)',
+        'd-m-Y H:i:s' => 'DD-MM-YYYY HH:mm:ss (31-12-2025 23:59:45)',
+        'M d, Y H:i:s' => 'Mon DD, YYYY HH:mm:ss (Dec 31, 2025 23:59:45)',
+        'F d, Y H:i:s' => 'Month DD, YYYY HH:mm:ss (December 31, 2025 23:59:45)',
+        'd/m/Y h:i:s A' => 'DD/MM/YYYY hh:mm:ss AM/PM (31/12/2025 11:59:45 PM)',
+        'm/d/Y h:i:s A' => 'MM/DD/YYYY hh:mm:ss AM/PM (12/31/2025 11:59:45 PM)',
+        'Y-m-d h:i:s A' => 'YYYY-MM-DD hh:mm:ss AM/PM (2025-12-31 11:59:45 PM)',
+        'd-m-Y h:i:s A' => 'DD-MM-YYYY hh:mm:ss AM/PM (31-12-2025 11:59:45 PM)',
+        'M d, Y h:i:s A' => 'Mon DD, YYYY hh:mm:ss AM/PM (Dec 31, 2025 11:59:45 PM)',
+        'F d, Y h:i:s A' => 'Month DD, YYYY hh:mm:ss AM/PM (December 31, 2025 11:59:45 PM)',
     ],
 
     /**
