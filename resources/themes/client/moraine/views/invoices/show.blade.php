@@ -98,6 +98,7 @@
                     name="payment_gateway"
                     label="Payment Method"
                 >
+                    {{-- TODO: Get list payment method --}}
                 </x-client::select>
                 <button type="submit" class="w-full bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     Proceed to Payment
