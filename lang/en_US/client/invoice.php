@@ -18,4 +18,10 @@ return [
     'price' => 'Price',
     'amount' => 'Amount',
     'total_due' => 'Total Due',
+    'status' => [
+        'unpaid' => 'Unpaid',
+        'paid' => 'Paid',
+        'cancelled' => 'Cancelled',
+        'refunded' => 'Refunded',
+    ],
 ];
