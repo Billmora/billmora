@@ -2,32 +2,31 @@
 
 namespace App\Services\Checkout;
 
-use App\Models\Coupon;
 use App\Models\CouponUsage;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Order;
 use App\Models\PackagePrice;
 use App\Models\Service;
+use App\Models\Coupon;
 use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
-
     /**
-     * Process and create a new order with selected package, variants, and pricing details.
-     *
+     * Process order creation with service and invoice
+     * 
      * @param int $userId
-     * @param \App\Models\PackagePrice $packagePrice
+     * @param PackagePrice $packagePrice
      * @param array $variantSelections
      * @param array $pricing
-     * @param \App\Models\Coupon|null $coupon
+     * @param Coupon|null $coupon
      * @param array $checkoutData
-     * @return mixed
+     * @return array
      */
     public function process(int $userId, PackagePrice $packagePrice, array $variantSelections, array $pricing, ?Coupon $coupon, array $checkoutData)
     {
-        $package = $packagePrice->package;
+        $package = $packagePrice->package()->with('catalog')->first();
         $currency = session('currency');
 
         return DB::transaction(function () use (
@@ -87,7 +86,7 @@ class OrderService
             InvoiceItem::create([
                 'invoice_id' => $invoice->id,
                 'service_id' => $service->id,
-                'description' => $package->name . ' - ' . $packagePrice->name,
+                'description' => $this->buildPackageDescription($package, $packagePrice),
                 'quantity' => 1,
                 'unit_price' => $pricing['base_price'],
                 'amount' => $pricing['base_price'],
@@ -101,7 +100,7 @@ class OrderService
                 InvoiceItem::create([
                     'invoice_id' => $invoice->id,
                     'service_id' => $service->id,
-                    'description' => 'Variant Option - ' . $item['description'],
+                    'description' => $item['description'],
                     'quantity' => 1,
                     'unit_price' => $item['price'],
                     'amount' => $item['price'],
@@ -154,11 +153,51 @@ class OrderService
                 ]);
             }
 
-            // Update order status (can be adjusted according to business logic)
-            // For now, keep pending until payment is completed
-            // $order->markAsCompleted();
-
             return compact('order', 'service', 'invoice');
         });
+    }
+
+    /**
+     * Build package description with service period.
+     *
+     * @param \App\Models\Package $package
+     * @param \App\Models\PackagePrice $packagePrice
+     * @return string
+     */
+    private function buildPackageDescription($package, PackagePrice $packagePrice): string
+    {
+        $catalogName = $package->catalog->name ?? '';
+        $packageName = $package->name;
+        
+        $description = "{$catalogName} - {$packageName}";
+
+        if (in_array(strtolower($packagePrice->type), ['recurring', 'onetime'])) {
+            $period = $this->calculateServicePeriod($packagePrice);
+            $description .= " ({$period})";
+        }
+
+        return $description;
+    }
+
+    /**
+     * Calculate service period based on billing cycle.
+     *
+     * @param \App\Models\PackagePrice $packagePrice
+     * @return string
+     */
+    private function calculateServicePeriod(PackagePrice $packagePrice): string
+    {
+        $start = now();
+        
+        $end = match(strtolower($packagePrice->billing_period)) {
+            'hourly' => $start->copy()->addHours($packagePrice->time_interval),
+            'daily' => $start->copy()->addDays($packagePrice->time_interval),
+            'weekly' => $start->copy()->addWeeks($packagePrice->time_interval),
+            'monthly' => $start->copy()->addMonths($packagePrice->time_interval),
+            'yearly' => $start->copy()->addYears($packagePrice->time_interval),
+            default => $start->copy()->addMonths(1),
+        };
+
+        return $start->toDateString() . ' - ' . $end->toDateString();
     }
 }

@@ -3,10 +3,8 @@
 namespace App\Services\Checkout;
 
 use App\Models\PackagePrice;
-use App\Models\VariantOption;
 use App\Models\Coupon;
-use App\Models\Currency;
-use Illuminate\Support\Facades\Session;
+use App\Models\VariantOption;
 
 class PricingService
 {
@@ -20,83 +18,68 @@ class PricingService
      */
     public function calculate(PackagePrice $packagePrice, array $variantSelections, ?Coupon $coupon = null)
     {
-        $currency = Session::get('currency');
+        $cycleName = $packagePrice->name;
+        $currencyCode = session('currency');
 
-        $isFree = $packagePrice->type === 'free';
-        $basePrice = $isFree ? 0 : ($packagePrice->rates[$currency]['price'] ?? 0);
-        $baseSetup = $isFree ? 0 : ($packagePrice->rates[$currency]['setup_fee'] ?? 0);
+        $basePrice = $this->getPrice($packagePrice, $currencyCode);
+        $setupFeePackage = $this->getSetupFee($packagePrice, $currencyCode);
 
+        $variantTotal = 0;
         $variantItems = [];
-        $variantRecurringSum = 0;
         $setupFeeVariants = [];
-        $setupFeeVariantSum = 0;
 
-        $allOptionIds = collect($variantSelections)->flatten()->toArray();
-        $options = VariantOption::with('variant', 'prices')
-            ->whereIn('id', $allOptionIds)
-            ->get()
-            ->keyBy('id');
+        if (!empty($variantSelections)) {
+            $allOptionIds = collect($variantSelections)->flatten()->unique()->toArray();
+            $options = VariantOption::with(['prices', 'variant'])->whereIn('id', $allOptionIds)->get()->keyBy('id');
 
-        foreach ($variantSelections as $variantId => $optionIds) {
-            foreach ($optionIds as $optionId) {
-                $option = $options->get($optionId);
-                
-                if (!$option) {
-                    continue;
-                }
+            foreach ($variantSelections as $variantId => $optionIds) {
+                foreach ($optionIds as $optionId) {
+                    $option = $options->get($optionId);
+                    if (!$option) {
+                        continue;
+                    }
 
-                $variantPrice = $option->prices
-                    ->where('name', $packagePrice->name)
-                    ->first();
+                    $optionPrice = $this->getVariantOptionPrice($option, $cycleName, $currencyCode);
+                    $optionSetupFee = $this->getVariantOptionSetupFee($option, $cycleName, $currencyCode);
 
-                if (!$variantPrice) {
-                    continue;
-                }
+                    if ($optionPrice > 0) {
+                        $variantTotal += $optionPrice;
+                        
+                        $variantItems[] = [
+                            'variant_id' => $variantId,
+                            'option_id' => $optionId,
+                            'description' => $option->variant->name . ': ' . $option->name,
+                            'price' => $optionPrice,
+                        ];
+                    }
 
-                $variantIsFree = $variantPrice->type === 'free';
-                $price = $variantIsFree ? 0 : ($variantPrice->rates[$currency]['price'] ?? 0);
-                $setup = $variantIsFree ? 0 : ($variantPrice->rates[$currency]['setup_fee'] ?? 0);
-
-                $variantItems[] = [
-                    'description' => $option->name,
-                    'price' => $price,
-                ];
-
-                $variantRecurringSum += $price;
-
-                if ($setup > 0) {
-                    $setupFeeVariants[] = [
-                        'description' => $option->name,
-                        'amount' => $setup,
-                    ];
-                    $setupFeeVariantSum += $setup;
+                    if ($optionSetupFee > 0) {
+                        $setupFeeVariants[] = [
+                            'variant_id' => $variantId,
+                            'option_id' => $optionId,
+                            'description' => $option->variant->name . ': ' . $option->name,
+                            'amount' => $optionSetupFee,
+                        ];
+                    }
                 }
             }
         }
 
-        $recurringTotal = $basePrice + $variantRecurringSum;
-        $setupFeePackage = $baseSetup;
-        $setupFeeTotal = $setupFeePackage + $setupFeeVariantSum;
-        $subtotal = $recurringTotal;
+        $recurringTotal = $basePrice + $variantTotal;
+        $setupFeeTotal = $setupFeePackage + array_sum(array_column($setupFeeVariants, 'amount'));
+        $subtotal = $recurringTotal + $setupFeeTotal;
 
         $discount = 0;
         if ($coupon) {
-            if ($coupon->type === 'percentage') {
-                $discount = ($subtotal * $coupon->value) / 100;
-            } else {
-                $discount = $this->convertCouponAmount($coupon->value, $currency);
-            }
-
-            $discount = min($discount, $subtotal);
+            $discount = $this->calculateDiscount($coupon, $recurringTotal);
         }
 
-
-        $total = $subtotal - $discount + $setupFeeTotal;
+        $total = max(0, $subtotal - $discount);
 
         return [
             'base_price' => $basePrice,
+            'variant_total' => $variantTotal,
             'variant_items' => $variantItems,
-            'variant_total' => $variantRecurringSum,
             'recurring_total' => $recurringTotal,
             'setup_fee_package' => $setupFeePackage,
             'setup_fee_variants' => $setupFeeVariants,
@@ -108,26 +91,108 @@ class PricingService
     }
 
     /**
-     * Convert coupon amount from default currency to target currency.
+     * Get the base price for the package price in specified currency.
      *
-     * @param float $amountInDefault
-     * @param string $targetCurrency
+     * @param \App\Models\PackagePrice $packagePrice
+     * @param string $currencyCode
      * @return float
      */
-    protected function convertCouponAmount(float $amountInDefault, string $targetCurrency)
+    private function getPrice(PackagePrice $packagePrice, string $currencyCode): float
     {
-        $defaultCurrency = Currency::where('is_default', true)->first();
-
-        if (!$defaultCurrency || $targetCurrency === $defaultCurrency->code) {
-            return $amountInDefault;
+        if (strtolower($packagePrice->type) === 'free') {
+            return 0.0;
         }
 
-        $target = Currency::where('code', $targetCurrency)->first();
+        $rate = $packagePrice->rates[$currencyCode] ?? null;
+        return $rate && ($rate['enabled'] ?? false) ? (float) ($rate['price'] ?? 0) : 0.0;
+    }
 
-        if (!$target || !$target->base_rate) {
-            return $amountInDefault;
+    /**
+     * Get the setup fee for the package price in specified currency.
+     *
+     * @param \App\Models\PackagePrice $packagePrice
+     * @param string $currencyCode
+     * @return float
+     */
+    private function getSetupFee(PackagePrice $packagePrice, string $currencyCode): float
+    {
+        if (strtolower($packagePrice->type) === 'free') {
+            return 0.0;
         }
 
-        return $amountInDefault * $target->base_rate;
+        $rate = $packagePrice->rates[$currencyCode] ?? null;
+        return $rate && ($rate['enabled'] ?? false) ? (float) ($rate['setup_fee'] ?? 0) : 0.0;
+    }
+
+    /**
+     * Get the price for a variant option in specified billing cycle and currency.
+     *
+     * @param \App\Models\VariantOption $option
+     * @param string $cycleName
+     * @param string $currencyCode
+     * @return float
+     */
+    private function getVariantOptionPrice($option, string $cycleName, string $currencyCode): float
+    {
+        foreach ($option->prices as $price) {
+            if ($price->name !== $cycleName) {
+                continue;
+            }
+
+            if (strtolower($price->type) === 'free') {
+                return 0.0;
+            }
+
+            $rate = $price->rates[$currencyCode] ?? null;
+            if ($rate && ($rate['enabled'] ?? false)) {
+                return (float) ($rate['price'] ?? 0);
+            }
+        }
+
+        return 0.0;
+    }
+
+    /**
+     * Get the setup fee for a variant option in specified billing cycle and currency.
+     *
+     * @param \App\Models\VariantOption $option
+     * @param string $cycleName
+     * @param string $currencyCode
+     * @return float
+     */
+    private function getVariantOptionSetupFee($option, string $cycleName, string $currencyCode): float
+    {
+        foreach ($option->prices as $price) {
+            if ($price->name !== $cycleName) {
+                continue;
+            }
+
+            if (strtolower($price->type) === 'free') {
+                return 0.0;
+            }
+
+            $rate = $price->rates[$currencyCode] ?? null;
+            if ($rate && ($rate['enabled'] ?? false)) {
+                return (float) ($rate['setup_fee'] ?? 0);
+            }
+        }
+
+        return 0.0;
+    }
+
+    /**
+     * Calculate discount amount based on coupon type and subtotal.
+     *
+     * @param \App\Models\Coupon $coupon
+     * @param float $subtotal
+     * @return float
+     */
+    private function calculateDiscount(Coupon $coupon, float $subtotal): float
+    {
+        if (strtolower($coupon->type) === 'percentage') {
+            return ($subtotal * $coupon->value) / 100;
+        }
+
+        return min($coupon->value, $subtotal);
     }
 }
