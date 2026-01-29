@@ -32,10 +32,10 @@
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $loop->iteration }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $coupon->code }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $coupon->start_at }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $coupon->expires_at }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $coupon->start_at?->format(Billmora::getGeneral('company_date_format')) }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $coupon->expires_at?->format(Billmora::getGeneral('company_date_format')) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $coupon->total_uses }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $coupon->created_at }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $coupon->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                 @can('coupons.edit')
                                     <a href="{{ route('admin.coupons.edit', ['id' => $coupon->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
