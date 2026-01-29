@@ -6,6 +6,7 @@ return [
     'invoice_date' => 'Invoice Date',
     'due_date' => 'Due Date',
     'total' => 'Total',
+    'manage' => 'Manage',
 
     'invoice_label' => 'Invoice #:number',
     'bill_to' => 'Bill To',
