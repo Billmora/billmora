@@ -5,12 +5,14 @@
 @section('body')
 <div class="flex flex-col lg:flex-row gap-5">
     <div class="w-full lg:w-5/7 h-fit grid gap-6">
-        <form action="{{ route('client.invoices.download', ['invoice' => $invoice->invoice_number]) }}" class="ml-auto">
-            <button type="submit" class="flex gap-2 items-center bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                <x-lucide-download class="w-5 h-auto" />
-                {{ __('client/invoice.download_label') }}
-            </button>
-        </form>
+        @if (Billmora::getGeneral('invoice_pdf'))
+            <form action="{{ route('client.invoices.download', ['invoice' => $invoice->invoice_number]) }}" class="ml-auto">
+                <button type="submit" class="flex gap-2 items-center bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                    <x-lucide-download class="w-5 h-auto" />
+                    {{ __('client/invoice.download_label') }}
+                </button>
+            </form>
+        @endif
         <div class="grid gap-8 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-0 items-center">
                 <div class="col-span-8">

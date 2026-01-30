@@ -59,6 +59,10 @@ class InvoicesController extends Controller
      */
     public function download(Invoice $invoice)
     {
+        if (!Billmora::getGeneral('invoice_pdf')) {
+            abort(404);
+        }
+
         if (Auth::id() !== $invoice->user_id && !Auth::user()->isAdmin) {
             abort(403);
         }
