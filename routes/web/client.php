@@ -52,13 +52,14 @@ Route::group(['prefix' => 'checkout', 'middleware' => ['maintenance']], function
 });
 
 /**
- * Client store routes.
+ * Client invoices routes.
  * 
  * Prefix: /invoices
  */
 Route::group(['prefix' => 'invoices', 'middleware' => ['auth', 'maintenance', '2fa']], function () {
     Route::get('/', [Client\InvoicesController::class, 'index'])->name('client.invoices');
     Route::get('/{invoice:invoice_number}', [Client\InvoicesController::class, 'show'])->name('client.invoices.show');
+    Route::get('/{invoice:invoice_number}/download', [Client\InvoicesController::class, 'download'])->name('client.invoices.download');
 });
 
 /**
