@@ -57,11 +57,9 @@ return [
     'ordering_number_format_helper' => 'Define the format for order numbers using {number} as a required placeholder. Optional placeholders: {day}, {month}, {year}.',
 
     'invoice_pdf_label' => 'Invoice PDF',
-    'invoice_pdf_helper' => 'Enable PDF generation for invoices, allowing customers to download or receive them via email.',
+    'invoice_pdf_helper' => 'Allow clients to download invoices as PDF from the client area and receive them via email.',
     'invoice_pdf_size_label' => 'Invoice PDF Size',
     'invoice_pdf_size_helper' => 'Select the paper size for generated invoice PDFs.',
-    'invoice_pdf_font_label' => 'Invoice PDF Font',
-    'invoice_pdf_font_helper' => 'Enter the Google Font name to use in invoice PDFs.',
     'invoice_number_increment_label' => 'Invoice Number Increment',
     'invoice_number_increment_helper' => 'Set the increment value for invoice numbers.',
     'invoice_number_padding_label' => 'Invoice Number Padding',
