@@ -36,6 +36,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin invoices interface routes.
+     *
+     * Prefix: /admin/invoices
+     */
+    Route::group(['prefix' => 'invoices'], function () {
+        Route::get('/', [Admin\InvoicesController::class, 'index'])->name('admin.invoices');
+    });
+
+    /**
      * Admin catalogs interface routes.
      *
      * Prefix: /admin/catalogs
