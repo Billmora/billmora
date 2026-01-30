@@ -24,7 +24,7 @@
       @auth
         <a href="{{ route('client.invoices') }}" class="flex gap-2 items-center {{ request()->routeIs('client.invoices*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
           <x-lucide-receipt-text class="w-5 h-auto" />
-          <span class="font-semibold">Invoices</span>
+          <span class="font-semibold">{{ __('client/navigation.invoices') }}</span>
         </a>
       @endauth
     </div>
