@@ -6,7 +6,6 @@
     <title>Invoice {{ $invoice->invoice_number }}</title>
     <style>
         * {
-            font-family: "Helvetica", sans-serif;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
