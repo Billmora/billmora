@@ -43,7 +43,6 @@ class SettingSeeder extends Seeder
             ['category' => 'general', 'key' => 'ordering_number_format', 'value' => 'ORD-{number}'],
             ['category' => 'general', 'key' => 'invoice_pdf', 'value' => false],
             ['category' => 'general', 'key' => 'invoice_pdf_size', 'value' => 'A4'],
-            ['category' => 'general', 'key' => 'invoice_pdf_font', 'value' => 'Plus Jakarta Sans'],
             ['category' => 'general', 'key' => 'invoice_number_increment', 'value' => 1],
             ['category' => 'general', 'key' => 'invoice_number_padding', 'value' => 4],
             ['category' => 'general', 'key' => 'invoice_number_format', 'value' => 'INV-{number}'],
