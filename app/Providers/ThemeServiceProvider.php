@@ -20,7 +20,7 @@ class ThemeServiceProvider extends ServiceProvider
 
     /**
      * Register default theme information, view namespaces, and Blade anonymous components
-     * for each predefined role (admin, client, portal, email).
+     * for each predefined role (admin, client, portal, email, invoice).
      *
      * This dynamically shares theme metadata with views, registers paths for Blade templates,
      * and auto-registers component aliases found under each theme’s components directory.
@@ -34,6 +34,7 @@ class ThemeServiceProvider extends ServiceProvider
             'portal' => 'moraine',
             'client' => 'moraine',
             'email' => 'moraine',
+            'invoice' => 'moraine',
         ];
 
         foreach ($defaultThemes as $role => $themeName) {
