@@ -20,9 +20,7 @@ class InvoicesController extends Controller
     {
         $user = Auth::user();
 
-        $invoices = Invoice::whereHas('order', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })
+        $invoices = Invoice::where('user_id', $user->id)
             ->with(['order.service.package.catalog'])
             ->orderBy('created_at', 'desc')
             ->paginate(15);
@@ -43,7 +41,7 @@ class InvoicesController extends Controller
 
         $invoice->loadMissing(['order.service.package.catalog', 'order.user']);
 
-        if ($invoice->order->user_id !== $user->id) {
+        if ($user->id !== $invoice->user_id) {
             abort(403);
         }
 
@@ -59,11 +57,13 @@ class InvoicesController extends Controller
      */
     public function download(Invoice $invoice)
     {
+        $user = Auth::user();
+
         if (!Billmora::getGeneral('invoice_pdf')) {
             abort(404);
         }
 
-        if (Auth::id() !== $invoice->user_id && !Auth::user()->isAdmin) {
+        if ($user->id !== $invoice->user_id && !$user->isAdmin) {
             abort(403);
         }
 

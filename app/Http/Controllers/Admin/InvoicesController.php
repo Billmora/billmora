@@ -19,8 +19,7 @@ class InvoicesController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::whereHas('order')
-            ->with(['order.service.package.catalog'])
+        $invoices = Invoice::with(['order.service.package.catalog', 'user'])
             ->orderBy('created_at', 'desc')
             ->paginate(25);
 
