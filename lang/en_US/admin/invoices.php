@@ -1,9 +1,30 @@
 <?php
 
 return [
-    'invoice_number_label' => 'Invoice Number',
-    'invoice_date_label' => 'Invoice Date',
+    'number_label' => 'Invoice Number',
+    'user_label' => 'User',
+    'user_helper' => 'Select the user this invoice is assigned to.',
+    'status_label' => 'Status',
+    'status_helper' => 'Select the current status of the invoice',
+    'date_label' => 'Invoice Date',
+    'date_helper' => 'Set the date when this invoice is issued.',
     'due_date_label' => 'Due Date',
+    'due_date_helper' => 'Set the payment due date for this invoice.',
+    'currency_label' => 'Currency',
+    'currency_helper' => 'Select the currency used for this invoice.',
+    'email_label' => 'Send Invoice Email',
+    'email_helper' => 'Enable to notify the user by email when this invoice is created.',
+    'invoice_items' => [
+        'items_label' => 'Items',
+        'items_helper' => 'Add invoice items with description, quantity, and price.',
+        'description_label' => 'Description',
+        'description_helper' => 'Enter a description of the invoice item or service.',
+        'quantity_label' => 'Quantity',
+        'quantity_helper' => 'Enter the quantity for this invoice item.',
+        'unit_price_label' => 'Unit Price',
+        'unit_price_helper' => 'Enter the price per unit for this invoice item.',
+    ],
     'total_label' => 'Total',
     'manage_label' => 'Manage',
+    'add_new_items_label' => 'Add new items',
 ];
