@@ -22,7 +22,7 @@ return [
         'quantity_label' => 'Quantity',
         'quantity_helper' => 'Enter the quantity for this invoice item.',
         'unit_price_label' => 'Unit Price',
-        'unit_price_helper' => 'Enter the price per unit for this invoice item.',
+        'unit_price_helper' => 'Enter the price per unit. Use a negative value to apply a discount.',
     ],
     'total_label' => 'Total',
     'manage_label' => 'Manage',
