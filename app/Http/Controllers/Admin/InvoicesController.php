@@ -227,4 +227,17 @@ class InvoicesController extends Controller
                 ->with('error', __('common.update_failed', ['attribute' => $e->getMessage()]));
         }
     }
+
+    /**
+     * Remove the specified invoice from database.
+     *
+     * @param \App\Models\Invoice $invoice
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Invoice $invoice)
+    {
+        $invoice->delete();
+
+        return redirect()->route('admin.invoices')->with('success', __('common.delete_success', ['attribute' => $invoice->invoice_number]));
+    }
 }
