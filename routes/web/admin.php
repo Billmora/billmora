@@ -44,6 +44,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/', [Admin\InvoicesController::class, 'index'])->name('admin.invoices');
         Route::get('/create', [Admin\InvoicesController::class, 'create'])->name('admin.invoices.create');
         Route::post('/create', [Admin\InvoicesController::class, 'store'])->name('admin.invoices.store');
+        Route::get('/{invoice:invoice_number}/edit', [Admin\InvoicesController::class, 'edit'])->name('admin.invoices.edit');
+        Route::put('/{invoice:invoice_number}/edit', [Admin\InvoicesController::class, 'update'])->name('admin.invoices.update');
     });
 
     /**

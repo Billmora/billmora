@@ -124,4 +124,107 @@ class InvoicesController extends Controller
                 ->with('error', __('common.create_failed', ['attribute' => $e->getMessage()]));
         }
     }
+
+    /**
+     * Show the form for editing the specified invoice.
+     *
+     * @param \App\Models\Invoice $invoice
+     * @return \Illuminate\View\View
+     */
+    public function edit(Invoice $invoice)
+    {
+        $users = User::select('id', 'first_name', 'last_name', 'email')->get();
+
+        $currencies = Currency::select('code')->get();
+
+        $invoiceItems = $invoice->items->map(fn($item) => [
+            'description' => $item->description,
+            'quantity' => $item->quantity,
+            'unit_price' => $item->unit_price
+        ])->toArray();
+
+        return view('admin::invoices.edit', compact('invoice', 'users', 'currencies', 'invoiceItems'));
+    }
+
+    /**
+     * Update the specified invoice in database.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Invoice $invoice
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, Invoice $invoice)
+    {
+        $validated = $request->validate([
+            'invoice_user' => ['required', Rule::exists('users', 'email')],
+            'invoice_status' => ['required', Rule::in(['unpaid', 'paid', 'cancelled', 'refunded'])],
+            'invoice_date' => ['required', 'date'],
+            'invoice_due_date' => ['required', 'date', 'after_or_equal:invoice_date'],
+            'invoice_currency' => ['required', Rule::exists('currencies', 'code')],
+            'invoice_email' => ['nullable', 'boolean'],
+            'invoice_items' => ['nullable', 'array'],
+            'invoice_items.*.description' => ['required', 'string', 'max:1000'],
+            'invoice_items.*.quantity' => ['required', 'integer', 'min:1'],
+            'invoice_items.*.unit_price' => ['required', 'numeric'],
+        ]);
+
+        DB::beginTransaction();
+        
+        try {
+            $subtotal = 0;
+            $discount = 0;
+
+            if (!empty($validated['invoice_items'])) {
+                foreach ($validated['invoice_items'] as $item) {
+                    $lineTotal = $item['quantity'] * $item['unit_price'];
+                    
+                    if ($item['unit_price'] < 0) {
+                        $discount += abs($lineTotal);
+                    } else {
+                        $subtotal += $lineTotal;
+                    }
+                }
+            }
+
+            $total = $subtotal - $discount;
+
+            $invoice->update([
+                'user_id' => User::where('email', $validated['invoice_user'])->value('id'),
+                'status' => $validated['invoice_status'],
+                'currency' => $validated['invoice_currency'],
+                'subtotal' => $subtotal,
+                'discount' => $discount,
+                'total' => $total,
+                'due_date' => $validated['invoice_due_date'],
+                'paid_at' => $validated['invoice_status'] === 'paid' ? now() : null,
+                'created_at' => $validated['invoice_date'],
+            ]);
+
+            $invoice->items()->delete();
+
+            if (!empty($validated['invoice_items'])) {
+                foreach ($validated['invoice_items'] as $item) {
+                    $invoice->items()->create([
+                        'description' => $item['description'],
+                        'quantity' => $item['quantity'],
+                        'unit_price' => $item['unit_price'],
+                        'amount' => $item['quantity'] * $item['unit_price'],
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return redirect()
+                ->route('admin.invoices')
+                ->with('success', __('common.update_success', ['attribute' => $invoice->invoice_number]));
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return back()
+                ->withInput()
+                ->with('error', __('common.update_failed', ['attribute' => $e->getMessage()]));
+        }
+    }
 }
