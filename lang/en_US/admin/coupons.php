@@ -6,7 +6,7 @@ return [
     'type_label' => 'Type',
     'type_helper' => 'Select whether the coupon provides a percentage discount or a fixed amount discount.',
     'value_label' => 'Value',
-    'value_helper' => 'Enter the discount value. For percentage type, enter a value.',
+    'value_helper' => 'Enter the discount value. For percentage, enter a percent amount. For fixed amount, the value uses the default currency and will be automatically converted to other currencies using base rate.',
     'billing_cycles_label' => 'Billing Cycles',
     'billing_cycles_helper' => 'Select specific pricing types for this coupon. Leave empty to apply to all billing cycles.',
     'max_uses_label' => 'Maximum Uses',
