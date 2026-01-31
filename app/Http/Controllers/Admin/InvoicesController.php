@@ -236,8 +236,10 @@ class InvoicesController extends Controller
      */
     public function destroy(Invoice $invoice)
     {
+        $tempInvoice = $invoice;
+
         $invoice->delete();
 
-        return redirect()->route('admin.invoices')->with('success', __('common.delete_success', ['attribute' => $invoice->invoice_number]));
+        return redirect()->route('admin.invoices')->with('success', __('common.delete_success', ['attribute' => $tempInvoice->invoice_number]));
     }
 }

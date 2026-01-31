@@ -56,7 +56,7 @@
             position="centered"
             title="{{ __('common.delete_modal_title') }}"
             description="{{ __('common.delete_modal_description', ['item' => $invoice->invoice_number]) }}">
-            <form action="{{ route('admin.coupons.destroy', ['id' => $invoice->invoice_number]) }}" method="POST">
+            <form action="{{ route('admin.invoices.destroy', ['invoice' => $invoice->invoice_number]) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <div class="flex justify-end gap-2 mt-4">
