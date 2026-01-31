@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('payment_method')->nullable();
             $table->string('transaction_id')->nullable();
             
-            $table->date('due_date');
+            $table->timestamp('due_date');
             $table->timestamp('paid_at')->nullable();
             $table->timestamps();
             
