@@ -16,8 +16,8 @@
                 <table class="min-w-full divide-y divide-billmora-2">
                     <thead class="bg-billmora-2">
                         <tr>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/invoices.invoice_number_label') }}</th>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/invoices.invoice_date_label') }}</th>
+                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/invoices.number_label') }}</th>
+                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/invoices.date_label') }}</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/invoices.due_date_label') }}</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/invoices.total_label') }}</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.status') }}</th>
