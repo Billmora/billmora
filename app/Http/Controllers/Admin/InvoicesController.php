@@ -15,6 +15,19 @@ use Illuminate\Validation\Rule;
 class InvoicesController extends Controller
 {
     /**
+     * Applies permission-based middleware for accessing invoices management.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:invoices.view')->only(['index']);
+        $this->middleware('permission:invoices.create')->only(['create', 'store']);
+        $this->middleware('permission:invoices.update')->only(['edit', 'update', 'download']);
+        $this->middleware('permission:invoices.delete')->only(['destroy']);
+    }
+
+    /**
      * Display a paginated list of all invoices.
      *
      * @return \Illuminate\View\View
