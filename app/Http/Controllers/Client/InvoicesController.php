@@ -63,7 +63,7 @@ class InvoicesController extends Controller
             abort(404);
         }
 
-        if ($user->id !== $invoice->user_id && !$user->isAdmin) {
+        if ($user->id !== $invoice->user_id) {
             abort(403);
         }
 
