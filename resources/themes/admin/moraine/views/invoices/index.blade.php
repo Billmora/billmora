@@ -16,6 +16,7 @@
                 <table class="min-w-full divide-y divide-billmora-2">
                     <thead class="bg-billmora-2">
                         <tr>
+                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">ID</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/invoices.number_label') }}</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/invoices.date_label') }}</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/invoices.due_date_label') }}</th>
@@ -27,6 +28,7 @@
                     <tbody class="divide-y-2 divide-billmora-2 bg-white">
                         @foreach ($invoices as $invoice)
                             <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->id }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
                                     <a href="{{ route('admin.invoices.edit', ['invoice' => $invoice->invoice_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $invoice->invoice_number }}</a>
                                 </td>
