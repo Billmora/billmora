@@ -3,6 +3,7 @@
 return [
     'dashboard' => 'Dashboard',
     'users' => 'Users',
+    'invoices' => 'Invoices',
     'catalogs' => 'Catalogs',
     'packages' => 'Packages',
     'variants' => 'Variants',
