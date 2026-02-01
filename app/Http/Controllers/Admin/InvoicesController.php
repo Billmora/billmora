@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Currency;
 use App\Models\Invoice;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -241,5 +243,34 @@ class InvoicesController extends Controller
         $invoice->delete();
 
         return redirect()->route('admin.invoices')->with('success', __('common.delete_success', ['attribute' => $tempInvoice->invoice_number]));
+    }
+
+    /**
+     * Download the invoice as a PDF file.
+     *
+     * @param \App\Models\Invoice $invoice
+     * @return \Illuminate\Http\Response
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    public function download(Invoice $invoice)
+    {
+        $paperSize = Billmora::getGeneral('invoice_pdf_size');
+
+        $pdf = Pdf::loadView('invoice::index', [
+            'invoice' => $invoice->load([
+                'user',
+                'order',
+                'items',
+                'items.service',
+            ]),
+        ])
+        ->setPaper($paperSize, 'portrait')
+        ->setOption('enable-local-file-access', true)
+        ->setOption('isHtml5ParserEnabled', true)
+        ->setOption('isRemoteEnabled', true);
+
+        $filename = "Invoice-{$invoice->invoice_number}.pdf";
+        
+        return $pdf->download($filename);
     }
 }

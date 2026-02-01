@@ -39,6 +39,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                     <a href="{{ route('admin.invoices.edit', ['invoice' => $invoice->invoice_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ __('common.edit') }}</a>
                                     <x-admin::modal.trigger modal="deleteModal-{{ $invoice->id }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.delete') }}</x-admin::modal.trigger>
+                                    <a href="{{ route('admin.invoices.download', ['invoice' => $invoice->invoice_number]) }}" class="inline-flex items-center text-sm font-semibold text-yellow-500 hover:text-yellow-600">{{ __('common.download') }}</a>
                                 </td>
                             </tr>
                         @endforeach
