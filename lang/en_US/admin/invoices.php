@@ -25,5 +25,6 @@ return [
         'unit_price_helper' => 'Enter the price per unit. Use a negative value to apply a discount.',
     ],
     'total_label' => 'Total',
+    'download_label' => 'Download as PDF',
     'add_new_items_label' => 'Add new items',
 ];
