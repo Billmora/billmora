@@ -35,11 +35,18 @@ class InvoicesController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $invoices = Invoice::with(['order.service.package.catalog', 'user'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(25);
+        $query = Invoice::with(['order.service.package.catalog', 'user']);
+
+        if ($search = $request->get('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('invoice_number', 'like', "%{$search}%")
+                ->orWhere('status', 'like', "%{$search}%");
+            });
+        }
+
+        $invoices = $query->paginate(25);
 
         return view('admin::invoices.index', compact('invoices'));
     }
