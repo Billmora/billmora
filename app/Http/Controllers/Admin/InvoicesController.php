@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Currency;
 use App\Models\Invoice;
 use App\Models\User;
+use App\Traits\AuditsSystem;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Billmora;
 use Illuminate\Http\Request;
@@ -14,6 +15,8 @@ use Illuminate\Validation\Rule;
 
 class InvoicesController extends Controller
 {
+    use AuditsSystem;
+
     /**
      * Applies permission-based middleware for accessing invoices management.
      * 
@@ -127,6 +130,8 @@ class InvoicesController extends Controller
 
             DB::commit();
 
+            $this->recordCreate('invoices.create', $invoice->toArray());
+
             return redirect()
                 ->route('admin.invoices')
                 ->with('success', __('common.create_success', ['attribute' => $invoice->invoice_number]));
@@ -203,6 +208,11 @@ class InvoicesController extends Controller
 
             $total = $subtotal - $discount;
 
+            $oldData = [
+                'invoice' => $invoice->getChanges(),
+                'items' => $invoice->items->toArray(),
+            ];
+
             $invoice->update([
                 'user_id' => User::where('email', $validated['invoice_user'])->value('id'),
                 'status' => $validated['invoice_status'],
@@ -228,7 +238,15 @@ class InvoicesController extends Controller
                 }
             }
 
+            $invoice->refresh();
+            $newData = [
+                'invoice' => $invoice->getChanges(),
+                'items' => $invoice->items->toArray(),
+            ];
+
             DB::commit();
+
+            $this->recordUpdate('invoices.update', $oldData, $newData);
 
             return redirect()
                 ->route('admin.invoices')
@@ -254,6 +272,11 @@ class InvoicesController extends Controller
         $tempInvoice = $invoice;
 
         $invoice->delete();
+
+        $this->recordDelete('invoices.delete', [
+            'id' => $tempInvoice->id,
+            'invoice_number' => $tempInvoice->invoice_number,
+        ]);
 
         return redirect()->route('admin.invoices')->with('success', __('common.delete_success', ['attribute' => $tempInvoice->invoice_number]));
     }
