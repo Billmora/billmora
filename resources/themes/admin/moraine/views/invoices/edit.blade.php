@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Edit Invoice')
+@section('title', "Invoice Edit - {$invoice->invoice_number}")
 
 @section('body')
 <div class="grid gap-4">

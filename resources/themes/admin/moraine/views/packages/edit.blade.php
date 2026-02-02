@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', "Package Create")
+@section('title', "Package Edit - {$package->name}")
 
 @section('body')
 <div class="flex flex-col gap-5">

@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Coupon Create')
+@section('title', "Coupon Edit - {$coupon->code}")
 
 @section('body')
 <form action="{{ route('admin.coupons.update', ['id' => $coupon->id]) }}" method="POST" class="flex flex-col gap-5">

@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', "Variant Edit")
+@section('title', "Variant Edit - {$variant->name}")
 
 @section('body')
 <div class="flex flex-col gap-5">
