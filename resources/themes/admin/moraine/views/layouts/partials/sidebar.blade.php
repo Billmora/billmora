@@ -24,6 +24,10 @@
         <x-lucide-receipt-text class="w-5 h-auto" />
         <span class="font-semibold">{{ __('admin/navigation.invoices') }}</span>
       </a>
+      <a href="{{ route('admin.orders') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.orders*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+        <x-lucide-shopping-bag class="w-5 h-auto" />
+        <span class="font-semibold">{{ __('admin/navigation.orders') }}</span>
+      </a>
       <span class="mt-4 block text-slate-600 font-semibold text-md">{{ __('admin/navigation.group.product') }}</span>
       <a href="{{ route('admin.catalogs') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.catalogs*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
         <x-lucide-box class="w-5 h-auto" />
