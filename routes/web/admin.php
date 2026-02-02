@@ -50,6 +50,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/{invoice:invoice_number}/download', [Admin\InvoicesController::class, 'download'])->name('admin.invoices.download');
     });
 
+    Route::group(['prefix' => 'orders'], function () {
+        Route::get('/', [Admin\OrdersController::class, 'index'])->name('admin.orders');
+    });
+
     /**
      * Admin catalogs interface routes.
      *
