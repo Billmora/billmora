@@ -105,6 +105,10 @@ return [
 
     'created_at' => 'Created At',
     'updated_at' => 'Updated At',
+    'completed_at' => 'Completed At',
+    'cancelled_at' => 'Cancelled At',
+    'suspended_at' => 'Suspended At',
+    'terminated_at' => 'Terminated At',
     'schedule_at' => 'Schedule At',
     'action' => 'Action',
 
