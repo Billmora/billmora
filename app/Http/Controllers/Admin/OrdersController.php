@@ -159,4 +159,80 @@ class OrdersController extends Controller
                 ->with('error', __('common.create_failed', ['attribute' => $e->getMessage()]));
         }
     }
+
+    /**
+     * Show the form for editing the specified order with variant details.
+     *
+     * @param \App\Models\Order $order
+     * @return \Illuminate\View\View
+     */
+    public function edit(Order $order)
+    {
+        $order->load([
+            'package.catalog',
+            'package.variants.options',
+            'packagePrice'
+        ]);
+
+        $variantDetails = [];
+    
+        if ($order->variant_selections && is_array($order->variant_selections)) {
+            foreach ($order->variant_selections as $variantId => $optionIds) {
+                $variant = $order->package->variants->firstWhere('id', $variantId);
+                
+                if (!$variant) continue;
+                
+                $optionIds = is_array($optionIds) ? $optionIds : [$optionIds];
+                
+                $selectedOptions = $variant->options->whereIn('id', $optionIds);
+                
+                foreach ($selectedOptions as $option) {
+                    $variantDetails[] = [
+                        'name' => "{$variant->name}: {$option->name}"
+                    ];
+                }
+            }
+        }
+
+        return view('admin::orders.edit', compact('order', 'variantDetails'));
+    }
+
+    /**
+     * Update the specified order status with timestamp handling.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Order $order
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, Order $order)
+    {
+        $validated = $request->validate([
+            'order_status' => ['required', Rule::in(['pending', 'processing', 'completed', 'cancelled', 'failed'])],
+        ]);
+
+        $updateData = [
+            'status' => $validated['order_status'],
+        ];
+    
+        switch ($validated['order_status']) {
+            case 'completed':
+                $updateData['completed_at'] = $order->completed_at ?? now();
+                $updateData['cancelled_at'] = null;
+                break;
+            case 'cancelled':
+                $updateData['cancelled_at'] = $order->cancelled_at ?? now();
+                $updateData['completed_at'] = null;
+                break;
+            default:
+                $updateData['cancelled_at'] = null;
+                $updateData['completed_at'] = null;
+                break;
+        }
+        
+        $order->update($updateData);
+        
+        return redirect()
+                ->route('admin.orders')
+                ->with('success', __('common.update_success', ['attribute' => $order->order_number]));
+    }
 }

@@ -54,6 +54,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/', [Admin\OrdersController::class, 'index'])->name('admin.orders');
         Route::get('/create', [Admin\OrdersController::class, 'create'])->name('admin.orders.create');
         Route::post('/create', [Admin\OrdersController::class, 'store'])->name('admin.orders.store');
+        Route::get('/{order:order_number}/edit', [Admin\OrdersController::class, 'edit'])->name('admin.orders.edit');
+        Route::put('/{order:order_number}/edit', [Admin\OrdersController::class, 'update'])->name('admin.orders.update');
     });
 
     /**
