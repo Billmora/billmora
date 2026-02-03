@@ -35,7 +35,7 @@ class OrderValidationService
             return $this->success();
         }
 
-        $variantValidation = $this->validateVariantSelections($package, $variantSelections);
+        $variantValidation = $this->validateVariantSelections($package, $variantSelections, $packagePrice);
         if (!$variantValidation['valid']) {
             return $variantValidation;
         }
@@ -44,27 +44,23 @@ class OrderValidationService
             return $this->success();
         }
 
-        $hasVariantPrices = $package->variants()
-            ->whereHas('options.prices', fn($q) => $q->where('name', $packagePrice->name))
-            ->exists();
-
-        if (!$hasVariantPrices) {
-            return $this->success();
-        }
-
         return $this->validateVariantPrices($variantSelections, $currencyCode, $packagePrice->name);
     }
 
     /**
+     * Validate that variant selections belong to package and have prices for billing cycle.
      *
      * @param \App\Models\Package $package
      * @param array $variantSelections
+     * @param \App\Models\PackagePrice|null $packagePrice
      * @return array
      */
-    public function validateVariantSelections(Package $package, array $variantSelections): array
-    {
+    public function validateVariantSelections(
+        Package $package, 
+        array $variantSelections,
+        ?PackagePrice $packagePrice = null
+    ): array {
         $packageVariantIds = $package->variants->pluck('id')->toArray();
-
         foreach (array_keys($variantSelections) as $variantId) {
             if (!in_array($variantId, $packageVariantIds)) {
                 return $this->error('One or more selected variants do not belong to this package.');
@@ -82,6 +78,21 @@ class OrderValidationService
 
         if (count($allOptionIds) !== count($validOptions)) {
             return $this->error('One or more selected options are invalid or do not belong to this package.');
+        }
+
+        if ($packagePrice) {
+            $cycleName = $packagePrice->name;
+            
+            $validOptionsWithPrice = VariantOption::whereIn('id', $allOptionIds)
+                ->whereHas('prices', function($q) use ($cycleName) {
+                    $q->where('name', $cycleName);
+                })
+                ->pluck('id')
+                ->toArray();
+
+            if (count($allOptionIds) !== count($validOptionsWithPrice)) {
+                return $this->error('One or more selected variants do not have prices for the selected billing cycle.');
+            }
         }
 
         return $this->success();
@@ -168,6 +179,7 @@ class OrderValidationService
     }
 
     /**
+     * Build normalized variant selections array from raw input.
      *
      * @param array $variantOptions
      * @return array
