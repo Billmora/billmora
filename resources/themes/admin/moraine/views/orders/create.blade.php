@@ -52,6 +52,12 @@
                 <option value="cancelled" {{ old('order_status') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                 <option value="failed" {{ old('order_status') === 'failed' ? 'selected' : '' }}>Failed</option>
             </x-admin::select>
+            <x-admin::toggle
+                name="order_email"
+                label="{{ __('admin/orders.email_label') }}"
+                helper="{{ __('admin/orders.email_helper') }}"
+                :checked="old('order_email')"
+            />
         </div>
         <div>
             <h4 class="text-lg font-semibold text-slate-600">{{ __('admin/orders.package_configuration_label') }}</h4>

@@ -145,6 +145,10 @@ class OrdersController extends Controller
                 $validated['order_status']
             );
 
+            if ($request->boolean('order_email')) {
+                // TODO: Send email notify to user
+            }
+
             return redirect()
                 ->route('admin.orders')
                 ->with('success', __('common.create_success', ['attribute' => $result['order']->order_number]));
