@@ -16,7 +16,7 @@
                 </div>
             </form>
         </div>
-        <a href="#" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+        <a href="{{ route('admin.orders.create') }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
             <x-lucide-plus class="w-auto h-5" />
             {{ __('common.create') }}
         </a>
