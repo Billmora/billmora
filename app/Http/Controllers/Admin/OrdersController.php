@@ -3,8 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
+use App\Models\Currency;
 use App\Models\Order;
+use App\Models\Package;
+use App\Models\User;
+use App\Services\Package\PricingService;
+use App\Services\Package\Admin\OrderService;
+use App\Services\Package\OrderValidationService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class OrdersController extends Controller
 {
@@ -36,5 +44,115 @@ class OrdersController extends Controller
         $orders = $query->paginate(25);
 
         return view('admin::orders.index', compact('orders'));
+    }
+
+    /**
+     * Show the form for creating a new order with packages and pricing data.
+     *
+     * @param \App\Services\Package\PricingService $pricingService
+     * @return \Illuminate\View\View
+     */
+    public function create(PricingService $pricingService)
+    {
+        $users = User::select('id', 'first_name', 'last_name', 'email')->get();
+        $currencies = Currency::select('code')->get();
+        $coupons = Coupon::select('id', 'code')->where(function ($q) {
+                $q->whereNull('expires_at')
+                ->orWhere('expires_at', '>', now());
+            })->get();
+        
+        $packages = Package::select('id', 'name', 'catalog_id')
+            ->with([
+                'prices',
+                'catalog:id,name',
+                'variants' => function($query) {
+                    $query->where('status', 'visible');
+                },
+                'variants.options.prices'
+            ])
+            ->get();
+
+        $packagesPayload = $pricingService->buildPackagesPayload($packages);
+
+        return view('admin::orders.create', compact(
+            'users',
+            'currencies',
+            'coupons',
+            'packagesPayload'
+        ));
+    }
+
+    /**
+     * Store a newly created order with validation and pricing calculation.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Services\Package\Admin\OrderService $orderService
+     * @param \App\Services\Package\OrderValidationService $validationService
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request, OrderService $orderService, OrderValidationService $validationService)
+    {
+        $validated = $request->validate([
+            'order_user' => ['required', Rule::exists('users', 'email')],
+            'order_currency' => ['required', Rule::exists('currencies', 'code')],
+            'order_coupon' => ['nullable', Rule::exists('coupons', 'code')],
+            'order_status' => ['required', Rule::in(['pending', 'processing', 'completed', 'cancelled', 'failed'])],
+            'order_package' => ['required', Rule::exists('packages', 'id')],
+            'order_package_billing' => ['required', Rule::exists('package_prices', 'id')],
+            'variant_options' => ['nullable', 'array'],
+        ]);
+
+        try {
+            $user = User::where('email', $validated['order_user'])->firstOrFail();
+            $package = Package::with(['prices', 'variants.options.prices', 'catalog'])
+                ->findOrFail($validated['order_package']);
+            $packagePrice = $package->prices->firstWhere('id', $validated['order_package_billing']);
+
+            if (!$packagePrice) {
+                return back()
+                    ->withInput()
+                    ->with('error', 'Selected billing cycle does not belong to the selected package.');
+            }
+
+            $variantSelections = $validationService->buildVariantSelections(
+                $validated['variant_options'] ?? []
+            );
+
+            $validation = $validationService->validateConfiguration(
+                $package,
+                $packagePrice,
+                $variantSelections,
+                $validated['order_currency']
+            );
+
+            if (!$validation['valid']) {
+                return back()
+                    ->withInput()
+                    ->with('error', $validation['message']);
+            }
+
+            $coupon = $validated['order_coupon'] 
+                ? Coupon::where('code', $validated['order_coupon'])->first() 
+                : null;
+
+            $result = $orderService->createOrder(
+                $user->id,
+                $package,
+                $packagePrice,
+                $variantSelections,
+                $coupon,
+                $validated['order_currency'],
+                $validated['order_status']
+            );
+
+            return redirect()
+                ->route('admin.orders')
+                ->with('success', __('common.create_success', ['attribute' => $result['order']->order_number]));
+
+        } catch (\Exception $e) {
+            return back()
+                ->withInput()
+                ->with('error', __('common.create_failed', ['attribute' => $e->getMessage()]));
+        }
     }
 }

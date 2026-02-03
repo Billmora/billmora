@@ -52,6 +52,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
     Route::group(['prefix' => 'orders'], function () {
         Route::get('/', [Admin\OrdersController::class, 'index'])->name('admin.orders');
+        Route::get('/create', [Admin\OrdersController::class, 'create'])->name('admin.orders.create');
+        Route::post('/create', [Admin\OrdersController::class, 'store'])->name('admin.orders.store');
     });
 
     /**
