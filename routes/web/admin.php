@@ -56,6 +56,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::post('/create', [Admin\OrdersController::class, 'store'])->name('admin.orders.store');
         Route::get('/{order:order_number}/edit', [Admin\OrdersController::class, 'edit'])->name('admin.orders.edit');
         Route::put('/{order:order_number}/edit', [Admin\OrdersController::class, 'update'])->name('admin.orders.update');
+        Route::delete('/{order:order_number}', [Admin\OrdersController::class, 'destroy'])->name('admin.orders.destroy');
     });
 
     /**

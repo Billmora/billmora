@@ -235,4 +235,19 @@ class OrdersController extends Controller
                 ->route('admin.orders')
                 ->with('success', __('common.update_success', ['attribute' => $order->order_number]));
     }
+
+    /**
+     * Remove the specified order from database.
+     *
+     * @param \App\Models\Order $order
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Order $order)
+    {
+        $tempOrder = $order;
+
+        $order->delete();
+
+        return redirect()->route('admin.orders')->with('success', __('common.delete_success', ['attribute' => $tempOrder->order_number]));
+    }
 }
