@@ -21,5 +21,8 @@ return [
     'variant_option_label' => 'Variant Options',
     'variant_option_helper' => 'Select additional variants are available for the chosen package.',
     'date_label' => 'Order Date',
+    'subtotal_label' => 'Subtotal',
+    'discount_label' => 'Discount',
+    'setup_fee_label' => 'Setup Fee',
     'total_label' => 'Total',
 ];
