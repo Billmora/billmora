@@ -10,6 +10,8 @@ return [
     'coupon_helper' => 'Apply a discount coupon to this order.',
     'status_label' => 'Status',
     'status_helper' => 'Set the current status of this order.',
+    'email_label' => 'Send order Email',
+    'email_helper' => 'Enable to notify the user by email when this order is created.',
     'package_configuration_label' => 'Package Configuration',
     'package_configuration_helper' => 'Define the base package and billing period for this order.',
     'package_label' => 'Package',
