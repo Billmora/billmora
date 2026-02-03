@@ -305,7 +305,7 @@ function orderSummary() {
 
         getOptionPriceForSelectedCycle(variantId, optionId) {
             const option = this.findOption(variantId, optionId);
-            return option?.p?.[this.selectedCycleName] || null;
+            return option?.prices_by_name?.[this.selectedCycleName] || null;
         },
 
         variantOptionAvailable(variantId, optionId) {
