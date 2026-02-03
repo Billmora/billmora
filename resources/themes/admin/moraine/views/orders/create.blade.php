@@ -91,84 +91,84 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
                     <template x-for="variant in currentVariants" :key="variant.id">
-                        <div x-show="getFilteredOptions(variant).length > 0">
-                            <label class="block text-sm font-semibold text-slate-600 mb-2" x-text="variant.name"></label>
-                            <template x-if="variant.type === 'select'">
-                                <select 
-                                    :name="'variant_options[' + variant.id + ']'"
-                                    class="w-full px-3 py-2 border-2 border-billmora-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-billmora-primary cursor-pointer"
-                                    x-init="$el.value = getFilteredOptions(variant)[0]?.id || ''"
-                                >
-                                    <template x-for="option in getFilteredOptions(variant)" :key="option.id">
-                                        <option :value="option.id" x-text="option.name"></option>
-                                    </template>
-                                </select>
-                            </template>
-                            <template x-if="variant.type === 'radio'">
-                                <div class="space-y-2">
-                                    <template x-for="(option, index) in getFilteredOptions(variant)" :key="option.id">
-                                        <label class="flex items-center space-x-2 cursor-pointer">
-                                            <input 
-                                                type="radio" 
-                                                :name="'variant_options[' + variant.id + ']'"
-                                                :value="option.id"
-                                                :checked="index === 0"
-                                                class="accent-billmora-primary"
-                                                required
-                                            />
-                                            <span x-text="option.name"></span>
-                                        </label>
-                                    </template>
-                                </div>
-                            </template>
-                            <template x-if="variant.type === 'slider'">
-                                <div x-data="{ sliderIdx: 0 }" class="mt-4">
-                                    <div class="relative mb-10">
-                                        <input 
-                                            type="range" 
-                                            min="0" 
-                                            :max="Math.max(0, getFilteredOptions(variant).length - 1)" 
-                                            step="1" 
-                                            class="w-full h-2 cursor-pointer accent-billmora-primary"
-                                            x-model="sliderIdx"
-                                        />
-                                        <template x-for="(option, i) in getFilteredOptions(variant)" :key="option.id">
-                                            <span 
-                                                class="text-sm text-slate-700 absolute -bottom-6"
-                                                :class="{
-                                                    'start-0 text-start': i === 0,
-                                                    'end-0 text-end': i === getFilteredOptions(variant).length - 1,
-                                                    'start-1/2 -translate-x-1/2': i > 0 && i < getFilteredOptions(variant).length - 1
-                                                }"
-                                                x-show="i === 0 || i === getFilteredOptions(variant).length - 1 || getFilteredOptions(variant).length <= 3"
-                                            >
+                        <template x-if="getFilteredOptions(variant).length > 0">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-600 mb-2" x-text="variant.name"></label>
+                                <template x-if="variant.type === 'select'">
+                                    <select 
+                                        :name="'variant_options[' + variant.id + ']'"
+                                        class="w-full px-3 py-2 border-2 border-billmora-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-billmora-primary cursor-pointer"
+                                    >
+                                        <template x-for="option in getFilteredOptions(variant)" :key="option.id">
+                                            <option :value="option.id" x-text="option.name"></option>
+                                        </template>
+                                    </select>
+                                </template>
+                                <template x-if="variant.type === 'radio'">
+                                    <div class="space-y-2">
+                                        <template x-for="(option, index) in getFilteredOptions(variant)" :key="option.id">
+                                            <label class="flex items-center space-x-2 cursor-pointer">
+                                                <input 
+                                                    type="radio" 
+                                                    :name="'variant_options[' + variant.id + ']'"
+                                                    :value="option.id"
+                                                    :checked="index === 0"
+                                                    class="accent-billmora-primary"
+                                                />
                                                 <span x-text="option.name"></span>
-                                            </span>
+                                            </label>
                                         </template>
                                     </div>
-                                    <input 
-                                        type="hidden" 
-                                        :name="'variant_options[' + variant.id + ']'" 
-                                        :value="getFilteredOptions(variant)[sliderIdx]?.id || ''"
-                                    />
-                                </div>
-                            </template>
-                            <template x-if="variant.type === 'checkbox'">
-                                <div class="space-y-2">
-                                    <template x-for="option in getFilteredOptions(variant)" :key="option.id">
-                                        <label class="flex items-center space-x-2 cursor-pointer">
+                                </template>
+                                <template x-if="variant.type === 'slider'">
+                                    <div x-data="{ sliderIdx: 0 }" class="mt-4">
+                                        <div class="relative mb-10">
                                             <input 
-                                                type="checkbox" 
-                                                :name="'variant_options[' + variant.id + '][]'"
-                                                :value="option.id"
-                                                class="accent-billmora-primary"
+                                                type="range" 
+                                                min="0" 
+                                                :max="Math.max(0, getFilteredOptions(variant).length - 1)" 
+                                                step="1" 
+                                                class="w-full h-2 cursor-pointer accent-billmora-primary"
+                                                x-model="sliderIdx"
                                             />
-                                            <span x-text="option.name"></span>
-                                        </label>
-                                    </template>
-                                </div>
-                            </template>
-                        </div>
+                                            <template x-for="(option, i) in getFilteredOptions(variant)" :key="option.id">
+                                                <span 
+                                                    class="text-sm text-slate-700 absolute -bottom-6"
+                                                    :class="{
+                                                        'start-0 text-start': i === 0,
+                                                        'end-0 text-end': i === getFilteredOptions(variant).length - 1,
+                                                        'start-1/2 -translate-x-1/2': i > 0 && i < getFilteredOptions(variant).length - 1
+                                                    }"
+                                                    x-show="i === 0 || i === getFilteredOptions(variant).length - 1 || getFilteredOptions(variant).length <= 3"
+                                                >
+                                                    <span x-text="option.name"></span>
+                                                </span>
+                                            </template>
+                                        </div>
+                                        <input 
+                                            type="hidden" 
+                                            :name="'variant_options[' + variant.id + ']'" 
+                                            :value="getFilteredOptions(variant)[sliderIdx]?.id || ''"
+                                        />
+                                    </div>
+                                </template>
+                                <template x-if="variant.type === 'checkbox'">
+                                    <div class="space-y-2">
+                                        <template x-for="option in getFilteredOptions(variant)" :key="option.id">
+                                            <label class="flex items-center space-x-2 cursor-pointer">
+                                                <input 
+                                                    type="checkbox" 
+                                                    :name="'variant_options[' + variant.id + '][]'"
+                                                    :value="option.id"
+                                                    class="accent-billmora-primary"
+                                                />
+                                                <span x-text="option.name"></span>
+                                            </label>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
                     </template>
                 </div>
             </div>
