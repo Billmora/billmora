@@ -13,8 +13,10 @@ return [
     'package' => [
         'billing_cycle' => 'Billing cycle',
         'order_summary' => 'Order Summary',
+        'subtotal' => 'Subtotal',
         'setup_fee' => 'Setup Fee',
         'due_today' => 'Total Due Today',
+        'next_billing' => 'Price that will be charged on the next billing cycle',
         'checkout' => 'Checkout',
     ],
 
