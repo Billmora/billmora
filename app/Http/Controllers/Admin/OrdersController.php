@@ -17,6 +17,19 @@ use Illuminate\Validation\Rule;
 class OrdersController extends Controller
 {
     /**
+     * Applies permission-based middleware for accessing orders management.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:orders.view')->only(['index']);
+        $this->middleware('permission:orders.create')->only(['create', 'store']);
+        $this->middleware('permission:orders.update')->only(['edit', 'update']);
+        $this->middleware('permission:orders.delete')->only(['destroy']);
+    }
+
+    /**
      * Display a paginated list of all orders with search functionality.
      *
      * @param \Illuminate\Http\Request $request
