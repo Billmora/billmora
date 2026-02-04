@@ -76,8 +76,8 @@
                     <span class="text-2xl text-billmora-primary font-bold" x-text="totalFormatted"></span>
                 </div>
                 <template x-if="setupFee > 0">
-                    <div class="mt-2 p-3 bg-slate-50 rounded-lg text-xs text-slate-500 border border-slate-100">
-                        <p>{{ __('client/store.package.next_billing') }}: <span x-text="subtotalFormatted" class="font-bold text-slate-700"></span></p>
+                    <div class="mt-2 p-2 bg-billmora-1 rounded-lg text-sm font-medium text-slate-500 border border-slate-100">
+                        <p>{{ __('client/store.package.next_billing') }}: <span x-text="subtotalFormatted" class="font-semibold text-slate-600"></span></p>
                     </div>
                 </template>
             </div>
