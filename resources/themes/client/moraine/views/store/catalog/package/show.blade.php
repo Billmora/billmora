@@ -81,7 +81,7 @@
                     </div>
                 </template>
             </div>
-            <button type="submit" class="w-full bg-billmora-primary hover:bg-billmora-primary-hover p-3 text-white rounded-xl font-semibold transition-all">
+            <button type="submit" class="w-full bg-billmora-primary hover:bg-billmora-primary-hover p-3 text-white rounded-xl font-semibold transition-all cursor-pointer">
                 {{ __('client/store.package.checkout') }}
             </button>
         </div>
