@@ -127,7 +127,7 @@ class OrdersController extends Controller
             if (!$packagePrice) {
                 return back()
                     ->withInput()
-                    ->with('error', 'Selected billing cycle does not belong to the selected package.');
+                    ->with('error', __('validation.package.cycle_mismatch'));
             }
 
             $variantSelections = $validationService->buildVariantSelections(

@@ -28,7 +28,7 @@ class CouponController extends Controller
 
         if (!$checkoutData) {
             return redirect()->route('client.checkout.review')
-                ->with('error', 'Session expired. Please select a package again.');
+                ->with('error', __('validation.checkout.session_expired'));
         }
 
         $user = Auth::user();
@@ -46,7 +46,7 @@ class CouponController extends Controller
 
             return redirect()
                 ->route('client.checkout.review')
-                ->with('success', 'Coupon applied successfully!');
+                ->with('success', __('validation.coupon.applied'));
 
         } catch (\Exception $e) {
             Session::forget('applied_coupon');
@@ -76,7 +76,7 @@ class CouponController extends Controller
 
         return redirect()
             ->route('client.checkout.review')
-            ->with('success', 'Coupon removed successfully.');
+            ->with('success', __('validation.coupon.removed'));
     }
 
     /**
@@ -103,19 +103,19 @@ class CouponController extends Controller
             ->first();
 
         if (!$coupon) {
-            throw new \RuntimeException('Invalid or expired coupon code.');
+            throw new \RuntimeException(__('validation.coupon.invalid'));
         }
 
         if ($coupon->packages()->exists() && !$coupon->packages->contains($package->id)) {
-            throw new \RuntimeException('This coupon is not applicable to the selected package.');
+            throw new \RuntimeException(__('validation.coupon.package_mismatch'));
         }
 
         if (!empty($coupon->billing_cycles) && !in_array($billingCycleName, $coupon->billing_cycles)) {
-            throw new \RuntimeException('This coupon is not applicable to the selected billing cycle.');
+            throw new \RuntimeException(__('validation.coupon.billing_mismatch'));
         }
 
         if ($coupon->max_uses && $coupon->total_uses >= $coupon->max_uses) {
-            throw new \RuntimeException('This coupon has reached its usage limit.');
+            throw new \RuntimeException(__('validation.coupon.limit_reached'));
         }
 
         if ($coupon->max_uses_per_user) {
@@ -124,7 +124,7 @@ class CouponController extends Controller
                 ->count();
 
             if ($userUsage >= $coupon->max_uses_per_user) {
-                throw new \RuntimeException('You have reached the usage limit for this coupon.');
+                throw new \RuntimeException(__('validation.coupon.user_limit_reached'));
             }
         }
 

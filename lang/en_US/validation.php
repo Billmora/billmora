@@ -176,10 +176,30 @@ return [
     |
     */
 
-    'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
-        ],
+    'coupon' => [
+        'invalid' => 'Invalid or expired coupon code.',
+        'package_mismatch' => 'This coupon is not applicable to the selected package.',
+        'billing_mismatch' => 'This coupon is not applicable to the selected billing cycle.',
+        'limit_reached' => 'This coupon has reached its usage limit.',
+        'user_limit_reached' => 'You have reached the usage limit for this coupon.',
+        'applied' => 'Coupon applied successfully!',
+        'removed' => 'Coupon removed successfully.',
+    ],
+
+    'checkout' => [
+        'session_expired' => 'Session expired. Please select a package again.',
+        'data_missing' => 'No checkout data found. Please select a package first.',
+        'currency_mismatch' => 'The selected configuration is not available for the current currency. Please select again.',
+    ],
+
+    'package' => [
+        'cycle_mismatch' => 'Selected billing cycle does not belong to the selected package.',
+        'cycle_currency_unavailable' => 'The selected billing cycle is not available for your selected currency.',
+        'variant_mismatch' => 'One or more selected variants do not belong to this package.',
+        'option_invalid' => 'One or more selected options are invalid or do not belong to this package.',
+        'variant_price_missing' => 'One or more selected variants do not have prices for the selected billing cycle.',
+        'option_missing' => 'One or more selected options were not found.',
+        'option_unavailable' => 'The option ":attribute" is not available for the selected billing cycle and currency.',
     ],
 
     /*

@@ -24,11 +24,11 @@ class OrderValidationService
         string $currencyCode
     ): array {
         if ($packagePrice->package_id !== $package->id) {
-            return $this->error('Selected billing cycle does not belong to the selected package.');
+            return $this->error(__('validation.package.cycle_mismatch'));
         }
 
         if (!$this->isPriceAvailableForCurrency($packagePrice, $currencyCode)) {
-            return $this->error('The selected billing cycle is not available for your selected currency.');
+            return $this->error(__('validation.package.cycle_currency_unavailable'));
         }
 
         if (empty($variantSelections)) {
@@ -63,7 +63,7 @@ class OrderValidationService
         $packageVariantIds = $package->variants->pluck('id')->toArray();
         foreach (array_keys($variantSelections) as $variantId) {
             if (!in_array($variantId, $packageVariantIds)) {
-                return $this->error('One or more selected variants do not belong to this package.');
+                return $this->error(__('validation.package.variant_mismatch'));
             }
         }
 
@@ -77,7 +77,7 @@ class OrderValidationService
             ->toArray();
 
         if (count($allOptionIds) !== count($validOptions)) {
-            return $this->error('One or more selected options are invalid or do not belong to this package.');
+            return $this->error(__('validation.package.option_invalid'));
         }
 
         if ($packagePrice) {
@@ -91,7 +91,7 @@ class OrderValidationService
                 ->toArray();
 
             if (count($allOptionIds) !== count($validOptionsWithPrice)) {
-                return $this->error('One or more selected variants do not have prices for the selected billing cycle.');
+                return $this->error(__('validation.package.variant_price_missing'));
             }
         }
 
@@ -119,12 +119,12 @@ class OrderValidationService
                 $option = $options->find($optionId);
                 
                 if (!$option) {
-                    return $this->error('One or more selected options were not found.');
+                    return $this->error(__('validation.package.option_missing'));
                 }
 
                 if (!$this->hasMatchingPrice($option->prices, $cycleName, $currencyCode)) {
                     return $this->error(
-                        "The option '{$option->name}' is not available for the selected billing cycle and currency."
+                        __('validation.package.option_unavailable', ['attribute' => $option->name])
                     );
                 }
             }
