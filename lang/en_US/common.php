@@ -55,6 +55,7 @@ return [
     'edit' => 'Edit',
     'update' => 'Update',
     'delete' => 'Delete',
+    'remove' => 'Remove',
     'send' => 'Send',
     'resend' => 'Resend',
     'submit' => 'Submit',
