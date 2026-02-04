@@ -36,15 +36,12 @@
                 @endif
             </div>
             <div class="bg-billmora-primary p-8 border-2 border-billmora-2 rounded-2xl">
-                <label for="coupon_code_input" class="block text-white font-semibold mb-1">
-                    Coupon
-                </label>
+                <label for="coupon_code_input" class="block text-white font-semibold mb-1">{{ __('client/checkout.coupon_label') }}</label>
                 <div class="flex gap-4">
                     <input
                         type="text"
                         id="coupon_code_input"
                         class="w-full bg-white px-3 py-2 rounded-lg border-2 border-billmora-2 outline-none text-slate-700 placeholder:text-slate-500 focus:ring-2 ring-billmora-primary {{ !empty($appliedCoupon) ? 'bg-gray-100' : '' }}"
-                        placeholder="Enter coupon code"
                         value="{{ old('coupon_code', $appliedCoupon['code'] ?? '') }}"
                         {{ !empty($appliedCoupon) ? 'readonly' : '' }}
                     />
@@ -54,7 +51,7 @@
                             form="coupon-remove-form"
                             class="w-auto bg-red-100 hover:bg-red-200 px-3 py-2 text-red-500 font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
                         >
-                            Remove
+                            {{ __('common.remove') }}
                         </button>
                     @else
                         <button
@@ -63,7 +60,7 @@
                             class="w-auto bg-violet-100 hover:bg-violet-200 px-3 py-2 text-billmora-primary font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
                             onclick="document.getElementById('coupon_code_hidden').value = document.getElementById('coupon_code_input').value;"
                         >
-                            Validate
+                            {{ __('common.apply') }}
                         </button>
                     @endif
                 </div>
@@ -76,7 +73,7 @@
             @if (Billmora::getGeneral('ordering_notes'))
                 <div class="bg-white px-8 py-7 border-2 border-billmora-2 rounded-2xl">
                     <label for="notes" class="block text-slate-600 font-semibold mb-1">
-                        Notes
+                        {{ __('client/checkout.notes_label') }}
                     </label>
                     <textarea 
                         name="notes"
@@ -94,7 +91,7 @@
         </div>
         <div class="w-full lg:w-1/3 h-fit flex flex-col gap-4">
             <div class="bg-white p-8 border-2 border-billmora-2 rounded-2xl space-y-4">
-                <h2 class="text-xl font-semibold text-slate-600 mb-4">Order Summary</h2>
+                <h2 class="text-xl font-semibold text-slate-600 mb-4">{{ __('client/checkout.order_summary') }}</h2>
                 <div class="grid font-medium">
                     <div class="flex gap-3 justify-between">
                         <span class="text-slate-500 text-start">{{ $packagePrice->name }}</span>
@@ -114,14 +111,14 @@
                     @endforeach
                     <hr class="border-t-2 border-billmora-2 my-4">
                     <div class="flex gap-3 justify-between">
-                        <span class="text-slate-600 font-semibold text-start">Subtotal</span>
+                        <span class="text-slate-600 font-semibold text-start">{{ __('client/checkout.subtotal') }}</span>
                         <span class="text-slate-600 font-semibold text-end">
                             {{ Currency::format($pricing['subtotal']) }}
                         </span>
                     </div>
                     @if($pricing['setup_fee_total'] > 0)
                         <div class="flex gap-3 justify-between mt-2">
-                            <span class="text-slate-600 font-semibold text-start">Setup Fee</span>
+                            <span class="text-slate-600 font-semibold text-start">{{ __('client/checkout.setup_fee') }}</span>
                             <span class="text-slate-600 font-semibold text-end">
                                 {{ Currency::format($pricing['setup_fee_total']) }}
                             </span>
@@ -129,7 +126,7 @@
                     @endif
                     @if($pricing['discount'] > 0)
                         <div class="flex gap-3 justify-between mt-2 text-billmora-primary">
-                            <span class="font-semibold text-start">Discount</span>
+                            <span class="font-semibold text-start">{{ __('client/checkout.discount') }}</span>
                             <span class="font-semibold text-end">
                                 - {{ Currency::format($pricing['discount']) }}
                             </span>
@@ -137,14 +134,14 @@
                     @endif
                     <hr class="border-t-2 border-billmora-2 my-4">
                     <div class="flex gap-3 justify-between">
-                        <span class="text-billmora-primary font-bold text-lg text-start">Total Due</span>
+                        <span class="text-billmora-primary font-bold text-lg text-start">{{ __('client/checkout.total_due') }}</span>
                         <span class="text-billmora-primary font-bold text-lg text-end">
                             {{ Currency::format($pricing['total']) }}
                         </span>
                     </div>
                 </div>
                 <button type="submit" class="w-full bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-3 text-white font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                    Complete Order
+                    {{ __('client/checkout.complete_order') }}
                 </button>
             </div>
             @if (Billmora::getGeneral('ordering_tos'))
@@ -159,10 +156,9 @@
                             class="w-4 h-4 accent-billmora-primary cursor-pointer"
                         >
                         <label for="terms_accepted" class="text-slate-600 font-medium cursor-pointer">
-                            I agree with the 
-                            <a href="{{ Billmora::getGeneral('term_tos_url') ?? '#' }}" target="_blank" class="text-billmora-primary underline">
-                                Terms and Conditions
-                            </a>.
+                            {!! __('client/checkout.agree_terms', [
+                                'attribute' => '<a href="' . (Billmora::getGeneral('term_tos_url') ?? '#') . '" target="_blank" class="text-billmora-primary underline">Terms and Conditions.</a>'
+                            ]) !!}
                         </label>
                     </div>
                     @error('terms_accepted')
