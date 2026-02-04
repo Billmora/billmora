@@ -64,6 +64,7 @@ return [
     'clear' => 'Clear',
     'export' => 'Export',
     'preview' => 'Preview',
+    'apply' => 'Apply',
     'key' => 'Key',
     'value' => 'Value',
 
