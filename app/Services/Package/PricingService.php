@@ -2,7 +2,6 @@
 
 namespace App\Services\Package;
 
-use App\Facades\Currency;
 use App\Models\Package;
 use App\Models\PackagePrice;
 use App\Models\VariantOption;
@@ -270,10 +269,6 @@ class PricingService
             'price' => (float) $priceValue,
             'setup_fee' => (float) $setupFee,
             'total' => (float) $total,
-            // price formatted values
-            'price_f' => $isFree ? 'Free' : Currency::format($priceValue),
-            'setup_fee_f' => $isFree ? 'Free' : Currency::format($setupFee),
-            'total_f' => $isFree ? 'Free' : Currency::format($total),
         ];
     }
 
