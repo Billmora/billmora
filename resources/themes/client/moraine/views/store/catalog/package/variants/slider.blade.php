@@ -13,6 +13,8 @@
              if (curr) {
                  const i = this.opts.findIndex(o => o.id == curr);
                  if (i >= 0) this.idx = i;
+             } else {
+                 this.update(this.idx);
              }
          },
          update(val) {
@@ -48,4 +50,7 @@
             </span>
         </template>
     </div>
+    <input type="hidden" 
+           name="variants[{{ $variant->id }}]" 
+           :value="opts[idx] ? opts[idx].id : ''">
 </div>
