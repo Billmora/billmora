@@ -15,27 +15,16 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 @foreach ($packagePricesPayload as $p)
                     <label class="group relative cursor-pointer">
-                        <input
-                            type="radio"
-                            name="price_id"
-                            value="{{ $p['id'] }}"
-                            x-on:change="selectCycle(@js($p))"
-                            class="hidden"
-                            :checked="selectedBillingId == {{ $p['id'] }}"
-                        >
-                        <div class="h-full bg-white p-4 border-2 border-billmora-2
-                                rounded-xl transition-all
-                                group-has-[:checked]:border-billmora-primary
-                                hover:border-billmora-primary">
+                        <input type="radio" name="price_id" value="{{ $p['id'] }}" 
+                               x-on:change="selectCycle(@js($p))" class="hidden" 
+                               :checked="selectedBillingId == {{ $p['id'] }}">
+                        <div class="h-full bg-white p-4 border-2 border-billmora-2 rounded-xl transition-all group-has-[:checked]:border-billmora-primary hover:border-billmora-primary">
                             <div class="flex items-start gap-3">
-                                <div class="mt-1 h-4 w-4 rounded-full border-2 border-slate-500
-                                        group-has-[:checked]:border-billmora-primary
-                                        group-has-[:checked]:bg-billmora-primary
-                                        transition-all"></div>
+                                <div class="mt-1 h-4 w-4 rounded-full border-2 border-slate-500 group-has-[:checked]:border-billmora-primary group-has-[:checked]:bg-billmora-primary transition-all"></div>
                                 <div class="flex flex-col">
                                     <h4 class="text-sm font-semibold text-slate-600">{{ $p['name'] }}</h4>
                                     <span class="text-sm font-semibold text-slate-500">
-                                        {{ $p['price_f'] }} @if($p['setup_fee'] > 0) + {{ $p['setup_fee_f'] }} {{ __('client/store.package.setup_fee') }} @endif
+                                        {{ Currency::format($p['price']) }} @if($p['setup_fee'] > 0) + {{ Currency::format($p['setup_fee']) }} {{ __('client/store.package.setup_fee') }}@endif
                                     </span>
                                 </div>
                             </div>
@@ -61,46 +50,38 @@
         </div>
         <div class="w-full lg:w-1/3 h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl space-y-4">
             <h2 class="text-xl font-semibold text-slate-600 mb-4">{{ __('client/store.package.order_summary') }}</h2>
-            <div class="grid">
-                <!-- Package Base Price -->
-                <div class="flex gap-3 justify-between">
-                    <span class="text-slate-600 font-semibold text-start break-all">{{ $package->catalog->name }} - {{ $package->name }}</span>
-                    <span class="text-slate-600 font-semibold text-end break-all"><span x-text="cyclePriceFormatted"></span></span>
+            <div class="grid gap-2">
+                <div class="flex justify-between font-semibold text-slate-600">
+                    <span>{{ $package->catalog->name }} - {{ $package->name }}</span>
+                    <span x-text="cyclePriceFormatted"></span>
                 </div>
-                <!-- Variant Items -->
                 <template x-for="row in variantSummaryRows" :key="row.key">
-                    <div class="flex gap-3 justify-between">
-                        <span class="text-slate-500 font-semibold text-start break-all" x-text="row.label"></span>
-                        <span class="text-slate-500 font-semibold text-end break-all" x-text="row.priceFormatted"></span>
+                    <div class="flex justify-between text-slate-500 text-sm font-medium">
+                        <span x-text="row.label"></span>
+                        <span x-text="row.priceFormatted"></span>
                     </div>
                 </template>
-                <hr class="border-t-2 border-billmora-2 my-4">
-                <!-- Subtotal (Recurring) -->
-                <div class="flex gap-3 justify-between">
-                    <span class="text-slate-600 font-semibold text-start break-all">{{ __('client/store.package.subtotal') }}</span>
-                    <span class="text-slate-600 font-semibold text-end break-all" x-text="subtotalFormatted"></span>
+                <hr class="border-t-2 border-billmora-2 my-2">
+                <div class="flex justify-between font-semibold text-slate-600">
+                    <span>{{ __('client/store.package.subtotal') }}</span>
+                    <span x-text="subtotalFormatted"></span>
                 </div>
-                <hr class="border-t-2 border-billmora-2 my-4">
-                <!-- Setup Fee -->
-                <div class="flex gap-3 justify-between">
-                    <span class="text-slate-500 font-semibold text-start break-all">{{ __('client/store.package.setup_fee') }}</span>
-                    <span class="text-slate-500 font-semibold text-end break-all" x-text="setupFeeFormatted"></span>
+                <div class="flex justify-between text-slate-500 font-semibold">
+                    <span>{{ __('client/store.package.setup_fee') }}</span>
+                    <span x-text="setupFeeFormatted"></span>
                 </div>
-                <hr class="border-t-2 border-billmora-2 my-4">
-                <!-- Total Due Today -->
+                <hr class="border-t-2 border-billmora-2 my-2">
                 <div class="flex flex-col">
-                    <span class="text-slate-600 font-semibold break-all">{{ __('client/store.package.due_today') }}</span>
-                    <span class="text-xl text-slate-600 font-semibold break-all" x-text="totalFormatted"></span>
+                    <span class="text-slate-600 font-semibold">{{ __('client/store.package.due_today') }}</span>
+                    <span class="text-2xl text-billmora-primary font-bold" x-text="totalFormatted"></span>
                 </div>
-                <!-- Next Billing Info -->
                 <template x-if="setupFee > 0">
-                    <div class="grid mt-2 p-2 bg-billmora-1 rounded text-sm text-slate-500">
-                        <span>{{ __('client/store.package.next_billing') }}:</span>
-                        <span x-text="subtotalFormatted" class="font-semibold"></span>
+                    <div class="mt-2 p-3 bg-slate-50 rounded-lg text-xs text-slate-500 border border-slate-100">
+                        <p>{{ __('client/store.package.next_billing') }}: <span x-text="subtotalFormatted" class="font-bold text-slate-700"></span></p>
                     </div>
                 </template>
             </div>
-            <button type="submit" class="w-full bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+            <button type="submit" class="w-full bg-billmora-primary hover:bg-billmora-primary-hover p-3 text-white rounded-xl font-semibold transition-all">
                 {{ __('client/store.package.checkout') }}
             </button>
         </div>
@@ -109,368 +90,215 @@
 <script>
 function orderSummary() {
     return {
-        packagePrices: @json($packagePricesPayload),
+        prices: @json($packagePricesPayload),
         variants: @json($variantsPayload),
-        currency: @js(['prefix' => $currencyActive->prefix ?? '', 'suffix' => $currencyActive->suffix ?? '', 'format' => $currencyActive->format ?? '1,234.56']),
+        currency: @json($currencyActive->toArray()), 
+        labels: {
+            setup_fee: @js(__('client/store.package.setup_fee')),
+        },
         
         selectedBillingId: null,
         selectedCycleName: '',
-        cycleName: '',
-        cyclePrice: 0,
+        
+        cyclePrice: 0, 
         cycleSetupFee: 0,
         cyclePriceFormatted: '',
-        selectedOptionByVariant: {},
+        
+        selectedOptionByVariant: {}, 
         selectedOptionsByVariant: {},
         variantSummaryRows: [],
         
-        subtotal: 0,
-        setupFee: 0,
-        total: 0,
-        subtotalFormatted: '',
-        setupFeeFormatted: '',
-        totalFormatted: '',
+        subtotal: 0, setupFee: 0, total: 0,
+        subtotalFormatted: '', setupFeeFormatted: '', totalFormatted: '',
 
         init() {
-            this.initCheckboxVariants();
-            const defaultPrice = this.packagePrices[0];
-            if (defaultPrice) this.selectCycle(defaultPrice, false);
-
-            window.location.search.length > 1 ? this.parseQuery() : this.applyDefaults();
-            this.recomputeAll();
-        },
-
-        initCheckboxVariants() {
             this.variants.forEach(v => {
                 if (v.type === 'checkbox') this.selectedOptionsByVariant[v.id] = new Set();
             });
+            const firstPrice = this.prices[0];
+            if (firstPrice) this.selectCycle(firstPrice, false);
+
+            window.location.search.length > 1 ? this.parseQuery() : this.applyDefaults();
         },
 
-        applyDefaults() {
-            this.variants.forEach(v => {
-                const opts = this.getAvailableOptionsForCycle(v.id);
-                if (opts.length && v.type !== 'checkbox') {
-                    this.selectedOptionByVariant[v.id] = opts[0].id;
-                }
-            });
-            this.syncUrl();
-        },
-
-        parseQuery() {
-            const params = new URLSearchParams(window.location.search);
-            let dirty = false;
-
-            // Parse billing
-            const billingId = params.get('billing');
-            if (billingId) {
-                const price = this.packagePrices.find(x => Number(x.id) === Number(billingId));
-                if (price) {
-                    this.selectCycle(price, false);
-                } else {
-                    this.resetToDefault();
-                    dirty = true;
-                }
-            }
-
-            // Parse variants
-            params.forEach((val, key) => {
-                const match = key.match(/^variants\[(\d+)\]$/);
-                if (!match) return;
-
-                const variantId = Number(match[1]);
-                const variant = this.findVariant(variantId);
-                if (!variant) {
-                    dirty = true;
-                    return;
-                }
-
-                if (val.includes(',')) {
-                    dirty = !this.parseCheckboxVariant(variantId, val) || dirty;
-                } else {
-                    dirty = !this.parseSingleVariant(variantId, val) || dirty;
-                }
-            });
-
-            this.cleanupSelectionsForCycle();
-            if (dirty) this.syncUrl();
-        },
-
-        parseCheckboxVariant(variantId, csvValue) {
-            if (!this.selectedOptionsByVariant[variantId]) {
-                this.selectedOptionsByVariant[variantId] = new Set();
-            }
-
-            const ids = csvValue.split(',').map(x => Number(x)).filter(Boolean);
-            let anyValid = false;
-
-            ids.forEach(optionId => {
-                if (this.variantOptionAvailable(variantId, optionId)) {
-                    this.selectedOptionsByVariant[variantId].add(optionId);
-                    anyValid = true;
-                }
-            });
-
-            return anyValid;
-        },
-
-        parseSingleVariant(variantId, value) {
-            const optionId = Number(value);
-            if (this.variantOptionAvailable(variantId, optionId)) {
-                this.selectedOptionByVariant[variantId] = optionId;
-                return true;
-            }
-            return false;
-        },
-
-        resetToDefault() {
-            const defaultPrice = this.packagePrices[0];
-            if (defaultPrice) this.selectCycle(defaultPrice, false);
+        selectCycle(p, sync = true) {
+            this.selectedBillingId = p.id;
+            this.selectedCycleName = p.name;
+            this.cyclePrice = Number(p.price);
+            this.cycleSetupFee = Number(p.setup_fee);
             
-            this.selectedOptionByVariant = {};
-            this.selectedOptionsByVariant = {};
-            this.initCheckboxVariants();
-        },
-
-        syncUrl() {
-            const params = new URLSearchParams();
-            if (this.selectedBillingId) params.set('billing', this.selectedBillingId);
-
-            Object.entries(this.selectedOptionByVariant).forEach(([vId, oId]) => {
-                if (oId) params.set(`variants[${vId}]`, oId);
-            });
-
-            Object.entries(this.selectedOptionsByVariant).forEach(([vId, set]) => {
-                if (set?.size) params.set(`variants[${vId}]`, Array.from(set).join(','));
-            });
-
-            const url = new URL(window.location.href);
-            url.search = params.toString().replaceAll('%5B', '[').replaceAll('%5D', ']').replaceAll('%2C', ',');
-            history.replaceState({}, '', url);
-        },
-
-        selectCycle(price, doSync = true) {
-            this.selectedBillingId = Number(price.id);
-            this.selectedCycleName = price.name;
-            this.cycleName = price.name;
-            this.cyclePrice = Number(price.price) || 0;
-            this.cycleSetupFee = Number(price.setup_fee) || 0;
-            this.cyclePriceFormatted = price.price_f;
-
-            this.applyDefaultSelectionsForCycle();
-            this.recomputeAll();
-            if (doSync) this.syncUrl();
-        },
-
-        applyDefaultSelectionsForCycle() {
-            // Remove invalid single selections
-            Object.keys(this.selectedOptionByVariant).forEach(vId => {
-                if (!this.variantOptionAvailable(Number(vId), this.selectedOptionByVariant[vId])) {
-                    delete this.selectedOptionByVariant[vId];
-                }
-            });
-
-            // Apply defaults for empty variants
-            this.variants.forEach(v => {
-                const opts = this.getAvailableOptionsForCycle(v.id);
-                
-                if (!opts.length) {
-                    delete this.selectedOptionByVariant[v.id];
-                    this.selectedOptionsByVariant[v.id]?.clear?.();
-                    return;
-                }
-
-                if (v.type === 'checkbox') {
-                    if (!this.selectedOptionsByVariant[v.id]) {
-                        this.selectedOptionsByVariant[v.id] = new Set();
-                    }
-                    this.selectedOptionsByVariant[v.id].clear();
-                } else if (!this.selectedOptionByVariant[v.id]) {
-                    this.selectedOptionByVariant[v.id] = opts[0].id;
-                }
-            });
-        },
-
-        cleanupSelectionsForCycle() {
-            // Clean single selections
-            Object.keys(this.selectedOptionByVariant).forEach(vId => {
-                if (!this.variantOptionAvailable(Number(vId), this.selectedOptionByVariant[vId])) {
-                    delete this.selectedOptionByVariant[vId];
-                }
-            });
-
-            // Clean checkbox selections
-            Object.entries(this.selectedOptionsByVariant).forEach(([vId, set]) => {
-                if (!set) return;
-                Array.from(set).forEach(oId => {
-                    if (!this.variantOptionAvailable(Number(vId), oId)) {
-                        set.delete(oId);
-                    }
-                });
-            });
-        },
-
-        findVariant(variantId) {
-            return this.variants.find(v => Number(v.id) === Number(variantId));
-        },
-
-        findOption(variantId, optionId) {
-            const variant = this.findVariant(variantId);
-            return variant?.options?.find(o => Number(o.id) === Number(optionId));
-        },
-
-        getOptionPriceForSelectedCycle(variantId, optionId) {
-            const option = this.findOption(variantId, optionId);
-            return option?.prices_by_name?.[this.selectedCycleName] || null;
-        },
-
-        variantOptionAvailable(variantId, optionId) {
-            return !!this.getOptionPriceForSelectedCycle(variantId, optionId);
-        },
-
-        variantHasAvailableOptions(variantId) {
-            const variant = this.findVariant(variantId);
-            return variant?.options?.some(o => this.variantOptionAvailable(variantId, o.id)) || false;
-        },
-
-        getAvailableOptionsForCycle(variantId) {
-            const variant = this.findVariant(variantId);
-            return variant?.options?.filter(o => this.variantOptionAvailable(variantId, o.id)) || [];
-        },
-
-        formatVariantOptionPrice(variantId, optionId) {
-            const priceData = this.getOptionPriceForSelectedCycle(variantId, optionId);
-            if (!priceData) return '';
+            this.cyclePriceFormatted = this.formatCurrency(this.cyclePrice);
             
-            const price = priceData.price_f || '';
-            const setupFee = (priceData.setup_fee && priceData.setup_fee > 0) ? ` + ${priceData.setup_fee_f} Setup Fee` : '';
-            return `${price}${setupFee}`;
-        },
-
-        selectOptionLabel(variantId, optionId, optionName) {
-            const formatted = this.formatVariantOptionPrice(variantId, optionId);
-            return formatted ? `${optionName} - ${formatted}` : optionName;
-        },
-
-        isCheckboxSelected(variantId, optionId) {
-            return this.selectedOptionsByVariant[variantId]?.has(Number(optionId)) || false;
-        },
-
-        setVariantRadio(variantId, optionId) {
-            this.selectedOptionByVariant[variantId] = Number(optionId);
+            this.validateSelections();
+            this.applyDefaultsIfEmpty();
+            if (sync) this.syncUrl();
             this.recomputeAll();
-            this.syncUrl();
-        },
-
-        setVariantSelect(variantId, optionId) {
-            optionId ? this.selectedOptionByVariant[variantId] = Number(optionId) : delete this.selectedOptionByVariant[variantId];
-            this.recomputeAll();
-            this.syncUrl();
-        },
-
-        toggleVariantCheckbox(variantId, optionId, checked) {
-            if (!this.selectedOptionsByVariant[variantId]) {
-                this.selectedOptionsByVariant[variantId] = new Set();
-            }
-            checked ? this.selectedOptionsByVariant[variantId].add(Number(optionId)) : this.selectedOptionsByVariant[variantId].delete(Number(optionId));
-            this.recomputeAll();
-            this.syncUrl();
-        },
-
-        sliderOptionId(variantId, idx) {
-            const opts = this.getAvailableOptionsForCycle(variantId);
-            return opts[idx]?.id || '';
-        },
-
-        setVariantSlider(variantId, idx) {
-            const optId = this.sliderOptionId(variantId, idx);
-            optId ? this.selectedOptionByVariant[variantId] = Number(optId) : delete this.selectedOptionByVariant[variantId];
-            this.recomputeAll();
-            this.syncUrl();
-        },
-
-        sliderTickClass(n, i) {
-            if (n <= 1 || i === 0) return 'start-0 text-start';
-            if (i === n - 1) return 'end-0 text-end';
-            const percent = (i / (n - 1)) * 100;
-            return `left-[${percent}%] -translate-x-1/2 text-center`;
         },
 
         recomputeAll() {
-            // Start with package base price and setup fee
-            let subtotal = this.cyclePrice;
-            let setupFee = this.cycleSetupFee;
-            const rows = [];
+            let sub = this.cyclePrice;
+            let set = this.cycleSetupFee;
+            let rows = [];
 
-            // Single choice variants
-            Object.entries(this.selectedOptionByVariant).forEach(([vId, oId]) => {
-                const variant = this.findVariant(vId);
-                const option = this.findOption(vId, oId);
-                const priceData = this.getOptionPriceForSelectedCycle(vId, oId);
+            const process = (vId, oId) => {
+                const data = this.getOptionPriceData(vId, oId);
+                if (!data) return;
+                
+                const pPrice = Number(data.price);
+                const pSetup = Number(data.setup_fee);
 
-                if (!priceData) {
-                    delete this.selectedOptionByVariant[vId];
-                    return;
-                }
-
-                subtotal += Number(priceData.price) || 0;
-                setupFee += Number(priceData.setup_fee) || 0;
+                sub += pPrice;
+                set += pSetup;
 
                 rows.push({
-                    key: `v-${vId}`,
-                    label: `${variant?.name ?? 'Variant'}: ${option?.name ?? ''}`,
-                    priceFormatted: priceData.price_f || ''
+                    key: `${vId}-${oId}`,
+                    label: `${this.getVariant(vId).name}: ${this.getOption(vId, oId).name}`,
+                    priceFormatted: this.formatCurrency(pPrice) 
                 });
-            });
+            };
 
-            // Checkbox variants
-            Object.entries(this.selectedOptionsByVariant).forEach(([vId, set]) => {
-                if (!set?.size) return;
-
-                set.forEach(oId => {
-                    const variant = this.findVariant(vId);
-                    const option = this.findOption(vId, oId);
-                    const priceData = this.getOptionPriceForSelectedCycle(vId, oId);
-
-                    if (!priceData) {
-                        set.delete(oId);
-                        return;
-                    }
-
-                    subtotal += Number(priceData.price) || 0;
-                    setupFee += Number(priceData.setup_fee) || 0;
-
-                    rows.push({
-                        key: `v-${vId}-${oId}`,
-                        label: `${variant?.name ?? 'Variant'}: ${option?.name ?? ''}`,
-                        priceFormatted: priceData.price_f || ''
-                    });
-                });
-            });
+            Object.entries(this.selectedOptionByVariant).forEach(([vId, oId]) => process(vId, oId));
+            Object.entries(this.selectedOptionsByVariant).forEach(([vId, s]) => s.forEach(oId => process(vId, oId)));
 
             this.variantSummaryRows = rows;
-            this.subtotal = subtotal;
-            this.setupFee = setupFee;
-            this.total = subtotal + setupFee;
+            this.subtotal = sub; 
+            this.setupFee = set; 
+            this.total = sub + set;
             
-            this.subtotalFormatted = this.subtotal === 0 ? 'Free' : this.formatCurrency(this.subtotal);
-            this.setupFeeFormatted = this.setupFee === 0 ? 'Free' : this.formatCurrency(this.setupFee);
-            this.totalFormatted = this.total === 0 ? 'Free' : this.formatCurrency(this.total);
+            this.subtotalFormatted = this.formatCurrency(this.subtotal);
+            this.setupFeeFormatted = this.formatCurrency(this.setupFee);
+            this.totalFormatted = this.formatCurrency(this.total);
+        },
+
+        formatVariantOptionPrice(vId, oId) {
+            const d = this.getOptionPriceData(vId, oId);
+            if (!d) return '';
+            return this.formatWithSetup(Number(d.price), Number(d.setup_fee));
+        },
+        
+        formatWithSetup(price, setupFee) {
+            const pStr = this.formatCurrency(price);
+            if (setupFee > 0) {
+                return `${pStr} + ${this.formatCurrency(setupFee)} ${this.labels.setup_fee}`;
+            }
+            return pStr;
         },
 
         formatCurrency(amount) {
-            const formats = {
-                '1,234.56': { d: 2, dec: '.', th: ',' },
-                '1.234,56': { d: 2, dec: ',', th: '.' },
-                '1,234': { d: 0, dec: '.', th: ',' }
-            };
+            if (amount === null || amount === undefined) return '';
+            if (Number(amount) === 0) return 'Free';
 
-            const cfg = formats[this.currency.format] || formats['1,234.56'];
-            const fixed = Number(amount).toFixed(cfg.d);
+            const formatPattern = this.currency.format || '1,234.56';
+            let decimals = 2, thousandSep = ',', decimalSep = '.';
+
+            if (!formatPattern.includes('.') && !formatPattern.includes(',') && formatPattern.includes(' ')) {
+                 thousandSep = ' '; decimals = 0;
+            } else if (formatPattern.endsWith(',234') || formatPattern.endsWith('.234')) {
+                 decimals = 0;
+                 thousandSep = formatPattern.includes(',') ? ',' : '.';
+            } else if (formatPattern === '1,234') {
+                 decimals = 0; thousandSep = ',';
+            } else if (formatPattern === '1.234') {
+                 decimals = 0; thousandSep = '.';
+            } else {
+                if (formatPattern.includes(',') && formatPattern.indexOf(',') > formatPattern.indexOf('.')) {
+                    thousandSep = '.'; decimalSep = ',';
+                } else {
+                    thousandSep = ','; decimalSep = '.';
+                }
+            }
+
+            const fixed = Number(amount).toFixed(decimals);
             let [integer, fraction] = fixed.split('.');
+            integer = integer.replace(/\B(?=(\d{3})+(?!\d))/g, thousandSep);
             
-            integer = integer.replace(/\B(?=(\d{3})+(?!\d))/g, cfg.th);
-            const num = cfg.d ? `${integer}${cfg.dec}${fraction}` : integer;
-            
-            return `${this.currency.prefix}${num}${this.currency.suffix ? ` ${this.currency.suffix}` : ''}`.trim();
+            const num = decimals > 0 ? `${integer}${decimalSep}${fraction}` : integer;
+            const prefix = this.currency.prefix ? this.currency.prefix + '' : '';
+            const suffix = this.currency.suffix ? ' ' + this.currency.suffix : '';
+
+            return `${prefix}${num}${suffix}`.trim();
+        },
+
+        getVariant(vId) { return this.variants.find(v => v.id == vId); },
+        getOption(vId, oId) { return this.getVariant(vId)?.options.find(o => o.id == oId); },
+        getOptionPriceData(vId, oId) { return this.getOption(vId, oId)?.prices_by_name?.[this.selectedCycleName]; },
+        variantOptionAvailable(vId, oId) { return !!this.getOptionPriceData(vId, oId); },
+        variantHasAvailableOptions(vId) { return this.getAvailableOptions(vId).length > 0; },
+        getAvailableOptions(vId) { return this.getVariant(vId)?.options.filter(o => this.variantOptionAvailable(vId, o.id)) || []; },
+        getAvailableOptionsForCycle(vId) { return this.getAvailableOptions(vId); },
+        
+        selectOptionLabel(vId, oId, name) {
+            const priceText = this.formatVariantOptionPrice(vId, oId);
+            return priceText ? `${name} - ${priceText}` : name;
+        },
+        sliderTickClass(n, i) {
+            if (n <= 1 || i === 0) return 'start-0 text-start';
+            if (i === n - 1) return 'end-0 text-end';
+            return `left-[${(i / (n - 1)) * 100}%] -translate-x-1/2 text-center`;
+        },
+        
+        isCheckboxSelected(vId, oId) { return this.selectedOptionsByVariant[vId]?.has(Number(oId)); },
+        toggleVariantCheckbox(vId, oId, c) { 
+            const s = this.selectedOptionsByVariant[vId]; 
+            c ? s.add(Number(oId)) : s.delete(Number(oId)); 
+            this.recomputeAll(); this.syncUrl(); 
+        },
+        setVariantRadio(vId, oId) { this.selectedOptionByVariant[vId] = Number(oId); this.recomputeAll(); this.syncUrl(); },
+        setVariantSelect(vId, val) { this.selectedOptionByVariant[vId] = Number(val); this.recomputeAll(); this.syncUrl(); },
+        setVariantSlider(vId, idx) {
+             const opts = this.getAvailableOptions(vId);
+             if(opts[idx]) { this.selectedOptionByVariant[vId] = opts[idx].id; this.recomputeAll(); this.syncUrl(); }
+        },
+        applyDefaults() {
+            this.variants.forEach(v => {
+                if (v.type !== 'checkbox') {
+                    const opts = this.getAvailableOptions(v.id);
+                    if (opts.length) this.selectedOptionByVariant[v.id] = opts[0].id;
+                }
+            });
+            this.syncUrl();
+            this.recomputeAll();
+        },
+        applyDefaultsIfEmpty() {
+             this.variants.forEach(v => {
+                if (v.type !== 'checkbox' && !this.selectedOptionByVariant[v.id]) {
+                    const opts = this.getAvailableOptions(v.id);
+                    if (opts.length) this.selectedOptionByVariant[v.id] = opts[0].id;
+                }
+            });
+        },
+        validateSelections() {
+            Object.keys(this.selectedOptionByVariant).forEach(id => {
+                if (!this.variantOptionAvailable(id, this.selectedOptionByVariant[id])) delete this.selectedOptionByVariant[id];
+            });
+            Object.entries(this.selectedOptionsByVariant).forEach(([vId, set]) => {
+                set.forEach(oId => { if (!this.variantOptionAvailable(vId, oId)) set.delete(oId); });
+            });
+        },
+        parseQuery() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('billing')) {
+                const p = this.prices.find(x => x.id == params.get('billing'));
+                if (p) this.selectCycle(p, false);
+            }
+            this.variants.forEach(v => {
+                const val = params.get(`variants[${v.id}]`);
+                if (!val) return;
+                if (v.type === 'checkbox') {
+                    val.split(',').forEach(id => this.variantOptionAvailable(v.id, id) && this.selectedOptionsByVariant[v.id].add(Number(id)));
+                } else if (this.variantOptionAvailable(v.id, val)) {
+                    this.selectedOptionByVariant[v.id] = Number(val);
+                }
+            });
+            this.applyDefaultsIfEmpty();
+            this.recomputeAll();
+        },
+        syncUrl() {
+            const p = new URLSearchParams();
+            if (this.selectedBillingId) p.set('billing', this.selectedBillingId);
+            Object.entries(this.selectedOptionByVariant).forEach(([k, v]) => p.set(`variants[${k}]`, v));
+            Object.entries(this.selectedOptionsByVariant).forEach(([k, v]) => v.size && p.set(`variants[${k}]`, [...v].join(',')));
+            history.replaceState({}, '', `${location.pathname}?${p.toString().replace(/%5B/g, '[').replace(/%5D/g, ']')}`);
         }
     };
 }

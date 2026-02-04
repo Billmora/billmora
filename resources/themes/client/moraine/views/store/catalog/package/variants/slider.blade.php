@@ -1,43 +1,51 @@
-<div class="mt-4" 
+<div class="mt-4"
      x-data="{ 
          idx: 0,
-         init() {
-             this.syncSliderIndex();
+         get opts() { 
+             return getAvailableOptions({{ $variant->id }}); 
          },
-         syncSliderIndex() {
-             const variantId = {{ $variant->id }};
-             const selectedOptionId = $wire.selectedOptionByVariant?.[variantId] || selectedOptionByVariant?.[variantId];
-             
-             if (selectedOptionId) {
-                 const availableOptions = getAvailableOptionsForCycle(variantId);
-                 const foundIndex = availableOptions.findIndex(opt => opt.id === selectedOptionId);
-                 if (foundIndex >= 0) {
-                     this.idx = foundIndex;
-                 }
+         init() {
+             this.$watch('selectedOptionByVariant[{{ $variant->id }}]', (val) => {
+                 const i = this.opts.findIndex(o => o.id == val);
+                 if (i >= 0) this.idx = i;
+             });
+             const curr = selectedOptionByVariant[{{ $variant->id }}];
+             if (curr) {
+                 const i = this.opts.findIndex(o => o.id == curr);
+                 if (i >= 0) this.idx = i;
              }
+         },
+         update(val) {
+             this.idx = Number(val);
+             const opt = this.opts[this.idx];
+             if (opt) {
+                 selectedOptionByVariant[{{ $variant->id }}] = opt.id;
+                 recomputeAll();
+                 syncUrl();
+             }
+         },
+         tickClass(n, i) {
+             if (n <= 1 || i === 0) return 'start-0 text-start';
+             if (i === n - 1) return 'end-0 text-end';
+             return `left-[${(i / (n - 1)) * 100}%] -translate-x-1/2 text-center`;
          }
      }"
-     x-init="init()"
-     x-show="variantHasAvailableOptions({{ $variant->id }})"
 >
     <div class="relative mb-10">
         <input type="range"
             min="0"
-            :max="Math.max(0, getAvailableOptionsForCycle({{ $variant->id }}).length - 1)"
+            :max="Math.max(0, opts.length - 1)"
             step="1"
-            :value="idx"
+            x-model="idx"
+            x-on:input="update($event.target.value)"
             class="w-full h-2 cursor-pointer accent-billmora-primary"
-            x-on:input="idx = Number($event.target.value); setVariantSlider({{ $variant->id }}, idx);"
         >
-        <template x-for="(opt, i) in getAvailableOptionsForCycle({{ $variant->id }})" :key="opt.id">
-            <span
-                class="grid text-sm text-body absolute"
-                :class="sliderTickClass(getAvailableOptionsForCycle({{ $variant->id }}).length, i)"
-            >
+        <template x-for="(opt, i) in opts" :key="opt.id">
+            <span class="grid text-sm text-body absolute"
+                  :class="tickClass(opts.length, i)">
                 <span class="text-slate-600 font-semibold" x-text="opt.name"></span>
                 <span class="text-slate-500 font-medium" x-text="formatVariantOptionPrice({{ $variant->id }}, opt.id)"></span>
             </span>
         </template>
     </div>
-    <input type="hidden" name="variants[{{ $variant->id }}]" :value="sliderOptionId({{ $variant->id }}, idx)">
 </div>
