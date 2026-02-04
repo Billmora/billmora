@@ -34,7 +34,9 @@
                                         transition-all"></div>
                                 <div class="flex flex-col">
                                     <h4 class="text-sm font-semibold text-slate-600">{{ $p['name'] }}</h4>
-                                    <span class="text-sm font-semibold text-slate-500">{{ $p['price_f'] }}</span>
+                                    <span class="text-sm font-semibold text-slate-500">
+                                        {{ $p['price_f'] }} @if($p['setup_fee'] > 0) + {{ $p['setup_fee_f'] }} {{ __('client/store.package.setup_fee') }} @endif
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -60,10 +62,12 @@
         <div class="w-full lg:w-1/3 h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl space-y-4">
             <h2 class="text-xl font-semibold text-slate-600 mb-4">{{ __('client/store.package.order_summary') }}</h2>
             <div class="grid">
+                <!-- Package Base Price -->
                 <div class="flex gap-3 justify-between">
                     <span class="text-slate-600 font-semibold text-start break-all">{{ $package->catalog->name }} - {{ $package->name }}</span>
                     <span class="text-slate-600 font-semibold text-end break-all"><span x-text="cyclePriceFormatted"></span></span>
                 </div>
+                <!-- Variant Items -->
                 <template x-for="row in variantSummaryRows" :key="row.key">
                     <div class="flex gap-3 justify-between">
                         <span class="text-slate-500 font-semibold text-start break-all" x-text="row.label"></span>
@@ -71,21 +75,30 @@
                     </div>
                 </template>
                 <hr class="border-t-2 border-billmora-2 my-4">
-                <span class="text-slate-600 font-semibold text-start text-md break-all">{{ __('client/store.package.billing_cycle') }}</span>
+                <!-- Subtotal (Recurring) -->
                 <div class="flex gap-3 justify-between">
-                    <span class="text-slate-500 font-semibold text-start break-all" x-text="cycleName"></span>
-                    <span class="text-slate-500 font-semibold text-end break-all" x-text="cyclePriceFormatted"></span>
+                    <span class="text-slate-600 font-semibold text-start break-all">{{ __('client/store.package.subtotal') }}</span>
+                    <span class="text-slate-600 font-semibold text-end break-all" x-text="subtotalFormatted"></span>
                 </div>
                 <hr class="border-t-2 border-billmora-2 my-4">
+                <!-- Setup Fee -->
                 <div class="flex gap-3 justify-between">
                     <span class="text-slate-500 font-semibold text-start break-all">{{ __('client/store.package.setup_fee') }}</span>
                     <span class="text-slate-500 font-semibold text-end break-all" x-text="setupFeeFormatted"></span>
                 </div>
                 <hr class="border-t-2 border-billmora-2 my-4">
+                <!-- Total Due Today -->
                 <div class="flex flex-col">
                     <span class="text-slate-600 font-semibold break-all">{{ __('client/store.package.due_today') }}</span>
                     <span class="text-xl text-slate-600 font-semibold break-all" x-text="totalFormatted"></span>
                 </div>
+                <!-- Next Billing Info -->
+                <template x-if="setupFee > 0">
+                    <div class="grid mt-2 p-2 bg-billmora-1 rounded text-sm text-slate-500">
+                        <span>{{ __('client/store.package.next_billing') }}:</span>
+                        <span x-text="subtotalFormatted" class="font-semibold"></span>
+                    </div>
+                </template>
             </div>
             <button type="submit" class="w-full bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                 {{ __('client/store.package.checkout') }}
@@ -104,13 +117,17 @@ function orderSummary() {
         selectedCycleName: '',
         cycleName: '',
         cyclePrice: 0,
-        setupFee: 0,
+        cycleSetupFee: 0,
         cyclePriceFormatted: '',
-        setupFeeFormatted: '',
         selectedOptionByVariant: {},
         selectedOptionsByVariant: {},
         variantSummaryRows: [],
+        
+        subtotal: 0,
+        setupFee: 0,
         total: 0,
+        subtotalFormatted: '',
+        setupFeeFormatted: '',
         totalFormatted: '',
 
         init() {
@@ -231,15 +248,12 @@ function orderSummary() {
         },
 
         selectCycle(price, doSync = true) {
-            Object.assign(this, {
-                selectedBillingId: Number(price.id),
-                selectedCycleName: price.name,
-                cycleName: price.name,
-                cyclePrice: Number(price.price) || 0,
-                setupFee: Number(price.setup_fee) || 0,
-                cyclePriceFormatted: price.price_f,
-                setupFeeFormatted: price.setup_fee_f
-            });
+            this.selectedBillingId = Number(price.id);
+            this.selectedCycleName = price.name;
+            this.cycleName = price.name;
+            this.cyclePrice = Number(price.price) || 0;
+            this.cycleSetupFee = Number(price.setup_fee) || 0;
+            this.cyclePriceFormatted = price.price_f;
 
             this.applyDefaultSelectionsForCycle();
             this.recomputeAll();
@@ -323,12 +337,17 @@ function orderSummary() {
         },
 
         formatVariantOptionPrice(variantId, optionId) {
-            return this.getOptionPriceForSelectedCycle(variantId, optionId)?.total_f || '';
+            const priceData = this.getOptionPriceForSelectedCycle(variantId, optionId);
+            if (!priceData) return '';
+            
+            const price = priceData.price_f || '';
+            const setupFee = (priceData.setup_fee && priceData.setup_fee > 0) ? ` + ${priceData.setup_fee_f} Setup Fee` : '';
+            return `${price}${setupFee}`;
         },
 
         selectOptionLabel(variantId, optionId, optionName) {
-            const price = this.getOptionPriceForSelectedCycle(variantId, optionId);
-            return price?.total_f ? `${optionName} - ${price.total_f}` : optionName;
+            const formatted = this.formatVariantOptionPrice(variantId, optionId);
+            return formatted ? `${optionName} - ${formatted}` : optionName;
         },
 
         isCheckboxSelected(variantId, optionId) {
@@ -376,26 +395,29 @@ function orderSummary() {
         },
 
         recomputeAll() {
-            const base = this.cyclePrice + this.setupFee;
-            let variantTotal = 0;
+            // Start with package base price and setup fee
+            let subtotal = this.cyclePrice;
+            let setupFee = this.cycleSetupFee;
             const rows = [];
 
             // Single choice variants
             Object.entries(this.selectedOptionByVariant).forEach(([vId, oId]) => {
                 const variant = this.findVariant(vId);
                 const option = this.findOption(vId, oId);
-                const price = this.getOptionPriceForSelectedCycle(vId, oId);
+                const priceData = this.getOptionPriceForSelectedCycle(vId, oId);
 
-                if (!price) {
+                if (!priceData) {
                     delete this.selectedOptionByVariant[vId];
                     return;
                 }
 
-                variantTotal += Number(price.total) || 0;
+                subtotal += Number(priceData.price) || 0;
+                setupFee += Number(priceData.setup_fee) || 0;
+
                 rows.push({
                     key: `v-${vId}`,
                     label: `${variant?.name ?? 'Variant'}: ${option?.name ?? ''}`,
-                    priceFormatted: price.total_f || ''
+                    priceFormatted: priceData.price_f || ''
                 });
             });
 
@@ -406,24 +428,31 @@ function orderSummary() {
                 set.forEach(oId => {
                     const variant = this.findVariant(vId);
                     const option = this.findOption(vId, oId);
-                    const price = this.getOptionPriceForSelectedCycle(vId, oId);
+                    const priceData = this.getOptionPriceForSelectedCycle(vId, oId);
 
-                    if (!price) {
+                    if (!priceData) {
                         set.delete(oId);
                         return;
                     }
 
-                    variantTotal += Number(price.total) || 0;
+                    subtotal += Number(priceData.price) || 0;
+                    setupFee += Number(priceData.setup_fee) || 0;
+
                     rows.push({
                         key: `v-${vId}-${oId}`,
                         label: `${variant?.name ?? 'Variant'}: ${option?.name ?? ''}`,
-                        priceFormatted: price.total_f || ''
+                        priceFormatted: priceData.price_f || ''
                     });
                 });
             });
 
             this.variantSummaryRows = rows;
-            this.total = base + variantTotal;
+            this.subtotal = subtotal;
+            this.setupFee = setupFee;
+            this.total = subtotal + setupFee;
+            
+            this.subtotalFormatted = this.subtotal === 0 ? 'Free' : this.formatCurrency(this.subtotal);
+            this.setupFeeFormatted = this.setupFee === 0 ? 'Free' : this.formatCurrency(this.setupFee);
             this.totalFormatted = this.total === 0 ? 'Free' : this.formatCurrency(this.total);
         },
 

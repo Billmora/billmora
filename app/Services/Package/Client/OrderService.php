@@ -110,6 +110,7 @@ class OrderService
                 'currency' => $currency,
                 'subtotal' => $pricing['subtotal'],
                 'discount' => $pricing['discount'],
+                'setup_fee' => $pricing['setup_fee_total'],
                 'total' => $pricing['total'],
                 'due_date' => now()->addDays(7),
             ]);

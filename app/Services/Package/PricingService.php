@@ -22,13 +22,11 @@ class PricingService
      */
     public function calculatePricing(
         PackagePrice $packagePrice,
-        array $variantSelections = [],
-        ?Coupon $coupon = null,
-        ?string $currencyCode = null
+        array $variantSelections,
+        ?Coupon $coupon,
+        string $currencyCode
     ): array {
-        $currencyCode = $currencyCode ?? session('currency');
         $cycleName = $packagePrice->name;
-
         $basePrice = $this->getPrice($packagePrice, $currencyCode);
         $setupFeePackage = $this->getSetupFee($packagePrice, $currencyCode);
 
@@ -76,16 +74,18 @@ class PricingService
         }
 
         $recurringTotal = $basePrice + $variantTotal;
-        $setupFeeTotal = $setupFeePackage + array_sum(array_column($setupFeeVariants, 'amount'));
-        $subtotal = $recurringTotal + $setupFeeTotal;
+        $subtotal = $recurringTotal;
 
+        $setupFeeTotal = $setupFeePackage + array_sum(array_column($setupFeeVariants, 'amount'));
+
+        $amountBeforeDiscount = $subtotal + $setupFeeTotal;
         $discount = 0;
         if ($coupon) {
-            $discount = $this->calculateDiscount($coupon, $recurringTotal);
+            $discount = $this->calculateDiscount($coupon, $amountBeforeDiscount);
         }
 
-        $total = max(0, $subtotal - $discount);
-
+        $total = max(0, $amountBeforeDiscount - $discount);
+        
         return [
             'base_price' => $basePrice,
             'variant_total' => $variantTotal,
