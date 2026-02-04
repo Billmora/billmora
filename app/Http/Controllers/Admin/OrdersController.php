@@ -11,11 +11,14 @@ use App\Models\User;
 use App\Services\Package\PricingService;
 use App\Services\Package\Admin\OrderService;
 use App\Services\Package\OrderValidationService;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class OrdersController extends Controller
 {
+    use AuditsSystem;
+
     /**
      * Applies permission-based middleware for accessing orders management.
      * 
@@ -162,6 +165,8 @@ class OrdersController extends Controller
                 // TODO: Send email notify to user
             }
 
+            $this->recordCreate('order.create', isset($result['order']) ? $result['order']->toArray() : (array) $result);
+
             return redirect()
                 ->route('admin.orders')
                 ->with('success', __('common.create_success', ['attribute' => $result['order']->order_number]));
@@ -223,6 +228,8 @@ class OrdersController extends Controller
             'order_status' => ['required', Rule::in(['pending', 'processing', 'completed', 'cancelled', 'failed'])],
         ]);
 
+        $oldOrder = $order->getOriginal();
+
         $updateData = [
             'status' => $validated['order_status'],
         ];
@@ -243,6 +250,8 @@ class OrdersController extends Controller
         }
         
         $order->update($updateData);
+
+        $this->recordUpdate('order.update', $oldOrder, $order->getChanges());
         
         return redirect()
                 ->route('admin.orders')
@@ -260,6 +269,11 @@ class OrdersController extends Controller
         $tempOrder = $order;
 
         $order->delete();
+
+        $this->recordDelete('order.delete', [
+            'id' => $tempOrder->id,
+            'name' => $tempOrder->order_number,
+        ]);
 
         return redirect()->route('admin.orders')->with('success', __('common.delete_success', ['attribute' => $tempOrder->order_number]));
     }
