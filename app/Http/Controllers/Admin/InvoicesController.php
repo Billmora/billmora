@@ -49,7 +49,7 @@ class InvoicesController extends Controller
             });
         }
 
-        $invoices = $query->paginate(25);
+        $invoices = $query->latest()->paginate(25);
 
         return view('admin::invoices.index', compact('invoices'));
     }

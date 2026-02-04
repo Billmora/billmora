@@ -57,7 +57,7 @@ class OrdersController extends Controller
             });
         }
 
-        $orders = $query->paginate(25);
+        $orders = $query->latest()->paginate(25);
 
         return view('admin::orders.index', compact('orders'));
     }
