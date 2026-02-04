@@ -140,7 +140,7 @@ class InvoicesController extends Controller
 
             DB::commit();
 
-            $this->recordCreate('invoices.create', $invoice->toArray());
+            $this->recordCreate('invoice.create', $invoice->toArray());
 
             return redirect()
                 ->route('admin.invoices')
@@ -256,7 +256,7 @@ class InvoicesController extends Controller
 
             DB::commit();
 
-            $this->recordUpdate('invoices.update', $oldData, $newData);
+            $this->recordUpdate('invoice.update', $oldData, $newData);
 
             return redirect()
                 ->route('admin.invoices')
@@ -283,7 +283,7 @@ class InvoicesController extends Controller
 
         $invoice->delete();
 
-        $this->recordDelete('invoices.delete', [
+        $this->recordDelete('invoice.delete', [
             'id' => $tempInvoice->id,
             'invoice_number' => $tempInvoice->invoice_number,
         ]);
