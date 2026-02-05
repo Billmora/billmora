@@ -94,6 +94,20 @@ class OrderService
                 default => 'pending'
             };
 
+            $activatedAt = $serviceStatus === 'active' ? now() : null;
+            $nextDueDate = null;
+
+            if ($serviceStatus === 'active' && $packagePrice->type === 'recurring') {
+                $date = now();
+                $nextDueDate = match($packagePrice->billing_period) {
+                    'daily' => $date->addDays($packagePrice->time_interval),
+                    'weekly' => $date->addWeeks($packagePrice->time_interval),
+                    'monthly' => $date->addMonths($packagePrice->time_interval),
+                    'yearly' => $date->addYears($packagePrice->time_interval),
+                    default => null,
+                };
+            }
+
             $service = Service::create([
                 'user_id' => $userId,
                 'order_id' => $order->id,
@@ -108,6 +122,9 @@ class OrderService
                 'price' => $pricing['recurring_total'],
                 'setup_fee' => $pricing['setup_fee_total'],
                 'variant_selections' => $variantSelections,
+                'activated_at' => $activatedAt,
+                'next_due_date' => $nextDueDate,
+                'cancelled_at' => $serviceStatus === 'cancelled' ? now() : null,
             ]);
 
             $invoiceStatus = match($status) {
@@ -155,18 +172,30 @@ class OrderService
         return DB::transaction(function () use ($order, $newStatus) {
             $order->update([
                 'status' => $newStatus,
-                'completed_at' => $newStatus === 'completed' ? now() : $order->completed_at,
-                'cancelled_at' => $newStatus === 'cancelled' ? now() : $order->cancelled_at,
+                'completed_at' => $newStatus === 'completed' ? now() : null,
+                'cancelled_at' => in_array($newStatus, ['cancelled', 'failed']) ? now() : null,
             ]);
 
             if ($order->service) {
-                $serviceStatus = match($newStatus) {
-                    'completed' => 'active',
-                    'cancelled', 'failed' => 'cancelled',
-                    default => 'pending'
-                };
-                
-                $order->service->update(['status' => $serviceStatus]);
+                if ($newStatus === 'completed') {
+                    if ($order->service->status !== 'active') {
+                        $order->service->forceFill(['cancelled_at' => null])->save(); 
+                        $order->service->activate();
+                    }
+                } elseif (in_array($newStatus, ['cancelled', 'failed'])) {
+                    $order->service->update([
+                        'status' => 'cancelled',
+                        'cancelled_at' => now(),
+                    ]);
+                } else {
+                    $order->service->update([
+                        'status' => 'pending',
+                        'cancelled_at' => null,
+                        'terminated_at' => null,
+                        'activated_at' => null, 
+                        'next_due_date' => null,
+                    ]);
+                }
             }
 
             if ($order->invoice) {
