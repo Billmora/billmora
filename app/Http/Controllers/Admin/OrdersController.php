@@ -222,7 +222,7 @@ class OrdersController extends Controller
      * @param \App\Models\Order $order
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Order $order)
+    public function update(Request $request, Order $order, OrderService $orderService)
     {
         $validated = $request->validate([
             'order_status' => ['required', Rule::in(['pending', 'processing', 'completed', 'cancelled', 'failed'])],
@@ -230,32 +230,20 @@ class OrdersController extends Controller
 
         $oldOrder = $order->getOriginal();
 
-        $updateData = [
-            'status' => $validated['order_status'],
-        ];
-    
-        switch ($validated['order_status']) {
-            case 'completed':
-                $updateData['completed_at'] = $order->completed_at ?? now();
-                $updateData['cancelled_at'] = null;
-                break;
-            case 'cancelled':
-                $updateData['cancelled_at'] = $order->cancelled_at ?? now();
-                $updateData['completed_at'] = null;
-                break;
-            default:
-                $updateData['cancelled_at'] = null;
-                $updateData['completed_at'] = null;
-                break;
-        }
-        
-        $order->update($updateData);
+        try {
+            $updatedOrder = $orderService->updateOrderStatus($order, $validated['order_status']);
 
-        $this->recordUpdate('order.update', $oldOrder, $order->getChanges());
-        
-        return redirect()
-                ->route('admin.orders')
-                ->with('success', __('common.update_success', ['attribute' => $order->order_number]));
+            $this->recordUpdate('order.update', $oldOrder, $updatedOrder->getChanges());
+            
+            return redirect()
+                    ->route('admin.orders')
+                    ->with('success', __('common.update_success', ['attribute' => $order->order_number]));
+
+        } catch (\Exception $e) {
+            return back()
+                ->withInput()
+                ->with('error', __('common.update_failed', ['attribute' => $e->getMessage()]));
+        }
     }
 
     /**
