@@ -36,6 +36,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin orders interface routes.
+     *
+     * Prefix: /admin/orders
+     */
+    Route::group(['prefix' => 'orders'], function () {
+        Route::get('/', [Admin\OrdersController::class, 'index'])->name('admin.orders');
+        Route::get('/create', [Admin\OrdersController::class, 'create'])->name('admin.orders.create');
+        Route::post('/create', [Admin\OrdersController::class, 'store'])->name('admin.orders.store');
+        Route::get('/{order:order_number}/edit', [Admin\OrdersController::class, 'edit'])->name('admin.orders.edit');
+        Route::put('/{order:order_number}/edit', [Admin\OrdersController::class, 'update'])->name('admin.orders.update');
+        Route::delete('/{order:order_number}', [Admin\OrdersController::class, 'destroy'])->name('admin.orders.destroy');
+    });
+
+    /**
      * Admin invoices interface routes.
      *
      * Prefix: /admin/invoices
@@ -48,20 +62,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::put('/{invoice:invoice_number}/edit', [Admin\InvoicesController::class, 'update'])->name('admin.invoices.update');
         Route::delete('/{invoice:invoice_number}', [Admin\InvoicesController::class, 'destroy'])->name('admin.invoices.destroy');
         Route::get('/{invoice:invoice_number}/download', [Admin\InvoicesController::class, 'download'])->name('admin.invoices.download');
-    });
-
-    /**
-     * Admin orders interface routes.
-     *
-     * Prefix: /admin/orders
-     */
-    Route::group(['prefix' => 'orders'], function () {
-        Route::get('/', [Admin\OrdersController::class, 'index'])->name('admin.orders');
-        Route::get('/create', [Admin\OrdersController::class, 'create'])->name('admin.orders.create');
-        Route::post('/create', [Admin\OrdersController::class, 'store'])->name('admin.orders.store');
-        Route::get('/{order:order_number}/edit', [Admin\OrdersController::class, 'edit'])->name('admin.orders.edit');
-        Route::put('/{order:order_number}/edit', [Admin\OrdersController::class, 'update'])->name('admin.orders.update');
-        Route::delete('/{order:order_number}', [Admin\OrdersController::class, 'destroy'])->name('admin.orders.destroy');
     });
 
     /**
