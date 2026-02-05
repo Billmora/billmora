@@ -43,7 +43,7 @@ class OrderService
      * @param array $checkoutData
      * @return array
      */
-    public function createFromCheckout(
+    public function createOrder(
         int $userId,
         int $packagePriceId,
         array $variantSelections,

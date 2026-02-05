@@ -183,7 +183,7 @@ class ReviewController extends Controller
         }
 
         try {
-            $result = $orderService->createFromCheckout(
+            $result = $orderService->createOrder(
                 Auth::id(),
                 $packagePrice->id,
                 $variantSelections,
