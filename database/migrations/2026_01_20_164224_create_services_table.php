@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('package_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('package_price_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('package_id')->constrained();
+            $table->foreignId('package_price_id')->constrained();
             $table->json('variant_selections')->nullable();
             
             $table->string('name');

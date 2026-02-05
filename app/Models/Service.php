@@ -35,6 +35,23 @@ class Service extends Model
     ];
 
     /**
+     * Boot the model and register event listeners.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::deleted(function ($service) {
+            if ($service->order) {
+                $service->order->update([
+                    'status' => 'cancelled',
+                    'cancelled_at' => now(),
+                ]);
+            }
+        });
+    }
+
+    /**
      * Get the user that owns this service.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -131,7 +148,7 @@ class Service extends Model
             return null;
         }
 
-        $date = now();
+        $date = $this->activated_at ? $this->activated_at->copy() : now();
         
         switch ($this->billing_period) {
             case 'daily':
