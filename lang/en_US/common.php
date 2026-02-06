@@ -65,8 +65,11 @@ return [
     'export' => 'Export',
     'preview' => 'Preview',
     'apply' => 'Apply',
+    'manage' => 'Manage',
     'key' => 'Key',
     'value' => 'Value',
+    'install' => 'Install',
+    'install' => 'Uninstall',
 
     'send_success' => ':attribute have been sent.',
     'send_failed' => 'Failed to send :attribute.',
@@ -86,6 +89,10 @@ return [
     'disable_failed' => 'Failed to disable :attribute.',
     'clear_success' => ':attribute have been cleared.',
     'clear_failed' => 'Failed to clear :attribute.',
+    'install_success' => ':attribute have been installed.',
+    'install_failed' => 'Failed to install :attribute.',
+    'uninstall_success' => ':attribute have been uninstalled.',
+    'uninstall_failed' => 'Failed to uninstall :attribute.',
 
     'create_modal_title' => 'Create a new item',
     'create_modal_description' => 'Are you sure you want to create this :item?',
