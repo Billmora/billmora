@@ -158,7 +158,7 @@ class ReviewController extends Controller
         $validated = $request->validate($rules);
 
         if (!Auth::check()) {
-            session()->put('intended', route('client.checkout.review'));
+            session()->put('url.intended', route('client.checkout.review'));
             return redirect()->route('client.login');
         }
 

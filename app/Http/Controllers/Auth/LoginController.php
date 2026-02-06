@@ -70,9 +70,7 @@ class LoginController extends Controller
                 'user_agent' => $request->userAgent(),
             ]);
 
-            $intended = session()->pull('intended', route('client.dashboard'));
-
-            return redirect()->to($intended);
+            return redirect()->intended(route('client.dashboard'));
         }
     
         return back()->with('error', __('auth.invalid_credentials'));
