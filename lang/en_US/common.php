@@ -69,7 +69,7 @@ return [
     'key' => 'Key',
     'value' => 'Value',
     'install' => 'Install',
-    'install' => 'Uninstall',
+    'uninstall' => 'Uninstall',
 
     'send_success' => ':attribute have been sent.',
     'send_failed' => 'Failed to send :attribute.',
