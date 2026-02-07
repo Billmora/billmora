@@ -1,0 +1,124 @@
+<?php
+
+namespace App\Http\Controllers\Admin\Provisionings;
+
+use App\Http\Controllers\Controller;
+use App\Models\Provisioning;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+
+class InstanceController extends Controller
+{
+    /**
+     * Display all instances for the specified provisioning driver.
+     *
+     * @param string $driver
+     * @return \Illuminate\View\View
+     */
+    public function index($driver)
+    {
+        if (!File::exists(base_path("plugin/Provisioning/{$driver}"))) {
+            abort(404, "Driver {$driver} not found");
+        }
+
+        $instances = Provisioning::where('driver', $driver)->latest()->get();
+
+        return view('admin::provisionings.show', compact('instances', 'driver'));
+    }
+
+    /**
+     * Show the form for creating a new provisioning instance.
+     *
+     * @param string $driver
+     * @return \Illuminate\View\View
+     */
+    public function create($driver)
+    {
+        $className = $this->getPluginClass($driver);
+        
+        $formFields = $className::getConfig();
+
+        return view('admin::provisionings.instances.create', compact('driver', 'formFields'));
+    }
+
+    /**
+     * Store a newly created provisioning instance.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string $driver
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request, $driver)
+    {
+        $className = $this->getPluginClass($driver);
+        
+        $configFields = $className::getConfig();
+
+        $rules = [
+            'instance_name' => ['required', 'string', 'max:255'],
+            'instance_active' => ['boolean'],
+        ];
+
+        foreach ($configFields as $key => $field) {
+            if (isset($field['rules'])) {
+                $rules[$key] = $field['rules'];
+            }
+        }
+
+        $validated = $request->validate($rules);
+
+        $configKeys = array_keys($configFields);
+        
+        $configValues = $request->only($configKeys);
+
+        $instance = Provisioning::create([
+            'name' => $validated['instance_name'],
+            'driver' => $driver,
+            'is_active' => $validated['instance_active'],
+            'config' => $configValues,
+        ]);
+
+        return redirect()->route('admin.provisionings.instance', $driver)->with('success', __('common.create_success', ['attribute' => $instance->name]));
+    }
+
+    /**
+     * Test connection to provisioning instance.
+     *
+     * @param string $driver
+     * @param \App\Models\Provisioning $instance
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function testConnection($driver, Provisioning $instance)
+    {
+        if ($instance->driver !== $driver) abort(404);
+
+        try {
+            $plugin = $instance->getPluginInstance();
+            
+            if ($plugin->testConnection($instance->config)) {
+                return back()->with('success', 'Connection successful');
+            }
+            return back()->with('error', 'Connection failed');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Get the plugin class for the specified driver.
+     *
+     * @param string $driver
+     * @return string
+     */
+    private function getPluginClass($driver)
+    {
+        $className = "Plugin\\Provisioning\\{$driver}\\{$driver}";
+        
+        if (!class_exists($className)) 
+        {
+            return abort(500, "Class {$className} not found");
+        }
+
+        return $className;
+    }
+}

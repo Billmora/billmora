@@ -141,6 +141,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/', [Admin\ProvisioningsController::class, 'index'])->name('admin.provisionings');
         Route::post('/install', [Admin\ProvisioningsController::class, 'install'])->name('admin.provisionings.install');
         Route::delete('/{driver}', [Admin\ProvisioningsController::class, 'uninstall'])->name('admin.provisionings.uninstall');
+        Route::get('/{driver}', [Admin\Provisionings\InstanceController::class, 'index'])->name('admin.provisionings.instance');
+        Route::get('/{driver}/create', [Admin\Provisionings\InstanceController::class, 'create'])->name('admin.provisionings.instance.create');
+        Route::post('/{driver}/create', [Admin\Provisionings\InstanceController::class, 'store'])->name('admin.provisionings.instance.store');
     });
 
     /**
