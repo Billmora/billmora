@@ -140,6 +140,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     Route::group(['prefix' => 'provisionings'], function () {
         Route::get('/', [Admin\ProvisioningsController::class, 'index'])->name('admin.provisionings');
         Route::post('/install', [Admin\ProvisioningsController::class, 'install'])->name('admin.provisionings.install');
+        Route::delete('/{driver}', [Admin\ProvisioningsController::class, 'uninstall'])->name('admin.provisionings.uninstall');
     });
 
     /**

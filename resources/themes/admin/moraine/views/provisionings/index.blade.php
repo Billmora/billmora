@@ -60,7 +60,7 @@
             position="centered"
             title="{{ __('common.uninstall_modal_title') }}"
             description="{{ __('common.uninstall_modal_description', ['item' => $provisioning->name]) }}">
-            <form action="#" method="POST">
+            <form action="{{ route('admin.provisionings.uninstall', ['driver' => $provisioning->driver]) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <div class="flex justify-end gap-2 mt-4">

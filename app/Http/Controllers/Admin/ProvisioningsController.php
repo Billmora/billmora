@@ -81,4 +81,35 @@ class ProvisioningsController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+    /**
+     * Uninstall a provisioning plugin driver.
+     *
+     * @param string $driver
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function uninstall($driver)
+    {
+        $instances = Provisioning::where('driver', $driver)->count();
+
+        if ($instances > 0) {
+            return back()->with('error', "Cannot uninstall driver {$driver}. There are {$instances} active instances using this driver. Please delete them first.");
+        }
+
+        $pluginPath = base_path("plugin/Provisioning/{$driver}");
+
+        if (File::exists($pluginPath)) {
+            try {
+                File::deleteDirectory($pluginPath);
+                
+                return redirect()->route('admin.provisionings')
+                    ->with('success', __('common.uninstall_success', ['attribute' => $instances->name]));
+                    
+            } catch (\Exception $e) {
+                return back()->with('error', $e->getMessage());
+            }
+        }
+
+        return back()->with('error', "Driver folder {$driver} not found.");
+    }
 }
