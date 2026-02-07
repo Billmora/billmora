@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('driver');
             $table->boolean('is_active')->default(true);
-            $table->json('meta_data')->nullable();
+            $table->json('config')->nullable();
             $table->timestamps();
         });
     }

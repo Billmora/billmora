@@ -26,6 +26,6 @@ class Provisioning extends Model
      */
     protected $casts = [
         'is_active' => 'boolean',
-        'meta_data' => 'array', 
+        'config' => 'array', 
     ];
 }
