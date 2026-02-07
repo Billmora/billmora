@@ -14,6 +14,7 @@ return [
     'group' => [
         'management' => 'Management',
         'product' => 'Product',
+        'plugin' => 'Plugin',
         'system' => 'System',
     ],
 ];
