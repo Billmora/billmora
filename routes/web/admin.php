@@ -133,6 +133,16 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin provisionings interface routes.
+     *
+     * Prefix: /admin/provisionings
+     */
+    Route::group(['prefix' => 'provisionings'], function () {
+        Route::get('/', [Admin\ProvisioningsController::class, 'index'])->name('admin.provisionings');
+        Route::post('/install', [Admin\ProvisioningsController::class, 'install'])->name('admin.provisionings.install');
+    });
+
+    /**
      * Admin settings interface routes.
      *
      * Prefix: /admin/settings
