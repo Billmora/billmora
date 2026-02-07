@@ -9,6 +9,7 @@ return [
     'packages' => 'Packages',
     'variants' => 'Variants',
     'coupons' => 'Coupons',
+    'provisionings' => 'Provisionings',
     'settings' => 'Settings',
     'audits' => 'Audits',
     'group' => [
