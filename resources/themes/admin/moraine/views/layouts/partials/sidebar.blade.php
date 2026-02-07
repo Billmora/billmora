@@ -45,6 +45,11 @@
         <x-lucide-tags class="w-5 h-auto" />
         <span class="font-semibold">{{ __('admin/navigation.coupons') }}</span>
       </a>
+      <span class="mt-4 block text-slate-600 font-semibold text-md">{{ __('admin/navigation.group.plugin') }}</span>
+      <a href="{{ route('admin.provisionings') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.provisionings*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+        <x-lucide-plug class="w-5 h-auto" />
+        <span class="font-semibold">{{ __('admin/navigation.provisionings') }}</span>
+      </a>
       <span class="mt-4 block text-slate-600 font-semibold text-md">{{ __('admin/navigation.group.system') }}</span>
       <a href="{{ route('admin.settings') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.settings*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
         <x-lucide-settings class="w-5 h-auto" />
