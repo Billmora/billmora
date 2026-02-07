@@ -42,7 +42,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $provisioning->version }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $provisioning->author }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
-                                    <a href="#" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ __('common.manage') }}</a>                               
+                                    <a href="{{ route('admin.provisionings.instance', ['driver' => $provisioning->driver]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ __('common.manage') }}</a>                               
                                     <x-admin::modal.trigger modal="deleteModal-{{ $provisioning->driver }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.uninstall') }}</x-admin::modal.trigger>
                                 </td>
                             </tr>
