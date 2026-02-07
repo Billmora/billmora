@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\ProvisioningInterface;
 use Illuminate\Database\Eloquent\Model;
 
 class Provisioning extends Model
@@ -28,4 +29,20 @@ class Provisioning extends Model
         'is_active' => 'boolean',
         'config' => 'array', 
     ];
+
+    /**
+     * Get the plugin instance for this provisioning driver.
+     *
+     * @return \App\Contracts\ProvisioningInterface|null
+     */
+    public function getPluginInstance()
+    {
+        $className = "Plugin\\Provisioning\\{$this->driver}\\{$this->driver}";
+
+        if (class_exists($className)) {
+            return new $className();
+        }
+
+        return null;
+    }
 }
