@@ -16,6 +16,11 @@
                 'icon' => 'lucide-badge-cent',
                 'label' => __('admin/packages.tabs.pricing'),
             ],
+            [
+                'route' => route('admin.packages.provisioning', ['id' => $package->id]),
+                'icon' => 'lucide-plug',
+                'label' => 'Provisioning',
+            ],
         ]" 
         active="{{ request()->fullUrl() }}" />
     <div class="flex flex-col gap-4">
