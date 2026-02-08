@@ -82,6 +82,70 @@ class InstanceController extends Controller
     }
 
     /**
+     * Show the form for editing the specified provisioning instance.
+     *
+     * @param string $driver
+     * @param \App\Models\Provisioning $instance
+     * @return \Illuminate\View\View
+     */
+    public function edit($driver, Provisioning $instance)
+    {
+        if ($instance->driver !== $driver) {
+            abort(404);
+        }
+
+        $className = $this->getPluginClass($driver);
+        $formFields = $className::getConfig();
+
+        return view('admin::provisionings.instances.edit', compact('driver', 'instance', 'formFields'));
+    }
+
+    /**
+     * Update the specified provisioning instance.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string $driver
+     * @param \App\Models\Provisioning $instance
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, $driver, Provisioning $instance)
+    {
+        if ($instance->driver !== $driver) {
+            abort(404);
+        }
+
+        $className = $this->getPluginClass($driver);
+        $configFields = $className::getConfig();
+
+        $rules = [
+            'instance_name' => ['required', 'string', 'max:255'],
+            'instance_active' => ['boolean'], 
+        ];
+
+        foreach ($configFields as $key => $field) {
+            if (isset($field['rules'])) {
+                $rules[$key] = $field['rules'];
+            }
+        }
+
+        $validated = $request->validate($rules);
+
+        $configKeys = array_keys($configFields);
+        
+        $newConfig = $request->only($configKeys);
+
+        $instance->update([
+            'name' => $validated['instance_name'],
+            'is_active' => (bool) $validated['instance_active'],
+            'config' => $newConfig, 
+        ]);
+
+        return redirect()
+            ->route('admin.provisionings.instance', $driver)
+            ->with('success', __('common.update_success', ['attribute' => $instance->name]));
+    }
+
+    /**
      * Test connection to provisioning instance.
      *
      * @param string $driver
