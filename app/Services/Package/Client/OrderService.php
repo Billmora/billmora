@@ -10,6 +10,7 @@ use App\Models\CouponUsage;
 use App\Models\Package;
 use App\Models\PackagePrice;
 use App\Models\Coupon;
+use App\Models\Provisioning;
 use App\Services\Package\PricingService;
 use Illuminate\Support\Facades\DB;
 
@@ -87,11 +88,15 @@ class OrderService
                 'terms_accepted' => $checkoutData['terms_accepted'] ?? true,
             ]);
 
+            $finalConfig = $this->resolveServiceConfiguration($package, $variantSelections);
+            $provisioningId = $this->findProvisioningInstance($package->provisioning_driver ?? null);
+
             $service = Service::create([
                 'user_id' => $userId,
                 'order_id' => $order->id,
                 'package_id' => $package->id,
                 'package_price_id' => $packagePrice->id,
+                'provisioning_id' => $provisioningId,
                 'name' => $package->name,
                 'status' => 'pending',
                 'currency' => $currency,
@@ -100,6 +105,7 @@ class OrderService
                 'billing_period' => $packagePrice->billing_period,
                 'price' => $pricing['recurring_total'],
                 'setup_fee' => $pricing['setup_fee_total'],
+                'configuration' => $finalConfig, 
                 'variant_selections' => $variantSelections,
             ]);
 
@@ -246,5 +252,73 @@ class OrderService
         };
 
         return $start->toDateString() . ' - ' . $end->toDateString();
+    }
+
+    /**
+     * Merge Package Default Config with Selected Variant Options.
+     *
+     * @param \App\Models\Package $package
+     * @param array $variantSelections (List of Option IDs)
+     * @return array
+     */
+    protected function resolveServiceConfiguration(Package $package, array $variantSelections): array
+    {
+        $config = $package->provisioning_config ?? [];
+
+        if (empty($variantSelections)) {
+            return $config;
+        }
+
+        $optionIds = collect($variantSelections)->flatten()->filter()->toArray();
+
+        if (empty($optionIds)) {
+            return $config;
+        }
+
+        $options = \App\Models\VariantOption::with('variant')
+            ->whereIn('id', $optionIds)
+            ->get();
+
+        foreach ($options as $option) {
+            $key = $option->variant->code ?? null;
+            
+            $value = $option->value;
+
+            if (empty($key)) {
+                continue;
+            }
+
+            if (is_numeric($value)) {
+                $value = $value + 0;
+            } elseif (strtolower($value) === 'true') {
+                $value = true;
+            } elseif (strtolower($value) === 'false') {
+                $value = false;
+            }
+
+            $config[$key] = $value;
+        }
+
+        return $config;
+    }
+
+    /**
+     * Find a suitable provisioning instance based on package driver.
+     *
+     * @param string|null $driver
+     * @return int|null
+     */
+    protected function findProvisioningInstance(?string $driver): ?int
+    {
+        if (empty($driver)) {
+            return null;
+        }
+
+        $instance = Provisioning::where('driver', $driver)
+            ->where('is_active', true)
+            ->inRandomOrder()
+            ->first();
+
+        return $instance?->id;
     }
 }
