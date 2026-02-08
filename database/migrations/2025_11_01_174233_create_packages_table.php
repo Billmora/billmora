@@ -22,6 +22,9 @@ return new class extends Migration
             $table->integer('per_user_limit')->default(-1);
             $table->boolean('allow_cancellation')->default(true);
             $table->enum('status', ['visible', 'hidden'])->default('visible');
+
+            $table->string('provisioning_driver')->nullable(); 
+            $table->json('provisioning_config')->nullable();
             $table->timestamps();
 
             $table->unique(['catalog_id', 'slug']);

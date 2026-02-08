@@ -31,6 +31,16 @@ class Provisioning extends Model
     ];
 
     /**
+     * Get the services for this provisioning.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function services()
+    {
+        return $this->hasMany(Service::class);
+    }
+
+    /**
      * Get the plugin instance for this provisioning driver.
      *
      * @return \App\Contracts\ProvisioningInterface|null

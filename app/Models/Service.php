@@ -102,6 +102,16 @@ class Service extends Model
     }
 
     /**
+     * Get the provisioning for this service.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function provisioning()
+    {
+        return $this->belongsTo(Provisioning::class);
+    }
+
+    /**
      * Scope a query to only include active services.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query

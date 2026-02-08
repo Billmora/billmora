@@ -26,6 +26,7 @@ class Package extends Model
     protected $casts = [
         'status' => 'string',
         'allow_cancellation' => 'boolean',
+        'provisioning_config' => 'array',
     ];
 
     /**
