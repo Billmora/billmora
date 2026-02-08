@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Provisioning;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Validation\Rule;
 
 class InstanceController extends Controller
 {
@@ -55,7 +56,14 @@ class InstanceController extends Controller
         $configFields = $className::getConfig();
 
         $rules = [
-            'instance_name' => ['required', 'string', 'max:255'],
+            'instance_name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('provisionings', 'name')->where(function ($query) use ($driver) {
+                    return $query->where('driver', $driver);
+                }),
+            ],
             'instance_active' => ['boolean'],
         ];
 
@@ -118,7 +126,14 @@ class InstanceController extends Controller
         $configFields = $className::getConfig();
 
         $rules = [
-            'instance_name' => ['required', 'string', 'max:255'],
+            'instance_name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('provisionings', 'name')->where(function ($query) use ($driver) {
+                    return $query->where('driver', $driver);
+                })->ignore($instance->id),
+            ],
             'instance_active' => ['boolean'], 
         ];
 
