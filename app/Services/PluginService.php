@@ -20,38 +20,45 @@ class PluginService
     {
         $zip = new ZipArchive;
         if ($zip->open($file->path()) !== true) {
-            throw new Exception("Failed to open ZIP file");
+            throw new Exception(__('validation.plugin.zip_failed'));
         }
 
         $jsonContent = $zip->getFromName('manifest.json');
         
         if (!$jsonContent) {
             $zip->close();
-            throw new Exception("Invalid plugin: manifest.json not found in root");
+            throw new Exception(__('validation.plugin.manifest_missing'));
         }
 
         $metadata = json_decode($jsonContent, true);
 
         if (!isset($metadata['name'], $metadata['type'], $metadata['driver'])) {
             $zip->close();
-            throw new Exception("Invalid manifest.json: Missing name, type, or driver");
+            throw new Exception(__('validation.plugin.manifest_invalid'));
         }
 
         if (!preg_match('/^[a-zA-Z0-9]+$/', $metadata['driver'])) {
             $zip->close();
-            throw new Exception("Invalid driver format {$metadata['driver']}: Must be PascalCase without spaces");
+            throw new Exception(__('validation.plugin.driver_format', [
+                'driver' => $metadata['driver']
+            ]));
         }
 
         if (strtolower($metadata['type']) !== strtolower($expectedType)) {
             $zip->close();
-            throw new Exception("Type mismatch: Expected {$expectedType}, got {$metadata['type']}");
+            throw new Exception(__('validation.plugin.type_mismatch', [
+                'expected' => $expectedType,
+                'current' => $metadata['type']
+            ]));
         }
 
         $targetPath = base_path("plugin/" . ucfirst($expectedType) . "/" . $metadata['driver']);
         
         if (File::exists($targetPath)) {
             $zip->close();
-            throw new Exception("Plugin driver {$metadata['driver']} already exists");
+            throw new Exception(__('validation.plugin.driver_exists', [
+                'driver' => $metadata['driver']
+            ]));
         }
 
         File::makeDirectory($targetPath, 0755, true);
