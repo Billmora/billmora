@@ -19,7 +19,7 @@ class InstanceController extends Controller
     public function index($driver)
     {
         if (!File::exists(base_path("plugin/Provisioning/{$driver}"))) {
-            abort(404, "Driver {$driver} not found");
+            abort(404, __('admin/provisionings.instance.driver_not_found', ['driver' => $driver]));
         }
 
         $instances = Provisioning::where('driver', $driver)->latest()->get();
@@ -176,7 +176,10 @@ class InstanceController extends Controller
         $activeService = $instance->services()->count();
 
         if ($activeService > 0) {
-            return back()->with('error', "Cannot delete instance {$instance->name}. It is currently assigned to {$activeService} active services.");
+            return back()->with('error', __('admin/provisionings.instance.delete_in_use', [
+                'name' => $instance->name, 
+                'count' => $activeService
+            ]));
         }
 
         $instance->delete();
@@ -201,11 +204,11 @@ class InstanceController extends Controller
             $plugin = $instance->getPluginInstance();
             
             if ($plugin->testConnection($instance->config)) {
-                return back()->with('success', 'Connection successful');
+                return back()->with('success', __('admin/provisionings.connection.success'));
             }
             return back()->with('error', 'Connection failed');
         } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
+            return back()->with('error', __('admin/provisionings.connection.failed') . $e->getMessage());
         }
     }
 
@@ -221,7 +224,7 @@ class InstanceController extends Controller
         
         if (!class_exists($className)) 
         {
-            return abort(500, "Class {$className} not found");
+            return abort(500, __('admin/provisionings.instance.class_not_found', ['name' => $className]));
         }
 
         return $className;

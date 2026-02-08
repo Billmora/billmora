@@ -75,7 +75,10 @@ class ProvisioningsController extends Controller
         try {
             $metadata = $installer->install($request->file('plugin_file'), 'provisioning');
             
-            return redirect()->back()->with('success', "Plugin {$metadata['name']} (v{$metadata['version']}) installed successfully!");
+            return redirect()->back()->with('success', __('admin/provisionings.install.success', [
+                'name' => $metadata['name'], 
+                'version' => $metadata['version']
+            ]));
 
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
@@ -90,10 +93,13 @@ class ProvisioningsController extends Controller
      */
     public function uninstall($driver)
     {
-        $instances = Provisioning::where('driver', $driver)->count();
+        $instance = Provisioning::where('driver', $driver)->count();
 
-        if ($instances > 0) {
-            return back()->with('error', "Cannot uninstall driver {$driver}. There are {$instances} active instances using this driver. Please delete them first.");
+        if ($instance > 0) {
+            return back()->with('error', __('admin/provisionings.uninstall.active_instances', [
+                'driver' => $driver, 
+                'count' => $instance
+            ]));
         }
 
         $pluginPath = base_path("plugin/Provisioning/{$driver}");
@@ -103,13 +109,14 @@ class ProvisioningsController extends Controller
                 File::deleteDirectory($pluginPath);
                 
                 return redirect()->route('admin.provisionings')
-                    ->with('success', __('common.uninstall_success', ['attribute' => $instances->name]));
-                    
+                    ->with('success', __('common.uninstall_success', ['attribute' => $instance->name]));
             } catch (\Exception $e) {
                 return back()->with('error', $e->getMessage());
             }
         }
 
-        return back()->with('error', "Driver folder {$driver} not found.");
+        return back()->with('error', __('admin/provisionings.uninstall.folder_missing', [
+            'driver' => $driver
+        ]));
     }
 }

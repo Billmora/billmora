@@ -106,12 +106,18 @@
                     <div class="flex flex-col items-center justify-center pt-5 pb-6 px-4 text-center">
                         <x-lucide-upload class="w-10 h-10 mb-3 text-gray-400" />
                         <div x-show="!fileName">
-                            <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                            <p class="text-xs text-gray-500">ZIP File (Plugin)</p>
+                            <p class="mb-2 text-sm text-gray-500">
+                                {{ __('admin/provisionings.upload.instruction') }}
+                            </p>
+                            <p class="text-xs text-gray-500">
+                                {{ __('admin/provisionings.upload.type_hint') }}
+                            </p>
                         </div>
                         <div x-show="fileName" class="text-blue-600 font-medium">
-                            <p class="text-sm" x-text="'Selected: ' + fileName"></p>
-                            <p class="text-xs text-gray-400 mt-1">(Drop another file to replace)</p>
+                            <p class="text-sm" x-text="'{{ __('admin/provisionings.upload.selected_prefix') }}' + fileName"></p>
+                            <p class="text-xs text-gray-400 mt-1">
+                                {{ __('admin/provisionings.upload.replace_hint') }}
+                            </p>
                         </div>
                     </div>
                     <input 
