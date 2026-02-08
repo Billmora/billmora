@@ -35,7 +35,6 @@ class PricingController extends Controller
     public function index($id)
     {
         $package = Package::with('prices')->findOrFail($id);
-        $catalogs = Catalog::select('id', 'name', 'slug')->get();
 
         return view('admin::packages.pricing.index', compact('package', 'catalogs'));
     }
@@ -49,10 +48,9 @@ class PricingController extends Controller
     public function create($id)
     {
         $package = Package::findOrFail($id);
-        $catalogs = Catalog::select('id', 'name', 'slug')->get();
         $currencies = Currency::orderBy('is_default', 'desc')->get();
 
-        return view('admin::packages.pricing.create', compact('package', 'catalogs', 'currencies'));
+        return view('admin::packages.pricing.create', compact('package', 'currencies'));
     }
 
     /**
@@ -200,10 +198,9 @@ class PricingController extends Controller
             abort(404);
         }
 
-        $catalogs = Catalog::select('id', 'name', 'slug')->get();
         $currencies = Currency::orderBy('is_default', 'desc')->get();
 
-        return view('admin::packages.pricing.edit', compact('package', 'catalogs', 'currencies', 'pricing'));
+        return view('admin::packages.pricing.edit', compact('package', 'currencies', 'pricing'));
     }
 
     /**
