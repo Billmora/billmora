@@ -45,5 +45,14 @@ return [
         'setup_fee_helper' => 'Enter any one-time setup fee for this pricing option.',
         'enabled_label' => 'Enabled?',
         'enabled_helper' => 'Enable or disable this pricing option without deleting it.',
-    ]
+    ],
+
+    'provisioning' => [
+        'driver_label' => 'Provisioning Driver',
+        'driver_helper' => 'Choose the provisioning system to manage this instance.',
+        'instance_label' => 'Reference Instance',
+        'instance_helper' => 'Select a provisioning driver first to load available instances.',
+        'plugin_not_found' => 'Provisioning plugin :driver not found.',
+        'unavailable_configuration' => 'No configuration fields available for this driver.',
+    ],
 ];

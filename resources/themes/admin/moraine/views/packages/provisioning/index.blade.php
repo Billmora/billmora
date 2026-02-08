@@ -59,8 +59,8 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white rounded-lg shadow p-6">
             <x-admin::select
                 name="provisioning_driver"
-                label="Provisioning Plugin"
-                helper="Select 'None' if no automation is needed."
+                label="{{ __('admin/packages.provisioning.driver_label') }}"
+                helper="{{ __('admin/packages.provisioning.driver_helper') }}"
                 x-model="currentDriver"
                 required
             >
@@ -71,8 +71,8 @@
             </x-admin::select>
             <x-admin::select
                 name="instance_reference"
-                label="Reference Instance"
-                helper="Select an instance."
+                label="{{ __('admin/packages.provisioning.instance_label') }}"
+                helper="{{ __('admin/packages.provisioning.instance_helper') }}"
                 x-model="currentInstance"
                 :disabled="empty($selectedDriver) || $instances->isEmpty()"
                 required
@@ -85,7 +85,7 @@
         <div class="bg-white rounded-lg shadow p-6 space-y-6">
             @if(empty($formFields))
                 <div class="text-center text-gray-400 py-10">
-                    No configuration fields available for this driver.
+                    {{ __('admin/packages.provisioning.unavailable_configuration') }}
                 </div>
             @else
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -103,7 +103,7 @@
                             <x-admin::input 
                                 name="config[{{ $key }}]"
                                 label="{{ $field['label'] ?? ucfirst($key) }}"
-                                helper="{{ $field['helper'] ?? 'Leave blank to keep unchanged.' }}"
+                                helper="{{ $field['helper'] ?? '' }}"
                                 type="password"
                                 value="" 
                             />

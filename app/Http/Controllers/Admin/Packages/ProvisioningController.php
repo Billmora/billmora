@@ -131,7 +131,7 @@ class ProvisioningController extends Controller
         if (! class_exists($className)) {
             return back()
                 ->withInput()
-                ->with('error', "Provisioning plugin '{$driver}' not found.")
+                ->with('error', __('admin/packages.provisioning.plugin_not_found', ['driver' => $driver]))
                 ->throwResponse();
         }
 
