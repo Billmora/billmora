@@ -10,15 +10,15 @@
         <x-admin::input 
             name="instance_name"
             type="text"
-            label="Name"
-            helper="Lorem ipsum dolor sit amet consectetur adipisicing."
+            label="{{ __('admin/provisionings.instance.name_label') }}"
+            helper="{{ __('admin/provisionings.instance.name_helper') }}"
             value="{{ old('instance_name', $instance->name) }}"
             required 
         />
         <x-admin::toggle
             name="instance_active"
-            label="Is Active?"
-            helper="Lorem ipsum dolor sit amet consectetur adipisicing."
+            label="{{ __('admin/provisionings.instance.is_active_label') }}"
+            helper="{{ __('admin/provisionings.instance.is_active_helper') }}"
             checked="{{ old('instance_active', $instance->is_active) }}"
         />
     </div>

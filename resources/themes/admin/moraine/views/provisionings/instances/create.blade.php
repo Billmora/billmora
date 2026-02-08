@@ -9,14 +9,14 @@
         <x-admin::input 
             name="instance_name"
             type="text"
-            label="Name"
-            helper="Lorem ipsum dolor sit amet consectetur adipisicing."
+            label="{{ __('admin/provisionings.instance.name_label') }}"
+            helper="{{ __('admin/provisionings.instance.name_helper') }}"
             required 
         />
         <x-admin::toggle
             name="instance_active"
-            label="Is Active?"
-            helper="Lorem ipsum dolor sit amet consectetur adipisicing."
+            label="{{ __('admin/provisionings.instance.is_active_label') }}"
+            helper="{{ __('admin/provisionings.instance.is_active_helper') }}"
         />
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
