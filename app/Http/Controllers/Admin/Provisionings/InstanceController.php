@@ -161,6 +161,32 @@ class InstanceController extends Controller
     }
 
     /**
+     * Remove the specified provisioning instance.
+     *
+     * @param string $driver
+     * @param \App\Models\Provisioning $instance
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy($driver, Provisioning $instance)
+    {
+        if ($instance->driver !== $driver) {
+            abort(404);
+        }
+
+        $activeService = $instance->services()->count();
+
+        if ($activeService > 0) {
+            return back()->with('error', "Cannot delete instance {$instance->name}. It is currently assigned to {$activeService} active services.");
+        }
+
+        $instance->delete();
+
+        return redirect()
+            ->route('admin.provisionings.instance', $driver)
+            ->with('success', __('common.delete_success', ['attribute' => $instance->name]));
+    }
+
+    /**
      * Test connection to provisioning instance.
      *
      * @param string $driver

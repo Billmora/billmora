@@ -146,6 +146,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::post('/{driver}/create', [Admin\Provisionings\InstanceController::class, 'store'])->name('admin.provisionings.instance.store');
         Route::get('/{driver}/{instance}/edit', [Admin\Provisionings\InstanceController::class, 'edit'])->name('admin.provisionings.instance.edit');
         Route::put('/{driver}/{instance}/edit', [Admin\Provisionings\InstanceController::class, 'update'])->name('admin.provisionings.instance.update');
+        Route::delete('/{driver}/{instance}', [Admin\Provisionings\InstanceController::class, 'destroy'])->name('admin.provisionings.instance.destroy');
     });
 
     /**
