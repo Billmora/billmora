@@ -22,7 +22,7 @@
                 'label' => __('admin/users.tabs.activity'),
             ],
         ]" 
-        active="{{ request()->fullUrl() }}" />
+        active="{{ request()->url() }}" />
     <form action="{{ route('admin.users.profile.update', ['id' => $user->id]) }}" method="POST" class="flex flex-col gap-5">
         @csrf
         @method('PUT')

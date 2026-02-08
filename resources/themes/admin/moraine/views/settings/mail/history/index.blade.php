@@ -27,7 +27,7 @@
                 'label' => __('admin/settings/mail.tabs.history'),
             ],
         ]" 
-        active="{{ request()->fullUrl() }}" />
+        active="{{ request()->url() }}" />
     <div class="flex flex-col gap-4">
         <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
             <div class="w-full md:w-100">

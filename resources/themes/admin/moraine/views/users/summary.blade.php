@@ -22,7 +22,7 @@
                 'label' => __('admin/users.tabs.activity'),
             ],
         ]" 
-        active="{{ request()->fullUrl() }}" />
+        active="{{ request()->url() }}" />
     @can('uses.update')
         @if (!$user->isEmailVerified())
             <x-admin::alert variant="warning" title="{{ __('admin/users.email_verification_alert_label') }}">

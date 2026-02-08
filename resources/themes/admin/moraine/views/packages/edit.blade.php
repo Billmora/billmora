@@ -22,7 +22,7 @@
                 'label' => 'Provisioning',
             ],
         ]" 
-        active="{{ request()->fullUrl() }}" />
+        active="{{ request()->url() }}" />
     <form action="{{ route('admin.packages.update', ['id' => $package->id]) }}" method="POST" class="flex flex-col gap-5" enctype="multipart/form-data">
         @method('PUT')
         @csrf

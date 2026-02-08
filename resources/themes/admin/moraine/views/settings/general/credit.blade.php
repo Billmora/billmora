@@ -44,7 +44,7 @@
                 'label' => __('admin/settings/general.tabs.social'),
             ],
         ]" 
-        active="{{ request()->fullUrl() }}" />
+        active="{{ request()->url() }}" />
     <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <x-admin::toggle name="credit_use" label="{{ __('admin/settings/general.credit_use_label') }}" helper="{{ __('admin/settings/general.credit_use_helper') }}" :checked="Billmora::getGeneral('credit_use')" />
         <x-admin::input type="number" min="1" name="credit_min_deposit" label="{{ __('admin/settings/general.credit_min_deposit_label') }}" helper="{{ __('admin/settings/general.credit_min_deposit_helper') }}" value="{{ old('credit_min_deposit', Billmora::getGeneral('credit_min_deposit')) }}" required/>

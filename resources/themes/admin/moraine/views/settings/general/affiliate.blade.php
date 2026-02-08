@@ -44,7 +44,7 @@
                 'label' => __('admin/settings/general.tabs.social'),
             ],
         ]" 
-        active="{{ request()->fullUrl() }}" />
+        active="{{ request()->url() }}" />
     <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <x-admin::toggle name="affiliate_use" label="{{ __('admin/settings/general.affiliate_use_label') }}" helper="{{ __('admin/settings/general.affiliate_use_helper') }}" :checked="Billmora::getGeneral('affiliate_use')" />
         <x-admin::input type="number" min="1" name="affiliate_min_payment" label="{{ __('admin/settings/general.affiliate_min_payment_label') }}" helper="{{ __('admin/settings/general.affiliate_min_payment_helper') }}" value="{{ old('affiliate_min_payment', Billmora::getGeneral('affiliate_min_payment')) }}" required/>

@@ -17,7 +17,7 @@
                 'label' => __('admin/variants.tabs.options'),
             ],
         ]" 
-        active="{{ request()->fullUrl() }}" />
+        active="{{ request()->url() }}" />
     <form action="{{ route('admin.variants.update', ['id' => $variant->id]) }}" method="POST" class="flex flex-col gap-5">
         @csrf
         @method('PUT')

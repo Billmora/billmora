@@ -22,7 +22,7 @@
                 'label' => 'Provisioning',
             ],
         ]" 
-        active="{{ request()->fullUrl() }}" />
+        active="{{ request()->url() }}" />
     <div class="flex flex-col gap-4">
         <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
             <a href="{{ route('admin.packages.pricing.create', ['id' => $package->id]) }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">

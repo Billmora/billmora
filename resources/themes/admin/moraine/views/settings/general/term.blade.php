@@ -44,7 +44,7 @@
                 'label' => __('admin/settings/general.tabs.social'),
             ],
         ]" 
-        active="{{ request()->fullUrl() }}" />
+        active="{{ request()->url() }}" />
     <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <div class="grid md:grid-cols-2 gap-4">
             <x-admin::toggle name="term_tos" label="{{ __('admin/settings/general.term_tos_label') }}" helper="{{ __('admin/settings/general.term_tos_helper') }}" :checked="Billmora::getGeneral('term_tos')" />

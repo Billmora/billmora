@@ -34,7 +34,7 @@
                     'label' => __('admin/settings/mail.tabs.history'),
                 ],
             ]" 
-            active="{{ request()->fullUrl() }}" />
+            active="{{ request()->url() }}" />
             <x-admin::alert variant="primary" title="{{ __('admin/settings/mail.mailer_alert_label') }}">{{ __('admin/settings/mail.mailer_alert_helper') }}</x-admin::alert>
             <div class="grid lg:grid-cols-3 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
                 <x-admin::radio.group

@@ -44,7 +44,7 @@
                 'label' => __('admin/settings/general.tabs.social'),
             ],
         ]" 
-        active="{{ request()->fullUrl() }}" />
+        active="{{ request()->url() }}" />
     <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <div class="grid gap-4 h-fit">
             <x-admin::toggle name="invoice_pdf" label="{{ __('admin/settings/general.invoice_pdf_label') }}" helper="{{ __('admin/settings/general.invoice_pdf_helper') }}" :checked="Billmora::getGeneral('invoice_pdf')" />

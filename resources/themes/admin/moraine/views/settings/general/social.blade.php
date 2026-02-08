@@ -44,7 +44,7 @@
                 'label' => __('admin/settings/general.tabs.social'),
             ],
         ]" 
-        active="{{ request()->fullUrl() }}" />
+        active="{{ request()->url() }}" />
     <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <x-admin::input type="url" name="social_discord" label="{{ __('admin/settings/general.social_discord_label') }}" helper="{{ __('admin/settings/general.social_discord_helper') }}" value="{{ old('social_discord', Billmora::getGeneral('social_discord')) }}" required/>
         <x-admin::input type="url" name="social_youtube" label="{{ __('admin/settings/general.social_youtube_label') }}" helper="{{ __('admin/settings/general.social_youtube_helper') }}" value="{{ old('social_youtube', Billmora::getGeneral('social_youtube')) }}" required/>

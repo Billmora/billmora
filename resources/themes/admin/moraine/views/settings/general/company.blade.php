@@ -44,7 +44,7 @@
                 'label' => __('admin/settings/general.tabs.social'),
             ],
         ]" 
-        active="{{ request()->fullUrl() }}" />
+        active="{{ request()->url() }}" />
     <div class="grid md:grid-cols-2 gap-5">
         <div class="flex flex-col gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
             <x-admin::input type="text" name="company_name"

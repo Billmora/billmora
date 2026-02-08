@@ -27,7 +27,7 @@
                 'label' => __('admin/settings/mail.tabs.history'),
             ],
         ]" 
-        active="{{ request()->fullUrl() }}" />
+        active="{{ request()->url() }}" />
     <div class="flex flex-col gap-4">
         <div class="w-full md:w-100">
             <form action="{{ route('admin.settings.mail.template') }}" method="GET" class="relative inline-block max-w-150 w-full group">
