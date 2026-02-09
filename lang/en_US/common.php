@@ -106,6 +106,8 @@ return [
     'disable_modal_description' => 'Are you sure you want to disable this :item?',
     'clear_modal_title' => 'Clear the item',
     'clear_modal_description' => 'Are you sure you want to clear this :item?',
+    'cancel_modal_title' => 'Cancel the item',
+    'cancel_modal_description' => 'Are you sure you want to cancel this :item?',
     'install_modal_title' => 'Install a new item',
     'install_modal_description' => 'Are you sure you want to install this :item?',
     'uninstall_modal_title' => 'Uninstall the item',
