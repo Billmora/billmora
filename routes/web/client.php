@@ -58,6 +58,7 @@ Route::group(['prefix' => 'checkout', 'middleware' => ['maintenance']], function
  */
 Route::group(['prefix' => 'services', 'middleware' => ['auth', 'maintenance', '2fa']], function () {
     Route::get('/', [Client\ServicesController::class, 'index'])->name('client.services');
+    Route::get('/{service}', [Client\ServicesController::class, 'show'])->name('client.services.show');
 });
 
 /**
