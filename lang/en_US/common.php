@@ -94,8 +94,8 @@ return [
     'uninstall_success' => ':attribute have been uninstalled.',
     'uninstall_failed' => 'Failed to uninstall :attribute.',
 
-    'action_modal_title' => ':action the item',
-    'action_modal_description' => 'Are you sure you want to :action this :item?',
+    'confirm_modal_title' => 'Confirm action',
+    'confirm_modal_description' => 'Are you sure you want to proceed with this :item?',
     'create_modal_title' => 'Create a new item',
     'create_modal_description' => 'Are you sure you want to create this :item?',
     'update_modal_title' => 'Update the item',
