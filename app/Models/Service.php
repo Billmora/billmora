@@ -173,4 +173,38 @@ class Service extends Model
                 return null;
         }
     }
+
+    /**
+     * Get human-readable billing cycle label with internationalization support.
+     *
+     * @return string|null
+     */
+    public function getCycleLabelAttribute()
+    {
+        if ($this->billing_type === 'free' || (float) $this->price == 0) {
+            return __('billing.cycles.free');
+        }
+
+        if ($this->billing_type === 'onetime') {
+            return __('billing.cycles.onetime');
+        }
+
+        if ($this->billing_type === 'recurring') {
+            $interval = (int) $this->billing_interval;
+            $period = $this->billing_period;
+
+            if ($interval === 1) {
+                return __('billing.cycles.' . $period);
+            }
+
+            $unitLabel = trans_choice('billing.units.' . $period, $interval);
+
+            return __('billing.cycles.every', [
+                'count' => $interval,
+                'unit'  => $unitLabel
+            ]);
+        }
+
+        return;
+    }
 }
