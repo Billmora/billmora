@@ -2,6 +2,7 @@
 
 namespace App\Contracts;
 
+use App\Models\Package;
 use App\Models\Service;
 use App\Models\Provisioning;
 use Illuminate\Database\Eloquent\Model;
@@ -68,20 +69,18 @@ interface ProvisioningInterface
      * Renew service on provider.
      *
      * @param \App\Models\Service $service
-     * @param array $instanceConfig
      * @return void
      */
     public function renew(Service $service): void;
 
     /**
-     * Change package for existing service.
+     * Scale the service to a new package from the old package configuration.
      *
      * @param \App\Models\Service $service
-     * @param array $instanceConfig
-     * @param \Illuminate\Database\Eloquent\Model $newPackage
+     * @param \App\Models\Package $oldPackage
      * @return void
      */
-    public function changePackage(Service $service, array $instanceConfig, Model $newPackage): void;
+    public function scale(Service $service, Package $oldPackage): void;
 
     /**
      * Get available client actions for the service.
