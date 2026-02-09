@@ -52,6 +52,15 @@ Route::group(['prefix' => 'checkout', 'middleware' => ['maintenance']], function
 });
 
 /**
+ * Client services routes.
+ * 
+ * Prefix: /services
+ */
+Route::group(['prefix' => 'services', 'middleware' => ['auth', 'maintenance', '2fa']], function () {
+    Route::get('/', [Client\ServicesController::class, 'index'])->name('client.services');
+});
+
+/**
  * Client invoices routes.
  * 
  * Prefix: /invoices
