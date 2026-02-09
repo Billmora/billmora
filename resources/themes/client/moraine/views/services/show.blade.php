@@ -41,28 +41,7 @@
                 @endif
             </div>
         </div>
-        @if($variantOptions->isNotEmpty())
-            <div class="bg-white border-2 border-billmora-2 rounded-2xl overflow-hidden">
-                <div class="bg-billmora-1 px-6 py-4 border-b-2 border-billmora-2">
-                    <h3 class="font-semibold text-slate-600">Variant Options</h3>
-                </div>
-                <ul class="grid gap-4 p-6">
-                    @foreach($variantOptions as $option)
-                        @if(!$loop->first)
-                            <hr class="border-t-2 border-billmora-2">
-                        @endif
-                        <li class="grid grid-cols-2 text-start">
-                            <span class="text-slate-500 font-semibold">
-                                {{ $option->variant->name }}
-                            </span>
-                            <span class="text-slate-600 font-semibold">
-                                {{ $option->name }}
-                            </span>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        @yield('workspaces')
     </div>
     <div class="w-full lg:w-2/7 h-fit grid gap-5">
         <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
@@ -87,6 +66,62 @@
                 </x-client::modal.trigger>
             @endif
         </div>
+        @if(!empty($service->getClientActions()))
+            <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+                @foreach($service->getClientActions() as $action)
+                    @if(in_array($action['type'], ['link', 'page']))
+                        <a href="{{ ($action['type']) === 'page' 
+                                ? route('client.services.provisioning', ['service' => $service->id, 'slug' => $action['slug']]) 
+                                : route('client.services.provisioning.process', ['service' => $service->id, 'slug' => $action['slug']]) }}"
+                        target="{{ ($action['type']) === 'link' ? '_blank' : '_self' }}"
+                        class="w-full flex gap-3 items-center g-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-all duration-200 cursor-pointer"
+                        >
+                            @if(!empty($action['icon']))
+                                <i class="{{ $action['icon'] }}"></i>
+                            @endif
+                            <span class="font-medium">{{ $action['label'] }}</span>
+                        </a>
+                    @elseif(($action['type'] ?? '') === 'button')
+                        <x-admin::modal.trigger 
+                            modal="modalAction-{{ $action['slug'] }}"
+                            class="w-full flex gap-3 items-center g-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-all duration-200 cursor-pointer"
+                        >
+                            @if(!empty($action['icon']))
+                                <i class="{{ $action['icon'] }}"></i>
+                            @endif
+                            <span class="font-medium">{{ $action['label'] }}</span>
+                        </x-admin::modal.trigger>
+                        <x-admin::modal.content
+                            modal="modalAction-{{ $action['slug'] }}"
+                            variant="danger"
+                            size="xl"
+                            position="centered"
+                            title="{{ __('common.confirm_modal_title')}}"
+                            description="{{ __('common.confirm_modal_description', ['item' => $action['label']]) }}"
+                        >
+                            <form action="{{ route('client.services.provisioning.process', ['service' => $service->id, 'slug' => $action['slug']]) }}" method="POST">
+                                @csrf
+                                @if(in_array(strtoupper($action['method'] ?? 'POST'), ['PUT', 'PATCH', 'DELETE']))
+                                    @method(strtoupper($action['method']))
+                                @endif
+                                <div class="flex justify-end gap-2 mt-4">
+                                    <x-admin::modal.trigger 
+                                        type="button" 
+                                        variant="close" 
+                                        class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
+                                    >
+                                        {{ __('common.cancel') }}
+                                    </x-admin::modal.trigger>
+                                    <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                                        {{ __('common.submit') }}
+                                    </button>
+                                </div>
+                            </form>
+                        </x-admin::modal.content>
+                    @endif
+                @endforeach
+            </div>
+        @endif
     </div>
 </div>
 @if ($service->package->allow_cancellation)
