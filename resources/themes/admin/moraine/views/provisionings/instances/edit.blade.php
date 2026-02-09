@@ -50,7 +50,7 @@
                     checked="{{ old($key, $instance->config[$key]) }}"
                     required
                 />
-                @elseif($field['type'] === 'select')
+            @elseif($field['type'] === 'select')
                 <x-admin::select
                     name="{{ $key }}"
                     label="{{ $field['label'] ?? ucfirst($key) }}"
