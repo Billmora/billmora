@@ -98,11 +98,11 @@ interface ProvisioningInterface
     public function changePassword(Service $service, array $instanceConfig, string $newPassword): void;
 
     /**
-     * Get client area buttons for service management.
+     * Get actions that allowed client for service management.
      *
      * @param \App\Models\Service $service
      * @param array $instanceConfig
      * @return array
      */
-    public function getClientButtons(Service $service, array $instanceConfig): array;
+    public function getClientActions(Service $service, array $instanceConfig): array;
 }
