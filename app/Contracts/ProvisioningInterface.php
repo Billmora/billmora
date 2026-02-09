@@ -35,38 +35,34 @@ interface ProvisioningInterface
      * Create service instance on provider.
      *
      * @param \App\Models\Service $service
-     * @param array $instanceConfig
      * @param array $inputs
      * @return void
      */
-    public function create(Service $service, array $instanceConfig, array $inputs): void;
+    public function create(Service $service, array $inputs): void;
 
     /**
      * Suspend service on provider.
      *
      * @param \App\Models\Service $service
-     * @param array $instanceConfig
      * @return void
      */
-    public function suspend(Service $service, array $instanceConfig): void;
+    public function suspend(Service $service): void;
 
     /**
      * Unsuspend service on provider.
      *
      * @param \App\Models\Service $service
-     * @param array $instanceConfig
      * @return void
      */
-    public function unsuspend(Service $service, array $instanceConfig): void;
+    public function unsuspend(Service $service): void;
 
     /**
      * Terminate service and remove from provider.
      *
      * @param \App\Models\Service $service
-     * @param array $instanceConfig
      * @return void
      */
-    public function terminate(Service $service, array $instanceConfig): void;
+    public function terminate(Service $service): void;
 
     /**
      * Renew service on provider.
@@ -75,7 +71,7 @@ interface ProvisioningInterface
      * @param array $instanceConfig
      * @return void
      */
-    public function renew(Service $service, array $instanceConfig): void;
+    public function renew(Service $service): void;
 
     /**
      * Change package for existing service.
