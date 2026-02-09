@@ -22,6 +22,10 @@
         <span class="font-semibold">{{ __('client/navigation.store') }}</span>
       </a>
       @auth
+        <a href="{{ route('client.services') }}" class="flex gap-2 items-center {{ request()->routeIs('client.services*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-scan-text class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('client/navigation.services') }}</span>
+        </a>
         <a href="{{ route('client.invoices') }}" class="flex gap-2 items-center {{ request()->routeIs('client.invoices*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
           <x-lucide-receipt-text class="w-5 h-auto" />
           <span class="font-semibold">{{ __('client/navigation.invoices') }}</span>
