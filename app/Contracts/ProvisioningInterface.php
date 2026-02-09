@@ -88,16 +88,6 @@ interface ProvisioningInterface
     public function changePackage(Service $service, array $instanceConfig, Model $newPackage): void;
 
     /**
-     * Change password for service on provider.
-     *
-     * @param \App\Models\Service $service
-     * @param array $instanceConfig
-     * @param string $newPassword
-     * @return void
-     */
-    public function changePassword(Service $service, array $instanceConfig, string $newPassword): void;
-
-    /**
      * Get available client actions for the service.
      *
      * @param \App\Models\Service $service
