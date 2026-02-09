@@ -88,6 +88,7 @@ class OrderService
                 'terms_accepted' => $checkoutData['terms_accepted'] ?? true,
             ]);
 
+            $initialDueDate = ($packagePrice->type === 'recurring') ? now() : null;
             $finalConfig = $this->resolveServiceConfiguration($package, $variantSelections);
             $provisioningId = $this->findProvisioningInstance($package->provisioning_driver ?? null);
 
@@ -105,6 +106,7 @@ class OrderService
                 'billing_period' => $packagePrice->billing_period,
                 'price' => $pricing['recurring_total'],
                 'setup_fee' => $pricing['setup_fee_total'],
+                'next_due_date' => $initialDueDate,
                 'configuration' => $finalConfig, 
                 'variant_selections' => $variantSelections,
             ]);

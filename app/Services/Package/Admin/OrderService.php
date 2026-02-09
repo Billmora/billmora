@@ -95,18 +95,22 @@ class OrderService
                 default => 'pending'
             };
 
-            $activatedAt = $serviceStatus === 'active' ? now() : null;
+            $activatedAt = null;
             $nextDueDate = null;
 
-            if ($serviceStatus === 'active' && $packagePrice->type === 'recurring') {
+            if ($packagePrice->type === 'recurring' && $serviceStatus === 'active') {
+                $activatedAt = now();
                 $date = now();
+                
                 $nextDueDate = match($packagePrice->billing_period) {
-                    'daily' => $date->addDays($packagePrice->time_interval),
-                    'weekly' => $date->addWeeks($packagePrice->time_interval),
-                    'monthly' => $date->addMonths($packagePrice->time_interval),
-                    'yearly' => $date->addYears($packagePrice->time_interval),
-                    default => null,
+                    'daily'   => $date->copy()->addDays($packagePrice->time_interval),
+                    'weekly'  => $date->copy()->addWeeks($packagePrice->time_interval),
+                    'monthly' => $date->copy()->addMonths($packagePrice->time_interval),
+                    'yearly'  => $date->copy()->addYears($packagePrice->time_interval),
+                    default   => null,
                 };
+            } elseif ($serviceStatus === 'pending') {
+                $nextDueDate = now();
             }
 
             $finalConfig = $this->resolveServiceConfiguration($package, $variantSelections);
