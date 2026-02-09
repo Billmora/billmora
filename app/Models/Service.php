@@ -207,4 +207,29 @@ class Service extends Model
 
         return;
     }
+
+    /**
+     * Get available client actions from the provisioning.
+     *
+     * @return array
+     */
+    public function getClientActions()
+    {
+        if (!$this->provisioning) {
+            return [];
+        }
+
+        $provisioning = $this->provisioning->getPluginInstance();
+
+        if ($provisioning) {
+            try {
+                return $provisioning->getClientActions($this, $this->configuration ?? []);
+            } catch (\Exception $e) {
+                // \Log::error($e->getMessage());
+                return [];
+            }
+        }
+
+        return [];
+    }
 }
