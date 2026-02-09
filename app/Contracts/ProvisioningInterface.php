@@ -98,11 +98,30 @@ interface ProvisioningInterface
     public function changePassword(Service $service, array $instanceConfig, string $newPassword): void;
 
     /**
-     * Get actions that allowed client for service management.
+     * Get available client actions for the service.
      *
      * @param \App\Models\Service $service
-     * @param array $instanceConfig
-     * @return array
+     * @return array<int, array<string, mixed>>
      */
-    public function getClientActions(Service $service, array $instanceConfig): array;
+    public function getClientActions(Service $service): array;
+
+    /**
+     * Get form configuration for a specific client action.
+     *
+     * @param \App\Models\Service $service
+     * @param string $slug
+     * @return array<string, mixed>|null
+     */
+    public function getClientActionForm(Service $service, string $slug): ?array;
+
+    /**
+     * Process and execute a client action with provided data.
+     *
+     * @param \App\Models\Service $service
+     * @param string $slug
+     * @param array<string, mixed> $data
+     * @return mixed
+     */
+    public function processClientAction(Service $service, string $slug, array $data): mixed;
+
 }
