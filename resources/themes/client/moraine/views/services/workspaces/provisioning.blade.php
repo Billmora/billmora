@@ -18,7 +18,7 @@
                     @if(in_array($field['type'] ?? 'text', ['text', 'email', 'url', 'number']))
                         <x-client::input 
                             name="{{ $key }}"
-                            label="{{ $field['label'] ?? ucfirst($key) }}"
+                            label="{{ $field['label'] }}"
                             helper="{{ $field['helper'] ?? '' }}"
                             type="{{ $field['type'] ?? 'text' }}"
                             :required="str_contains($field['rules'] ?? '', 'required')"
@@ -27,7 +27,7 @@
                     @elseif(($field['type'] ?? '') === 'password')
                         <x-client::input 
                             name="{{ $key }}"
-                            label="{{ $field['label'] ?? ucfirst($key) }}"
+                            label="{{ $field['label'] }}"
                             helper="{{ $field['helper'] ?? '' }}"
                             type="password"
                             :required="str_contains($field['rules'] ?? '', 'required')"
@@ -36,15 +36,15 @@
                         <div class="flex items-center pt-6">
                             <x-client::toggle
                                 name="{{ $key }}"
-                                label="{{ $field['label'] ?? ucfirst($key) }}"
+                                label="{{ $field['label'] }}"
                                 helper="{{ $field['helper'] ?? '' }}"
-                                checked="{{ old($key, $field['default'] ?? false) }}"
+                                :checked="(bool)old($key, $field['default'] ?? false)"
                             />
                         </div>
                     @elseif(($field['type'] ?? '') === 'select')
                         <x-client::select
                             name="{{ $key }}"
-                            label="{{ $field['label'] ?? ucfirst($key) }}"
+                            label="{{ $field['label'] }}"
                             helper="{{ $field['helper'] ?? '' }}"
                             :required="str_contains($field['rules'] ?? '', 'required')"
                         >

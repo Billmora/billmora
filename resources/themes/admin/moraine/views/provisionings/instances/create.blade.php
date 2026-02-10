@@ -24,33 +24,34 @@
             @if(in_array($field['type'], ['text', 'email', 'url', 'number']))
                 <x-admin::input 
                     name="{{ $key }}"
-                    label="{{ $field['label'] ?? ucfirst($key) }}"
+                    label="{{ $field['label'] }}"
                     helper="{{ $field['helper'] ?? '' }}"
                     type="{{ $field['type'] }}"
-                    required
+                    :required="str_contains($field['rules'] ?? '', 'required')"
+                    value="{{ old($key, $field['default'] ?? '') }}" 
                 />
             @elseif($field['type'] === 'password')
                 <x-admin::input 
                     name="{{ $key }}"
-                    label="{{ $field['label'] ?? ucfirst($key) }}"
+                    label="{{ $field['label'] }}"
                     helper="{{ $field['helper'] ?? '' }}"
                     type="{{ $field['type'] }}"
                     value=""
-                    required
+                    :required="str_contains($field['rules'] ?? '', 'required')"
                 />
             @elseif($field['type'] === 'boolean')
                 <x-admin::toggle
                     name="{{ $key }}"
-                    label="{{ $field['label'] ?? ucfirst($key) }}"
+                    label="{{ $field['label'] }}"
                     helper="{{ $field['helper'] ?? '' }}"
-                    required
+                    :checked="(bool)old($key, $field['default'] ?? false)"
                 />
-                @elseif($field['type'] === 'select')
+            @elseif($field['type'] === 'select')
                 <x-admin::select
                     name="{{ $key }}"
-                    label="{{ $field['label'] ?? ucfirst($key) }}"
+                    label="{{ $field['label'] }}"
                     helper="{{ $field['helper'] ?? '' }}"
-                    required
+                    :required="str_contains($field['rules'] ?? '', 'required')"
                 >
                     @foreach($field['options'] ?? [] as $optValue => $optLabel)
                         <option value="{{ $optValue }}" {{ old($key, $field['default'] ?? '') == $optValue ? 'selected' : '' }}>

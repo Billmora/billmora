@@ -93,7 +93,7 @@
                         @if(in_array($field['type'], ['text', 'email', 'url', 'number']))
                             <x-admin::input 
                                 name="config[{{ $key }}]"
-                                label="{{ $field['label'] ?? ucfirst($key) }}"
+                                label="{{ $field['label'] }}"
                                 helper="{{ $field['helper'] ?? '' }}"
                                 type="{{ $field['type'] }}"
                                 :required="str_contains($field['rules'] ?? '', 'required')"
@@ -102,16 +102,17 @@
                         @elseif($field['type'] === 'password')
                             <x-admin::input 
                                 name="config[{{ $key }}]"
-                                label="{{ $field['label'] ?? ucfirst($key) }}"
+                                label="{{ $field['label'] }}"
                                 helper="{{ $field['helper'] ?? '' }}"
                                 type="password"
+                                :required="str_contains($field['rules'] ?? '', 'required')"
                                 value="" 
                             />
                         @elseif($field['type'] === 'boolean')
                             <div class="flex items-center pt-6">
                                 <x-admin::toggle
                                     name="config[{{ $key }}]"
-                                    label="{{ $field['label'] ?? ucfirst($key) }}"
+                                    label="{{ $field['label'] }}"
                                     helper="{{ $field['helper'] ?? '' }}"
                                     value="1"
                                     :checked="(bool)old('config.'.$key, $package->provisioning_config[$key] ?? $field['default'] ?? false)"
@@ -120,7 +121,7 @@
                         @elseif($field['type'] === 'select')
                             <x-admin::select
                                 name="config[{{ $key }}]"
-                                label="{{ $field['label'] ?? ucfirst($key) }}"
+                                label="{{ $field['label'] }}"
                                 helper="{{ $field['helper'] ?? '' }}"
                                 :required="str_contains($field['rules'] ?? '', 'required')"
                             >
