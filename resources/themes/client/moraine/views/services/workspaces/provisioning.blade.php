@@ -32,13 +32,6 @@
                             type="password"
                             :required="str_contains($field['rules'] ?? '', 'required')"
                         />
-                    @elseif(($field['type'] ?? '') === 'textarea')
-                        <x-client::textarea
-                            name="{{ $key }}"
-                            label="{{ $field['label'] ?? ucfirst($key) }}"
-                            helper="{{ $field['helper'] ?? '' }}"
-                            :required="str_contains($field['rules'] ?? '', 'required')"
-                        >{{ old($key, $field['default'] ?? '') }}</x-client::textarea>
                     @elseif(($field['type'] ?? '') === 'boolean')
                         <div class="flex items-center pt-6">
                             <x-client::toggle
