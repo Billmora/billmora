@@ -66,7 +66,7 @@
         </div>
     </div>
     <div>
-        {{ $invoices->links('client::layouts.partials.pagination') }}
+        {{ $invoices->links('admin::layouts.partials.pagination') }}
     </div>
     @can('invoices.delete')
         @foreach ($invoices as $invoice)

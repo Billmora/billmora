@@ -65,7 +65,7 @@
         </div>
     </div>
     <div>
-        {{ $orders->links('client::layouts.partials.pagination') }}
+        {{ $orders->links('admin::layouts.partials.pagination') }}
     </div>
     @can('orders.delete')
         @foreach ($orders as $order)
