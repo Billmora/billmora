@@ -4,7 +4,7 @@
     @if($variantOptions->isNotEmpty())
         <div class="bg-white border-2 border-billmora-2 rounded-2xl overflow-hidden">
             <div class="bg-billmora-1 px-6 py-4 border-b-2 border-billmora-2">
-                <h3 class="font-semibold text-slate-600">Variant Options</h3>
+                <h3 class="font-semibold text-slate-600">{{ __('client/service.variant_label') }}</h3>
             </div>
             <ul class="grid gap-4 p-6">
                 @foreach($variantOptions as $option)
