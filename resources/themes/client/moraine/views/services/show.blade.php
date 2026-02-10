@@ -18,24 +18,24 @@
                     <span class="font-semibold text-slate-600">{{ $service->status }}</span>
                 </div>
                 <div class="grid">
-                    <span class="text-sm font-semibold text-slate-500">{{ __('client/service.registration_label') }}</span>
+                    <span class="text-sm font-semibold text-slate-500">{{ __('client/services.registration_label') }}</span>
                     <span class="font-semibold text-slate-600">{{ $service->created_at->format(Billmora::getGeneral('company_date_format')) }}</span>
                 </div>
                 <div class="grid">
-                    <span class="text-sm font-semibold text-slate-500">{{ __('client/service.price_label') }}</span>
+                    <span class="text-sm font-semibold text-slate-500">{{ __('client/services.price_label') }}</span>
                     <span class="font-semibold text-slate-600">{{ Currency::format($service->price, $service->currency) }}</span>
                 </div>
                 <div class="grid">
-                    <span class="text-sm font-semibold text-slate-500">{{ __('client/service.setup_fee_label') }}</span>
+                    <span class="text-sm font-semibold text-slate-500">{{ __('client/services.setup_fee_label') }}</span>
                     <span class="font-semibold text-slate-600">{{ Currency::format($service->setup_fee, $service->currency) }}</span>
                 </div>
                 <div class="grid">
-                    <span class="text-sm font-semibold text-slate-500">{{ __('client/service.billing_cycle_label') }}</span>
+                    <span class="text-sm font-semibold text-slate-500">{{ __('client/services.billing_cycle_label') }}</span>
                     <span class="font-semibold text-slate-600">{{ $service->cycle_label }}</span>
                 </div>
                 @if ($service->billing_type === 'recurring')
                     <div class="grid">
-                        <span class="text-sm font-semibold text-slate-500">{{ __('client/service.expires_label') }}</span>
+                        <span class="text-sm font-semibold text-slate-500">{{ __('client/services.expires_label') }}</span>
                         <span class="font-semibold text-slate-600">{{ $service->next_due_date?->format(Billmora::getGeneral('company_date_format')) }}</span>
                     </div>
                 @endif
@@ -47,7 +47,7 @@
         <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
             <a href="{{ route('client.services.show', ['service' => $service->id]) }}" class="w-full flex gap-2 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                 <x-lucide-view class="w-auto h-5" />
-                {{ __('client/service.action.overview') }}
+                {{ __('client/services.action.overview') }}
             </a>
             {{-- TODO: Add package/variant scaling --}}
             <a href="#" class="w-full flex gap-2 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
@@ -57,7 +57,7 @@
             @if ($service->package->allow_cancellation)
                 <x-client::modal.trigger modal="cancelServiceModal" class="w-full flex gap-2 items-center bg-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     <x-lucide-ban class="w-auto h-5" />
-                    {{ __('client/service.action.cancel') }}
+                    {{ __('client/services.action.cancel') }}
                 </x-client::modal.trigger>
             @endif
         </div>
