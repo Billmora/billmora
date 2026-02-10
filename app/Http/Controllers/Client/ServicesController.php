@@ -88,7 +88,8 @@ class ServicesController extends Controller
         $pageSchema = $driver->getClientActionForm($service, $slug);
 
         if (empty($pageSchema)) {
-            abort(404, 'Page not found or action does not require input.');
+            return redirect()->route('client.services.show', $service->id)
+                ->with('error', 'Page not found or action does not require input.');
         }
 
         return view('client::services.workspaces.provisioning', compact('service', 'slug', 'pageSchema'));
