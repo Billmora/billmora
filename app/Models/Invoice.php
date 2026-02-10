@@ -112,20 +112,33 @@ class Invoice extends Model
     }
 
     /**
-     * Get the service associated with the invoice through invoice item.
+     * Get the services associated with the invoice through invoice items.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function service()
+    public function services()
     {
-        return $this->hasOneThrough(
-            Service::class,
-            InvoiceItem::class,
-            'invoice_id',
-            'id',
-            'id',
+        return $this->belongsToMany(
+            Service::class, 
+            'invoice_items', 
+            'invoice_id', 
             'service_id'
-        );
+        )->withPivot([
+            'description',
+            'quantity',
+            'unit_price',
+            'amount',
+        ]);
+    }
+
+    /**
+     * Get the first service associated with the invoice as an attribute accessor.
+     *
+     * @return \App\Models\Service|null
+     */
+    public function getServiceAttribute()
+    {
+        return $this->services->first();
     }
 
     /**
