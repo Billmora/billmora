@@ -77,7 +77,7 @@
                             <span class="font-medium">{{ $action['label'] }}</span>
                         </a>
                     @elseif(($action['type'] ?? '') === 'button')
-                        <x-admin::modal.trigger 
+                        <x-client::modal.trigger 
                             modal="modalAction-{{ $action['slug'] }}"
                             class="w-full flex gap-3 items-center g-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-all duration-200 cursor-pointer"
                         >
@@ -85,8 +85,8 @@
                                 <i class="{{ $action['icon'] }}"></i>
                             @endif
                             <span class="font-medium">{{ $action['label'] }}</span>
-                        </x-admin::modal.trigger>
-                        <x-admin::modal.content
+                        </x-client::modal.trigger>
+                        <x-client::modal.content
                             modal="modalAction-{{ $action['slug'] }}"
                             variant="danger"
                             size="xl"
@@ -100,19 +100,19 @@
                                     @method(strtoupper($action['method']))
                                 @endif
                                 <div class="flex justify-end gap-2 mt-4">
-                                    <x-admin::modal.trigger 
+                                    <x-client::modal.trigger 
                                         type="button" 
                                         variant="close" 
                                         class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
                                     >
                                         {{ __('common.cancel') }}
-                                    </x-admin::modal.trigger>
+                                    </x-client::modal.trigger>
                                     <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                                         {{ __('common.submit') }}
                                     </button>
                                 </div>
                             </form>
-                        </x-admin::modal.content>
+                        </x-client::modal.content>
                     @endif
                 @endforeach
             </div>
@@ -120,7 +120,7 @@
     </div>
 </div>
 @if ($service->package->allow_cancellation)
-    <x-admin::modal.content
+    <x-client::modal.content
         modal="cancelServiceModal"
         variant="danger"
         size="xl"
@@ -130,10 +130,10 @@
         <form action="#" method="POST">
             @csrf
             <div class="flex justify-end gap-2 mt-4">
-                <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                <x-client::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-client::modal.trigger>
                 <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.submit') }}</button>
             </div>
         </form>
-    </x-admin::modal.content>
+    </x-client::modal.content>
 @endif
 @endsection
