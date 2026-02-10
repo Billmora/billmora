@@ -99,4 +99,13 @@ class Package extends Model
         return $this->hasMany(Service::class);
     }
 
+    /**
+     * Get the provisioning configuration associated with the package.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function provisioning()
+    {
+        return $this->belongsTo(Provisioning::class);
+    }
 }

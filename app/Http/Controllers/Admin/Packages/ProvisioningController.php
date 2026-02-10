@@ -8,6 +8,7 @@ use App\Models\Provisioning;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ProvisioningController extends Controller
 {
@@ -33,7 +34,7 @@ class ProvisioningController extends Controller
         }
 
         $selectedDriver = $this->resolveDriver($request->get('driver', $package->provisioning_driver));
-        $selectedInstanceId = $request->get('instance');
+        $selectedInstanceId = $request->get('instance', $package->provisioning_id);
 
         $instances = $selectedDriver
             ? Provisioning::where('driver', $selectedDriver)
@@ -64,12 +65,14 @@ class ProvisioningController extends Controller
     {
         $package = Package::findOrFail($id);
 
-        $request->validate([
+        $validated = $request->validate([
             'provisioning_driver' => ['required', 'string'],
+            'instance_reference'  => ['nullable', Rule::exists('provisionings', 'id')],
         ]);
 
-        $rawDriver = $request->input('provisioning_driver');
-        $driver = $this->resolveDriver($rawDriver);
+        $rawDriver = $validated['provisioning_driver'];
+        $instanceId = ($rawDriver === 'none') ? null : $validated['instance_reference'];
+        $driver = ($rawDriver === 'none') ? null : $this->resolveDriver($rawDriver);
 
         $configData = [];
         if ($driver) {
@@ -78,6 +81,7 @@ class ProvisioningController extends Controller
 
         $package->update([
             'provisioning_driver' => $driver,
+            'provisioning_id' => $instanceId,
             'provisioning_config' => $configData,
         ]);
 
