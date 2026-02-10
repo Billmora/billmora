@@ -36,4 +36,13 @@ return [
         'success' => 'Connection successful.',
         'failed' => 'Connection failed: ',
     ],
+
+    'plugin' => [
+        'zip_failed' => 'Failed to open ZIP file.',
+        'manifest_missing' => 'Invalid plugin: manifest.json not found in the zip file.',
+        'manifest_invalid' => 'Invalid manifest.json: Missing name, type, or driver.',
+        'driver_format' => 'Invalid driver format :driver: Must be PascalCase without spaces.',
+        'type_mismatch' => 'Type mismatch: Expected :expected, got :current.',
+        'driver_exists' => 'Plugin driver :driver already exists.',
+    ],
 ];

@@ -76,7 +76,7 @@ class ReviewController extends Controller
         if (!$checkoutData) {
             return redirect()
                 ->route('client.store')
-                ->with('error', __('validation.checkout.data_missing'));
+                ->with('error', __('client/checkout.session.missing_data'));
         }
 
         $currentCurrency = Session::get('currency');
@@ -98,7 +98,7 @@ class ReviewController extends Controller
                 Session::forget(['checkout_data', 'applied_coupon']);
                 return redirect()
                     ->route('client.store')
-                    ->with('error', __('validation.checkout.currency_mismatch'));
+                    ->with('error', __('client/checkout.session.currency_mismatch'));
             }
 
             $checkoutData['currency'] = $currentCurrency;
@@ -144,7 +144,7 @@ class ReviewController extends Controller
         if (!$checkoutData) {
             return redirect()
                 ->route('client.store')
-                ->with('error', __('validation.checkout.session_expired'));
+                ->with('error', __('client/checkout.session.expired'));
         }
 
         $rules = [];

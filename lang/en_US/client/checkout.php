@@ -3,6 +3,7 @@
 return [
     'coupon_label' => 'Coupon',
     'notes_label' => 'Notes',
+    'agree_terms' => 'I agree with the :attribute',
 
     'order_summary' => 'Order Summary',
     'subtotal' => 'Subtotal',
@@ -11,5 +12,20 @@ return [
     'total_due' => 'Total Due',
     'next_billing' => 'Price that will be charged on the next billing cycle',
     'complete_order' => 'Complete Order',
-    'agree_terms' => 'I agree with the :attribute',
+
+    'coupon' => [
+        'invalid' => 'Invalid or expired coupon code.',
+        'package_mismatch' => 'This coupon is not applicable to the selected package.',
+        'billing_mismatch' => 'This coupon is not applicable to the selected billing cycle.',
+        'limit_reached' => 'This coupon has reached its usage limit.',
+        'user_limit_reached' => 'You have reached the usage limit for this coupon.',
+        'applied' => 'Coupon applied successfully!',
+        'removed' => 'Coupon removed successfully.',
+    ],
+
+    'session' => [
+        'expired' => 'Session expired. Please select a package again.',
+        'missing_data' => 'No checkout data found. Please select a package first.',
+        'currency_mismatch' => 'The selected configuration is not available for the current currency. Please select again.',
+    ],
 ];

@@ -127,7 +127,7 @@ class OrdersController extends Controller
             if (!$packagePrice) {
                 return back()
                     ->withInput()
-                    ->with('error', __('validation.package.cycle_mismatch'));
+                    ->with('error', __('client/store.order.cycle_mismatch'));
             }
 
             $variantSelections = $validationService->buildVariantSelections(

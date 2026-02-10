@@ -24,11 +24,11 @@ class OrderValidationService
         string $currencyCode
     ): array {
         if ($packagePrice->package_id !== $package->id) {
-            return $this->error(__('validation.package.cycle_mismatch'));
+            return $this->error(__('client/store.order.cycle_mismatch'));
         }
 
         if (!$this->isPriceAvailableForCurrency($packagePrice, $currencyCode)) {
-            return $this->error(__('validation.package.cycle_currency_unavailable'));
+            return $this->error(__('client/store.order.cycle_currency_unavailable'));
         }
 
         if (empty($variantSelections)) {
@@ -63,7 +63,7 @@ class OrderValidationService
         $packageVariantIds = $package->variants->pluck('id')->toArray();
         foreach (array_keys($variantSelections) as $variantId) {
             if (!in_array($variantId, $packageVariantIds)) {
-                return $this->error(__('validation.package.variant_mismatch'));
+                return $this->error(__('client/store.order.variant_mismatch'));
             }
         }
 
@@ -77,7 +77,7 @@ class OrderValidationService
             ->toArray();
 
         if (count($allOptionIds) !== count($validOptions)) {
-            return $this->error(__('validation.package.option_invalid'));
+            return $this->error(__('client/store.order.option_invalid'));
         }
 
         if ($packagePrice) {
@@ -91,7 +91,7 @@ class OrderValidationService
                 ->toArray();
 
             if (count($allOptionIds) !== count($validOptionsWithPrice)) {
-                return $this->error(__('validation.package.variant_price_missing'));
+                return $this->error(__('client/store.order.variant_price_missing'));
             }
         }
 
@@ -119,12 +119,12 @@ class OrderValidationService
                 $option = $options->find($optionId);
                 
                 if (!$option) {
-                    return $this->error(__('validation.package.option_missing'));
+                    return $this->error(__('client/store.order.option_missing'));
                 }
 
                 if (!$this->hasMatchingPrice($option->prices, $cycleName, $currencyCode)) {
                     return $this->error(
-                        __('validation.package.option_unavailable', ['attribute' => $option->name])
+                        __('client/store.order.option_unavailable', ['attribute' => $option->name])
                     );
                 }
             }

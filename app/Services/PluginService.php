@@ -20,33 +20,33 @@ class PluginService
     {
         $zip = new ZipArchive;
         if ($zip->open($file->path()) !== true) {
-            throw new Exception(__('validation.plugin.zip_failed'));
+            throw new Exception(__('admin/provisionings.plugin.zip_failed'));
         }
 
         $jsonContent = $zip->getFromName('manifest.json');
         
         if (!$jsonContent) {
             $zip->close();
-            throw new Exception(__('validation.plugin.manifest_missing'));
+            throw new Exception(__('admin/provisionings.plugin.manifest_missing'));
         }
 
         $metadata = json_decode($jsonContent, true);
 
         if (!isset($metadata['name'], $metadata['type'], $metadata['driver'])) {
             $zip->close();
-            throw new Exception(__('validation.plugin.manifest_invalid'));
+            throw new Exception(__('admin/provisionings.plugin.manifest_invalid'));
         }
 
         if (!preg_match('/^[a-zA-Z0-9]+$/', $metadata['driver'])) {
             $zip->close();
-            throw new Exception(__('validation.plugin.driver_format', [
+            throw new Exception(__('admin/provisionings.plugin.driver_format', [
                 'driver' => $metadata['driver']
             ]));
         }
 
         if (strtolower($metadata['type']) !== strtolower($expectedType)) {
             $zip->close();
-            throw new Exception(__('validation.plugin.type_mismatch', [
+            throw new Exception(__('admin/provisionings.plugin.type_mismatch', [
                 'expected' => $expectedType,
                 'current' => $metadata['type']
             ]));
@@ -56,7 +56,7 @@ class PluginService
         
         if (File::exists($targetPath)) {
             $zip->close();
-            throw new Exception(__('validation.plugin.driver_exists', [
+            throw new Exception(__('admin/provisionings.plugin.driver_exists', [
                 'driver' => $metadata['driver']
             ]));
         }
