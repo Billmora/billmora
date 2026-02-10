@@ -26,18 +26,21 @@
     />
     <form action="{{ route('admin.packages.provisioning.update', ['id' => $package->id]) }}" method="POST" class="grid gap-6"
         x-data="{
-            currentDriver: '{{ $selectedDriver ?? 'none' }}',
-            currentInstance: '{{ $selectedInstanceId }}',
+            currentDriver: '{{ old('provisioning_driver', $selectedDriver ?? 'none') }}',
+            currentInstance: '{{ old('instance_reference', $selectedInstanceId ?? '') }}',
             baseUrl: '{{ route('admin.packages.provisioning', $package->id) }}',
             
             init() {
                 this.$watch('currentDriver', (value) => {
-                    this.currentInstance = ''; 
-                    this.refreshPage();
+                    // Hanya reset instance jika driver berubah manual oleh user, bukan saat load awal
+                    if (value !== '{{ $selectedDriver ?? 'none' }}') {
+                         this.currentInstance = ''; 
+                         this.refreshPage();
+                    }
                 });
                 
                 this.$watch('currentInstance', (value) => {
-                    if (this.currentDriver !== 'none' && value) {
+                    if (this.currentDriver !== 'none' && value && value !== '{{ $selectedInstanceId ?? '' }}') {
                         this.refreshPage();
                     }
                 });
@@ -64,9 +67,11 @@
                 x-model="currentDriver"
                 required
             >
-                <option value="none">None (No Provisioning)</option>
+                <option value="none" {{ old('provisioning_driver', $selectedDriver ?? 'none') == 'none' ? 'selected' : '' }}>None (No Provisioning)</option>
                 @foreach($drivers as $driverName)
-                    <option value="{{ $driverName }}">{{ $driverName }}</option>
+                    <option value="{{ $driverName }}" {{ old('provisioning_driver', $selectedDriver ?? '') == $driverName ? 'selected' : '' }}>
+                        {{ $driverName }}
+                    </option>
                 @endforeach
             </x-admin::select>
             <x-admin::select
@@ -78,7 +83,9 @@
                 required
             >
                 @foreach($instances as $id => $name)
-                    <option value="{{ $id }}">{{ $name }}</option>
+                    <option value="{{ $id }}" {{ old('instance_reference', $selectedInstanceId ?? '') == $id ? 'selected' : '' }}>
+                        {{ $name }}
+                    </option>
                 @endforeach
             </x-admin::select>
         </div>
