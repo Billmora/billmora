@@ -92,13 +92,25 @@ class Service extends Model
     }
 
     /**
-     * Get the invoices for this service.
+     * Get the invoices associated with the service through invoice items.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function invoices()
     {
-        return $this->hasMany(Invoice::class);
+        return $this->belongsToMany(
+            Invoice::class, 
+            'invoice_items',
+            'service_id',
+            'invoice_id'
+        )
+        ->withPivot([
+            'description', 
+            'quantity', 
+            'unit_price', 
+            'amount'
+        ])
+        ->withTimestamps();
     }
 
     /**

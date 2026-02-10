@@ -112,6 +112,23 @@ class Invoice extends Model
     }
 
     /**
+     * Get the service associated with the invoice through invoice item.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
+     */
+    public function service()
+    {
+        return $this->hasOneThrough(
+            Service::class,
+            InvoiceItem::class,
+            'invoice_id',
+            'id',
+            'id',
+            'service_id'
+        );
+    }
+
+    /**
      * Get the items for this invoice.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
