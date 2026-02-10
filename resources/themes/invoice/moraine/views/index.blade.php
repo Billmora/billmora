@@ -307,15 +307,15 @@
                     <td class="left">
                         <div class="client-info">
                             <div style="margin-top: 10px;">
-                                <span class="label">{{ __('client/invoice.invoice_number') }}</span>
+                                <span class="label">{{ __('client/invoices.invoice_number') }}</span>
                                 <span class="value">#{{ $invoice->invoice_number }}</span>
                             </div>
                             <div style="margin-top: 10px;">
-                                <span class="label">{{ __('client/invoice.bill_to') }}</span>
+                                <span class="label">{{ __('client/invoices.bill_to') }}</span>
                                 <span class="value">{{ $invoice->user->fullname }}</span>
                             </div>
                             <div style="margin-top: 5px;">
-                                <span class="label">{{ __('client/invoice.currency') }}</span>
+                                <span class="label">{{ __('client/invoices.currency') }}</span>
                                 <span class="value">{{ $invoice->currency }}</span>
                             </div>
                         </div>
@@ -329,11 +329,11 @@
                                 </span>
                             </div>
                             <div style="margin-top: 10px;">
-                                <span class="label">{{ __('client/invoice.invoice_date') }}</span>
+                                <span class="label">{{ __('client/invoices.invoice_date') }}</span>
                                 <span class="value">{{ $invoice->created_at->format(Billmora::getGeneral('company_date_format')) }}</span>
                             </div>
                             <div style="margin-top: 5px;">
-                                <span class="label">{{ __('client/invoice.due_date') }}</span>
+                                <span class="label">{{ __('client/invoices.due_date') }}</span>
                                 <span class="value">{{ $invoice->due_date->format(Billmora::getGeneral('company_date_format')) }}</span>
                             </div>
                         </div>
@@ -348,10 +348,10 @@
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 50%;">{{ __('client/invoice.description') }}</th>
-                        <th style="width: 12%; text-align: center;">{{ __('client/invoice.quantity') }}</th>
-                        <th style="width: 18%; text-align: right;">{{ __('client/invoice.unit_price') }}</th>
-                        <th style="width: 20%; text-align: right;">{{ __('client/invoice.amount') }}</th>
+                        <th style="width: 50%;">{{ __('client/invoices.description') }}</th>
+                        <th style="width: 12%; text-align: center;">{{ __('client/invoices.quantity') }}</th>
+                        <th style="width: 18%; text-align: right;">{{ __('client/invoices.unit_price') }}</th>
+                        <th style="width: 20%; text-align: right;">{{ __('client/invoices.amount') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -380,7 +380,7 @@
                             <div class="total-row">
                                 <table>
                                     <tr>
-                                        <td class="label">{{ __('client/invoice.subtotal') }}</td>
+                                        <td class="label">{{ __('client/invoices.subtotal') }}</td>
                                         <td class="value">{{ Currency::format($invoice->subtotal, $invoice->currency) }}</td>
                                     </tr>
                                 </table>
@@ -390,7 +390,7 @@
                                 <div class="total-row">
                                     <table>
                                         <tr>
-                                            <td class="label">{{ __('client/invoice.discount') }}</td>
+                                            <td class="label">{{ __('client/invoices.discount') }}</td>
                                             <td class="value">{{ Currency::format($invoice->discount, $invoice->currency) }}</td>
                                         </tr>
                                     </table>
@@ -400,7 +400,7 @@
                             <div class="grand-total">
                                 <table>
                                     <tr>
-                                        <td class="label">{{ __('client/invoice.total_due') }}</td>
+                                        <td class="label">{{ __('client/invoices.total_due') }}</td>
                                         <td class="value">{{ Currency::format($invoice->total, $invoice->currency) }}</td>
                                     </tr>
                                 </table>
