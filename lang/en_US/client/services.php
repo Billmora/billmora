@@ -14,15 +14,14 @@ return [
         'overview' => 'Overview',
         'scale' => 'Scale',
         'cancel' => 'Cancel',
+
+        'unavailable' => 'Page not found or action does not require input.',
+        'success' => 'Action processed successfully.',
+        'failed' => 'Action failed to process: ',
     ],
 
-    'alerts' => [
-        'provisioning' => [
-            'driver_not_found' => 'Provisioning driver not found.',
-            'driver_unavailable' => 'Provisioning driver unavailable.',
-            'action_unavailable' => 'Page not found or action does not require input.',
-            'action_success' => 'Action processed successfully.',
-            'action_failed' => 'Action failed to process: ',
-        ],
+    'provisioning' => [
+        'not_found' => 'Provisioning driver not found.',
+        'unavailable' => 'Provisioning driver unavailable.',
     ],
 ];

@@ -82,14 +82,14 @@ class ServicesController extends Controller
 
         if (!$driver) {
             return redirect()->route('client.services.show', $service->id)
-                ->with('error', __('client/services.alerts.provisioning.driver_not_found'));
+                ->with('error', __('client/services.provisioning.not_found'));
         }
 
         $pageSchema = $driver->getClientActionForm($service, $slug);
 
         if (empty($pageSchema)) {
             return redirect()->route('client.services.show', $service->id)
-                ->with('error', __('client/services.alerts.provisioning.action_unavailable'));
+                ->with('error', __('client/services.action.unavailable'));
         }
 
         return view('client::services.workspaces.provisioning', compact('service', 'slug', 'pageSchema'));
@@ -114,7 +114,7 @@ class ServicesController extends Controller
         $driver = $service->provisioning?->getPluginInstance();
         
         if (!$driver) {
-            return back()->with('error', __('client/services.alerts.provisioning.driver_unavailable'));
+            return back()->with('error', __('client/services.provisioning.unavailable'));
         }
 
         $schema = $driver->getClientActionForm($service, $slug);
@@ -137,11 +137,11 @@ class ServicesController extends Controller
 
 
             return redirect()->route('client.services.show', $service->id)
-                ->with('success', __('client/services.alerts.provisioning.action_success'));
+                ->with('success', __('client/services.action.success'));
 
         } catch (\Exception $e) {
             return redirect()->route('client.services.show', $service->id)
-                ->with('error', __('client/services.alerts.provisioning.action_failed') . $e->getMessage());
+                ->with('error', __('client/services.action.failed') . $e->getMessage());
         }
     }
 
