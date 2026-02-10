@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\Packages;
 
 use App\Http\Controllers\Controller;
-use App\Models\Catalog;
 use App\Models\Currency;
 use App\Models\Package;
 use App\Models\PackagePrice;
@@ -36,7 +35,7 @@ class PricingController extends Controller
     {
         $package = Package::with('prices')->findOrFail($id);
 
-        return view('admin::packages.pricing.index', compact('package', 'catalogs'));
+        return view('admin::packages.pricing.index', compact('package'));
     }
 
     /**
