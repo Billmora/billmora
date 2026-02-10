@@ -50,6 +50,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin services interface routes.
+     *
+     * Prefix: /admin/services
+     */
+    Route::group(['prefix' => 'services'], function () {
+        Route::get('/', [Admin\ServicesController::class, 'index'])->name('admin.services');
+    });
+
+    /**
      * Admin invoices interface routes.
      *
      * Prefix: /admin/invoices
