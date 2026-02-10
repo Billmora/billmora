@@ -22,11 +22,11 @@
   </button>
 
   {{-- Toggle Preferences --}}
-  <x-client::modal.trigger modal="preferenceModal" class="flex gap-3 items-center bg-billmora-2 hover:bg-billmora-primary px-3 py-2 ml-auto text-billmora-primary hover:text-white font-semibold rounded-lg transition-colors duration-300 group cursor-pointer">
+  <x-admin::modal.trigger modal="preferenceModal" class="flex gap-3 items-center bg-billmora-2 hover:bg-billmora-primary px-3 py-2 ml-auto text-billmora-primary hover:text-white font-semibold rounded-lg transition-colors duration-300 group cursor-pointer">
     <x-dynamic-component component="flag-country-{{ strtolower($langActive['country']) }}" class="w-auto h-5 pointer-events-none" />
     <div class="w-1 h-5 bg-billmora-3"></div>
     <span>{{ $currencyActive['code'] }}</span>
-  </x-client::modal.trigger>
+  </x-admin::modal.trigger>
 
   <!-- Profile -->
   <div class="relative w-fit flex items-center"
@@ -82,31 +82,31 @@
     </div>
   </div>
 </header>
-<x-client::modal.content 
+<x-admin::modal.content 
   modal="preferenceModal"
   title="{{ __('preference.title') }}"
   description="{{ __('preference.description') }}"
 >
   <form action="{{ route('common.preference.update') }}" method="POST" class="space-y-4">
     @csrf
-    <x-client::select name="language" label="{{ __('preference.language') }}" required>
+    <x-admin::select name="language" label="{{ __('preference.language') }}" required>
       @foreach ($langs as $lang)
         <option value="{{ $lang['lang'] }}" @if ($lang['lang'] === app()->getLocale()) selected @endif>
           {{ $lang['name'] }}
         </option>
       @endforeach
-    </x-client::select>
-    <x-client::select name="currency" label="{{ __('preference.currency') }}" required>
+    </x-admin::select>
+    <x-admin::select name="currency" label="{{ __('preference.currency') }}" required>
       @foreach ($currencies as $currency)
           <option value="{{ $currency->code }}"
               @selected($currency->code === $currencyActive?->code)>
               {{ $currency->code }}
           </option>
       @endforeach
-    </x-client::select>
+    </x-admin::select>
     <div class="flex justify-end gap-2 pt-4">
       <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
       <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.save') }}</button>
     </div>
   </form>
-</x-client::modal.content>
+</x-admin::modal.content>
