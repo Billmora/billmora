@@ -104,7 +104,6 @@
                                         class="w-full px-3 py-2 border-2 border-billmora-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-billmora-primary cursor-pointer"
                                         x-model="selections[variant.id]"
                                     >
-                                        <option value="" disabled selected>Select Option</option>
                                         <template x-for="option in getFilteredOptions(variant)" :key="option.id">
                                             <option :value="option.id" x-text="option.name" :selected="selections[variant.id] == option.id"></option>
                                         </template>
@@ -237,9 +236,7 @@ function orderForm() {
         },
 
         initializeFromOldValues() {
-            this.availablePackages = this.packages.filter(pkg => {
-                return pkg.currencies[this.selectedCurrency] !== undefined;
-            });
+            this.availablePackages = this.packages.filter(pkg => pkg.currencies[this.selectedCurrency] !== undefined);
             
             if (this.selectedPackage) {
                 const pkg = this.packages.find(p => p.id == this.selectedPackage);
@@ -248,9 +245,10 @@ function orderForm() {
                     
                     if (this.selectedPrice) {
                         this.currentVariants = pkg.currencies[this.selectedCurrency].variants;
-                        
                         const price = this.availablePrices.find(p => p.id == this.selectedPrice);
                         this.selectedPriceName = price ? price.name : '';
+                        
+                        this.applyVariantDefaults();
                     }
                 }
             }
@@ -261,7 +259,6 @@ function orderForm() {
                 this.availablePackages = [];
                 return;
             }
-            
             this.selectedPackage = '';
             this.selectedPrice = '';
             this.selectedPriceName = '';
@@ -269,9 +266,7 @@ function orderForm() {
             this.currentVariants = [];
             this.selections = {};
             
-            this.availablePackages = this.packages.filter(pkg => {
-                return pkg.currencies[this.selectedCurrency] !== undefined;
-            });  
+            this.availablePackages = this.packages.filter(pkg => pkg.currencies[this.selectedCurrency] !== undefined);
         },
         
         onPackageChange() {
@@ -280,7 +275,6 @@ function orderForm() {
                 this.currentVariants = [];
                 return;
             }
-            
             this.selectedPrice = '';
             this.selectedPriceName = '';
             this.currentVariants = [];
@@ -304,22 +298,33 @@ function orderForm() {
             const pkg = this.packages.find(p => p.id == this.selectedPackage);
             if (pkg && pkg.currencies[this.selectedCurrency]) {
                 this.currentVariants = pkg.currencies[this.selectedCurrency].variants;
+
+                this.applyVariantDefaults();
             }
+        },
+        
+        applyVariantDefaults() {
+            this.currentVariants.forEach(variant => {
+                if (variant.type === 'checkbox') return;
+
+                if (this.selections[variant.id] !== undefined && this.selections[variant.id] !== null && this.selections[variant.id] !== '') {
+                    return;
+                }
+
+                const opts = this.getFilteredOptions(variant);
+                if (opts.length > 0) {
+                    this.selections[variant.id] = opts[0].id;
+                }
+            });
         },
         
         hasAnyAvailableOptions() {
             if (!this.selectedPriceName) return false;
-            
-            return this.currentVariants.some(variant => {
-                return this.getFilteredOptions(variant).length > 0;
-            });
+            return this.currentVariants.some(variant => this.getFilteredOptions(variant).length > 0);
         },
         
         getFilteredOptions(variant) {
-            if (!this.selectedPriceName) {
-                return [];
-            }
-            
+            if (!this.selectedPriceName) return [];
             return (variant.options || []).filter(option => {
                 return option.prices_by_name && option.prices_by_name[this.selectedPriceName] !== undefined;
             });
