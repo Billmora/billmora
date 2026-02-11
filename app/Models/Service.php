@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
+    public const ERROR_INACTIVE = 802;
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -228,6 +230,10 @@ class Service extends Model
      */
     public function getClientActions()
     {
+        if ($this->status !== 'active') {
+            return [];
+        }
+
         if (!$this->provisioning) {
             return [];
         }

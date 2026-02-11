@@ -78,6 +78,10 @@ class ServicesController extends Controller
             abort(404);
         }
 
+        if ($service->status !== 'active') {
+            abort(404);
+        }
+
         $driver = $service->provisioning?->getPluginInstance();
         $instanceConfig = $service->provisioning?->config ?? [];
 
@@ -109,6 +113,10 @@ class ServicesController extends Controller
     public function processAction(Request $request, Service $service, string $slug)
     {
         if ($service->user_id !== Auth::id()) {
+            abort(404);
+        }
+
+        if ($service->status !== 'active') {
             abort(404);
         }
 
