@@ -56,6 +56,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
      */
     Route::group(['prefix' => 'services'], function () {
         Route::get('/', [Admin\ServicesController::class, 'index'])->name('admin.services');
+        Route::get('/{service}/edit', [Admin\ServicesController::class, 'edit'])->name('admin.services.edit');
+        Route::put('/{service}/edit', [Admin\ServicesController::class, 'update'])->name('admin.services.update');
     });
 
     /**
