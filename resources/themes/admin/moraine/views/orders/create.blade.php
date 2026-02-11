@@ -305,7 +305,17 @@ function orderForm() {
         
         applyVariantDefaults() {
             this.currentVariants.forEach(variant => {
-                if (variant.type === 'checkbox') return;
+                if (variant.type === 'checkbox') {
+                    if (!Array.isArray(this.selections[variant.id])) {
+                        let val = this.selections[variant.id];
+                        if (val !== undefined && val !== null && val !== '') {
+                            this.selections[variant.id] = Array.isArray(val) ? val : [parseInt(val)];
+                        } else {
+                            this.selections[variant.id] = [];
+                        }
+                    }
+                    return;
+                }
 
                 if (this.selections[variant.id] !== undefined && this.selections[variant.id] !== null && this.selections[variant.id] !== '') {
                     return;

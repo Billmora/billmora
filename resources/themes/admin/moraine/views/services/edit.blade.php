@@ -235,7 +235,6 @@ function serviceForm() {
         selectedCurrency: '{{ old("service_currency", $service->currency) }}',
         selectedPackage: '{{ old("package_id", $service->package_id) }}',
         selectedPrice: '{{ old("package_price_id", $service->package_price_id) }}',
-        serviceName: '{{ $service->name }}',
         
         selections: @json(old('variant_selections', $service->variant_selections ?? [])),
         
@@ -282,10 +281,9 @@ function serviceForm() {
                     if (priceObj) {
                         this.selectedPriceName = priceObj.name;
                     }
+                    
+                    this.applyVariantDefaults();
                 }
-            } else {
-                this.availablePrices = [];
-                this.currentVariants = [];
             }
         },
 
@@ -310,28 +308,15 @@ function serviceForm() {
             if (!this.selectedPackage) {
                 this.availablePrices = [];
                 this.currentVariants = [];
-                this.serviceName = '';
                 return;
             }
+            this.selectedPrice = '';
+            this.selectedPriceName = '';
+            this.currentVariants = [];
             
             const pkg = this.packages.find(p => p.id == this.selectedPackage);
-            if (pkg) {
-                this.serviceName = pkg.name;
-
-                if (pkg.currencies[this.selectedCurrency]) {
-                    this.availablePrices = pkg.currencies[this.selectedCurrency].prices;
-                    this.currentVariants = pkg.currencies[this.selectedCurrency].variants;
-                    
-                    if (this.availablePrices.length > 0) {
-                        if (!this.selectedPrice) {
-                            this.selectedPrice = this.availablePrices[0].id;
-                            this.selectedPriceName = this.availablePrices[0].name;
-                        } else {
-                            const price = this.availablePrices.find(p => p.id == this.selectedPrice);
-                            this.selectedPriceName = price ? price.name : this.availablePrices[0].name;
-                        }
-                    }
-                }
+            if (pkg && pkg.currencies[this.selectedCurrency]) {
+                this.availablePrices = pkg.currencies[this.selectedCurrency].prices;
             }
         },
 
@@ -342,6 +327,37 @@ function serviceForm() {
             }
             const price = this.availablePrices.find(p => p.id == this.selectedPrice);
             this.selectedPriceName = price ? price.name : '';
+
+            const pkg = this.packages.find(p => p.id == this.selectedPackage);
+            if (pkg && pkg.currencies[this.selectedCurrency]) {
+                this.currentVariants = pkg.currencies[this.selectedCurrency].variants;
+                
+                this.applyVariantDefaults();
+            }
+        },
+
+        applyVariantDefaults() {
+            this.currentVariants.forEach(variant => {
+                if (variant.type === 'checkbox') {
+                    if (this.selections[variant.id] === undefined || this.selections[variant.id] === null) {
+                        this.selections[variant.id] = [];
+                    } 
+                    else if (!Array.isArray(this.selections[variant.id])) {
+                         let val = this.selections[variant.id];
+                         this.selections[variant.id] = val !== '' ? [parseInt(val)] : [];
+                    }
+                    return;
+                }
+
+                if (this.selections[variant.id] !== undefined && this.selections[variant.id] !== null && this.selections[variant.id] !== '') {
+                    return;
+                }
+
+                const opts = this.getFilteredOptions(variant);
+                if (opts.length > 0) {
+                    this.selections[variant.id] = opts[0].id;
+                }
+            });
         },
 
         hasAnyAvailableOptions() {
