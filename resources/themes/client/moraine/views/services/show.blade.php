@@ -63,38 +63,40 @@
         </div>
         @if(!empty($service->getClientActions()))
             <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
-                @foreach($service->getClientActions() as $action)
+                @foreach($service->getClientActions() as $slug => $action)
                     @if(in_array($action['type'], ['link', 'page']))
                         <a href="{{ ($action['type']) === 'page' 
-                                ? route('client.services.provisioning', ['service' => $service->id, 'slug' => $action['slug']]) 
-                                : route('client.services.provisioning.process', ['service' => $service->id, 'slug' => $action['slug']]) }}"
+                                ? route('client.services.provisioning', ['service' => $service->id, 'slug' => $slug]) 
+                                : route('client.services.provisioning.process', ['service' => $service->id, 'slug' => $slug]) }}"
                         target="{{ ($action['type']) === 'link' ? '_blank' : '_self' }}"
-                        class="w-full flex gap-3 items-center g-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-all duration-200 cursor-pointer"
+                        class="w-full flex gap-3 items-center bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-all duration-200 cursor-pointer"
                         >
                             @if(!empty($action['icon']))
                                 <i class="{{ $action['icon'] }}"></i>
                             @endif
                             <span class="font-medium">{{ $action['label'] }}</span>
                         </a>
+
                     @elseif(($action['type'] ?? '') === 'button')
                         <x-client::modal.trigger 
-                            modal="modalAction-{{ $action['slug'] }}"
-                            class="w-full flex gap-3 items-center g-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-all duration-200 cursor-pointer"
+                            modal="modalAction-{{ $slug }}"
+                            class="w-full flex gap-3 items-center bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-all duration-200 cursor-pointer"
                         >
                             @if(!empty($action['icon']))
                                 <i class="{{ $action['icon'] }}"></i>
                             @endif
                             <span class="font-medium">{{ $action['label'] }}</span>
                         </x-client::modal.trigger>
+
                         <x-client::modal.content
-                            modal="modalAction-{{ $action['slug'] }}"
+                            modal="modalAction-{{ $slug }}"
                             variant="danger"
                             size="xl"
                             position="centered"
                             title="{{ __('common.confirm_modal_title')}}"
                             description="{{ __('common.confirm_modal_description', ['item' => $action['label']]) }}"
                         >
-                            <form action="{{ route('client.services.provisioning.process', ['service' => $service->id, 'slug' => $action['slug']]) }}" method="POST">
+                            <form action="{{ route('client.services.provisioning.process', ['service' => $service->id, 'slug' => $slug]) }}" method="POST">
                                 @csrf
                                 @if(in_array(strtoupper($action['method'] ?? 'POST'), ['PUT', 'PATCH', 'DELETE']))
                                     @method(strtoupper($action['method']))
