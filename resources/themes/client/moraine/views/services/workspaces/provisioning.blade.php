@@ -24,7 +24,7 @@
                             :required="str_contains($field['rules'] ?? '', 'required')"
                             value="{{ old($key, $field['default'] ?? '') }}"
                         />
-                    @elseif(($field['type'] ?? '') === 'password')
+                    @elseif(($field['type']) === 'password')
                         <x-client::input 
                             name="{{ $key }}"
                             label="{{ $field['label'] }}"
@@ -32,7 +32,7 @@
                             type="password"
                             :required="str_contains($field['rules'] ?? '', 'required')"
                         />
-                    @elseif(($field['type'] ?? '') === 'boolean')
+                    @elseif(($field['type']) === 'toggle')
                         <div class="flex items-center pt-6">
                             <x-client::toggle
                                 name="{{ $key }}"
@@ -41,7 +41,7 @@
                                 :checked="(bool)old($key, $field['default'] ?? false)"
                             />
                         </div>
-                    @elseif(($field['type'] ?? '') === 'select')
+                    @elseif(($field['type']) === 'select')
                         <x-client::select
                             name="{{ $key }}"
                             label="{{ $field['label'] }}"

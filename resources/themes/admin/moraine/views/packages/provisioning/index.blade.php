@@ -115,7 +115,7 @@
                                 :required="str_contains($field['rules'] ?? '', 'required')"
                                 value="" 
                             />
-                        @elseif($field['type'] === 'boolean')
+                        @elseif($field['type'] === 'toggle')
                             <div class="flex items-center pt-6">
                                 <x-admin::toggle
                                     name="config[{{ $key }}]"

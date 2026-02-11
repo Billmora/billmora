@@ -39,7 +39,7 @@
                     value=""
                     :required="str_contains($field['rules'] ?? '', 'required')"
                 />
-            @elseif($field['type'] === 'boolean')
+            @elseif($field['type'] === 'toggle')
                 <x-admin::toggle
                     name="{{ $key }}"
                     label="{{ $field['label'] }}"
