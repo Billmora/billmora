@@ -6,6 +6,7 @@ use App\Models\Package;
 use App\Models\PackagePrice;
 use App\Models\VariantOption;
 use App\Models\Coupon;
+use App\Models\Currency;
 use Illuminate\Support\Collection;
 
 class PricingService
@@ -171,9 +172,13 @@ class PricingService
     public function getPackageCurrencies(Package $package): Collection
     {
         $currencies = collect();
+        $hasFreePrice = false;
         
         foreach ($package->prices as $price) {
-            if (strtolower($price->type) === 'free') continue;
+            if (strtolower($price->type) === 'free') {
+                $hasFreePrice = true;
+                continue;
+            }
             
             $rates = $this->decodeRates($price->rates);
             if ($rates) {
@@ -183,6 +188,10 @@ class PricingService
                     }
                 }
             }
+        }
+
+        if ($hasFreePrice) {
+            return Currency::pluck('code');
         }
 
         return $currencies->unique()->values();
