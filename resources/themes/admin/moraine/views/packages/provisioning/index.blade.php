@@ -32,7 +32,6 @@
             
             init() {
                 this.$watch('currentDriver', (value) => {
-                    // Hanya reset instance jika driver berubah manual oleh user, bukan saat load awal
                     if (value !== '{{ $selectedDriver ?? 'none' }}') {
                          this.currentInstance = ''; 
                          this.refreshPage();
@@ -99,16 +98,16 @@
                     @foreach($formFields as $key => $field)
                         @if(in_array($field['type'], ['text', 'email', 'url', 'number']))
                             <x-admin::input 
-                                name="config[{{ $key }}]"
+                                name="{{ $key }}"
                                 label="{{ $field['label'] }}"
                                 helper="{{ $field['helper'] ?? '' }}"
                                 type="{{ $field['type'] }}"
                                 :required="str_contains($field['rules'] ?? '', 'required')"
-                                value="{{ old('config.'.$key, $package->provisioning_config[$key] ?? $field['default'] ?? '') }}"
+                                value="{{ old($key, $package->provisioning_config[$key] ?? $field['default'] ?? '') }}"
                             />
                         @elseif($field['type'] === 'password')
                             <x-admin::input 
-                                name="config[{{ $key }}]"
+                                name="{{ $key }}"
                                 label="{{ $field['label'] }}"
                                 helper="{{ $field['helper'] ?? '' }}"
                                 type="password"
@@ -118,16 +117,16 @@
                         @elseif($field['type'] === 'toggle')
                             <div class="flex items-center pt-6">
                                 <x-admin::toggle
-                                    name="config[{{ $key }}]"
+                                    name="{{ $key }}"
                                     label="{{ $field['label'] }}"
                                     helper="{{ $field['helper'] ?? '' }}"
                                     value="1"
-                                    :checked="(bool)old('config.'.$key, $package->provisioning_config[$key] ?? $field['default'] ?? false)"
+                                    :checked="(bool)old($key, $package->provisioning_config[$key] ?? $field['default'] ?? false)"
                                 />
                             </div>
                         @elseif($field['type'] === 'select')
                             <x-admin::select
-                                name="config[{{ $key }}]"
+                                name="{{ $key }}"
                                 label="{{ $field['label'] }}"
                                 helper="{{ $field['helper'] ?? '' }}"
                                 :required="str_contains($field['rules'] ?? '', 'required')"
@@ -135,7 +134,7 @@
                                 @foreach($field['options'] ?? [] as $optValue => $optLabel)
                                     <option 
                                         value="{{ $optValue }}" 
-                                        {{ (string)old('config.'.$key, $package->provisioning_config[$key] ?? $field['default'] ?? '') === (string)$optValue ? 'selected' : '' }}
+                                        {{ (string)old($key, $package->provisioning_config[$key] ?? $field['default'] ?? '') === (string)$optValue ? 'selected' : '' }}
                                     >
                                         {{ $optLabel }}
                                     </option>

@@ -36,11 +36,7 @@ class ProvisioningController extends Controller
         $selectedDriver = $this->resolveDriver($request->get('driver', $package->provisioning_driver));
         $selectedInstanceId = $request->get('instance', $package->provisioning_id);
 
-        $instances = $selectedDriver
-            ? Provisioning::where('driver', $selectedDriver)
-                          ->where('is_active', true)
-                          ->pluck('name', 'id')
-            : collect();
+        $instances = $selectedDriver ? Provisioning::where('driver', $selectedDriver)->pluck('name', 'id') : collect();
 
         $formFields = $selectedDriver ? $this->getFormFields($selectedDriver, $selectedInstanceId) : [];
 
@@ -118,8 +114,9 @@ class ProvisioningController extends Controller
 
         $plugin = new $className();
         $instanceObj = $instanceId ? Provisioning::find($instanceId) : null;
+        $instanceConfig = $instanceObj->config ?? [];
 
-        return $plugin->getPackageFields($instanceObj->config) ?: [];
+        return $plugin->getPackageFields($instanceConfig) ?: [];
     }
 
     /**
@@ -147,8 +144,8 @@ class ProvisioningController extends Controller
 
         foreach ($fields as $key => $field) {
             if (isset($field['rules'])) {
-                $rules["config.{$key}"] = $field['rules'];
-                $labels["config.{$key}"] = $field['label'] ?? $key;
+                $rules[$key] = $field['rules'];
+                $labels[$key] = $field['label'] ?? $key;
             }
         }
 
@@ -161,8 +158,6 @@ class ProvisioningController extends Controller
                 ->throwResponse();
         }
 
-        $validData = $validator->validated();
-
-        return $validData['config'] ?? [];
+        return $request->only(array_keys($fields));
     }
 }
