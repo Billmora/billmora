@@ -149,7 +149,7 @@ class Service extends Model
     }
 
     /**
-     * Activate the service and set next due date.
+     * Activate the service and set next due date based on billing cycle.
      *
      * @return bool
      */
@@ -159,6 +159,47 @@ class Service extends Model
             'status' => 'active',
             'activated_at' => now(),
             'next_due_date' => $this->calculateNextDueDate(),
+        ]);
+    }
+
+    /**
+     * Suspend the service and record suspension timestamp.
+     *
+     * @return bool
+     */
+    public function suspend()
+    {
+        return $this->update([
+            'status' => 'suspended',
+            'suspended_at' => now(),
+        ]);
+    }
+
+    /**
+     * Unsuspend the service and clear suspension timestamp.
+     *
+     * @return bool
+     */
+    public function unsuspend()
+    {
+        return $this->update([
+            'status' => 'active',
+            'suspended_at' => null,
+        ]);
+    }
+
+    /**
+     * Terminate the service and clear all billing-related timestamps.
+     *
+     * @return bool
+     */
+    public function terminate()
+    {
+        return $this->update([
+            'status' => 'terminated',
+            'terminated_at' => now(),
+            'suspended_at' => null,
+            'next_due_date' => null,
         ]);
     }
 
