@@ -119,7 +119,7 @@ class ProvisioningController extends Controller
         $plugin = new $className();
         $instanceObj = $instanceId ? Provisioning::find($instanceId) : null;
 
-        return $plugin->getPackageFields($instanceObj) ?: [];
+        return $plugin->getPackageFields($instanceObj->config) ?: [];
     }
 
     /**

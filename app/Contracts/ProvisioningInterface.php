@@ -17,10 +17,10 @@ interface ProvisioningInterface
     /**
      * Get package configuration fields for provider integration.
      *
-     * @param array<string, mixed> $instanceConfig Data from Provisioning::$config
+     * @param array|null<string, mixed> $instanceConfig Data from Provisioning::$config
      * @return array<string, mixed>
      */
-    public function getPackageFields(array $instanceConfig = []): array;
+    public function getPackageFields(?array $instanceConfig = []): array;
 
     /**
      * Test connection to provisioning provider.
