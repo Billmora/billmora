@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Package;
 use App\Models\Currency;
 use App\Models\PackagePrice;
+use App\Models\Provisioning;
 use App\Models\Service;
+use App\Models\VariantOption;
 use App\Services\Package\PricingService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -102,15 +104,34 @@ class ServicesController extends Controller
             'service_price' => ['nullable', 'numeric', 'min:0'],
             'service_setup_fee' => ['nullable', 'numeric', 'min:0'],
             'package_id' => ['required', Rule::exists('packages', 'id')],
-            'package_price_id' => ['required', Rule::exists('package_prices', 'id')],
+            'package_price_id' => [
+                'required', 
+                Rule::exists('package_prices', 'id')->where(function ($query) use ($request) {
+                    return $query->where('package_id', $request->package_id);
+                })
+            ],
             'variant_selections' => ['nullable', 'array'],
         ]);
 
         $service = Service::findOrFail($id);
         $package = Package::findOrFail($validated['package_id']);
-        $packagePrice = PackagePrice::where('package_id', $package->id)
-            ->where('id', $validated['package_price_id'])
-            ->firstOrFail();
+        
+        $packagePrice = PackagePrice::findOrFail($validated['package_price_id']);
+
+        $provisioningId = $service->provisioning_id;
+
+        if ($service->package_id != $package->id) {
+            $provisioningId = null;
+
+            if ($package->provisioning_id) {
+                $provisioningId = $package->provisioning_id;
+            } elseif ($package->provisioning_driver) {
+                $provisioningId = Provisioning::where('driver', $package->provisioning_driver)
+                    ->where('is_active', true)
+                    ->inRandomOrder()
+                    ->value('id');
+            }
+        }
 
         $variantSelections = [];
         if (!empty($validated['variant_selections'])) {
@@ -119,6 +140,35 @@ class ServicesController extends Controller
                     $variantSelections[$variantId] = array_map('intval', $optionVal);
                 } else {
                     $variantSelections[$variantId] = (int) $optionVal;
+                }
+            }
+        }
+
+        $configuration = $package->provisioning_config ?? [];
+        
+        if (!empty($variantSelections)) {
+            $optionIds = collect($variantSelections)->flatten()->filter()->toArray();
+            
+            if (!empty($optionIds)) {
+                $options = VariantOption::with('variant')
+                    ->whereIn('id', $optionIds)
+                    ->get();
+
+                foreach ($options as $option) {
+                    $key = $option->variant->code ?? null;
+                    $value = $option->value;
+
+                    if (empty($key)) continue;
+
+                    if (is_numeric($value)) {
+                        $value = $value + 0;
+                    } elseif (strtolower($value) === 'true') {
+                        $value = true;
+                    } elseif (strtolower($value) === 'false') {
+                        $value = false;
+                    }
+
+                    $configuration[$key] = $value;
                 }
             }
         }
@@ -151,6 +201,8 @@ class ServicesController extends Controller
             'setup_fee' => $setupFee,
             'variant_selections' => $variantSelections,
             'next_due_date' => $validated['service_next_due_date'],
+            'provisioning_id' => $provisioningId,
+            'configuration' => $configuration,
         ]);
 
         return redirect()->route('admin.services.edit', $id)
