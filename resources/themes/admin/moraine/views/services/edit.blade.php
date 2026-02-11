@@ -96,10 +96,9 @@
                 x-on:disabled="!selectedCurrency"
             >
                 <template x-for="pkg in availablePackages" :key="pkg.id">
-                    <option :value="pkg.id" x-text="pkg.catalog_name + ' - ' + pkg.name"></option>
+                    <option :value="pkg.id" :selected="pkg.id == selectedPackage" x-text="pkg.catalog_name + ' - ' + pkg.name"></option>
                 </template>
             </x-admin::select>
-
             <x-admin::select 
                 name="package_price_id"
                 label="{{ __('admin/services.billing_cycle_label') }}"
@@ -109,7 +108,7 @@
                 x-on:disabled="!selectedPackage"
             >
                 <template x-for="price in availablePrices" :key="price.id">
-                    <option :value="price.id" x-text="price.name"></option>
+                    <option :value="price.id" :selected="price.id == selectedPrice" x-text="price.name"></option>
                 </template>
             </x-admin::select>
         </div>
@@ -236,7 +235,7 @@ function serviceForm() {
         selectedPackage: '{{ old("package_id", $service->package_id) }}',
         selectedPrice: '{{ old("package_price_id", $service->package_price_id) }}',
         
-        selections: @json(old('variant_selections', $service->variant_selections ?? [])),
+        selections: @json(old('variant_selections', $service->variant_selections ?? (object)[])),
         
         selectedPriceName: '',
         
@@ -277,13 +276,22 @@ function serviceForm() {
                     this.availablePrices = pkg.currencies[this.selectedCurrency].prices;
                     this.currentVariants = pkg.currencies[this.selectedCurrency].variants;
                     
-                    const priceObj = this.availablePrices.find(p => p.id == this.selectedPrice);
-                    if (priceObj) {
-                        this.selectedPriceName = priceObj.name;
+                    const currentPrice = this.availablePrices.find(p => p.id == this.selectedPrice);
+                    
+                    if (this.availablePrices.length > 0) {
+                        if (!this.selectedPrice || !currentPrice) {
+                            this.selectedPrice = this.availablePrices[0].id;
+                            this.selectedPriceName = this.availablePrices[0].name;
+                        } else {
+                            this.selectedPriceName = currentPrice.name;
+                        }
                     }
                     
                     this.applyVariantDefaults();
                 }
+            } else {
+                this.availablePrices = [];
+                this.currentVariants = [];
             }
         },
 
@@ -299,7 +307,7 @@ function serviceForm() {
             
             this.availablePrices = []; 
             this.currentVariants = [];
-            this.selections = {};
+            this.selections = {}; 
 
             this.availablePackages = this.packages.filter(pkg => pkg.currencies[this.selectedCurrency] !== undefined);
         },
@@ -310,13 +318,18 @@ function serviceForm() {
                 this.currentVariants = [];
                 return;
             }
-            this.selectedPrice = '';
-            this.selectedPriceName = '';
-            this.currentVariants = [];
             
             const pkg = this.packages.find(p => p.id == this.selectedPackage);
             if (pkg && pkg.currencies[this.selectedCurrency]) {
                 this.availablePrices = pkg.currencies[this.selectedCurrency].prices;
+                this.currentVariants = pkg.currencies[this.selectedCurrency].variants;
+                
+                if (this.availablePrices.length > 0) {
+                    this.selectedPrice = this.availablePrices[0].id;
+                    this.selectedPriceName = this.availablePrices[0].name;
+                }
+                this.selections = {};
+                this.applyVariantDefaults();
             }
         },
 
@@ -331,7 +344,6 @@ function serviceForm() {
             const pkg = this.packages.find(p => p.id == this.selectedPackage);
             if (pkg && pkg.currencies[this.selectedCurrency]) {
                 this.currentVariants = pkg.currencies[this.selectedCurrency].variants;
-                
                 this.applyVariantDefaults();
             }
         },
@@ -341,8 +353,7 @@ function serviceForm() {
                 if (variant.type === 'checkbox') {
                     if (this.selections[variant.id] === undefined || this.selections[variant.id] === null) {
                         this.selections[variant.id] = [];
-                    } 
-                    else if (!Array.isArray(this.selections[variant.id])) {
+                    } else if (!Array.isArray(this.selections[variant.id])) {
                          let val = this.selections[variant.id];
                          this.selections[variant.id] = val !== '' ? [parseInt(val)] : [];
                     }
@@ -352,7 +363,6 @@ function serviceForm() {
                 if (this.selections[variant.id] !== undefined && this.selections[variant.id] !== null && this.selections[variant.id] !== '') {
                     return;
                 }
-
                 const opts = this.getFilteredOptions(variant);
                 if (opts.length > 0) {
                     this.selections[variant.id] = opts[0].id;
