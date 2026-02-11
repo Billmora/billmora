@@ -9,26 +9,33 @@
         @method('PUT')
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
             <div class="w-full">
-                <label for="user_id" class="flex text-slate-600 font-semibold mb-1">User</label>
+                <label for="user_id" class="flex text-slate-600 font-semibold mb-1">
+                    {{ __('admin/services.user_label') }}
+                </label>
                 <a href="{{ route('admin.users.summary', ['id' => $service->user_id]) }}" class="relative inline-block max-w-150 w-full group" target="_blank">
                     <input type="text" name="user_id" id="user_id" value="{{ $service->user->email }}" class="w-full px-3 py-2.25 bg-billmora-1 placeholder:text-gray-400 border-2 border-billmora-2 rounded-xl cursor-not-allowed" disabled>
                     <div class="absolute top-1/2 -translate-y-1/2 right-1.5">
                         <button type="button" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">
-                            Go to User
+                            {{ __('admin/services.go_to_user') }}
                         </button>
                     </div>
                 </a>
+                <p class="mt-1 text-sm text-slate-500">
+                    {{ __('admin/services.user_helper') }}
+                </p>
             </div>
             <x-admin::input 
                 name="service_name"
-                label="Name"
+                label="{{ __('admin/services.name_label') }}"
+                helper="{{ __('admin/services.name_helper') }}"
                 value="{{ $service->name }}"
                 required
                 disabled
             />
             <x-admin::select 
                 name="service_currency"
-                label="Currency"
+                label="{{ __('admin/services.currency_label') }}"
+                helper="{{ __('admin/services.currency_helper') }}"
                 required
                 x-model="selectedCurrency"
             >
@@ -38,7 +45,8 @@
             </x-admin::select>
             <x-admin::select
                 name="service_status"
-                label="{{ __('admin/orders.status_label') }}"
+                label="{{ __('admin/services.status_label') }}"
+                helper="{{ __('admin/services.status_helper') }}"
                 required
             >
                 @foreach(['pending', 'active', 'suspended', 'terminated', 'cancelled'] as $status)
@@ -47,37 +55,42 @@
             </x-admin::select>
             <x-admin::toggle 
                 name="service_recalculate_price"
-                label="Recalculate on Save?"
+                label="{{ __('admin/services.recalculate_label') }}"
+                helper="{{ __('admin/services.recalculate_helper') }}"
             />
             <x-admin::input 
                 name="service_next_due_date" 
-                label="Next Due Date" 
+                label="{{ __('admin/services.expires_label') }}"
+                helper="{{ __('admin/services.expires_helper') }}"
                 type="date"
                 value="{{ old('service_next_due_date', $service->next_due_date?->format('Y-m-d')) }}"
             />
             <x-admin::input 
                 name="service_price" 
-                label="Price" 
+                label="{{ __('admin/services.price_label') }}"
+                helper="{{ __('admin/services.price_helper') }}"
                 type="number" 
                 step="0.01"
                 value="{{ old('service_price', $service->price) }}"
             />
             <x-admin::input 
                 name="service_setup_fee" 
-                label="Setup Fee" 
+                label="{{ __('admin/services.setup_fee_label') }}"
+                helper="{{ __('admin/services.setup_fee_helper') }}"
                 type="number" 
                 step="0.01"
                 value="{{ old('service_setup_fee', $service->setup_fee) }}"
             />
         </div>
         <div>
-            <h4 class="text-lg font-semibold text-slate-600">Package Configuration</h4>
-            <span class="text-slate-500">Define the base package and billing period for this service.</span>
+            <h4 class="text-lg font-semibold text-slate-600">{{ __('admin/services.package_configuration_label') }}</h4>
+            <span class="text-slate-500">{{ __('admin/services.package_configuration_helper') }}</span>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
             <x-admin::select 
                 name="package_id"
-                label="Package"
+                label="{{ __('admin/services.package_label') }}"
+                helper="{{ __('admin/services.package_helper') }}"
                 required
                 x-model="selectedPackage"
                 x-on:disabled="!selectedCurrency"
@@ -89,7 +102,8 @@
 
             <x-admin::select 
                 name="package_price_id"
-                label="Price"
+                label="{{ __('admin/services.billing_cycle_label') }}"
+                helper="{{ __('admin/services.billing_cycle_helper') }}"
                 required
                 x-model="selectedPrice"
                 x-on:disabled="!selectedPackage"
@@ -102,8 +116,8 @@
         <template x-if="currentVariants.length > 0 && hasAnyAvailableOptions()">
             <div>
                 <div class="mb-2">
-                    <h4 class="text-lg font-semibold text-slate-600">Variant Options</h4>
-                    <span class="text-slate-500">Select additional variants are available for the chosen package.</span>
+                    <h4 class="text-lg font-semibold text-slate-600">{{ __('admin/services.variant_option_label') }}</h4>
+                    <span class="text-slate-500">{{ __('admin/services.variant_option_helper') }}</span>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
                     <template x-for="variant in currentVariants" :key="variant.id">
