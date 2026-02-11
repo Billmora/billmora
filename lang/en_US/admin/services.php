@@ -28,4 +28,39 @@ return [
     
     'catalog_label' => 'Catalog',
     'go_to_user' => 'Go to User',
+
+    'provisioning' => [
+        'driver_missing' => 'No provisioning driver assigned to this service.',
+        'driver_class_missing' => 'Driver class for :driver not found.',
+        'create' => [
+            'invalid_status' => 'Service must be pending or terminated to be created.',
+            'success' => 'Service created and activated successfully.',
+            'failed' => 'Create failed: :message',
+        ],
+        'suspend' => [
+            'invalid_status' => 'Only active services can be suspended.',
+            'success' => 'Service suspended successfully.',
+            'failed' => 'Suspend failed: :message',
+        ],
+        'unsuspend' => [
+            'invalid_status' => 'Only suspended services can be unsuspended.',
+            'success' => 'Service unsuspended successfully.',
+            'failed' => 'Unsuspend failed: :message',
+        ],
+        'terminate' => [
+            'already_terminated' => 'Service is already terminated.',
+            'success' => 'Service terminated successfully.',
+            'failed' => 'Termination failed: :message',
+        ],
+        'renew' => [
+            'invalid_status' => 'Only active or suspended services can be renewed.',
+            'success' => 'Service renewed on provider successfully.',
+            'failed' => 'Renew failed: :message',
+        ],
+        'scale' => [
+            'invalid_status' => 'Only active services can be scaled.',
+            'success' => 'Service scaled successfully.',
+            'failed' => 'Scaling failed: :message',
+        ],
+    ],
 ];
