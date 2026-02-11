@@ -75,15 +75,13 @@ class InstanceController extends Controller
 
         $validated = $request->validate($rules);
 
-        $configKeys = array_keys($configFields);
-        
-        $configValues = $request->only($configKeys);
+        $config = $request->only(array_keys($configFields));
 
         $instance = Provisioning::create([
             'name' => $validated['instance_name'],
             'driver' => $driver,
-            'is_active' => $validated['instance_active'],
-            'config' => $configValues,
+            'is_active' => (bool) $validated['instance_active'],
+            'config' => (array) $config,
         ]);
 
         return redirect()->route('admin.provisionings.instance', $driver)->with('success', __('common.create_success', ['attribute' => $instance->name]));
@@ -145,14 +143,12 @@ class InstanceController extends Controller
 
         $validated = $request->validate($rules);
 
-        $configKeys = array_keys($configFields);
-        
-        $newConfig = $request->only($configKeys);
+        $config = $request->only(array_keys($configFields));
 
         $instance->update([
             'name' => $validated['instance_name'],
             'is_active' => (bool) $validated['instance_active'],
-            'config' => $newConfig, 
+            'config' => (array) $config, 
         ]);
 
         return redirect()
