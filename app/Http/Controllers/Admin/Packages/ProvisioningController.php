@@ -63,11 +63,15 @@ class ProvisioningController extends Controller
 
         $validated = $request->validate([
             'provisioning_driver' => ['required', 'string'],
-            'instance_reference'  => ['nullable', Rule::exists('provisionings', 'id')],
+            'instance_reference'  => [
+                Rule::requiredIf($request->provisioning_driver !== 'none'),
+                'nullable',
+                Rule::exists('provisionings', 'id')
+            ],
         ]);
 
         $rawDriver = $validated['provisioning_driver'];
-        $instanceId = ($rawDriver === 'none') ? null : $validated['instance_reference'];
+        $instanceId = ($rawDriver === 'none') ? null : ($validated['instance_reference'] ?? null);
         $driver = ($rawDriver === 'none') ? null : $this->resolveDriver($rawDriver);
 
         $configData = [];
