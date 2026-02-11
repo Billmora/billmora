@@ -30,5 +30,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectUsersTo(fn () => route('client.dashboard'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (\Exception $e) {
+            if ($e->getCode() === 801) {
+                return Redirect::back()->with('error', $e->getMessage());
+            }
+        });
     })->create();

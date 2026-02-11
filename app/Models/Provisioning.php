@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use App\Contracts\ProvisioningInterface;
 use Illuminate\Database\Eloquent\Model;
 
 class Provisioning extends Model
 {
+    public const ERROR_DISABLED = 801;
+
     protected $table = 'provisionings';
 
     /**
@@ -47,6 +48,10 @@ class Provisioning extends Model
      */
     public function getPluginInstance()
     {
+        if (!$this->is_active) {
+            throw new \Exception(__('validation.provisioning_disabled', ['name' => $this->name]), self::ERROR_DISABLED);
+        }
+
         $className = "Plugin\\Provisioning\\{$this->driver}\\{$this->driver}";
 
         if (class_exists($className)) {

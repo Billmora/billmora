@@ -175,6 +175,7 @@ return [
     | specify a specific custom language line for a given attribute rule.
     |
     */
+    'provisioning_disabled' => 'The provisioning :name is currently disabled. Action cannot be processed.',
 
     // Custom validation here
 
