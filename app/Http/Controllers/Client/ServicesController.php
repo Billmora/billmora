@@ -79,13 +79,14 @@ class ServicesController extends Controller
         }
 
         $driver = $service->provisioning?->getPluginInstance();
+        $instanceConfig = $service->provisioning?->config ?? [];
 
         if (!$driver) {
             return redirect()->route('client.services.show', $service->id)
                 ->with('error', __('client/services.provisioning.not_found'));
         }
 
-        $pageSchema = $driver->getClientActionForm($service, $slug);
+        $pageSchema = $driver->getClientActionForm($service, $instanceConfig, $slug);
 
         if (empty($pageSchema)) {
             return redirect()->route('client.services.show', $service->id)
@@ -112,20 +113,23 @@ class ServicesController extends Controller
         }
 
         $driver = $service->provisioning?->getPluginInstance();
+        $instanceConfig = $service->provisioning?->config ?? [];
         
         if (!$driver) {
             return back()->with('error', __('client/services.provisioning.unavailable'));
         }
 
-        $schema = $driver->getClientActionForm($service, $slug);
+        $pageSchema = $driver->getClientActionForm($service, $instanceConfig, $slug);
 
-        if ($schema && $request->isMethod('post')) {
-            $rules = $this->extractValidationRules($schema);
-            $validated = $request->validate($rules);
+        $actionData = $request->all();
+
+        if ($pageSchema && $request->isMethod('post')) {
+            $rules = $this->extractValidationRules($pageSchema);
+            $actionData = $request->validate($rules);
         }
 
         try {
-            $result = $driver->processClientAction($service, $slug, $request->all());
+            $result = $driver->processClientAction($service, $instanceConfig, $slug, $actionData);
 
             if ($result instanceof \Illuminate\Http\RedirectResponse || $result instanceof \Illuminate\Http\Response) {
                 return $result;
@@ -134,7 +138,6 @@ class ServicesController extends Controller
             if (is_string($result) && filter_var($result, FILTER_VALIDATE_URL)) {
                 return redirect()->away($result);
             }
-
 
             return redirect()->route('client.services.show', $service->id)
                 ->with('success', __('client/services.action.success'));
