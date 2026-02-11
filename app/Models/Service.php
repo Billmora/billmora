@@ -231,13 +231,15 @@ class Service extends Model
             return [];
         }
 
-        $provisioning = $this->provisioning->getPluginInstance();
+        $driver = $this->provisioning->driver;
+        $className = "Plugin\\Provisioning\\{$driver}\\{$driver}";
 
-        if ($provisioning) {
+        if (class_exists($className)) {
             try {
-                return $provisioning->getClientActions($this, $this->configuration ?? []);
+                $plugin = new $className();
+                $instanceConfig = $this->provisioning->config ?? [];
+                return $plugin->getClientActions($this, $instanceConfig);
             } catch (\Exception $e) {
-                // \Log::error($e->getMessage());
                 return [];
             }
         }
