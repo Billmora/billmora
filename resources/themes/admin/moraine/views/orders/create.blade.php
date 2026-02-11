@@ -46,11 +46,9 @@
                 helper="{{ __('admin/orders.status_helper') }}"
                 required
             >
-                <option value="pending" {{ old('order_status') === 'pending' ? 'selected' : '' }}>Pending</option>
-                <option value="processing" {{ old('order_status') === 'processing' ? 'selected' : '' }}>Processing</option>
-                <option value="completed" {{ old('order_status') === 'completed' ? 'selected' : '' }}>Completed</option>
-                <option value="cancelled" {{ old('order_status') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                <option value="failed" {{ old('order_status') === 'failed' ? 'selected' : '' }}>Failed</option>
+                @foreach(['pending', 'processing', 'completed', 'cancelled', 'failed'] as $status)
+                    <option value="{{ $status }}" {{ old('order_status') === $status ? 'selected' : '' }}>{{ ucfirst($status) }}</option>
+                @endforeach
             </x-admin::select>
             <x-admin::toggle
                 name="order_email"
@@ -98,15 +96,17 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
                     <template x-for="variant in currentVariants" :key="variant.id">
                         <template x-if="getFilteredOptions(variant).length > 0">
-                            <div>
+                            <div class="col-span-1">
                                 <label class="block text-sm font-semibold text-slate-600 mb-2" x-text="variant.name"></label>
                                 <template x-if="variant.type === 'select'">
                                     <select 
                                         :name="'variant_options[' + variant.id + ']'"
                                         class="w-full px-3 py-2 border-2 border-billmora-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-billmora-primary cursor-pointer"
+                                        x-model="selections[variant.id]"
                                     >
+                                        <option value="" disabled selected>Select Option</option>
                                         <template x-for="option in getFilteredOptions(variant)" :key="option.id">
-                                            <option :value="option.id" x-text="option.name"></option>
+                                            <option :value="option.id" x-text="option.name" :selected="selections[variant.id] == option.id"></option>
                                         </template>
                                     </select>
                                 </template>
@@ -118,7 +118,7 @@
                                                     type="radio" 
                                                     :name="'variant_options[' + variant.id + ']'"
                                                     :value="option.id"
-                                                    :checked="index === 0"
+                                                    x-model="selections[variant.id]"
                                                     class="accent-billmora-primary"
                                                 />
                                                 <span x-text="option.name"></span>
@@ -127,7 +127,15 @@
                                     </div>
                                 </template>
                                 <template x-if="variant.type === 'slider'">
-                                    <div x-data="{ sliderIdx: 0 }" class="mt-4">
+                                    <div x-data="{ 
+                                        sliderIdx: 0,
+                                        init() {
+                                            let opts = this.getFilteredOptions(variant);
+                                            let selectedId = this.selections[variant.id];
+                                            let foundIndex = opts.findIndex(o => o.id == selectedId);
+                                            this.sliderIdx = foundIndex !== -1 ? foundIndex : 0;
+                                        }
+                                    }" class="mt-4">
                                         <div class="relative mb-10">
                                             <input 
                                                 type="range" 
@@ -136,6 +144,7 @@
                                                 step="1" 
                                                 class="w-full h-2 cursor-pointer accent-billmora-primary"
                                                 x-model="sliderIdx"
+                                                @input="selections[variant.id] = getFilteredOptions(variant)[sliderIdx]?.id"
                                             />
                                             <template x-for="(option, i) in getFilteredOptions(variant)" :key="option.id">
                                                 <span 
@@ -166,6 +175,7 @@
                                                     type="checkbox" 
                                                     :name="'variant_options[' + variant.id + '][]'"
                                                     :value="option.id"
+                                                    x-model="selections[variant.id]"
                                                     class="accent-billmora-primary"
                                                 />
                                                 <span x-text="option.name"></span>
@@ -186,16 +196,14 @@
     </div>
 </form>
 <script>
-/**
- * Initialize Alpine.js component for order form with dynamic package and variant handling.
- *
- * @return object
- */
 function orderForm() {
     return {
         selectedCurrency: '{{ old("order_currency") }}',
         selectedPackage: '{{ old("order_package") }}',
         selectedPrice: '{{ old("order_package_billing") }}',
+        
+        selections: @json(old('variant_options', [])),
+        
         selectedPriceName: '',
         
         availablePackages: [],
@@ -204,35 +212,12 @@ function orderForm() {
         
         packages: @json($packagesPayload),
         
-        /**
-         * Initialize watchers and load old form values if present.
-         *
-         * @return void
-         */
         init() {
-            this.$watch('selectedCurrency', (newValue, oldValue) => {
-                if (oldValue === undefined) return;
-                
-                if (newValue && newValue !== oldValue) {
-                    this.onCurrencyChange();
-                }
-            });
-            
-            this.$watch('selectedPackage', (newValue, oldValue) => {
-                if (oldValue === undefined) return;
-                
-                if (newValue && newValue !== oldValue) {
-                    this.onPackageChange();
-                }
-            });
-            
-            this.$watch('selectedPrice', (newValue, oldValue) => {
-                if (oldValue === undefined) return;
-                
-                if (newValue && newValue !== oldValue) {
-                    this.onPriceChange();
-                }
-            });
+            this.sanitizeSelections();
+
+            this.$watch('selectedCurrency', (val, old) => { if(val && val !== old) this.onCurrencyChange(); });
+            this.$watch('selectedPackage', (val, old) => { if(val && val !== old) this.onPackageChange(); });
+            this.$watch('selectedPrice', (val, old) => { if(val && val !== old) this.onPriceChange(); });
             
             this.$nextTick(() => {
                 if (this.selectedCurrency) {
@@ -241,11 +226,16 @@ function orderForm() {
             });
         },
         
-        /**
-         * Restore form state from old input values after validation errors.
-         *
-         * @return void
-         */
+        sanitizeSelections() {
+            for (const key in this.selections) {
+                if (Array.isArray(this.selections[key])) {
+                    this.selections[key] = this.selections[key].map(id => parseInt(id));
+                } else if (this.selections[key] !== null && this.selections[key] !== '') {
+                    this.selections[key] = parseInt(this.selections[key]);
+                }
+            }
+        },
+
         initializeFromOldValues() {
             this.availablePackages = this.packages.filter(pkg => {
                 return pkg.currencies[this.selectedCurrency] !== undefined;
@@ -266,11 +256,6 @@ function orderForm() {
             }
         },
         
-        /**
-         * Handle currency change and reset dependent selections.
-         *
-         * @return void
-         */
         onCurrencyChange() {
             if (!this.selectedCurrency) {
                 this.availablePackages = [];
@@ -282,17 +267,13 @@ function orderForm() {
             this.selectedPriceName = '';
             this.availablePrices = [];
             this.currentVariants = [];
+            this.selections = {};
             
             this.availablePackages = this.packages.filter(pkg => {
                 return pkg.currencies[this.selectedCurrency] !== undefined;
             });  
         },
         
-        /**
-         * Handle package change and load available prices.
-         *
-         * @return void
-         */
         onPackageChange() {
             if (!this.selectedPackage) {
                 this.availablePrices = [];
@@ -310,11 +291,6 @@ function orderForm() {
             }
         },
         
-        /**
-         * Handle billing cycle change and load variants with matching prices.
-         *
-         * @return void
-         */
         onPriceChange() {
             if (!this.selectedPrice) {
                 this.selectedPriceName = '';
@@ -331,11 +307,6 @@ function orderForm() {
             }
         },
         
-        /**
-         * Check if any variant has options available for selected billing cycle.
-         *
-         * @return boolean
-         */
         hasAnyAvailableOptions() {
             if (!this.selectedPriceName) return false;
             
@@ -344,12 +315,6 @@ function orderForm() {
             });
         },
         
-        /**
-         * Get variant options that have prices for selected billing cycle.
-         *
-         * @param object variant
-         * @return array
-         */
         getFilteredOptions(variant) {
             if (!this.selectedPriceName) {
                 return [];
