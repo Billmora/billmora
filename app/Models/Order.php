@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Billmora;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -159,7 +160,7 @@ class Order extends Model
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopePending($query)
+    public function scopePending(Builder $query)
     {
         return $query->where('status', 'pending');
     }
@@ -170,7 +171,7 @@ class Order extends Model
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeCompleted($query)
+    public function scopeCompleted(Builder $query)
     {
         return $query->where('status', 'completed');
     }

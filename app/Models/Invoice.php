@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Billmora;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
@@ -157,7 +158,7 @@ class Invoice extends Model
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeUnpaid($query)
+    public function scopeUnpaid(Builder $query)
     {
         return $query->where('status', 'unpaid');
     }
@@ -168,7 +169,7 @@ class Invoice extends Model
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopePaid($query)
+    public function scopePaid(Builder $query)
     {
         return $query->where('status', 'paid');
     }

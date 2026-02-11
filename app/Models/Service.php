@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
@@ -129,7 +130,7 @@ class Service extends Model
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeActive($query)
+    public function scopeActive(Builder $query)
     {
         return $query->where('status', 'active');
     }
@@ -140,7 +141,7 @@ class Service extends Model
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopePending($query)
+    public function scopePending(Builder $query)
     {
         return $query->where('status', 'pending');
     }

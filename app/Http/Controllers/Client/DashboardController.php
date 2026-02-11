@@ -21,17 +21,17 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         $activeServicesCount = Service::where('user_id', $user->id)
-            ->where('status', 'active')
+            ->active()
             ->count();
 
         $unpaidInvoicesCount = Invoice::whereHas('order', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             })
-            ->where('status', 'unpaid')
+            ->unpaid()
             ->count();
 
         $activeServices = Service::where('user_id', $user->id)
-            ->where('status', 'active')
+            ->active()
             ->with(['package.catalog'])
             ->select('id', 'name', 'package_id', 'next_due_date')
             ->paginate(10);
