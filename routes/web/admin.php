@@ -58,6 +58,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/', [Admin\ServicesController::class, 'index'])->name('admin.services');
         Route::get('/{service}/edit', [Admin\ServicesController::class, 'edit'])->name('admin.services.edit');
         Route::put('/{service}/edit', [Admin\ServicesController::class, 'update'])->name('admin.services.update');
+
+        Route::post('/{service}/create', [Admin\Services\ProvisioningController::class, 'create'])->name('admin.services.create');
+        Route::post('/{service}/suspend', [Admin\Services\ProvisioningController::class, 'suspend'])->name('admin.services.suspend');
+        Route::post('/{service}/unsuspend', [Admin\Services\ProvisioningController::class, 'unsuspend'])->name('admin.services.unsuspend');
+        Route::post('/{service}/terminate', [Admin\Services\ProvisioningController::class, 'terminate'])->name('admin.services.terminate');
+        Route::post('/{service}/renew', [Admin\Services\ProvisioningController::class, 'renew'])->name('admin.services.renew');
+        Route::post('/{service}/scale', [Admin\Services\ProvisioningController::class, 'scale'])->name('admin.services.scale');
     });
 
     /**

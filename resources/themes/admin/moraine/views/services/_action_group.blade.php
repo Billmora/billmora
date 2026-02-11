@@ -1,6 +1,6 @@
 <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl h-fit">
     <h3 class="text-lg font-semibold text-slate-600 border-b-2 border-billmora-2 pb-4 mb-2">Service Actions</h3>
-    @if(in_array($service->status, ['pending', 'failed']))
+    @if(in_array($service->status, ['pending', 'terminated']))
         <x-admin::modal.trigger modal="serviceCreateModal" class="w-full flex gap-2 items-center justify-center bg-green-600 hover:bg-green-700 px-3 py-2.5 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer font-medium">
             <x-lucide-badge-plus class="w-5 h-5" />
             Create
@@ -45,7 +45,7 @@
     title="{{ __('common.confirm_modal_title')}}"
     description="{{ __('common.confirm_modal_description', ['item' => 'Create']) }}"
 >
-    <form action="#" method="POST">
+    <form action="{{ route('admin.services.create', ['service' => $service->id]) }}" method="POST">
         @csrf
         <div class="flex justify-end gap-2 mt-4">
             <x-admin::modal.trigger 
@@ -69,7 +69,7 @@
     title="{{ __('common.confirm_modal_title')}}"
     description="{{ __('common.confirm_modal_description', ['item' => 'Suspend']) }}"
 >
-    <form action="#" method="POST">
+    <form action="{{ route('admin.services.suspend', ['service' => $service->id]) }}" method="POST">
         @csrf
         <div class="flex justify-end gap-2 mt-4">
             <x-admin::modal.trigger 
@@ -93,7 +93,7 @@
     title="{{ __('common.confirm_modal_title')}}"
     description="{{ __('common.confirm_modal_description', ['item' => 'Unsuspend']) }}"
 >
-    <form action="#" method="POST">
+    <form action="{{ route('admin.services.unsuspend', ['service' => $service->id]) }}" method="POST">
         @csrf
         <div class="flex justify-end gap-2 mt-4">
             <x-admin::modal.trigger 
@@ -117,7 +117,7 @@
     title="{{ __('common.confirm_modal_title')}}"
     description="{{ __('common.confirm_modal_description', ['item' => 'Terminate']) }}"
 >
-    <form action="#" method="POST">
+    <form action="{{ route('admin.services.terminate', ['service' => $service->id]) }}" method="POST">
         @csrf
         <div class="flex justify-end gap-2 mt-4">
             <x-admin::modal.trigger 
@@ -141,7 +141,7 @@
     title="{{ __('common.confirm_modal_title')}}"
     description="{{ __('common.confirm_modal_description', ['item' => 'Force Renew']) }}"
 >
-    <form action="#" method="POST">
+    <form action="{{ route('admin.services.renew', ['service' => $service->id]) }}#" method="POST">
         @csrf
         <div class="flex justify-end gap-2 mt-4">
             <x-admin::modal.trigger 
@@ -158,14 +158,14 @@
     </form>
 </x-admin::modal.content>
 <x-admin::modal.content
-    modal="serviceScaleodal"
+    modal="serviceScaleModal"
     variant="danger"
     size="xl"
     position="centered"
     title="{{ __('common.confirm_modal_title')}}"
     description="{{ __('common.confirm_modal_description', ['item' => 'Scale']) }}"
 >
-    <form action="#" method="POST">
+    <form action="{{ route('admin.services.scale', ['service' => $service->id]) }}" method="POST">
         @csrf
         <div class="flex justify-end gap-2 mt-4">
             <x-admin::modal.trigger 
