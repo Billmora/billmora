@@ -12,6 +12,18 @@ use Illuminate\Support\Facades\Validator;
 class ProvisioningsController extends Controller
 {
     /**
+     * Applies permission-based middleware for accessing provisionings plugin.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:provisionings.view')->only(['index']);
+        $this->middleware('permission:provisionings.install')->only(['install']);
+        $this->middleware('permission:provisionings.uninstall')->only(['uninstall']);
+    }
+
+    /**
      * Display a list of available provisioning plugins.
      *
      * @param \Illuminate\Http\Request $request

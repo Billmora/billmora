@@ -11,6 +11,19 @@ use Illuminate\Validation\Rule;
 class InstanceController extends Controller
 {
     /**
+     * Applies permission-based middleware for accessing instance provisionings.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:provisionings.instance.view')->only(['index']);
+        $this->middleware('permission:provisionings.instance.create')->only(['create', 'store']);
+        $this->middleware('permission:provisionings.instance.update')->only(['edit', 'update', 'testConnection']);
+        $this->middleware('permission:provisionings.instance.delete')->only(['destroy']);
+    }
+
+    /**
      * Display all instances for the specified provisioning driver.
      *
      * @param string $driver
