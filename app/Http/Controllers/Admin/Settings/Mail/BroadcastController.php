@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin\Settings\Mail;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\MailBroadcastJob;
-use App\Models\MailBroadcast;
+use App\Jobs\BroadcastJob;
+use App\Models\Broadcast;
 use App\Models\User;
 use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
@@ -36,7 +36,7 @@ class BroadcastController extends Controller
     {
         $search = $request->query('searchBroadcastMail');
 
-        $broadcasts = MailBroadcast::select('id', 'subject', 'recipient_group', 'schedule_at', 'created_at')
+        $broadcasts = Broadcast::select('id', 'subject', 'recipient_group', 'schedule_at', 'created_at')
                                 ->when($search, function ($query, $search) {
                                     $query->where(function ($q) use ($search) {
                                         $q->where('subject', 'like', "%{$search}%");
@@ -100,7 +100,7 @@ class BroadcastController extends Controller
                 break;
         }
 
-        $broadcast = MailBroadcast::create([
+        $broadcast = Broadcast::create([
             'subject' => $validated['broadcast_subject'],
             'body' => $validated['broadcast_body'],
             'recipient_group' => $recipient_group,
@@ -113,9 +113,9 @@ class BroadcastController extends Controller
         $this->recordCreate('mail.broadcast.create', $broadcast->toArray());
 
         if ($broadcast->schedule_at) {
-            MailBroadcastJob::dispatch($broadcast)->delay($broadcast->schedule_at);
+            BroadcastJob::dispatch($broadcast)->delay($broadcast->schedule_at);
         } else {
-            MailBroadcastJob::dispatch($broadcast);
+            BroadcastJob::dispatch($broadcast);
         }
 
         return redirect()->route('admin.settings.mail.broadcast')->with('success', __('common.create_success', ['attribute' => __('admin/settings/mail.tabs.broadcast')]));
@@ -131,7 +131,7 @@ class BroadcastController extends Controller
      */
     public function edit($id)
     {
-        $broadcast = MailBroadcast::findOrFail($id);
+        $broadcast = Broadcast::findOrFail($id);
         $users = User::select('id', 'first_name', 'last_name', 'email')->get();
 
         return view("admin::settings.mail.broadcast.edit", compact('broadcast', 'users'));
@@ -149,7 +149,7 @@ class BroadcastController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $broadcast = MailBroadcast::findOrFail($id);
+        $broadcast = Broadcast::findOrFail($id);
         
         $validated = $request->validate([
             'broadcast_subject' => ['required', 'string', 'max:255'],
@@ -196,9 +196,9 @@ class BroadcastController extends Controller
         $this->recordUpdate('mail.broadcast.update', $oldBroadcast, $broadcast->getChanges());
 
         if ($broadcast->schedule_at) {
-            MailBroadcastJob::dispatch($broadcast)->delay($broadcast->schedule_at);
+            BroadcastJob::dispatch($broadcast)->delay($broadcast->schedule_at);
         } else {
-            MailBroadcastJob::dispatch($broadcast);
+            BroadcastJob::dispatch($broadcast);
         }
 
         return redirect()->route('admin.settings.mail.broadcast')->with('success', __('common.save_success', ['attribute' => __('admin/settings/mail.tabs.broadcast')]));
@@ -214,7 +214,7 @@ class BroadcastController extends Controller
      */
     public function destroy($id)
     {
-        $broadcast = MailBroadcast::findOrFail($id);
+        $broadcast = Broadcast::findOrFail($id);
 
         $this->recordDelete('mail.broadcast.delete', [
             'name' => $broadcast->subject,

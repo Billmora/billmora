@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Facades\Audit;
 use App\Mail\BroadcastMail;
-use App\Models\MailBroadcast;
+use App\Models\Broadcast;
 use App\Models\User;
 use Billmora;
 use Illuminate\Bus\Queueable;
@@ -14,13 +14,13 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
-class MailBroadcastJob implements ShouldQueue
+class BroadcastJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public MailBroadcast $broadcast;
+    public Broadcast $broadcast;
 
-    public function __construct(MailBroadcast $broadcast)
+    public function __construct(Broadcast $broadcast)
     {
         $this->broadcast = $broadcast;
     }
@@ -41,7 +41,7 @@ class MailBroadcastJob implements ShouldQueue
         $auditEmail = Audit::email(
             null,
             $this->broadcast->recipient_group,
-            'broadcast_mail',
+            'broadcast.email',
             'pending',
         );
 

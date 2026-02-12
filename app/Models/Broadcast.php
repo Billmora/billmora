@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MailBroadcast extends Model
+class Broadcast extends Model
 {
     /**
      * The attributes that aren't mass assignable.

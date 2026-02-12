@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\MailBroadcast;
+use App\Models\Broadcast;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -14,7 +14,7 @@ class BroadcastMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public MailBroadcast $broadcast;
+    public Broadcast $broadcast;
     public array $data;
 
     /**
@@ -23,10 +23,10 @@ class BroadcastMail extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param \App\Models\MailBroadcast $broadcast
+     * @param \App\Models\Broadcast $broadcast
      * @param array $data Placeholder replacement
      */
-    public function __construct(MailBroadcast $broadcast, array $data = [])
+    public function __construct(Broadcast $broadcast, array $data = [])
     {
         $this->broadcast = $broadcast;
         $this->data = $data;

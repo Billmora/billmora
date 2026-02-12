@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\BroadcastMail;
 use App\Mail\TemplateMail;
 use App\Models\AuditEmail;
-use App\Models\MailBroadcast;
+use App\Models\Broadcast;
 use App\Models\MailTemplate;
 use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
@@ -81,8 +81,8 @@ class EmailController extends Controller
     {
         $history = AuditEmail::findOrFail($id);
 
-        if ($history->event === 'broadcast_mail') {
-            $broadcast = MailBroadcast::findOrFail($history->properties['id']);
+        if ($history->event === 'broadcast.email') {
+            $broadcast = Broadcast::findOrFail($history->properties['id']);
             $mailable = new BroadcastMail($broadcast);
         } else {
             $template = MailTemplate::where('key', $history->event)->firstOrFail();
