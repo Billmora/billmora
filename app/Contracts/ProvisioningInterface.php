@@ -26,7 +26,8 @@ interface ProvisioningInterface
      * Test connection to provisioning provider.
      *
      * @param array<string, mixed> $instanceConfig Data from Provisioning::$config
-     * @return bool
+     * @return bool Returns true if successful.
+     * @throws \Exception If the connection fails or configuration is invalid.
      */
     public function testConnection(array $instanceConfig): bool;
 
