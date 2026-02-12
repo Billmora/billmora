@@ -20,6 +20,7 @@ return [
     'uninstall' => [
         'active_instances' => 'Cannot uninstall driver :driver. There are :count active instances using this driver.',
         'folder_missing' => 'Driver folder :driver not found.',
+        'directory_access' => 'Failed to delete plugin directory. Please check file permissions.',
     ],
 
     'instance' => [
