@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Label')
+@section('title', "Provisioning Manage - {$driver}")
 
 @section('body')
 <div class="flex flex-col gap-4">

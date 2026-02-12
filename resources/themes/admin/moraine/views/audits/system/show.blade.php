@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'History View - Mail')
+@section('title', 'Log View - System')
 
 @section('body')
 <div class="flex flex-col gap-5">

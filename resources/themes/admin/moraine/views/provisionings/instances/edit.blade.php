@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Instance Create')
+@section('title', "Instance Edit - {$instance->name}")
 
 @section('body')
 <form action="{{ route('admin.provisionings.instance.update', ['driver' => $instance->driver, 'instance' => $instance->id]) }}" method="POST" class="flex flex-col gap-5">
