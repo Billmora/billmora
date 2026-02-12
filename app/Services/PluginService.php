@@ -71,31 +71,39 @@ class PluginService
     /**
      * Uninstall a plugin by removing its directory.
      *
-     * @param string $driver The driver name
-     * @param string $type The plugin type
-     * @return bool
+     * @param string $driver
+     * @param string $type
+     * @return array
      * @throws \Exception
      */
-    public function uninstall(string $driver, string $type): bool
+    public function uninstall(string $driver, string $type): array
     {
         if (!preg_match('/^[a-zA-Z0-9]+$/', $driver)) {
-            throw new Exception(__('admin/provisionings.plugin.driver_format', [
-                'driver' => $driver
-            ]));
+            throw new Exception(__('admin/provisionings.plugin.driver_format', ['driver' => $driver]));
         }
 
         $targetPath = base_path("plugin/" . ucfirst($type) . "/" . $driver);
 
         if (!File::exists($targetPath)) {
-            throw new Exception(__('admin/provisionings.uninstall.folder_missing', [
-                'driver' => $driver
-            ]));
+            throw new Exception(__('admin/provisionings.uninstall.folder_missing', ['driver' => $driver]));
+        }
+
+        $manifestPath = $targetPath . '/manifest.json';
+        $metadata = ['driver' => $driver];
+
+        if (File::exists($manifestPath)) {
+            $content = File::get($manifestPath);
+            $decoded = json_decode($content, true);
+            
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $metadata = $decoded;
+            }
         }
 
         if (!File::deleteDirectory($targetPath)) {
             throw new Exception(__('admin/provisionings.uninstall.directory_access'));
         }
 
-        return true;
+        return $metadata;
     }
 }
