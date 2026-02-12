@@ -25,8 +25,12 @@ return [
     'instance' => [
         'name_label' => 'Name',
         'name_helper' => 'Enter a unique name to identify this instance.',
+        'provisioning_label' => 'Provisioning',
+        'provisioning_helper' => 'Provisioning system assigned to this instance (read-only).',
         'is_active_label' => 'Is Active?',
         'is_active_helper' => 'Enable or disable this instance from being accessible.',
+        'test_connection_label' => 'Test Connection',
+
         'driver_not_found' => 'Driver :driver not found.',
         'class_not_found' => 'Class :name not found.',
         'delete_in_use' => 'Cannot delete instance :name. It is currently assigned to :count active services.',
@@ -34,7 +38,7 @@ return [
 
     'connection' => [
         'success' => 'Connection successful.',
-        'failed' => 'Connection failed: ',
+        'failed' => 'Connection failed: :message',
     ],
 
     'plugin' => [
