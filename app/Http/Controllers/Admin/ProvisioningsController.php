@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Facades\Audit;
 use App\Http\Controllers\Controller;
 use App\Models\Provisioning;
 use App\Services\PluginService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
@@ -86,6 +88,14 @@ class ProvisioningsController extends Controller
 
         try {
             $metadata = $installer->install($request->file('plugin_file'), 'provisioning');
+
+            Audit::system([
+                'user_id' => Auth::user()->id,
+                'event' => 'provisioning.install',
+                'properties' => [
+                    $metadata,
+                ],
+            ]);
             
             return redirect()->back()->with('success', __('admin/provisionings.install.success', [
                 'name' => $metadata['name'], 
@@ -116,7 +126,15 @@ class ProvisioningsController extends Controller
         }
 
         try {
-            $pluginService->uninstall($driver, 'provisioning');
+            $metadata = $pluginService->uninstall($driver, 'provisioning');
+
+            Audit::system([
+                'user_id' => Auth::user()->id,
+                'event' => 'provisioning.uninstall',
+                'properties' => [
+                    $metadata,
+                ],
+            ]);
             
             return redirect()->route('admin.provisionings')
                 ->with('success', __('common.uninstall_success', ['attribute' => $driver]));
