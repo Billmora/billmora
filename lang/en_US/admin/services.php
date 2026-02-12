@@ -63,4 +63,8 @@ return [
             'failed' => 'Scaling failed: :message',
         ],
     ],
+
+    'delete' => [
+        'active_services' => 'Cannot delete an active service. Please terminate or cancel it first to ensure remote resources are cleaned up.',
+    ],
 ];
