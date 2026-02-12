@@ -67,4 +67,35 @@ class PluginService
 
         return $metadata;
     }
+
+    /**
+     * Uninstall a plugin by removing its directory.
+     *
+     * @param string $driver The driver name
+     * @param string $type The plugin type
+     * @return bool
+     * @throws \Exception
+     */
+    public function uninstall(string $driver, string $type): bool
+    {
+        if (!preg_match('/^[a-zA-Z0-9]+$/', $driver)) {
+            throw new Exception(__('admin/provisionings.plugin.driver_format', [
+                'driver' => $driver
+            ]));
+        }
+
+        $targetPath = base_path("plugin/" . ucfirst($type) . "/" . $driver);
+
+        if (!File::exists($targetPath)) {
+            throw new Exception(__('admin/provisionings.uninstall.folder_missing', [
+                'driver' => $driver
+            ]));
+        }
+
+        if (!File::deleteDirectory($targetPath)) {
+            throw new Exception(__('admin/provisionings.uninstall.directory_access'));
+        }
+
+        return true;
+    }
 }

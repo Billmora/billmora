@@ -101,9 +101,10 @@ class ProvisioningsController extends Controller
      * Uninstall a provisioning plugin driver.
      *
      * @param string $driver
+     * @param \App\Services\PluginService $pluginService
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function uninstall($driver)
+    public function uninstall($driver, PluginService $pluginService)
     {
         $instance = Provisioning::where('driver', $driver)->count();
 
@@ -114,21 +115,13 @@ class ProvisioningsController extends Controller
             ]));
         }
 
-        $pluginPath = base_path("plugin/Provisioning/{$driver}");
-
-        if (File::exists($pluginPath)) {
-            try {
-                File::deleteDirectory($pluginPath);
-                
-                return redirect()->route('admin.provisionings')
-                    ->with('success', __('common.uninstall_success', ['attribute' => $instance->name]));
-            } catch (\Exception $e) {
-                return back()->with('error', $e->getMessage());
-            }
+        try {
+            $pluginService->uninstall($driver, 'provisioning');
+            
+            return redirect()->route('admin.provisionings')
+                ->with('success', __('common.uninstall_success', ['attribute' => $driver]));
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
-
-        return back()->with('error', __('admin/provisionings.uninstall.folder_missing', [
-            'driver' => $driver
-        ]));
     }
 }
