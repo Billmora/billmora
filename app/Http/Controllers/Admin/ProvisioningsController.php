@@ -89,13 +89,13 @@ class ProvisioningsController extends Controller
         try {
             $metadata = $installer->install($request->file('plugin_file'), 'provisioning');
 
-            Audit::system([
-                'user_id' => Auth::user()->id,
-                'event' => 'provisioning.install',
-                'properties' => [
+            Audit::system(
+                Auth::user()->id,
+                'provisioning.install',
+                [
                     $metadata,
                 ],
-            ]);
+            );
             
             return redirect()->back()->with('success', __('admin/provisionings.install.success', [
                 'name' => $metadata['name'], 
@@ -128,13 +128,13 @@ class ProvisioningsController extends Controller
         try {
             $metadata = $pluginService->uninstall($driver, 'provisioning');
 
-            Audit::system([
-                'user_id' => Auth::user()->id,
-                'event' => 'provisioning.uninstall',
-                'properties' => [
+            Audit::system(
+                Auth::user()->id,
+                'provisioning.uninstall',
+                [
                     $metadata,
                 ],
-            ]);
+            );
             
             return redirect()->route('admin.provisionings')
                 ->with('success', __('common.uninstall_success', ['attribute' => $driver]));
