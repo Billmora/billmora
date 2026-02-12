@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Admin\Provisionings;
 
 use App\Http\Controllers\Controller;
 use App\Models\Provisioning;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Validation\Rule;
 
 class InstanceController extends Controller
 {
+    use AuditsSystem;
+
     /**
      * Applies permission-based middleware for accessing instance provisionings.
      * 
@@ -97,6 +100,8 @@ class InstanceController extends Controller
             'config' => (array) $config,
         ]);
 
+        $this->recordCreate('provisioning.instance.create', $instance->toArray());
+
         return redirect()->route('admin.provisionings.instance.edit', ['driver' => $driver, 'instance' => $instance->id])
             ->with('success', __('common.create_success', ['attribute' => $instance->name]));
     }
@@ -157,6 +162,8 @@ class InstanceController extends Controller
 
         $validated = $request->validate($rules);
 
+        $oldInstance = $instance->getOriginal();
+
         $config = $request->only(array_keys($configFields));
 
         $instance->update([
@@ -164,6 +171,8 @@ class InstanceController extends Controller
             'is_active' => (bool) $validated['instance_active'],
             'config' => (array) $config, 
         ]);
+
+        $this->recordUpdate('provisioning.instance.update', $oldInstance, $instance->getChanges());
 
         return redirect()
             ->route('admin.provisionings.instance', $driver)
@@ -193,6 +202,11 @@ class InstanceController extends Controller
         }
 
         $instance->delete();
+
+        $this->recordDelete('provisioning.instance.delete', [
+            'id' => $instance->id,
+            'name' => $instance->name,
+        ]);
 
         return redirect()
             ->route('admin.provisionings.instance', $driver)
