@@ -222,11 +222,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::get('/broadcast/{id}/edit', [Settings\Mail\BroadcastController::class, 'edit'])->name('admin.settings.mail.broadcast.edit');
             Route::put('/broadcast/{id}/edit', [Settings\Mail\BroadcastController::class, 'update'])->name('admin.settings.mail.broadcast.update');
             Route::delete('/broadcast/{id}', [Settings\Mail\BroadcastController::class, 'destroy'])->name('admin.settings.mail.broadcast.destroy');
-            Route::get('/history', [Settings\Mail\HistoryController::class, 'index'])->name('admin.settings.mail.history');
-            Route::get('/history/{id}', [Settings\Mail\HistoryController::class, 'show'])->name('admin.settings.mail.history.show');
-            Route::get('/history/{id}/preview', [Settings\Mail\HistoryController::class, 'preview'])->name('admin.settings.mail.history.preview');
-            Route::post('/history/export', [Settings\Mail\HistoryController::class, 'export'])->name('admin.settings.mail.history.export');
-            Route::post('/history/clear', [Settings\Mail\HistoryController::class, 'clear'])->name('admin.settings.mail.history.clear');
         });
 
         /**
@@ -300,6 +295,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::post('/export', [Audits\SystemController::class, 'export'])->name('admin.audits.system.export');
             Route::post('/clear', [Audits\SystemController::class, 'clear'])->name('admin.audits.system.clear');
         });
+
+        /**
+         * Admin email audits interface routes.
+         *
+         * Prefix: /admin/audits/email
+         */
+        Route::group(['prefix' => 'email'], function () {
+            Route::get('/', [Audits\EmailController::class, 'index'])->name('admin.audits.email');
+            Route::get('/{id}', [Audits\EmailController::class, 'show'])->name('admin.audits.email.show');
+            Route::get('/{id}/preview', [Audits\EmailController::class, 'preview'])->name('admin.audits.email.preview');
+            Route::post('/export', [Audits\EmailController::class, 'export'])->name('admin.audits.email.export');
+            Route::post('/clear', [Audits\EmailController::class, 'clear'])->name('admin.audits.email.clear');
+        });
+
     });
 
     /**

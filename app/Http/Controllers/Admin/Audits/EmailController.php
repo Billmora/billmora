@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Settings\Mail;
+namespace App\Http\Controllers\Admin\Audits;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Mail\BroadcastMail;
 use App\Mail\TemplateMail;
@@ -9,10 +10,9 @@ use App\Models\AuditEmail;
 use App\Models\MailBroadcast;
 use App\Models\MailTemplate;
 use App\Traits\AuditsSystem;
-use Billmora;
 use Illuminate\Http\Request;
 
-class HistoryController extends Controller
+class EmailController extends Controller
 {
     use AuditsSystem;
 
@@ -38,18 +38,18 @@ class HistoryController extends Controller
         $search = $request->query('searchHistoryMail');
 
         $histories = AuditEmail::select('id', 'event', 'user_id', 'to', 'status', 'created_at')
-                                ->when($search, function ($query, $search) {
-                                    $query->where(function ($q) use ($search) {
-                                        $q->where('event', 'like', "%{$search}%")
-                                        ->orWhere('to', 'like', "%{$search}%")
-                                        ->orWhere('status', 'like', "%{$search}%");
-                                    });
-                                })
-                                ->latest()
-                                ->paginate(25)
-                                ->withQueryString();
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('event', 'like', "%{$search}%")
+                    ->orWhere('to', 'like', "%{$search}%")
+                    ->orWhere('status', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate(25)
+            ->withQueryString();
         
-        return view('admin::settings.mail.history.index', compact('histories'));
+        return view('admin::audits.email.index', compact('histories'));
     }
 
     /**
@@ -65,7 +65,7 @@ class HistoryController extends Controller
     {
         $history = AuditEmail::findOrFail($id);
 
-        return view('admin::settings.mail.history.show', compact('history'));
+        return view('admin::audits.email.show', compact('history'));
     }
 
     /**
