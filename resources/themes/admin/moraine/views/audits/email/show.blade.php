@@ -41,7 +41,7 @@
                                 <dd class="text-slate-500 md:w-2/3 w-full overflow-hidden">
                                     @if(is_array($value) || is_object($value))
                                         <div class="w-full overflow-x-auto">
-                                            <pre class="text-xs md:text-sm bg-white p-3 border border-billmora-2 rounded-lg whitespace-pre inline-block">{{ json_encode($value, JSON_PRETTY_PRINT) }}</pre>
+                                            <pre class="w-full text-xs md:text-sm bg-white p-3 border border-billmora-2 rounded-lg whitespace-pre inline-block">{{ json_encode($value, JSON_PRETTY_PRINT) }}</pre>
                                         </div>
                                     @else
                                         <span class="break-words block">{{ $value }}</span>
