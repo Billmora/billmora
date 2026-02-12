@@ -84,7 +84,8 @@ class InstanceController extends Controller
             'config' => (array) $config,
         ]);
 
-        return redirect()->route('admin.provisionings.instance', $driver)->with('success', __('common.create_success', ['attribute' => $instance->name]));
+        return redirect()->route('admin.provisionings.instance.edit', ['driver' => $driver, 'instance' => $instance->id])
+            ->with('success', __('common.create_success', ['attribute' => $instance->name]));
     }
 
     /**
@@ -199,12 +200,11 @@ class InstanceController extends Controller
         try {
             $plugin = $instance->getPluginInstance();
             
-            if ($plugin->testConnection($instance->config)) {
-                return back()->with('success', __('admin/provisionings.connection.success'));
-            }
-            return back()->with('error', 'Connection failed');
+            $plugin->testConnection($instance->config);
+
+            return back()->with('success', __('admin/provisionings.connection.success'));
         } catch (\Exception $e) {
-            return back()->with('error', __('admin/provisionings.connection.failed') . $e->getMessage());
+            return back()->with('error', __('admin/provisionings.connection.failed', ['message' => $e->getMessage()]) );
         }
     }
 
