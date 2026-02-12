@@ -10,11 +10,14 @@ use App\Models\Provisioning;
 use App\Models\Service;
 use App\Models\VariantOption;
 use App\Services\Package\PricingService;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class ServicesController extends Controller
 {
+    use AuditsSystem;
+
     /**
      * Applies permission-based middleware for accessing services management.
      * 
@@ -126,8 +129,9 @@ class ServicesController extends Controller
         ]);
 
         $service = Service::findOrFail($id);
+        $oldService = $service->getOriginal();
+
         $package = Package::findOrFail($validated['package_id']);
-        
         $packagePrice = PackagePrice::findOrFail($validated['package_price_id']);
 
         $provisioningId = $service->provisioning_id;
@@ -217,6 +221,8 @@ class ServicesController extends Controller
             'configuration' => $configuration,
         ]);
 
+        $this->recordUpdate('service.update', $oldService, $service->getChanges());
+
         return redirect()->route('admin.services.edit', $id)
             ->with('success', __('common.update_success', ['attribute' => $service->name]));
     }
@@ -238,6 +244,8 @@ class ServicesController extends Controller
         }
 
         $service->delete();
+
+        $this->recordDelete('service.delete', $service->toArray());
 
         return redirect()->route('admin.services')
             ->with('success', __('common.delete_success', ['attribute' => $service->name]));

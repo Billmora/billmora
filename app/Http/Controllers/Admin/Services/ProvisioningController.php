@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin\Services;
 
+use App\Facades\Audit;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\Package;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class ProvisioningController extends Controller
 {
@@ -38,8 +40,27 @@ class ProvisioningController extends Controller
 
             $service->activate();
 
+            Audit::system(
+                Auth::user()->id,
+                'service.provisioning.create',
+                [
+                    'service_id' => $service->id,
+                    'status' => 'success',
+                ],
+            );
+
             return back()->with('success', __('admin/services.provisioning.create.success'));
         } catch (\Exception $e) {
+            Audit::system(
+                Auth::user()->id,
+                'service.provisioning.create',
+                [
+                    'service_id' => $service->id,
+                    'status' => 'failed',
+                    'message' => $e->getMessage(),
+                ],
+            );
+
             return back()->with('error', __('admin/services.provisioning.create.failed', ['message' => $e->getMessage()]));
         }
     }
@@ -63,8 +84,27 @@ class ProvisioningController extends Controller
 
             $service->suspend();
 
+            Audit::system(
+                Auth::user()->id,
+                'service.provisioning.suspend',
+                [
+                    'service_id' => $service->id,
+                    'status' => 'success',
+                ],
+            );
+
             return back()->with('success', __('admin/services.provisioning.suspend.success'));
         } catch (\Exception $e) {
+            Audit::system(
+                Auth::user()->id,
+                'service.provisioning.suspend',
+                [
+                    'service_id' => $service->id,
+                    'status' => 'failed',
+                    'message' => $e->getMessage(),
+                ],
+            );
+
             return back()->with('error', __('admin/services.provisioning.suspend.failed', ['message' => $e->getMessage()]));
         }
     }
@@ -88,8 +128,27 @@ class ProvisioningController extends Controller
 
             $service->unsuspend();
 
+            Audit::system(
+                Auth::user()->id,
+                'service.provisioning.unsuspend',
+                [
+                    'service_id' => $service->id,
+                    'status' => 'success',
+                ],
+            );
+
             return back()->with('success', __('admin/services.provisioning.unsuspend.success'));
         } catch (\Exception $e) {
+            Audit::system(
+                Auth::user()->id,
+                'service.provisioning.unsuspend',
+                [
+                    'service_id' => $service->id,
+                    'status' => 'failed',
+                    'message' => $e->getMessage(),
+                ],
+            );
+
             return back()->with('error', __('admin/services.provisioning.unsuspend.failed', ['message' => $e->getMessage()]));
         }
     }
@@ -112,8 +171,27 @@ class ProvisioningController extends Controller
 
             $service->terminate();
 
+            Audit::system(
+                Auth::user()->id,
+                'service.provisioning.terminate',
+                [
+                    'service_id' => $service->id,
+                    'status' => 'success',
+                ],
+            );
+
             return back()->with('success', __('admin/services.provisioning.terminate.success'));
         } catch (\Exception $e) {
+            Audit::system(
+                Auth::user()->id,
+                'service.provisioning.terminate',
+                [
+                    'service_id' => $service->id,
+                    'status' => 'failed',
+                    'message' => $e->getMessage(),
+                ],
+            );
+
             return back()->with('error', __('admin/services.provisioning.terminate.failed', ['message' => $e->getMessage()]));
         }
     }
@@ -134,9 +212,28 @@ class ProvisioningController extends Controller
             [$plugin, $instanceConfig] = $this->getPluginAndConfig($service);
 
             $plugin->renew($service, $instanceConfig);
+
+            Audit::system(
+                Auth::user()->id,
+                'service.provisioning.renew',
+                [
+                    'service_id' => $service->id,
+                    'status' => 'success',
+                ],
+            );
             
             return back()->with('success', __('admin/services.provisioning.renew.success'));
         } catch (\Exception $e) {
+            Audit::system(
+                Auth::user()->id,
+                'service.provisioning.renew',
+                [
+                    'service_id' => $service->id,
+                    'status' => 'failed',
+                    'message' => $e->getMessage(),
+                ],
+            );
+
             return back()->with('error', __('admin/services.provisioning.renew.failed', ['message' => $e->getMessage()]));
         }
     }
@@ -162,8 +259,27 @@ class ProvisioningController extends Controller
 
             $plugin->scale($service, $instanceConfig, $oldPackage);
 
+            Audit::system(
+                Auth::user()->id,
+                'service.provisioning.scale',
+                [
+                    'service_id' => $service->id,
+                    'status' => 'success',
+                ],
+            );
+
             return back()->with('success', __('admin/services.provisioning.scale.success'));
         } catch (\Exception $e) {
+            Audit::system(
+                Auth::user()->id,
+                'service.provisioning.scale',
+                [
+                    'service_id' => $service->id,
+                    'status' => 'failed',
+                    'message' => $e->getMessage(),
+                ],
+            );
+
             return back()->with('error', __('admin/services.provisioning.scale.failed', ['message' => $e->getMessage()]));
         }
     }
