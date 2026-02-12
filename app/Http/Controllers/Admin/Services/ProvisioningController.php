@@ -10,6 +10,16 @@ use Illuminate\Http\RedirectResponse;
 class ProvisioningController extends Controller
 {
     /**
+     * Applies permission-based middleware for accessing action services.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:services.update')->only(['create', 'suspend', 'unsuspend', 'terminate', 'renew', 'scale']);
+    }
+
+    /**
      * Create and activate the service on the provisioning provider.
      *
      * @param \App\Models\Service $service

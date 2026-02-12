@@ -52,8 +52,12 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ Currency::format($service->price, $service->currency) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->status }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
-                                    <a href="{{ route('admin.services.edit', ['service' => $service->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ __('common.edit') }}</a>                               
-                                    <x-admin::modal.trigger modal="deleteModal-{{ $service->id }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.delete') }}</x-admin::modal.trigger>
+                                    @can('services.update')
+                                        <a href="{{ route('admin.services.edit', ['service' => $service->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ __('common.edit') }}</a>                               
+                                    @endcan
+                                    @can('services.delete')
+                                        <x-admin::modal.trigger modal="deleteModal-{{ $service->id }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.delete') }}</x-admin::modal.trigger>
+                                    @endcan
                                 </td>
                             </tr>
                         @endforeach
@@ -65,23 +69,25 @@
     <div>
         {{ $services->links('admin::layouts.partials.pagination') }}
     </div>
-    @foreach ($services as $service)
-        <x-admin::modal.content
-            modal="deleteModal-{{ $service->id }}"
-            variant="danger"
-            size="xl"
-            position="centered"
-            title="{{ __('common.delete_modal_title') }}"
-            description="{{ __('common.delete_modal_description', ['item' => $service->name]) }}">
-            <form action="{{ route('admin.services.destroy', ['service' => $service->id]) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <div class="flex justify-end gap-2 mt-4">
-                    <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
-                    <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
-                </div>
-            </form>
-        </x-admin::modal.content>
-    @endforeach
+    @can('services.delete')
+        @foreach ($services as $service)
+            <x-admin::modal.content
+                modal="deleteModal-{{ $service->id }}"
+                variant="danger"
+                size="xl"
+                position="centered"
+                title="{{ __('common.delete_modal_title') }}"
+                description="{{ __('common.delete_modal_description', ['item' => $service->name]) }}">
+                <form action="{{ route('admin.services.destroy', ['service' => $service->id]) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="flex justify-end gap-2 mt-4">
+                        <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                        <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
+                    </div>
+                </form>
+            </x-admin::modal.content>
+        @endforeach
+    @endcan
 </div>
 @endsection

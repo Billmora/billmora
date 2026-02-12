@@ -16,6 +16,18 @@ use Illuminate\Validation\Rule;
 class ServicesController extends Controller
 {
     /**
+     * Applies permission-based middleware for accessing services management.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:services.view')->only(['index']);
+        $this->middleware('permission:services.update')->only(['edit', 'update']);
+        $this->middleware('permission:services.delete')->only(['destroy']);
+    }
+
+    /**
      * Display a paginated list of services with search functionality.
      *
      * @param \Illuminate\Http\Request $request
