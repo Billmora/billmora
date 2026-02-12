@@ -16,11 +16,6 @@
                 'icon' => 'lucide-mailbox',
                 'label' => __('admin/settings/mail.tabs.template'),
             ],
-            [
-                'route' => route('admin.settings.mail.broadcast'),
-                'icon' => 'lucide-megaphone',
-                'label' => __('admin/settings/mail.tabs.broadcast'),
-            ],
         ]" 
         active="{{ request()->url() }}" />
     <div class="flex flex-col gap-4">

@@ -6,8 +6,6 @@ return [
     'tabs' => [
         'mailer' => 'Mailer',
         'template' => 'Template',
-        'broadcast' => 'Broadcast',
-        'history' => 'History',
     ],
 
     'mailer_alert_label' => 'Mailer Settings Source',
@@ -57,26 +55,4 @@ return [
     'template_bcc_helper' => 'Add one or more email addresses to receive a blind copy (BCC) of this email.',
     'template_placeholder_label' => 'Template Placeholders',
     'template_placeholder_helper' => 'List of available placeholders you can use in the email subject or body.',
-
-    'broadcast_alert_label' => 'Updating this broadcast will resend emails',
-    'broadcast_alert_helper' => 'Once you update this broadcast, the emails will be re-scheduled and sent again according to the defined schedule. Make sure your changes are final before saving.',
-    'broadcast_table' => [
-        'subject' => 'Subject',
-        'recipient_group' => 'Recipient Group',
-    ],
-    'broadcast_subject_label' => 'Broadcast Subject',
-    'broadcast_subject_helper' => 'Enter the subject line for the email.',
-    'broadcast_body_label' => 'Broadcast Body',
-    'broadcast_body_helper' => 'Write the content of the broadcast email. You can use placeholders to insert dynamic data.',
-    'broadcast_recipient_group_label' => 'Broadcast Recipients',
-    'broadcast_recipient_group_helper' => 'Select the recipient group for this broadcast.',
-    'broadcast_recipient_custom_helper' => 'Choose specific users to receive this broadcast email.',
-    'broadcast_cc_label' => 'Broadcast CC',
-    'broadcast_cc_helper' => 'Add one or more email addresses to receive a copy (CC) of this email.',
-    'broadcast_bcc_label' => 'Broadcast BCC',
-    'broadcast_bcc_helper' => 'Add one or more email addresses to receive a blind copy (BCC) of this email.',
-    'broadcast_schedule_label' => 'Broadcast Schedule',
-    'broadcast_schedule_helper' => 'Set a date and time to schedule when the broadcast email will be sent. Leave empty to send immediately.',
-    'broadcast_placeholder_label' => 'Broadcast Placeholders',
-    'broadcast_placeholder_helper' => 'List of available placeholders you can use in the email subject or body.',
 ];

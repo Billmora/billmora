@@ -1,18 +1,18 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Broadcast Create - Mail')
+@section('title', 'Broadcast Create')
 
 @section('body')
-<form action="{{ route('admin.settings.mail.broadcast.store') }}" method="POST" class="flex flex-col gap-5">
+<form action="{{ route('admin.broadcasts.store') }}" method="POST" class="flex flex-col gap-5">
     @csrf
     <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
-        <x-admin::input type="text" name="broadcast_subject" label="{{ __('admin/settings/mail.broadcast_subject_label') }}" helper="{{ __('admin/settings/mail.broadcast_subject_helper') }}" value="{{ old('broadcast_subject') }}" required />
-        <x-admin::editor.text name="broadcast_body" label="{{ __('admin/settings/mail.broadcast_body_label') }}" helper="{{ __('admin/settings/mail.broadcast_body_helper') }}" required>{{ old('broadcast_body') }}</x-admin::editor.text>
+        <x-admin::input type="text" name="broadcast_subject" label="{{ __('admin/broadcasts.subject_label') }}" helper="{{ __('admin/broadcasts.subject_helper') }}" value="{{ old('broadcast_subject') }}" required />
+        <x-admin::editor.text name="broadcast_body" label="{{ __('admin/broadcasts.body_label') }}" helper="{{ __('admin/broadcasts.body_helper') }}" required>{{ old('broadcast_body') }}</x-admin::editor.text>
         <div x-data="{ recipient_custom: '{{ old('broadcast_recipient_group') }}' }" class="grid gap-4">
             <x-admin::select 
                 name="broadcast_recipient_group" 
-                label="{{ __('admin/settings/mail.broadcast_recipient_group_label') }}" 
-                helper="{{ __('admin/settings/mail.broadcast_recipient_group_helper') }}" 
+                label="{{ __('admin/broadcasts.recipient_group_label') }}" 
+                helper="{{ __('admin/broadcasts.recipient_group_helper') }}" 
                 x-model="recipient_custom"
                 required
             >
@@ -29,18 +29,18 @@
                         'subtitle' => $user->email,
                     ])"
                     :selected="old('broadcast_recipient_custom', [])"
-                    helper="{{ __('admin/settings/mail.broadcast_recipient_custom_helper') }}"
+                    helper="{{ __('admin/broadcasts.recipient_custom_helper') }}"
                 />
             </div>
         </div>
         <div class="grid md:grid-cols-2 gap-4">
-            <x-admin::tags name="broadcast_cc" label="{{ __('admin/settings/mail.broadcast_cc_label') }}" helper="{{ __('admin/settings/mail.broadcast_cc_helper') }}" :value="old('broadcast_cc')" />
-            <x-admin::tags name="broadcast_bcc" label="{{ __('admin/settings/mail.broadcast_bcc_label') }}" helper="{{ __('admin/settings/mail.broadcast_bcc_helper') }}" :value="old('broadcast_bcc')" />
+            <x-admin::tags name="broadcast_cc" label="{{ __('admin/broadcasts.cc_label') }}" helper="{{ __('admin/broadcasts.cc_helper') }}" :value="old('broadcast_cc')" />
+            <x-admin::tags name="broadcast_bcc" label="{{ __('admin/broadcasts.bcc_label') }}" helper="{{ __('admin/broadcasts.bcc_helper') }}" :value="old('broadcast_bcc')" />
         </div>
-        <x-admin::input type="datetime-local" name="broadcast_schedule" label="{{ __('admin/settings/mail.broadcast_schedule_label') }}" helper="{{ __('admin/settings/mail.broadcast_schedule_helper') }}" value="{{ old('broadcast_schedule') }}" />
+        <x-admin::input type="datetime-local" name="broadcast_schedule" label="{{ __('admin/broadcasts.schedule_label') }}" helper="{{ __('admin/broadcasts.schedule_helper') }}" value="{{ old('broadcast_schedule') }}" />
         <div class="min-w-full flex flex-col gap-1">
             <label class="block text-slate-600 font-semibold mb-0.5">
-                {{ __('admin/settings/mail.broadcast_placeholder_label') }}
+                {{ __('admin/broadcasts.placeholder_label') }}
             </label>
             <div class="border-2 border-billmora-2 rounded-xl overflow-x-auto">
                 <table class="w-full border-collapse">
@@ -62,11 +62,11 @@
                     </tbody>
                 </table>
             </div>
-            <p class="mt-1 text-sm text-slate-500">{{ __('admin/settings/mail.broadcast_placeholder_helper') }}</p>
+            <p class="mt-1 text-sm text-slate-500">{{ __('admin/broadcasts.placeholder_helper') }}</p>
         </div>
     </div>
     <div class="flex gap-4 ml-auto">
-        <a href="{{ route('admin.settings.mail.broadcast') }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
+        <a href="{{ route('admin.broadcasts') }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
         <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.create') }}</button>
     </div>
 </form>

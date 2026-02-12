@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Settings\Mail;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\BroadcastJob;
@@ -10,46 +10,46 @@ use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class BroadcastController extends Controller
+class BroadcastsController extends Controller
 {
     use AuditsSystem;
 
     /**
-     * Applies permission-based middleware for accessing mail broadcast settings.
+     * Applies permission-based middleware for accessing broadcasts management.
      * 
      * @return void
      */
     public function __construct()
     {
-        $this->middleware('permission:settings.mail.broadcast.view')->only(['index']);
-        $this->middleware('permission:settings.mail.broadcast.create')->only(['create', 'store']);
-        $this->middleware('permission:settings.mail.broadcast.update')->only(['edit', 'update']);
-        $this->middleware('permission:settings.mail.broadcast.delete')->only(['destroy']);
+        $this->middleware('permission:broadcasts.view')->only(['index']);
+        $this->middleware('permission:broadcasts.create')->only(['create', 'store']);
+        $this->middleware('permission:broadcasts.update')->only(['edit', 'update']);
+        $this->middleware('permission:broadcasts.delete')->only(['destroy']);
     }
 
     /**
-     * Display the list mail broadcast table.
+     * Display the list broadcasts table.
      *
      * @return \Illuminate\View\View
      */
     public function index(Request $request)
     {
-        $search = $request->query('searchBroadcastMail');
+        $search = $request->query('searchBroadcast');
 
         $broadcasts = Broadcast::select('id', 'subject', 'recipient_group', 'schedule_at', 'created_at')
-                                ->when($search, function ($query, $search) {
-                                    $query->where(function ($q) use ($search) {
-                                        $q->where('subject', 'like', "%{$search}%");
-                                    });
-                                })
-                                ->paginate(25)
-                                ->withQueryString();
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('subject', 'like', "%{$search}%");
+                });
+            })
+            ->paginate(25)
+            ->withQueryString();
 
-        return view('admin::settings.mail.broadcast.index', compact('broadcasts'));
+        return view('admin::broadcasts.index', compact('broadcasts'));
     }
 
     /**
-     * Show the form for creating a new mail broadcast.
+     * Show the form for creating a new broadcast.
      *
      * @return \Illuminate\View\View
      */
@@ -57,11 +57,11 @@ class BroadcastController extends Controller
     {
         $users = User::select('id', 'first_name', 'last_name', 'email')->get();
 
-        return view('admin::settings.mail.broadcast.create', compact('users'));
+        return view('admin::broadcasts.create', compact('users'));
     }
 
     /**
-     * Store a newly created mail broadcast in the database and queue it for sending.
+     * Store a newly created broadcast in the database and queue it for sending.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse Redirects to the broadcast index with a success message after storing.
@@ -118,13 +118,13 @@ class BroadcastController extends Controller
             BroadcastJob::dispatch($broadcast);
         }
 
-        return redirect()->route('admin.settings.mail.broadcast')->with('success', __('common.create_success', ['attribute' => __('admin/settings/mail.tabs.broadcast')]));
+        return redirect()->route('admin.broadcasts')->with('success', __('common.create_success', ['attribute' => __('admin/settings/mail.tabs.broadcast')]));
     }
 
     /**
-     * Show the form for editing an existing mail broadcast.
+     * Show the form for editing an existing broadcast.
      *
-     * @param  int  $id  The ID of the mail broadcast to edit.
+     * @param  int  $id  The ID of the broadcast to edit.
      * @return \Illuminate\View\View The view containing the edit form.
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the broadcast is not found.
@@ -134,14 +134,14 @@ class BroadcastController extends Controller
         $broadcast = Broadcast::findOrFail($id);
         $users = User::select('id', 'first_name', 'last_name', 'email')->get();
 
-        return view("admin::settings.mail.broadcast.edit", compact('broadcast', 'users'));
+        return view("admin::broadcasts.edit", compact('broadcast', 'users'));
     }
 
     /**
-     * Update an existing mail broadcast.
+     * Update an existing broadcast.
      *
      * @param  \Illuminate\Http\Request  $request  The incoming request containing broadcast update data.
-     * @param  int  $id  The ID of the mail broadcast to update.
+     * @param  int  $id  The ID of the broadcast to update.
      * @return \Illuminate\Http\RedirectResponse Redirects back to the broadcast index with success message.
      *
      * @throws \Illuminate\Validation\ValidationException If validation fails.
@@ -201,13 +201,13 @@ class BroadcastController extends Controller
             BroadcastJob::dispatch($broadcast);
         }
 
-        return redirect()->route('admin.settings.mail.broadcast')->with('success', __('common.save_success', ['attribute' => __('admin/settings/mail.tabs.broadcast')]));
+        return redirect()->route('admin.broadcasts')->with('success', __('common.save_success', ['attribute' => __('admin/settings/mail.tabs.broadcast')]));
     }
 
     /**
-     * Remove the specified mail broadcast from storage.
+     * Remove the specified broadcast from storage.
      *
-     * @param  int  $id  The ID of the mail broadcast to delete.
+     * @param  int  $id  The ID of the broadcast to delete.
      * @return \Illuminate\Http\RedirectResponse Redirects back to the broadcast index with success message.
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the broadcast is not found.
@@ -222,6 +222,6 @@ class BroadcastController extends Controller
 
         $broadcast->delete();
 
-        return redirect()->route('admin.settings.mail.broadcast')->with('success', __('common.delete_success', ['attribute' => __('admin/settings/mail.tabs.broadcast')]));
+        return redirect()->route('admin.broadcasts')->with('success', __('common.delete_success', ['attribute' => __('admin/settings/mail.tabs.broadcast')]));
     }
 }

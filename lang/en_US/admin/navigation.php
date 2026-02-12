@@ -6,6 +6,7 @@ return [
     'orders' => 'Orders',
     'services' => 'Services',
     'invoices' => 'Invoices',
+    'broadcasts' => 'Broadcasts',
     'catalogs' => 'Catalogs',
     'packages' => 'Packages',
     'variants' => 'Variants',

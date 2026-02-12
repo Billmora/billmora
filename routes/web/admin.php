@@ -84,6 +84,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin broadcasts interface routes.
+     *
+     * Prefix: /admin/broadcasts
+     */
+    Route::group(['prefix' => 'broadcasts'], function () {
+        Route::get('/', [Admin\BroadcastsController::class, 'index'])->name('admin.broadcasts');
+        Route::get('/create', [Admin\BroadcastsController::class, 'create'])->name('admin.broadcasts.create');
+        Route::post('/create', [Admin\BroadcastsController::class, 'store'])->name('admin.broadcasts.store');
+        Route::get('/{id}/edit', [Admin\BroadcastsController::class, 'edit'])->name('admin.broadcasts.edit');
+        Route::put('/{id}/edit', [Admin\BroadcastsController::class, 'update'])->name('admin.broadcasts.update');
+        Route::delete('/{id}', [Admin\BroadcastsController::class, 'destroy'])->name('admin.broadcasts.destroy');
+    });
+
+    /**
      * Admin catalogs interface routes.
      *
      * Prefix: /admin/catalogs
@@ -216,12 +230,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::get('/template', [Settings\Mail\TemplateController::class, 'index'])->name('admin.settings.mail.template');
             Route::get('/template/{id}/edit', [Settings\Mail\TemplateController::class, 'edit'])->name('admin.settings.mail.template.edit');
             Route::put('/template/{id}/edit', [Settings\Mail\TemplateController::class, 'update'])->name('admin.settings.mail.template.update');
-            Route::get('/broadcast', [Settings\Mail\BroadcastController::class, 'index'])->name('admin.settings.mail.broadcast');
-            Route::get('/broadcast/create', [Settings\Mail\BroadcastController::class, 'create'])->name('admin.settings.mail.broadcast.create');
-            Route::post('/broadcast', [Settings\Mail\BroadcastController::class, 'store'])->name('admin.settings.mail.broadcast.store');
-            Route::get('/broadcast/{id}/edit', [Settings\Mail\BroadcastController::class, 'edit'])->name('admin.settings.mail.broadcast.edit');
-            Route::put('/broadcast/{id}/edit', [Settings\Mail\BroadcastController::class, 'update'])->name('admin.settings.mail.broadcast.update');
-            Route::delete('/broadcast/{id}', [Settings\Mail\BroadcastController::class, 'destroy'])->name('admin.settings.mail.broadcast.destroy');
         });
 
         /**
