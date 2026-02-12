@@ -58,6 +58,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/', [Admin\ServicesController::class, 'index'])->name('admin.services');
         Route::get('/{service}/edit', [Admin\ServicesController::class, 'edit'])->name('admin.services.edit');
         Route::put('/{service}/edit', [Admin\ServicesController::class, 'update'])->name('admin.services.update');
+        Route::delete('/{service}', [Admin\ServicesController::class, 'destroy'])->name('admin.services.destroy');
 
         Route::post('/{service}/create', [Admin\Services\ProvisioningController::class, 'create'])->name('admin.services.create');
         Route::post('/{service}/suspend', [Admin\Services\ProvisioningController::class, 'suspend'])->name('admin.services.suspend');

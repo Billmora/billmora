@@ -208,4 +208,26 @@ class ServicesController extends Controller
         return redirect()->route('admin.services.edit', $id)
             ->with('success', __('common.update_success', ['attribute' => $service->name]));
     }
+
+    /**
+     * Remove the specified service from database with status validation.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     * 
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public function destroy($id)
+    {
+        $service = Service::findOrFail($id);
+
+        if ($service->status === 'active') {
+            return back()->with('error', __('admin/services.delete.active_services'));
+        }
+
+        $service->delete();
+
+        return redirect()->route('admin.services')
+            ->with('success', __('common.delete_success', ['attribute' => $service->name]));
+    }
 }

@@ -73,7 +73,7 @@
             position="centered"
             title="{{ __('common.delete_modal_title') }}"
             description="{{ __('common.delete_modal_description', ['item' => $service->name]) }}">
-            <form action="#" method="POST">
+            <form action="{{ route('admin.services.destroy', ['service' => $service->id]) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <div class="flex justify-end gap-2 mt-4">
