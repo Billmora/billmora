@@ -29,10 +29,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/{id}/profile', [Users\ProfileController::class, 'index'])->name('admin.users.profile');
         Route::put('/{id}/profile', [Users\ProfileController::class, 'update'])->name('admin.users.profile.update');
         Route::delete('/{id}', [Admin\UsersController::class, 'destroy'])->name('admin.users.destroy');
-        Route::get('/{id}/activity', [Users\ActivityController::class, 'index'])->name('admin.users.activity');
-        Route::get('/{id}/activity/{activity}', [Users\ActivityController::class, 'show'])->name('admin.users.activity.show');
-        Route::post('/{id}/activity/export', [Users\ActivityController::class, 'export'])->name('admin.users.activity.export');
-        Route::post('/{id}/activity/clear', [Users\ActivityController::class, 'clear'])->name('admin.users.activity.clear');
+        Route::get('/{id}/activity', [Admin\Audits\UserController::class, 'index'])->name('admin.users.activity');
+        Route::get('/{id}/activity/{activity}', [Admin\Audits\UserController::class, 'show'])->name('admin.users.activity.show');
+        Route::post('/{id}/activity/export', [Admin\Audits\UserController::class, 'export'])->name('admin.users.activity.export');
+        Route::post('/{id}/activity/clear', [Admin\Audits\UserController::class, 'clear'])->name('admin.users.activity.clear');
     });
 
     /**
@@ -295,6 +295,16 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::get('/{id}/preview', [Audits\EmailController::class, 'preview'])->name('admin.audits.email.preview');
             Route::post('/export', [Audits\EmailController::class, 'export'])->name('admin.audits.email.export');
             Route::post('/clear', [Audits\EmailController::class, 'clear'])->name('admin.audits.email.clear');
+        });
+
+        /**
+         * Admin user audits interface routes.
+         *
+         * Prefix: /admin/audits/user
+         */
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/', [Audits\UserController::class, 'index'])->name('admin.audits.user');
+            Route::post('/export', [Audits\UserController::class, 'export'])->name('admin.audits.user.export');
         });
 
         /**

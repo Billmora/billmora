@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Users;
+namespace App\Http\Controllers\Admin\Audits;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\AuditUser;
 use App\Models\User;
 use App\Traits\AuditsSystem;
-use Billmora;
 use Illuminate\Http\Request;
 
-class ActivityController extends Controller
+class UserController extends Controller
 {
     use AuditsSystem;
 
@@ -29,30 +29,35 @@ class ActivityController extends Controller
      * Display a paginated list of user activity logs.
      *
      * @param \Illuminate\Http\Request $request The HTTP request instance.
-     * @param int $id The ID of the user.
+     * @param int|null $id The ID of the user.
      *
      * @return \Illuminate\View\View
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function index(Request $request, $id)
+    public function index(Request $request, $id = null)
     {
-        $search = $request->query('searchHistoryMail');
+        $search = $request->query('searchActiviyUser');
 
-        $user = User::findOrFail($id);
+        $user = $id ? User::findOrFail($id) : null;
 
-        $activities = AuditUser::select('id', 'event', 'user_id', 'created_at')
-                            ->where('user_id', $user->id)
-                            ->when($search, function ($query, $search) {
-                                $query->where(function ($q) use ($search) {
-                                    $q->where('event', 'like', "%{$search}%");
-                                });
-                            })
-                            ->latest()
-                            ->paginate(25)
-                            ->withQueryString();
-        
-        return view('admin::users.activity.index', compact('user', 'activities'));
+        $activities = AuditUser::with('user:id,email,first_name,last_name')
+            ->select('id', 'event', 'user_id', 'created_at')
+            ->when($id, function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->when($search, function ($query, $search) {
+                $query->where('event', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->paginate(25)
+            ->withQueryString();
+
+        if ($id) {
+            return view('admin::users.activity.index', compact('user', 'activities'));
+        } else {
+            return view('admin::audits.user.index', compact('user', 'activities'));
+        }
     }
 
     /**
@@ -79,20 +84,25 @@ class ActivityController extends Controller
     /**
      * Export all activity logs of a user as a JSON file.
      *
-     * @param int $id The ID of the user.
+     * @param int int|null $id The ID of the user.
      *
      * @return \Symfony\Component\HttpFoundation\StreamedResponse
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function export($id)
+    public function export($id = null)
     {
-        $user = User::findOrFail($id);
         $companyName = Billmora::getGeneral('company_name');
         $nowDate = now()->format('Ymd_His');
 
-        $activities = AuditUser::where('user_id', $user->id)->get();
-        $filename = "{$companyName}_{$user->fullname}_audit-user-activity-{$nowDate}.json";
+        if ($id) {
+            $user = User::findOrFail($id);
+            $activities = AuditUser::where('user_id', $user->id)->get();
+            $filename = "{$companyName}_{$user->fullname}_audit-user-activity-{$nowDate}.json";
+        } else {
+            $activities = AuditUser::with('user:id,email,first_name,last_name')->get();
+            $filename = "{$companyName}_all-users_audit-activity-{$nowDate}.json";
+        }
 
         $json = $activities->toJson(JSON_PRETTY_PRINT);
 
