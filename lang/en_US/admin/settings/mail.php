@@ -32,7 +32,7 @@ return [
     'mailer_mailgun_secret_helper' => 'Enter your Mailgun API key for authentication.',
     'mailer_mailgun_endpoint_label' => 'Mailgun Endpoint',
     'mailer_mailgun_endpoint_helper' => 'Enter your Mailgun API endpoint.',
-    'mailer_test_label' => 'Test Email',
+    'mailer_test_label' => 'Test Connection',
 
     'translation_missing_title' => 'Translation not found',
     'translation_missing_desc'  => 'The notification for ":lang" does not exist yet. The English (en_US) version is shown instead. If you update, a new translation for ":lang" will be created automatically.',
@@ -55,4 +55,9 @@ return [
     'notification_bcc_helper' => 'Add one or more email addresses to receive a blind copy (BCC) of this email.',
     'notification_placeholder_label' => 'Placeholders',
     'notification_placeholder_helper' => 'List of available placeholders you can use in the email subject or body.',
+    'notification_job' => [
+        'key_missing' => 'Notification key :key does not exist.',
+        'inactive' => 'Notification :key is currently inactive.',
+        'translation_missing' => 'Translation not found for :key in language :lang.',
+    ],
 ];

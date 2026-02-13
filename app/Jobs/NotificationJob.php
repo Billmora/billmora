@@ -39,11 +39,15 @@ class NotificationJob implements ShouldQueue
                 ->first();
 
             if (!$notification) {
-                throw new \Exception("Notification key {$this->notificationKey} does not exist.");
+                throw new \Exception(__('admin/settings/mail.notification_job.key_missing', [
+                    'key' => $this->notificationKey
+                ]));
             }
 
             if (!$notification->is_active) {
-                throw new \Exception("Notification {$this->notificationKey} is currently inactive.");
+                throw new \Exception(__('admin/settings/mail.notification_job.inactive', [
+                    'key' => $this->notificationKey
+                ]));
             }
 
             $lang = $this->lang ?? config('app.fallback_locale');
@@ -51,7 +55,10 @@ class NotificationJob implements ShouldQueue
                 ?? $notification->translations->firstWhere('lang', config('app.fallback_locale'));
 
             if (!$translation) {
-                throw new \Exception("Translation not found for {$this->notificationKey} in language {$lang}.");
+                throw new \Exception(__('admin/settings/mail.notification_job.translation_missing', [
+                    'key' => $this->notificationKey,
+                    'lang' => $lang
+                ]));
             }
 
             $notification->subject = $translation->subject;
