@@ -17,6 +17,10 @@
                     {{ $user->email }}
                 </a>
             </div>
+            <div class="grid">
+                <span class="text-slate-600 font-semibold">{{ __('common.created_at') }}</span>
+                <span class="text-slate-500">{{ $log->created_at }}</span>
+            </div>
         </div>
         @if($log->properties)
             <div class="space-y-2 overflow-hidden">

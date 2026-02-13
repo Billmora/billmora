@@ -26,8 +26,8 @@
                 <span class="text-slate-500">{{ $history->status }}</span>
             </div>
             <div class="grid">
-                <span class="text-slate-600 font-semibold">ID</span>
-                <span class="text-slate-500">{{ $history->id }}</span>
+                <span class="text-slate-600 font-semibold">{{ __('common.created_at') }}</span>
+                <span class="text-slate-500">{{ $history->created_at }}</span>
             </div>
         </div>
         @if($history->properties)
