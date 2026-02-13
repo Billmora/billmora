@@ -126,6 +126,6 @@ class NotificationController extends Controller
             ]
         );
 
-        return redirect()->route('admin.settings.mail.notification')->with('success', __('common.save_success', ['attribute' => __('admin/settings/mail.title')]));
+        return redirect()->route('admin.settings.mail.notification')->with('success', __('common.save_success', ['attribute' => $notification->name]));
     }
 }
