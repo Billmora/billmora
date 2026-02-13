@@ -12,6 +12,15 @@ use Illuminate\Validation\Rule;
 
 class ProvisioningController extends Controller
 {
+    /**
+     * Applies permission-based middleware for accessing packages pricing.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:packages.update')->only(['index', 'update']);
+    }
 
     /**
      * Display package provisioning configuration page with available drivers and instances.
