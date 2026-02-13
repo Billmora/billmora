@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Facades\Audit;
 use App\Http\Controllers\Controller;
-use App\Mail\TemplateMail;
+use App\Mail\NotificationMail;
 use App\Models\UserEmailVerification;
 use Billmora;
 use Illuminate\Http\Request;
@@ -103,7 +103,7 @@ class EmailVerificationController extends Controller
             );
 
             try {
-                Mail::to($user->email)->send(new TemplateMail(
+                Mail::to($user->email)->send(new NotificationMail(
                     'user_resend_verification', 
                     [
                         'client_name' => $user->fullname,

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth\Password;
 
 use App\Facades\Audit;
 use App\Http\Controllers\Controller;
-use App\Mail\TemplateMail;
+use App\Mail\NotificationMail;
 use App\Models\User;
 use App\Models\UserPasswordReset;
 use Billmora;
@@ -63,7 +63,7 @@ class ForgotController extends Controller
             );
 
             try {
-                Mail::to($user->email)->send(new TemplateMail(
+                Mail::to($user->email)->send(new NotificationMail(
                     'user_password_reset', 
                     [
                         'client_name' => $user->fullname,

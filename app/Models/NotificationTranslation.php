@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MailTemplateTranslation extends Model
+class NotificationTranslation extends Model
 {
 
     /**
@@ -19,12 +19,12 @@ class MailTemplateTranslation extends Model
     ];
 
     /**
-     * Get the parent mail template that this translation belongs to.
+     * Get the parent mail notification that this translation belongs to.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function template()
+    public function notification()
     {
-        return $this->belongsTo(MailTemplate::class);
+        return $this->belongsTo(Notification::class);
     }
 }

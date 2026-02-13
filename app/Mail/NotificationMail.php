@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\MailTemplate;
+use App\Models\Notification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -10,18 +10,18 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Exception;
 
-class TemplateMail extends Mailable
+class NotificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public MailTemplate $email;
+    public Notification $email;
     public array $data;
     public string $lang;
 
     /**
      * Create a new message instance.
      *
-     * @param string $key Template key
+     * @param string $key Notification key
      * @param array $data Placeholder replacement
      * @param string $lang language code, default en_US
      */
@@ -29,20 +29,20 @@ class TemplateMail extends Mailable
     {
         $this->lang = $lang ?? config('app.fallback_locale');
 
-        $this->email = MailTemplate::with(['translations'])
+        $this->email = Notification::with(['translations'])
             ->where('key', $key)
-            ->where('active', true)
+            ->where('is_active', true)
             ->first();
 
         if (!$this->email) {
-            throw new Exception("Email template '{$key}' not found or disabled.");
+            throw new Exception("Email notification '{$key}' not found or disabled.");
         }
 
         $translation = $this->email->translations->firstWhere('lang', $lang)
             ?? $this->email->translations->firstWhere('lang', config('app.fallback_locale'));
 
         if (!$translation) {
-            throw new Exception("No translation found for template '{$key}' and fallback 'en_US'.");
+            throw new Exception("No translation found for notification '{$key}' and fallback 'en_US'.");
         }
 
         $this->email->subject = $translation->subject;
@@ -52,13 +52,13 @@ class TemplateMail extends Mailable
     }
 
     /**
-     * Replace placeholders in the email template
+     * Replace placeholders in the email notification
      */
-    private function placeholder(string $template): string
+    private function placeholder(string $notification): string
     {
         return preg_replace_callback('/\{(\w+)\}/', function ($matches) {
             return $this->data[$matches[1]] ?? '';
-        }, $template);
+        }, $notification);
     }
 
     /**

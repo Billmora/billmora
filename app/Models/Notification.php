@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MailTemplate extends Model
+class Notification extends Model
 {
 
     /**
@@ -27,16 +27,16 @@ class MailTemplate extends Model
         'cc' => 'array',
         'bcc' => 'array',
         'placeholder' => 'array',
-        'active' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     /**
-     * Get all translations associated with the mail template.
+     * Get all translations associated with the mail notification.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function translations()
     {
-        return $this->hasMany(MailTemplateTranslation::class);
+        return $this->hasMany(NotificationTranslation::class);
     }
 }

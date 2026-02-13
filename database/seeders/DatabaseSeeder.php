@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             SettingSeeder::class,
-            MailTemplateSeeder::class,
+            NotificationSeeder::class,
             PermissionSeeder::class,
             CurrencySeeder::class,
         ]);

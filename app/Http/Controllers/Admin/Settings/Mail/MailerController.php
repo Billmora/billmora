@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Settings\Mail;
 
-use App\Mail\TemplateMail;
+use App\Mail\NotificationMail;
 use App\Traits\AuditsSystem;
 use Billmora;
 use App\Http\Controllers\Controller;
@@ -81,7 +81,7 @@ class MailerController extends Controller
 
 
     /**
-     * Send a test email using the configured mailer and template system.
+     * Send a test email using the configured mailer and notification.
      *
      * @return \Illuminate\Http\RedirectResponse Redirects back to the previous page with either success or error status.
      */
@@ -89,7 +89,7 @@ class MailerController extends Controller
     {
         try {
             $user = Auth::user();
-            Mail::to($user->email)->send(new TemplateMail(
+            Mail::to($user->email)->send(new NotificationMail(
                 'test_message', [
                     'client_name' => $user->fullname,
                     'company_name' => Billmora::getGeneral('company_name'),

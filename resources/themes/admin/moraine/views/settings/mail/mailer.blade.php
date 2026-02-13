@@ -19,9 +19,9 @@
                     'label' => __('admin/settings/mail.tabs.mailer'),
                 ],
                 [
-                    'route' => route('admin.settings.mail.template'),
+                    'route' => route('admin.settings.mail.notification'),
                     'icon' => 'lucide-mailbox',
-                    'label' => __('admin/settings/mail.tabs.template'),
+                    'label' => __('admin/settings/mail.tabs.notification'),
                 ],
             ]" 
             active="{{ request()->url() }}" />

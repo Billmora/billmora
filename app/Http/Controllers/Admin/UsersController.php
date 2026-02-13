@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Facades\Audit;
-use App\Mail\TemplateMail;
+use App\Mail\NotificationMail;
 use App\Models\User;
 use App\Models\UserEmailVerification;
 use App\Models\UserPasswordReset;
@@ -164,7 +164,7 @@ class UsersController extends Controller
             );
 
             try {
-                Mail::to($user->email)->send(new TemplateMail(
+                Mail::to($user->email)->send(new NotificationMail(
                     'user_password_reset', 
                     [
                         'client_name' => $user->fullname,

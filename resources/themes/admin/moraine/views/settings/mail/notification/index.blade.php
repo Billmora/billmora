@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Template Settings - Mail')
+@section('title', 'Notification Settings - Mail')
 
 @section('body')
 <div class="flex flex-col gap-5">
@@ -12,19 +12,19 @@
                 'label' => __('admin/settings/mail.tabs.mailer'),
             ],
             [
-                'route' => route('admin.settings.mail.template'),
+                'route' => route('admin.settings.mail.notification'),
                 'icon' => 'lucide-mailbox',
-                'label' => __('admin/settings/mail.tabs.template'),
+                'label' => __('admin/settings/mail.tabs.notification'),
             ],
         ]" 
         active="{{ request()->url() }}" />
     <div class="flex flex-col gap-4">
         <div class="w-full md:w-100">
-            <form action="{{ route('admin.settings.mail.template') }}" method="GET" class="relative inline-block max-w-150 w-full group">
+            <form action="{{ route('admin.settings.mail.notification') }}" method="GET" class="relative inline-block max-w-150 w-full group">
                 <div class="absolute top-1/2 -translate-y-1/2 left-2.5 pointer-events-none">
                     <x-lucide-search class="w-5 h-auto text-slate-500 group-focus-within:text-billmora-primary" />
                 </div>
-                <input type="text" name="searchTemplateMail" id="searchTemplateMail" placeholder="{{ __('admin/common.search') }}" value="{{ request('searchTemplateMail') }}" class="w-full px-6 py-3 pl-10 bg-white placeholder:text-gray-400 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary">
+                <input type="text" name="searchNotificationMail" id="searchNotificationMail" placeholder="{{ __('admin/common.search') }}" value="{{ request('searchNotificationMail') }}" class="w-full px-6 py-3 pl-10 bg-white placeholder:text-gray-400 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary">
                 <div class="absolute top-1/2 -translate-y-1/2 right-1.5">
                     <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">{{ __('common.submit') }}</button>
                 </div>
@@ -43,18 +43,18 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y-2 divide-billmora-2 bg-white">
-                            @foreach ($templates as $template)
+                            @foreach ($notifications as $notification)
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $template->key }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $template->name }}</td>
-                                @if ($template->active)
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $notification->key }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $notification->name }}</td>
+                                @if ($notification->is_active)
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ __('common.active') }}</td>
                                 @else
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ __('common.inactive') }}</td>
                                 @endif
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                    @can('settings.mail.template.update')
-                                        <a href="{{ route('admin.settings.mail.template.edit', $template->id) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover underline">
+                                    @can('settings.mail.notification.update')
+                                        <a href="{{ route('admin.settings.mail.notification.edit', $notification->id) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover underline">
                                             {{ __('common.edit') }}
                                         </a>
                                     @endcan
@@ -67,7 +67,7 @@
             </div>
         </div>
         <div>
-            {{ $templates->links('admin::layouts.partials.pagination') }}
+            {{ $notifications->links('admin::layouts.partials.pagination') }}
         </div>
     </div>
 </div>

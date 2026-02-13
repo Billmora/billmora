@@ -3,7 +3,7 @@
 namespace App\Console\Commands\User;
 
 use App\Facades\Audit;
-use App\Mail\TemplateMail;
+use App\Mail\NotificationMail;
 use App\Models\User;
 use App\Models\UserEmailVerification;
 use Billmora;
@@ -157,7 +157,7 @@ class MakeUserCommand extends Command
         );
 
         try {
-            Mail::to($user->email)->send(new TemplateMail(
+            Mail::to($user->email)->send(new NotificationMail(
                 'user_registration', [
                     'client_name' => $user->fullname,
                     'company_name' => Billmora::getGeneral('company_name'),

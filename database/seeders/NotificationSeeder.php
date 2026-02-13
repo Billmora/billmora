@@ -2,18 +2,18 @@
 
 namespace Database\Seeders;
 
-use App\Models\MailTemplate;
+use App\Models\Notification;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class MailTemplateSeeder extends Seeder
+class NotificationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $templates = [
+        $notifications = [
             [
                 'key' => 'test_message',
                 'name' => 'Test Message',
@@ -127,16 +127,16 @@ class MailTemplateSeeder extends Seeder
             ],
         ];
 
-        foreach ($templates as $template) {
-            $mail = MailTemplate::updateOrCreate(
-                ['key' => $template['key']],
+        foreach ($notifications as $notification) {
+            $mail = Notification::updateOrCreate(
+                ['key' => $notification['key']],
                 [
-                    'name' => $template['name'],
-                    'placeholder' => $template['placeholder'],
+                    'name' => $notification['name'],
+                    'placeholder' => $notification['placeholder'],
                 ]
             );
 
-            foreach ($template['translations'] as $lang => $data) {
+            foreach ($notification['translations'] as $lang => $data) {
                 $mail->translations()->updateOrCreate(
                     ['lang' => $lang],
                     $data

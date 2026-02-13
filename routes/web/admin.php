@@ -227,9 +227,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::get('/', [Settings\Mail\MailerController::class, 'index'])->name('admin.settings.mail.mailer');
             Route::put('/', [Settings\Mail\MailerController::class, 'update'])->name('admin.settings.mail.mailer.update');
             Route::post('/test', [Settings\Mail\MailerController::class, 'test'])->name('admin.settings.mail.mailer.test');
-            Route::get('/template', [Settings\Mail\TemplateController::class, 'index'])->name('admin.settings.mail.template');
-            Route::get('/template/{id}/edit', [Settings\Mail\TemplateController::class, 'edit'])->name('admin.settings.mail.template.edit');
-            Route::put('/template/{id}/edit', [Settings\Mail\TemplateController::class, 'update'])->name('admin.settings.mail.template.update');
+            Route::get('/notification', [Settings\Mail\NotificationController::class, 'index'])->name('admin.settings.mail.notification');
+            Route::get('/notification/{id}/edit', [Settings\Mail\NotificationController::class, 'edit'])->name('admin.settings.mail.notification.edit');
+            Route::put('/notification/{id}/edit', [Settings\Mail\NotificationController::class, 'update'])->name('admin.settings.mail.notification.update');
         });
 
         /**

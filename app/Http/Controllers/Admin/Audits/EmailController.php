@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Admin\Audits;
 use Billmora;
 use App\Http\Controllers\Controller;
 use App\Mail\BroadcastMail;
-use App\Mail\TemplateMail;
+use App\Mail\NotificationMail;
 use App\Models\AuditEmail;
 use App\Models\Broadcast;
-use App\Models\MailTemplate;
+use App\Models\Notification;
 use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 
@@ -85,10 +85,10 @@ class EmailController extends Controller
             $broadcast = Broadcast::findOrFail($history->properties['id']);
             $mailable = new BroadcastMail($broadcast);
         } else {
-            $template = MailTemplate::where('key', $history->event)->firstOrFail();
-            $mailable = new TemplateMail(
-                $template->key,
-                $template->placeholder,
+            $notification = Notification::where('key', $history->event)->firstOrFail();
+            $mailable = new NotificationMail(
+                $notification->key,
+                $notification->placeholder,
             );
         }
 
