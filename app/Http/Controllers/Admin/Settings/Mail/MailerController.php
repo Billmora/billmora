@@ -89,10 +89,13 @@ class MailerController extends Controller
     {
         try {
             $user = Auth::user();
-            Mail::to($user->email)->send(new TemplateMail('test_message', [
-                'client_name' => $user->fullname,
-                'company_name' => Billmora::getGeneral('company_name'),
-            ]));
+            Mail::to($user->email)->send(new TemplateMail(
+                'test_message', [
+                    'client_name' => $user->fullname,
+                    'company_name' => Billmora::getGeneral('company_name'),
+                ],
+                $user->language,
+            ));
 
             return redirect()->back()->with('success', __('common.send_success', ['attribute' => __('admin/settings/mail.mailer_test_label')]));
         } catch (\Exception $e) {

@@ -103,12 +103,16 @@ class EmailVerificationController extends Controller
             );
 
             try {
-                Mail::to($user->email)->send(new TemplateMail('user_resend_verification', [
-                    'client_name' => $user->fullname,
-                    'company_name' => Billmora::getGeneral('company_name'),
-                    'verify_url' => route('client.email.verify', ['token' => $newToken]),
-                    'clientarea_url' => config('app.url'),
-                ]));
+                Mail::to($user->email)->send(new TemplateMail(
+                    'user_resend_verification', 
+                    [
+                        'client_name' => $user->fullname,
+                        'company_name' => Billmora::getGeneral('company_name'),
+                        'verify_url' => route('client.email.verify', ['token' => $newToken]),
+                        'clientarea_url' => config('app.url'),
+                    ],
+                    $user->language,
+                ));
 
                 $auditEmail->update([
                     'status' => 'sent',

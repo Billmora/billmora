@@ -63,12 +63,16 @@ class ForgotController extends Controller
             );
 
             try {
-                Mail::to($user->email)->send(new TemplateMail('user_password_reset', [
-                    'client_name' => $user->fullname,
-                    'company_name' => Billmora::getGeneral('company_name'),
-                    'reset_url' => route('client.password.reset', ['token' => $newToken]),
-                    'clientarea_url' => config('app.url'),
-                ]));
+                Mail::to($user->email)->send(new TemplateMail(
+                    'user_password_reset', 
+                    [
+                        'client_name' => $user->fullname,
+                        'company_name' => Billmora::getGeneral('company_name'),
+                        'reset_url' => route('client.password.reset', ['token' => $newToken]),
+                        'clientarea_url' => config('app.url'),
+                    ],
+                    $user->language,
+                ));
 
                 $auditEmail->update([
                     'status' => 'sent',

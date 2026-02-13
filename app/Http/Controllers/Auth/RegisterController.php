@@ -132,12 +132,16 @@ class RegisterController extends Controller
         );
 
         try {
-            Mail::to($user->email)->send(new TemplateMail('user_registration', [
-                'client_name' => $user->fullname,
-                'company_name' => Billmora::getGeneral('company_name'),
-                'verify_url' => route('client.email.verify', ['token' => $token]),
-                'clientarea_url' => config('app.url'),
-            ]));
+            Mail::to($user->email)->send(new TemplateMail(
+                'user_registration', 
+                [
+                    'client_name' => $user->fullname,
+                    'company_name' => Billmora::getGeneral('company_name'),
+                    'verify_url' => route('client.email.verify', ['token' => $token]),
+                    'clientarea_url' => config('app.url'),
+                ],
+                $user->language,
+            ));
 
             $auditEmail->update([
                 'status' => 'sent',
