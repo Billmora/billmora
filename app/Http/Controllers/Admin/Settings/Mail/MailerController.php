@@ -6,6 +6,7 @@ use App\Mail\NotificationMail;
 use App\Traits\AuditsSystem;
 use Billmora;
 use App\Http\Controllers\Controller;
+use App\Jobs\NotificationJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -87,19 +88,18 @@ class MailerController extends Controller
      */
     public function test()
     {
-        try {
-            $user = Auth::user();
-            Mail::to($user->email)->send(new NotificationMail(
-                'test_message', [
-                    'client_name' => $user->fullname,
-                    'company_name' => Billmora::getGeneral('company_name'),
-                ],
-                $user->language,
-            ));
+        $user = Auth::user();
 
-            return redirect()->back()->with('success', __('common.send_success', ['attribute' => __('admin/settings/mail.mailer_test_label')]));
-        } catch (\Exception $e) {
-            return redirect()->back()->with('failed', $e->getMessage());
-        }
+        NotificationJob::dispatch(
+            $user->email,
+            'test_message', 
+            [
+                'client_name' => $user->fullname,
+                'company_name' => Billmora::getGeneral('company_name'),
+            ],
+            $user->language
+        );
+
+        return redirect()->back()->with('success', __('common.send_success', ['attribute' => __('admin/settings/mail.mailer_test_label')]));
     }
 }

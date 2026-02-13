@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Auth\Password;
 
-use App\Facades\Audit;
 use App\Http\Controllers\Controller;
-use App\Mail\NotificationMail;
+use App\Jobs\NotificationJob;
 use App\Models\User;
 use App\Models\UserPasswordReset;
 use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
 
 class ForgotController extends Controller
 {
@@ -55,42 +53,17 @@ class ForgotController extends Controller
                 'expires_at' => now()->addMinutes(60),
             ]);
 
-            $auditEmail = Audit::email(
-                $user->id,
+            NotificationJob::dispatch(
                 $user->email,
-                'user_password_reset',
-                'pending',
+                'user_password_reset', 
+                [
+                    'client_name' => $user->fullname,
+                    'company_name' => Billmora::getGeneral('company_name'),
+                    'reset_url' => route('client.password.reset', ['token' => $newToken]),
+                    'clientarea_url' => config('app.url'),
+                ],
+                $user->language
             );
-
-            try {
-                Mail::to($user->email)->send(new NotificationMail(
-                    'user_password_reset', 
-                    [
-                        'client_name' => $user->fullname,
-                        'company_name' => Billmora::getGeneral('company_name'),
-                        'reset_url' => route('client.password.reset', ['token' => $newToken]),
-                        'clientarea_url' => config('app.url'),
-                    ],
-                    $user->language,
-                ));
-
-                $auditEmail->update([
-                    'status' => 'sent',
-                    'properties' => [
-                        'ip' => $request->ip(),
-                        'user_agent' => $request->userAgent(),
-                    ],
-                ]);
-            } catch (\Throwable $e) {
-                $auditEmail->update([
-                    'status' => 'failed',
-                    'properties' => [
-                        'ip' => $request->ip(),
-                        'user_agent' => $request->userAgent(),
-                        'error' => $e->getMessage(),
-                    ],
-                ]);
-            }
         }
 
         return redirect()->route('client.password.forgot')->with('success', __('auth.password.reset_request_sent'));

@@ -11,6 +11,7 @@ use App\Models\Broadcast;
 use App\Models\Notification;
 use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
+use Str;
 
 class EmailController extends Controller
 {
@@ -83,13 +84,18 @@ class EmailController extends Controller
 
         if ($history->event === 'broadcast.email') {
             $broadcast = Broadcast::findOrFail($history->properties['id']);
-            $mailable = new BroadcastMail($broadcast);
-        } else {
-            $notification = Notification::where('key', $history->event)->firstOrFail();
-            $mailable = new NotificationMail(
-                $notification->key,
-                $notification->placeholder,
-            );
+            $mailable = new BroadcastMail($broadcast, []);
+        } else  {
+            $key = Str::after($history->event, 'notification.');
+            
+            $notification = Notification::with(['translations'])->where('key', $key)->firstOrFail();
+            
+            $translation = $notification->translations->first();
+            
+            $notification->subject = $translation->subject;
+            $notification->body = $translation->body;
+            
+            $mailable = new NotificationMail($notification, []);
         }
 
         $content = $mailable->content();

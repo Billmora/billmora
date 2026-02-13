@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Facades\Audit;
-use App\Mail\NotificationMail;
 use App\Models\User;
 use App\Models\UserEmailVerification;
 use App\Models\UserPasswordReset;
 use App\Http\Controllers\Controller;
+use App\Jobs\NotificationJob;
 use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -156,42 +155,17 @@ class UsersController extends Controller
                 'expires_at' => now()->addMinutes(60),
             ]);
 
-            $auditEmail = Audit::email(
-                $user->id,
+            NotificationJob::dispatch(
                 $user->email,
-                'user_password_reset',
-                'pending',
+                'user_password_reset', 
+                [
+                    'client_name' => $user->fullname,
+                    'company_name' => Billmora::getGeneral('company_name'),
+                    'reset_url' => route('client.password.reset', ['token' => $token]),
+                    'clientarea_url' => config('app.url'),
+                ],
+                $user->language
             );
-
-            try {
-                Mail::to($user->email)->send(new NotificationMail(
-                    'user_password_reset', 
-                    [
-                        'client_name' => $user->fullname,
-                        'company_name' => Billmora::getGeneral('company_name'),
-                        'reset_url' => route('client.password.reset', ['token' => $token]),
-                        'clientarea_url' => config('app.url'),
-                    ],
-                    $user->language,
-                ));
-
-                $auditEmail->update([
-                    'status' => 'sent',
-                    'properties' => [
-                        'ip' => $request->ip(),
-                        'user_agent' => $request->userAgent(),
-                    ],
-                ]);
-            } catch (\Throwable $e) {
-                $auditEmail->update([
-                    'status' => 'failed',
-                    'properties' => [
-                        'ip' => $request->ip(),
-                        'user_agent' => $request->userAgent(),
-                        'error' => $e->getMessage(),
-                    ],
-                ]);
-            }
         }
 
         if ($validated['role'] === 'root' && Auth::user()->isRootAdmin()) {
