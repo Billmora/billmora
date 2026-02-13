@@ -271,9 +271,9 @@ class PricingController extends Controller
                     continue;
                 }
 
-                if (empty($rate['price']) || $rate['price'] <= 0) {
+                if (!isset($rate['price']) || $rate['price'] === '' || $rate['price'] === null || $rate['price'] <= 0) {
                     $validator->errors()->add(
-                        "rates[$code][price]",
+                        "rates.$code.price",
                         __('validation.required_if', [
                             'attribute' => __('admin/packages.pricing.price_label'),
                             'other' => __('common.enable'),
@@ -282,9 +282,9 @@ class PricingController extends Controller
                     );
                 }
 
-                if (!isset($rate['setup_fee'])) {
+                if (!isset($rate['setup_fee']) || $rate['setup_fee'] === '' || $rate['setup_fee'] === null) {
                     $validator->errors()->add(
-                        "rates[$code][setup_fee]",
+                        "rates.$code.setup_fee",
                         __('validation.required_if', [
                             'attribute' => __('admin/packages.pricing.setup_fee_label'),
                             'other' => __('common.enable'),
