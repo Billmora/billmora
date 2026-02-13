@@ -86,27 +86,27 @@ class NotificationController extends Controller
         $notification = Notification::with('translations')->findOrFail($id);
 
         $validated = $request->validate([
-            'language' => ['required', 'string'],
-            'subject' => ['required', 'string', 'max:255'],
-            'body' => ['required', 'string'],
-            'is_active' => ['required', 'boolean'],
-            'cc' => ['nullable', 'array'],
-            'bcc' => ['nullable', 'array'],
+            'notification_language' => ['required', 'string'],
+            'notification_subject' => ['required', 'string', 'max:255'],
+            'notification_body' => ['required', 'string'],
+            'notification_is_active' => ['required', 'boolean'],
+            'notification_cc' => ['nullable', 'array'],
+            'notification_bcc' => ['nullable', 'array'],
         ]);
 
-        $oldNotification = $notification->translations->firstWhere('lang', $validated['language'])?->toArray();
+        $oldNotification = $notification->translations->firstWhere('lang', $validated['notification_language'])?->toArray();
 
         $notification->update([
-            'is_active' => $validated['is_active'],
-            'cc' => $validated['cc'] ?? [],
-            'bcc' => $validated['bcc'] ?? [],
+            'notification_is_active' => $validated['notification_is_active'],
+            'notification_cc' => $validated['notification_cc'] ?? [],
+            'notification_bcc' => $validated['notification_bcc'] ?? [],
         ]);
 
         $translation = $notification->translations()->updateOrCreate(
-            ['lang' => $validated['language']],
+            ['lang' => $validated['notification_language']],
             [
-                'subject' => $validated['subject'],
-                'body'    => $validated['body'],
+                'subject' => $validated['notification_subject'],
+                'body'    => $validated['notification_body'],
             ]
         );
 
