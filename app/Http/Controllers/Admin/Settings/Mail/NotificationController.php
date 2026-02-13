@@ -94,12 +94,13 @@ class NotificationController extends Controller
             'notification_bcc' => ['nullable', 'array'],
         ]);
 
-        $oldNotification = $notification->translations->firstWhere('lang', $validated['notification_language'])?->toArray();
+        $oldNotification = $notification->getOriginal();
+        $oldTranslation = $notification->translations->firstWhere('lang', $validated['notification_language'])?->toArray();
 
         $notification->update([
-            'notification_is_active' => $validated['notification_is_active'],
-            'notification_cc' => $validated['notification_cc'] ?? [],
-            'notification_bcc' => $validated['notification_bcc'] ?? [],
+            'is_active' => $validated['notification_is_active'],
+            'cc' => $validated['notification_cc'] ?? [],
+            'bcc' => $validated['notification_bcc'] ?? [],
         ]);
 
         $translation = $notification->translations()->updateOrCreate(
@@ -110,9 +111,20 @@ class NotificationController extends Controller
             ]
         );
 
-        $newNotification = $translation->toArray();
+        $newNotification = $notification->getChanges();
+        $newTranslation = $translation->toArray();
 
-        $this->recordUpdate('mail.notification.update', $oldNotification, $newNotification);
+        $this->recordUpdate(
+            'mail.notification.update', 
+            [
+                'notification' => $oldNotification,
+                'translation' => $oldTranslation,
+            ],
+            [
+                'notification' => $newNotification,
+                'translation' => $newTranslation,
+            ]
+        );
 
         return redirect()->route('admin.settings.mail.notification')->with('success', __('common.save_success', ['attribute' => __('admin/settings/mail.title')]));
     }
