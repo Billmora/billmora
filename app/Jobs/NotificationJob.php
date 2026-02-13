@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Facades\Audit;
 use App\Mail\NotificationMail;
+use App\Models\Notification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -33,19 +34,38 @@ class NotificationJob implements ShouldQueue
         );
 
         try {
+            $notification = Notification::with(['translations'])
+                ->where('key', $this->notificationKey)
+                ->first();
+
+            if (!$notification) {
+                throw new \Exception("Notification key {$this->notificationKey} does not exist.");
+            }
+
+            if (!$notification->is_active) {
+                throw new \Exception("Notification {$this->notificationKey} is currently inactive.");
+            }
+
+            $lang = $this->lang ?? config('app.fallback_locale');
+            $translation = $notification->translations->firstWhere('lang', $lang)
+                ?? $notification->translations->firstWhere('lang', config('app.fallback_locale'));
+
+            if (!$translation) {
+                throw new \Exception("Translation not found for {$this->notificationKey} in language {$lang}.");
+            }
+
+            $notification->subject = $translation->subject;
+            $notification->body = $translation->body;
+
             Mail::to($this->recipient)
-                ->send(new NotificationMail(
-                    $this->notificationKey,
-                    $this->data,
-                    $this->lang
-                ));
+                ->send(new NotificationMail($notification, $this->data));
 
             $auditEmail->update([
                 'status' => 'sent',
                 'properties' => [
                     'key' => $this->notificationKey,
                     'recipient' => $this->recipient,
-                    'lang' => $this->lang,
+                    'lang' => $lang,
                 ],
             ]);
         } catch (\Throwable $e) {

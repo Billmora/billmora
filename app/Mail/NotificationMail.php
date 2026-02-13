@@ -8,57 +8,34 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Exception;
 
 class NotificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public Notification $email;
+    public Notification $notification;
     public array $data;
-    public string $lang;
 
     /**
      * Create a new message instance.
-     *
-     * @param string $key Notification key
+     * 
+     * @param \App\Models\Notification $notification
      * @param array $data Placeholder replacement
-     * @param string $lang language code, default en_US
      */
-    public function __construct(string $key, array $data = [], ?string $lang = null)
+    public function __construct(Notification $notification, array $data = [])
     {
-        $this->lang = $lang ?? config('app.fallback_locale');
-
-        $this->email = Notification::with(['translations'])
-            ->where('key', $key)
-            ->where('is_active', true)
-            ->first();
-
-        if (!$this->email) {
-            throw new Exception("Email notification '{$key}' not found or disabled.");
-        }
-
-        $translation = $this->email->translations->firstWhere('lang', $lang)
-            ?? $this->email->translations->firstWhere('lang', config('app.fallback_locale'));
-
-        if (!$translation) {
-            throw new Exception("No translation found for notification '{$key}' and fallback 'en_US'.");
-        }
-
-        $this->email->subject = $translation->subject;
-        $this->email->body = $translation->body;
-
+        $this->notification = $notification;
         $this->data = $data;
     }
 
     /**
-     * Replace placeholders in the email notification
+     * Replace placeholders in subject or body.
      */
-    private function placeholder(string $notification): string
+    private function placeholder(string $field): string
     {
         return preg_replace_callback('/\{(\w+)\}/', function ($matches) {
             return $this->data[$matches[1]] ?? '';
-        }, $notification);
+        }, $field);
     }
 
     /**
@@ -67,15 +44,15 @@ class NotificationMail extends Mailable
     public function envelope(): Envelope
     {
         $envelope = new Envelope(
-            subject: $this->placeholder($this->email->subject),
+            subject: $this->placeholder($this->notification->subject),
         );
 
-        if (!empty($this->email->cc)) {
-            $envelope->cc($this->email->cc);
+        if (!empty($this->notification->cc)) {
+            $envelope->cc($this->notification->cc);
         }
 
-        if (!empty($this->email->bcc)) {
-            $envelope->bcc($this->email->bcc);
+        if (!empty($this->notification->bcc)) {
+            $envelope->bcc($this->notification->bcc);
         }
 
         return $envelope;
@@ -89,7 +66,7 @@ class NotificationMail extends Mailable
         return new Content(
             view: 'email::index',
             with: [
-                'body' => $this->placeholder($this->email->body)
+                'body' => $this->placeholder($this->notification->body)
             ],
         );
     }
