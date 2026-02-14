@@ -6,9 +6,6 @@
 <form action="{{ route('admin.settings.auth.user.update') }}" method="POST" class="flex flex-col gap-5">
     @csrf
     @method('PUT')
-    @if (session('success'))
-        <x-admin::alert variant="success" title="{{ session('success') }}" />
-    @endif
     <x-admin::tabs 
         :tabs="[
             [
@@ -17,7 +14,7 @@
                 'label' => __('admin/settings/auth.tabs.user'),
             ],
         ]" 
-        active="{{ request()->fullUrl() }}" />
+        active="{{ request()->url() }}" />
     <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <div class="grid gap-4">
             <x-admin::toggle name="user_registration" label="{{ __('admin/settings/auth.user_registration_label') }}" helper="{{ __('admin/settings/auth.user_registration_helper') }}" :checked="Billmora::getAuth('user_registration')" />

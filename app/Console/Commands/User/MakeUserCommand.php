@@ -2,14 +2,12 @@
 
 namespace App\Console\Commands\User;
 
-use App\Facades\Audit;
-use App\Mail\TemplateMail;
+use App\Jobs\NotificationJob;
 use App\Models\User;
 use App\Models\UserEmailVerification;
 use Billmora;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Laravel\Prompts;
 
@@ -144,37 +142,17 @@ class MakeUserCommand extends Command
             'expires_at' => now()->addMinutes(60),
         ]);
 
-        $auditEmail = Audit::email(
-            $user->id,
+        NotificationJob::dispatch(
             $user->email,
-            'user_registration',
-            'pending',
+            'user_registration', 
             [
-                'ip' => null,
-                'user_agent' => "artisan {$this->getName()}",
-                
-            ]
-        );
-
-        try {
-            Mail::to($user->email)->send(new TemplateMail('user_registration', [
                 'client_name' => $user->fullname,
                 'company_name' => Billmora::getGeneral('company_name'),
                 'verify_url' => route('client.email.verify', ['token' => $token]),
                 'clientarea_url' => config('app.url'),
-            ]));
-
-            $auditEmail->update([
-                'status' => 'sent',
-            ]);
-        } catch (\Throwable $e) {
-            $auditEmail->update([
-                'status' => 'failed',
-                'properties' => array_merge($auditEmail->properties ?? [], [
-                    'error' => $e->getMessage(),
-                ]),
-            ]);
-        }
+            ],
+            $user->language
+        );
 
         $this->newLine();
         $this->info("User has been created successfully with the following details:");

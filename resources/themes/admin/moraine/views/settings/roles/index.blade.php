@@ -4,11 +4,8 @@
 
 @section('body')
 <div class="flex flex-col gap-5">
-    @if (session('success'))
-        <x-admin::alert variant="success" title="{{ session('success') }}" />
-    @endif
     <div class="flex flex-col gap-4">
-        @can('settings.roles.delete')
+        @can('settings.roles.create')
             <a href="{{ route('admin.settings.roles.create') }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                 <x-lucide-plus class="w-auto h-5" />
                 {{ __('common.create') }}
@@ -33,7 +30,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $loop->iteration }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $role->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $role->permissions->count() }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $role->created_at }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $role->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                     @can('settings.roles.update')
                                         <a href="{{ route('admin.settings.roles.edit', ['id' => $role->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">

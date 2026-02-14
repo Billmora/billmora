@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Facades\Audit;
 use Billmora;
 use App\Http\Controllers\Controller;
+use App\Jobs\NotificationJob;
 use App\Models\User;
-use App\Mail\TemplateMail;
 use App\Models\UserEmailVerification;
 use App\Services\CaptchaService;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
@@ -120,36 +118,17 @@ class RegisterController extends Controller
             'expires_at' => now()->addMinutes(60),
         ]);
 
-        $auditEmail = Audit::email(
-            $user->id,
+        NotificationJob::dispatch(
             $user->email,
-            'user_registration',
-            'pending',
+            'user_registration', 
             [
-                'ip' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-            ]
-        );
-
-        try {
-            Mail::to($user->email)->send(new TemplateMail('user_registration', [
                 'client_name' => $user->fullname,
                 'company_name' => Billmora::getGeneral('company_name'),
                 'verify_url' => route('client.email.verify', ['token' => $token]),
                 'clientarea_url' => config('app.url'),
-            ]));
-
-            $auditEmail->update([
-                'status' => 'sent',
-            ]);
-        } catch (\Throwable $e) {
-            $auditEmail->update([
-                'status' => 'failed',
-                'properties' => array_merge($auditEmail->properties ?? [], [
-                    'error' => $e->getMessage(),
-                ]),
-            ]);
-        }
+            ],
+            $user->language
+        );
 
         return redirect()->route('client.login')->with('success', __('auth.registration_successful'));
     }

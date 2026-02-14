@@ -4,28 +4,25 @@
 
 @section('body')
 <div class="flex flex-col gap-5">
-    @if (session('success'))
-        <x-admin::alert variant="success" title="{{ session('success') }}" />
-    @endif
     <x-admin::tabs 
         :tabs="[
             [
                 'route' => route('admin.users.summary', ['id' => $user->id]),
                 'icon' => 'lucide-contact',
-                'label' => __('admin/users/manage.tabs.summary'),
+                'label' => __('admin/users.tabs.summary'),
             ],
             [
                 'route' => route('admin.users.profile', ['id' => $user->id]),
                 'icon' => 'lucide-user-pen',
-                'label' => __('admin/users/manage.tabs.profile'),
+                'label' => __('admin/users.tabs.profile'),
             ],
             [
                 'route' => route('admin.users.activity', ['id' => $user->id]),
                 'icon' => 'lucide-activity',
-                'label' => __('admin/users/manage.tabs.activity'),
+                'label' => __('admin/users.tabs.activity'),
             ],
         ]" 
-        active="{{ request()->fullUrl() }}" />
+        active="{{ request()->url() }}" />
     <div class="flex flex-col gap-4">
         <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
             <div class="w-full md:w-100">
@@ -33,7 +30,7 @@
                     <div class="absolute top-1/2 -translate-y-1/2 left-2.5 pointer-events-none">
                         <x-lucide-search class="w-5 h-auto text-slate-500 group-focus-within:text-billmora-primary" />
                     </div>
-                    <input type="text" name="searchHistoryMail" id="searchHistoryMail" placeholder="{{ __('admin/common.search') }}" value="{{ request('searchHistoryMail') }}" class="w-full px-6 py-3 pl-10 bg-white placeholder:text-gray-400 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary">
+                    <input type="text" name="searchActiviyUser" id="searchActiviyUser" placeholder="{{ __('admin/common.search') }}" value="{{ request('searchActiviyUser') }}" class="w-full px-6 py-3 pl-10 bg-white placeholder:text-gray-400 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary">
                     <div class="absolute top-1/2 -translate-y-1/2 right-1.5">
                         <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">{{ __('common.submit') }}</button>
                     </div>
@@ -74,7 +71,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
                                     <a href="{{ route('admin.users.activity.show', ['id' => $user->id, 'activity' => $activity->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $activity->event }}</a>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $activity->created_at }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $activity->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                     <a href="{{ route('admin.users.activity.show', ['id' => $user->id, 'activity' => $activity->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                                         {{ __('common.view') }}

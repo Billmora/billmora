@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Facades\Audit;
-use App\Mail\TemplateMail;
 use App\Models\User;
 use App\Models\UserEmailVerification;
 use App\Models\UserPasswordReset;
 use App\Http\Controllers\Controller;
+use App\Jobs\NotificationJob;
 use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -58,7 +57,7 @@ class UsersController extends Controller
                     ->paginate(25)
                     ->withQueryString();
         
-        return view('admin::users', compact('users', 'search', 'sort', 'direction'));
+        return view('admin::users.index', compact('users', 'search', 'sort', 'direction'));
     }
 
     /**
@@ -95,7 +94,6 @@ class UsersController extends Controller
                 Rule::in(array_merge(['client', 'root'], Role::pluck('name')->toArray())),
             ],
             'status' => ['required', 'in:active,inactive,suspended,closed'],
-            'currency' => ['required', 'string'], // TODO: Add currency validation rule
             'language' => ['required', 'string', Rule::in(array_map('basename', File::directories(lang_path())))],
             'phone_number' => [
                 Rule::requiredIf(Billmora::hasAuth('user_billing_required_inputs', 'phone_number')),
@@ -146,26 +144,8 @@ class UsersController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'status' => $validated['status'],
-            'currency' => $validated['currency'],
             'language' => $validated['language'],
         ]);
-
-        $userData = [
-            'user' => $user->toArray(),
-            'role' => $validated['role'],
-            'billing' => [
-                'phone_number' => $validated['phone_number'],
-                'company_name' => $validated['company_name'],
-                'street_address_1' => $validated['street_address_1'],
-                'street_address_2' => $validated['street_address_2'],
-                'city' => $validated['city'],
-                'state' => $validated['state'],
-                'postcode' => $validated['postcode'],
-                'country' => $validated['country'],
-            ]
-        ];
-
-        $this->recordCreate('user.create', $userData);
 
         if ($validated['password'] === null) {
             $token = Str::random(64);
@@ -175,38 +155,17 @@ class UsersController extends Controller
                 'expires_at' => now()->addMinutes(60),
             ]);
 
-            $auditEmail = Audit::email(
-                $user->id,
+            NotificationJob::dispatch(
                 $user->email,
-                'user_password_reset',
-                'pending',
-            );
-
-            try {
-                Mail::to($user->email)->send(new TemplateMail('user_password_reset', [
+                'user_password_reset', 
+                [
                     'client_name' => $user->fullname,
                     'company_name' => Billmora::getGeneral('company_name'),
                     'reset_url' => route('client.password.reset', ['token' => $token]),
                     'clientarea_url' => config('app.url'),
-                ]));
-
-                $auditEmail->update([
-                    'status' => 'sent',
-                    'properties' => [
-                        'ip' => $request->ip(),
-                        'user_agent' => $request->userAgent(),
-                    ],
-                ]);
-            } catch (\Throwable $e) {
-                $auditEmail->update([
-                    'status' => 'failed',
-                    'properties' => [
-                        'ip' => $request->ip(),
-                        'user_agent' => $request->userAgent(),
-                        'error' => $e->getMessage(),
-                    ],
-                ]);
-            }
+                ],
+                $user->language
+            );
         }
 
         if ($validated['role'] === 'root' && Auth::user()->isRootAdmin()) {
@@ -232,6 +191,12 @@ class UsersController extends Controller
                 'country' => $validated['country'],
             ]
         );
+
+       $this->recordCreate('user.create', [
+            'user' => $user->toArray(),
+            'roles' => $user->roles->toArray(),
+            'billing' => $user->billing?->toArray(),
+        ]);
 
         return redirect()->route('admin.users')->with('success', __('common.create_success', ['attribute' => $user->email]));
     }
@@ -297,7 +262,7 @@ class UsersController extends Controller
             'user_agent' => $request->userAgent(),
         ]);
 
-        return redirect()->back()->with('success', __('admin/users/manage.email_verification_alert_success'));
+        return redirect()->back()->with('success', __('admin/users.email_verification_alert_success'));
     }
 
     /**

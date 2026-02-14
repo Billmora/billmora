@@ -25,4 +25,14 @@ class AuditUser extends Model
     protected $casts = [
         'properties' => 'array',
     ];
+
+    /**
+     * Get the user that owns this audit.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

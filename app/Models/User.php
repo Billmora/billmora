@@ -27,7 +27,6 @@ class User extends Authenticatable
         'is_root_admin',
         'status',
         'currency',
-        'language',
         'email_verified_at',
     ];
 
@@ -90,6 +89,16 @@ class User extends Authenticatable
     public function billing()
     {
         return $this->hasOne(UserBilling::class);
+    }
+
+    /**
+     * Get the coupon usages for this user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function couponUsages()
+    {
+        return $this->hasMany(CouponUsage::class);
     }
 
     /**

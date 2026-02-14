@@ -79,6 +79,7 @@ trait AuditsSystem
 
         if ($changes) {
             Audit::system(Auth::id(), $event, [
+                'id' => $old['id'] ?? null,
                 'changes' => $changes,
             ]);
         }

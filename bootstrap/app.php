@@ -15,7 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->web(\App\Http\Middleware\LanguageMiddleware::class);
+        $middleware->web([
+            \App\Http\Middleware\PreferenceMiddleware::class,
+        ]);
         $middleware->alias([
             'permission' => Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role' => Spatie\Permission\Middleware\RoleMiddleware::class,
@@ -28,5 +30,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectUsersTo(fn () => route('client.dashboard'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (\Exception $e) {
+            if ($e->getCode() === 801) {
+                return Redirect::back()->with('error', $e->getMessage());
+            }
+        });
     })->create();

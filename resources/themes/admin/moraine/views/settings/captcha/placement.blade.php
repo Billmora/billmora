@@ -6,9 +6,6 @@
 <form action="{{ route('admin.settings.captcha.placement.update') }}" method="POST" class="flex flex-col gap-5">
     @csrf
     @method('PUT')
-    @if (session('success'))
-        <x-admin::alert variant="success" title="{{ session('success') }}" />
-    @endif
     <x-admin::tabs 
         :tabs="[
             [
@@ -22,7 +19,7 @@
                 'label' => __('admin/settings/captcha.tabs.placement'),
             ],
         ]" 
-        active="{{ request()->fullUrl() }}" />
+        active="{{ request()->url() }}" />
     <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <x-admin::multiselect
             name="placements_enabled_forms"

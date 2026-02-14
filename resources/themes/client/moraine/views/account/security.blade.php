@@ -1,16 +1,12 @@
 @extends('client::layouts.app')
 
+@section('title', 'Account Security')
+
 @section('body')
 <div class="grid gap-5">
-    @if (session('success'))
-        <x-client::alert variant="success">{{ session('success') }}</x-client::alert>
-    @endif
     @error('totp')
-    <x-client::alert variant="danger">{{ $message }}</x-client::alert>
+        <x-client::alert variant="danger" title="{{ $message }}" />
     @enderror
-    @if (session('error'))
-        <x-client::alert variant="danger">{{ session('error') }}</x-client::alert>
-    @endif
     <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-3 gap-5">
         <form action="{{ route('client.account.security.email.update') }}" method="POST" class="w-full h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-xl">
             @csrf

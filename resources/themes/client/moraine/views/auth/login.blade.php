@@ -1,3 +1,5 @@
+@section('title', 'Login')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,14 +18,13 @@
                 </a>
                 <div class="grid gap-6 my-auto">
                     @if (session('success'))
-                        <x-client::alert variant="success">{{ session('success') }}</x-client::alert>
+                        <x-client::alert variant="success" title="{{ session('success') }}" />
                     @endif
                     @if (session('warning'))
-                        <x-client::alert variant="warning">{{ session('warning') }}</x-client::alert>
+                        <x-client::alert variant="warning" title="{{ session('warning') }}" />
                     @endif
                     @if (session('error'))
-                        <x-client::alert variant="danger">
-                            {{ session('error') }}
+                        <x-client::alert variant="danger" title="{{ session('error') }}">
                             @if (session('email_token'))
                                 <button type="button" onclick="document.getElementById('resendEmail').submit()" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.resend') }}</button>
                             @endif

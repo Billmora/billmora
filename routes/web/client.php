@@ -27,6 +27,55 @@ Route::group(['middleware' => ['auth', 'maintenance', '2fa']], function () {
 });
 
 /**
+ * Client store routes.
+ * 
+ * Prefix: /store
+ */
+Route::group(['prefix' => 'store', 'middleware' => ['maintenance']], function () {
+    Route::get('/', [Client\StoreController::class, 'index'])->name('client.store');
+    Route::get('/{catalog:slug}', [Client\Store\CatalogController::class, 'index'])->name('client.store.catalog');
+    Route::get('/{catalog:slug}/{package:slug}', [Client\Store\PackageController::class, 'show'])->name('client.store.catalog.package');
+});
+
+/**
+ * Client store routes.
+ * 
+ * Prefix: /checkout
+ */
+Route::group(['prefix' => 'checkout', 'middleware' => ['maintenance']], function () {
+    Route::post('/review', [Client\Checkout\ReviewController::class, 'initiate'])->name('client.checkout.review.initiate');
+    Route::get('/review', [Client\Checkout\ReviewController::class, 'review'])->name('client.checkout.review');
+    Route::post('/process', [Client\Checkout\ReviewController::class, 'process'])->name('client.checkout.process');
+
+    Route::post('/coupon/check', [Client\Checkout\CouponController::class, 'check'])->name('client.checkout.coupon.check');
+    Route::post('/coupon/remove', [Client\Checkout\CouponController::class, 'remove'])->name('client.checkout.coupon.remove');
+});
+
+/**
+ * Client services routes.
+ * 
+ * Prefix: /services
+ */
+Route::group(['prefix' => 'services', 'middleware' => ['auth', 'maintenance', '2fa']], function () {
+    Route::get('/', [Client\ServicesController::class, 'index'])->name('client.services');
+    Route::get('/{service}', [Client\ServicesController::class, 'show'])->name('client.services.show');
+
+    Route::get('/{service}/provisioning/{slug}', [Client\ServicesController::class, 'showActionForm'])->name('client.services.provisioning');
+    Route::any('/{service}/provisioning/{slug}/process', [Client\ServicesController::class, 'processAction'])->name('client.services.provisioning.process');
+});
+
+/**
+ * Client invoices routes.
+ * 
+ * Prefix: /invoices
+ */
+Route::group(['prefix' => 'invoices', 'middleware' => ['auth', 'maintenance', '2fa']], function () {
+    Route::get('/', [Client\InvoicesController::class, 'index'])->name('client.invoices');
+    Route::get('/{invoice:invoice_number}', [Client\InvoicesController::class, 'show'])->name('client.invoices.show');
+    Route::get('/{invoice:invoice_number}/download', [Client\InvoicesController::class, 'download'])->name('client.invoices.download');
+});
+
+/**
  * Client authentication routes.
  * 
  * Prefix: /auth

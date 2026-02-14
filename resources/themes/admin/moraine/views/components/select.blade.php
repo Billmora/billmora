@@ -36,10 +36,9 @@
                 'border-red-400' => $error,
                 'border-billmora-2' => !$error,
             ])
-            @if($attributes->has('disabled') && $attributes->get('disabled') !== false) disabled @endif
             {{ $attributes }}
         >
-            <option class="text-slate-500" selected disabled>
+            <option value="" class="text-slate-500" selected disabled>
                 {{ __('common.choose_option') }}
             </option>
             {{ $slot }}

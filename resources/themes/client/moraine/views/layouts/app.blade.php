@@ -15,6 +15,16 @@
       {{-- Header --}}
       @include('client::layouts.partials.header')
 
+      {{-- Alert --}}
+      @if (session('success'))
+        <x-client::alert variant="success" title="{{ session('success') }}" />
+      @endif
+      @if (session('warning'))
+          <x-client::alert variant="warning" title="{{ session('warning') }}" />
+      @endif
+      @if (session('error'))
+          <x-client::alert variant="danger" title="{{ session('error') }}" />
+      @endif
       <!-- Content -->
       <main>
         @yield('body')

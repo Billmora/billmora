@@ -2,8 +2,7 @@
 
 return [
     'dashboard' => 'Dashboard',
-    'settings' => 'Settings',
-    'group' => [
-        'system' => 'System'
-    ],
+    'store' => 'Store',
+    'services' => 'Services',
+    'invoices' => 'Invoices',
 ];

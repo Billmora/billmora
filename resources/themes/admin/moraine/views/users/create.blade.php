@@ -4,12 +4,6 @@
 
 @section('body')
 <div class="flex flex-col gap-5">
-    @if (session('success'))
-        <x-admin::alert variant="success" title="{{ session('success') }}" />
-    @endif
-    @if (session('error'))
-        <x-admin::alert variant="danger" title="{{ session('error') }}" />
-    @endif
     <form action="{{ route('admin.users.store') }}" method="POST" class="flex flex-col gap-5">
         @csrf
         <div class="flex flex-col lg:flex-row gap-5">
@@ -25,7 +19,7 @@
                         <x-admin::input type="tel" name="phone_number" label="{{ __('common.phone_number') }}" value="{{ old('phone_number') }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'phone_number')" />
                         <x-admin::input type="text" name="company_name" label="{{ __('common.company_name') }}" value="{{ old('company_name') }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'company_name')" />
                         <x-admin::input type="text" name="street_address_1" label="{{ __('common.street_address_1') }}" value="{{ old('street_address_1') }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'street_address_1')" />
-                        <x-admin::input type="text" name="street_address_2" label="{{ __('common.street_address_2') }}" value="{{ old('street_address_2') }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'street_address_1')" />
+                        <x-admin::input type="text" name="street_address_2" label="{{ __('common.street_address_2') }}" value="{{ old('street_address_2') }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'street_address_2')" />
                         <x-admin::input type="text" name="city" label="{{ __('common.city') }}" value="{{ old('city') }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'city')" />
                         <x-admin::input type="text" name="state" label="{{ __('common.state') }}" value="{{ old('state') }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'state')" />
                         <x-admin::input type="number" name="postcode" label="{{ __('common.postcode') }}" value="{{ old('postcode') }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'postcode')" />
@@ -61,11 +55,6 @@
                     <option value="inactive" {{ old('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
                     <option value="suspended" {{ old('status') === 'suspended' ? 'selected' : '' }}>Suspended</option>
                     <option value="closed" {{ old('status') === 'closed' ? 'selected' : '' }}>Closed</option>
-                </x-admin::select>
-                {{-- TODO: List currency from data and add old value --}}
-                <x-admin::select name="currency" label="{{ __('common.currency') }}" required>
-                    <option value="USD" {{ old('currency') === 'USD' ? 'selected' : '' }}>USD</option>
-                    <option value="IDR" {{ old('currency') === 'IDR' ? 'selected' : '' }}>IDR</option>
                 </x-admin::select>
                 <x-admin::select name="language" label="{{ __('common.language') }}" required>
                     @foreach ($langs as $lang)

@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'number_label' => 'Order Number',
+    'user_label' => 'User',
+    'user_helper' => 'Select the customer who will be associated with this order',
+    'currency_label' => 'Currency',
+    'currency_helper' => 'Choose the currency for this order transaction.',
+    'coupon_label' => 'Coupon',
+    'coupon_helper' => 'Apply a discount coupon to this order.',
+    'status_label' => 'Status',
+    'status_helper' => 'Set the current status of this order.',
+    'email_label' => 'Send order Email',
+    'email_helper' => 'Enable to notify the user by email when this order is created.',
+    'package_configuration_label' => 'Package Configuration',
+    'package_configuration_helper' => 'Define the base package and billing period for this order.',
+    'package_label' => 'Package',
+    'package_helper' => 'Select a currency first to view available packages for this order.',
+    'package_billing_label' => 'Billing Cycle',
+    'package_billing_helper' => 'Choose a package first to view available billing cycles.',
+    'variant_option_label' => 'Variant Options',
+    'variant_option_helper' => 'Select additional variants are available for the chosen package.',
+    'date_label' => 'Order Date',
+    'subtotal_label' => 'Subtotal',
+    'discount_label' => 'Discount',
+    'setup_fee_label' => 'Setup Fee',
+    'total_label' => 'Total',
+];

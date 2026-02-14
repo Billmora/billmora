@@ -39,7 +39,7 @@
             @if($attributes->has('disabled') && $attributes->get('disabled') !== false) disabled @endif
             {{ $attributes }}
         >
-            <option class="text-slate-500" selected disabled>
+            <option class="text-slate-500" value="" selected disabled>
                 {{ __('common.choose_option') }}
             </option>
             {{ $slot }}

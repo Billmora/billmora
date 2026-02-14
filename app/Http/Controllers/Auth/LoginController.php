@@ -41,10 +41,16 @@ class LoginController extends Controller
             $user = Auth::user();
 
             if (Billmora::getAuth('user_require_verified') && !$user->isEmailVerified()) {
+                $intended = session()->get('intended');
+
                 Auth::logout();
         
                 $verification = $user->getEmailVerification()->latest()->first();
                 $token = $verification ? encrypt($verification->id) : null;
+
+                if ($intended) {
+                    session()->put('intended', $intended);
+                }
 
                 return redirect()->back()
                         ->with('error', __('auth.email.not_verified'))
@@ -64,7 +70,7 @@ class LoginController extends Controller
                 'user_agent' => $request->userAgent(),
             ]);
 
-            return redirect()->intended('/');
+            return redirect()->intended(route('client.dashboard'));
         }
     
         return back()->with('error', __('auth.invalid_credentials'));

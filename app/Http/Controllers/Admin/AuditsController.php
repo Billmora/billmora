@@ -15,6 +15,6 @@ class AuditsController extends Controller
      */
     public function index()
     {
-        return view('admin::audits');
+        return view('admin::audits.index');
     }
 }

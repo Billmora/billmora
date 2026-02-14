@@ -1,16 +1,9 @@
 @extends('client::layouts.app')
 
+@section('title', 'Account Settings')
+
 @section('body')
 <div class="grid gap-5">
-    @if (session('success'))
-        <x-client::alert variant="success">{{ session('success') }}</x-client::alert>
-    @endif
-    @if (session('warning'))
-        <x-client::alert variant="warning">{{ session('warning') }}</x-client::alert>
-    @endif
-    @if (session('error'))
-        <x-client::alert variant="danger">{{ session('error') }}</x-client::alert>
-    @endif
     <div class="flex flex-col lg:flex-row gap-5">
         <div class="w-full lg:w-1/4 h-fit flex flex-col gap-6 items-center bg-white p-8 text-center border-2 border-billmora-2 rounded-xl">
             <img src="{{ $user->avatar }}?s=128" alt="user avatar" class="rounded-full w-32 h-auto">
@@ -38,10 +31,6 @@
                         <x-client::input type="tel" name="phone_number" label="{{ __('common.phone_number') }}" value="{{ old('phone_number', $user->billing->phone_number) }}" :required="Billmora::hasAuth('user_billing_required_inputs', 'phone_number')" />
                     </div>
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <x-client::select name="currency" label="{{ __('common.currency') }}" required>
-                            <option value="USD" {{ old('currency', $user->currency) === 'USD' ? 'selected' : '' }}>USD</option>
-                            <option value="IDR" {{ old('currency', $user->currency) === 'IDR' ? 'selected' : '' }}>IDR</option>
-                        </x-client::select>
                         <x-client::select name="language" label="{{ __('common.language') }}" required>
                             @foreach ($langs as $lang)
                                 <option value="{{ $lang['lang'] }}"

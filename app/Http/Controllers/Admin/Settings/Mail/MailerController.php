@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Admin\Settings\Mail;
 
-use App\Mail\TemplateMail;
+use App\Mail\NotificationMail;
 use App\Traits\AuditsSystem;
 use Billmora;
 use App\Http\Controllers\Controller;
+use App\Jobs\NotificationJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
 
 class MailerController extends Controller
 {
@@ -50,14 +52,43 @@ class MailerController extends Controller
             'mailer_driver' => ['required', 'string', 'in:smtp,mailgun'],
             'mailer_from_address' => ['required', 'email'],
             'mailer_from_name' => ['required', 'string'],
-            'mailer_smtp_host' => ['nullable', 'required_if:mailer_driver,smtp', 'string'],
-            'mailer_smtp_port' => ['nullable', 'required_if:mailer_driver,smtp', 'integer', 'between:1,65535'],
-            'mailer_smtp_username' => ['nullable', 'required_if:mailer_driver,smtp', 'string'],
-            'mailer_smtp_password' => ['nullable', 'required_if:mailer_driver,smtp', 'string'],
+            'mailer_smtp_host' => [
+                'nullable',
+                Rule::requiredIf($request->mailer_driver === 'smtp'), 
+                'string'
+            ],
+            'mailer_smtp_port' => [
+                'nullable',
+                Rule::requiredIf($request->mailer_driver === 'smtp'), 
+                'integer',
+                'between:1,65535'
+            ],
+            'mailer_smtp_username' => [
+                'nullable',
+                Rule::requiredIf($request->mailer_driver === 'smtp'), 
+                'string'
+            ],
+            'mailer_smtp_password' => [
+                'nullable', 
+                Rule::requiredIf($request->mailer_driver === 'smtp'), 
+                'string'
+            ],
             'mailer_smtp_encryption' => ['nullable', 'string', 'in:tls,ssl'],
-            'mailer_mailgun_domain' => ['nullable', 'required_if:mailer_driver,mailgun', 'string'],
-            'mailer_mailgun_secret' => ['nullable', 'required_if:mailer_driver,mailgun', 'string'],
-            'mailer_mailgun_endpoint' => ['nullable', 'required_if:mailer_driver,mailgun', 'string'],
+            'mailer_mailgun_domain' => [
+                'nullable',
+                Rule::requiredIf($request->mailer_driver === 'mailgun'), 
+                'string'
+            ],
+            'mailer_mailgun_secret' => [
+                'nullable',
+                Rule::requiredIf($request->mailer_driver === 'mailgun'), 
+                'string'
+            ],
+            'mailer_mailgun_endpoint' => [
+                'nullable',
+                Rule::requiredIf($request->mailer_driver === 'mailgun'), 
+                'string'
+            ],
         ]);
 
         $this->updateSettings('mail', $validated);
@@ -81,22 +112,24 @@ class MailerController extends Controller
 
 
     /**
-     * Send a test email using the configured mailer and template system.
+     * Send a test email using the configured mailer and notification.
      *
      * @return \Illuminate\Http\RedirectResponse Redirects back to the previous page with either success or error status.
      */
     public function test()
     {
-        try {
-            $user = Auth::user();
-            Mail::to($user->email)->send(new TemplateMail('test_message', [
+        $user = Auth::user();
+
+        NotificationJob::dispatch(
+            $user->email,
+            'test_message', 
+            [
                 'client_name' => $user->fullname,
                 'company_name' => Billmora::getGeneral('company_name'),
-            ]));
+            ],
+            $user->language
+        );
 
-            return redirect()->back()->with('success', __('common.send_success', ['attribute' => __('admin/settings/mail.mailer_test_label')]));
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
-        }
+        return redirect()->back()->with('success', __('common.send_success', ['attribute' => __('admin/settings/mail.mailer_test_label')]));
     }
 }

@@ -13,6 +13,180 @@ use Illuminate\Support\Facades\Route;
  */
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('admin.dashboard');
+    
+    /**
+     * Admin users interface routes.
+     *
+     * Prefix: /admin/users
+     */
+    Route::group(['prefix' => 'users'], function () {
+        Route::get('/', [Admin\UsersController::class, 'index'])->name('admin.users');
+        Route::get('/create', [Admin\UsersController::class, 'create'])->name('admin.users.create');
+        Route::post('/create', [Admin\UsersController::class, 'store'])->name('admin.users.store');
+        Route::post('/{id}/verify', [Admin\UsersController::class, 'verify'])->name('admin.users.verify');
+        Route::get('/{id}/summary', [Users\SummaryController::class, 'index'])->name('admin.users.summary');
+        Route::post('/{id}/impersonate', [Users\SummaryController::class, 'impersonate'])->name('admin.users.impersonate');
+        Route::get('/{id}/profile', [Users\ProfileController::class, 'index'])->name('admin.users.profile');
+        Route::put('/{id}/profile', [Users\ProfileController::class, 'update'])->name('admin.users.profile.update');
+        Route::delete('/{id}', [Admin\UsersController::class, 'destroy'])->name('admin.users.destroy');
+        Route::get('/{id}/activity', [Admin\Audits\UserController::class, 'index'])->name('admin.users.activity');
+        Route::get('/{id}/activity/{activity}', [Admin\Audits\UserController::class, 'show'])->name('admin.users.activity.show');
+        Route::post('/{id}/activity/export', [Admin\Audits\UserController::class, 'export'])->name('admin.users.activity.export');
+        Route::post('/{id}/activity/clear', [Admin\Audits\UserController::class, 'clear'])->name('admin.users.activity.clear');
+    });
+
+    /**
+     * Admin orders interface routes.
+     *
+     * Prefix: /admin/orders
+     */
+    Route::group(['prefix' => 'orders'], function () {
+        Route::get('/', [Admin\OrdersController::class, 'index'])->name('admin.orders');
+        Route::get('/create', [Admin\OrdersController::class, 'create'])->name('admin.orders.create');
+        Route::post('/create', [Admin\OrdersController::class, 'store'])->name('admin.orders.store');
+        Route::get('/{order:order_number}/edit', [Admin\OrdersController::class, 'edit'])->name('admin.orders.edit');
+        Route::put('/{order:order_number}/edit', [Admin\OrdersController::class, 'update'])->name('admin.orders.update');
+        Route::delete('/{order:order_number}', [Admin\OrdersController::class, 'destroy'])->name('admin.orders.destroy');
+    });
+
+    /**
+     * Admin services interface routes.
+     *
+     * Prefix: /admin/services
+     */
+    Route::group(['prefix' => 'services'], function () {
+        Route::get('/', [Admin\ServicesController::class, 'index'])->name('admin.services');
+        Route::get('/{service}/edit', [Admin\ServicesController::class, 'edit'])->name('admin.services.edit');
+        Route::put('/{service}/edit', [Admin\ServicesController::class, 'update'])->name('admin.services.update');
+        Route::delete('/{service}', [Admin\ServicesController::class, 'destroy'])->name('admin.services.destroy');
+
+        Route::post('/{service}/create', [Admin\Services\ProvisioningController::class, 'create'])->name('admin.services.create');
+        Route::post('/{service}/suspend', [Admin\Services\ProvisioningController::class, 'suspend'])->name('admin.services.suspend');
+        Route::post('/{service}/unsuspend', [Admin\Services\ProvisioningController::class, 'unsuspend'])->name('admin.services.unsuspend');
+        Route::post('/{service}/terminate', [Admin\Services\ProvisioningController::class, 'terminate'])->name('admin.services.terminate');
+        Route::post('/{service}/renew', [Admin\Services\ProvisioningController::class, 'renew'])->name('admin.services.renew');
+        Route::post('/{service}/scale', [Admin\Services\ProvisioningController::class, 'scale'])->name('admin.services.scale');
+    });
+
+    /**
+     * Admin invoices interface routes.
+     *
+     * Prefix: /admin/invoices
+     */
+    Route::group(['prefix' => 'invoices'], function () {
+        Route::get('/', [Admin\InvoicesController::class, 'index'])->name('admin.invoices');
+        Route::get('/create', [Admin\InvoicesController::class, 'create'])->name('admin.invoices.create');
+        Route::post('/create', [Admin\InvoicesController::class, 'store'])->name('admin.invoices.store');
+        Route::get('/{invoice:invoice_number}/edit', [Admin\InvoicesController::class, 'edit'])->name('admin.invoices.edit');
+        Route::put('/{invoice:invoice_number}/edit', [Admin\InvoicesController::class, 'update'])->name('admin.invoices.update');
+        Route::delete('/{invoice:invoice_number}', [Admin\InvoicesController::class, 'destroy'])->name('admin.invoices.destroy');
+        Route::get('/{invoice:invoice_number}/download', [Admin\InvoicesController::class, 'download'])->name('admin.invoices.download');
+    });
+
+    /**
+     * Admin broadcasts interface routes.
+     *
+     * Prefix: /admin/broadcasts
+     */
+    Route::group(['prefix' => 'broadcasts'], function () {
+        Route::get('/', [Admin\BroadcastsController::class, 'index'])->name('admin.broadcasts');
+        Route::get('/create', [Admin\BroadcastsController::class, 'create'])->name('admin.broadcasts.create');
+        Route::post('/create', [Admin\BroadcastsController::class, 'store'])->name('admin.broadcasts.store');
+        Route::get('/{id}/edit', [Admin\BroadcastsController::class, 'edit'])->name('admin.broadcasts.edit');
+        Route::put('/{id}/edit', [Admin\BroadcastsController::class, 'update'])->name('admin.broadcasts.update');
+        Route::delete('/{id}', [Admin\BroadcastsController::class, 'destroy'])->name('admin.broadcasts.destroy');
+    });
+
+    /**
+     * Admin catalogs interface routes.
+     *
+     * Prefix: /admin/catalogs
+     */
+    Route::group(['prefix' => 'catalogs'], function () {
+        Route::get('/', [Admin\CatalogsController::class, 'index'])->name('admin.catalogs');
+        Route::get('/create', [Admin\CatalogsController::class, 'create'])->name('admin.catalogs.create');
+        Route::post('/create', [Admin\CatalogsController::class, 'store'])->name('admin.catalogs.store');
+        Route::get('/{id}/edit', [Admin\CatalogsController::class, 'edit'])->name('admin.catalogs.edit');
+        Route::put('/{id}/edit', [Admin\CatalogsController::class, 'update'])->name('admin.catalogs.update');
+        Route::delete('/{id}', [Admin\CatalogsController::class, 'destroy'])->name('admin.catalogs.destroy');
+    });
+
+    /**
+     * Admin packages interface routes.
+     *
+     * Prefix: /admin/packages
+     */
+    Route::group(['prefix' => 'packages'], function () {
+        Route::get('/', [Admin\PackagesController::class, 'index'])->name('admin.packages');
+        Route::get('/create', [Admin\PackagesController::class, 'create'])->name('admin.packages.create');
+        Route::post('/create', [Admin\PackagesController::class, 'store'])->name('admin.packages.store');
+        Route::get('/{id}/edit', [Admin\PackagesController::class, 'edit'])->name('admin.packages.edit');
+        Route::put('/{id}/edit', [Admin\PackagesController::class, 'update'])->name('admin.packages.update');
+        
+        Route::get('/{id}/pricing', [Admin\Packages\PricingController::class, 'index'])->name('admin.packages.pricing');
+        Route::get('/{id}/pricing/create', [Admin\Packages\PricingController::class, 'create'])->name('admin.packages.pricing.create');
+        Route::post('/{id}/pricing/create', [Admin\Packages\PricingController::class, 'store'])->name('admin.packages.pricing.store');
+        Route::get('/{id}/pricing/{pricing:id}/edit', [Admin\Packages\PricingController::class, 'edit'])->name('admin.packages.pricing.edit');
+        Route::put('/{id}/pricing/{pricing:id}/edit', [Admin\Packages\PricingController::class, 'update'])->name('admin.packages.pricing.update');
+        Route::delete('/{id}/pricing/{pricing:id}', [Admin\Packages\PricingController::class, 'destroy'])->name('admin.packages.pricing.destroy');
+
+        Route::get('/{id}/provisioning', [Admin\Packages\ProvisioningController::class, 'index'])->name('admin.packages.provisioning');
+        Route::put('/{id}/provisioning', [Admin\Packages\ProvisioningController::class, 'update'])->name('admin.packages.provisioning.update');
+
+        Route::delete('/{id}', [Admin\PackagesController::class, 'destroy'])->name('admin.packages.destroy');
+    });
+
+    /**
+     * Admin variants interface routes.
+     *
+     * Prefix: /admin/variants
+     */
+    Route::group(['prefix' => 'variants'], function () {
+        Route::get('/', [Admin\VariantsController::class, 'index'])->name('admin.variants');
+        Route::get('/create', [Admin\VariantsController::class, 'create'])->name('admin.variants.create');
+        Route::post('/create', [Admin\VariantsController::class, 'store'])->name('admin.variants.store');
+        Route::get('/{id}/edit', [Admin\VariantsController::class, 'edit'])->name('admin.variants.edit');
+        Route::put('/{id}/edit', [Admin\VariantsController::class, 'update'])->name('admin.variants.update');
+        Route::delete('/{id}', [Admin\VariantsController::class, 'destroy'])->name('admin.variants.destroy');
+        Route::get('/{id}/options', [Admin\Variants\OptionController::class, 'index'])->name('admin.variants.options');
+        Route::get('/{id}/options/create', [Admin\Variants\OptionController::class, 'create'])->name('admin.variants.options.create');
+        Route::post('/{id}/options/create', [Admin\Variants\OptionController::class, 'store'])->name('admin.variants.options.store');
+        Route::get('/{id}/options/{option:id}/edit', [Admin\Variants\OptionController::class, 'edit'])->name('admin.variants.options.edit');
+        Route::put('/{id}/options/{option:id}/edit', [Admin\Variants\OptionController::class, 'update'])->name('admin.variants.options.update');
+        Route::delete('/{id}/{option:id}', [Admin\Variants\OptionController::class, 'destroy'])->name('admin.variants.options.destroy');
+    });
+
+    /**
+     * Admin coupons interface routes.
+     *
+     * Prefix: /admin/coupons
+     */
+    Route::group(['prefix' => 'coupons'], function () {
+        Route::get('/', [Admin\CouponsController::class, 'index'])->name('admin.coupons');
+        Route::get('/create', [Admin\CouponsController::class, 'create'])->name('admin.coupons.create');
+        Route::post('/create', [Admin\CouponsController::class, 'store'])->name('admin.coupons.store');
+        Route::get('/{id}/edit', [Admin\CouponsController::class, 'edit'])->name('admin.coupons.edit');
+        Route::put('/{id}/edit', [Admin\CouponsController::class, 'update'])->name('admin.coupons.update');
+        Route::delete('/{id}', [Admin\CouponsController::class, 'destroy'])->name('admin.coupons.destroy');
+    });
+
+    /**
+     * Admin provisionings interface routes.
+     *
+     * Prefix: /admin/provisionings
+     */
+    Route::group(['prefix' => 'provisionings'], function () {
+        Route::get('/', [Admin\ProvisioningsController::class, 'index'])->name('admin.provisionings');
+        Route::post('/install', [Admin\ProvisioningsController::class, 'install'])->name('admin.provisionings.install');
+        Route::delete('/{driver}', [Admin\ProvisioningsController::class, 'uninstall'])->name('admin.provisionings.uninstall');
+        Route::get('/{driver}', [Admin\Provisionings\InstanceController::class, 'index'])->name('admin.provisionings.instance');
+        Route::get('/{driver}/create', [Admin\Provisionings\InstanceController::class, 'create'])->name('admin.provisionings.instance.create');
+        Route::post('/{driver}/create', [Admin\Provisionings\InstanceController::class, 'store'])->name('admin.provisionings.instance.store');
+        Route::get('/{driver}/{instance}/edit', [Admin\Provisionings\InstanceController::class, 'edit'])->name('admin.provisionings.instance.edit');
+        Route::put('/{driver}/{instance}/edit', [Admin\Provisionings\InstanceController::class, 'update'])->name('admin.provisionings.instance.update');
+        Route::post('/{driver}/{instance}/test', [Admin\Provisionings\InstanceController::class, 'testConnection'])->name('admin.provisionings.instance.test');
+        Route::delete('/{driver}/{instance}', [Admin\Provisionings\InstanceController::class, 'destroy'])->name('admin.provisionings.instance.destroy');
+    });
 
     /**
      * Admin settings interface routes.
@@ -53,20 +227,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::get('/', [Settings\Mail\MailerController::class, 'index'])->name('admin.settings.mail.mailer');
             Route::put('/', [Settings\Mail\MailerController::class, 'update'])->name('admin.settings.mail.mailer.update');
             Route::post('/test', [Settings\Mail\MailerController::class, 'test'])->name('admin.settings.mail.mailer.test');
-            Route::get('/template', [Settings\Mail\TemplateController::class, 'index'])->name('admin.settings.mail.template');
-            Route::get('/template/{id}/edit', [Settings\Mail\TemplateController::class, 'edit'])->name('admin.settings.mail.template.edit');
-            Route::put('/template/{id}/edit', [Settings\Mail\TemplateController::class, 'update'])->name('admin.settings.mail.template.update');
-            Route::get('/broadcast', [Settings\Mail\BroadcastController::class, 'index'])->name('admin.settings.mail.broadcast');
-            Route::get('/broadcast/create', [Settings\Mail\BroadcastController::class, 'create'])->name('admin.settings.mail.broadcast.create');
-            Route::post('/broadcast', [Settings\Mail\BroadcastController::class, 'store'])->name('admin.settings.mail.broadcast.store');
-            Route::get('/broadcast/{id}/edit', [Settings\Mail\BroadcastController::class, 'edit'])->name('admin.settings.mail.broadcast.edit');
-            Route::put('/broadcast/{id}/edit', [Settings\Mail\BroadcastController::class, 'update'])->name('admin.settings.mail.broadcast.update');
-            Route::delete('/broadcast/{id}', [Settings\Mail\BroadcastController::class, 'destroy'])->name('admin.settings.mail.broadcast.destroy');
-            Route::get('/history', [Settings\Mail\HistoryController::class, 'index'])->name('admin.settings.mail.history');
-            Route::get('/history/{id}', [Settings\Mail\HistoryController::class, 'show'])->name('admin.settings.mail.history.show');
-            Route::get('/history/{id}/preview', [Settings\Mail\HistoryController::class, 'preview'])->name('admin.settings.mail.history.preview');
-            Route::post('/history/export', [Settings\Mail\HistoryController::class, 'export'])->name('admin.settings.mail.history.export');
-            Route::post('/history/clear', [Settings\Mail\HistoryController::class, 'clear'])->name('admin.settings.mail.history.clear');
+            Route::get('/notification', [Settings\Mail\NotificationController::class, 'index'])->name('admin.settings.mail.notification');
+            Route::get('/notification/{id}/edit', [Settings\Mail\NotificationController::class, 'edit'])->name('admin.settings.mail.notification.edit');
+            Route::put('/notification/{id}/edit', [Settings\Mail\NotificationController::class, 'update'])->name('admin.settings.mail.notification.update');
         });
 
         /**
@@ -105,6 +268,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::put('/{id}', [Settings\RoleController::class, 'update'])->name('admin.settings.roles.update');
             Route::delete('/{id}', [Settings\RoleController::class, 'destroy'])->name('admin.settings.roles.destroy');
         });
+
+        /**
+         * Admin currency settings interface routes.
+         *
+         * Prefix: /admin/settings/currency
+         */
+        Route::group(['prefix' => 'currencies'], function () {
+            Route::get('/', [Settings\CurrencyController::class, 'index'])->name('admin.settings.currencies');
+            Route::get('/create', [Settings\CurrencyController::class, 'create'])->name('admin.settings.currencies.create');
+            Route::post('/', [Settings\CurrencyController::class, 'store'])->name('admin.settings.currencies.store');
+            Route::get('/{id}/edit', [Settings\CurrencyController::class, 'edit'])->name('admin.settings.currencies.edit');
+            Route::post('/{id}', [Settings\CurrencyController::class, 'update'])->name('admin.settings.currencies.update');
+            Route::delete('/{id}', [Settings\CurrencyController::class, 'destroy'])->name('admin.settings.currencies.destroy');
+        });
     });
 
     /**
@@ -114,6 +291,29 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
      */
     Route::group(['prefix' => 'audits'], function () {
         Route::get('/', [Admin\AuditsController::class, 'index'])->name('admin.audits');
+
+        /**
+         * Admin email audits interface routes.
+         *
+         * Prefix: /admin/audits/email
+         */
+        Route::group(['prefix' => 'email'], function () {
+            Route::get('/', [Audits\EmailController::class, 'index'])->name('admin.audits.email');
+            Route::get('/{id}', [Audits\EmailController::class, 'show'])->name('admin.audits.email.show');
+            Route::get('/{id}/preview', [Audits\EmailController::class, 'preview'])->name('admin.audits.email.preview');
+            Route::post('/export', [Audits\EmailController::class, 'export'])->name('admin.audits.email.export');
+            Route::post('/clear', [Audits\EmailController::class, 'clear'])->name('admin.audits.email.clear');
+        });
+
+        /**
+         * Admin user audits interface routes.
+         *
+         * Prefix: /admin/audits/user
+         */
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/', [Audits\UserController::class, 'index'])->name('admin.audits.user');
+            Route::post('/export', [Audits\UserController::class, 'export'])->name('admin.audits.user.export');
+        });
 
         /**
          * Admin system audits interface routes.
@@ -126,27 +326,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::post('/export', [Audits\SystemController::class, 'export'])->name('admin.audits.system.export');
             Route::post('/clear', [Audits\SystemController::class, 'clear'])->name('admin.audits.system.clear');
         });
-    });
-
-    /**
-     * Admin users interface routes.
-     *
-     * Prefix: /admin/users
-     */
-    Route::group(['prefix' => 'users'], function () {
-        Route::get('/', [Admin\UsersController::class, 'index'])->name('admin.users');
-        Route::get('/create', [Admin\UsersController::class, 'create'])->name('admin.users.create');
-        Route::post('/create', [Admin\UsersController::class, 'store'])->name('admin.users.store');
-        Route::post('/{id}/verify', [Admin\UsersController::class, 'verify'])->name('admin.users.verify');
-        Route::get('/{id}/summary', [Users\Edit\SummaryController::class, 'index'])->name('admin.users.summary');
-        Route::post('/{id}/impersonate', [Users\Edit\SummaryController::class, 'impersonate'])->name('admin.users.impersonate');
-        Route::get('/{id}/profile', [Users\Edit\ProfileController::class, 'index'])->name('admin.users.profile');
-        Route::put('/{id}/profile', [Users\Edit\ProfileController::class, 'update'])->name('admin.users.profile.update');
-        Route::delete('/{id}', [Admin\UsersController::class, 'destroy'])->name('admin.users.destroy');
-        Route::get('/{id}/activity', [Users\ActivityController::class, 'index'])->name('admin.users.activity');
-        Route::get('/{id}/activity/{activity}', [Users\ActivityController::class, 'show'])->name('admin.users.activity.show');
-        Route::post('/{id}/activity/export', [Users\ActivityController::class, 'export'])->name('admin.users.activity.export');
-        Route::post('/{id}/activity/clear', [Users\ActivityController::class, 'clear'])->name('admin.users.activity.clear');
     });
 
     /**

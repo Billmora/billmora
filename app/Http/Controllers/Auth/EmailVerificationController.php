@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Facades\Audit;
 use App\Http\Controllers\Controller;
-use App\Mail\TemplateMail;
+use App\Jobs\NotificationJob;
 use App\Models\UserEmailVerification;
 use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
 
 class EmailVerificationController extends Controller
 {
@@ -95,38 +94,17 @@ class EmailVerificationController extends Controller
                 'expires_at' => now()->addMinutes(60),
             ]);
 
-            $auditEmail = Audit::email(
-                $user->id,
+            NotificationJob::dispatch(
                 $user->email,
-                'user_resend_verification',
-                'pending',
-            );
-
-            try {
-                Mail::to($user->email)->send(new TemplateMail('user_resend_verification', [
+                'user_resend_verification', 
+                [
                     'client_name' => $user->fullname,
                     'company_name' => Billmora::getGeneral('company_name'),
                     'verify_url' => route('client.email.verify', ['token' => $newToken]),
                     'clientarea_url' => config('app.url'),
-                ]));
-
-                $auditEmail->update([
-                    'status' => 'sent',
-                    'properties' => [
-                        'ip' => $request->ip(),
-                        'user_agent' => $request->userAgent(),
-                    ],
-                ]);
-            } catch (\Throwable $e) {
-                $auditEmail->update([
-                    'status' => 'failed',
-                    'properties' => [
-                        'ip' => $request->ip(),
-                        'user_agent' => $request->userAgent(),
-                        'error' => $e->getMessage(),
-                    ],
-                ]);
-            }
+                ],
+                $user->language
+            );
 
             return redirect()->route('client.login')->with('success', __('auth.email.resent'));
         } catch (\Exception $e) {
