@@ -2,117 +2,96 @@
 
 namespace App\Contracts;
 
-use App\Models\Package;
 use App\Models\Service;
 
-interface ProvisioningInterface
+interface ProvisioningInterface extends PluginInterface
 {
     /**
-     * Get default form fields for provisioning provider configuration.
+     * Get package configuration schema for provisioning settings.
      *
      * @return array<string, mixed>
      */
-    public static function getConfig(): array;
+    public function getPackageSchema(): array;
 
     /**
-     * Get package configuration fields for provider integration.
+     * Get checkout form schema for service configuration fields.
      *
-     * @param array|null<string, mixed> $instanceConfig Data from Provisioning::$config
      * @return array<string, mixed>
      */
-    public function getPackageFields(?array $instanceConfig = []): array;
+    public function getCheckoutSchema(): array;
 
     /**
-     * Test connection to provisioning provider.
+     * Test connection to provisioning provider with given configuration.
      *
-     * @param array<string, mixed> $instanceConfig Data from Provisioning::$config
-     * @return bool Returns true if successful.
-     * @throws \Exception If the connection fails or configuration is invalid.
+     * @param array<string, mixed> $config Data from Plugin::$config
+     * @return bool
      */
-    public function testConnection(array $instanceConfig): bool;
+    public function testConnection(array $config): bool;
 
     /**
-     * Create service instance on provider.
-     *
-     * @param \App\Models\Service $service
-     * @param array<string, mixed> $instanceConfig Data from Provisioning::$config
-     * @return void
-     */
-    public function create(Service $service, array $instanceConfig): void;
-
-    /**
-     * Suspend service on provider.
+     * Create service instance on provisioning provider.
      *
      * @param \App\Models\Service $service
-     * @param array<string, mixed> $instanceConfig Data from Provisioning::$config
      * @return void
      */
-    public function suspend(Service $service, array $instanceConfig): void;
+    public function create(Service $service): void;
 
     /**
-     * Unsuspend service on provider.
+     * Suspend service on provisioning provider.
      *
      * @param \App\Models\Service $service
-     * @param array<string, mixed> $instanceConfig Data from Provisioning::$config
      * @return void
      */
-    public function unsuspend(Service $service, array $instanceConfig): void;
+    public function suspend(Service $service): void;
 
     /**
-     * Terminate service and remove from provider.
+     * Unsuspend service on provisioning provider.
      *
      * @param \App\Models\Service $service
-     * @param array<string, mixed> $instanceConfig Data from Provisioning::$config
      * @return void
      */
-    public function terminate(Service $service, array $instanceConfig): void;
+    public function unsuspend(Service $service): void;
 
     /**
-     * Renew service on provider by extending expiration.
+     * Terminate service and remove from provisioning provider.
      *
      * @param \App\Models\Service $service
-     * @param array<string, mixed> $instanceConfig Data from Provisioning::$config
      * @return void
      */
-    public function renew(Service $service, array $instanceConfig): void;
+    public function terminate(Service $service): void;
 
     /**
-     * Scale the service to a new package with updated configuration.
+     * Renew service on provisioning provider by extending expiration.
      *
-     * @param \App\Models\Service $service Service with new package_id and configuration
-     * @param array<string, mixed> $instanceConfig Data from Provisioning::$config
-     * @param \App\Models\Package $oldPackage Previous package before scaling
+     * @param \App\Models\Service $service
      * @return void
      */
-    public function scale(Service $service, array $instanceConfig, Package $oldPackage): void;
+    public function renew(Service $service): void;
+
+    /**
+     * Scale service to new configuration on provisioning provider.
+     *
+     * @param \App\Models\Service $service Service with updated configuration
+     * @param array<string, mixed> $newConfig New configuration data
+     * @return void
+     */
+    public function scale(Service $service, array $newConfig): void;
 
     /**
      * Get available client actions for the service.
      *
      * @param \App\Models\Service $service
-     * @param array<string, mixed> $instanceConfig Data from Provisioning::$config
      * @return array<int, array<string, mixed>>
      */
-    public function getClientActions(Service $service, array $instanceConfig): array;
+    public function getClientAction(Service $service): array;
 
     /**
-     * Get form configuration for a specific client action.
+     * Handle and execute a specific client action with provided data.
      *
      * @param \App\Models\Service $service
-     * @param array<string, mixed> $instanceConfig Data from Provisioning::$config
      * @param string $slug
-     * @return array<string, mixed>|null
-     */
-    public function getClientActionForm(Service $service, array $instanceConfig, string $slug): ?array;
-
-    /**
-     * Process and execute a client action with provided data.
-     *
-     * @param \App\Models\Service $service
-     * @param array<string, mixed> $instanceConfig Data from Provisioning::$config
-     * @param string $slug
-     * @param array<string, mixed> $actionData Input data from the client action form
+     * @param array<string, mixed> $data
      * @return mixed
      */
-    public function processClientAction(Service $service, array $instanceConfig, string $slug, array $actionData): mixed;
+    public function handleClientAction(Service $service, string $slug, array $data = []);
 }
