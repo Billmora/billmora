@@ -177,15 +177,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
      */
     Route::group(['prefix' => 'provisionings'], function () {
         Route::get('/', [Admin\ProvisioningsController::class, 'index'])->name('admin.provisionings');
-        Route::post('/install', [Admin\ProvisioningsController::class, 'install'])->name('admin.provisionings.install');
-        Route::delete('/{driver}', [Admin\ProvisioningsController::class, 'uninstall'])->name('admin.provisionings.uninstall');
-        Route::get('/{driver}', [Admin\Provisionings\InstanceController::class, 'index'])->name('admin.provisionings.instance');
-        Route::get('/{driver}/create', [Admin\Provisionings\InstanceController::class, 'create'])->name('admin.provisionings.instance.create');
-        Route::post('/{driver}/create', [Admin\Provisionings\InstanceController::class, 'store'])->name('admin.provisionings.instance.store');
-        Route::get('/{driver}/{instance}/edit', [Admin\Provisionings\InstanceController::class, 'edit'])->name('admin.provisionings.instance.edit');
-        Route::put('/{driver}/{instance}/edit', [Admin\Provisionings\InstanceController::class, 'update'])->name('admin.provisionings.instance.update');
-        Route::post('/{driver}/{instance}/test', [Admin\Provisionings\InstanceController::class, 'testConnection'])->name('admin.provisionings.instance.test');
-        Route::delete('/{driver}/{instance}', [Admin\Provisionings\InstanceController::class, 'destroy'])->name('admin.provisionings.instance.destroy');
+        Route::get('/create', [Admin\ProvisioningsController::class, 'create'])->name('admin.provisionings.create');
+        Route::post('/create', [Admin\ProvisioningsController::class, 'store'])->name('admin.provisionings.store');
+        Route::get('/{provisioning}/edit', [Admin\ProvisioningsController::class, 'edit'])->name('admin.provisionings.edit');
+        Route::put('/{provisioning}/edit', [Admin\ProvisioningsController::class, 'update'])->name('admin.provisionings.update');
+        Route::post('/{provisioning}/test', [Admin\ProvisioningsController::class, 'testConnection'])->name('admin.provisionings.test');
+        Route::delete('/{provisioning}', [Admin\ProvisioningsController::class, 'destroy'])->name('admin.provisionings.destroy');
     });
 
     /**

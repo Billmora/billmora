@@ -2,144 +2,220 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Facades\Audit;
 use App\Http\Controllers\Controller;
-use App\Models\Provisioning;
-use App\Services\PluginService;
+use App\Models\Plugin;
+use App\Services\PluginManager;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ProvisioningsController extends Controller
 {
     /**
-     * Applies permission-based middleware for accessing provisionings plugin.
-     * 
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('permission:provisionings.view')->only(['index']);
-        $this->middleware('permission:provisionings.install')->only(['install']);
-        $this->middleware('permission:provisionings.uninstall')->only(['uninstall']);
-    }
-
-    /**
-     * Display a list of available provisioning plugins.
+     * Display a listing of provisioning plugins.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(Request $request)
     {
-        $provisionings = [];
-        $path = base_path('plugin/Provisioning');
-
-        if (File::exists($path)) {
-            foreach (File::directories($path) as $dir) {
-                $driverName = basename($dir);
-                $manifestPath = $dir . '/manifest.json';
-
-                if (!File::exists($manifestPath)) continue;
-
-                $manifest = json_decode(File::get($manifestPath), true);
-
-                $provisionings[] = (object) [
-                    'driver' => $driverName,
-                    'name' => $manifest['name'] ?? $driverName,
-                    'version' => $manifest['version'] ?? '0.0.0',
-                    'description' => $manifest['description'] ?? '-',
-                    'author' => $manifest['author'] ?? 'Unknown',
-                    'instance_count' => Provisioning::where('driver', $driverName)->count(),
-                ];
-            }
-        }
+        $query = Plugin::where('type', 'provisioning');
 
         if ($search = $request->get('search')) {
-            $provisionings = collect($provisionings)->filter(function ($item) use ($search) {
-                return stripos($item->name, $search) !== false ||
-                    stripos($item->driver, $search) !== false ||
-                    stripos($item->description, $search) !== false ||
-                    stripos($item->author, $search) !== false;
-            })->values();
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('provider', 'like', "%{$search}%");
+            });
         }
+
+        $provisionings = $query->orderByDesc('created_at')->paginate(25);
+
+        $provisionings->appends(['search' => $search]);
 
         return view('admin::provisionings.index', compact('provisionings'));
     }
 
     /**
-     * Install a new provisioning plugin from uploaded ZIP file.
+     * Show the form for creating a new provisioning instance.
+     *
+     * @param \App\Services\PluginManager $manager
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function create(PluginManager $manager)
+    {
+        $providers = $manager->getAvailableProviders('provisioning');
+
+        return view('admin::provisionings.create', compact('providers'));
+    }
+
+    /**
+     * Store a newly created provisioning instance in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Services\PluginService $service
+     * @param \App\Services\PluginManager $manager
      * @return \Illuminate\Http\RedirectResponse
+     * 
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function install(Request $request, PluginService $installer)
+    public function store(Request $request, PluginManager $manager)
     {
-        $validator = Validator::make($request->all(), [
-            'plugin_file' => ['required', 'file', 'mimes:zip', 'max:10240']
+        $validated = $request->validate([
+            'instance_name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('plugins', 'name')->where(function ($query) {
+                    return $query->where('type', 'provisioning');
+                }),
+            ],
+            'instance_provider' => 'required|string',
+            'instance_active' => 'boolean',
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->with('error', $validator->errors()->first());
+        $configData = $this->validatePluginConfig(
+            $request, 
+            $manager, 
+            $validated['instance_provider']
+        );
+
+        $plugin = Plugin::create([
+            'name' => $validated['instance_name'],
+            'provider' => $validated['instance_provider'],
+            'type' => 'provisioning',
+            'is_active' => (bool) $validated['instance_active'],
+            'config' => $configData,
+        ]);
+
+        return redirect()->route('admin.provisionings')->with('success', __('common.create_success', ['attribute' => $plugin->name]));
+    }
+
+    /**
+     * Show the form for editing the specified provisioning instance.
+     *
+     * @param \App\Models\Plugin $provisioning
+     * @param \App\Services\PluginManager $manager
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Contracts\View\View
+     */
+    public function edit(Plugin $provisioning, PluginManager $manager)
+    {
+        $instance = $manager->bootInstance($provisioning);
+
+        if (!$instance) {
+            return back()->with('error', "Provider files for {$provisioning->provider} not found.");
+        }
+
+        $schema = $instance->getConfigSchema();
+
+        return view('admin::provisionings.edit', compact('provisioning', 'schema'));
+    }
+
+    /**
+     * Update the specified provisioning instance in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Plugin $provisioning
+     * @param \App\Services\PluginManager $manager
+     * @return \Illuminate\Http\RedirectResponse
+     * 
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function update(Request $request, Plugin $provisioning, PluginManager $manager)
+    {
+        $validated = $request->validate([
+            'instance_name' => [
+                'required', 'string', 'max:255',
+                Rule::unique('plugins', 'name')
+                    ->where(fn($q) => $q->where('type', 'provisioning'))
+                    ->ignore($provisioning->id),
+            ],
+            'instance_active' => 'boolean',
+        ]);
+
+        $configData = $this->validatePluginConfig(
+            $request, 
+            $manager, 
+            $provisioning->provider
+        );
+
+        $provisioning->update([
+            'name' => $validated['instance_name'],
+            'is_active' => (bool) $validated['instance_active'],
+            'config' => $configData,
+        ]);
+
+        return redirect()->route('admin.provisionings')->with('success', __('common.update_success', ['attribute' => $provisioning->name]));
+    }
+
+    /**
+     * Remove the specified provisioning instance from storage.
+     *
+     * @param \App\Models\Plugin $provisioning
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Plugin $provisioning)
+    {
+        $provisioning->delete();
+
+        return redirect()->route('admin.provisionings')->with('success', __('common.delete_success', ['attribute' => $provisioning->name]));
+    }
+
+    /**
+     * Test connection to the provisioning provider with stored configuration.
+     *
+     * @param \App\Models\Plugin $provisioning
+     * @param \App\Services\PluginManager $manager
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function testConnection(Plugin $provisioning, PluginManager $manager)
+    {
+        $instance = $manager->bootInstance($provisioning);
+
+        if (!$instance) {
+            return back()->with('error', "Provider files for {$provisioning->provider} not found.");
         }
 
         try {
-            $metadata = $installer->install($request->file('plugin_file'), 'provisioning');
+            $instance->testConnection($provisioning->config);
 
-            Audit::system(
-                Auth::user()->id,
-                'provisioning.install',
-                [
-                    $metadata,
-                ],
-            );
-            
-            return redirect()->back()->with('success', __('admin/provisionings.install.success', [
-                'name' => $metadata['name'], 
-                'version' => $metadata['version']
-            ]));
-
+            return back()->with('success', __('admin/provisionings.connection.success'));
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return back()->with('error', __('admin/provisionings.connection.failed', ['message' => $e->getMessage()]));
         }
     }
 
     /**
-     * Uninstall a provisioning plugin driver.
+     * Validate plugin configuration based on schema from provider instance.
      *
-     * @param string $driver
-     * @param \App\Services\PluginService $pluginService
-     * @return \Illuminate\Http\RedirectResponse
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Services\PluginManager $manager
+     * @param string $provider
+     * @param string $type
+     * @return array<string, mixed>
+     * 
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function uninstall($driver, PluginService $pluginService)
+    private function validatePluginConfig(Request $request, PluginManager $manager, string $provider, string $type = 'provisioning'): array
     {
-        $instance = Provisioning::where('driver', $driver)->count();
+        $instance = $manager->bootInstance(new Plugin([
+            'provider' => $provider,
+            'type' => $type
+        ]));
 
-        if ($instance > 0) {
-            return back()->with('error', __('admin/provisionings.uninstall.active_instances', [
-                'driver' => $driver, 
-                'count' => $instance
-            ]));
+        if (!$instance) {
+            return [];
         }
 
-        try {
-            $metadata = $pluginService->uninstall($driver, 'provisioning');
+        $schema = collect($instance->getConfigSchema());
+        $inputPrefix = "configurations.{$provider}";
 
-            Audit::system(
-                Auth::user()->id,
-                'provisioning.uninstall',
-                [
-                    $metadata,
-                ],
-            );
-            
-            return redirect()->route('admin.provisionings')
-                ->with('success', __('common.uninstall_success', ['attribute' => $driver]));
-        } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
-        }
+        $rules = $schema->mapWithKeys(fn($field, $key) => [
+            "{$inputPrefix}.{$key}" => $field['rules'] ?? 'nullable'
+        ])->all();
+
+        $attributes = $schema->mapWithKeys(fn($field, $key) => [
+            "{$inputPrefix}.{$key}" => strtolower($field['label'] ?? $key)
+        ])->all();
+
+        $request->validate($rules, [], $attributes);
+
+        return $request->input($inputPrefix, []);
     }
 }
