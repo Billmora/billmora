@@ -132,7 +132,8 @@ class ProvisioningsController extends Controller
         $configData = $this->validatePluginConfig(
             $request, 
             $manager, 
-            $provisioning->provider
+            $provisioning->provider,
+            $provisioning
         );
 
         $provisioning->update([
@@ -182,40 +183,42 @@ class ProvisioningsController extends Controller
     }
 
     /**
-     * Validate plugin configuration based on schema from provider instance.
+     * Validate plugin configuration based on schema with file upload handling.
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Services\PluginManager $manager
      * @param string $provider
-     * @param string $type
+     * @param \App\Models\Plugin|null $currentInstance
      * @return array<string, mixed>
      * 
      * @throws \Illuminate\Validation\ValidationException
      */
-    private function validatePluginConfig(Request $request, PluginManager $manager, string $provider, string $type = 'provisioning'): array
+    private function validatePluginConfig(Request $request, PluginManager $manager, string $provider, ?Plugin $currentInstance = null): array
     {
-        $instance = $manager->bootInstance(new Plugin([
-            'provider' => $provider,
-            'type' => $type
-        ]));
-
-        if (!$instance) {
-            return [];
-        }
+        $instance = $manager->bootInstance(new Plugin(['provider' => $provider, 'type' => 'provisioning']));
+        if (!$instance) return [];
 
         $schema = collect($instance->getConfigSchema());
-        $inputPrefix = "configurations.{$provider}";
+        $prefix = "configurations.{$provider}";
 
-        $rules = $schema->mapWithKeys(fn($field, $key) => [
-            "{$inputPrefix}.{$key}" => $field['rules'] ?? 'nullable'
-        ])->all();
+        $rules = $schema->mapWithKeys(fn($f, $k) => ["{$prefix}.{$k}" => $f['rules'] ?? 'nullable'])->all();
+        $attrs = $schema->mapWithKeys(fn($f, $k) => ["{$prefix}.{$k}" => strtolower($f['label'] ?? $k)])->all();
 
-        $attributes = $schema->mapWithKeys(fn($field, $key) => [
-            "{$inputPrefix}.{$key}" => strtolower($field['label'] ?? $key)
-        ])->all();
+        $request->validate($rules, [], $attrs);
 
-        $request->validate($rules, [], $attributes);
+        $config = $request->input($prefix, []);
 
-        return $request->input($inputPrefix, []);
+        foreach ($schema->where('type', 'file') as $key => $field) {
+            $inputKey = "{$prefix}.{$key}";
+
+            if ($request->hasFile($inputKey)) {
+                $path = $request->file($inputKey)->store("plugins/{$provider}", 'public');
+                $config[$key] = $path;
+            } elseif ($currentInstance && isset($currentInstance->config[$key])) {
+                $config[$key] = $currentInstance->config[$key];
+            }
+        }
+
+        return $config;
     }
 }
