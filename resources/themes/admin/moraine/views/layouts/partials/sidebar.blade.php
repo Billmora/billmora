@@ -16,48 +16,68 @@
         <span class="font-semibold">{{ __('admin/navigation.dashboard') }}</span>
       </a>
       <span class="mt-4 block text-slate-600 font-semibold text-md">{{ __('admin/navigation.group.management') }}</span>
-      <a href="{{ route('admin.users') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.users*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
-        <x-lucide-users class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('admin/navigation.users') }}</span>
-      </a>
-      <a href="{{ route('admin.orders') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.orders*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
-        <x-lucide-shopping-bag class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('admin/navigation.orders') }}</span>
-      </a>
-      <a href="{{ route('admin.services') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.services*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
-        <x-lucide-scan-text class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('admin/navigation.services') }}</span>
-      </a>
-      <a href="{{ route('admin.invoices') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.invoices*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
-        <x-lucide-receipt-text class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('admin/navigation.invoices') }}</span>
-      </a>
-      <a href="{{ route('admin.broadcasts') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.broadcasts*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
-        <x-lucide-radio class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('admin/navigation.broadcasts') }}</span>
-      </a>
+      @can('users.view')
+        <a href="{{ route('admin.users') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.users*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-users class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('admin/navigation.users') }}</span>
+        </a>
+      @endcan
+      @can('orders.view')
+        <a href="{{ route('admin.orders') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.orders*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-shopping-bag class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('admin/navigation.orders') }}</span>
+        </a>
+      @endcan
+      @can('services.view')
+        <a href="{{ route('admin.services') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.services*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-scan-text class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('admin/navigation.services') }}</span>
+        </a>
+      @endcan
+      @can('invoices.view')
+        <a href="{{ route('admin.invoices') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.invoices*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-receipt-text class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('admin/navigation.invoices') }}</span>
+        </a>
+      @endcan
+      @can('broadcasts.view')
+        <a href="{{ route('admin.broadcasts') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.broadcasts*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-radio class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('admin/navigation.broadcasts') }}</span>
+        </a>
+      @endcan
       <span class="mt-4 block text-slate-600 font-semibold text-md">{{ __('admin/navigation.group.product') }}</span>
-      <a href="{{ route('admin.catalogs') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.catalogs*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
-        <x-lucide-box class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('admin/navigation.catalogs') }}</span>
-      </a>
-      <a href="{{ route('admin.packages') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.packages*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
-        <x-lucide-package class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('admin/navigation.packages') }}</span>
-      </a>
-      <a href="{{ route('admin.variants') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.variants*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
-        <x-lucide-boxes class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('admin/navigation.variants') }}</span>
-      </a>
-      <a href="{{ route('admin.coupons') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.coupons*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
-        <x-lucide-tags class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('admin/navigation.coupons') }}</span>
-      </a>
+      @can('catalogs.view')
+        <a href="{{ route('admin.catalogs') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.catalogs*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-box class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('admin/navigation.catalogs') }}</span>
+        </a>
+      @endcan
+      @can('packages.view')
+        <a href="{{ route('admin.packages') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.packages*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-package class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('admin/navigation.packages') }}</span>
+        </a>
+      @endcan
+      @can('variants.view')
+        <a href="{{ route('admin.variants') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.variants*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-boxes class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('admin/navigation.variants') }}</span>
+        </a>
+      @endcan
+      @can('coupons.view')
+        <a href="{{ route('admin.coupons') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.coupons*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-tags class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('admin/navigation.coupons') }}</span>
+        </a>
+      @endcan
       <span class="mt-4 block text-slate-600 font-semibold text-md">{{ __('admin/navigation.group.plugin') }}</span>
-      <a href="{{ route('admin.provisionings') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.provisionings*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
-        <x-lucide-plug class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('admin/navigation.provisionings') }}</span>
-      </a>
+      @can('provisionings.view')
+        <a href="{{ route('admin.provisionings') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.provisionings*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-plug class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('admin/navigation.provisionings') }}</span>
+        </a>
+      @endcan
       <span class="mt-4 block text-slate-600 font-semibold text-md">{{ __('admin/navigation.group.system') }}</span>
       <a href="{{ route('admin.settings') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.settings*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
         <x-lucide-settings class="w-5 h-auto" />
