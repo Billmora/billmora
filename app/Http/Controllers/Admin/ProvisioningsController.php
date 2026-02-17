@@ -10,6 +10,20 @@ use Illuminate\Validation\Rule;
 
 class ProvisioningsController extends Controller
 {
+
+    /**
+     * Applies permission-based middleware for accessing provisionings plugin.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:provisionings.view')->only(['index']);
+        $this->middleware('permission:provisionings.create')->only(['create', 'store']);
+        $this->middleware('permission:provisionings.update')->only(['edit', 'update']);
+        $this->middleware('permission:provisionings.delete')->only(['destroy']);
+    }
+
     /**
      * Display a listing of provisioning plugins.
      *
