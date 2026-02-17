@@ -7,6 +7,7 @@
     action="{{ route('admin.provisionings.update', $provisioning) }}" 
     method="POST" 
     class="flex flex-col gap-5"
+    enctype="multipart/form-data"
 >
     @csrf
     @method('PUT')
@@ -55,6 +56,13 @@
                     :required="str_contains($field['rules'] ?? '', 'required')"
                     value="{{ old('configurations.'.$provisioning->provider.'.'.$key, $provisioning->config[$key] ?? $field['default'] ?? '') }}" 
                 />
+            @elseif($field['type'] === 'textarea')
+                    <x-admin::textarea
+                        name="configurations[{{ $provisioning->provider }}][{{ $key }}]"
+                        label="{{ $field['label'] }}"
+                        helper="{{ $field['helper'] ?? '' }}"
+                        :required="str_contains($field['rules'] ?? '', 'required')"
+                    >{{ old('configurations.'.$provisioning->provider.'.'.$key, $provisioning->config[$key] ?? $field['default'] ?? '') }}</x-admin::textarea>
             @elseif($field['type'] === 'toggle')
                 <x-admin::toggle
                     name="configurations[{{ $provisioning->provider }}][{{ $key }}]"
@@ -78,6 +86,39 @@
                         </option>
                     @endforeach
                 </x-admin::select>
+            @elseif($field['type'] === 'radio')
+                <x-admin::radio.group 
+                    name="configurations[{{ $provisioning->provider }}][{{ $key }}]"
+                    label="{{ $field['label'] }}"
+                    helper="{{ $field['helper'] ?? '' }}"
+                    :required="str_contains($field['rules'] ?? '', 'required')"
+                >
+                    @foreach($field['options'] as $optVal => $optLabel)
+                        <x-admin::radio.option
+                            name="configurations[{{ $provisioning->provider }}][{{ $key }}]"
+                            value="{{ $optVal }}"
+                            label="{{ $optLabel }}"
+                            :checked="old('configurations.'.$provisioning->provider.'.'.$key, $provisioning->config[$key] ?? $field['default'] ?? '') == $optVal" 
+                        />
+                    @endforeach
+                </x-admin::radio.group>
+            @elseif($field['type'] === 'checkbox')
+                <x-admin::checkbox 
+                    name="configurations[{{ $provisioning->provider }}][{{ $key }}]"
+                    label="{{ $field['label'] }}"
+                    helper="{{ $field['helper'] ?? '' }}"
+                    :options="$field['options']" 
+                    :checked="(array) old('configurations.'.$provisioning->provider.'.'.$key, $provisioning->config[$key] ?? $field['default'] ?? [])"
+                />
+            @elseif($field['type'] === 'file')
+                <x-admin::input 
+                    name="configurations[{{ $provisioning->provider }}][{{ $key }}]"
+                    label="{{ $field['label'] }}"
+                    helper="{{ $field['helper'] ?? '' }}"
+                    type="file"
+                    :required="str_contains($field['rules'] ?? '', 'required')"
+                    value="{{ old('configurations.'.$provisioning->provider.'.'.$key, $field['default'] ?? '') }}" 
+                />
             @endif
         @endforeach
     </div>
