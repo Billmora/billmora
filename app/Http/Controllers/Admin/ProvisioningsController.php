@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Plugin;
 use App\Services\PluginManager;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class ProvisioningsController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing provisionings plugin.
@@ -98,6 +100,8 @@ class ProvisioningsController extends Controller
             'config' => $configData,
         ]);
 
+        $this->recordCreate('provisioning.create', $plugin->toArray());
+
         return redirect()->route('admin.provisionings')->with('success', __('common.create_success', ['attribute' => $plugin->name]));
     }
 
@@ -150,11 +154,15 @@ class ProvisioningsController extends Controller
             $provisioning
         );
 
+        $oldProvisioning = $provisioning->getOriginal();
+
         $provisioning->update([
             'name' => $validated['instance_name'],
             'is_active' => (bool) $validated['instance_active'],
             'config' => $configData,
         ]);
+
+        $this->recordUpdate('provisioning.update', $oldProvisioning, $provisioning->getChanges());
 
         return redirect()->route('admin.provisionings')->with('success', __('common.update_success', ['attribute' => $provisioning->name]));
     }
@@ -168,6 +176,8 @@ class ProvisioningsController extends Controller
     public function destroy(Plugin $provisioning)
     {
         $provisioning->delete();
+
+        $this->recordDelete('provisioning.delete', $provisioning->toArray());
 
         return redirect()->route('admin.provisionings')->with('success', __('common.delete_success', ['attribute' => $provisioning->name]));
     }
