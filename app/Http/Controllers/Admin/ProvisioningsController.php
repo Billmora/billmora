@@ -20,7 +20,7 @@ class ProvisioningsController extends Controller
     {
         $this->middleware('permission:provisionings.view')->only(['index']);
         $this->middleware('permission:provisionings.create')->only(['create', 'store']);
-        $this->middleware('permission:provisionings.update')->only(['edit', 'update']);
+        $this->middleware('permission:provisionings.update')->only(['edit', 'update', 'testConnection']);
         $this->middleware('permission:provisionings.delete')->only(['destroy']);
     }
 
