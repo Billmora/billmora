@@ -2,34 +2,27 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
+use App\Services\PluginManager;
 
 class PluginServiceProvider extends ServiceProvider
 {
     /**
-     * Register services.
+     * Register plugin services into the application container.
+     *
+     * @return void
      */
     public function register(): void
     {
-        $pluginPath = base_path('plugin');
-
-        if (!File::exists($pluginPath)) return;
-
-        spl_autoload_register(function ($class) use ($pluginPath) {
-            if (str_starts_with($class, 'Plugin\\')) {
-                $relativeClass = str_replace('Plugin\\', '', $class);
-                $file = $pluginPath . '/' . str_replace('\\', '/', $relativeClass) . '.php';
-
-                if (file_exists($file)) {
-                    require $file;
-                }
-            }
+        $this->app->singleton(PluginManager::class, function ($app) {
+            return new PluginManager();
         });
     }
 
     /**
-     * Bootstrap services.
+     * Bootstrap plugin services and auto-load active plugins.
+     *
+     * @return void
      */
     public function boot(): void
     {
