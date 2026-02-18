@@ -4,6 +4,7 @@ return [
     'tabs' => [
         'summary' => 'Summary',
         'pricing' => 'Pricing',
+        'provisioning' => 'Provisioning',
     ],
     'catalog_label' => 'Catalog',
     'catalog_helper' => 'Select the catalog to which this package belongs.',
@@ -48,11 +49,8 @@ return [
     ],
 
     'provisioning' => [
-        'driver_label' => 'Provisioning Driver',
-        'driver_helper' => 'Choose the provisioning system to manage this instance.',
-        'instance_label' => 'Reference Instance',
-        'instance_helper' => 'Select a provisioning driver first to load available instances.',
-        'plugin_not_found' => 'Provisioning plugin :driver not found.',
-        'unavailable_configuration' => 'No configuration fields available for this driver.',
+        'instance_label' => 'Provisioning Instance',
+        'instance_helper' => 'Select the provisioning instance to link with this package.',
+        'unavailable_schema' => 'This provisioning instance has no schema options for packages.',
     ],
 ];
