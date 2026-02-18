@@ -110,16 +110,6 @@
                     :options="$field['options']" 
                     :checked="(array) old('configurations.'.$provisioning->provider.'.'.$key, $provisioning->config[$key] ?? $field['default'] ?? [])"
                 />
-            @elseif($field['type'] === 'file')
-                <x-admin::input 
-                    name="configurations[{{ $provisioning->provider }}][{{ $key }}]"
-                    label="{{ $field['label'] }}"
-                    helper="{{ $field['helper'] ?? '' }}"
-                    type="file"
-                    :required="str_contains($field['rules'] ?? '', 'required')"
-                    value="{{ old('configurations.'.$provisioning->provider.'.'.$key, $field['default'] ?? '') }}" 
-                />
-            @endif
         @endforeach
     </div>
     <div class="flex gap-4 ml-auto">

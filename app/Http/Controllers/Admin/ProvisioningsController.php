@@ -150,8 +150,7 @@ class ProvisioningsController extends Controller
         $configData = $this->validatePluginConfig(
             $request, 
             $manager, 
-            $provisioning->provider,
-            $provisioning
+            $provisioning->provider
         );
 
         $oldProvisioning = $provisioning->getOriginal();
@@ -212,12 +211,11 @@ class ProvisioningsController extends Controller
      * @param \Illuminate\Http\Request $request
      * @param \App\Services\PluginManager $manager
      * @param string $provider
-     * @param \App\Models\Plugin|null $currentInstance
      * @return array<string, mixed>
      * 
      * @throws \Illuminate\Validation\ValidationException
      */
-    private function validatePluginConfig(Request $request, PluginManager $manager, string $provider, ?Plugin $currentInstance = null): array
+    private function validatePluginConfig(Request $request, PluginManager $manager, string $provider): array
     {
         $instance = $manager->bootInstance(new Plugin(['provider' => $provider, 'type' => 'provisioning']));
         if (!$instance) return [];
@@ -230,19 +228,6 @@ class ProvisioningsController extends Controller
 
         $request->validate($rules, [], $attrs);
 
-        $config = $request->input($prefix, []);
-
-        foreach ($schema->where('type', 'file') as $key => $field) {
-            $inputKey = "{$prefix}.{$key}";
-
-            if ($request->hasFile($inputKey)) {
-                $path = $request->file($inputKey)->store("plugins/{$provider}", 'public');
-                $config[$key] = $path;
-            } elseif ($currentInstance && isset($currentInstance->config[$key])) {
-                $config[$key] = $currentInstance->config[$key];
-            }
-        }
-
-        return $config;
+        return $request->input($prefix, []);
     }
 }

@@ -111,16 +111,6 @@
                         :options="$field['options']" 
                         :checked="old('configurations.'.$provider['provider'].'.'.$key, $config[$key] ?? $field['default'] ?? [])"
                     />
-                @elseif($field['type'] === 'file')
-                    <x-admin::input 
-                        name="configurations[{{ $provider['provider'] }}][{{ $key }}]"
-                        label="{{ $field['label'] }}"
-                        helper="{{ $field['helper'] ?? '' }}"
-                        type="file"
-                        :required="str_contains($field['rules'] ?? '', 'required')"
-                        value="{{ old('configurations.'.$provider['provider'].'.'.$key, $field['default'] ?? '') }}" 
-                    />
-                @endif
             @endforeach
         </div>
     @endforeach
