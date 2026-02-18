@@ -23,8 +23,7 @@ return new class extends Migration
             $table->boolean('allow_cancellation')->default(true);
             $table->enum('status', ['visible', 'hidden'])->default('visible');
 
-            $table->string('provisioning_driver')->nullable(); 
-            $table->foreignId('provisioning_id')->nullable()->constrained('provisionings')->nullOnDelete();
+            $table->foreignId('plugin_id')->nullable()->constrained('plugins')->nullOnDelete(); 
             $table->json('provisioning_config')->nullable();
             $table->timestamps();
 

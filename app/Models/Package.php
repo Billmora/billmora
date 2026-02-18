@@ -100,12 +100,22 @@ class Package extends Model
     }
 
     /**
-     * Get the provisioning configuration associated with the package.
+     * Get the plugin instance associated with the package.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function plugin()
+    {
+        return $this->belongsTo(Plugin::class, 'plugin_id');
+    }
+
+    /**
+     * Get the provisioning plugin relationship scoped by provisioning type.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function provisioning()
     {
-        return $this->belongsTo(Provisioning::class);
+        return $this->plugin()->where('type', 'provisioning');
     }
 }
