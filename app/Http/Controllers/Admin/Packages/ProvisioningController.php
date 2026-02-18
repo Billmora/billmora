@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Admin\Packages;
 
 use App\Http\Controllers\Controller;
 use App\Models\Package;
-use App\Models\Provisioning;
+use App\Models\Plugin;
+use App\Services\PluginManager;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class ProvisioningController extends Controller
 {
@@ -23,154 +21,104 @@ class ProvisioningController extends Controller
     }
 
     /**
-     * Display package provisioning configuration page with available drivers and instances.
+     * Display the provisioning configuration page for the specified package.
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
-     * @return \Illuminate\View\View
+     * @param \App\Services\PluginManager $manager
+     * @return \Illuminate\Contracts\View\View
      */
-    public function index(Request $request, $id)
+    public function index(Request $request, $id, PluginManager $manager)
     {
         $package = Package::findOrFail($id);
 
-        $drivers = [];
-        $path = base_path('plugin/Provisioning');
-        if (File::exists($path)) {
-            foreach (File::directories($path) as $dir) {
-                $driverName = basename($dir);
-                $drivers[$driverName] = $driverName;
+        $provisionings = Plugin::where('type', 'provisioning')
+            ->orderBy('name')
+            ->get();
+
+        $selectedId = old('provisioning_id') 
+            ?? $request->query('instance_id') 
+            ?? $package->plugin_id;
+
+        $schema = [];
+        $selectedPlugin = null;
+
+        if ($selectedId) {
+            $selectedPlugin = $provisionings->firstWhere('id', $selectedId);
+            
+            if ($selectedPlugin) {
+                $instance = $manager->bootInstance($selectedPlugin);
+                if ($instance && method_exists($instance, 'getPackageSchema')) {
+                    $schema = $instance->getPackageSchema();
+                }
             }
         }
 
-        $selectedDriver = $this->resolveDriver($request->get('driver', $package->provisioning_driver));
-        $selectedInstanceId = $request->get('instance', $package->provisioning_id);
-
-        $instances = $selectedDriver ? Provisioning::where('driver', $selectedDriver)->pluck('name', 'id') : collect();
-
-        $formFields = $selectedDriver ? $this->getFormFields($selectedDriver, $selectedInstanceId) : [];
-
         return view('admin::packages.provisioning.index', compact(
             'package',
-            'drivers',
-            'instances',
-            'selectedDriver',
-            'selectedInstanceId',
-            'formFields'
+            'provisionings',
+            'selectedId',
+            'schema',
+            'selectedPlugin'
         ));
     }
 
     /**
-     * Update package provisioning configuration including driver and package-specific fields.
+     * Update the provisioning plugin and configuration for the specified package.
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
+     * @param \App\Services\PluginManager $manager
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, PluginManager $manager)
     {
         $package = Package::findOrFail($id);
 
         $validated = $request->validate([
-            'provisioning_driver' => ['required', 'string'],
-            'instance_reference'  => [
-                Rule::requiredIf($request->provisioning_driver !== 'none'),
-                'nullable',
-                Rule::exists('provisionings', 'id')
-            ],
+            'provisioning_id' => ['nullable', 'exists:plugins,id'],
         ]);
 
-        $rawDriver = $validated['provisioning_driver'];
-        $instanceId = ($rawDriver === 'none') ? null : ($validated['instance_reference'] ?? null);
-        $driver = ($rawDriver === 'none') ? null : $this->resolveDriver($rawDriver);
-
         $configData = [];
-        if ($driver) {
-            $configData = $this->validateAndExtractConfig($request, $driver);
+
+        if ($validated['provisioning_id']) {
+            $plugin = Plugin::findOrFail($validated['provisioning_id']);
+            $configData = $this->validateConfig($request, $manager, $plugin);
         }
 
         $package->update([
-            'provisioning_driver' => $driver,
-            'provisioning_id' => $instanceId,
+            'plugin_id' => $validated['provisioning_id'] ?? null,
             'provisioning_config' => $configData,
         ]);
 
-        return redirect()->route('admin.packages.provisioning', [
-            'id' => $id,
-            'driver' => $driver ?? 'none',
-        ])->with('success', __('common.update_success', ['attribute' => $package->name]));
+        return redirect()
+            ->route('admin.packages.provisioning', ['id' => $package->id])
+            ->with('success', __('common.update_success', ['attribute' => $package->name]));
     }
 
     /**
-     * Resolve provision driver from request, mapping 'none' to null.
+     * Validate provisioning configuration for the given plugin and request.
      *
-     * @param string|null $driver
-     * @return string|null
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Services\PluginManager $manager
+     * @param \App\Models\Plugin $plugin
+     * @return array<string, mixed>
      */
-    private function resolveDriver(?string $driver)
+    private function validateConfig(Request $request, PluginManager $manager, Plugin $plugin): array
     {
-        return $driver === 'none' ? null : $driver;
-    }
-
-    /**
-     * Get package configuration fields for selected driver and instance.
-     *
-     * @param string $driver
-     * @param string|null $instanceId
-     * @return array
-     */
-    private function getFormFields(string $driver, ?string $instanceId)
-    {
-        $className = "Plugin\\Provisioning\\{$driver}\\{$driver}";
-        if (! class_exists($className)) {
+        $instance = $manager->bootInstance($plugin);
+        if (!$instance || !method_exists($instance, 'getPackageSchema')) {
             return [];
         }
 
-        $plugin = new $className();
-        $instanceObj = $instanceId ? Provisioning::find($instanceId) : null;
-        $instanceConfig = $instanceObj->config ?? [];
+        $schema = collect($instance->getPackageSchema());
+        $prefix = "provisioning_config";
 
-        return $plugin->getPackageFields($instanceConfig) ?: [];
-    }
+        $rules = $schema->mapWithKeys(fn($f, $k) => ["{$prefix}.{$k}" => $f['rules'] ?? 'nullable'])->all();
+        $attrs = $schema->mapWithKeys(fn($f, $k) => ["{$prefix}.{$k}" => strtolower($f['label'] ?? $k)])->all();
 
-    /**
-     * Validate and extract provisioning configuration data for driver.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param string $driver
-     * @return array
-     */
-    private function validateAndExtractConfig(Request $request, string $driver)
-    {
-        $className = "Plugin\\Provisioning\\{$driver}\\{$driver}";
-        if (! class_exists($className)) {
-            return back()
-                ->withInput()
-                ->with('error', __('admin/packages.provisioning.plugin_not_found', ['driver' => $driver]))
-                ->throwResponse();
-        }
+        $request->validate($rules, [], $attrs);
 
-        $plugin = new $className();
-        $fields = $plugin->getPackageFields(null);
-
-        $rules = [];
-        $labels = [];
-
-        foreach ($fields as $key => $field) {
-            if (isset($field['rules'])) {
-                $rules[$key] = $field['rules'];
-                $labels[$key] = $field['label'] ?? $key;
-            }
-        }
-
-        $validator = Validator::make($request->all(), $rules, [], $labels);
-
-        if ($validator->fails()) {
-            return back()
-                ->withErrors($validator)
-                ->withInput()
-                ->throwResponse();
-        }
-
-        return $request->only(array_keys($fields));
+        return $request->input($prefix, []);
     }
 }
