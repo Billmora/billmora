@@ -36,9 +36,15 @@ class ProvisioningController extends Controller
             ->orderBy('name')
             ->get();
 
-        $selectedId = old('provisioning_id') 
-            ?? $request->query('instance_id') 
-            ?? $package->plugin_id;
+        $selectedId = null;
+
+        if (old('provisioning_id') !== null) {
+            $selectedId = old('provisioning_id');
+        } elseif ($request->has('instance_id')) {
+            $selectedId = $request->input('instance_id'); 
+        } else {
+            $selectedId = $package->plugin_id;
+        }
 
         $schema = [];
         $selectedPlugin = null;
