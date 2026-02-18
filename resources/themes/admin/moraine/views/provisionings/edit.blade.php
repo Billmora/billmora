@@ -110,6 +110,7 @@
                     :options="$field['options']" 
                     :checked="(array) old('configurations.'.$provisioning->provider.'.'.$key, $provisioning->config[$key] ?? $field['default'] ?? [])"
                 />
+            @endif
         @endforeach
     </div>
     <div class="flex gap-4 ml-auto">

@@ -111,6 +111,7 @@
                         :options="$field['options']" 
                         :checked="old('configurations.'.$provider['provider'].'.'.$key, $config[$key] ?? $field['default'] ?? [])"
                     />
+                @endif
             @endforeach
         </div>
     @endforeach
