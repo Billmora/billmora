@@ -20,6 +20,8 @@ return [
     'package_billing_helper' => 'Choose a package first to view available billing cycles.',
     'variant_option_label' => 'Variant Options',
     'variant_option_helper' => 'Select additional variants are available for the chosen package.',
+    'additional_configuration_label' => 'Additional Configuration',
+    'additional_configuration_helper' => 'Provide any additional configuration required for provisioning this order.',
     'date_label' => 'Order Date',
     'subtotal_label' => 'Subtotal',
     'discount_label' => 'Discount',
