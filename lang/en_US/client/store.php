@@ -12,6 +12,7 @@ return [
 
     'package' => [
         'billing_cycle' => 'Billing cycle',
+        'configuration' => 'Configuration',
         'order_summary' => 'Order Summary',
         'subtotal' => 'Subtotal',
         'setup_fee' => 'Setup Fee',
