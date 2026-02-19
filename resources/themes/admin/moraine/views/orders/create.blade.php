@@ -88,81 +88,80 @@
             </x-admin::select>
         </div>
         <template x-if="currentVariants.length > 0 && hasAnyAvailableOptions">
-    <div>
-        <div class="mb-2">
-            <h4 class="text-lg font-semibold text-slate-600">{{ __('admin/orders.variant_option_label') }}</h4>
-            <span class="text-slate-500">{{ __('admin/orders.variant_option_helper') }}</span>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
-            @foreach ($packagesPayload as $pkgData)
-                @foreach ($pkgData['currencies'] ?? [] as $currencyCode => $currencyData)
-                    @foreach ($currencyData['variants'] ?? [] as $variant)
-                        <template x-if="
-                            selectedPackage == {{ $pkgData['id'] }} &&
-                            selectedCurrency == '{{ $currencyCode }}' &&
-                            getFilteredOptions({{ json_encode($variant) }}).length > 0
-                        ">
-                            <div>
-                                @switch($variant['type'])
-                                    @case('select')
-                                        <x-admin::select
-                                            name="variant_options[{{ $variant['id'] }}]"
-                                            label="{{ $variant['name'] }}"
-                                            required
-                                        >
-                                            @foreach ($variant['options'] as $option)
-                                                <option
-                                                    value="{{ $option['id'] }}"
-                                                    x-show="getFilteredOptions({{ json_encode($variant) }}).some(o => o.id == {{ $option['id'] }})"
-                                                    :selected="selections[{{ $variant['id'] }}] == {{ $option['id'] }}"
-                                                >{{ $option['name'] }}</option>
-                                            @endforeach
-                                        </x-admin::select>
-                                        @break
-                                    @case('radio')
-                                        <x-admin::radio.group
-                                            name="variant_options[{{ $variant['id'] }}]"
-                                            label="{{ $variant['name'] }}"
-                                            required
-                                        >
-                                            @foreach ($variant['options'] as $option)
-                                                <x-admin::radio.option
+            <div>
+                <div class="mb-2">
+                    <h4 class="text-lg font-semibold text-slate-600">{{ __('admin/orders.variant_option_label') }}</h4>
+                    <span class="text-slate-500">{{ __('admin/orders.variant_option_helper') }}</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+                    @foreach ($packagesPayload as $pkgData)
+                        @foreach ($pkgData['currencies'] ?? [] as $currencyCode => $currencyData)
+                            @foreach ($currencyData['variants'] ?? [] as $variant)
+                                <template x-if="
+                                    selectedPackage == {{ $pkgData['id'] }} &&
+                                    selectedCurrency == '{{ $currencyCode }}' &&
+                                    getFilteredOptions({{ json_encode($variant) }}).length > 0
+                                ">
+                                    <div>
+                                        @switch($variant['type'])
+                                            @case('select')
+                                                <x-admin::select
                                                     name="variant_options[{{ $variant['id'] }}]"
-                                                    label="{{ $option['name'] }}"
-                                                    value="{{ $option['id'] }}"
-                                                    x-show="getFilteredOptions({{ json_encode($variant) }}).some(o => o.id == {{ $option['id'] }})"
-                                                    :checked="old('variant_options.' . $variant['id']) == $option['id']"
+                                                    label="{{ $variant['name'] }}"
+                                                    required
+                                                >
+                                                    @foreach ($variant['options'] as $option)
+                                                        <option
+                                                            value="{{ $option['id'] }}"
+                                                            x-show="getFilteredOptions({{ json_encode($variant) }}).some(o => o.id == {{ $option['id'] }})"
+                                                            :selected="selections[{{ $variant['id'] }}] == {{ $option['id'] }}"
+                                                        >{{ $option['name'] }}</option>
+                                                    @endforeach
+                                                </x-admin::select>
+                                                @break
+                                            @case('radio')
+                                                <x-admin::radio.group
+                                                    name="variant_options[{{ $variant['id'] }}]"
+                                                    label="{{ $variant['name'] }}"
+                                                    required
+                                                >
+                                                    @foreach ($variant['options'] as $option)
+                                                        <x-admin::radio.option
+                                                            name="variant_options[{{ $variant['id'] }}]"
+                                                            label="{{ $option['name'] }}"
+                                                            value="{{ $option['id'] }}"
+                                                            x-show="getFilteredOptions({{ json_encode($variant) }}).some(o => o.id == {{ $option['id'] }})"
+                                                            :checked="old('variant_options.' . $variant['id']) == $option['id']"
+                                                        />
+                                                    @endforeach
+                                                </x-admin::radio.group>
+                                                @break
+                                            @case('checkbox')
+                                                <x-admin::checkbox
+                                                    name="variant_options[{{ $variant['id'] }}]"
+                                                    label="{{ $variant['name'] }}"
+                                                    :options="collect($variant['options'])->pluck('name', 'id')->toArray()"
+                                                    :checked="old('variant_options.' . $variant['id'], [])"
                                                 />
-                                            @endforeach
-                                        </x-admin::radio.group>
-                                        @break
-                                    @case('checkbox')
-                                        <x-admin::checkbox
-                                            name="variant_options[{{ $variant['id'] }}]"
-                                            label="{{ $variant['name'] }}"
-                                            :options="collect($variant['options'])->pluck('name', 'id')->toArray()"
-                                            :checked="old('variant_options.' . $variant['id'], [])"
-                                        />
-                                        @break
-                                    @case('slider')
-                                        <x-admin::slider
-                                            name="variant_options[{{ $variant['id'] }}]"
-                                            label="{{ $variant['name'] }}"
-                                            :options="collect($variant['options'])->map(fn($o) => ['value' => $o['id'], 'label' => $o['name']])->toArray()"
-                                            value="{{ old('variant_options.' . $variant['id'], $variant['options'][0]['id'] ?? null) }}"
-                                            required
-                                        />
-                                        @break
-                                @endswitch
-                            </div>
-                        </template>
+                                                @break
+                                            @case('slider')
+                                                <x-admin::slider
+                                                    name="variant_options[{{ $variant['id'] }}]"
+                                                    label="{{ $variant['name'] }}"
+                                                    :options="collect($variant['options'])->map(fn($o) => ['value' => $o['id'], 'label' => $o['name']])->toArray()"
+                                                    value="{{ old('variant_options.' . $variant['id'], $variant['options'][0]['id'] ?? null) }}"
+                                                    required
+                                                />
+                                                @break
+                                        @endswitch
+                                    </div>
+                                </template>
+                            @endforeach
+                        @endforeach
                     @endforeach
-                @endforeach
-            @endforeach
-        </div>
-    </div>
-</template>
-
+                </div>
+            </div>
+        </template>
         @if (!empty($checkoutSchema))
             @foreach ($checkoutSchema as $packageId => $schema)
                 <template x-if="Number(selectedPackage) === {{ $packageId }}">
