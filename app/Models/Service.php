@@ -123,7 +123,7 @@ class Service extends Model
      */
     public function provisioning()
     {
-        return $this->belongsTo(Provisioning::class);
+        return $this->belongsTo(Plugin::class, 'plugin_id');
     }
 
     /**
@@ -262,36 +262,5 @@ class Service extends Model
         }
 
         return;
-    }
-
-    /**
-     * Get available client actions from the provisioning.
-     *
-     * @return array
-     */
-    public function getClientActions()
-    {
-        if ($this->status !== 'active') {
-            return [];
-        }
-
-        if (!$this->provisioning) {
-            return [];
-        }
-
-        $driver = $this->provisioning->driver;
-        $className = "Plugin\\Provisioning\\{$driver}\\{$driver}";
-
-        if (class_exists($className)) {
-            try {
-                $plugin = new $className();
-                $instanceConfig = $this->provisioning->config ?? [];
-                return $plugin->getClientActions($this, $instanceConfig);
-            } catch (\Exception $e) {
-                return [];
-            }
-        }
-
-        return [];
     }
 }
