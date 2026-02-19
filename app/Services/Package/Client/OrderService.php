@@ -10,7 +10,7 @@ use App\Models\CouponUsage;
 use App\Models\Package;
 use App\Models\PackagePrice;
 use App\Models\Coupon;
-use App\Models\Provisioning;
+use App\Models\VariantOption;
 use App\Services\Package\PricingService;
 use Illuminate\Support\Facades\DB;
 
@@ -35,21 +35,23 @@ class OrderService
     }
 
     /**
-     * Create order, service, and invoice from checkout session data.
+     * Create a new order, service, and invoice with pricing, configuration, and coupon usage.
      *
      * @param int $userId
      * @param int $packagePriceId
-     * @param array $variantSelections
+     * @param array<int|string, mixed> $variantSelections
      * @param \App\Models\Coupon|null $coupon
-     * @param array $checkoutData
-     * @return array
+     * @param array<string, mixed> $checkoutData
+     * @param array<string, mixed> $configuration
+     * @return array{order:\App\Models\Order,service:\App\Models\Service,invoice:\App\Models\Invoice}
      */
     public function createOrder(
         int $userId,
         int $packagePriceId,
         array $variantSelections,
         ?Coupon $coupon,
-        array $checkoutData
+        array $checkoutData,
+        array $configuration = [],
     ): array {
         $packagePrice = PackagePrice::with('package.catalog')->findOrFail($packagePriceId);
         $package = $packagePrice->package;
@@ -70,7 +72,8 @@ class OrderService
             $pricing,
             $coupon,
             $checkoutData,
-            $currency
+            $currency,
+            $configuration,
         ) {
             $order = Order::create([
                 'user_id' => $userId,
@@ -89,15 +92,14 @@ class OrderService
             ]);
 
             $initialDueDate = ($packagePrice->type === 'recurring') ? now() : null;
-            $finalConfig = $this->resolveServiceConfiguration($package, $variantSelections);
-            $provisioningId = $this->findProvisioningInstance($package->provisioning_driver ?? null);
+            $finalConfig = $this->resolveServiceConfiguration($package, $variantSelections, $configuration);
 
             $service = Service::create([
                 'user_id' => $userId,
                 'order_id' => $order->id,
                 'package_id' => $package->id,
                 'package_price_id' => $packagePrice->id,
-                'provisioning_id' => $provisioningId,
+                'plugin_id' => $package->plugin_id,
                 'name' => $package->name,
                 'status' => 'pending',
                 'currency' => $currency,
@@ -139,13 +141,13 @@ class OrderService
     }
 
     /**
-     * Create invoice items for package, variants, setup fees, and discount.
+     * Create invoice items for base package, variants, setup fees, and discount lines.
      *
      * @param \App\Models\Invoice $invoice
      * @param \App\Models\Service $service
      * @param \App\Models\Package $package
      * @param \App\Models\PackagePrice $packagePrice
-     * @param array $pricing
+     * @param array<string, mixed> $pricing
      * @param \App\Models\Coupon|null $coupon
      * @return void
      */
@@ -216,7 +218,7 @@ class OrderService
     }
 
     /**
-     * Build package description with catalog name and service period.
+     * Build main package invoice description including catalog and service period.
      *
      * @param \App\Models\Package $package
      * @param \App\Models\PackagePrice $packagePrice
@@ -237,7 +239,7 @@ class OrderService
     }
 
     /**
-     * Calculate service period date range based on billing interval.
+     * Calculate formatted service period range string from billing period and interval.
      *
      * @param \App\Models\PackagePrice $packagePrice
      * @return string
@@ -257,70 +259,47 @@ class OrderService
     }
 
     /**
-     * Merge Package Default Config with Selected Variant Options.
+     * Resolve final service configuration from package defaults, variants, and checkout data.
      *
      * @param \App\Models\Package $package
-     * @param array $variantSelections (List of Option IDs)
-     * @return array
+     * @param array<int|string, mixed> $variantSelections
+     * @param array<string, mixed> $checkoutConfiguration
+     * @return array<string, mixed>
      */
-    protected function resolveServiceConfiguration(Package $package, array $variantSelections): array
+    protected function resolveServiceConfiguration(Package $package, array $variantSelections, array $checkoutConfiguration = []): array
     {
         $config = $package->provisioning_config ?? [];
 
-        if (empty($variantSelections)) {
-            return $config;
-        }
-
-        $optionIds = collect($variantSelections)->flatten()->filter()->toArray();
-
-        if (empty($optionIds)) {
-            return $config;
-        }
-
-        $options = \App\Models\VariantOption::with('variant')
-            ->whereIn('id', $optionIds)
-            ->get();
-
-        foreach ($options as $option) {
-            $key = $option->variant->code ?? null;
+        if (!empty($variantSelections)) {
+            $optionIds = collect($variantSelections)->flatten()->filter()->toArray();
             
-            $value = $option->value;
+            if (!empty($optionIds)) {
+                $options = VariantOption::with('variant')
+                    ->whereIn('id', $optionIds)
+                    ->get();
 
-            if (empty($key)) {
-                continue;
+                foreach ($options as $option) {
+                    $key = $option->variant->code ?? null;
+                    if (empty($key)) continue;
+
+                    $value = $option->value;
+                    if (is_numeric($value)) {
+                        $value = $value + 0;
+                    } elseif (strtolower($value) === 'true') {
+                        $value = true;
+                    } elseif (strtolower($value) === 'false') {
+                        $value = false;
+                    }
+
+                    $config[$key] = $value;
+                }
             }
+        }
 
-            if (is_numeric($value)) {
-                $value = $value + 0;
-            } elseif (strtolower($value) === 'true') {
-                $value = true;
-            } elseif (strtolower($value) === 'false') {
-                $value = false;
-            }
-
-            $config[$key] = $value;
+        if (!empty($checkoutConfiguration)) {
+            $config = array_merge($config, $checkoutConfiguration);
         }
 
         return $config;
-    }
-
-    /**
-     * Find a suitable provisioning instance based on package driver.
-     *
-     * @param string|null $driver
-     * @return int|null
-     */
-    protected function findProvisioningInstance(?string $driver): ?int
-    {
-        if (empty($driver)) {
-            return null;
-        }
-
-        $instance = Provisioning::where('driver', $driver)
-            ->where('is_active', true)
-            ->inRandomOrder()
-            ->first();
-
-        return $instance?->id;
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Catalog;
 use App\Models\Package;
 use App\Services\Package\PricingService;
+use App\Services\PluginManager;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -21,7 +22,7 @@ class PackageController extends Controller
      * @param \App\Services\Package\PricingService $pricingService
      * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
-    public function show(string $catalogSlug, string $packageSlug, PricingService $pricingService)
+    public function show(string $catalogSlug, string $packageSlug, PricingService $pricingService, PluginManager $pluginManager)
     {
         $catalog = Catalog::where('slug', $catalogSlug)->firstOrFail();
         $package = $this->getPackage($catalog, $packageSlug);
@@ -35,12 +36,20 @@ class PackageController extends Controller
                 ->with('error', __('client/store.unavailable_currency'));
         }
 
-        $packagePricesPayload = $prices->map(function ($price) use ($currencyCode, $pricingService) {
-            return $pricingService->mapPriceToPayload($price, $currencyCode);
-        })->values()->toArray();
+        $packagePricesPayload = $prices->map(
+            fn($price) => $pricingService->mapPriceToPayload($price, $currencyCode)
+        )->values()->toArray();
 
         $variants = $pricingService->getAvailableVariants($package, $currencyCode);
         $variantsPayload = $pricingService->buildVariantsPayload($variants);
+
+        $checkoutSchema = [];
+        if ($package->plugin) {
+            $instance = $pluginManager->bootInstance($package->plugin);
+            if ($instance && method_exists($instance, 'getCheckoutSchema')) {
+                $checkoutSchema = $instance->getCheckoutSchema();
+            }
+        }
 
         return view('client::store.catalog.package.show', compact(
             'package',
@@ -48,6 +57,7 @@ class PackageController extends Controller
             'packagePricesPayload',
             'variants',
             'variantsPayload',
+            'checkoutSchema',
         ));
     }
 

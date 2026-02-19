@@ -11,6 +11,7 @@ use App\Models\VariantOption;
 use App\Services\Package\PricingService;
 use App\Services\Package\OrderValidationService;
 use App\Services\Package\Client\OrderService;
+use App\Services\PluginManager;
 use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,7 @@ class ReviewController extends Controller
      * @param \App\Services\Package\OrderValidationService $validationService
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function initiate(Request $request, OrderValidationService $validationService)
+    public function initiate(Request $request, OrderValidationService $validationService, PluginManager $pluginManager)
     {
         $validated = $request->validate([
             'price_id' => ['required', Rule::exists('package_prices', 'id')],
@@ -38,7 +39,7 @@ class ReviewController extends Controller
         ]);
 
         $currencyCode = Session::get('currency');
-        $packagePrice = PackagePrice::with('package')->findOrFail($validated['price_id']);
+        $packagePrice = PackagePrice::with('package.plugin')->findOrFail($validated['price_id']);
         $variantSelections = $validationService->buildVariantSelections(
             ($validated['variants'] ?? []) + ($validated['variants_multi'] ?? [])
         );
@@ -51,12 +52,34 @@ class ReviewController extends Controller
         );
 
         if (!$validation['valid']) {
-            return redirect()
-                ->route('client.store')
-                ->with('error', $validation['message']);
+            return redirect()->route('client.store')->with('error', $validation['message']);
         }
 
-        Session::put('checkout_data', array_merge($validated, ['currency' => $currencyCode]));
+        $configuration = [];
+        if ($packagePrice->package->plugin) {
+            $instance = $pluginManager->bootInstance($packagePrice->package->plugin);
+            if ($instance && method_exists($instance, 'getCheckoutSchema')) {
+                $schema = $instance->getCheckoutSchema();
+                if (!empty($schema)) {
+                    $configRules = [];
+                    $configAttributes = [];
+
+                    foreach ($schema as $key => $field) {
+                        $configRules["configuration.{$key}"] = explode('|', $field['rules'] ?? 'nullable');
+                        $configAttributes["configuration.{$key}"] = $field['label'] ?? $key;
+                    }
+
+                    $configValidated = $request->validate($configRules, [], $configAttributes);
+                    $configuration = $configValidated['configuration'] ?? [];
+                }
+            }
+        }
+
+        Session::put('checkout_data', [
+            ...$validated,
+            'currency' => $currencyCode,
+            'configuration' => $configuration,
+        ]);
         Session::forget('applied_coupon');
 
         return redirect()->route('client.checkout.review');
@@ -188,7 +211,8 @@ class ReviewController extends Controller
                 $packagePrice->id,
                 $variantSelections,
                 $this->getCoupon(),
-                $validated
+                $validated,
+                $checkoutData['configuration'] ?? []
             );
 
             Session::forget(['checkout_data', 'applied_coupon']);
