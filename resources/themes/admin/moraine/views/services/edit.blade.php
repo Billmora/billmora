@@ -3,7 +3,7 @@
 @section('title', "Service Edit - {$service->name}")
 
 @section('body')
-<div class="flex flex-col lg:flex-row gap-5">
+<div class="flex flex-col-reverse lg:flex-row gap-5">
     <form action="{{ route('admin.services.update', ['service' => $service->id]) }}" method="POST" x-data="serviceForm()" class="w-full lg:w-5/7 flex flex-col gap-5">
         @csrf
         @method('PUT')
