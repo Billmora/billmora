@@ -25,9 +25,8 @@
         options: {{ json_encode(array_values($options)) }},
         hasError: {{ $resolvedError ? 'true' : 'false' }},
         init() {
-            const opts = this.options;
-            if (opts.length === 0) return;
-            let found = opts.findIndex(o => o.id == '{{ $resolvedValue }}');
+            if (this.options.length === 0) return;
+            let found = this.options.findIndex(o => o.value == '{{ $resolvedValue }}');
             this.sliderIdx = found !== -1 ? found : 0;
         },
         updateSelection() {
@@ -59,21 +58,23 @@
             :class="hasError ? 'border-red-400' : ''"
         />
 
-        <template x-for="(option, i) in options" :key="option.id">
-            <span 
-                class="text-sm text-slate-700 absolute -bottom-6"
+        <template x-for="(option, i) in options" :key="option.value">
+            <span
+                class="absolute -bottom-10 flex flex-col gap-0.5"
                 :class="{
-                    'start-0 text-start': i === 0,
-                    'end-0 text-end': i === options.length - 1,
-                    'start-1/2 -translate-x-1/2': i > 0 && i < options.length - 1
+                    'start-0 items-start': i === 0,
+                    'end-0 items-end': i === options.length - 1,
+                    'start-1/2 -translate-x-1/2 items-center': i > 0 && i < options.length - 1
                 }"
                 x-show="i === 0 || i === options.length - 1 || options.length <= 3"
-                x-text="option.name"
-            ></span>
+            >
+                <span class="text-sm font-semibold text-slate-700" x-text="option.title"></span>
+                <span class="text-xs text-slate-500" x-text="option.subtitle" x-show="!!option.subtitle"></span>
+            </span>
         </template>
     </div>
 
-    <input type="hidden" name="{{ $name }}" :value="options[sliderIdx]?.id || ''">
+    <input type="hidden" name="{{ $name }}" :value="options[sliderIdx]?.value || ''">
 
     @if ($resolvedError)
         <p class="mt-1 text-sm text-red-400 font-semibold" x-show="hasError">
