@@ -16,12 +16,13 @@ return [
         'cancel' => 'Cancel',
 
         'unavailable' => 'Page not found or action does not require input.',
+        'invalid_type' => 'Invalid action type configured for rendering.',
         'success' => 'Action processed successfully.',
-        'failed' => 'Action failed to process: ',
+        'failed' => 'Action failed to process :message',
     ],
 
     'provisioning' => [
-        'not_found' => 'Provisioning driver not found.',
-        'unavailable' => 'Provisioning driver unavailable.',
+        'not_found' => 'Provisioning provider not found.',
+        'unavailable' => 'Provisioning provider unavailable.',
     ],
 ];
