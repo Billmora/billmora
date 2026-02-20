@@ -53,17 +53,17 @@
                     <option value="{{ $status }}" {{ old('service_status', $service->status) === $status ? 'selected' : '' }}>{{ ucfirst($status) }}</option>
                 @endforeach
             </x-admin::select>
-            <x-admin::toggle 
-                name="service_recalculate_price"
-                label="{{ __('admin/services.recalculate_label') }}"
-                helper="{{ __('admin/services.recalculate_helper') }}"
-            />
             <x-admin::input 
                 name="service_next_due_date" 
                 label="{{ __('admin/services.expires_label') }}"
                 helper="{{ __('admin/services.expires_helper') }}"
                 type="date"
                 value="{{ old('service_next_due_date', $service->next_due_date?->format('Y-m-d')) }}"
+            />
+            <x-admin::toggle 
+                name="service_recalculate_price"
+                label="{{ __('admin/services.recalculate_label') }}"
+                helper="{{ __('admin/services.recalculate_helper') }}"
             />
             <x-admin::input 
                 name="service_price" 
@@ -119,104 +119,157 @@
                     <span class="text-slate-500">{{ __('admin/services.variant_option_helper') }}</span>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
-                    <template x-for="variant in currentVariants" :key="variant.id">
-                        <template x-if="getFilteredOptions(variant).length > 0">
-                            <div class="col-span-1">
-                                <label class="block text-sm font-semibold text-slate-600 mb-2" x-text="variant.name"></label>
-                                <template x-if="variant.type === 'select'">
-                                    <select 
-                                        :name="'variant_selections[' + variant.id + ']'"
-                                        class="w-full px-3 py-2 border-2 border-billmora-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-billmora-primary cursor-pointer"
-                                        x-model="selections[variant.id]"
-                                    >
-                                        <template x-for="option in getFilteredOptions(variant)" :key="option.id">
-                                            <option 
-                                                :value="option.id" 
-                                                x-text="option.name"
-                                                :selected="selections[variant.id] == option.id"
-                                            ></option>
-                                        </template>
-                                    </select>
-                                </template>
-                                <template x-if="variant.type === 'radio'">
-                                    <div class="space-y-2">
-                                        <template x-for="option in getFilteredOptions(variant)" :key="option.id">
-                                            <label class="flex items-center space-x-2 cursor-pointer">
-                                                <input 
-                                                    type="radio" 
-                                                    :name="'variant_selections[' + variant.id + ']'"
-                                                    :value="option.id"
-                                                    x-model="selections[variant.id]"
-                                                    class="accent-billmora-primary"
-                                                />
-                                                <span x-text="option.name"></span>
-                                            </label>
-                                        </template>
-                                    </div>
-                                </template>
-                                <template x-if="variant.type === 'slider'">
-                                    <div x-data="{ 
-                                        sliderIdx: 0,
-                                        init() {
-                                            let opts = this.getFilteredOptions(variant);
-                                            let selectedId = this.selections[variant.id];
-                                            let foundIndex = opts.findIndex(o => o.id == selectedId);
-                                            this.sliderIdx = foundIndex !== -1 ? foundIndex : 0;
-                                        }
-                                    }" class="mt-4">
-                                        <div class="relative mb-10">
-                                            <input 
-                                                type="range" 
-                                                min="0" 
-                                                :max="Math.max(0, getFilteredOptions(variant).length - 1)" 
-                                                step="1" 
-                                                class="w-full h-2 cursor-pointer accent-billmora-primary"
-                                                x-model="sliderIdx"
-                                                x-on:input="selections[variant.id] = getFilteredOptions(variant)[sliderIdx]?.id"
-                                            />
-                                            <template x-for="(option, i) in getFilteredOptions(variant)" :key="option.id">
-                                                <span 
-                                                    class="text-sm text-slate-700 absolute -bottom-6"
-                                                    :class="{
-                                                        'start-0 text-start': i === 0,
-                                                        'end-0 text-end': i === getFilteredOptions(variant).length - 1,
-                                                        'start-1/2 -translate-x-1/2': i > 0 && i < getFilteredOptions(variant).length - 1
-                                                    }"
-                                                    x-show="i === 0 || i === getFilteredOptions(variant).length - 1 || getFilteredOptions(variant).length <= 3"
+                    @foreach ($packagesPayload as $pkgData)
+                        @foreach ($pkgData['currencies'] ?? [] as $currencyCode => $currencyData)
+                            @foreach ($currencyData['variants'] ?? [] as $variant)
+                                <template x-if="
+                                    selectedPackage == {{ $pkgData['id'] }} &&
+                                    selectedCurrency == '{{ $currencyCode }}' &&
+                                    getFilteredOptions({{ json_encode($variant) }}).length > 0
+                                ">
+                                    <div>
+                                        @switch($variant['type'])
+                                            @case('select')
+                                                <x-admin::select
+                                                    name="variant_selections[{{ $variant['id'] }}]"
+                                                    label="{{ $variant['name'] }}"
+                                                    required
                                                 >
-                                                    <span x-text="option.name"></span>
-                                                </span>
-                                            </template>
-                                        </div>
-                                        <input 
-                                            type="hidden" 
-                                            :name="'variant_selections[' + variant.id + ']'" 
-                                            :value="getFilteredOptions(variant)[sliderIdx]?.id || ''"
-                                        />
-                                    </div>
-                                </template>
-                                <template x-if="variant.type === 'checkbox'">
-                                    <div class="space-y-2">
-                                        <template x-for="option in getFilteredOptions(variant)" :key="option.id">
-                                            <label class="flex items-center space-x-2 cursor-pointer">
-                                                <input 
-                                                    type="checkbox" 
-                                                    :name="'variant_selections[' + variant.id + '][]'"
-                                                    :value="option.id"
-                                                    x-model="selections[variant.id]"
-                                                    class="accent-billmora-primary"
+                                                    @foreach ($variant['options'] as $option)
+                                                        <option
+                                                            value="{{ $option['id'] }}"
+                                                            x-show="getFilteredOptions({{ json_encode($variant) }}).some(o => o.id == {{ $option['id'] }})"
+                                                            :selected="selections[{{ $variant['id'] }}] == {{ $option['id'] }}"
+                                                        >{{ $option['name'] }}</option>
+                                                    @endforeach
+                                                </x-admin::select>
+                                                @break
+                                            @case('radio')
+                                                <x-admin::radio.group
+                                                    name="variant_selections[{{ $variant['id'] }}]"
+                                                    label="{{ $variant['name'] }}"
+                                                    required
+                                                >
+                                                    @foreach ($variant['options'] as $option)
+                                                        <x-admin::radio.option
+                                                            name="variant_selections[{{ $variant['id'] }}]"
+                                                            label="{{ $option['name'] }}"
+                                                            value="{{ $option['id'] }}"
+                                                            x-show="getFilteredOptions({{ json_encode($variant) }}).some(o => o.id == {{ $option['id'] }})"
+                                                            :checked="old('variant_selections.' . $variant['id'], $service->variant_selections[$variant['id']][0] ?? '') == $option['id']"
+                                                        />
+                                                    @endforeach
+                                                </x-admin::radio.group>
+                                                @break
+                                            @case('checkbox')
+                                                <x-admin::checkbox
+                                                    name="variant_selections[{{ $variant['id'] }}]"
+                                                    label="{{ $variant['name'] }}"
+                                                    :options="collect($variant['options'])->pluck('name', 'id')->toArray()"
+                                                    :checked="old('variant_selections.' . $variant['id'], $service->variant_selections[$variant['id']] ?? [])"
                                                 />
-                                                <span x-text="option.name"></span>
-                                            </label>
-                                        </template>
+                                                @break
+                                            @case('slider')
+                                                <x-admin::slider
+                                                    name="variant_selections[{{ $variant['id'] }}]"
+                                                    label="{{ $variant['name'] }}"
+                                                    :options="collect($variant['options'])->map(fn($o) => [
+                                                        'value' => $o['id'],
+                                                        'title' => $o['name']
+                                                    ])->toArray()"
+                                                    value="{{ old('variant_selections.' . $variant['id'], $service->variant_selections[$variant['id']][0] ?? null) }}"
+                                                    required
+                                                />
+                                                @break
+                                        @endswitch
                                     </div>
                                 </template>
-                            </div>
-                        </template>
-                    </template>
+                            @endforeach
+                        @endforeach
+                    @endforeach
                 </div>
             </div>
         </template>
+        @if (!empty($schemasPayload))
+            @foreach ($schemasPayload as $packageId => $schema)
+                <template x-if="Number(selectedPackage) === {{ $packageId }}">
+                    <div class="space-y-2">
+                        <div>
+                            <h4 class="text-lg font-semibold text-slate-600">{{ __('admin/services.additional_configuration_label') }}</h4>
+                            <span class="text-slate-500">{{ __('admin/services.additional_configuration_helper') }}</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+                            @foreach ($schema as $key => $field)
+                                @if (in_array($field['type'], ['text', 'email', 'url', 'number', 'password']))
+                                    <x-admin::input
+                                        name="configuration[{{ $key }}]"
+                                        label="{{ $field['label'] }}"
+                                        helper="{{ $field['helper'] ?? '' }}"
+                                        type="{{ $field['type'] }}"
+                                        :required="str_contains($field['rules'] ?? '', 'required')"
+                                        :value="old('configuration.' . $key, $service->configuration[$key] ?? '')"
+                                    />
+                                @elseif ($field['type'] === 'textarea')
+                                    <x-admin::textarea
+                                        name="configuration[{{ $key }}]"
+                                        label="{{ $field['label'] }}"
+                                        helper="{{ $field['helper'] ?? '' }}"
+                                        :required="str_contains($field['rules'] ?? '', 'required')"
+                                    >{{ old('configuration.' . $key, $service->configuration[$key] ?? '') }}</x-admin::textarea>
+                                @elseif ($field['type'] === 'toggle')
+                                    <x-admin::toggle
+                                        name="configuration[{{$key}}]"
+                                        label="{{ $field['label'] }}"
+                                        helper="{{ $field['helper'] ?? '' }}"
+                                        :checked="(bool) old('configuration.' . $key, $service->configuration[$key] ?? false)"
+                                    />
+                                @elseif ($field['type'] === 'select')
+                                    <x-admin::select
+                                        name="configuration[{{ $key }}]"
+                                        label="{{ $field['label'] }}"
+                                        helper="{{ $field['helper'] ?? '' }}"
+                                        :required="str_contains($field['rules'] ?? '', 'required')"
+                                    >
+                                        @foreach ($field['options'] ?? [] as $optValue => $optLabel)
+                                            <option
+                                                value="{{ $optValue }}"
+                                                @selected(old('configuration.' . $key,  $service->configuration[$key] ?? '') == $optValue)
+                                            >
+                                                {{ $optLabel }}
+                                            </option>
+                                        @endforeach
+                                    </x-admin::select>
+                                @elseif ($field['type'] === 'radio')
+                                    <x-admin::radio.group
+                                        name="configuration[{{ $key }}]"
+                                        label="{{ $field['label'] }}"
+                                        helper="{{ $field['helper'] ?? '' }}"
+                                        :required="str_contains($field['rules'] ?? '', 'required')"
+                                    >
+                                        @foreach ($field['options'] ?? [] as $optVal => $optLabel)
+                                            <x-admin::radio.option
+                                                name="configuration[{{ $key }}]"
+                                                value="{{ $optVal }}"
+                                                label="{{ $optLabel }}"
+                                                :checked="old('configuration.' . $key, $service->configuration[$key] ?? '') == $optVal"
+                                            />
+                                        @endforeach
+                                    </x-admin::radio.group>
+                                @elseif ($field['type'] === 'checkbox')
+                                    <x-admin::checkbox
+                                        name="configuration[{{ $key }}]"
+                                        label="{{ $field['label'] }}"
+                                        helper="{{ $field['helper'] ?? '' }}"
+                                        :options="$field['options'] ?? []"
+                                        :checked="old('configuration.' . $key, $service->configuration[$key] ?? [])"
+                                    />
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                </template>
+            @endforeach
+        @endif
         <div class="flex gap-4 ml-auto">
             <a href="{{ route('admin.services') }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
             <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">

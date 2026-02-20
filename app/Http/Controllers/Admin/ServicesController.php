@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Package;
 use App\Models\Currency;
 use App\Models\PackagePrice;
-use App\Models\Provisioning;
+use App\Models\Plugin;
 use App\Models\Service;
 use App\Models\VariantOption;
+use App\Services\Package\OrderValidationService;
 use App\Services\Package\PricingService;
+use App\Services\PluginManager;
 use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -43,7 +45,7 @@ class ServicesController extends Controller
             'package:id,name,slug,catalog_id', 
             'package.catalog:id,name',
             'packagePrice:id,package_id,name,type,billing_period',
-            'provisioning:id,name,driver'
+            'provisioning:id,name'
         ]);
 
         if ($search = $request->get('search')) {
@@ -64,52 +66,67 @@ class ServicesController extends Controller
     }
 
     /**
-     * Show the form for editing the specified service with pricing calculations.
+     * Show the form for editing the specified service with packages, pricing, and plugin schemas.
      *
      * @param int $id
      * @param \App\Services\PricingService $pricingService
+     * @param \App\Services\PluginManager $pluginManager
      * @return \Illuminate\Contracts\View\View
-     * 
+     *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function edit($id, PricingService $pricingService)
+    public function edit($id, PricingService $pricingService, PluginManager $pluginManager)
     {
         $service = Service::with('user')->findOrFail($id);
         
         $currencies = Currency::orderBy('code')->get();
 
-        $rawPackages = Package::with([
-            'catalog:id,name',
-            'prices', 
-            'variants' => function($q) {
-                $q->where('status', 'visible');
-            }, 
-            'variants.options.prices'
-        ])
-        ->where('status', 'visible')
-        ->get();
+        $packages = Package::with([
+                'catalog:id,name',
+                'prices', 
+                'plugin',
+                'variants' => fn($q) => $q->where('status', 'visible'),
+                'variants.options.prices'
+            ])
+            ->where('status', 'visible')
+            ->get();
 
-        $packagesPayload = $pricingService->buildPackagesPayload($rawPackages);
+        $packagesPayload = $pricingService->buildPackagesPayload($packages);
+
+        $schemasPayload = [];
+        foreach ($packages as $package) {
+            if (!$package->plugin) continue;
+            $instance = $pluginManager->bootInstance($package->plugin);
+            if ($instance && method_exists($instance, 'getCheckoutSchema')) {
+                $schema = $instance->getCheckoutSchema();
+                if (!empty($schema)) {
+                    $schemasPayload[$package->id] = $schema;
+                }
+            }
+        }
 
         return view('admin::services.edit', compact(
-            'service', 
-            'currencies', 
-            'packagesPayload'
+            'service',
+            'currencies',
+            'packagesPayload',
+            'schemasPayload',
         ));
     }
 
     /**
-     * Update the specified service with validated data and optional price recalculation.
+     * Update the specified service with validated data, configuration, and optional price recalculation.
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
      * @param \App\Services\PricingService $pricingService
+     * @param \App\Services\Package\OrderValidationService $validationService
+     * @param \App\Services\PluginManager $pluginManager
      * @return \Illuminate\Http\RedirectResponse
-     * 
+     *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, $id, PricingService $pricingService)
+    public function update(Request $request, $id, PricingService $pricingService, OrderValidationService $validationService, PluginManager $pluginManager)
     {
         $validated = $request->validate([
             'service_status' => ['required', Rule::in(['pending', 'active', 'suspended', 'terminated', 'cancelled'])],
@@ -131,60 +148,61 @@ class ServicesController extends Controller
         $service = Service::findOrFail($id);
         $oldService = $service->getOriginal();
 
-        $package = Package::findOrFail($validated['package_id']);
+        $package = Package::with(['plugin', 'variants.options'])->findOrFail($validated['package_id']);
         $packagePrice = PackagePrice::findOrFail($validated['package_price_id']);
 
-        $provisioningId = $service->provisioning_id;
-
+        $pluginId = $service->plugin_id;
         if ($service->package_id != $package->id) {
-            $provisioningId = null;
-
-            if ($package->provisioning_id) {
-                $provisioningId = $package->provisioning_id;
-            } elseif ($package->provisioning_driver) {
-                $provisioningId = Provisioning::where('driver', $package->provisioning_driver)
-                    ->where('is_active', true)
-                    ->inRandomOrder()
-                    ->value('id');
-            }
+            $pluginId = $package->plugin_id;
         }
 
-        $variantSelections = [];
-        if (!empty($validated['variant_selections'])) {
-            foreach ($validated['variant_selections'] as $variantId => $optionVal) {
-                if (is_array($optionVal)) {
-                    $variantSelections[$variantId] = array_map('intval', $optionVal);
-                } else {
-                    $variantSelections[$variantId] = (int) $optionVal;
+        $variantSelections = $validationService->buildVariantSelections(
+            $validated['variant_selections'] ?? []
+        );
+
+        $validation = $validationService->validateConfiguration(
+            $package,
+            $packagePrice,
+            $variantSelections,
+            $validated['service_currency']
+        );
+
+        if (!$validation['valid']) {
+            return back()->withInput()->with('error', $validation['message']);
+        }
+
+        $configuration = $package->provisioning_config ?? [];
+        if (!empty($variantSelections)) {
+            $optionIds = collect($variantSelections)->flatten()->filter()->toArray();
+            if (!empty($optionIds)) {
+                $options = VariantOption::with('variant')->whereIn('id', $optionIds)->get();
+                foreach ($options as $option) {
+                    $key = $option->variant->code ?? null;
+                    $value = $option->value;
+                    if (empty($key)) continue;
+                    if (is_numeric($value)) $value = $value + 0;
+                    elseif (strtolower($value) === 'true')  $value = true;
+                    elseif (strtolower($value) === 'false') $value = false;
+                    $configuration[$key] = $value;
                 }
             }
         }
 
-        $configuration = $package->provisioning_config ?? [];
-        
-        if (!empty($variantSelections)) {
-            $optionIds = collect($variantSelections)->flatten()->filter()->toArray();
-            
-            if (!empty($optionIds)) {
-                $options = VariantOption::with('variant')
-                    ->whereIn('id', $optionIds)
-                    ->get();
-
-                foreach ($options as $option) {
-                    $key = $option->variant->code ?? null;
-                    $value = $option->value;
-
-                    if (empty($key)) continue;
-
-                    if (is_numeric($value)) {
-                        $value = $value + 0;
-                    } elseif (strtolower($value) === 'true') {
-                        $value = true;
-                    } elseif (strtolower($value) === 'false') {
-                        $value = false;
+        if ($package->plugin) {
+            $instance = $pluginManager->bootInstance($package->plugin);
+            if ($instance && method_exists($instance, 'getCheckoutSchema')) {
+                $schema = $instance->getCheckoutSchema();
+                if (!empty($schema)) {
+                    $configRules = [];
+                    $configAttributes = [];
+                    foreach ($schema as $key => $field) {
+                        $configRules["configuration.{$key}"] = is_array($field['rules'] ?? null)
+                            ? $field['rules']
+                            : explode('|', $field['rules'] ?? 'nullable');
+                        $configAttributes["configuration.{$key}"] = $field['label'] ?? $key;
                     }
-
-                    $configuration[$key] = $value;
+                    $configValidated = $request->validate($configRules, [], $configAttributes);
+                    $configuration = array_merge($configuration, $configValidated['configuration'] ?? []);
                 }
             }
         }
@@ -193,13 +211,7 @@ class ServicesController extends Controller
         $setupFee = $validated['service_setup_fee'] ?? 0;
 
         if ($request->boolean('service_recalculate_price')) {
-            $pricing = $pricingService->calculatePricing(
-                $packagePrice,
-                $variantSelections,
-                null,
-                $validated['service_currency']
-            );
-
+            $pricing = $pricingService->calculatePricing($packagePrice, $variantSelections, null, $validated['service_currency']);
             $price = $pricing['recurring_total'];
             $setupFee = $pricing['setup_fee_total'];
         }
@@ -207,7 +219,7 @@ class ServicesController extends Controller
         $service->update([
             'package_id' => $package->id,
             'package_price_id' => $packagePrice->id,
-            'name' => $package->name, 
+            'name' => $package->name,
             'status' => $validated['service_status'],
             'currency' => $validated['service_currency'],
             'billing_type' => $packagePrice->type,
@@ -217,7 +229,7 @@ class ServicesController extends Controller
             'setup_fee' => $setupFee,
             'variant_selections' => $variantSelections,
             'next_due_date' => $validated['service_next_due_date'],
-            'provisioning_id' => $provisioningId,
+            'plugin_id' => $pluginId,
             'configuration' => $configuration,
         ]);
 
