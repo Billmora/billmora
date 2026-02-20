@@ -26,10 +26,15 @@
                  syncUrl();
              }
          },
+         tickStyle(n, i) {
+             if (n <= 1 || i === 0) return { left: '0%' };
+             if (i === n - 1) return { right: '0%' };
+             return { left: `${(i / (n - 1)) * 100}%` };
+         },
          tickClass(n, i) {
-             if (n <= 1 || i === 0) return 'start-0 text-start';
-             if (i === n - 1) return 'end-0 text-end';
-             return `left-[${(i / (n - 1)) * 100}%] -translate-x-1/2 text-center`;
+             if (n <= 1 || i === 0) return 'items-start text-start';
+             if (i === n - 1) return 'items-end text-end';
+             return 'items-center text-center -translate-x-1/2';
          }
      }"
 >
@@ -43,8 +48,9 @@
             class="w-full h-2 cursor-pointer accent-billmora-primary"
         >
         <template x-for="(opt, i) in opts" :key="opt.id">
-            <span class="grid text-sm text-body absolute"
-                  :class="tickClass(opts.length, i)">
+            <span class="grid text-sm absolute"
+                  :class="tickClass(opts.length, i)"
+                  :style="tickStyle(opts.length, i)">
                 <span class="text-slate-600 font-semibold" x-text="opt.name"></span>
                 <span class="text-slate-500 font-medium" x-text="formatVariantOptionPrice({{ $variant->id }}, opt.id)"></span>
             </span>
