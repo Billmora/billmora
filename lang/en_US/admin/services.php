@@ -31,9 +31,17 @@ return [
     'catalog_label' => 'Catalog',
     'go_to_user' => 'Go to User',
 
+    'provisioning_actions_label' => 'Provisioning Actions',
+    'provisioning_create_label' => 'Create',
+    'provisioning_suspend_label' => 'Suspend',
+    'provisioning_unsuspend_label' => 'Unsuspend',
+    'provisioning_terminate_label' => 'Terminate',
+    'provisioning_renew_label' => 'Force Renew',
+    'provisioning_scale_label' => 'Scale',
+
     'provisioning' => [
-        'driver_missing' => 'No provisioning driver assigned to this service.',
-        'driver_class_missing' => 'Driver class for :driver not found.',
+        'provider_missing' => 'No provisioning provider assigned to this service.',
+        'provider_class_missing' => 'provider class for :provider not found.',
         'create' => [
             'invalid_status' => 'Service must be pending or terminated to be created.',
             'success' => 'Service created and activated successfully.',
