@@ -61,6 +61,13 @@ class OrderValidationService
         ?PackagePrice $packagePrice = null
     ): array {
         $packageVariantIds = $package->variants->pluck('id')->toArray();
+
+        foreach ($package->variants as $variant) {
+            if ($variant->type !== 'checkbox' && empty($variantSelections[$variant->id])) {
+                return $this->error(__('validation.required', ['attribute' => $variant->name]));
+            }
+        }
+
         foreach (array_keys($variantSelections) as $variantId) {
             if (!in_array($variantId, $packageVariantIds)) {
                 return $this->error(__('client/store.order.variant_mismatch'));
