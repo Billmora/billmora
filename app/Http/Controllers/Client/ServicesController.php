@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\VariantOption;
+use App\Services\PluginManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,14 +29,15 @@ class ServicesController extends Controller
     }
 
     /**
-     * Display the specified service details with variant options for the authenticated user.
+     * Display the specified service details with variant options and available client actions.
      *
      * @param \App\Models\Service $service
+     * @param \App\Services\PluginManager $manager
      * @return \Illuminate\Contracts\View\View
-     * 
+     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function show(Service $service)
+    public function show(Service $service, PluginManager $manager)
     {
         if ($service->user_id !== Auth::id()) {
             abort(404);
@@ -60,44 +62,75 @@ class ServicesController extends Controller
             }
         }
 
-        return view('client::services.workspaces.variant', compact('service', 'variantOptions'));
+        $clientActions = [];
+        if ($service->status === 'active' && $service->provisioning) {
+            $plugin = $manager->bootInstance($service->provisioning);
+            
+            if ($plugin && method_exists($plugin, 'getClientAction')) {
+                $clientActions = $plugin->getClientAction($service);
+            }
+        }
+
+        return view('client::services.workspaces.overview', compact('service', 'variantOptions', 'clientActions'));
     }
 
     /**
-     * Display the form for a specific client action on the service.
+     * Display the specified client action page or form for the active service.
      *
      * @param \App\Models\Service $service
      * @param string $slug
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Contracts\View\View
-     * 
+     * @param \App\Services\PluginManager $manager
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Contracts\View\View|\Illuminate\View\View
+     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function showActionForm(Service $service, string $slug)
+    public function showAction(Service $service, string $slug, PluginManager $manager)
     {
-        if ($service->user_id !== Auth::id()) {
+        if ($service->user_id !== Auth::id() || $service->status !== 'active') {
             abort(404);
         }
 
-        if ($service->status !== 'active') {
-            abort(404);
-        }
+        $plugin = $service->provisioning ? $manager->bootInstance($service->provisioning) : null;
 
-        $driver = $service->provisioning?->getPluginInstance();
-        $instanceConfig = $service->provisioning?->config ?? [];
-
-        if (!$driver) {
+        if (!$plugin || !method_exists($plugin, 'getClientAction')) {
             return redirect()->route('client.services.show', $service->id)
                 ->with('error', __('client/services.provisioning.not_found'));
         }
 
-        $pageSchema = $driver->getClientActionForm($service, $instanceConfig, $slug);
+        $actions = $plugin->getClientAction($service);
+        $actionConfig = $actions[$slug] ?? null;
 
-        if (empty($pageSchema)) {
+        if (!$actionConfig) {
             return redirect()->route('client.services.show', $service->id)
                 ->with('error', __('client/services.action.unavailable'));
         }
 
-        return view('client::services.workspaces.provisioning', compact('service', 'slug', 'pageSchema'));
+        if ($actionConfig['type'] === 'page') {
+            try {
+                $result = $plugin->handleClientAction($service, $slug, request()->all());
+
+                if ($result instanceof \Illuminate\View\View) {
+                    $result->with('clientActions', $actions);
+                }
+                
+                return $result;
+            } catch (\Exception $e) {
+                return redirect()->route('client.services.show', $service->id)
+                    ->with('error', $e->getMessage());
+            }
+        }
+
+        if ($actionConfig['type'] === 'form') {
+            return view('client::services.workspaces.provisioning', [
+                'service' => $service,
+                'slug' => $slug,
+                'pageSchema' => $actionConfig['schema'] ?? [],
+                'clientActions' => $actions 
+            ]);
+        }
+
+        return redirect()->route('client.services.show', $service->id)
+            ->with('error', __('client/services.action.invalid_type'));
     }
 
     /**
@@ -106,45 +139,48 @@ class ServicesController extends Controller
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Service $service
      * @param string $slug
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
-     * 
+     * @param \App\Services\PluginManager $manager
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\View\View
+     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function processAction(Request $request, Service $service, string $slug)
+    public function handleAction(Request $request, Service $service, string $slug, PluginManager $manager)
     {
-        if ($service->user_id !== Auth::id()) {
+        if ($service->user_id !== Auth::id() || $service->status !== 'active') {
             abort(404);
         }
 
-        if ($service->status !== 'active') {
-            abort(404);
-        }
-
-        $driver = $service->provisioning?->getPluginInstance();
-        $instanceConfig = $service->provisioning?->config ?? [];
+        $plugin = $service->provisioning ? $manager->bootInstance($service->provisioning) : null;
         
-        if (!$driver) {
+        if (!$plugin) {
             return back()->with('error', __('client/services.provisioning.unavailable'));
         }
 
-        $pageSchema = $driver->getClientActionForm($service, $instanceConfig, $slug);
-
+        $actions = $plugin->getClientAction($service);
+        $actionConfig = $actions[$slug] ?? null;
+        
         $actionData = $request->all();
 
-        if ($pageSchema && $request->isMethod('post')) {
-            $rules = $this->extractValidationRules($pageSchema);
-            $actionData = $request->validate($rules);
+        if ($actionConfig && $actionConfig['type'] === 'form' && $request->isMethod('post')) {
+            $rules = $this->extractValidationRules($actionConfig['schema'] ?? []);
+            
+            if (!empty($rules)) {
+                $request->validate($rules);
+            }
         }
 
         try {
-            $result = $driver->processClientAction($service, $instanceConfig, $slug, $actionData);
+            $result = $plugin->handleClientAction($service, $slug, $actionData);
 
-            if ($result instanceof \Illuminate\Http\RedirectResponse || $result instanceof \Illuminate\Http\Response) {
+            if ($result instanceof \Illuminate\Http\RedirectResponse || $result instanceof \Illuminate\Http\Response || $result instanceof \Illuminate\View\View) {
                 return $result;
             }
 
-            if (is_string($result) && filter_var($result, FILTER_VALIDATE_URL)) {
-                return redirect()->away($result);
+            if (is_string($result)) {
+                if (filter_var($result, FILTER_VALIDATE_URL)) {
+                    return redirect()->away($result);
+                }
+                return redirect()->route('client.services.show', $service->id)->with('success', $result);
             }
 
             return redirect()->route('client.services.show', $service->id)
@@ -152,7 +188,7 @@ class ServicesController extends Controller
 
         } catch (\Exception $e) {
             return redirect()->route('client.services.show', $service->id)
-                ->with('error', __('client/services.action.failed') . $e->getMessage());
+                ->with('error', __('client/services.action.failed', ['message' => $e->getMessage()]));
         }
     }
 
@@ -165,13 +201,19 @@ class ServicesController extends Controller
     private function extractValidationRules(array $schema): array
     {
         $rules = [];
+        
         if (isset($schema['fields']) && is_array($schema['fields'])) {
-            foreach ($schema['fields'] as $fieldKey => $fieldConfig) {
-                if (isset($fieldConfig['rules'])) {
-                    $rules[$fieldKey] = $fieldConfig['rules'];
-                }
+            $schemaArray = $schema['fields'];
+        } else {
+            $schemaArray = $schema;
+        }
+
+        foreach ($schemaArray as $fieldKey => $fieldConfig) {
+            if (isset($fieldConfig['rules'])) {
+                $rules[$fieldKey] = $fieldConfig['rules'];
             }
         }
+
         return $rules;
     }
 }
