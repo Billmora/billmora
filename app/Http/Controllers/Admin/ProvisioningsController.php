@@ -8,6 +8,7 @@ use App\Services\PluginManager;
 use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Permission;
 
 class ProvisioningsController extends Controller
 {
@@ -100,6 +101,15 @@ class ProvisioningsController extends Controller
             'config' => $configData,
         ]);
 
+        if ($plugin->is_active) {
+            $instance = $manager->bootInstance($plugin);
+            if ($instance && method_exists($instance, 'getPermissions')) {
+                foreach ($instance->getPermissions() as $permissionName) {
+                    Permission::firstOrCreate(['name' => $permissionName]);
+                }
+            }
+        }
+
         $this->recordCreate('provisioning.create', $plugin->toArray());
 
         return redirect()->route('admin.provisionings')->with('success', __('common.create_success', ['attribute' => $plugin->name]));
@@ -160,6 +170,24 @@ class ProvisioningsController extends Controller
             'is_active' => (bool) $validated['instance_active'],
             'config' => $configData,
         ]);
+
+        if ($provisioning->is_active !== (bool) $oldProvisioning['is_active']) {
+            $instance = $manager->bootInstance($provisioning);
+
+            if ($instance && method_exists($instance, 'getPermissions')) {
+                $permissions = $instance->getPermissions();
+
+                if ($provisioning->is_active) {
+                    foreach ($permissions as $permissionName) {
+                        Permission::firstOrCreate(['name' => $permissionName]);
+                    }
+                } else {
+                    foreach ($permissions as $permissionName) {
+                        Permission::where('name', $permissionName)->delete();
+                    }
+                }
+            }
+        }
 
         $this->recordUpdate('provisioning.update', $oldProvisioning, $provisioning->getChanges());
 

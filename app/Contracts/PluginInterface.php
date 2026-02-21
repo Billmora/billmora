@@ -19,6 +19,13 @@ interface PluginInterface
     public function getConfigSchema(): array;
 
     /**
+     * Get the custom permissions required by this plugin.
+     *
+     * @return array<int, string>
+     */
+    public function getPermissions(): array;
+
+    /**
      * Get the navigation items for the admin area.
      *
      * @return array<string, array<int, mixed>>

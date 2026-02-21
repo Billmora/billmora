@@ -122,6 +122,17 @@ abstract class AbstractPlugin extends ServiceProvider implements PluginInterface
     }
 
     /**
+     * Get the custom permissions required by this plugin.
+     * Returns an array of permission names (strings).
+     *
+     * @return array<int, string>
+     */
+    public function getPermissions(): array
+    {
+        return [];
+    }
+
+    /**
      * Get the navigation items for the admin area.
      *
      * @return array
