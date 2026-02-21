@@ -5,6 +5,7 @@ namespace App\Support;
 use Illuminate\Support\ServiceProvider;
 use App\Contracts\PluginInterface;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use ReflectionClass;
 
@@ -32,7 +33,7 @@ abstract class AbstractPlugin extends ServiceProvider implements PluginInterface
     protected array $instanceConfig = [];
 
     /**
-     * Create a new plugin instance and load manifest configuration.
+     * Create a new plugin instance, load manifest, and register view namespace.
      *
      * @param \Illuminate\Contracts\Foundation\Application $app
      */
@@ -44,6 +45,8 @@ abstract class AbstractPlugin extends ServiceProvider implements PluginInterface
         $this->pluginPath = dirname($reflection->getFileName());
 
         $this->loadManifest();
+
+        $this->registerViewNamespace();
     }
 
     /**
@@ -57,6 +60,22 @@ abstract class AbstractPlugin extends ServiceProvider implements PluginInterface
         $this->manifest = file_exists($jsonPath)
             ? json_decode(file_get_contents($jsonPath), true)
             : [];
+    }
+
+    /**
+     * Register the view namespace for the plugin.
+     *
+     * @return void
+     */
+    protected function registerViewNamespace(): void
+    {
+        $providerSlug = strtolower($this->getProvider());
+        $typeSlug = strtolower($this->manifest['type']);
+        
+        $viewNamespace = "{$typeSlug}.{$providerSlug}";
+        $viewsPath = $this->pluginPath . '/resources/views';
+
+        View::addNamespace($viewNamespace, $viewsPath);
     }
 
     /**
@@ -103,29 +122,23 @@ abstract class AbstractPlugin extends ServiceProvider implements PluginInterface
     }
 
     /**
-     * Bootstrap plugin services including views, migrations, and routes.
+     * Bootstrap plugin services including migrations, routes, and custom setup.
      *
      * @return void
      */
     public function boot(): void
     {
-        $provider = $this->getProvider();
-
-        if (is_dir($this->pluginPath . '/views')) {
-            $this->loadViewsFrom($this->pluginPath . '/views', $provider);
-        }
-
         if (is_dir($this->pluginPath . '/database/migrations')) {
             $this->loadMigrationsFrom($this->pluginPath . '/database/migrations');
         }
 
-        $this->bootRoutes($provider);
+        $this->bootRoutes();
 
         $this->setup();
     }
 
     /**
-     * Register plugin routes for web, admin, and API with type-aware prefixes.
+     * Register plugin routes for client, admin, portal, and API with type-aware prefixes.
      *
      * @return void
      */
@@ -133,30 +146,35 @@ abstract class AbstractPlugin extends ServiceProvider implements PluginInterface
     {
         $providerSlug = strtolower($this->getProvider());
         
-        $typeRaw = $this->manifest['type'] ?? 'module';
+        $typeRaw = $this->manifest['type']; 
         $typeSlug = Str::plural(strtolower($typeRaw));
 
-        $urlPrefix = "plugins/{$typeSlug}/{$providerSlug}";
-        
-        $namePrefix = "plugin." . strtolower($typeRaw) . ".{$providerSlug}.";
-
-        if (file_exists($this->pluginPath . '/routes/web.php')) {
-            Route::middleware(['web'])
-                ->prefix($urlPrefix)
-                ->name($namePrefix)
-                ->group($this->pluginPath . '/routes/web.php');
-        }
+        $namePrefix = "{$typeSlug}.{$providerSlug}.";
 
         if (file_exists($this->pluginPath . '/routes/admin.php')) {
-            Route::middleware(['web', 'auth', 'verified'])
-                ->prefix("admin/{$urlPrefix}")
+            Route::middleware(['web', 'auth', 'admin']) 
+                ->prefix("admin/{$typeSlug}/{$providerSlug}") 
                 ->name("admin.{$namePrefix}")
                 ->group($this->pluginPath . '/routes/admin.php');
         }
 
+        if (file_exists($this->pluginPath . '/routes/client.php')) {
+            Route::middleware(['web', 'maintenance'])
+                ->prefix($providerSlug)
+                ->name("client.{$namePrefix}")
+                ->group($this->pluginPath . '/routes/client.php');
+        }
+
+        if (file_exists($this->pluginPath . '/routes/portal.php')) {
+            Route::middleware(['web'])
+                ->prefix($providerSlug)
+                ->name("portal.{$namePrefix}")
+                ->group($this->pluginPath . '/routes/portal.php');
+        }
+
         if (file_exists($this->pluginPath . '/routes/api.php')) {
-            Route::prefix("api/{$urlPrefix}")
-                ->middleware('api')
+            Route::middleware(['api'])
+                ->prefix("api/{$typeSlug}/{$providerSlug}")
                 ->name("api.{$namePrefix}")
                 ->group($this->pluginPath . '/routes/api.php');
         }
