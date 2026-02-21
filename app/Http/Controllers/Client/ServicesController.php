@@ -63,15 +63,40 @@ class ServicesController extends Controller
         }
 
         $clientActions = [];
-        if ($service->status === 'active' && $service->provisioning) {
+        $checkoutData = [];
+
+        if ($service->provisioning) {
             $plugin = $manager->bootInstance($service->provisioning);
             
-            if ($plugin && method_exists($plugin, 'getClientAction')) {
-                $clientActions = $plugin->getClientAction($service);
+            if ($plugin) {
+                if ($service->status === 'active' && method_exists($plugin, 'getClientAction')) {
+                    $clientActions = $plugin->getClientAction($service);
+                }
+
+                if (method_exists($plugin, 'getCheckoutSchema')) {
+                    $schema = $plugin->getCheckoutSchema();
+                    
+                    $schemaFields = isset($schema['fields']) && is_array($schema['fields']) 
+                        ? $schema['fields'] 
+                        : $schema;
+                        
+                    $config = $service->configuration ?? [];
+
+                    foreach ($schemaFields as $key => $field) {
+                        if (array_key_exists($key, $config)) {
+                            $checkoutData[] = [
+                                'key' => $key,
+                                'label' => $field['label'] ?? $key,
+                                'value' => $config[$key],
+                                'type' => $field['type'],
+                            ];
+                        }
+                    }
+                }
             }
         }
 
-        return view('client::services.workspaces.overview', compact('service', 'variantOptions', 'clientActions'));
+        return view('client::services.workspaces.overview', compact('service', 'variantOptions', 'clientActions', 'checkoutData'));
     }
 
     /**

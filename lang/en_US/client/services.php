@@ -9,6 +9,7 @@ return [
     'setup_fee_label' => 'Setup Fee',
     'expires_label' => 'Expires At',
     'variant_label' => 'Variant Options',
+    'configuration_label' => 'Additional Configuration',
 
     'action' => [
         'overview' => 'Overview',
