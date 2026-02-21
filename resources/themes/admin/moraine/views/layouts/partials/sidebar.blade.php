@@ -1,3 +1,8 @@
+@inject('pluginManager', 'App\Services\PluginManager')
+@php
+    $pluginAdminMenus = $pluginManager->getNavigationAdmin();
+@endphp
+
 <nav id="sidebar" class="fixed z-100 xl:sticky top-0 left-0 xl:block shrink-0 p-5 xl:pr-0 w-[350px] sm:w-[400px] h-dvh -translate-x-full xl:translate-x-0 transition-transform duration-300 ease-in-out">
   <div class="bg-white flex flex-col w-full h-full border-2 border-billmora-2 rounded-2xl p-8">
     <a href="{{ route('admin.dashboard') }}" class="relative flex gap-3 items-center">
@@ -71,6 +76,25 @@
           <span class="font-semibold">{{ __('admin/navigation.coupons') }}</span>
         </a>
       @endcan
+      @if(!empty($pluginAdminMenus))
+        @foreach($pluginAdminMenus as $groupTitle => $menuItems)
+            <span class="mt-4 block text-slate-600 font-semibold text-md">{{ $groupTitle }}</span>
+            @foreach($menuItems as $menu)
+              @if(Auth::user()->can($menu['permission']))
+                <a href="{{ $menu['route'] }}" 
+                  class="flex gap-2 items-center {{ request()->url() === $menu['route'] ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300"
+                >
+                  @if(str_starts_with($menu['icon'], 'lucide-'))
+                    <x-dynamic-component :component="$menu['icon']" class="w-5 h-auto" />
+                  @else
+                    <i class="{{ $menu['icon'] }} w-5 text-center"></i>
+                  @endif
+                  <span class="font-semibold">{{ $menu['label'] }}</span>
+                </a>
+              @endif
+            @endforeach
+          @endforeach
+      @endif
       <span class="mt-4 block text-slate-600 font-semibold text-md">{{ __('admin/navigation.group.plugin') }}</span>
       @can('provisionings.view')
         <a href="{{ route('admin.provisionings') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.provisionings*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">

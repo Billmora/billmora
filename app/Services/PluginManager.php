@@ -74,4 +74,60 @@ class PluginManager
         return null;
     }
 
+    /**
+     * Get grouped navigation items for the Admin area from all active plugins.
+     *
+     * @return array
+     */
+    public function getNavigationAdmin(): array
+    {
+        return $this->getNavigation('getNavigationAdmin');
+    }
+
+    /**
+     * Get grouped navigation items for the Client area from all active plugins.
+     *
+     * @return array
+     */
+    public function getNavigationClient(): array
+    {
+        return $this->getNavigation('getNavigationClient');
+    }
+
+    /**
+     * Get grouped navigation items for the Portal area from all active plugins.
+     *
+     * @return array
+     */
+    public function getNavigationPortal(): array
+    {
+        return $this->getNavigation('getNavigationPortal');
+    }
+
+    /**
+     * Get grouped navigation items for a specific area from all active plugins.
+     *
+     * @param string $method
+     * @return array
+     */
+    private function getNavigation(string $method): array
+    {
+        $menus = [];
+        $activePlugins = Plugin::where('is_active', true)->get();
+        
+        foreach ($activePlugins as $pluginRecord) {
+            $pluginInstance = $this->bootInstance($pluginRecord);
+            
+            if ($pluginInstance && method_exists($pluginInstance, $method)) {
+                $typeTitle = ucfirst(Str::singular($pluginRecord->type));
+                
+                $navItems = $pluginInstance->$method();
+                if (!empty($navItems)) {
+                    $menus[$typeTitle] = array_merge($menus[$typeTitle] ?? [], $navItems);
+                }
+            }
+        }
+        
+        return $menus;
+    }
 }
