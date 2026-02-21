@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@source '../../../../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../../../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
+@source '../js/**/*.js';
+@source '../../../../../plugin/**/resources/views/**/*.blade.php';
+
 * {
     color-scheme: light;
     font-family: "Plus Jakarta Sans", sans-serif;
