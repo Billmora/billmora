@@ -122,6 +122,36 @@ abstract class AbstractPlugin extends ServiceProvider implements PluginInterface
     }
 
     /**
+     * Get the navigation items for the admin area.
+     *
+     * @return array
+     */
+    public function getNavigationAdmin(): array
+    {
+        return [];
+    }
+
+    /**
+     * Get the navigation items for the client area.
+     *
+     * @return array
+     */
+    public function getNavigationClient(): array
+    {
+        return [];
+    }
+
+    /**
+     * Get the navigation items for the portal area.
+     *
+     * @return array
+     */
+    public function getNavigationPortal(): array
+    {
+        return [];
+    }
+
+    /**
      * Bootstrap plugin services including migrations, routes, and custom setup.
      *
      * @return void

@@ -19,6 +19,27 @@ interface PluginInterface
     public function getConfigSchema(): array;
 
     /**
+     * Get the navigation items for the admin area.
+     *
+     * @return array<string, array<int, mixed>>
+     */
+    public function getNavigationAdmin(): array;
+
+    /**
+     * Get the navigation items for the client area.
+     *
+     * @return array<string, array<int, mixed>>
+     */
+    public function getNavigationClient(): array;
+
+    /**
+     * Get the navigation items for the portal area.
+     *
+     * @return array<string, array<int, mixed>>
+     */
+    public function getNavigationPortal(): array;
+
+    /**
      * Bootstrap plugin services including event listeners and schedules.
      *
      * @return void
