@@ -207,7 +207,7 @@
                                         helper="{{ $field['helper'] ?? '' }}"
                                         type="{{ $field['type'] }}"
                                         placeholder="{{ $field['placeholder'] ?? '' }}"
-                                        :required="str_contains($field['rules'] ?? '', 'required')"
+                                        :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')"
                                         :value="old('configuration.' . $key, $service->configuration[$key] ?? '')"
                                     />
                                 @elseif ($field['type'] === 'textarea')
@@ -216,7 +216,7 @@
                                         label="{{ $field['label'] }}"
                                         helper="{{ $field['helper'] ?? '' }}"
                                         placeholder="{{ $field['placeholder'] ?? '' }}"
-                                        :required="str_contains($field['rules'] ?? '', 'required')"
+                                        :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')"
                                     >{{ old('configuration.' . $key, $service->configuration[$key] ?? '') }}</x-admin::textarea>
                                 @elseif ($field['type'] === 'toggle')
                                     <x-admin::toggle
@@ -230,7 +230,7 @@
                                         name="configuration[{{ $key }}]"
                                         label="{{ $field['label'] }}"
                                         helper="{{ $field['helper'] ?? '' }}"
-                                        :required="str_contains($field['rules'] ?? '', 'required')"
+                                        :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')"
                                     >
                                         @foreach ($field['options'] ?? [] as $optValue => $optLabel)
                                             <option
@@ -246,7 +246,7 @@
                                         name="configuration[{{ $key }}]"
                                         label="{{ $field['label'] }}"
                                         helper="{{ $field['helper'] ?? '' }}"
-                                        :required="str_contains($field['rules'] ?? '', 'required')"
+                                        :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')"
                                     >
                                         @foreach ($field['options'] ?? [] as $optVal => $optLabel)
                                             <x-admin::radio.option

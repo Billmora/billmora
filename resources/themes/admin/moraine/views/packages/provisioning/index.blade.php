@@ -69,7 +69,7 @@
                             helper="{{ $field['helper'] ?? '' }}"
                             type="{{ $field['type'] }}"
                             placeholder="{{ $field['placeholder'] ?? '' }}"
-                            :required="str_contains($field['rules'] ?? '', 'required')"
+                            :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')"
                             value="{{ old('provisioning_config.'.$key, $package->provisioning_config[$key] ?? $field['default'] ?? '') }}"
                         />
                     @elseif($field['type'] === 'textarea')
@@ -78,14 +78,14 @@
                             label="{{ $field['label'] }}"
                             helper="{{ $field['helper'] ?? '' }}"
                             placeholder="{{ $field['placeholder'] ?? '' }}"
-                            :required="str_contains($field['rules'] ?? '', 'required')"
+                            :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')"
                         >{{ old('provisioning_config.'.$key, $package->provisioning_config[$key] ?? $field['default'] ?? '') }}</x-admin::textarea>
                     @elseif($field['type'] === 'select')
                         <x-admin::select
                             name="provisioning_config[{{ $key }}]"
                             label="{{ $field['label'] }}"
                             helper="{{ $field['helper'] ?? '' }}"
-                            :required="str_contains($field['rules'] ?? '', 'required')"
+                            :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')"
                         >
                             @foreach($field['options'] ?? [] as $optValue => $optLabel)
                                 <option 
@@ -110,7 +110,7 @@
                             name="provisioning_config[{{ $key }}]"
                             label="{{ $field['label'] }}"
                             helper="{{ $field['helper'] ?? '' }}"
-                            :required="str_contains($field['rules'] ?? '', 'required')"
+                            :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')"
                         >
                             @foreach($field['options'] as $optVal => $optLabel)
                                 <x-admin::radio.option
@@ -128,7 +128,7 @@
                             helper="{{ $field['helper'] ?? '' }}"
                             :options="$field['options']" 
                             :checked="(array) old('provisioning_config.'.$key, $package->provisioning_config[$key] ?? $field['default'] ?? [])"
-                            :required="str_contains($field['rules'] ?? '', 'required')"
+                            :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')"
                         />
                     @endif
                 @endforeach
