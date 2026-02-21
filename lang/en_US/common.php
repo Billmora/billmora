@@ -48,6 +48,8 @@ return [
     'inactive' => 'Inactive',
     'enable' => 'Enable',
     'disable' => 'Disable',
+    'show' => 'Show',
+    'hide' => 'Hide',
     'save' => 'Save',
     'cancel' => 'Cancel',
     'create' => 'Create',
