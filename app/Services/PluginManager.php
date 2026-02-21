@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Plugin;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -123,7 +124,27 @@ class PluginManager
                 
                 $navItems = $pluginInstance->$method();
                 if (!empty($navItems)) {
-                    $menus[$typeTitle] = array_merge($menus[$typeTitle] ?? [], $navItems);
+                    $filteredItems = array_filter($navItems, function ($item) {
+                        
+                        if (isset($item['auth'])) {
+                            if ($item['auth'] === true && !Auth::check()) {
+                                return false; 
+                            }
+                            if ($item['auth'] === false && Auth::check()) {
+                                return false; 
+                            }
+                        }
+
+                        if (!empty($item['permission'])) {
+                            return Auth::check() && Auth::user()->can($item['permission']);
+                        }
+
+                        return true;
+                    });
+
+                    if (!empty($filteredItems)) {
+                        $menus[$typeTitle] = array_merge($menus[$typeTitle] ?? [], $filteredItems);
+                    }
                 }
             }
         }

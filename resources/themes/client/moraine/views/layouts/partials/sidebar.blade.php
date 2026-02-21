@@ -37,22 +37,20 @@
         </a>
       @endauth
       @if(!empty($pluginClientMenus))
-        @foreach($pluginClientMenus as $groupTitle => $menuItems)
-          @foreach($menuItems as $menu)
-            @if($menu['auth'] ? Auth::user() : true)
-              <a href="{{ $menu['route'] }}" 
-                class="flex gap-2 items-center {{ request()->url() === $menu['route'] ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300"
-              >
-                @if(str_starts_with($menu['icon'], 'lucide-'))
-                  <x-dynamic-component :component="$menu['icon']" class="w-5 h-auto" />
-                @else
-                  <i class="{{ $menu['icon'] }} w-5 text-center"></i>
-                @endif
-                <span class="font-semibold">{{ $menu['label'] }}</span>
-              </a>
-            @endif
+          @foreach($pluginClientMenus as $groupTitle => $menuItems)
+              @foreach($menuItems as $menu)
+                  <a href="{{ $menu['route'] }}" 
+                    class="flex gap-2 items-center {{ request()->url() === $menu['route'] ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300"
+                  >
+                      @if(str_starts_with($menu['icon'], 'lucide-'))
+                          <x-dynamic-component :component="$menu['icon']" class="w-5 h-auto" />
+                      @else
+                          <i class="{{ $menu['icon'] }} w-5 text-center"></i>
+                      @endif
+                      <span class="font-semibold">{{ $menu['label'] }}</span>
+                  </a>
+              @endforeach
           @endforeach
-        @endforeach
       @endif
     </div>
     @guest
