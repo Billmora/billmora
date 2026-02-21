@@ -178,6 +178,7 @@
                                         label="{{ $field['label'] }}"
                                         helper="{{ $field['helper'] ?? '' }}"
                                         type="{{ $field['type'] }}"
+                                        placeholder="{{ $field['placeholder'] ?? '' }}"
                                         :required="str_contains($field['rules'] ?? '', 'required')"
                                         :value="old('configuration.' . $key, $field['default'] ?? '')"
                                     />
@@ -186,6 +187,7 @@
                                         name="configuration[{{$key}}]"
                                         label="{{ $field['label'] }}"
                                         helper="{{ $field['helper'] ?? '' }}"
+                                        placeholder="{{ $field['placeholder'] ?? '' }}"
                                         :required="str_contains($field['rules'] ?? '', 'required')"
                                     >{{ old('configuration.' . $key, $field['default'] ?? '') }}</x-admin::textarea>
 

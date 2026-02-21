@@ -6,6 +6,7 @@
     'error' => null,
     'required' => false,
     'helper' => null,
+    'placeholder' => null,
 ])
 
 @php
@@ -45,6 +46,7 @@
         type="{{ $type }}"
         name="{{ $name }}"
         id="{{ $name }}"
+        placeholder="{{ $placeholder }}"
         value="{{ $resolvedValue }}"
         x-on:input="hasError = false"
         :class="hasError ? 'border-red-400' : ''"

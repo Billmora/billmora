@@ -5,6 +5,7 @@
     'error' => null,
     'required' => null,
     'helper' => null,
+    'placeholder' => null,
 ])
 
 @php
@@ -39,6 +40,7 @@
         <textarea
             name="{{ $name }}"
             id="{{ $name }}"
+            placeholder="{{ $placeholder }}"
             x-on:input="errorVisible = false"
             @class([
                 'w-full text-slate-700 rounded-lg px-3 py-2 border-2 outline-none focus:ring-2 ring-billmora-primary placeholder:text-slate-500',

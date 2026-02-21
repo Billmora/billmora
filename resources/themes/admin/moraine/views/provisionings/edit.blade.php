@@ -53,16 +53,18 @@
                     label="{{ $field['label'] }}"
                     helper="{{ $field['helper'] ?? '' }}"
                     type="{{ $field['type'] }}"
+                    placeholder="{{ $field['placeholder'] ?? '' }}"
                     :required="str_contains($field['rules'] ?? '', 'required')"
                     value="{{ old('configurations.'.$provisioning->provider.'.'.$key, $provisioning->config[$key] ?? $field['default'] ?? '') }}" 
                 />
             @elseif($field['type'] === 'textarea')
-                    <x-admin::textarea
-                        name="configurations[{{ $provisioning->provider }}][{{ $key }}]"
-                        label="{{ $field['label'] }}"
-                        helper="{{ $field['helper'] ?? '' }}"
-                        :required="str_contains($field['rules'] ?? '', 'required')"
-                    >{{ old('configurations.'.$provisioning->provider.'.'.$key, $provisioning->config[$key] ?? $field['default'] ?? '') }}</x-admin::textarea>
+                <x-admin::textarea
+                    name="configurations[{{ $provisioning->provider }}][{{ $key }}]"
+                    label="{{ $field['label'] }}"
+                    helper="{{ $field['helper'] ?? '' }}"
+                    placeholder="{{ $field['placeholder'] ?? '' }}"
+                    :required="str_contains($field['rules'] ?? '', 'required')"
+                >{{ old('configurations.'.$provisioning->provider.'.'.$key, $provisioning->config[$key] ?? $field['default'] ?? '') }}</x-admin::textarea>
             @elseif($field['type'] === 'toggle')
                 <x-admin::toggle
                     name="configurations[{{ $provisioning->provider }}][{{ $key }}]"

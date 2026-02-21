@@ -68,6 +68,7 @@
                             label="{{ $field['label'] }}"
                             helper="{{ $field['helper'] ?? '' }}"
                             type="{{ $field['type'] }}"
+                            placeholder="{{ $field['placeholder'] ?? '' }}"
                             :required="str_contains($field['rules'] ?? '', 'required')"
                             value="{{ old('provisioning_config.'.$key, $package->provisioning_config[$key] ?? $field['default'] ?? '') }}"
                         />
@@ -76,6 +77,7 @@
                             name="provisioning_config[{{ $key }}]"
                             label="{{ $field['label'] }}"
                             helper="{{ $field['helper'] ?? '' }}"
+                            placeholder="{{ $field['placeholder'] ?? '' }}"
                             :required="str_contains($field['rules'] ?? '', 'required')"
                         >{{ old('provisioning_config.'.$key, $package->provisioning_config[$key] ?? $field['default'] ?? '') }}</x-admin::textarea>
                     @elseif($field['type'] === 'select')

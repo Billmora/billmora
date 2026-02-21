@@ -15,12 +15,13 @@
             @csrf
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @foreach($pageSchema as $key => $field)
-                    @if(in_array($field['type'] ?? 'text', ['text', 'email', 'url', 'number']))
+                    @if(in_array($field['type'], ['text', 'email', 'url', 'number']))
                         <x-client::input 
                             name="{{ $key }}"
                             label="{{ $field['label'] }}"
                             helper="{{ $field['helper'] ?? '' }}"
-                            type="{{ $field['type'] ?? 'text' }}"
+                            type="{{ $field['type'] }}"
+                            placeholder="{{ $field['placeholder'] ?? '' }}"
                             :required="str_contains($field['rules'] ?? '', 'required')"
                             value="{{ old($key, $field['default'] ?? '') }}"
                         />
@@ -30,6 +31,7 @@
                             label="{{ $field['label'] }}"
                             helper="{{ $field['helper'] ?? '' }}"
                             type="password"
+                            placeholder="{{ $field['placeholder'] ?? '' }}"
                             :required="str_contains($field['rules'] ?? '', 'required')"
                         />
                     @elseif(($field['type']) === 'toggle')
@@ -62,6 +64,7 @@
                             name="{{ $key }}"
                             label="{{ $field['label'] }}"
                             helper="{{ $field['helper'] ?? '' }}"
+                            placeholder="{{ $field['placeholder'] ?? '' }}"
                             :required="str_contains($field['rules'] ?? '', 'required')"
                         >{{ old($key, $field['default'] ?? '') }}</x-client::textarea>
                     @elseif(($field['type']) === 'radio')
