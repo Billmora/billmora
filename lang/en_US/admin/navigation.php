@@ -12,6 +12,7 @@ return [
     'variants' => 'Variants',
     'coupons' => 'Coupons',
     'provisionings' => 'Provisionings',
+    'gateways' => 'Gateways',
     'settings' => 'Settings',
     'audits' => 'Audits',
     'group' => [
