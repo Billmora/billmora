@@ -224,6 +224,27 @@ class ReviewController extends Controller
     }
 
     /**
+     * Display the order completion page and clear completed order session data.
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Contracts\View\View
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public function complete()
+    {
+        if (!Session::has('completed_order_data')) {
+            return redirect()->route('client.store')->with('error', __('client/checkout.session.missing_data'));
+        }
+
+        $sessionData = Session::pull('completed_order_data');
+
+        $order = Order::with('package')->findOrfail($sessionData['order_id']);
+        $invoice = Invoice::findOrfail($sessionData['invoice_id']);
+
+        return view('client::checkout.complete', compact('order', 'invoice'));
+    }
+
+    /**
      * Get applied coupon from session or null.
      *
      * @return \App\Models\Coupon|null
@@ -270,13 +291,17 @@ class ReviewController extends Controller
      */
     protected function handleOrderRedirect(Order $order, Invoice $invoice)
     {
-        // TODO: Return to response until frontend handling is implemented
         switch (Billmora::getGeneral('ordering_redirect')) {
             case 'complete':
-                return response($order);
+                Session::put('completed_order_data', [
+                    'order_id' => $order->id,
+                    'invoice_id' => $invoice->id,
+                ]);
+                return $this->complete();
             case 'invoice':
-                return response($invoice);
+                return redirect()->route('client.invoices.show', $invoice->invoice_number);
             case 'payment':
+                // TODO: Implement payment gateway page
                 return response($invoice);
                 break;
         }
