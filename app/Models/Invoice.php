@@ -113,6 +113,16 @@ class Invoice extends Model
     }
 
     /**
+     * Get the order associated with this invoice.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function plugin()
+    {
+        return $this->belongsTo(Plugin::class, 'plugin_id');
+    }
+
+    /**
      * Get the services associated with the invoice through invoice items.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

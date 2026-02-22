@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('order_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('plugin_id')->nullable()->constrained('plugins')->nullOnDelete();
             
             $table->string('invoice_number')->unique();
             $table->enum('status', ['unpaid', 'paid', 'cancelled', 'refunded'])->default('unpaid');
@@ -23,9 +24,6 @@ return new class extends Migration
             $table->decimal('subtotal', 15, 2);
             $table->decimal('discount', 15, 2)->default(0);
             $table->decimal('total', 15, 2);
-            
-            $table->string('payment_method')->nullable();
-            $table->string('transaction_id')->nullable();
             
             $table->timestamp('due_date');
             $table->timestamp('paid_at')->nullable();
