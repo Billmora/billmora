@@ -7,7 +7,6 @@
     action="{{ route('admin.provisionings.store') }}" 
     method="POST" 
     class="flex flex-col gap-5"
-    enctype="multipart/form-data"
     x-data="{ selectedProvider: '{{ old('instance_provider', '') }}' }"
 >
     @csrf

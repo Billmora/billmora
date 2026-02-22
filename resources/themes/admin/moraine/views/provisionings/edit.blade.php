@@ -1,13 +1,12 @@
 @extends('admin::layouts.app')
 
-@section('title', "Provisioning Edit - " . $provisioning->name)
+@section('title', "Provisioning Edit - {$provisioning->name}")
 
 @section('body')
 <form 
     action="{{ route('admin.provisionings.update', $provisioning) }}" 
     method="POST" 
     class="flex flex-col gap-5"
-    enctype="multipart/form-data"
 >
     @csrf
     @method('PUT')
