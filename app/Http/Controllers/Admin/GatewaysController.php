@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Plugin;
 use App\Services\PluginManager;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Permission;
 
 class GatewaysController extends Controller
 {
+    use AuditsSystem;
+
     /**
      * Applies permission-based middleware for accessing gateways plugin.
      * 
@@ -99,6 +102,8 @@ class GatewaysController extends Controller
             }
         }
 
+        $this->recordCreate('gateway.create', $plugin->toArray());
+
         return redirect()->route('admin.gateways')->with('success', __('common.create_success', ['attribute' => $plugin->name]));
     }
 
@@ -172,6 +177,8 @@ class GatewaysController extends Controller
             }
         }
 
+        $this->recordUpdate('gateway.update', $oldGateway, $gateway->getChanges());
+
         return redirect()->route('admin.gateways')->with('success', __('common.update_success', ['attribute' => $gateway->name]));
     }
 
@@ -184,6 +191,8 @@ class GatewaysController extends Controller
     public function destroy(Plugin $gateway)
     {
         $gateway->delete();
+
+        $this->recordDelete('gateway.delete', $gateway->toArray());
 
         return redirect()->route('admin.gateways')->with('success', __('common.delete_success', ['attribute' => $gateway->name]));
     }
