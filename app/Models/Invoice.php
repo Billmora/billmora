@@ -193,21 +193,4 @@ class Invoice extends Model
     {
         return $query->where('status', 'paid');
     }
-
-    /**
-     * Mark the invoice as paid with optional payment details.
-     *
-     * @param string|null $paymentMethod
-     * @param string|null $transactionId
-     * @return bool
-     */
-    public function markAsPaid(?string $paymentMethod = null, ?string $transactionId = null)
-    {
-        $this->update([
-            'status' => 'paid',
-            'paid_at' => now(),
-            'payment_method' => $paymentMethod,
-            'transaction_id' => $transactionId,
-        ]);
-    }
 }
