@@ -23,6 +23,15 @@ return [
         'removed' => 'Coupon removed successfully.',
     ],
 
+    'complete' => [
+        'heading' => 'Thank you for your order!',
+        'message' => 'If you have any questions about your order, please open a support ticket from your client area.',
+        'information' => 'Your order number is #:order_number.',
+        'unpaid_note' => 'Your order is currently unpaid. Please complete the payment to activate your services.',
+        'view_invoice' => 'View Invoice',
+        'back_to_client' => 'Back to Client Area',
+    ],
+
     'session' => [
         'expired' => 'Session expired. Please select a package again.',
         'missing_data' => 'No checkout data found. Please select a package first.',
