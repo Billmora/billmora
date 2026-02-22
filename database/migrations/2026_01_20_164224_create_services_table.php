@@ -29,6 +29,7 @@ return new class extends Migration
             $table->enum('billing_period', ['daily', 'weekly', 'monthly', 'yearly'])->nullable();
             $table->decimal('price', 15, 2);
             $table->decimal('setup_fee', 15, 2)->default(0);
+            $table->string('subscription_id')->nullable();
             
             $table->timestamp('activated_at')->nullable();
             $table->timestamp('next_due_date')->nullable();
