@@ -163,6 +163,16 @@ class Invoice extends Model
     }
 
     /**
+     * Get the transactions for the invoice.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    /**
      * Scope a query to only include unpaid invoices.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
