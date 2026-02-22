@@ -186,6 +186,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin gateways interface routes.
+     *
+     * Prefix: /admin/gateways
+     */
+    Route::group(['prefix' => 'gateways'], function () {
+        Route::get('/', [Admin\GatewaysController::class, 'index'])->name('admin.gateways');
+        Route::get('/create', [Admin\GatewaysController::class, 'create'])->name('admin.gateways.create');
+        Route::post('/create', [Admin\GatewaysController::class, 'store'])->name('admin.gateways.store');
+        Route::get('/{gateway}/edit', [Admin\GatewaysController::class, 'edit'])->name('admin.gateways.edit');
+        Route::put('/{gateway}/edit', [Admin\GatewaysController::class, 'update'])->name('admin.gateways.update');
+        Route::delete('/{gateway}', [Admin\GatewaysController::class, 'destroy'])->name('admin.gateways.destroy');
+    });
+
+    /**
      * Admin settings interface routes.
      *
      * Prefix: /admin/settings
