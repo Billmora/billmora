@@ -100,10 +100,12 @@
           <span class="font-semibold">{{ __('admin/navigation.provisionings') }}</span>
         </a>
       @endcan
-      <a href="{{ route('admin.gateways') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.gateways*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
-        <x-lucide-credit-card class="w-5 h-auto" />
-        <span class="font-semibold">{{ __('admin/navigation.gateways') }}</span>
-      </a>
+      @can('gateways.view')
+        <a href="{{ route('admin.gateways') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.gateways*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-credit-card class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('admin/navigation.gateways') }}</span>
+        </a>
+      @endcan
       <span class="mt-4 block text-slate-600 font-semibold text-md">{{ __('admin/navigation.group.system') }}</span>
       <a href="{{ route('admin.settings') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.settings*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
         <x-lucide-settings class="w-5 h-auto" />

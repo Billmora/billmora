@@ -12,6 +12,19 @@ use Spatie\Permission\Models\Permission;
 class GatewaysController extends Controller
 {
     /**
+     * Applies permission-based middleware for accessing gateways plugin.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:gateways.view')->only(['index']);
+        $this->middleware('permission:gateways.create')->only(['create', 'store']);
+        $this->middleware('permission:gateways.update')->only(['edit', 'update']);
+        $this->middleware('permission:gateways.delete')->only(['destroy']);
+    }
+
+    /**
      * Display a paginated list of gateway plugins with optional search filter.
      *
      * @param \Illuminate\Http\Request $request
