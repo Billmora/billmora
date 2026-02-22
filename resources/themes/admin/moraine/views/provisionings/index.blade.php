@@ -64,6 +64,9 @@
             </div>
         </div>
     </div>
+    <div>
+        {{ $provisionings->links('admin::layouts.partials.pagination') }}
+    </div>
     @can('provisionings.delete')
         @foreach ($provisionings as $provisioning)
             <x-admin::modal.content
