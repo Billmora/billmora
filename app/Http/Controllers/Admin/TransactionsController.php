@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
+use App\Models\Plugin;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TransactionsController extends Controller
 {
@@ -16,6 +20,7 @@ class TransactionsController extends Controller
     public function __construct()
     {
         $this->middleware('permission:transactions.view')->only(['index']);
+        $this->middleware('permission:transactions.create')->only(['create', 'store']);
         $this->middleware('permission:transactions.delete')->only(['destroy']);
     }
 
@@ -30,7 +35,7 @@ class TransactionsController extends Controller
 
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {
-                $q->where('transaction_id', 'like', "%{$search}%")
+                $q->where('reference', 'like', "%{$search}%")
                 ->orWhere('description', 'like', "%{$search}%")
                 ->orWhereHas('user', function ($userQuery) use ($search) {
                     $userQuery->where('email', 'like', "%{$search}%");
@@ -47,6 +52,56 @@ class TransactionsController extends Controller
     }
 
     /**
+     * Show the form for creating a new manual transaction.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function create()
+    {
+        $users = User::select('id', 'first_name', 'last_name', 'email')->get();
+        $invoices = Invoice::select('id', 'invoice_number', 'currency')->get();
+        $plugins = Plugin::select('id', 'name', 'type', 'provider')->where('type', 'gateway')->where('is_active', true)->get();
+
+        return view('admin::transactions.create', compact('users', 'invoices', 'plugins'));
+    }
+
+    /**
+     * Store a newly created manual transaction record in database.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'transaction_user' => ['required', Rule::exists('users', 'id')],
+            'transaction_invoice' => ['required', Rule::exists('invoices', 'id')],
+            'transaction_gateway' => ['nullable', Rule::exists('plugins', 'id')->where(fn ($query) => $query->where('type', 'gateway'))],
+            'transaction_reference' => ['nullable', 'string'],
+            'transaction_amount' => ['required', 'numeric'],
+            'transaction_fee' => ['required', 'numeric'],
+            'transaction_description' => ['required', 'string', 'max:1000'],
+        ]);
+
+        $invoice = Invoice::where('id', $validated['transaction_invoice'])->first();
+
+        $transaction = Transaction::create([
+            'user_id' => $validated['transaction_user'],
+            'invoice_id' => $validated['transaction_invoice'],
+            'plugin_id' => $validated['transaction_gateway'],
+            'reference' => $validated['transaction_reference'],
+            'currency' => $invoice->currency,
+            'amount' => $validated['transaction_amount'],
+            'fee' => $validated['transaction_fee'],
+            'description' => $validated['transaction_description'],
+        ]);
+
+        return redirect()->route('admin.transactions')->with('success', __('common.create_success', ['attribute' => __('admin/navigation.transactions')]));
+    }
+
+    /**
      * Remove the specified transaction from database.
      *
      * @param \App\Models\Transaction $transaction
@@ -56,6 +111,6 @@ class TransactionsController extends Controller
     {
         $transaction->delete();
 
-        return redirect()->back()->with('success', __('common.delete_success', ['attribute' => $transaction->transaction_id]));
+        return redirect()->route('admin.transactions')->with('success', __('common.delete_success', ['attribute' => $transaction->reference]));
     }
 }

@@ -16,6 +16,12 @@
                 </div>
             </form>
         </div>
+        @can('transactions.create')
+            <a href="{{ route('admin.transactions.create') }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <x-lucide-plus class="w-auto h-5" />
+                {{ __('common.create') }}
+            </a>
+        @endcan
     </div>
     <div class="overflow-x-auto">
         <div class="min-w-full inline-block align-middle">
@@ -41,8 +47,8 @@
                                         {{ $transaction->invoice->invoice_number }}
                                     </a>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $transaction->transaction_id }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $transaction->plugin->name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $transaction->reference }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $transaction->plugin?->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $transaction->description }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ Currency::format($transaction->amount, $transaction->currency) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ Currency::format($transaction->fee, $transaction->currency) }}</td>
@@ -70,7 +76,7 @@
                 size="xl"
                 position="centered"
                 title="{{ __('common.delete_modal_title') }}"
-                description="{{ __('common.delete_modal_description', ['item' => $transaction->transaction_id]) }}">
+                description="{{ __('common.delete_modal_description', ['item' => $transaction->reference ?? $transaction->id]) }}">
                 <form action="{{ route('admin.transactions.destroy', ['transaction' => $transaction->id]) }}" method="POST">
                     @csrf
                     @method('DELETE')

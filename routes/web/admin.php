@@ -90,6 +90,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
      */
     Route::group(['prefix' => 'transactions'], function () {
         Route::get('/', [Admin\TransactionsController::class, 'index'])->name('admin.transactions');
+        Route::get('/create', [Admin\TransactionsController::class, 'create'])->name('admin.transactions.create');
+        Route::post('/create', [Admin\TransactionsController::class, 'store'])->name('admin.transactions.store');
         Route::delete('/{transaction}', [Admin\TransactionsController::class, 'destroy'])->name('admin.transactions.destroy');
     });
 
