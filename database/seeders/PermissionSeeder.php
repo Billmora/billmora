@@ -36,6 +36,7 @@ class PermissionSeeder extends Seeder
             'invoices.update',
             'invoices.delete',
             'transactions.view',
+            'transactions.create',
             'transactions.delete',
             'broadcasts.view',
             'broadcasts.create',
