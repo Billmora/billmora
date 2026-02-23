@@ -45,6 +45,10 @@
           <span class="font-semibold">{{ __('admin/navigation.invoices') }}</span>
         </a>
       @endcan
+      <a href="{{ route('admin.transactions') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.transactions*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+        <x-lucide-landmark class="w-5 h-auto" />
+        <span class="font-semibold">{{ __('admin/navigation.transactions') }}</span>
+      </a>
       @can('broadcasts.view')
         <a href="{{ route('admin.broadcasts') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.broadcasts*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
           <x-lucide-radio class="w-5 h-auto" />
