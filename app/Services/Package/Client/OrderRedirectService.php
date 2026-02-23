@@ -21,7 +21,7 @@ class OrderRedirectService
         switch (Billmora::getGeneral('ordering_redirect')) {
             case 'complete':
                 Session::put('completed_order_data', [
-                    'order_id'   => $order->id,
+                    'order_id' => $order->id,
                     'invoice_id' => $invoice->id,
                 ]);
                 return redirect()->route('client.checkout.complete');
@@ -30,8 +30,10 @@ class OrderRedirectService
                 return redirect()->route('client.invoices.show', $invoice->invoice_number);
                 
             case 'payment':
-                // TODO: Implement payment gateway page
-                return response($invoice);
+                return redirect()->route('client.invoices.pay', $invoice->invoice_number);
+            
+            default:
+                return redirect()->route('client.dashboard');
         }
     }
 }
