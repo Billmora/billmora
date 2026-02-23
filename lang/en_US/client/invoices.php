@@ -9,6 +9,8 @@ return [
 
     'download_label' => 'Download as PDF',
     'invoice_label' => 'Invoice #:number',
+    'payment_label' => 'Payment Method',
+    'payment_process_label' => 'Proceed to Payment',
     'bill_to' => 'Bill To',
     'issued_to' => 'Issued To',
     'invoice_items' => 'Invoice Items',

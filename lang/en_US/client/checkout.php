@@ -3,6 +3,7 @@
 return [
     'coupon_label' => 'Coupon',
     'notes_label' => 'Notes',
+    'payment_label' => 'Payment Method',
     'agree_terms' => 'I agree with the :attribute',
 
     'order_summary' => 'Order Summary',
