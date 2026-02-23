@@ -7,11 +7,14 @@ use App\Models\Invoice;
 use App\Models\Plugin;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class TransactionsController extends Controller
 {
+    use AuditsSystem;
+
     /**
      * Applies permission-based middleware for accessing transactions management.
      * 
@@ -98,6 +101,8 @@ class TransactionsController extends Controller
             'description' => $validated['transaction_description'],
         ]);
 
+        $this->recordCreate('transaction.create', $transaction->toArray());
+
         return redirect()->route('admin.transactions')->with('success', __('common.create_success', ['attribute' => __('admin/navigation.transactions')]));
     }
 
@@ -110,6 +115,8 @@ class TransactionsController extends Controller
     public function destroy(Transaction $transaction)
     {
         $transaction->delete();
+
+        $this->recordDelete('transaction.delete', $transaction->toArray());
 
         return redirect()->route('admin.transactions')->with('success', __('common.delete_success', ['attribute' => $transaction->reference]));
     }
