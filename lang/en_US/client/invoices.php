@@ -28,4 +28,10 @@ return [
         'cancelled' => 'Cancelled',
         'refunded' => 'Refunded',
     ],
+
+    'payment' => [
+        'already_processed' => 'This invoice has been paid or cancelled.',
+        'method_required' => 'Please select a payment method first.',
+        'invalid_method' => 'Payment method is invalid.',
+    ],
 ];
