@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'common' => __DIR__.'/../routes/web/common.php',
         ],
         commands: __DIR__.'/../routes/console.php',
-        health: '/up',
+        api: __DIR__.'/../routes/api.php',
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web([
