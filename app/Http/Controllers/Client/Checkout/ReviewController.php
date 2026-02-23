@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Client\Checkout;
 
+use App\Contracts\GatewayInterface;
 use App\Http\Controllers\Controller;
 use App\Models\Coupon;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\PackagePrice;
+use App\Models\Plugin;
 use App\Models\VariantOption;
+use App\Services\Package\Client\OrderRedirectService;
 use App\Services\Package\PricingService;
 use App\Services\Package\OrderValidationService;
 use App\Services\Package\Client\OrderService;
@@ -92,7 +95,7 @@ class ReviewController extends Controller
      * @param \App\Services\Package\OrderValidationService $validationService
      * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
-    public function review(PricingService $pricingService, OrderValidationService $validationService)
+    public function review(PricingService $pricingService, OrderValidationService $validationService, PluginManager $pluginManager)
     {
         $checkoutData = Session::get('checkout_data');
 
@@ -141,6 +144,19 @@ class ReviewController extends Controller
             $currentCurrency
         );
 
+        $activeGateways = Plugin::where('type', 'gateway')->where('is_active', true)->get();
+        $gateways = collect();
+
+        foreach ($activeGateways as $gatewayRecord) {
+            $instance = $pluginManager->bootInstance($gatewayRecord);
+            
+            if ($instance instanceof GatewayInterface) {
+                if ($instance->isApplicable((float) $pricing['total'], $currentCurrency)) {
+                    $gateways->push($gatewayRecord);
+                }
+            }
+        }
+
         return view('client::checkout.review', [
             'package' => $packagePrice->package,
             'packagePrice' => $packagePrice,
@@ -149,6 +165,7 @@ class ReviewController extends Controller
             'pricing' => $pricing,
             'currency' => $currentCurrency,
             'appliedCoupon' => Session::get('applied_coupon'),
+            'gateways' => $gateways,
         ]);
     }
 
@@ -158,9 +175,10 @@ class ReviewController extends Controller
      * @param \Illuminate\Http\Request $request
      * @param \App\Services\Package\Client\OrderService $orderService
      * @param \App\Services\Package\OrderValidationService $validationService
+     * @param \App\Services\Package\Client\OrderRedirectService $redirectService
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
-    public function process(Request $request, OrderService $orderService, OrderValidationService $validationService)
+    public function process(Request $request, OrderService $orderService, OrderValidationService $validationService, OrderRedirectService $redirectService)
     {
         $checkoutData = Session::get('checkout_data');
 
@@ -170,7 +188,14 @@ class ReviewController extends Controller
                 ->with('error', __('client/checkout.session.expired'));
         }
 
-        $rules = [];
+        $rules = [
+            'payment_method' => [
+                'required', 
+                Rule::exists('plugins', 'id')
+                    ->where('type', 'gateway')
+                    ->where('is_active', true)
+            ],
+        ];
         if (Billmora::getGeneral('ordering_notes')) {
             $rules['notes'] = ['nullable', 'string', 'max:1000'];
         }
@@ -217,7 +242,7 @@ class ReviewController extends Controller
 
             Session::forget(['checkout_data', 'applied_coupon']);
 
-            return $this->handleOrderRedirect($result['order'], $result['invoice']);
+            return $redirectService->handle($result['order'], $result['invoice']);
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
@@ -280,30 +305,5 @@ class ReviewController extends Controller
                 ])->values()->toArray()
             ] : null;
         })->filter()->values()->toArray();
-    }
-
-    /**
-     * Handle redirect after successful order creation based on settings.
-     *
-     * @param \App\Models\Order $order
-     * @param \App\Models\Invoice $invoice
-     * @return \Illuminate\Http\Response
-     */
-    protected function handleOrderRedirect(Order $order, Invoice $invoice)
-    {
-        switch (Billmora::getGeneral('ordering_redirect')) {
-            case 'complete':
-                Session::put('completed_order_data', [
-                    'order_id' => $order->id,
-                    'invoice_id' => $invoice->id,
-                ]);
-                return $this->complete();
-            case 'invoice':
-                return redirect()->route('client.invoices.show', $invoice->invoice_number);
-            case 'payment':
-                // TODO: Implement payment gateway page
-                return response($invoice);
-                break;
-        }
     }
 }

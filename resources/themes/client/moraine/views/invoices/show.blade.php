@@ -103,15 +103,21 @@
             </div>
         </div>
         @if ($invoice->status === 'unpaid')
-            <form action="#" class="grid gap-6 p-6">
+            <form action="{{ route('client.invoices.pay', ['invoice' => $invoice->invoice_number]) }}" class="grid gap-6 p-6">
                 <x-client::select
-                    name="payment_gateway"
-                    label="Payment Method"
+                    name="payment_method"
+                    label="{{ __('client/invoices.payment_label') }}"
+                    :value="old('payment_method')"
+                    required
                 >
-                    {{-- TODO: Get list payment method --}}
+                    @foreach($gateways as $gateway)
+                        <option value="{{ $gateway->id }}" {{ old('payment_method', $invoice->plugin_id) == $gateway->id ? 'selected' : '' }}>
+                            {{ $gateway->name }}
+                        </option>
+                    @endforeach
                 </x-client::select>
                 <button type="submit" class="w-full bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                    Proceed to Payment
+                    {{ __('client/invoices.payment_process_label') }}
                 </button>
             </form>
         @endif

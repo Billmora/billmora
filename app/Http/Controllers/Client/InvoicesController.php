@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Contracts\GatewayInterface;
 use App\Facades\Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
+use App\Models\Plugin;
+use App\Services\PluginManager;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +38,7 @@ class InvoicesController extends Controller
      * @return \Illuminate\View\View
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function show(Invoice $invoice)
+    public function show(Invoice $invoice, PluginManager $pluginManager)
     {
         $user = Auth::user();
 
@@ -45,7 +48,20 @@ class InvoicesController extends Controller
             abort(403);
         }
 
-        return view('client::invoices.show', compact('invoice'));
+        $activeGateways = Plugin::where('type', 'gateway')->where('is_active', true)->get();
+        $gateways = collect();
+
+        foreach ($activeGateways as $gatewayRecord) {
+            $instance = $pluginManager->bootInstance($gatewayRecord);
+            
+            if ($instance instanceof GatewayInterface) {
+                if ($instance->isApplicable((float) $invoice->total, $invoice->currency)) {
+                    $gateways->push($gatewayRecord);
+                }
+            }
+        }
+
+        return view('client::invoices.show', compact('invoice', 'gateways'));
     }
 
     /**

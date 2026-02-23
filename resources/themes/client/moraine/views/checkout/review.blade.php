@@ -70,6 +70,20 @@
                     </span>
                 @enderror
             </div>
+            <div class="bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+                <x-client::select
+                    name="payment_method"
+                    label="{{ __('client/checkout.payment_label') }}"
+                    :value="old('payment_method')"
+                    required
+                >
+                    @foreach($gateways as $gateway)
+                        <option value="{{ $gateway->id }}" {{ old('payment_method') == $gateway->id ? 'selected' : '' }}>
+                            {{ $gateway->name }}
+                        </option>
+                    @endforeach
+                </x-client::select>
+            </div>
             @if (Billmora::getGeneral('ordering_notes'))
                 <div class="bg-white px-8 py-7 border-2 border-billmora-2 rounded-2xl">
                     <label for="notes" class="block text-slate-600 font-semibold mb-1">
