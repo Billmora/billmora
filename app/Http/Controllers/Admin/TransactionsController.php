@@ -8,6 +8,16 @@ use Illuminate\Http\Request;
 
 class TransactionsController extends Controller
 {
+    /**
+     * Applies permission-based middleware for accessing transactions management.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:transactions.view')->only(['index']);
+        $this->middleware('permission:transactions.delete')->only(['destroy']);
+    }
 
     /**
      * Display a paginated list of all transactions.

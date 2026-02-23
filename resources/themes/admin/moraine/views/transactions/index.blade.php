@@ -48,7 +48,9 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ Currency::format($transaction->fee, $transaction->currency) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $transaction->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
-                                    <x-admin::modal.trigger modal="deleteModal-{{ $transaction->id }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.delete') }}</x-admin::modal.trigger>
+                                    @can('transactions.delete')
+                                        <x-admin::modal.trigger modal="deleteModal-{{ $transaction->id }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.delete') }}</x-admin::modal.trigger>
+                                    @endcan
                                 </td>
                             </tr>
                         @endforeach
@@ -60,23 +62,25 @@
     <div>
         {{ $transactions->links('admin::layouts.partials.pagination') }}
     </div>
-    @foreach ($transactions as $transaction)
-        <x-admin::modal.content
-            modal="deleteModal-{{ $transaction->id }}"
-            variant="danger"
-            size="xl"
-            position="centered"
-            title="{{ __('common.delete_modal_title') }}"
-            description="{{ __('common.delete_modal_description', ['item' => $transaction->transaction_id]) }}">
-            <form action="{{ route('admin.transactions.destroy', ['transaction' => $transaction->id]) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <div class="flex justify-end gap-2 mt-4">
-                    <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
-                    <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
-                </div>
-            </form>
-        </x-admin::modal.content>
-    @endforeach
+    @can('transactions.delete')
+        @foreach ($transactions as $transaction)
+            <x-admin::modal.content
+                modal="deleteModal-{{ $transaction->id }}"
+                variant="danger"
+                size="xl"
+                position="centered"
+                title="{{ __('common.delete_modal_title') }}"
+                description="{{ __('common.delete_modal_description', ['item' => $transaction->transaction_id]) }}">
+                <form action="{{ route('admin.transactions.destroy', ['transaction' => $transaction->id]) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="flex justify-end gap-2 mt-4">
+                        <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                        <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
+                    </div>
+                </form>
+            </x-admin::modal.content>
+        @endforeach
+    @endcan
 </div>
 @endsection
