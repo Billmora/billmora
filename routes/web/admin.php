@@ -84,6 +84,16 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin transactions interface routes.
+     *
+     * Prefix: /admin/transactions
+     */
+    Route::group(['prefix' => 'transactions'], function () {
+        Route::get('/', [Admin\TransactionsController::class, 'index'])->name('admin.transactions');
+        Route::delete('/{transaction}', [Admin\TransactionsController::class, 'destroy'])->name('admin.transactions.destroy');
+    });
+
+    /**
      * Admin broadcasts interface routes.
      *
      * Prefix: /admin/broadcasts
