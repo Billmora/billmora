@@ -48,7 +48,7 @@ class CallbackController extends Controller
 
             return DB::transaction(function () use ($response, $plugin) {
                 
-                $invoice = Invoice::where('invoice_number', $response['transaction_id'])->lockForUpdate()->first();
+                $invoice = Invoice::where('invoice_number', $response['reference'])->lockForUpdate()->first();
 
                 if (!$invoice) {
                     return response()->json(['error' => 'Invoice not found.'], 404);
@@ -69,7 +69,7 @@ class CallbackController extends Controller
                         'user_id' => $invoice->user_id,
                         'invoice_id' => $invoice->id,
                         'plugin_id' => $plugin->id,
-                        'transaction_id' => $response['gateway_reference'],
+                        'reference' => $response['gateway_reference'],
                         'description' => "Payment of Invoice {$invoice->invoice_number} via {$plugin->name}",
                         'currency' => $invoice->currency,
                         'amount' => $response['amount'],

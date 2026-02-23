@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('invoice_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('plugin_id')->nullable()->constrained('plugins')->nullOnDelete();
             
-            $table->string('transaction_id')->nullable()->index();
+            $table->string('reference')->nullable()->index();
             $table->string('description');
             
             $table->string('currency', 3);
