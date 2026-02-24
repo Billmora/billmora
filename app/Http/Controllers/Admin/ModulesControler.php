@@ -131,7 +131,7 @@ class ModulesControler extends Controller
         $instance = $manager->bootInstance($module);
 
         if (!$instance) {
-            return back()->with('error', "Provider files for {$module->provider} not found.");
+            return back()->with('error', __('admin/plugins.provider.files_missing', ['provider' => $module->provider]));
         }
 
         $schema = $instance->getConfigSchema();

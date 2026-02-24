@@ -127,7 +127,7 @@ class ProvisioningsController extends Controller
         $instance = $manager->bootInstance($provisioning);
 
         if (!$instance) {
-            return back()->with('error', "Provider files for {$provisioning->provider} not found.");
+            return back()->with('error', __('admin/plugins.provider.files_missing', ['provider' => $provisioning->provider]));
         }
 
         $schema = $instance->getConfigSchema();
@@ -221,7 +221,7 @@ class ProvisioningsController extends Controller
         $instance = $manager->bootInstance($provisioning);
 
         if (!$instance) {
-            return back()->with('error', "Provider files for {$provisioning->provider} not found.");
+            return back()->with('error', __('admin/plugins.provider.files_missing', ['provider' => $provisioning->provider]));
         }
 
         try {

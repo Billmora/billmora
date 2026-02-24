@@ -119,7 +119,7 @@ class GatewaysController extends Controller
         $instance = $manager->bootInstance($gateway);
 
         if (!$instance) {
-            return back()->with('error', "Provider files for {$gateway->provider} not found.");
+            return back()->with('error', __('admin/plugins.provider.files_missing', ['provider' => $gateway->provider]));
         }
 
         $schema = $instance->getConfigSchema();
