@@ -16,6 +16,7 @@ return [
     'gateways' => 'Gateways',
     'modules' => 'Modules',
     'settings' => 'Settings',
+    'plugins' => 'Plugins',
     'audits' => 'Audits',
     'group' => [
         'management' => 'Management',
