@@ -14,6 +14,7 @@ return [
     'coupons' => 'Coupons',
     'provisionings' => 'Provisionings',
     'gateways' => 'Gateways',
+    'modules' => 'Modules',
     'settings' => 'Settings',
     'audits' => 'Audits',
     'group' => [
