@@ -9,4 +9,12 @@ return [
     'is_active_helper' => 'Toggle to enable or disable this gateway instance.',
     'version_label' => 'Version',
     'author_label' => 'Author',
+
+    'delete' => [
+        'in_use' => 'This gateway cannot be deleted because it is associated with existing invoices or transactions.',
+    ],
+
+    'disable' => [
+        'in_use' => 'This gateway cannot be disabled because it is currently in use.',
+    ],
 ];

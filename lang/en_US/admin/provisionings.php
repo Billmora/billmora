@@ -15,4 +15,8 @@ return [
         'success' => 'Connection successful',
         'failed' => 'Connection failed: :message',
     ],
+
+    'delete' => [
+        'in_use' => 'This plugin cannot be deleted because it is currently used by an active package or service.',
+    ],
 ];
