@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
+use App\Contracts\ModuleInterface;
+use App\Models\Plugin;
 use Illuminate\Support\ServiceProvider;
 use App\Services\PluginManager;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Schema;
 
 class PluginServiceProvider extends ServiceProvider
 {
@@ -26,6 +30,28 @@ class PluginServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if ($this->app->runningInConsole() && !Schema::hasTable('plugins')) {
+            return;
+        }
+
+        try {
+            $pluginManager = $this->app->make(PluginManager::class);
+            
+            $activeModules = Plugin::where('type', 'module')->where('is_active', true)->get();
+
+            foreach ($activeModules as $pluginRecord) {
+                $instance = $pluginManager->bootInstance($pluginRecord);
+
+                if ($instance instanceof ModuleInterface) {
+                    $subscribedEvents = $instance->getSubscribedEvents();
+
+                    foreach ($subscribedEvents as $eventClass => $methodName) {
+                        Event::listen($eventClass, [$instance, $methodName]);
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            \Log::error("Failed to boot plugin modules: " . $e->getMessage());
+        }
     }
 }
