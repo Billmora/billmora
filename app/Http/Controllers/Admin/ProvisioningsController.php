@@ -234,7 +234,7 @@ class ProvisioningsController extends Controller
     }
 
     /**
-     * Validate plugin configuration based on schema with file upload handling.
+     * Validate plugin configuration based on schema.
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Services\PluginManager $manager
