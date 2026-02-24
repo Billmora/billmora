@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Plugin Provisinings')
+@section('title', 'Plugin Provisionings')
 
 @section('body')
 <div class="flex flex-col gap-4">
