@@ -327,6 +327,18 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin plugins interface routes.
+     *
+     * Prefix: /admin/plugins
+     */
+    Route::group(['prefix' => 'plugins'], function () {
+        Route::get('/', [Admin\PluginsController::class, 'index'])->name('admin.plugins');
+        Route::post('/install', [Admin\PluginsController::class, 'install'])->name('admin.plugins.install');
+        Route::post('/{identifier}/update', [Admin\PluginsController::class, 'update'])->name('admin.plugins.update');
+        Route::delete('/{identifier}/uninstall', [Admin\PluginsController::class, 'uninstall'])->name('admin.plugins.uninstall');
+    });
+
+    /**
      * Admin audits interface routes.
      *
      * Prefix: /admin/audits
