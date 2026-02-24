@@ -112,6 +112,12 @@
           <span class="font-semibold">{{ __('admin/navigation.gateways') }}</span>
         </a>
       @endcan
+      @can('modules.view')
+        <a href="{{ route('admin.modules') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.modules*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-codesandbox class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('admin/navigation.modules') }}</span>
+        </a>
+      @endcan
       <span class="mt-4 block text-slate-600 font-semibold text-md">{{ __('admin/navigation.group.system') }}</span>
       <a href="{{ route('admin.settings') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.settings*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
         <x-lucide-settings class="w-5 h-auto" />
