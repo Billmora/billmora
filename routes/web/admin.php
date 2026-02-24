@@ -217,6 +217,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin modules interface routes.
+     *
+     * Prefix: /admin/modules
+     */
+    Route::group(['prefix' => 'modules'], function () {
+        Route::get('/', [Admin\ModulesControler::class, 'index'])->name('admin.modules');
+        Route::get('/create', [Admin\ModulesControler::class, 'create'])->name('admin.modules.create');
+        Route::post('/create', [Admin\ModulesControler::class, 'store'])->name('admin.modules.store');
+        Route::get('/{module}/edit', [Admin\ModulesControler::class, 'edit'])->name('admin.modules.edit');
+        Route::put('/{module}/edit', [Admin\ModulesControler::class, 'update'])->name('admin.modules.update');
+        Route::delete('/{module}', [Admin\ModulesControler::class, 'destroy'])->name('admin.modules.destroy');
+    });
+
+    /**
      * Admin settings interface routes.
      *
      * Prefix: /admin/settings
