@@ -123,6 +123,12 @@
         <x-lucide-settings class="w-5 h-auto" />
         <span class="font-semibold">{{ __('admin/navigation.settings') }}</span>
       </a>
+      @can('plugins.view')
+        <a href="{{ route('admin.plugins') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.plugins*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-puzzle class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('admin/navigation.plugins') }}</span>
+        </a>
+      @endcan
       <a href="{{ route('admin.audits') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.audits*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
         <x-lucide-file-text class="w-5 h-auto" />
         <span class="font-semibold">{{ __('admin/navigation.audits') }}</span>
