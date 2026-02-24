@@ -81,6 +81,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::put('/{invoice:invoice_number}/edit', [Admin\InvoicesController::class, 'update'])->name('admin.invoices.update');
         Route::delete('/{invoice:invoice_number}', [Admin\InvoicesController::class, 'destroy'])->name('admin.invoices.destroy');
         Route::get('/{invoice:invoice_number}/download', [Admin\InvoicesController::class, 'download'])->name('admin.invoices.download');
+
+        Route::get('/{invoice:invoice_number}/transaction', [Admin\Invoices\TransactionController::class, 'index'])->name('admin.invoices.transaction');
+        Route::get('/{invoice:invoice_number}/transaction/create', [Admin\Invoices\TransactionController::class, 'create'])->name('admin.invoices.transaction.create');
+        Route::post('/{invoice:invoice_number}/transaction/create', [Admin\Invoices\TransactionController::class, 'store'])->name('admin.invoices.transaction.store');
+        Route::delete('/{invoice:invoice_number}/transaction/{transaction}', [Admin\Invoices\TransactionController::class, 'destroy'])->name('admin.invoices.transaction.destroy');
     });
 
     /**
