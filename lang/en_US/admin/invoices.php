@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'tabs' => [
+        'summary' => 'Summary',
+        'transaction' => 'Transaction',
+    ],
+
     'number_label' => 'Invoice Number',
     'user_label' => 'User',
     'user_helper' => 'Select the user this invoice is assigned to.',
