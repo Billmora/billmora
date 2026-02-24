@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Package;
 use App\Models\Plugin;
+use App\Models\Service;
 use App\Services\PluginManager;
 use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
@@ -198,10 +200,26 @@ class ProvisioningsController extends Controller
      * Remove the specified provisioning instance from storage.
      *
      * @param \App\Models\Plugin $provisioning
+     * @param \App\Services\PluginManager $manager
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Plugin $provisioning)
+    public function destroy(Plugin $provisioning, PluginManager $manager)
     {
+        $isUsed = Package::where('plugin_id', $provisioning->id)->exists() || 
+                  Service::where('plugin_id', $provisioning->id)->exists();
+
+        if ($isUsed) {
+            return redirect()->route('admin.provisionings')->with('error', __('admin/provisionings.delete.in_use'));
+        }
+
+        $instance = $manager->bootInstance($provisioning);
+        if ($instance && method_exists($instance, 'getPermissions')) {
+            $permissions = $instance->getPermissions();
+            if (!empty($permissions)) {
+                Permission::whereIn('name', $permissions)->delete();
+            }
+        }
+
         $provisioning->delete();
 
         $this->recordDelete('provisioning.delete', $provisioning->toArray());

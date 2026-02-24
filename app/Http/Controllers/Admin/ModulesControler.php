@@ -202,10 +202,19 @@ class ModulesControler extends Controller
      * Remove the specified module instance from storage.
      *
      * @param \App\Models\Plugin $module
+     * @param \App\Services\PluginManager $manager
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Plugin $module)
+    public function destroy(Plugin $module, PluginManager $manager)
     {
+        $instance = $manager->bootInstance($module);
+        if ($instance && method_exists($instance, 'getPermissions')) {
+            $permissions = $instance->getPermissions();
+            if (!empty($permissions)) {
+                Permission::whereIn('name', $permissions)->delete();
+            }
+        }
+
         $module->delete();
 
         $this->recordDelete('module.delete', $module->toArray());

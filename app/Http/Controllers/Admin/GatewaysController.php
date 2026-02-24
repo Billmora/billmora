@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
 use App\Models\Plugin;
+use App\Models\Transaction;
 use App\Services\PluginManager;
 use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
@@ -151,6 +153,16 @@ class GatewaysController extends Controller
 
         $configData = $this->validatePluginConfig($request, $manager, $gateway->provider);
 
+        if (isset($validated['instance_active']) && $validated['instance_active'] == false && $gateway->is_active == true) {
+            
+            $isUsed = Invoice::where('plugin_id', $gateway->id)->exists() || 
+                  Transaction::where('plugin_id', $gateway->id)->exists();
+
+            if ($isUsed) {
+                return redirect()->back()->with('error', __('admin/gateways.disable.in_use'));
+            }
+        }
+
         $oldGateway = $gateway->getOriginal();
 
         $gateway->update([
@@ -186,10 +198,26 @@ class GatewaysController extends Controller
      * Remove the specified gateway plugin instance from storage.
      *
      * @param \App\Models\Plugin $gateway
+     * @param \App\Services\PluginManager $manager
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Plugin $gateway)
+    public function destroy(Plugin $gateway, PluginManager $manager)
     {
+        $isUsed = Invoice::where('plugin_id', $gateway->id)->exists() || 
+                  Transaction::where('plugin_id', $gateway->id)->exists();
+
+        if ($isUsed) {
+            return redirect()->route('admin.gateways')->with('error', __('admin/gateways.delete.in_use'));
+        }
+
+        $instance = $manager->bootInstance($gateway);
+        if ($instance && method_exists($instance, 'getPermissions')) {
+            $permissions = $instance->getPermissions();
+            if (!empty($permissions)) {
+                Permission::whereIn('name', $permissions)->delete();
+            }
+        }
+
         $gateway->delete();
 
         $this->recordDelete('gateway.delete', $gateway->toArray());
