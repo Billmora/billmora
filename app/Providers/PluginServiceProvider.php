@@ -37,21 +37,25 @@ class PluginServiceProvider extends ServiceProvider
         try {
             $pluginManager = $this->app->make(PluginManager::class);
             
-            $activeModules = Plugin::where('type', 'module')->where('is_active', true)->get();
+            $activePlugins = Plugin::where('is_active', true)->get();
 
-            foreach ($activeModules as $pluginRecord) {
+            foreach ($activePlugins as $pluginRecord) {
                 $instance = $pluginManager->bootInstance($pluginRecord);
 
-                if ($instance instanceof ModuleInterface) {
-                    $subscribedEvents = $instance->getSubscribedEvents();
+                if ($instance) {
+                    $this->app->register($instance);
 
-                    foreach ($subscribedEvents as $eventClass => $methodName) {
-                        Event::listen($eventClass, [$instance, $methodName]);
+                    if ($instance instanceof ModuleInterface) {
+                        $subscribedEvents = $instance->getSubscribedEvents();
+
+                        foreach ($subscribedEvents as $eventClass => $methodName) {
+                            Event::listen($eventClass, [$instance, $methodName]);
+                        }
                     }
                 }
             }
         } catch (\Exception $e) {
-            \Log::error("Failed to boot plugin modules: " . $e->getMessage());
+            \Log::error("Failed to boot plugins: " . $e->getMessage());
         }
     }
 }
