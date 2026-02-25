@@ -47,7 +47,7 @@
     </div>
     <div class="w-full lg:w-3/4 h-fit grid gap-5">
         <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <a href="#" class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 hover:border-green-500 transition-colors rounded-2xl">
+            <a href="{{ route('client.services') }}" class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 hover:border-green-500 transition-colors rounded-2xl">
                 <div class="bg-green-200 p-3 text-green-500 rounded-full">
                     <x-lucide-shopping-bag class="w-auto h-10" />
                 </div>
