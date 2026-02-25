@@ -5,6 +5,7 @@ namespace App\Models;
 use Billmora;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Invoice extends Model
 {
@@ -58,38 +59,43 @@ class Invoice extends Model
         $padding = (int) Billmora::getGeneral('invoice_number_padding');
         $increment = (int) Billmora::getGeneral('invoice_number_increment');
 
-        $lastInvoice = static::whereNotNull('invoice_number')
-            ->orderBy('id', 'desc')
-            ->first();
+        return DB::transaction(function () use ($format, $padding, $increment) {
 
-        if ($lastInvoice && preg_match('/(\d+)/', $lastInvoice->invoice_number, $matches)) {
-            $lastNumber = (int) end($matches);
-            $nextNumber = $lastNumber + $increment;
-        } else {
-            $nextNumber = $increment;
-        }
+            $lastInvoice = static::whereNotNull('invoice_number')
+                ->orderBy('id', 'desc')
+                ->lockForUpdate()
+                ->first();
 
-        $paddedNumber = str_pad($nextNumber, $padding, '0', STR_PAD_LEFT);
+            if ($lastInvoice && preg_match_all('/(\d+)/', $lastInvoice->invoice_number, $matches)) {
+                $lastNumber = (int) end($matches[1]);
+                $nextNumber = $lastNumber + $increment;
+            } else {
+                $nextNumber = $increment;
+            }
 
-        $invoiceNumber = str_replace(
-            ['{number}', '{day}', '{month}', '{year}'],
-            [
-                $paddedNumber,
-                date('d'),
-                date('m'),
-                date('Y'),
-            ],
-            $format
-        );
+            $paddedNumber = str_pad($nextNumber, $padding, '0', STR_PAD_LEFT);
 
-        $counter = 0;
-        $originalNumber = $invoiceNumber;
-        while (static::where('invoice_number', $invoiceNumber)->exists()) {
-            $counter++;
-            $invoiceNumber = $originalNumber . '-' . $counter;
-        }
+            $invoiceNumber = str_replace(
+                ['{number}', '{day}', '{month}', '{year}'],
+                [
+                    $paddedNumber,
+                    date('d'),
+                    date('m'),
+                    date('Y'),
+                ],
+                $format
+            );
 
-        return $invoiceNumber;
+            $counter = 0;
+            $originalNumber = $invoiceNumber;
+            while (static::where('invoice_number', $invoiceNumber)->exists()) {
+                $counter++;
+                $invoiceNumber = $originalNumber . '-' . $counter;
+            }
+
+            return $invoiceNumber;
+
+        }); 
     }
 
     /**

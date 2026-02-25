@@ -5,6 +5,7 @@ namespace App\Models;
 use Billmora;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
@@ -60,38 +61,42 @@ class Order extends Model
         $padding = (int) Billmora::getGeneral('ordering_number_padding');
         $increment = (int) Billmora::getGeneral('ordering_number_increment');
 
-        $lastOrder = static::whereNotNull('order_number')
-            ->orderBy('id', 'desc')
-            ->first();
+        return DB::transaction(function () use ($format, $padding, $increment) {
+            $lastOrder = static::whereNotNull('order_number')
+                ->orderBy('id', 'desc')
+                ->lockForUpdate()
+                ->first();
 
-        if ($lastOrder && preg_match('/(\d+)/', $lastOrder->order_number, $matches)) {
-            $lastNumber = (int) end($matches);
-            $nextNumber = $lastNumber + $increment;
-        } else {
-            $nextNumber = $increment;
-        }
+            if ($lastOrder && preg_match_all('/(\d+)/', $lastOrder->invoice_number, $matches)) {
+                $lastNumber = (int) end($matches[1]);
+                $nextNumber = $lastNumber + $increment;
+            } else {
+                $nextNumber = $increment;
+            }
 
-        $paddedNumber = str_pad($nextNumber, $padding, '0', STR_PAD_LEFT);
+            $paddedNumber = str_pad($nextNumber, $padding, '0', STR_PAD_LEFT);
 
-        $orderNumber = str_replace(
-            ['{number}', '{day}', '{month}', '{year}'],
-            [
-                $paddedNumber,
-                date('d'),
-                date('m'),
-                date('Y'),
-            ],
-            $format
-        );
+            $orderNumber = str_replace(
+                ['{number}', '{day}', '{month}', '{year}'],
+                [
+                    $paddedNumber,
+                    date('d'),
+                    date('m'),
+                    date('Y'),
+                ],
+                $format
+            );
 
-        $counter = 0;
-        $originalNumber = $orderNumber;
-        while (static::where('order_number', $orderNumber)->exists()) {
-            $counter++;
-            $orderNumber = $originalNumber . '-' . $counter;
-        }
+            $counter = 0;
+            $originalNumber = $orderNumber;
+            while (static::where('order_number', $orderNumber)->exists()) {
+                $counter++;
+                $orderNumber = $originalNumber . '-' . $counter;
+            }
 
-        return $orderNumber;
+            return $orderNumber;
+
+        }); 
     }
 
     /**
