@@ -324,6 +324,16 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::post('/{id}', [Settings\CurrencyController::class, 'update'])->name('admin.settings.currencies.update');
             Route::delete('/{id}', [Settings\CurrencyController::class, 'destroy'])->name('admin.settings.currencies.destroy');
         });
+
+        /**
+         * Admin ticket settings interface routes.
+         *
+         * Prefix: /admin/settings/ticket
+         */
+        Route::group(['prefix' => 'ticket'], function () {
+            Route::get('/', [Settings\Ticket\TicketingController::class, 'index'])->name('admin.settings.ticket.ticketing');
+            Route::patch('/', [Settings\Ticket\TicketingController::class, 'update'])->name('admin.settings.ticket.ticketing.update');
+        });
     });
 
     /**
