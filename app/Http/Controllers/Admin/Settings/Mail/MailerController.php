@@ -91,7 +91,6 @@ class MailerController extends Controller
             ],
         ]);
 
-        $this->updateSettings('mail', $validated);
 
         Billmora::setEnv([
             'MAIL_MAILER' => $validated['mailer_driver'],
@@ -106,6 +105,11 @@ class MailerController extends Controller
             'MAILGUN_SECRET' => $validated['mailer_mailgun_secret'],
             'MAILGUN_ENDPOINT' => $validated['mailer_mailgun_endpoint'],
         ]);
+
+        $validated['mailer_smtp_password'] = encrypt($validated['mailer_smtp_password']);
+        $validated['mailer_mailgun_secret'] = encrypt($validated['mailer_mailgun_secret']);
+
+        $this->updateSettings('mail', $validated);
 
         return redirect()->back()->with('success', __('common.save_success', ['attribute' => __('admin/settings/mail.title')]));
     }
