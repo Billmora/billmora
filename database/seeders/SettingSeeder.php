@@ -93,6 +93,17 @@ class SettingSeeder extends Seeder
              */
             ['category' => 'captcha', 'key' => 'provider_type', 'value' => null],
             ['category' => 'captcha', 'key' => 'placements_enabled_forms', 'value' => []],
+
+            /**
+             * Run seeder of ticket category.
+             *
+             * Seeds initial data into the 'ticket' category.
+             */
+            ['category' => 'ticket', 'key' => 'ticketing_departements', 'value' => ['billing', 'support', 'sales']],
+            ['category' => 'ticket', 'key' => 'ticketing_allow_client_close', 'value' => true],
+            ['category' => 'ticket', 'key' => 'ticketing_number_increment', 'value' => 1],
+            ['category' => 'ticket', 'key' => 'ticketing_number_padding', 'value' => 4],
+            ['category' => 'ticket', 'key' => 'ticketing_number_format', 'value' => 'TKT-{number}'],
         ];
 
         /**
