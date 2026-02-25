@@ -88,6 +88,8 @@ class PermissionSeeder extends Seeder
             'settings.currencies.create',
             'settings.currencies.update',
             'settings.currencies.delete',
+            'settings.ticket.view',
+            'settings.ticket.update',
             'plugins.view',
             'plugins.install',
             'plugins.update',
