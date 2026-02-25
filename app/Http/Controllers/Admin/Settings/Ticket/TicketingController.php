@@ -40,7 +40,7 @@ class TicketingController extends Controller
      */
     public function update(Request $request)
     {
-        $validated = $request->validate( [
+        $validated = $request->validate([
             'ticketing_departements' => ['required', 'array'],
             'ticketing_number_increment' => ['required', 'integer', 'min:1'],
             'ticketing_number_padding' => ['required', 'integer', 'min:1'],
@@ -54,8 +54,10 @@ class TicketingController extends Controller
             'ticketing_allow_client_close' => ['boolean'],
         ]);
 
+        $this->updateSettings('ticket', $validated);
+
         Billmora::setTicket($validated);
 
-        return redirect()->back()->with('success', __('common.save_success', ['attribute' => __('admin/settings/general.title')]));
+        return redirect()->back()->with('success', __('common.save_success', ['attribute' => __('admin/settings/ticket.title')]));
     }
 }
