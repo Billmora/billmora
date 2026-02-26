@@ -333,6 +333,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::group(['prefix' => 'ticket'], function () {
             Route::get('/', [Settings\Ticket\TicketingController::class, 'index'])->name('admin.settings.ticket.ticketing');
             Route::patch('/', [Settings\Ticket\TicketingController::class, 'update'])->name('admin.settings.ticket.ticketing.update');
+            Route::get('/piping', [Settings\Ticket\PipingController::class, 'index'])->name('admin.settings.ticket.piping');
+            Route::patch('/piping', [Settings\Ticket\PipingController::class, 'update'])->name('admin.settings.ticket.piping.update');
         });
     });
 
