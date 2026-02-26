@@ -51,6 +51,10 @@ class PipingController extends Controller
             'piping_mail_password' => [Rule::requiredIf($pipingEnabled), 'nullable', 'string'],
         ]);
 
+        Billmora::setTicket([
+            'piping_enabled' => $validated['piping_enabled'],
+        ]);
+
         Billmora::setEnv([
             'PIPING_MAIL_HOST' => $validated['piping_mail_host'],
             'PIPING_MAIL_PORT' => $validated['piping_mail_port'],
