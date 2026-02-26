@@ -32,6 +32,7 @@
                     <thead class="bg-billmora-2">
                         <tr>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/plugins.name_label') }}</th>
+                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/plugins.provider_label') }}</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/plugins.type_label') }}</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/plugins.version_label') }}</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/plugins.author_label') }}</th>
@@ -42,6 +43,7 @@
                         @foreach ($plugins as $plugin)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $plugin['name'] }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $plugin['provider'] }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $plugin['type'] }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $plugin['version'] }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $plugin['author'] }}</td>

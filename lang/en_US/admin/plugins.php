@@ -2,6 +2,7 @@
 
 return [
     'name_label' => 'Name',
+    'provider_label' => 'Provider',
     'type_label' => 'Type',
     'version_label' => 'Version',
     'author_label' => 'Author',
