@@ -4,6 +4,7 @@ return [
     'tabs' => [
         'ticketing' => 'Ticketing',
         'piping' => 'Piping',
+        'notify' => 'Notify',
     ],
     'title' => 'Ticket settings',
     'description' => 'Configure ticket settings for the system.',
@@ -33,4 +34,16 @@ return [
     'piping_mail_address_helper' => 'Enter the email address that will receive and pipe incoming emails into tickets.',
     'piping_mail_password_label' => 'Mail Password',
     'piping_mail_password_helper' => 'Enter the password for the piping mail account.',
+
+    'notify_client_on_open_label' => 'Notify Client on Ticket Open',
+    'notify_client_on_open_helper' => 'Send an email notification to the client when they open a new ticket.',
+    'notify_client_on_staff_open_label' => 'Notify Client on Staff Open',
+    'notify_client_on_staff_open_helper' => 'Send an email notification to the client when a staff member opens a ticket on their behalf.',
+    'notify_client_on_staff_answered_label' => 'Notify Client on Staff Reply',
+    'notify_client_on_staff_answered_helper' => 'Send an email notification to the client when a staff member replies to their ticket.',
+    'notify_staff_on_client_reply_label' => 'Notify Staff on Client Reply',
+    'notify_staff_on_client_reply_helper' => 'Send an email notification to staff when a client replies to a ticket.',
+    'notify_staff_fallback_label' => 'Staff Notification Target',
+    'notify_staff_fallback_helper' => 'Determine who receives staff notifications. "Department" notifies all admins in the ticket\'s department, "Assigned" notifies only the assigned staff, "None" disables staff notifications.',
+
 ];
