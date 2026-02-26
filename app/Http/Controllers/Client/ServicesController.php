@@ -115,6 +115,11 @@ class ServicesController extends Controller
             abort(404);
         }
 
+        if ($service->provisioning && !$service->provisioning->is_active) {
+            return redirect()->route('client.services.show', $service->id)
+                ->with('error', __('validation.provisioning_disabled', ['name' => $service->provisioning->name]));
+        }
+
         $plugin = $service->provisioning ? $manager->bootInstance($service->provisioning) : null;
 
         if (!$plugin || !method_exists($plugin, 'getClientAction')) {
@@ -173,6 +178,10 @@ class ServicesController extends Controller
     {
         if ($service->user_id !== Auth::id() || $service->status !== 'active') {
             abort(404);
+        }
+
+        if ($service->provisioning && !$service->provisioning->is_active) {
+            return back()->with('error', __('validation.provisioning_disabled', ['name' => $service->provisioning->name]));
         }
 
         $plugin = $service->provisioning ? $manager->bootInstance($service->provisioning) : null;

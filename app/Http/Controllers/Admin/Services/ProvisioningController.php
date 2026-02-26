@@ -258,6 +258,10 @@ class ProvisioningController extends Controller
             throw new \Exception(__('admin/services.provisioning.provider_missing'));
         }
 
+        if (!$service->provisioning->is_active) {
+            throw new \Exception(__('validation.provisioning_disabled', ['name' => $service->provisioning->name]));
+        }
+
         $plugin = $manager->bootInstance($service->provisioning);
 
         if (!$plugin) {
