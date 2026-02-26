@@ -52,6 +52,8 @@ class TicketingController extends Controller
                 'regex:/^[^{}]*(\{(number|day|month|year)\}[^{}]*)*$/',
             ],
             'ticketing_allow_client_close' => ['boolean'],
+            'ticketing_max_attachment_size' => ['required', 'integer', 'min:1', 'max:100'],
+            'ticketing_allowed_attachment_types' => ['required', 'string', 'regex:/^[a-zA-Z0-9]+(,[a-zA-Z0-9]+)*$/'],
         ]);
 
         $this->updateSettings('ticket', $validated);

@@ -18,6 +18,10 @@ return [
     'ticketing_number_padding_helper' => 'Set the number of digits to pad ticket numbers with leading zeros.',
     'ticketing_number_format_label' => 'Ticket Number Format',
     'ticketing_number_format_helper' => 'Define the format for ticket numbers using {number} as a required placeholder. Optional placeholders: {day}, {month}, {year}.',
+    'ticketing_max_attachment_size_label' => 'Max Attachment Size',
+    'ticketing_max_attachment_size_helper' => 'Set the maximum allowed attachment size per file in megabytes (MB).',
+    'ticketing_allowed_attachment_types_label' => 'Allowed Attachment Types',
+    'ticketing_allowed_attachment_types_helper' => 'Enter the allowed file extensions for attachments, separated by commas.',
 
     'piping_enabled_label' => 'Enable Email Piping',
     'piping_enabled_helper' => 'Enable this to allow incoming emails to be converted into support tickets automatically.',

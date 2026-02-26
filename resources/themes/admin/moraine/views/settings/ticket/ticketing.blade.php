@@ -60,6 +60,21 @@
                 helper="{{ __('admin/settings/ticket.ticketing_allow_client_close_helper') }}"
                 checked="{{ old('ticketing_allow_client_close', Billmora::getTicket('ticketing_allow_client_close')) }}"
             />
+            <x-admin::input 
+                name="ticketing_max_attachment_size"
+                type="number"
+                label="{{ __('admin/settings/ticket.ticketing_max_attachment_size_label') }}"
+                helper="{{ __('admin/settings/ticket.ticketing_max_attachment_size_helper') }}"
+                value="{{ old('ticketing_max_attachment_size', Billmora::getTicket('ticketing_max_attachment_size')) }}"
+                required
+            />
+            <x-admin::input 
+                name="ticketing_allowed_attachment_types"
+                label="{{ __('admin/settings/ticket.ticketing_allowed_attachment_types_label') }}"
+                helper="{{ __('admin/settings/ticket.ticketing_allowed_attachment_types_helper') }}"
+                value="{{ old('ticketing_allowed_attachment_types', Billmora::getTicket('ticketing_allowed_attachment_types')) }}"
+                required
+            />
         </div>
     </div>
     @can('settings.ticket.update')
