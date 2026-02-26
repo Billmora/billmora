@@ -7,15 +7,15 @@
     @switch(Billmora::getCaptcha('provider_type'))
       @case('turnstile')
           <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-          <div class="cf-turnstile" data-sitekey="{{ env('CAPTCHA_SITE_KEY') }}"></div>
+          <div class="cf-turnstile" data-sitekey="{{ config('captcha.site_key') }}"></div>
           @break
       @case('recaptchav2')
           <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-          <div class="g-recaptcha" data-sitekey="{{ env('CAPTCHA_SITE_KEY') }}"></div>
+          <div class="g-recaptcha" data-sitekey="{{ config('captcha.site_key') }}"></div>
           @break
       @case('hcaptcha')
           <script src="https://hcaptcha.com/1/api.js" async defer></script>
-          <div class="h-captcha" data-sitekey="{{ env('CAPTCHA_SITE_KEY') }}"></div>
+          <div class="h-captcha" data-sitekey="{{ config('captcha.site_key') }}"></div>
           @break
       @default
     @endswitch

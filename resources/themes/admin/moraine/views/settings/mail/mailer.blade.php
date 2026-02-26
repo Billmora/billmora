@@ -8,7 +8,7 @@
     method="POST" 
     class="flex flex-col gap-5"
     x-data="{ 
-        selectedDriver: '{{ old('mailer_driver', env('MAIL_MAILER', 'smtp')) }}' 
+        selectedDriver: '{{ old('mailer_driver', config('mail.default')) }}' 
     }"
     x-init="$watch('selectedDriver')"
 >
@@ -49,13 +49,13 @@
                     name="mailer_driver" 
                     label="SMTP" 
                     value="smtp" 
-                    :checked="old('mailer_driver', env('MAIL_MAILER')) === 'smtp'" 
+                    :checked="old('mailer_driver', config('mail.default')) === 'smtp'" 
                 />
                 <x-admin::radio.option 
                     name="mailer_driver" 
                     label="Mailgun" 
                     value="mailgun" 
-                    :checked="old('mailer_driver', env('MAIL_MAILER')) === 'mailgun'" 
+                    :checked="old('mailer_driver', config('mail.default')) === 'mailgun'" 
                 />
             </x-admin::radio.group>
         </div>
@@ -64,7 +64,7 @@
             name="mailer_from_address"
             label="{{ __('admin/settings/mail.mailer_from_address_label') }}"
             helper="{{ __('admin/settings/mail.mailer_from_address_helper') }}"
-            value="{{ old('mailer_from_address', env('MAIL_FROM_ADDRESS')) }}"
+            value="{{ old('mailer_from_address', config('mail.from.address')) }}"
             required
         />
         <x-admin::input 
@@ -72,7 +72,7 @@
             name="mailer_from_name"
             label="{{ __('admin/settings/mail.mailer_from_name_label') }}"
             helper="{{ __('admin/settings/mail.mailer_from_name_helper') }}"
-            value="{{ old('mailer_from_name', env('MAIL_FROM_NAME')) }}"
+            value="{{ old('mailer_from_name', config('mail.from.name')) }}"
             required
         />
     </div>
@@ -94,7 +94,7 @@
                     name="mailer_smtp_host"
                     label="{{ __('admin/settings/mail.mailer_smtp_host_label') }}"
                     helper="{{ __('admin/settings/mail.mailer_smtp_host_helper') }}" 
-                    value="{{ old('mailer_smtp_host', env('MAIL_HOST')) }}"
+                    value="{{ old('mailer_smtp_host', config('mail.mailers.smtp.host')) }}"
                     required
                 />
                 <x-admin::input 
@@ -102,7 +102,7 @@
                     name="mailer_smtp_port" 
                     label="{{ __('admin/settings/mail.mailer_smtp_port_label') }}" 
                     helper="{{ __('admin/settings/mail.mailer_smtp_port_helper') }}" 
-                    value="{{ old('mailer_smtp_port', env('MAIL_PORT')) }}" 
+                    value="{{ old('mailer_smtp_port', config('mail.mailers.smtp.port')) }}" 
                     required
                 />
                 <x-admin::select 
@@ -111,9 +111,9 @@
                     helper="{{ __('admin/settings/mail.mailer_smtp_encryption_helper') }}"
                     required
                 >
-                    <option value="tls" {{ old('mailer_smtp_encryption', env('MAIL_ENCRYPTION')) == 'tls' ? 'selected' : '' }}>TLS</option>
-                    <option value="ssl" {{ old('mailer_smtp_encryption', env('MAIL_ENCRYPTION')) == 'ssl' ? 'selected' : '' }}>SSL</option>
-                    <option value="" {{ old('mailer_smtp_encryption', env('MAIL_ENCRYPTION')) == '' ? 'selected' : '' }}>{{ __('admin/common.none') }}</option>
+                    <option value="tls" {{ old('mailer_smtp_encryption', config('mail.mailers.smtp.encryption')) == 'tls' ? 'selected' : '' }}>TLS</option>
+                    <option value="ssl" {{ old('mailer_smtp_encryption', config('mail.mailers.smtp.encryption')) == 'ssl' ? 'selected' : '' }}>SSL</option>
+                    <option value="" {{ old('mailer_smtp_encryption', config('mail.mailers.smtp.encryption')) == '' ? 'selected' : '' }}>{{ __('admin/common.none') }}</option>
                 </x-admin::select>
             </div>
             <div class="grid md:grid-cols-2 gap-4">
@@ -122,7 +122,7 @@
                     name="mailer_smtp_username"
                     label="{{ __('admin/settings/mail.mailer_smtp_username_label') }}" 
                     helper="{{ __('admin/settings/mail.mailer_smtp_username_helper') }}"
-                    value="{{ old('mailer_smtp_username', env('MAIL_USERNAME')) }}"
+                    value="{{ old('mailer_smtp_username', config('mail.mailers.smtp.username')) }}"
                     required
                 />
                 <x-admin::input 
@@ -130,7 +130,7 @@
                     name="mailer_smtp_password" 
                     label="{{ __('admin/settings/mail.mailer_smtp_password_label') }}" 
                     helper="{{ __('admin/settings/mail.mailer_smtp_password_helper') }}" 
-                    value="{{ old('mailer_smtp_password', env('MAIL_PASSWORD')) }}" 
+                    value="{{ old('mailer_smtp_password', config('mail.mailers.smtp.password')) }}" 
                     required
                 />
             </div>
@@ -145,7 +145,7 @@
                 name="mailer_mailgun_domain" 
                 label="{{ __('admin/settings/mail.mailer_mailgun_domain_label') }}" 
                 helper="{{ __('admin/settings/mail.mailer_mailgun_domain_helper') }}" 
-                value="{{ old('mailer_mailgun_domain', env('MAILGUN_DOMAIN')) }}"
+                value="{{ old('mailer_mailgun_domain', config('mail.mailers.mailgun.domain')) }}"
                 required
             />
             <x-admin::input 
@@ -153,7 +153,7 @@
                 name="mailer_mailgun_secret" 
                 label="{{ __('admin/settings/mail.mailer_mailgun_secret_label') }}" 
                 helper="{{ __('admin/settings/mail.mailer_mailgun_secret_helper') }}" 
-                value="{{ old('mailer_mailgun_secret', env('MAILGUN_SECRET')) }}" 
+                value="{{ old('mailer_mailgun_secret',config('mail.mailers.mailgun.secret')) }}" 
                 required
             />
             <x-admin::input 
@@ -161,7 +161,7 @@
                 name="mailer_mailgun_endpoint" 
                 label="{{ __('admin/settings/mail.mailer_mailgun_endpoint_label') }}" 
                 helper="{{ __('admin/settings/mail.mailer_mailgun_endpoint_helper') }}" 
-                value="{{ old('mailer_mailgun_endpoint', env('MAILGUN_ENDPOINT')) }}"
+                value="{{ old('mailer_mailgun_endpoint', config('mail.mailers.mailgun.endpoint')) }}"
                 required
             />
         </div>

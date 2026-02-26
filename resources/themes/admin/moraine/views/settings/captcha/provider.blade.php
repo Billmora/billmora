@@ -39,14 +39,14 @@
             name="provider_site_key"
             label="{{ __('admin/settings/captcha.provider_site_key_label') }}"
             helper="{{ __('admin/settings/captcha.provider_site_key_helper') }}"
-            value="{{ env('CAPTCHA_SITE_KEY') }}"
+            value="{{ config('captcha.site_key') }}"
             autocomplete="off" />
         <x-admin::input
             type="password"
             name="provider_secret_key"
             label="{{ __('admin/settings/captcha.provider_secret_key_label') }}"
             helper="{{ __('admin/settings/captcha.provider_secret_key_helper') }}"
-            value="{{ env('CAPTCHA_SECRET_KEY') }}"
+            value="{{ config('captcha.secret_key') }}"
             autocomplete="off" />
     </div>
     @can('settings.captcha.update')

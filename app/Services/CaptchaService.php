@@ -53,7 +53,7 @@ class CaptchaService
             default       => null,
         };
 
-        $secret = env('CAPTCHA_SECRET_KEY');
+        $secret = config('captcha.secret_key');
 
         if (!$endpoint || !$secret) {
             return false;
