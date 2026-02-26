@@ -5,10 +5,9 @@
 | Captcha Configuration
 |--------------------------------------------------------------------------
 |
-| Here you may configure the captcha providers used by your application
-| to protect forms from spam and bot submissions. Each provider requires
-| a site key (used on the frontend) and a secret key (used on the backend
-| for server-side verification).
+| Here you may configure the captcha credentials used by your application
+| to protect forms from spam and bot submissions. The active provider is
+| stored in the application settings and can be changed via the admin panel.
 |
 | Supported providers: "turnstile", "recaptcha_v2", "hcaptcha"
 |
@@ -16,52 +15,18 @@
 
 return [
 
-    /*
+        /*
     |--------------------------------------------------------------------------
-    | Cloudflare Turnstile
-    |--------------------------------------------------------------------------
-    |
-    | Turnstile is Cloudflare's CAPTCHA alternative that provides a
-    | privacy-preserving, user-friendly challenge without visual puzzles.
-    | https://developers.cloudflare.com/turnstile
-    |
-    */
-
-    'turnstile' => [
-        'site_key'   => env('TURNSTILE_SITE_KEY', ''),
-        'secret_key' => env('TURNSTILE_SECRET_KEY', ''),
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Google reCAPTCHA v2
+    | Captcha Credentials
     |--------------------------------------------------------------------------
     |
-    | reCAPTCHA v2 requires users to check a checkbox or solve an image
-    | challenge to verify they are human.
-    | https://developers.google.com/recaptcha/docs/display
+    | These keys are shared across all supported captcha providers. Switch
+    | the active provider anytime via admin settings without needing to
+    | change the credentials stored here.
     |
     */
 
-    'recaptcha_v2' => [
-        'site_key'   => env('RECAPTCHAV2_SITE_KEY', ''),
-        'secret_key' => env('RECAPTCHAV2_SECRET_KEY', ''),
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | hCaptcha
-    |--------------------------------------------------------------------------
-    |
-    | hCaptcha is a privacy-focused CAPTCHA service that serves as a
-    | drop-in replacement for reCAPTCHA.
-    | https://docs.hcaptcha.com
-    |
-    */
-
-    'hcaptcha' => [
-        'site_key'   => env('HCAPTCHA_SITE_KEY', ''),
-        'secret_key' => env('HCAPTCHA_SECRET_KEY', ''),
-    ],
+    'site_key'   => env('CAPTCHA_SITE_KEY', ''),
+    'secret_key' => env('CAPTCHA_SECRET_KEY', ''),
 
 ];
