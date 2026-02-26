@@ -5,7 +5,7 @@
 @section('body')
 <form action="{{ route('admin.settings.captcha.placement.update') }}" method="POST" class="flex flex-col gap-5">
     @csrf
-    @method('PUT')
+    @method('PATCH')
     <x-admin::tabs 
         :tabs="[
             [

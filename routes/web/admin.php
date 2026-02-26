@@ -245,19 +245,19 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
          */
         Route::group(['prefix' => 'general'], function () {
             Route::get('/', [Settings\General\CompanyController::class, 'index'])->name('admin.settings.general.company');
-            Route::put('/', [Settings\General\CompanyController::class, 'update'])->name('admin.settings.general.company.update');
+            Route::patch('/', [Settings\General\CompanyController::class, 'update'])->name('admin.settings.general.company.update');
             Route::get('/ordering', [Settings\General\OrderingController::class, 'index'])->name('admin.settings.general.ordering');
-            Route::put('/ordering', [Settings\General\OrderingController::class, 'update'])->name('admin.settings.general.ordering.update');
+            Route::patch('/ordering', [Settings\General\OrderingController::class, 'update'])->name('admin.settings.general.ordering.update');
             Route::get('/invoice', [Settings\General\InvoiceController::class, 'index'])->name('admin.settings.general.invoice');
-            Route::put('/invoice', [Settings\General\InvoiceController::class, 'update'])->name('admin.settings.general.invoice.update');
+            Route::patch('/invoice', [Settings\General\InvoiceController::class, 'update'])->name('admin.settings.general.invoice.update');
             Route::get('/credit', [Settings\General\CreditController::class, 'index'])->name('admin.settings.general.credit');
-            Route::put('/credit', [Settings\General\CreditController::class, 'update'])->name('admin.settings.general.credit.update');
+            Route::patch('/credit', [Settings\General\CreditController::class, 'update'])->name('admin.settings.general.credit.update');
             Route::get('/affiliate', [Settings\General\AffiliateController::class, 'index'])->name('admin.settings.general.affiliate');
-            Route::put('/affiliate', [Settings\General\AffiliateController::class, 'update'])->name('admin.settings.general.affiliate.update');
+            Route::patch('/affiliate', [Settings\General\AffiliateController::class, 'update'])->name('admin.settings.general.affiliate.update');
             Route::get('/term', [Settings\General\TermController::class, 'index'])->name('admin.settings.general.term');
-            Route::put('/term', [Settings\General\TermController::class, 'update'])->name('admin.settings.general.term.update');
+            Route::patch('/term', [Settings\General\TermController::class, 'update'])->name('admin.settings.general.term.update');
             Route::get('/social', [Settings\General\SocialController::class, 'index'])->name('admin.settings.general.social');
-            Route::put('/social', [Settings\General\SocialController::class, 'update'])->name('admin.settings.general.social.update');
+            Route::patch('/social', [Settings\General\SocialController::class, 'update'])->name('admin.settings.general.social.update');
         });
 
         /**
@@ -281,7 +281,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
          */
         Route::group(['prefix' => 'auth'], function () {
             Route::get('/', [Settings\Auth\UserController::class, 'index'])->name('admin.settings.auth.user');
-            Route::put('/', [Settings\Auth\UserController::class, 'update'])->name('admin.settings.auth.user.update');
+            Route::patch('/', [Settings\Auth\UserController::class, 'update'])->name('admin.settings.auth.user.update');
         });
 
         /**
@@ -291,9 +291,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
          */
         Route::group(['prefix' => 'captcha'], function () {
             Route::get('/', [Settings\Captcha\ProviderController::class, 'index'])->name('admin.settings.captcha.provider');
-            Route::put('/', [Settings\Captcha\ProviderController::class, 'update'])->name('admin.settings.captcha.provider.update');
+            Route::patch('/', [Settings\Captcha\ProviderController::class, 'update'])->name('admin.settings.captcha.provider.update');
             Route::get('/placement', [Settings\Captcha\PlacementController::class, 'index'])->name('admin.settings.captcha.placement');
-            Route::put('/placement', [Settings\Captcha\PlacementController::class, 'update'])->name('admin.settings.captcha.placement.update');
+            Route::patch('/placement', [Settings\Captcha\PlacementController::class, 'update'])->name('admin.settings.captcha.placement.update');
         });
 
         

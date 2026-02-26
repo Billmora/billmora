@@ -2,7 +2,7 @@
 
 @section('title', 'Ordering Settings - General')
 
-@section('body')
+@section('PATCH')
 <form action="{{ route('admin.settings.general.ordering.update') }}" method="POST" class="flex flex-col gap-5">
     @csrf
     @method('PUT')
