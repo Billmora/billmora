@@ -121,4 +121,23 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Piping Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Email piping allows the application to read incoming emails from a
+    | mailbox and automatically convert them into support tickets. Configure
+    | the IMAP connection details below to enable this feature.
+    |
+    | Supported ports: 143 (IMAP), 993 (IMAP over SSL)
+    |
+    */
+
+    'piping' => [
+        'host'     => env('PIPING_MAIL_HOST'),
+        'port'     => env('PIPING_MAIL_PORT', 993),
+        'address'  => env('PIPING_MAIL_ADDRESS'),
+        'password' => env('PIPING_MAIL_PASSWORD'),
+    ],
 ];
