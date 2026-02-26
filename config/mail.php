@@ -136,9 +136,9 @@ return [
     */
 
     'piping' => [
-        'host'     => env('PIPING_MAIL_HOST'),
-        'port'     => env('PIPING_MAIL_PORT', 993),
-        'address'  => env('PIPING_MAIL_ADDRESS'),
+        'host' => env('PIPING_MAIL_HOST'),
+        'port' => env('PIPING_MAIL_PORT', 993),
+        'address' => env('PIPING_MAIL_ADDRESS'),
         'password' => env('PIPING_MAIL_PASSWORD'),
     ],
 ];
