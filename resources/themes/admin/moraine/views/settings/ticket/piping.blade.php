@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Ticketing Settings - Ticket')
+@section('title', 'Piping Settings - Ticket')
 
 @section('body')
 <form action="{{ route('admin.settings.ticket.piping.update') }}" method="POST" class="flex flex-col gap-5">
