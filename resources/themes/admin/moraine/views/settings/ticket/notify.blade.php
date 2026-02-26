@@ -57,7 +57,7 @@
             required
         >
             <option value="none" {{ old('notify_staff_fallback', Billmora::getTicket('notify_staff_fallback')) === 'none' ? 'selected' : '' }}>None</option>
-            <option value="department" {{ old('notify_staff_fallback', Billmora::getTicket('notify_staff_fallback')) === 'department' ? 'selected' : '' }}>department</option>
+            <option value="department" {{ old('notify_staff_fallback', Billmora::getTicket('notify_staff_fallback')) === 'department' ? 'selected' : '' }}>Department</option>
             <option value="assigned" {{ old('notify_staff_fallback', Billmora::getTicket('notify_staff_fallback')) === 'assigned' ? 'selected' : '' }}>Assigned</option>
         </x-admin::select>
     </div>
