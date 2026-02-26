@@ -72,7 +72,7 @@ class ProfileController extends Controller
             ],
             'department' => [
                 'nullable',
-                Rule::requiredIf($request->role !== 'client'),
+                Rule::requiredIf(fn() => !in_array($request->role, ['client', 'root'])),
                 Rule::in(Billmora::getTicket('ticketing_departments')),
             ],
             'status' => ['required', 'in:active,inactive,suspended,closed'],
