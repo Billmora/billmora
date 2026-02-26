@@ -9,8 +9,8 @@ return [
     'title' => 'Ticket settings',
     'description' => 'Configure ticket settings for the system.',
 
-    'ticketing_departements_label' => 'Ticket Departments',
-    'ticketing_departements_helper' => 'Add a list of departments available for ticket categorization.',
+    'ticketing_departments_label' => 'Ticket Departments',
+    'ticketing_departments_helper' => 'Add a list of departments available for ticket categorization.',
     'ticketing_allow_client_close_label' => 'Allow Client to Close Ticket',
     'ticketing_allow_client_close_helper' => 'Enable this to allow clients to close their own tickets.',
     'ticketing_number_increment_label' => 'Ticket Number Increment',

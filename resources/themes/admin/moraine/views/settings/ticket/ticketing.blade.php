@@ -27,10 +27,10 @@
         active="{{ request()->url() }}" />
     <div class="grid grid-cols-1 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <x-admin::tags 
-            name="ticketing_departements"
-            label="{{ __('admin/settings/ticket.ticketing_departements_label') }}"
-            helper="{{ __('admin/settings/ticket.ticketing_departements_helper') }}"
-            :value="old('ticketing_departements', Billmora::getTicket('ticketing_departements'))"
+            name="ticketing_departments"
+            label="{{ __('admin/settings/ticket.ticketing_departments_label') }}"
+            helper="{{ __('admin/settings/ticket.ticketing_departments_helper') }}"
+            :value="old('ticketing_departments', Billmora::getTicket('ticketing_departments'))"
             required
         />
         <div class="grid grid-cols-2 gap-4">

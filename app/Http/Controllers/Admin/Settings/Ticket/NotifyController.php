@@ -46,7 +46,7 @@ class NotifyController extends Controller
             'notify_client_on_staff_open' => ['boolean'],
             'notify_client_on_staff_answered' => ['boolean'],
             'notify_staff_on_client_reply' => ['boolean'],
-            'notify_staff_fallback' => ['required', Rule::in('none', 'departement', 'assigned')],
+            'notify_staff_fallback' => ['required', Rule::in('none', 'department', 'assigned')],
         ]);
 
         $this->updateSettings('ticket', $validated);

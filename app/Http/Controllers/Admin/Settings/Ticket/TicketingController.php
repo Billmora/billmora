@@ -41,7 +41,7 @@ class TicketingController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'ticketing_departements' => ['required', 'array'],
+            'ticketing_departments' => ['required', 'array'],
             'ticketing_number_increment' => ['required', 'integer', 'min:1'],
             'ticketing_number_padding' => ['required', 'integer', 'min:1'],
             'ticketing_number_format' => [

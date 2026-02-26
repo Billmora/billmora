@@ -99,7 +99,7 @@ class SettingSeeder extends Seeder
              *
              * Seeds initial data into the 'ticket' category.
              */
-            ['category' => 'ticket', 'key' => 'ticketing_departements', 'value' => ['billing', 'support', 'sales']],
+            ['category' => 'ticket', 'key' => 'ticketing_departments', 'value' => ['billing', 'support', 'sales']],
             ['category' => 'ticket', 'key' => 'ticketing_allow_client_close', 'value' => true],
             ['category' => 'ticket', 'key' => 'ticketing_number_increment', 'value' => 1],
             ['category' => 'ticket', 'key' => 'ticketing_number_padding', 'value' => 4],
@@ -111,7 +111,7 @@ class SettingSeeder extends Seeder
             ['category' => 'ticket', 'key' => 'notify_client_on_staff_open', 'value' => true],
             ['category' => 'ticket', 'key' => 'notify_client_on_staff_answered', 'value' => true],
             ['category' => 'ticket', 'key' => 'notify_staff_on_client_reply', 'value' => true],
-            ['category' => 'ticket', 'key' => 'notify_staff_fallback', 'value' => 'departement'],
+            ['category' => 'ticket', 'key' => 'notify_staff_fallback', 'value' => 'department'],
         ];
 
         /**
