@@ -13,6 +13,11 @@
                 'icon' => 'lucide-tags',
                 'label' => __('admin/settings/ticket.tabs.ticketing'),
             ],
+            [
+                'route' => route('admin.settings.ticket.piping'),
+                'icon' => 'lucide-mailbox',
+                'label' => __('admin/settings/ticket.tabs.piping'),
+            ],
         ]" 
         active="{{ request()->url() }}" />
     <div class="grid grid-cols-1 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
