@@ -335,6 +335,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::patch('/', [Settings\Ticket\TicketingController::class, 'update'])->name('admin.settings.ticket.ticketing.update');
             Route::get('/piping', [Settings\Ticket\PipingController::class, 'index'])->name('admin.settings.ticket.piping');
             Route::patch('/piping', [Settings\Ticket\PipingController::class, 'update'])->name('admin.settings.ticket.piping.update');
+            Route::get('/notify', [Settings\Ticket\NotifyController::class, 'index'])->name('admin.settings.ticket.notify');
+            Route::patch('/notify', [Settings\Ticket\NotifyController::class, 'update'])->name('admin.settings.ticket.notify.update');
         });
     });
 
