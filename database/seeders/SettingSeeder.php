@@ -104,6 +104,7 @@ class SettingSeeder extends Seeder
             ['category' => 'ticket', 'key' => 'ticketing_number_increment', 'value' => 1],
             ['category' => 'ticket', 'key' => 'ticketing_number_padding', 'value' => 4],
             ['category' => 'ticket', 'key' => 'ticketing_number_format', 'value' => 'TKT-{number}'],
+            ['category' => 'ticket', 'key' => 'piping_enabled', 'value' => false],
         ];
 
         /**
