@@ -107,6 +107,11 @@ class SettingSeeder extends Seeder
             ['category' => 'ticket', 'key' => 'ticketing_max_attachment_size', 'value' => 10],
             ['category' => 'ticket', 'key' => 'ticketing_allowed_attachment_types', 'value' => 'jpg,jpeg,png,doc,docx'],
             ['category' => 'ticket', 'key' => 'piping_enabled', 'value' => false],
+            ['category' => 'ticket', 'key' => 'notify_client_on_open', 'value' => true],
+            ['category' => 'ticket', 'key' => 'notify_client_on_staff_open', 'value' => true],
+            ['category' => 'ticket', 'key' => 'notify_client_on_staff_answered', 'value' => true],
+            ['category' => 'ticket', 'key' => 'notify_staff_on_client_reply', 'value' => true],
+            ['category' => 'ticket', 'key' => 'notify_staff_fallback', 'value' => 'departement'],
         ];
 
         /**
