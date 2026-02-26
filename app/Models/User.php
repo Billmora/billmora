@@ -27,6 +27,7 @@ class User extends Authenticatable
         'is_root_admin',
         'status',
         'currency',
+        'language',
         'email_verified_at',
     ];
 
