@@ -55,7 +55,7 @@
                 </div>
             </div>
             <div class="w-full lg:w-1/3 h-fit flex flex-col gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
-                <x-admin::select name="role" label="{{ __('common.role') }}" :disabled="($user->id === Auth::id()) || ($user->isRootAdmin() && !Auth::user()->isRootAdmin())">
+                <x-admin::select name="role" label="{{ __('common.role') }}" :disabled="($user->id === Auth::id()) || ($user->isRootAdmin() && !Auth::user()->isRootAdmin())" required>
                     @if (Auth::user()->isRootAdmin())
                         <option value="root" {{ old('role', $user->isRootAdmin() ? 'root' : null) === 'root' ? 'selected' : '' }}>
                             Administrator
@@ -68,6 +68,11 @@
                         <option value="{{ $name }}" {{ old('role', $user->roles->first()->name ?? null) === $name ? 'selected' : '' }}>
                             {{ ucfirst($name) }}
                         </option>
+                    @endforeach
+                </x-admin::select>
+                <x-admin::select name="department" label="{{ __('common.department') }}">
+                    @foreach (Billmora::getTicket('ticketing_departments') as $department)
+                        <option value="{{ $department }}" {{ old('department', $user->department) === $department ? 'selected' : '' }}>{{ ucfirst($department) }}</option>
                     @endforeach
                 </x-admin::select>
                 <x-admin::select name="status" label="{{ __('common.status') }}" required>

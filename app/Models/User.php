@@ -28,6 +28,7 @@ class User extends Authenticatable
         'status',
         'currency',
         'language',
+        'department',
         'email_verified_at',
     ];
 

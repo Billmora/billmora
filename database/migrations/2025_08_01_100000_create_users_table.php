@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->boolean('is_root_admin')->default(false);
+            $table->string('department')->nullable();
             $table->enum('status', ['active', 'inactive', 'suspended', 'closed'])->default('active');
             $table->char('language', 5)->default('en_US'); 
             $table->timestamp('email_verified_at')->nullable();

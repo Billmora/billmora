@@ -28,7 +28,7 @@ return [
     'last_name' => 'Last Name',
     'email' => 'Email',
     'role' => 'Role',
-    'status' => 'Status',
+    'department' => 'Department',
     'currency' => 'Currency',
     'language' => 'Language',
     'phone_number' => 'Phone Number',
@@ -129,6 +129,7 @@ return [
     'suspended_at' => 'Suspended At',
     'terminated_at' => 'Terminated At',
     'schedule_at' => 'Schedule At',
+    'status' => 'Status',
     'action' => 'Action',
 
     'unauthorized_admin' => 'You do not have permission to access the admin area.',

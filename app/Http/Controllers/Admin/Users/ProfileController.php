@@ -70,6 +70,11 @@ class ProfileController extends Controller
                 Rule::requiredIf($user->id !== Auth::id()),
                 Rule::in(array_merge(['client', 'root'], Role::pluck('name')->toArray())),
             ],
+            'department' => [
+                'nullable',
+                Rule::requiredIf($request->role !== 'client'),
+                Rule::in(Billmora::getTicket('ticketing_departments')),
+            ],
             'status' => ['required', 'in:active,inactive,suspended,closed'],
             'language' => ['required', 'string', Rule::in(array_map('basename', File::directories(lang_path())))],
             'phone_number' => [
@@ -122,6 +127,7 @@ class ProfileController extends Controller
             'password' => $validated['password'] ? Hash::make($validated['password']) : $user->password,
             'status' => $validated['status'],
             'language' => $validated['language'],
+            'department' => $validated['role'] !== 'client' ? ($validated['department'] ?? null) : null,
         ]);
 
         if ($user->id !== Auth::id()) {
