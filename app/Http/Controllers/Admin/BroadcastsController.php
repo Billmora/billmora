@@ -118,7 +118,7 @@ class BroadcastsController extends Controller
             BroadcastJob::dispatch($broadcast);
         }
 
-        return redirect()->route('admin.broadcasts')->with('success', __('common.create_success', ['attribute' => __('admin/settings/mail.tabs.broadcast')]));
+        return redirect()->route('admin.broadcasts')->with('success', __('common.create_success', ['attribute' => __('admin/navigation.broadcasts')]));
     }
 
     /**
@@ -201,7 +201,7 @@ class BroadcastsController extends Controller
             BroadcastJob::dispatch($broadcast);
         }
 
-        return redirect()->route('admin.broadcasts')->with('success', __('common.save_success', ['attribute' => __('admin/settings/mail.tabs.broadcast')]));
+        return redirect()->route('admin.broadcasts')->with('success', __('common.save_success', ['attribute' => __('admin/navigation.broadcasts')]));
     }
 
     /**
@@ -222,6 +222,6 @@ class BroadcastsController extends Controller
 
         $broadcast->delete();
 
-        return redirect()->route('admin.broadcasts')->with('success', __('common.delete_success', ['attribute' => __('admin/settings/mail.tabs.broadcast')]));
+        return redirect()->route('admin.broadcasts')->with('success', __('common.delete_success', ['attribute' => __('admin/navigation.broadcasts')]));
     }
 }
