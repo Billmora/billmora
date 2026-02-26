@@ -29,7 +29,7 @@ class TicketingController extends Controller
      */
     public function index()
     {
-        return view('admin::settings.ticket.index');
+        return view('admin::settings.ticket.ticketing');
     }
 
     /**
