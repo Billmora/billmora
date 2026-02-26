@@ -165,6 +165,14 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
 
+        $userCount = $role->users()->count();
+        if ($userCount > 0) {
+            return back()->with('error', __('validation.role_has_users', [
+                'name' => $role->name,
+                'count' => $userCount,
+            ]));
+        }
+
         $this->recordDelete('role.delete', [
             'name' => $role->name,
         ]);

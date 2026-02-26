@@ -176,6 +176,7 @@ return [
     |
     */
     'provisioning_disabled' => 'The provisioning :name is currently disabled. Action cannot be processed.',
+    'role_has_users' => 'The role :name cannot be deleted because it still has :count assigned user(s).',
 
     // Custom validation here
 
