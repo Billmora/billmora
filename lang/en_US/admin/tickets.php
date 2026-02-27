@@ -10,7 +10,7 @@ return [
     'ticket_priority_helper' => 'Set the priority level to indicate the urgency of this ticket.',
     'ticket_department_label' => 'Department',
     'ticket_department_helper' => 'Select the department responsible for handling this ticket.',
-    'ticket_user_label' => 'Client',
+    'ticket_user_label' => 'User',
     'ticket_user_helper' => 'Select the client this ticket is being created for.',
     'ticket_assigned_label' => 'Assigned To',
     'ticket_assigned_helper' => 'Select the staff member assigned to handle this ticket.',
