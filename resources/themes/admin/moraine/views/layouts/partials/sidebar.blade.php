@@ -57,6 +57,12 @@
           <span class="font-semibold">{{ __('admin/navigation.broadcasts') }}</span>
         </a>
       @endcan
+      @can('tickets.view')
+        <a href="{{ route('admin.tickets') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.tickets*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-ticket class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('admin/navigation.tickets') }}</span>
+        </a>
+      @endcan
       <span class="mt-4 block text-slate-600 font-semibold text-md">{{ __('admin/navigation.group.product') }}</span>
       @can('catalogs.view')
         <a href="{{ route('admin.catalogs') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.catalogs*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
