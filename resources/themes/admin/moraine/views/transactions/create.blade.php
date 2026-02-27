@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Label')
+@section('title', 'Transaction Create')
 
 @section('body')
 <form action="{{ route('admin.transactions.store') }}" method="POST" class="flex flex-col gap-5">

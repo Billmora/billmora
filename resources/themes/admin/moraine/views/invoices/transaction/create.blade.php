@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Label')
+@section('title', 'Transaction Create - Invoice')
 
 @section('body')
 <form action="{{ route('admin.invoices.transaction.create', ['invoice' => $invoice->invoice_number]) }}" method="POST" class="flex flex-col gap-5">
