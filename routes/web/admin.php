@@ -115,6 +115,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin tickets interface routes.
+     *
+     * Prefix: /admin/tickets
+     */
+    Route::group(['prefix' => 'tickets'], function () {
+        Route::get('/', [Admin\TicketsController::class, 'index'])->name('admin.tickets');
+        Route::get('/create', [Admin\TicketsController::class, 'create'])->name('admin.tickets.create');
+        Route::post('/create', [Admin\TicketsController::class, 'store'])->name('admin.tickets.store');
+        Route::get('/{ticket:ticket_number}/edit', [Admin\TicketsController::class, 'edit'])->name('admin.tickets.edit');
+        Route::put('/{ticket:ticket_number}/edit', [Admin\TicketsController::class, 'update'])->name('admin.tickets.update');
+        Route::delete('/{ticket:ticket_number}', [Admin\TicketsController::class, 'destroy'])->name('admin.tickets.destroy');
+    });
+
+    /**
      * Admin catalogs interface routes.
      *
      * Prefix: /admin/catalogs
