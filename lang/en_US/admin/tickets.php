@@ -20,4 +20,5 @@ return [
     'ticket_message_helper' => 'Enter the initial message for this ticket.',
     'ticket_attachments_label' => 'Attachments',
     'ticket_attachments_helper' => 'Upload any relevant files to include with this ticket.',
+    'ticket_add_attachments' => 'Add new Attachments',
 ];
