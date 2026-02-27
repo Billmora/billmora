@@ -101,9 +101,9 @@ class Ticket extends Model
      */
     public static function generateTicketNumber(): string
     {
-        $format = Billmora::getGeneral('ticketing_number_format');
-        $padding = (int) Billmora::getGeneral('ticketing_number_padding');
-        $increment = (int) Billmora::getGeneral('ticketing_number_increment');
+        $format = Billmora::getTicket('ticketing_number_format');
+        $padding = (int) Billmora::getTicket('ticketing_number_padding');
+        $increment = (int) Billmora::getTicket('ticketing_number_increment');
 
         return DB::transaction(function () use ($format, $padding, $increment) {
 
