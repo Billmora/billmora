@@ -19,10 +19,12 @@
             this.open = false;
             this.search = '';
             this.errorVisible = false;
+            $dispatch('picked', { name: '{{ $name }}', value: value });
         },
         clear() {
             this.selected = null;
             this.errorVisible = false;
+            $dispatch('picked', { name: '{{ $name }}', value: value });
         },
         isSelected(value) {
             return this.selected === value;
