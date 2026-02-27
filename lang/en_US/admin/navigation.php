@@ -8,6 +8,7 @@ return [
     'invoices' => 'Invoices',
     'transactions' => 'Transactions',
     'broadcasts' => 'Broadcasts',
+    'tickets' => 'Tickets',
     'catalogs' => 'Catalogs',
     'packages' => 'Packages',
     'variants' => 'Variants',
