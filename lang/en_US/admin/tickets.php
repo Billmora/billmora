@@ -16,4 +16,8 @@ return [
     'ticket_assigned_helper' => 'Select the staff member assigned to handle this ticket.',
     'ticket_service_label' => 'Related Service',
     'ticket_service_helper' => 'Select the service related to this ticket, if applicable.',
+    'ticket_message_label' => 'Message',
+    'ticket_message_helper' => 'Enter the initial message for this ticket.',
+    'ticket_attachments_label' => 'Attachments',
+    'ticket_attachments_helper' => 'Upload any relevant files to include with this ticket.',
 ];
