@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -155,6 +157,21 @@ class User extends Authenticatable
         }
 
         return $this->permissions()->exists() || $this->roles()->whereHas('permissions')->exists();
+    }
+
+    /**
+     * Scope a query to only include admin users based on root status, direct permissions, or role permissions.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeAdmins(Builder $query)
+    {
+        return $query->where(function ($q) {
+            $q->where('is_root_admin', true)
+                ->orWhereHas('permissions')
+                ->orWhereHas('roles', fn($r) => $r->whereHas('permissions'));
+        });
     }
 
     /**
