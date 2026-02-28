@@ -24,5 +24,4 @@ return [
     'ticket_information' => 'Ticket Information',
     'ticket_attachments' => 'Ticket Attachments',
     'ticket_add_attachments' => 'Add new Attachments',
-    'reply_sent' => 'Reply has been sent successfully.',
 ];
