@@ -1,0 +1,17 @@
+<?php
+
+return [
+    'ticket_number_label' => 'Ticket Number',
+    'ticket_subject_label' => 'Subject',
+    'ticket_status_label' => 'Status',
+    'ticket_priority_label' => 'Priority',
+    'ticket_department_label' => 'Department',
+    'ticket_assigned_label' => 'Assigned To',
+    'ticket_service_label' => 'Related Service',
+    'ticket_message_label' => 'Message',
+    'ticket_attachments_label' => 'Attachments',
+
+    'ticket_information' => 'Ticket Information',
+    'ticket_attachments' => 'Ticket Attachments',
+    'ticket_add_attachments' => 'Add new Attachments',
+];
