@@ -23,7 +23,7 @@ class ReplyController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:tickets.reply')->only(['index', 'send', 'reply']);
+        $this->middleware('permission:tickets.reply')->only(['index', 'send', 'reply', 'destroy']);
     }
 
     /**

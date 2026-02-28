@@ -59,7 +59,7 @@
                                 <span class="text-sm text-slate-400 font-semibold">
                                     {{ $message->created_at->format(Billmora::getGeneral('company_date_format')) }} ({{ $message->created_at->format('g:i A') }})
                                 </span>
-                                @can('tickets.delete')
+                                @can('tickets.reply')
                                     <x-admin::modal.trigger modal="deleteModal-{{ $message->id }}" variant="open" class="inline-flex items-center ml-auto text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">
                                         {{ __('common.delete') }}
                                     </x-admin::modal.trigger>
@@ -112,7 +112,7 @@
                                 <span class="text-sm text-slate-400 font-semibold">
                                     {{ $message->created_at->format(Billmora::getGeneral('company_date_format')) }} ({{ $message->created_at->format('g:i A') }})
                                 </span>
-                                @can('tickets.delete')
+                                @can('tickets.reply')
                                     <x-admin::modal.trigger modal="deleteModal-{{ $message->id }}" variant="open" class="inline-flex items-center ml-auto text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">
                                         {{ __('common.delete') }}
                                     </x-admin::modal.trigger>
