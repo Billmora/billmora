@@ -126,6 +126,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/{ticket:ticket_number}/edit', [Admin\TicketsController::class, 'edit'])->name('admin.tickets.edit');
         Route::put('/{ticket:ticket_number}/edit', [Admin\TicketsController::class, 'update'])->name('admin.tickets.update');
         Route::delete('/{ticket:ticket_number}', [Admin\TicketsController::class, 'destroy'])->name('admin.tickets.destroy');
+
+        Route::get('/{ticket:ticket_number}/reply', [Admin\Tickets\ReplyController::class, 'index'])->name('admin.tickets.reply');
+        Route::post('/{ticket:ticket_number}/reply', [Admin\Tickets\ReplyController::class, 'send'])->name('admin.tickets.reply.send');
+        Route::delete('/{ticket:ticket_number}/reply/{message}', [Admin\Tickets\ReplyController::class, 'destroy'])->name('admin.tickets.reply.destroy');
     });
 
     /**
