@@ -78,3 +78,18 @@
     scrollbar-width: thin;
     scrollbar-color: var(--color-billmora-primary) transparent;
 }
+
+@layer components {
+    .froala-content {
+        @apply min-w-0 max-w-full overflow-hidden;
+    }
+    .froala-content pre {
+        @apply bg-[#0d1117] rounded-xl p-2 my-3 overflow-x-auto max-w-full;
+    }
+    .froala-content pre code {
+        @apply block text-sm font-mono text-gray-100 bg-transparent p-0 whitespace-pre;
+    }
+    .froala-content code:not(pre code) {
+        @apply bg-gray-100 text-billmora-primary text-sm font-mono px-1.5 py-0.5 rounded whitespace-normal;
+    }
+}
