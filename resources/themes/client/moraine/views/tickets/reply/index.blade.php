@@ -165,6 +165,7 @@
                         </button>
                     </div>
                 </template>
+                <x-client::captcha form="ticket_form" class="mt-4 mx-auto" />
                 <div class="flex gap-4 ml-auto">
                     <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                         {{ __('common.send') }}

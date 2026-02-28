@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Services\CaptchaService;
 use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
@@ -68,6 +69,8 @@ class TicketsController extends Controller
                 'mimes:' . Billmora::getTicket('ticketing_allowed_attachment_types'),
             ],
         ]);
+
+        CaptchaService::verifyOrFail('ticket_form', $request);
 
         $ticket = DB::transaction(function () use ($validated) {
             $ticket = Ticket::create([
