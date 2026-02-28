@@ -104,7 +104,7 @@ class TicketsController extends Controller
                 'department' => $validated['ticket_department'] ?? null,
                 'service_id' => $validated['ticket_service_id'] ?? null,
                 'user_id' => $validated['ticket_user_id'],
-                'assigned_to' => $validated['ticket_assigned_to'] ?? null,
+                'assigned_to' => $validated['ticket_assigned_id'] ?? null,
                 'subject' => $validated['ticket_subject'],
                 'last_reply_at' => now(),
             ]);

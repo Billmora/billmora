@@ -91,7 +91,7 @@
                     'title' => $assigned->email,
                     'subtitle' => $assigned->fullname
                 ])->toArray()"
-                :selected="old('ticket_assigned_id', $ticket->assigned_id)"
+                :selected="old('ticket_assigned_id', $ticket->assigned_to)"
             />
             <x-admin::select
                 name="ticket_service_id"
