@@ -23,7 +23,7 @@
                                     @if ($message->user->is_root_admin)
                                         Administrator
                                     @else
-                                        {{ $message->user->roles }}
+                                        {{ $message->user->roles->pluck('name')->implode(', ') }}
                                     @endif
                                 </span>
                             </div>
