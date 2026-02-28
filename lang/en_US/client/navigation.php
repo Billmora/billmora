@@ -5,4 +5,5 @@ return [
     'store' => 'Store',
     'services' => 'Services',
     'invoices' => 'Invoices',
+    'tickets' => 'Tickets',
 ];
