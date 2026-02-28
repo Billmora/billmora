@@ -14,4 +14,5 @@ return [
     'ticket_information' => 'Ticket Information',
     'ticket_attachments' => 'Ticket Attachments',
     'ticket_add_attachments' => 'Add new Attachments',
+    'ticket_closed_hint' => 'This ticket is closed. You may reply to this ticket to reopen it.',
 ];
