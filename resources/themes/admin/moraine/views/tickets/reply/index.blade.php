@@ -215,7 +215,9 @@
                     <h4 class="text-sm text-slate-400 font-semibold">{{ __('admin/tickets.ticket_service_label') }}</h4>
                     <span class="text-slate-500 font-medium">
                         @if ($ticket->service)
-                            {{ $ticket->service->name }} - {{ ucwords($ticket->service->status) }}
+                            <a href="{{ route('admin.services.edit', ['service' => $ticket->service->id]) }}">
+                                {{ $ticket->service->name }} - {{ ucwords($ticket->service->status) }}
+                            </a>
                         @else
                             -
                         @endif
