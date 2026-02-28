@@ -187,6 +187,13 @@
             </h3>
             <div class="bg-white p-4 border-2 border-billmora-2 rounded-2xl">
                 <div class="grid">
+                    <h4 class="text-sm text-slate-400 font-semibold">{{ __('admin/tickets.ticket_user_label') }}</h4>
+                    <a href="{{ route('admin.users.summary', ['id' => $ticket->user->id]) }}" class="text-slate-500 font-medium">
+                        {{ $ticket->user->fullname }}
+                    </a>
+                </div>
+                <hr class="border-t-2 border-billmora-2 my-2">
+                <div class="grid">
                     <h4 class="text-sm text-slate-400 font-semibold">{{ __('admin/tickets.ticket_subject_label') }}</h4>
                     <span class="text-slate-500 font-medium">{{ $ticket->subject }}</span>
                 </div>
