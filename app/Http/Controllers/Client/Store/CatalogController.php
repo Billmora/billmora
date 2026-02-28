@@ -11,18 +11,15 @@ class CatalogController extends Controller
 {
 
     /**
-     * Display all packages belonging to a specific catalog slug.
+     * Display all visible packages within the specified catalog for the store page.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  string  $catalogSlug  The slug identifying the catalog
+     * @param  \App\Models\Catalog  $catalog
      * @return \Illuminate\View\View
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function index(Request $request, $catalogSlug)
+    public function index(Request $request, Catalog $catalog)
     {
-        $catalog = Catalog::where('slug', $catalogSlug)
-            ->when(!Auth::user() || !Auth::user()->isAdmin(), function ($query) {
+        $catalog->when(!Auth::user() || !Auth::user()->isAdmin(), function ($query) {
                 $query->where('status', 'visible');
             })
             ->firstOrFail();
@@ -33,7 +30,9 @@ class CatalogController extends Controller
             ->get();
 
         $catalogs = Catalog::select('id', 'name', 'slug', 'description', 'icon', 'status')
-            ->where('status', 'visible')
+            ->when(!Auth::user() || !Auth::user()->isAdmin(), function ($query) {
+                $query->where('status', 'visible');
+            })
             ->get();
 
         return view('client::store.catalog.index', compact('packages', 'catalogs', 'catalog'));
