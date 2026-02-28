@@ -187,6 +187,39 @@
                         <h4 class="text-sm text-slate-400 font-semibold">{{ __('client/tickets.ticket_status_label') }}</h4>
                         <span class="text-slate-500 font-medium">{{ ucwords($ticket->status) }}</span>
                     </div>
+                    @if ($ticket->status === 'open')
+                        <hr class="border-t-2 border-billmora-2 my-2">
+                        <div class="grid">
+                            <h4 class="text-sm text-slate-400 font-semibold">{{ __('client/tickets.ticket_opened_at_label') }}</h4>
+                            <span class="text-slate-500 font-medium">
+                                {{ $ticket->created_at->format(Billmora::getGeneral('company_date_format')) }} ({{ $ticket->created_at->format('g:i A') }})
+                            </span>
+                        </div>
+                    @elseif ($ticket->status === 'closed')
+                        <hr class="border-t-2 border-billmora-2 my-2">
+                        <div class="grid">
+                            <h4 class="text-sm text-slate-400 font-semibold">{{ __('client/tickets.ticket_closed_at_label') }}</h4>
+                            <span class="text-slate-500 font-medium">
+                                {{ $ticket->closed_at->format(Billmora::getGeneral('company_date_format')) }} ({{ $ticket->closed_at->format('g:i A') }})
+                            </span>
+                        </div>
+                    @elseif ($ticket->status === 'replied')
+                        <hr class="border-t-2 border-billmora-2 my-2">
+                        <div class="grid">
+                            <h4 class="text-sm text-slate-400 font-semibold">{{ __('client/tickets.ticket_replied_at_label') }}</h4>
+                            <span class="text-slate-500 font-medium">
+                                {{ $ticket->last_reply_at->format(Billmora::getGeneral('company_date_format')) }} ({{ $ticket->last_reply_at->format('g:i A') }})
+                            </span>
+                        </div>
+                    @elseif ($ticket->status === 'answered')
+                        <hr class="border-t-2 border-billmora-2 my-2">
+                        <div class="grid">
+                            <h4 class="text-sm text-slate-400 font-semibold">{{ __('client/tickets.ticket_answered_at_label') }}</h4>
+                            <span class="text-slate-500 font-medium">
+                                {{ $ticket->last_reply_at->format(Billmora::getGeneral('company_date_format')) }} ({{ $ticket->last_reply_at->format('g:i A') }})
+                            </span>
+                        </div>
+                    @endif
                     <hr class="border-t-2 border-billmora-2 my-2">
                     <div class="grid">
                         <h4 class="text-sm text-slate-400 font-semibold">{{ __('client/tickets.ticket_priority_label') }}</h4>
@@ -255,7 +288,7 @@
             position="centered"
             title="{{ __('common.confirm_modal_title') }}"
             description="{{ __('common.confirm_modal_description', ['item' => $ticket->ticket_number]) }}">
-            <form action="#" method="POST">
+            <form action="{{ route('client.tickets.close', ['ticket' => $ticket->ticket_number]) }}" method="POST">
                 @csrf
                 @method('PATCH')
                 <div class="flex justify-end gap-2 mt-4">

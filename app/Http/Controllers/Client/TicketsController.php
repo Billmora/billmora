@@ -108,4 +108,34 @@ class TicketsController extends Controller
 
         return redirect()->route('client.tickets')->with('success', __('common.create_success', ['attribute' => $ticket->ticket_number]));
     }
+
+    /**
+     * Close the specified ticket.
+     *
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function close(Ticket $ticket)
+    {
+        if ($ticket->user->id !== Auth::id()) {
+            abort(404);
+        }
+        
+        if (!Billmora::getTicket('ticketing_allow_client_close') || $ticket->status === 'closed') {
+            abort(403);
+        }
+
+        $oldTicket = $ticket->getOriginal();
+
+        $ticket->update([
+            'status' => 'closed',
+            'closed_at' => now(),
+        ]);
+
+        $this->recordUpdate('ticket.update', $oldTicket, $ticket->getChanges());
+
+        return redirect()
+            ->route('client.tickets.reply', $ticket->ticket_number)
+            ->with('success', __('common.close_success', ['attribute' => $ticket->ticket_number]));
+    }
 }

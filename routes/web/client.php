@@ -86,6 +86,7 @@ Route::group(['prefix' => 'tickets', 'middleware' => ['auth', 'maintenance', '2f
     Route::get('/', [Client\TicketsController::class, 'index'])->name('client.tickets');
     Route::get('/create', [Client\TicketsController::class, 'create'])->name('client.tickets.create');
     Route::post('/create', [Client\TicketsController::class, 'store'])->name('client.tickets.store');
+    Route::patch('/{ticket:ticket_number}', [Client\TicketsController::class, 'close'])->name('client.tickets.close');
 
     Route::get('/{ticket:ticket_number}/reply', [Client\Tickets\ReplyController::class, 'index'])->name('client.tickets.reply');
     Route::post('/{ticket:ticket_number}/reply', [Client\Tickets\ReplyController::class, 'send'])->name('client.tickets.reply.send');
