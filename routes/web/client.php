@@ -78,6 +78,17 @@ Route::group(['prefix' => 'invoices', 'middleware' => ['auth', 'maintenance', '2
 });
 
 /**
+ * Client tickets routes.
+ * 
+ * Prefix: /tickets
+ */
+Route::group(['prefix' => 'tickets', 'middleware' => ['auth', 'maintenance', '2fa']], function () {
+    Route::get('/', [Client\TicketsController::class, 'index'])->name('client.tickets');
+    Route::get('/create', [Client\TicketsController::class, 'create'])->name('client.tickets.create');
+    Route::post('/create', [Client\TicketsController::class, 'store'])->name('client.tickets.store');
+});
+
+/**
  * Client authentication routes.
  * 
  * Prefix: /auth
