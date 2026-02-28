@@ -35,6 +35,10 @@
           <x-lucide-receipt-text class="w-5 h-auto" />
           <span class="font-semibold">{{ __('client/navigation.invoices') }}</span>
         </a>
+        <a href="{{ route('client.tickets') }}" class="flex gap-2 items-center {{ request()->routeIs('client.tickets*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-ticket class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('client/navigation.tickets') }}</span>
+        </a>
       @endauth
       @if(!empty($pluginClientMenus))
           @foreach($pluginClientMenus as $groupTitle => $menuItems)
