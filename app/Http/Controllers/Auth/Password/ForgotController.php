@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Jobs\NotificationJob;
 use App\Models\User;
 use App\Models\UserPasswordReset;
+use App\Services\CaptchaService;
 use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -33,6 +34,8 @@ class ForgotController extends Controller
         $request->validate([
             'email' => ['required', 'string', 'email:dns'],
         ]);
+
+        CaptchaService::verifyOrFail('forgot_password_form', $request);
 
         $user = User::where('email', $request->email)->first();
         

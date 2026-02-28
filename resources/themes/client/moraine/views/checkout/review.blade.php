@@ -157,6 +157,7 @@
                 <button type="submit" class="w-full bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-3 text-white font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     {{ __('client/checkout.complete_order') }}
                 </button>
+                <x-client::captcha form="checkout_form" class="text-center mx-auto" />
             </div>
             @if (Billmora::getGeneral('ordering_tos'))
                 <div class="flex flex-col gap-0">

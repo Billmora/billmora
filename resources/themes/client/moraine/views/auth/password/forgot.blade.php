@@ -27,6 +27,7 @@
                     <div class="grid gap-3">
                         <x-client::input type="email" name="email" label="{{ __('common.email') }}" required />
                     </div>
+                    <x-client::captcha form="forgot_password_form" class="mx-auto" />
                     <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.submit') }}</button>
                     <span class="text-slate-600">{{ __('auth.remembered_password') }} <a href="{{ route('client.login') }}" class="text-billmora-primary hover:text-billmora-primary-hover font-semibold">{{ __('common.sign_in') }}</a></span>
                 </div>

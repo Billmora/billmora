@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\PackagePrice;
 use App\Models\Plugin;
 use App\Models\VariantOption;
+use App\Services\CaptchaService;
 use App\Services\Package\Client\OrderRedirectService;
 use App\Services\Package\PricingService;
 use App\Services\Package\OrderValidationService;
@@ -204,6 +205,8 @@ class ReviewController extends Controller
         }
 
         $validated = $request->validate($rules);
+
+        CaptchaService::verifyOrFail('checkout_form', $request);
 
         if (!Auth::check()) {
             session()->put('url.intended', route('client.checkout.review'));

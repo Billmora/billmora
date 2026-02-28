@@ -6,10 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PlacementController extends Controller
 {
     use AuditsSystem;
+
+    /**
+     * List of form identifiers where CAPTCHA placement can be configured.
+     *
+     * @var array<int, string>
+     */
+    protected $FORM = [
+        'login_form',
+        'register_form',
+        'forgot_password_form',
+        'ticket_form',
+        'checkout_form',
+    ];
 
     /**
      * Applies permission-based middleware for accessing captcha placement settings.
@@ -29,7 +43,9 @@ class PlacementController extends Controller
      */
     public function index()
     {
-        return view('admin::settings.captcha.placement');
+        $forms = $this->FORM;
+
+        return view('admin::settings.captcha.placement', compact('forms'));
     }
 
     /**
@@ -45,7 +61,7 @@ class PlacementController extends Controller
     {
         $validated = $request->validate([
             'placements_enabled_forms' => ['nullable', 'array'],
-            'placements_enabled_forms.*' => ['in:login_form,register_form,ticket_form,'],
+            'placements_enabled_forms.*' => [Rule::in($this->FORM)],
         ]);
 
         $validated += [
