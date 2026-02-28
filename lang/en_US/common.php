@@ -98,6 +98,10 @@ return [
     'install_failed' => 'Failed to install :attribute.',
     'uninstall_success' => ':attribute have been uninstalled.',
     'uninstall_failed' => 'Failed to uninstall :attribute.',
+    'open_success' => ':attribute have been opened.',
+    'open_failed' => 'Failed to open :attribute.',
+    'close_success' => ':attribute have been closed.',
+    'close_failed' => 'Failed to close :attribute.',
 
     'confirm_modal_title' => 'Confirm action',
     'confirm_modal_description' => 'Are you sure you want to proceed with this :item?',
