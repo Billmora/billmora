@@ -72,6 +72,8 @@ return [
     'value' => 'Value',
     'install' => 'Install',
     'uninstall' => 'Uninstall',
+    'open' => 'Open',
+    'close' => 'Close',
 
     'send_success' => ':attribute have been sent.',
     'send_failed' => 'Failed to send :attribute.',
