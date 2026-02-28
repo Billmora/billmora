@@ -17,7 +17,7 @@ class CaptchaService
      *
      * @return bool True if captcha is enabled globally or for the given context, false otherwise.
      */
-    public static function enabled(string $context = null): bool
+    public static function enabled(?string $context = null): bool
     {
         $captchaEnabled = in_array(Billmora::getCaptcha('provider_type'), ['turnstile', 'recaptchav2', 'hcaptcha']);
 
