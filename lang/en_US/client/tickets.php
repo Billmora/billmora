@@ -10,6 +10,7 @@ return [
     'ticket_service_label' => 'Related Service',
     'ticket_message_label' => 'Message',
     'ticket_attachments_label' => 'Attachments',
+    'ticket_opened_at_label' => 'Opened At',
     'ticket_closed_at_label' => 'Closed At',
     'ticket_replied_at_label' => 'Replied At',
     'ticket_answered_at_label' => 'Answered At',
