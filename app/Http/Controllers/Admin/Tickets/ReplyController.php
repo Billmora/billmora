@@ -84,6 +84,7 @@ class ReplyController extends Controller
 
             $ticket->update([
                 'status' => 'answered',
+                'closed_at' => null,
                 'last_reply_at' => now(),
             ]);
 

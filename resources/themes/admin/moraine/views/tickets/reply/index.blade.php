@@ -230,9 +230,15 @@
                 >
                     {{ __('common.reply') }}
                 </button>
-                <x-admin::modal.trigger modal="closeModal" class="w-full bg-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                    {{ __('common.close') }}
-                </x-admin::modal.trigger>
+                @if ($ticket->status !== 'closed')
+                    <x-admin::modal.trigger modal="closeModal" class="w-full bg-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                        {{ __('common.close') }}
+                    </x-admin::modal.trigger>
+                @else
+                    <button type="button" class="w-full bg-red-400 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-not-allowed">
+                        {{ __('common.close') }}
+                    </button>
+                @endif
             </div>
         </div>
         <div class="grid gap-2">
@@ -274,24 +280,26 @@
         </form>
     </x-admin::modal.content>
 @endforeach
-<x-admin::modal.content
-    modal="closeModal"
-    variant="danger"
-    size="xl"
-    position="centered"
-    title="{{ __('common.confirm_modal_title') }}"
-    description="{{ __('common.confirm_modal_description', ['item' => $ticket->ticket_number]) }}">
-    <form action="#" method="POST">
-        @csrf
-        @method('DELETE')
-        <div class="flex justify-end gap-2 mt-4">
-            <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                {{ __('common.cancel') }}
-            </x-admin::modal.trigger>
-            <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                {{ __('common.delete') }}
-            </button>
-        </div>
-    </form>
-</x-admin::modal.content>
+@if ($ticket->status !== 'closed')
+    <x-admin::modal.content
+        modal="closeModal"
+        variant="danger"
+        size="xl"
+        position="centered"
+        title="{{ __('common.confirm_modal_title') }}"
+        description="{{ __('common.confirm_modal_description', ['item' => $ticket->ticket_number]) }}">
+        <form action="{{ route('admin.tickets.close', ['ticket' => $ticket->ticket_number]) }}" method="POST">
+            @csrf
+            @method('PATCH')
+            <div class="flex justify-end gap-2 mt-4">
+                <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                    {{ __('common.cancel') }}
+                </x-admin::modal.trigger>
+                <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                    {{ __('common.delete') }}
+                </button>
+            </div>
+        </form>
+    </x-admin::modal.content>
+@endif
 @endsection

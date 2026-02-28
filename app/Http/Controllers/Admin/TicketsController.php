@@ -26,7 +26,7 @@ class TicketsController extends Controller
     {
         $this->middleware('permission:tickets.view')->only(['index']);
         $this->middleware('permission:tickets.create')->only(['create', 'store']);
-        $this->middleware('permission:tickets.update')->only(['edit', 'update']);
+        $this->middleware('permission:tickets.update')->only(['edit', 'update', 'close']);
         $this->middleware('permission:tickets.delete')->only(['destroy']);
     }
 
@@ -208,5 +208,31 @@ class TicketsController extends Controller
         return redirect()
             ->route('admin.tickets')
             ->with('success', __('common.delete_success', ['attribute' => $ticket->ticket_number]));
+    }
+
+    /**
+     * Close the specified ticket.
+     *
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function close(Ticket $ticket)
+    {
+        if ($ticket->status === 'closed') {
+            abort(403);
+        }
+
+        $oldTicket = $ticket->getOriginal();
+
+        $ticket->update([
+            'status' => 'closed',
+            'closed_at' => now(),
+        ]);
+
+        $this->recordUpdate('ticket.update', $oldTicket, $ticket->getChanges());
+
+        return redirect()
+            ->route('admin.tickets.reply', $ticket->ticket_number)
+            ->with('success', __('common.close_success', ['attribute' => $ticket->ticket_number]));
     }
 }
