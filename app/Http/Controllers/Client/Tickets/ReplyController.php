@@ -94,7 +94,7 @@ class ReplyController extends Controller
         $this->recordCreate('ticket.message.create', $message->toArray());
 
         return redirect()
-            ->route('admin.tickets.reply', $ticket->ticket_number)
+            ->route('client.tickets.reply', $ticket->ticket_number)
             ->with('success', __('common.send_success', ['attribute' => __('common.reply')]));
     }
 }
