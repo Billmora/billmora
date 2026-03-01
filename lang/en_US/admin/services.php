@@ -40,8 +40,6 @@ return [
     'provisioning_scale_label' => 'Scale',
 
     'provisioning' => [
-        'provider_missing' => 'No provisioning provider assigned to this service.',
-        'provider_class_missing' => 'provider class for :provider not found.',
         'create' => [
             'invalid_status' => 'Service must be pending or terminated to be created.',
             'success' => 'Service created and activated successfully.',

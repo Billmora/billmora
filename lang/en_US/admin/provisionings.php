@@ -16,6 +16,11 @@ return [
         'failed' => 'Connection failed: :message',
     ],
 
+    'provider' => [
+        'missing' => 'No provisioning provider assigned to this service.',
+        'class_missing' => 'provider class for :provider not found.',
+    ],
+
     'delete' => [
         'in_use' => 'This plugin cannot be deleted because it is currently used by an active package or service.',
     ],
