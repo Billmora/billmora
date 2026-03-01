@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Users;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,7 @@ use Spatie\Permission\Models\Role;
 
 class ProfileController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing users management.
@@ -120,6 +122,16 @@ class ProfileController extends Controller
             ],
         ]);
 
+        $oldUser = $user->only([
+            'first_name', 'last_name', 'email',
+            'status', 'language', 'department',
+        ]);
+        $oldRole = $user->roles->pluck('name')->first() ?? ($user->is_root_admin ? 'root' : 'client');
+        $oldBilling  = $user->billing?->only([
+            'phone_number', 'company_name', 'street_address_1', 'street_address_2',
+            'city', 'state', 'postcode', 'country',
+        ]) ?? [];
+
         $user->update([
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
@@ -155,6 +167,23 @@ class ProfileController extends Controller
                 'postcode' => $validated['postcode'],
                 'country' => $validated['country'],
             ]
+        );
+
+        $this->recordUpdate("user.profile.update", $oldUser, $user->fresh()->only([
+            'first_name', 'last_name', 'email',
+            'status', 'language', 'department',
+        ]));
+
+        $this->recordUpdate("user.role.update", 
+            ['role' => $oldRole], 
+            ['role' => $validated['role']]
+        );
+
+        $this->recordUpdate("user.billing.update", $oldBilling, 
+            $user->fresh()->billing?->only([
+                'phone_number', 'company_name', 'street_address_1', 'street_address_2',
+                'city', 'state', 'postcode', 'country',
+            ]) ?? []
         );
 
         return redirect()->back()->with('success', __('common.update_success', ['attribute' => __('admin/users.tabs.profile')]));
