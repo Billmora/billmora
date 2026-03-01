@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Observers\OrderObserver;
 use Billmora;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+#[ObservedBy(OrderObserver::class)]
 class Order extends Model
 {
     /**

@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Observers\TicketMessageObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 
+#[ObservedBy(TicketMessageObserver::class)]
 class TicketMessage extends Model
 {
     /**

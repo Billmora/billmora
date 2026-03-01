@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Observers\UserBillingObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 
+#[ObservedBy(UserBillingObserver::class)]
 class UserBilling extends Model
 {
     /**

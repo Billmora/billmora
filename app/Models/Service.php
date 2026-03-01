@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Observers\ServiceObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
+#[ObservedBy(ServiceObserver::class)]
 class Service extends Model
 {
-    public const ERROR_INACTIVE = 802;
-
     /**
      * The attributes that aren't mass assignable.
      *

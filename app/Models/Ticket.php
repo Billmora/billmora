@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Observers\TicketObserver;
 use Billmora;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+#[ObservedBy(TicketObserver::class)]
 class Ticket extends Model
 {
     /**

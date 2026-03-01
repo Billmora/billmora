@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Observers\InvoiceObserver;
 use Billmora;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+#[ObservedBy([InvoiceObserver::class])]
 class Invoice extends Model
 {
     /**
