@@ -8,11 +8,13 @@ use App\Models\Invoice;
 use App\Models\Plugin;
 use App\Models\Transaction;
 use App\Services\PluginManager;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CallbackController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Handle incoming payment gateway callback and process invoice payment.
@@ -65,7 +67,9 @@ class CallbackController extends Controller
                         'paid_at' => now(),
                     ]);
 
-                    Transaction::create([
+                    $this->recordSystem('invoice.paid', $invoice->only(['status', 'paid_at']), 'gateway');
+
+                    $transaction = Transaction::create([
                         'user_id' => $invoice->user_id,
                         'invoice_id' => $invoice->id,
                         'plugin_id' => $plugin->id,
@@ -75,6 +79,8 @@ class CallbackController extends Controller
                         'amount' => $response['amount'],
                         'fee' => $response['fee'] ?? 0,
                     ]);
+
+                    $this->recordSystem('transaction.created', $transaction->toArray(), 'gateway');
 
                     // TODO: Activated service with provisioning
 
