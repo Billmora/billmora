@@ -62,14 +62,14 @@ class AuditService
     /**
      * Log a system-related audit event.
      *
-     * @param int    $userId     The ID of the user associated with the system event.
+     * @param int|null    $userId     The ID of the authenticated user, or null if triggered by system, gateway, or cron.
      * @param string $event      The name of the system event (e.g., "settings.general.update", "settings.roles.create").
      * @param array  $properties Optional additional data related to the system event.
      *
      * @return \App\Models\AuditSystem
      */
     public function system(
-            int $userId,
+            ?int $userId,
             string $event,
             array $properties = []
         ) 

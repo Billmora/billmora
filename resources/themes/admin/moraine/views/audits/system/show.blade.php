@@ -13,9 +13,15 @@
             </div>
             <div class="grid">
                 <span class="text-slate-600 font-semibold">{{ __('admin/audits/system.actor_label') }}</span>
-                <a href="{{ route('admin.users.summary', ['id' => $log->user_id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
-                    {{ $user->email }}
-                </a>
+                @if ($log->user_id)
+                    <a href="{{ route('admin.users.summary', ['id' => $log->user_id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                        {{ $user->email }}
+                    </a>
+                @else
+                    <span class="text-slate-500">
+                        {{ $log->properties['actor'] }}
+                    </span>
+                @endif
             </div>
             <div class="grid">
                 <span class="text-slate-600 font-semibold">{{ __('common.created_at') }}</span>

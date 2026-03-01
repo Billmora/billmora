@@ -41,6 +41,22 @@ trait AuditsSystem
     }
 
     /**
+     * Record a system-triggered event with no authenticated user (e.g., webhooks, cron jobs, API callbacks).
+     *
+     * @param string $event  The event name or action performed.
+     * @param array  $data   The data associated with the event.
+     * @param string $actor  The actor identifier (e.g., 'gateway', 'cron', 'system').
+     *
+     * @return void
+     */
+    protected function recordSystem(string $event, array $data = [], string $actor = 'system'): void
+    {
+        Audit::system(null, $event, array_merge($data, [
+            'actor' => $actor,
+        ]));
+    }
+
+    /**
      * Record a create event into the system audit log.
      *
      * @param string $event  The event name or action performed.
