@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('audit_systems', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('event');
             $table->json('properties')->nullable();
             $table->timestamps();
