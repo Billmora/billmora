@@ -20,9 +20,7 @@ class InvoiceObserver
      */
     public function updated(Invoice $invoice): void
     {
-        \Log::debug('Status Updated: ' . $invoice->status);
         if ($invoice->wasChanged('status')) {
-            \Log::debug('Status Changed: ' . $invoice->status);
             switch ($invoice->status) {
                 case 'paid':
                     if ($invoice->order?->package?->stock > 0) {
