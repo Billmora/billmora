@@ -82,7 +82,11 @@ class ProfileController extends Controller
             'phone_number' => [
                 Rule::requiredIf(Billmora::hasAuth('user_billing_required_inputs', 'phone_number')),
                 Rule::prohibitedIf(Billmora::hasAuth('user_registration_disabled_inputs', 'phone_number')),
-                'nullable', 'numeric',
+                'nullable',
+                'string',
+                'min:7',
+                'max:20',
+                'regex:/^\+?[\d\s\-\(\)]{7,20}$/',
             ],
             'company_name' => [
                 Rule::requiredIf(Billmora::hasAuth('user_billing_required_inputs', 'company_name')),
