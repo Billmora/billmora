@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Auth;
 use App\Facades\Audit;
 use App\Http\Controllers\Controller;
 use App\Services\CaptchaService;
+use App\Traits\AuditsUser;
 use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    use AuditsUser;
 
     /**
      * Show the client login form.
@@ -64,11 +66,7 @@ class LoginController extends Controller
                 return redirect()->route('client.two-factor.verify');
             }
 
-            Audit::user($user->id, 'account.login', [
-                'method' => 'password',
-                'ip' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-            ]);
+            $this->recordActivity('account.login', ['method' => 'password'], $request);
 
             return redirect()->intended(route('client.dashboard'));
         }

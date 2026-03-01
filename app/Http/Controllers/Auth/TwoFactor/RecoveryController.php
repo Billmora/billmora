@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Auth\TwoFactor;
 
 use App\Facades\Audit;
 use App\Http\Controllers\Controller;
+use App\Traits\AuditsUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RecoveryController extends Controller
 {
+    use AuditsUser;
 
     /**
      * Show the recovery code input page.
@@ -50,11 +52,7 @@ class RecoveryController extends Controller
         ]);
         session()->forget('2fa_passed');
 
-        Audit::user($user->id, 'account.two-factor.disable', [
-            'method' => 'recovery',
-            'ip' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-        ]);
+        $this->recordActivity('account.two-factor.disable', ['method' => 'recovery'], $request);
 
         return redirect()->route('client.account.security')->with('success', __('common.disable_success', ['attribute' => __('auth.2fa.title')]));
     }

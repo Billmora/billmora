@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client\Account;
 
 use App\Facades\Audit;
 use App\Http\Controllers\Controller;
+use App\Traits\AuditsUser;
 use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\File;
 
 class SettingsController extends Controller
 {
+    use AuditsUser;
 
     /**
      * Display the authenticated user's account settings page.
@@ -83,8 +85,13 @@ class SettingsController extends Controller
             ],
         ]);
 
-        $oldUser = $user->replicate();
-        $oldUserBilling = $user->billing?->replicate();
+        $oldUser = array_merge(
+            $user->only(['first_name', 'last_name', 'language']),
+            $user->billing?->only([
+                'phone_number', 'company_name', 'street_address_1', 'street_address_2',
+                'city', 'state', 'postcode', 'country',
+            ]) ?? []
+        );
 
         $user->update([
             'first_name' => $validated['first_name'],
@@ -92,7 +99,7 @@ class SettingsController extends Controller
             'language' => $validated['language'],
         ]);
 
-        $billing = $user->billing()->updateOrCreate(
+        $user->billing()->updateOrCreate(
             ['user_id' => $user->id],
             [
                 'phone_number' => $validated['phone_number'],
@@ -106,36 +113,15 @@ class SettingsController extends Controller
             ]
         );
 
-        $changes = [];
-        foreach ($user->getChanges() as $field => $new) {
-            if (!in_array($field, ['updated_at', 'created_at'])) {
-                $changes[$field] = [
-                    'old' => $oldUser->$field,
-                    'new' => $new
-                ];
-            }
-        }
-        
-        if ($billing->wasChanged()) {
-            foreach ($billing->getChanges() as $field => $new) {
-                if (!in_array($field, ['updated_at', 'created_at'])) {
-                    $changes[$field] = [
-                        'old' => $oldUserBilling ? $oldUserBilling->$field : null,
-                        'new' => $new
-                    ];
-                }
-            }
-        }
+        $newUser = array_merge(
+            $user->fresh()->only(['first_name', 'last_name', 'language']),
+            $user->fresh()->billing?->only([
+                'phone_number', 'company_name', 'street_address_1', 'street_address_2',
+                'city', 'state', 'postcode', 'country',
+            ]) ?? []
+        );
 
-        if ($changes) {
-            Audit::user($user->id, 'account.settings.update', [
-                'changes' => $changes,
-                'ip' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-            ]);
-        }
-
-        $user->refresh();
+        $this->recordUpdate('account.settings.update', $oldUser, $newUser, $request);
 
         return redirect()->back()->with('success', __('common.update_success', ['attribute' => __('common.account_settings')]));
     }

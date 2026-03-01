@@ -6,11 +6,13 @@ use App\Facades\Audit;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use App\Traits\AuditsUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class SecurityController extends Controller
 {
+    use AuditsUser;
 
     /**
      * Display the authenticated user's account security page.
@@ -44,28 +46,12 @@ class SecurityController extends Controller
             return back()->withErrors(['confirm_password' => __('auth.password.current_mismatch')])->withInput();
         }
 
-        $oldUser = $user->replicate();
+        $oldUser = $user->only(['email']);
 
         $user->email = $validated['new_email'];
         $user->save();
 
-        $changes = [];
-        foreach ($user->getChanges() as $field => $new) {
-            if (!in_array($field, ['updated_at', 'created_at'])) {
-                $changes[$field] = [
-                    'old' => $oldUser->$field,
-                    'new' => $new
-                ];
-            }
-        }
-
-        if ($changes) {
-            Audit::user($user->id, 'account.security.email.update', [
-                'changes' => $changes,
-                'ip' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-            ]);
-        }
+        $this->recordUpdate('account.email.updated', $oldUser, $user->fresh()->only(['email']), $request);
 
         return redirect()->back()->with('success', __('common.update_success', ['attribute' => __('common.email')]));
     }
@@ -86,8 +72,6 @@ class SecurityController extends Controller
             'new_password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
         
-        $oldUser = $user->replicate();
-
         if (!Hash::check($validated['current_password'], $user->password)) {
             return back()->withErrors(['current_password' => __('auth.password.current_mismatch')])->withInput();
         }
@@ -95,23 +79,7 @@ class SecurityController extends Controller
         $user->password = Hash::make($validated['new_password']);
         $user->save();
 
-        $changes = [];
-        foreach ($user->getChanges() as $field => $new) {
-            if (!in_array($field, ['updated_at', 'created_at'])) {
-                $changes[$field] = [
-                    'old' => $oldUser->$field,
-                    'new' => $new
-                ];
-            }
-        }
-
-        if ($changes) {
-            Audit::user($user->id, 'account.security.password.update', [
-                'changes' => $changes,
-                'ip' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-            ]);
-        }
+        $this->recordUpdate('account.password.updated', [], [], $request);
 
         Auth::logout();
         

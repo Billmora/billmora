@@ -118,11 +118,7 @@ class SetupController extends Controller
             'downloaded_at' => null,
         ]);
 
-        Audit::user($user->id, 'account.two-factor.disable', [
-            'method' => 'totp',
-            'ip' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-        ]);
+        $this->recordActivity('account.two-factor.disable', ['method' => 'totp'], $request);
 
         return redirect()->back()->with('success', __('common.disable_success', ['attribute' => __('auth.2fa.title')]));
     }

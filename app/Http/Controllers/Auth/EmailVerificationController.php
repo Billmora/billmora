@@ -6,12 +6,14 @@ use App\Facades\Audit;
 use App\Http\Controllers\Controller;
 use App\Jobs\NotificationJob;
 use App\Models\UserEmailVerification;
+use App\Traits\AuditsUser;
 use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class EmailVerificationController extends Controller
 {
+    use AuditsUser;
 
     /**
      * Handle email verification request using a token.
@@ -44,14 +46,8 @@ class EmailVerificationController extends Controller
         $verification->user->update([
             'email_verified_at' => now(),
         ]);
-
-        $user = $verification->user;
         
-        Audit::user($user->id, 'account.email.verify', [
-            'method' => 'token',
-            'ip' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-        ]);
+        $this->recordActivity('account.email.verify', ['method' => 'token'], $request);
 
         return redirect()->route('client.login')->with('success', __('auth.email.has_verified'));
     }
