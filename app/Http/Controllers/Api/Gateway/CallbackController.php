@@ -82,8 +82,6 @@ class CallbackController extends Controller
 
                     $this->recordSystem('transaction.created', $transaction->toArray(), 'gateway');
 
-                    // TODO: Activated service with provisioning
-
                     return response()->json(['message' => 'Payment processed successfully'], 200);
                 }
 
