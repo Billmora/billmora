@@ -67,7 +67,7 @@ class CallbackController extends Controller
                         'paid_at' => now(),
                     ]);
 
-                    $this->recordSystem('invoice.paid', $invoice->only(['status', 'paid_at']), 'gateway');
+                    $this->recordSystem('invoice.paid', $invoice->toArray(), 'gateway');
 
                     $transaction = Transaction::create([
                         'user_id' => $invoice->user_id,
