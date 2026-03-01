@@ -143,19 +143,27 @@ class ProfileController extends Controller
             'password' => $validated['password'] ? Hash::make($validated['password']) : $user->password,
             'status' => $validated['status'],
             'language' => $validated['language'],
-            'department' => $validated['role'] !== 'client' ? ($validated['department'] ?? null) : null,
         ]);
 
         if ($user->id !== Auth::id()) {
             if ($validated['role'] === 'root' && Auth::user()->isRootAdmin()) {
                 $user->syncRoles([]);
-                $user->update(['is_root_admin' => true]);
+                $user->update([
+                    'is_root_admin' => true,
+                    'department' => null,
+                ]);
             } elseif ($validated['role'] === 'client') {
                 $user->syncRoles([]);
-                $user->update(['is_root_admin' => false]);
+                $user->update([
+                    'is_root_admin' => false,
+                    'department' => null,
+                ]);
             } else {
                 $user->syncRoles([$validated['role']]);
-                $user->update(['is_root_admin' => false]);
+                $user->update([
+                    'is_root_admin' => false,
+                    'department' => $validated['department'],
+                ]);
             }
         }
 

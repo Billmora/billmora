@@ -54,7 +54,14 @@
                     </div>
                 </div>
             </div>
-            <div class="w-full lg:w-1/3 h-fit flex flex-col gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+            <div 
+                class="w-full lg:w-1/3 h-fit flex flex-col gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl"
+                x-data="{ isClient: {{ in_array(old('role', $user->isClient() ? 'client' : ($user->isRootAdmin() ? 'root' : ($user->roles->first()->name ?? 'client'))), ['client', 'root']) ? 'true' : 'false' }} }"
+                x-on:change="
+                    const select = $event.target.closest('[name=role]') || $event.target;
+                    if (select.name === 'role') isClient = (select.value === 'client' || select.value === 'root');
+                "
+            >
                 <x-admin::select name="role" label="{{ __('common.role') }}" :disabled="($user->id === Auth::id()) || ($user->isRootAdmin() && !Auth::user()->isRootAdmin())" required>
                     @if (Auth::user()->isRootAdmin())
                         <option value="root" {{ old('role', $user->isRootAdmin() ? 'root' : null) === 'root' ? 'selected' : '' }}>
@@ -70,11 +77,15 @@
                         </option>
                     @endforeach
                 </x-admin::select>
-                <x-admin::select name="department" label="{{ __('common.department') }}">
-                    @foreach (Billmora::getTicket('ticketing_departments') as $department)
-                        <option value="{{ $department }}" {{ old('department', $user->department) === $department ? 'selected' : '' }}>{{ ucfirst($department) }}</option>
-                    @endforeach
-                </x-admin::select>
+                <div x-show="!isClient" x-cloak>
+                    <x-admin::select name="department" label="{{ __('common.department') }}">
+                        @foreach (Billmora::getTicket('ticketing_departments') as $department)
+                            <option value="{{ $department }}" {{ old('department', $user->department) === $department ? 'selected' : '' }}>
+                                {{ ucfirst($department) }}
+                            </option>
+                        @endforeach
+                    </x-admin::select>
+                </div>
                 <x-admin::select name="status" label="{{ __('common.status') }}" required>
                     <option value="active" {{ old('status', $user->status) === 'active' ? 'selected' : '' }}>Active</option>
                     <option value="inactive" {{ old('status', $user->status) === 'inactive' ? 'selected' : '' }}>Inactive</option>
@@ -83,8 +94,7 @@
                 </x-admin::select>
                 <x-admin::select name="language" label="{{ __('common.language') }}" required>
                     @foreach ($langs as $lang)
-                        <option value="{{ $lang['lang'] }}"
-                            {{ old('language', $user->language) == $lang['lang'] ? 'selected' : '' }}>
+                        <option value="{{ $lang['lang'] }}" {{ old('language', $user->language) == $lang['lang'] ? 'selected' : '' }}>
                             {{ $lang['name'] }}
                         </option>
                     @endforeach
