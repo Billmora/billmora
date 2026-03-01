@@ -12,10 +12,13 @@ use App\Models\PackagePrice;
 use App\Models\Coupon;
 use App\Models\VariantOption;
 use App\Services\Package\PricingService;
+use App\Traits\AuditsSystem;
 use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
+    use AuditsSystem;
+
     /**
      * The pricing service instance.
      *
@@ -91,6 +94,8 @@ class OrderService
                 'terms_accepted' => $checkoutData['terms_accepted'] ?? true,
             ]);
 
+            $this->recordCreate('order.created', $order->toArray());
+
             $initialDueDate = ($packagePrice->type === 'recurring') ? now() : null;
             $finalConfig = $this->resolveServiceConfiguration($package, $variantSelections, $configuration);
 
@@ -113,6 +118,8 @@ class OrderService
                 'variant_selections' => $variantSelections,
             ]);
 
+            $this->recordCreate('service.created', $service->toArray());
+
             $invoice = Invoice::create([
                 'user_id' => $userId,
                 'order_id' => $order->id,
@@ -126,15 +133,19 @@ class OrderService
                 'due_date' => now()->addDays(7),
             ]);
 
+            $this->recordCreate('invoice.created', $invoice->toArray());
+
             $this->createInvoiceItems($invoice, $service, $package, $packagePrice, $pricing, $coupon);
 
             if ($coupon) {
-                CouponUsage::create([
+                $coupon = CouponUsage::create([
                     'coupon_id' => $coupon->id,
                     'user_id' => $userId,
                     'order_id' => $order->id,
                     'used_at' => now(),
                 ]);
+
+                $this->recordCreate('coupon.used', $coupon->toArray());
             }
 
             return compact('order', 'service', 'invoice');
