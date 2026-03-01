@@ -6,7 +6,7 @@ use App\Facades\Audit;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\Package;
-use App\Services\PluginManager;
+use App\Services\ProvisioningService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,17 +26,17 @@ class ProvisioningController extends Controller
      * Create and activate the service on the provisioning provider.
      *
      * @param \App\Models\Service $service
-     * @param \App\Services\PluginManager $manager
+     * @param \App\Services\ProvisioningService $provisioningService
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function create(Service $service, PluginManager $manager): RedirectResponse
+    public function create(Service $service, ProvisioningService $provisioningService): RedirectResponse
     {
         if (!in_array($service->status, ['pending', 'terminated'])) {
             return back()->with('error', __('admin/services.provisioning.create.invalid_status'));
         }
 
         try {
-            [$plugin, $instanceConfig] = $this->getPluginAndConfig($service, $manager);
+            [$plugin, $instanceConfig] = $provisioningService->bootPluginFor($service);
 
             $plugin->create($service, $instanceConfig);
 
@@ -63,17 +63,17 @@ class ProvisioningController extends Controller
      * Suspend the active service on the provisioning provider.
      *
      * @param \App\Models\Service $service
-     * @param \App\Services\PluginManager $manager
+     * @param \App\Services\ProvisioningService $provisioningService
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function suspend(Service $service, PluginManager $manager): RedirectResponse
+    public function suspend(Service $service, ProvisioningService $provisioningService): RedirectResponse
     {
         if ($service->status !== 'active') {
             return back()->with('error', __('admin/services.provisioning.suspend.invalid_status'));
         }
 
         try {
-            [$plugin, $instanceConfig] = $this->getPluginAndConfig($service, $manager);
+            [$plugin, $instanceConfig] = $provisioningService->bootPluginFor($service);
 
             $plugin->suspend($service, $instanceConfig);
 
@@ -100,17 +100,17 @@ class ProvisioningController extends Controller
      * Unsuspend the suspended service on the provisioning provider.
      *
      * @param \App\Models\Service $service
-     * @param \App\Services\PluginManager $manager
+     * @param \App\Services\ProvisioningService $provisioningService
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function unsuspend(Service $service, PluginManager $manager): RedirectResponse
+    public function unsuspend(Service $service, ProvisioningService $provisioningService): RedirectResponse
     {
         if ($service->status !== 'suspended') {
             return back()->with('error', __('admin/services.provisioning.unsuspend.invalid_status'));
         }
 
         try {
-            [$plugin, $instanceConfig] = $this->getPluginAndConfig($service, $manager);
+            [$plugin, $instanceConfig] = $provisioningService->bootPluginFor($service);
 
             $plugin->unsuspend($service, $instanceConfig);
 
@@ -137,17 +137,18 @@ class ProvisioningController extends Controller
      * Terminate the service on the provisioning provider.
      *
      * @param \App\Models\Service $service
-     * @param \App\Services\PluginManager $manager
+     * @param \App\Services\ProvisioningService $provisioningService
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function terminate(Service $service, PluginManager $manager): RedirectResponse
+    public function terminate(Service $service, ProvisioningService $provisioningService): RedirectResponse
     {
         if (in_array($service->status, ['terminated', 'cancelled'])) {
             return back()->with('error', __('admin/services.provisioning.terminate.already_terminated'));
         }
 
         try {
-            [$plugin, $instanceConfig] = $this->getPluginAndConfig($service, $manager);
+            [$plugin, $instanceConfig] = $provisioningService->bootPluginFor($service);
+
             $plugin->terminate($service, $instanceConfig);
 
             $service->terminate();
@@ -173,17 +174,17 @@ class ProvisioningController extends Controller
      * Renew the service on the provisioning provider.
      *
      * @param \App\Models\Service $service
-     * @param \App\Services\PluginManager $manager
+     * @param \App\Services\ProvisioningService $provisioningService
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function renew(Service $service, PluginManager $manager): RedirectResponse
+    public function renew(Service $service, ProvisioningService $provisioningService): RedirectResponse
     {
         if (!in_array($service->status, ['active', 'suspended'])) {
             return back()->with('error', __('admin/services.provisioning.renew.invalid_status'));
         }
 
         try {
-            [$plugin, $instanceConfig] = $this->getPluginAndConfig($service, $manager);
+            [$plugin, $instanceConfig] = $provisioningService->bootPluginFor($service);
 
             $plugin->renew($service, $instanceConfig);
 
@@ -208,17 +209,17 @@ class ProvisioningController extends Controller
      * Scale the service to a different package on the provisioning provider.
      *
      * @param \App\Models\Service $service
-     * @param \App\Services\PluginManager $manager
+     * @param \App\Services\ProvisioningService $provisioningService
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function scale(Service $service, PluginManager $manager): RedirectResponse
+    public function scale(Service $service, ProvisioningService $provisioningService): RedirectResponse
     {
         if ($service->status !== 'active') {
             return back()->with('error', __('admin/services.provisioning.scale.invalid_status'));
         }
 
         try {
-            [$plugin, $instanceConfig] = $this->getPluginAndConfig($service, $manager);
+            [$plugin, $instanceConfig] = $provisioningService->bootPluginFor($service);
 
             $oldPackage = $service->getOriginal('package_id') 
                 ? Package::find($service->getOriginal('package_id')) 
@@ -241,37 +242,5 @@ class ProvisioningController extends Controller
 
             return back()->with('error', __('admin/services.provisioning.scale.failed', ['message' => $e->getMessage()]));
         }
-    }
-
-    /**
-     * Get booted provisioning plugin instance and configuration for the service.
-     *
-     * @param \App\Models\Service $service
-     * @param \App\Services\PluginManager $manager
-     * @return array{0: \App\Contracts\ProvisioningInterface, 1: array<string, mixed>}
-     *
-     * @throws \Exception
-     */
-    private function getPluginAndConfig(Service $service, PluginManager $manager): array
-    {
-        if (!$service->provisioning) {
-            throw new \Exception(__('admin/services.provisioning.provider_missing'));
-        }
-
-        if (!$service->provisioning->is_active) {
-            throw new \Exception(__('validation.provisioning_disabled', ['name' => $service->provisioning->name]));
-        }
-
-        $plugin = $manager->bootInstance($service->provisioning);
-
-        if (!$plugin) {
-            throw new \Exception(__('admin/services.provisioning.provider_class_missing', [
-                'provider' => $service->provisioning->provider
-            ]));
-        }
-
-        $instanceConfig = $service->provisioning->config ?? [];
-
-        return [$plugin, $instanceConfig];
     }
 }
