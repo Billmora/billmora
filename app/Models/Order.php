@@ -67,7 +67,7 @@ class Order extends Model
                 ->lockForUpdate()
                 ->first();
 
-            if ($lastOrder && preg_match_all('/(\d+)/', $lastOrder->invoice_number, $matches)) {
+            if ($lastOrder && preg_match_all('/(\d+)/', $lastOrder->order_number, $matches)) {
                 $lastNumber = (int) end($matches[1]);
                 $nextNumber = $lastNumber + $increment;
             } else {
