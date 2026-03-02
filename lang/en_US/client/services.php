@@ -10,6 +10,7 @@ return [
     'expires_label' => 'Expires At',
     'variant_label' => 'Variant Options',
     'configuration_label' => 'Additional Configuration',
+    'cancel_label' => 'Cancellation Request',
 
     'action' => [
         'overview' => 'Overview',
@@ -20,6 +21,14 @@ return [
         'invalid_type' => 'Invalid action type configured for rendering.',
         'success' => 'Action processed successfully.',
         'failed' => 'Action failed to process :message',
+    ],
+
+    'cancellation' => [
+        'type_label' => 'Cancellation Type',
+        'reason_label' => 'Cancellation Reason',
+
+        'requested' => 'Cancellation request has been submitted.',
+        'pending' => 'This service has a pending cancellation request. Please contact support if you wish to withdraw it.',
     ],
 
     'provisioning' => [
