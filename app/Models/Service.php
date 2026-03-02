@@ -118,6 +118,28 @@ class Service extends Model
     }
 
     /**
+     * Get all cancellation requests associated with the service.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function cancellations()
+    {
+        return $this->hasMany(ServiceCancellation::class);
+    }
+
+    /**
+     * Get the latest pending cancellation request for the service.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function activeCancellation()
+    {
+        return $this->hasOne(ServiceCancellation::class)
+            ->where('status', 'pending')
+            ->latestOfMany();
+    }
+
+    /**
      * Get the provisioning for this service.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
