@@ -27,7 +27,14 @@ class ServicesController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:services.view')->only(['index']);
+        $this->middleware(function ($request, $next) {
+            if (!$request->user()->hasPermissionTo('services.view')) {
+                return redirect()->route('admin.services.cancellations');
+            }
+
+            return $next($request);
+        })->only(['index']);
+
         $this->middleware('permission:services.update')->only(['edit', 'update']);
         $this->middleware('permission:services.delete')->only(['destroy']);
     }
