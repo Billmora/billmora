@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'tabs' => [
+        'services' => 'Services',
+        'cancellations' => 'Cancellations',
+    ],
+
     'user_label' => 'User',
     'user_helper' => 'Client associated with this service.',
     'name_label' => 'Name',
@@ -27,8 +32,24 @@ return [
     'variant_option_helper' => 'Select additional variants are available for the chosen package.',
     'additional_configuration_label' => 'Additional Configuration',
     'additional_configuration_helper' => 'Provide any additional configuration required for provisioning this service.',
+
+    'cancellation_service_label' => 'Service',
+    'cancellation_reviewed_by_label' => 'Reviewed By',
+    'cancellation_reviewed_at_label' => 'Reviewed At',
+    'cancellation_cancelled_at_label' => 'Cancelled At',
+    'cancellation_type_label' => 'Type',
+    'cancellation_reason_label' => 'Reason',
+    'cancellation_rejection_label' => 'Rejection Note',
+
+    'cancellation' => [
+        'approve' => 'Approve',
+        'reject' => 'Reject',
+        'approved' => 'Cancellation request has been approved.',
+        'rejected' => 'Cancellation request has been rejected.',
+    ],
     
     'catalog_label' => 'Catalog',
+    'go_to_service' => 'Go to Service',
     'go_to_user' => 'Go to User',
 
     'provisioning_actions_label' => 'Provisioning Actions',
