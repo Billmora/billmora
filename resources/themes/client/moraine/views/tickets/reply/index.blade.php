@@ -186,7 +186,7 @@
                     <hr class="border-t-2 border-billmora-2 my-2">
                     <div class="grid">
                         <h4 class="text-sm text-slate-400 font-semibold">{{ __('client/tickets.ticket_status_label') }}</h4>
-                        <span class="text-slate-500 font-medium">{{ ucwords($ticket->status) }}</span>
+                        <span class="text-slate-500 font-medium">{{ ucwords(str_replace('_', ' ', $ticket->status)) }}</span>
                     </div>
                     @if ($ticket->status === 'open')
                         <hr class="border-t-2 border-billmora-2 my-2">

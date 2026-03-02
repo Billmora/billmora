@@ -31,9 +31,9 @@
                                     <a href="{{ route('client.tickets.reply', ['ticket' => $ticket->ticket_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $ticket->ticket_number }}</a>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $ticket->subject }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $ticket->status }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $ticket->priority }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $ticket->department }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ ucwords(str_replace('_', ' ', $ticket->status)) }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ ucwords($ticket->priority) }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ ucwords($ticket->department) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                     <a href="{{ route('client.tickets.reply', ['ticket' => $ticket->ticket_number]) }}" class="inline-flex items-center text-sm font-semibold text-yellow-500 hover:text-yellow-600">
                                         {{ __('common.manage') }}
