@@ -175,6 +175,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/{id}/provisioning', [Admin\Packages\ProvisioningController::class, 'index'])->name('admin.packages.provisioning');
         Route::put('/{id}/provisioning', [Admin\Packages\ProvisioningController::class, 'update'])->name('admin.packages.provisioning.update');
 
+        Route::get('/{package}/scaling', [Admin\Packages\ScalingController::class, 'index'])->name('admin.packages.scaling');
+        Route::put('/{package}/scaling', [Admin\Packages\ScalingController::class, 'update'])->name('admin.packages.scaling.update');
+
         Route::delete('/{id}', [Admin\PackagesController::class, 'destroy'])->name('admin.packages.destroy');
     });
 
