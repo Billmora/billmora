@@ -14,7 +14,7 @@ class ProvisioningController extends Controller
     use AuditsSystem;
 
     /**
-     * Applies permission-based middleware for accessing packages pricing.
+     * Applies permission-based middleware for accessing packages provisioning.
      * 
      * @return void
      */
