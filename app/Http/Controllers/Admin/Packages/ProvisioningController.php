@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Package;
 use App\Models\Plugin;
 use App\Services\PluginManager;
+use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 
 class ProvisioningController extends Controller
 {
+    use AuditsSystem;
+
     /**
      * Applies permission-based middleware for accessing packages pricing.
      * 
@@ -81,6 +84,8 @@ class ProvisioningController extends Controller
     {
         $package = Package::findOrFail($id);
 
+        $oldPackage = $package->getOriginal();
+
         $validated = $request->validate([
             'provisioning_id' => ['nullable', 'exists:plugins,id'],
         ]);
@@ -96,6 +101,8 @@ class ProvisioningController extends Controller
             'plugin_id' => $validated['provisioning_id'] ?? null,
             'provisioning_config' => $configData,
         ]);
+
+        $this->recordUpdate('package.provisioning.update', $oldPackage, $package->getChanges());
 
         return redirect()
             ->route('admin.packages.provisioning', ['id' => $package->id])
