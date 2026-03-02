@@ -60,6 +60,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::put('/{service}/edit', [Admin\ServicesController::class, 'update'])->name('admin.services.update');
         Route::delete('/{service}', [Admin\ServicesController::class, 'destroy'])->name('admin.services.destroy');
 
+        Route::get('/cancellation', [Admin\Services\CancellationController::class, 'index'])->name('admin.services.cancellations');
+        Route::get('/cancellation/{cancellation}/edit', [Admin\Services\CancellationController::class, 'edit'])->name('admin.services.cancellations.edit');
+        Route::post('/cancellation/{cancellation}/approve', [Admin\Services\CancellationController::class, 'approve'])->name('admin.services.cancellations.approve');
+        Route::post('/cancellation/{cancellation}/reject', [Admin\Services\CancellationController::class, 'reject'])->name('admin.services.cancellations.reject');
+        Route::delete('/cancellation/{cancellation}', [Admin\Services\CancellationController::class, 'destroy'])->name('admin.services.cancellations.destroy');
+
         Route::post('/{service}/create', [Admin\Services\ProvisioningController::class, 'create'])->name('admin.services.create');
         Route::post('/{service}/suspend', [Admin\Services\ProvisioningController::class, 'suspend'])->name('admin.services.suspend');
         Route::post('/{service}/unsuspend', [Admin\Services\ProvisioningController::class, 'unsuspend'])->name('admin.services.unsuspend');
