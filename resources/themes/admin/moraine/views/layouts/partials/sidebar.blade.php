@@ -33,7 +33,7 @@
           <span class="font-semibold">{{ __('admin/navigation.orders') }}</span>
         </a>
       @endcan
-      @can('services.view')
+      @canany(['services.view', 'services.cancellations.view'])
         <a href="{{ route('admin.services') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.services*') ? 'bg-billmora-primary text-white' : 'hover:bg-billmora-primary' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
           <x-lucide-scan-text class="w-5 h-auto" />
           <span class="font-semibold">{{ __('admin/navigation.services') }}</span>
