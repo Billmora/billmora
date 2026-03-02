@@ -70,6 +70,21 @@ class Package extends Model
     }
 
     /**
+     * Get all packages that this package can be scaled up or down to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function scalablePackages()
+    {
+        return $this->belongsToMany(
+            Package::class, 
+            'package_scalings',
+            'package_id',
+            'target_package_id'
+        )->withTimestamps();
+    }
+
+    /**
      * Get the coupons associated with this package.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
