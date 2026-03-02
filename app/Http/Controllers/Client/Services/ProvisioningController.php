@@ -61,9 +61,9 @@ class ProvisioningController extends Controller
 
         if ($actionConfig['type'] === 'form') {
             return view('client::services.workspaces.provisioning', [
-                'service'       => $service,
-                'slug'          => $slug,
-                'pageSchema'    => $actionConfig['schema'] ?? [],
+                'service' => $service,
+                'slug' => $slug,
+                'pageSchema' => $actionConfig['schema'] ?? [],
                 'clientActions' => $actions,
             ]);
         }
