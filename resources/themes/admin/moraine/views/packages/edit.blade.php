@@ -21,6 +21,11 @@
                 'icon' => 'lucide-plug',
                 'label' => 'Provisioning',
             ],
+            [
+                'route' => route('admin.packages.scaling', ['package' => $package->id]),
+                'icon' => 'lucide-arrow-up-down',
+                'label' => __('admin/packages.tabs.scaling'),
+            ],
         ]" 
         active="{{ request()->url() }}" />
     <form action="{{ route('admin.packages.update', ['id' => $package->id]) }}" method="POST" class="flex flex-col gap-5" enctype="multipart/form-data">

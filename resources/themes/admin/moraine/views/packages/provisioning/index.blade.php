@@ -21,6 +21,11 @@
                 'icon' => 'lucide-plug',
                 'label' => __('admin/packages.tabs.provisioning'),
             ],
+            [
+                'route' => route('admin.packages.scaling', ['package' => $package->id]),
+                'icon' => 'lucide-arrow-up-down',
+                'label' => __('admin/packages.tabs.scaling'),
+            ],
         ]" 
         active="{{ request()->url() }}"
     />

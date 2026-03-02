@@ -21,6 +21,11 @@
                 'icon' => 'lucide-plug',
                 'label' => 'Provisioning',
             ],
+            [
+                'route' => route('admin.packages.scaling', ['package' => $package->id]),
+                'icon' => 'lucide-arrow-up-down',
+                'label' => __('admin/packages.tabs.scaling'),
+            ],
         ]" 
         active="{{ request()->url() }}" />
     <div class="flex flex-col gap-4">
