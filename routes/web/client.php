@@ -61,8 +61,8 @@ Route::group(['prefix' => 'services', 'middleware' => ['auth', 'maintenance', '2
     Route::get('/', [Client\ServicesController::class, 'index'])->name('client.services');
     Route::get('/{service}', [Client\ServicesController::class, 'show'])->name('client.services.show');
 
-    Route::get('/{service}/provisioning/{slug}', [Client\ServicesController::class, 'showAction'])->name('client.services.provisioning');
-    Route::any('/{service}/provisioning/{slug}/process', [Client\ServicesController::class, 'handleAction'])->name('client.services.provisioning.process');
+    Route::get('/{service}/provisioning/{slug}', [Client\Services\ProvisioningController::class, 'show'])->name('client.services.provisioning.show');
+    Route::any('/{service}/provisioning/{slug}/handle', [Client\Services\ProvisioningController::class, 'handle'])->name('client.services.provisioning.handle');
 });
 
 /**
