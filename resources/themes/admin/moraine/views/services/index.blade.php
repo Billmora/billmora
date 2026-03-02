@@ -3,7 +3,22 @@
 @section('title', 'Manage Services')
 
 @section('body')
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-5">
+    <x-admin::tabs 
+        :tabs="[
+            [
+                'route' => route('admin.services'),
+                'icon' => 'lucide-scan-text',
+                'label' => __('admin/services.tabs.services'),
+            ],
+            [
+                'route' => route('admin.services.cancellations'),
+                'icon' => 'lucide-ban',
+                'label' => __('admin/services.tabs.cancellations'),
+            ],
+        ]" 
+        active="{{ request()->url() }}"
+    />
     <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
         <div class="w-full md:w-100">
             <form action="{{ route('admin.services') }}" method="GET" class="relative inline-block max-w-150 w-full group">
