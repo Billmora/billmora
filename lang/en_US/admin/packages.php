@@ -5,7 +5,9 @@ return [
         'summary' => 'Summary',
         'pricing' => 'Pricing',
         'provisioning' => 'Provisioning',
+        'scaling' => 'Scaling',
     ],
+
     'catalog_label' => 'Catalog',
     'catalog_helper' => 'Select the catalog to which this package belongs.',
     'name_label' => 'Name',
@@ -46,6 +48,11 @@ return [
         'setup_fee_helper' => 'Enter any one-time setup fee for this pricing option.',
         'enabled_label' => 'Enabled?',
         'enabled_helper' => 'Enable or disable this pricing option without deleting it.',
+    ],
+
+    'scaling' => [
+        'target_packages_label' => 'Scalable To',
+        'target_packages_helper' => 'Select the packages that this package can be scaled up or down to.',
     ],
 
     'provisioning' => [
