@@ -28,7 +28,7 @@ class ServicesController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            if (!$request->user()->hasPermissionTo('services.view')) {
+            if (!$request->user()->can('services.view')) {
                 return redirect()->route('admin.services.cancellations');
             }
 
