@@ -81,7 +81,24 @@ class Package extends Model
             'package_scalings',
             'package_id',
             'target_package_id'
-        )->withTimestamps();
+        )
+        ->using(PackageScaling::class)
+        ->withTimestamps();
+    }
+
+    /**
+     * Get all packages that can be scaled into this package as the target.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function sourceScalablePackages()
+    {
+        return $this->belongsToMany(
+            Package::class, 
+            'package_scalings',
+            'target_package_id',
+            'package_id'
+        );
     }
 
     /**
