@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('type');
             $table->string('code');
             $table->enum('status', ['visible', 'hidden'])->default('visible');
-            $table->boolean('is_upgradable')->default(false);
+            $table->boolean('is_scalable')->default(false);
             $table->timestamps();
         });
     }

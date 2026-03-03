@@ -24,7 +24,7 @@ class Variant extends Model
      */
     protected $casts = [
         'status' => 'string',
-        'is_upgradable' => 'boolean',
+        'is_scalable' => 'boolean',
     ];
 
     /**

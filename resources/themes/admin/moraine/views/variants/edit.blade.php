@@ -70,10 +70,10 @@
                         :checked="old('variant_status', $variant->status) === 'hidden'" />
                 </x-admin::radio.group>
                 <x-admin::toggle 
-                    name="variant_is_upgradable"
-                    label="{{ __('admin/variants.is_upgradable_label') }}"
-                    helper="{{ __('admin/variants.is_upgradable_helper') }}"
-                    :checked="old('variant_is_upgradable', $variant->is_upgradable)" />
+                    name="variant_is_scalable"
+                    label="{{ __('admin/variants.is_scalable_label') }}"
+                    helper="{{ __('admin/variants.is_scalable_helper') }}"
+                    :checked="old('variant_is_scalable', $variant->is_scalable)" />
             </div>
             <x-admin::multiselect
                 name="variant_packages"

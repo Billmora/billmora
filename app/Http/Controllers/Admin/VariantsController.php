@@ -79,7 +79,7 @@ class VariantsController extends Controller
             'variant_type' => ['required', 'in:select,radio,slider,checkbox'],
             'variant_code' => ['required', 'string'],
             'variant_status' => ['required', 'in:visible,hidden'],
-            'variant_is_upgradable' => ['required', 'boolean'],
+            'variant_is_scalable' => ['required', 'boolean'],
             'variant_packages' => ['required', 'array'],
             'variant_packages.*' => ['integer', Rule::exists('packages', 'id')],
         ]);
@@ -90,7 +90,7 @@ class VariantsController extends Controller
             'type' => $validated['variant_type'],
             'code' => $validated['variant_code'],
             'status' => $validated['variant_status'],
-            'is_upgradable' => $validated['variant_is_upgradable'],
+            'is_scalable' => $validated['variant_is_scalable'],
         ]);
 
         $variant->packages()->sync($validated['variant_packages']);
@@ -147,7 +147,7 @@ class VariantsController extends Controller
             'variant_type' => ['required', 'in:select,radio,slider,checkbox'],
             'variant_code' => ['required', 'string'],
             'variant_status' => ['required', 'in:visible,hidden'],
-            'variant_is_upgradable' => ['required', 'boolean'],
+            'variant_is_scalable' => ['required', 'boolean'],
             'variant_packages' => ['required', 'array'],
             'variant_packages.*' => ['integer', Rule::exists('packages', 'id')],
         ]);
@@ -161,7 +161,7 @@ class VariantsController extends Controller
             'type' => $validated['variant_type'],
             'code' => $validated['variant_code'],
             'status' => $validated['variant_status'],
-            'is_upgradable' => $validated['variant_is_upgradable'],
+            'is_scalable' => $validated['variant_is_scalable'],
         ]);
 
         $variant->packages()->sync($validated['variant_packages']);

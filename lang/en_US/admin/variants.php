@@ -20,8 +20,8 @@ return [
         'visible' => 'Visible',
         'hidden' => 'Hidden',
     ],
-    'is_upgradable_label' => 'Is Upgradable?',
-    'is_upgradable_helper' => 'Enable to allow this variant to be upgraded or changed after purchase.',
+    'is_scalable_label' => 'Is Scalable?',
+    'is_scalable_helper' => 'Enable to allow this variant to be scaling.',
     'package_label' => 'Package',
     'package_helper' => 'Select the package this variant belongs to.',
 
