@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class PackageScaling extends Model
+class PackageScaling extends Pivot
 {
+    protected $table = 'package_scalings';
+
+    public $incrementing = true;
+
     /**
      * The attributes that aren't mass assignable.
      *
