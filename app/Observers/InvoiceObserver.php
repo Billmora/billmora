@@ -12,6 +12,10 @@ class InvoiceObserver
      */
     public function created(Invoice $invoice): void
     {
+        if ($invoice->total <= 0 && $invoice->status !== 'paid') {
+            $invoice->update(['status' => 'paid']);
+        }
+        
         event(new InvoiceEvents\Created($invoice));
     }
 
