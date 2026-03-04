@@ -17,22 +17,19 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web([
             \App\Http\Middleware\PreferenceMiddleware::class,
+            \App\Http\Middleware\ServiceScalingMiddleware::class,
         ]);
         $middleware->alias([
             'permission' => Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role' => Spatie\Permission\Middleware\RoleMiddleware::class,
             'role_or_permission' => Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
-            'admin'   => \App\Http\Middleware\AdminMiddleware::class,
-            'maintenance'   => \App\Http\Middleware\MaintenanceMiddleware::class,
-            '2fa'   => \App\Http\Middleware\TwoFactorMiddleware::class,
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'maintenance' => \App\Http\Middleware\MaintenanceMiddleware::class,
+            '2fa' => \App\Http\Middleware\TwoFactorMiddleware::class,
         ]);
         $middleware->redirectGuestsTo(fn () => route('client.login'));
         $middleware->redirectUsersTo(fn () => route('client.dashboard'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->render(function (\Exception $e) {
-            if ($e->getCode() === 801) {
-                return Redirect::back()->with('error', $e->getMessage());
-            }
-        });
+        // 
     })->create();
