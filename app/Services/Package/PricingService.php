@@ -101,6 +101,45 @@ class PricingService
     }
 
     /**
+     * Calculate the total price of a package including base price and selected variant option prices.
+     *
+     * @param  \App\Models\PackagePrice  $packagePrice
+     * @param  array  $variantSelections
+     * @param  string  $currencyCode
+     * @return float
+     */
+    public function calculateTotal(PackagePrice $packagePrice, array $variantSelections, string $currencyCode): float
+    {
+        $basePrice = $this->getPrice($packagePrice, $currencyCode);
+        $cycleName = $packagePrice->name;
+        $variantTotal = 0;
+
+        if (!empty($variantSelections)) {
+            $allOptionIds = collect($variantSelections)->flatten()->unique()->toArray();
+            
+            if (!empty($allOptionIds)) {
+                $options = VariantOption::with('prices')
+                    ->whereIn('id', $allOptionIds)
+                    ->get()
+                    ->keyBy('id');
+
+                foreach ($variantSelections as $variantId => $optionIds) {
+                    $optionIds = is_array($optionIds) ? $optionIds : [$optionIds];
+                    
+                    foreach ($optionIds as $optionId) {
+                        $option = $options->get($optionId);
+                        if ($option) {
+                            $variantTotal += $this->getVariantOptionPrice($option, $cycleName, $currencyCode);
+                        }
+                    }
+                }
+            }
+        }
+
+        return $basePrice + $variantTotal;
+    }
+
+    /**
      * Build complete packages payload with prices and variants for all or single currency.
      *
      * @param \Illuminate\Support\Collection $packages
