@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Pelago\Emogrifier\CssInliner;
 
 class NotificationMail extends Mailable
 {
@@ -63,11 +64,14 @@ class NotificationMail extends Mailable
      */
     public function content(): Content
     {
+        $rawHtml = view('email::index', [
+            'body' => $this->placeholder($this->notification->body)
+        ])->render();
+
+        $inlinedHtml = CssInliner::fromHtml($rawHtml)->inlineCss()->render();
+
         return new Content(
-            view: 'email::index',
-            with: [
-                'body' => $this->placeholder($this->notification->body)
-            ],
+            htmlString: $inlinedHtml
         );
     }
 
