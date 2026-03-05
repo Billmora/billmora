@@ -64,6 +64,9 @@ Route::group(['prefix' => 'services', 'middleware' => ['auth', 'maintenance', '2
     Route::get('/{service}/cancellation', [Client\Services\CancellationController::class, 'create'])->name('client.services.cancellation.create');
     Route::post('/{service}/cancellation', [Client\Services\CancellationController::class, 'store'])->name('client.services.cancellation.store');
 
+    Route::get('/{service}/scaling', [Client\Services\ScalingController::class, 'show'])->name('client.services.scaling.show');
+    Route::post('/{service}/scaling', [Client\Services\ScalingController::class, 'store'])->name('client.services.scaling.store');
+
     Route::get('/{service}/provisioning/{slug}', [Client\Services\ProvisioningController::class, 'show'])->name('client.services.provisioning.show');
     Route::any('/{service}/provisioning/{slug}/handle', [Client\Services\ProvisioningController::class, 'handle'])->name('client.services.provisioning.handle');
 });
