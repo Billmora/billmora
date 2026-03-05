@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Events\Invoice as InvoiceEvents;
 use App\Models\Invoice;
+use Illuminate\Support\Facades\DB;
 
 class InvoiceObserver
 {
@@ -13,7 +14,9 @@ class InvoiceObserver
     public function created(Invoice $invoice): void
     {
         if ($invoice->total <= 0 && $invoice->status !== 'paid') {
-            $invoice->update(['status' => 'paid']);
+            DB::afterCommit(function () use ($invoice) {
+                $invoice->update(['status' => 'paid']);
+            });
         }
         
         event(new InvoiceEvents\Created($invoice));
