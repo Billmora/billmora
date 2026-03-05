@@ -59,7 +59,7 @@ class PaymentController extends Controller
         $invoice->load(['user.billing', 'items', 'order.package.catalog']);
     
         $options = [
-            'description' => Str::limit("{$invoice->order->package->name} - {$invoice->order->package->catalog->name}", 200),
+            'description' => "Payment for Invoice #{$invoice->invoice_number}",
             'user' => $invoice->user->toArray(),
             'items' => $invoice->items->toArray(),
             'return_url' => route('client.invoices.show', $invoice->invoice_number),
