@@ -18,8 +18,8 @@ class NotificationController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:settings.mail.notification.view')->only('index');
-        $this->middleware('permission:settings.mail.notification.update')->only(['edit', 'update']);
+        $this->middleware('permission:settings.mail.view')->only('index');
+        $this->middleware('permission:settings.mail.update')->only(['edit', 'update']);
     }
 
     /**

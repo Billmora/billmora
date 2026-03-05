@@ -53,7 +53,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ __('common.inactive') }}</td>
                                 @endif
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                    @can('settings.mail.notification.update')
+                                    @can('settings.mail.update')
                                         <a href="{{ route('admin.settings.mail.notification.edit', $notification->id) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover underline">
                                             {{ __('common.edit') }}
                                         </a>

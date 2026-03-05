@@ -299,7 +299,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::post('/test', [Settings\Mail\MailerController::class, 'test'])->name('admin.settings.mail.mailer.test');
             Route::get('/notification', [Settings\Mail\NotificationController::class, 'index'])->name('admin.settings.mail.notification');
             Route::get('/notification/{id}/edit', [Settings\Mail\NotificationController::class, 'edit'])->name('admin.settings.mail.notification.edit');
-            Route::put('/notification/{id}/edit', [Settings\Mail\NotificationController::class, 'update'])->name('admin.settings.mail.notification.update');
+            Route::put('/notification/{id}/edit', [Settings\Mail\NotificationController::class, 'update'])->name('admin.settings.mail.update');
         });
 
         /**

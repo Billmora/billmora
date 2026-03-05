@@ -83,8 +83,6 @@ class PermissionSeeder extends Seeder
             'settings.general.update',
             'settings.mail.view',
             'settings.mail.update',
-            'settings.mail.notification.view',
-            'settings.mail.notification.update',
             'settings.auth.view',
             'settings.auth.update',
             'settings.captcha.view',

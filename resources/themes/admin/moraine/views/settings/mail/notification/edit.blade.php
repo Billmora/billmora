@@ -3,7 +3,7 @@
 @section('title', "Notification Edit - {$notification->id}")
 
 @section('body')
-<form action="{{ route('admin.settings.mail.notification.update', $notification->id) }}" method="POST" class="flex flex-col gap-5">
+<form action="{{ route('admin.settings.mail.update', $notification->id) }}" method="POST" class="flex flex-col gap-5">
     @csrf
     @method('PUT')
     @if ($noTranslation)
