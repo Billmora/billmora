@@ -53,11 +53,13 @@
                     <x-lucide-view class="w-auto h-5" />
                     {{ __('client/services.action.overview') }}
                 </a>
-                {{-- TODO: Add package/variant scaling --}}
-                <a href="#" class="w-full flex gap-2 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                    <x-lucide-arrow-down-up class="w-auto h-5" />
-                    Adjustment Package
-                </a>
+                @inject('scalingService', 'App\Services\Service\ScalingService')
+                @if($scalingService->canBeScaled($service))
+                    <a href="{{ route('client.services.scaling.show',['service' => $service->id]) }}" class="w-full flex gap-2 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                        <x-lucide-arrow-up-down class="w-auto h-5" />
+                        {{ __('client/services.action.scale') }}
+                    </a>
+                @endif
                 @if ($service->activeCancellation)
                     <button type="button" class="w-full flex gap-2 items-center bg-red-400 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-not-allowed" disabled>
                         <x-lucide-ban class="w-auto h-5" />
