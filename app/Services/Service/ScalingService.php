@@ -8,6 +8,7 @@ use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\ServiceScaling;
 use App\Services\Package\PricingService;
+use App\Traits\AuditsSystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -15,6 +16,8 @@ use Exception;
 
 class ScalingService
 {
+    use AuditsSystem;
+
     /**
      * Inject the PricingService dependency into the scaling service.
      *
@@ -167,7 +170,8 @@ class ScalingService
             throw new Exception(__('client/services.scaling.service_overdue'));
         }
 
-        $remainingDays = max(0, $now->diffInDays($dueDate));
+        $exactRemainingDays = $now->floatDiffInDays($dueDate);
+        $remainingDays = (int) max(0, ceil($exactRemainingDays));
 
         $interval = $service->billing_interval ?? 1;
         $period = $service->billing_period ?? 'monthly';
@@ -247,6 +251,8 @@ class ScalingService
             ]);
 
             $scaling->update(['invoice_id' => $invoice->id]);
+
+            $this->recordCreate('service.scaling.request', $scaling->toArray());
 
             InvoiceItem::create([
                 'invoice_id' => $invoice->id,
