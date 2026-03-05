@@ -89,7 +89,6 @@
             'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'insertLink', 'insertImage', 'insertTable',
             'specialCharacters', 'insertHR', 'selectAll', 'help', 'fullscreen', 'codeBlock', 'html',
         ],
-        useClasses: false,
         quickInsertTags: [],
         height: 500,
         spellcheck: false,
