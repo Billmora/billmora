@@ -87,7 +87,7 @@
         toolbarButtons: [
             'bold', 'italic', 'underline', 'strikeThrough', 'fontSize', 'color', 'paragraphStyle', 'paragraphFormat',
             'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'insertLink', 'insertImage', 'insertTable',
-            'specialCharacters', 'insertHR', 'selectAll', 'help', 'fullscreen', 'codeBlock',
+            'specialCharacters', 'insertHR', 'selectAll', 'help', 'fullscreen', 'codeBlock', 'html',
         ],
         useClasses: false,
         quickInsertTags: [],
