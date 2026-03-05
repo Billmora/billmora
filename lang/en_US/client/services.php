@@ -35,6 +35,8 @@ return [
     ],
 
     'scaling' => [
+        'current_label' => 'Current Package',
+
         'must_be_active' => 'Only active services can be scaled.',
         'unpaid_invoice_exists' => 'Please pay all outstanding invoices before making changes to this service.',
         'service_overdue' => 'Your service has expired. Please renew it before requesting a scale.',
