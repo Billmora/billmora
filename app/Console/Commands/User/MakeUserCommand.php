@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\User;
 
-use App\Jobs\NotificationJob;
+use App\Events\User as UserEvents;
 use App\Models\User;
 use App\Models\UserEmailVerification;
 use Billmora;
@@ -142,17 +142,7 @@ class MakeUserCommand extends Command
             'expires_at' => now()->addMinutes(60),
         ]);
 
-        NotificationJob::dispatch(
-            $user->email,
-            'user_registration', 
-            [
-                'client_name' => $user->fullname,
-                'company_name' => Billmora::getGeneral('company_name'),
-                'verify_url' => route('client.email.verify', ['token' => $token]),
-                'clientarea_url' => config('app.url'),
-            ],
-            $user->language
-        );
+        event(new UserEvents\Registered($user, $token));
 
         $this->newLine();
         $this->info("User has been created successfully with the following details:");

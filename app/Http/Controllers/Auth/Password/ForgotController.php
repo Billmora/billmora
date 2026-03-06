@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Auth\Password;
 
+use App\Events\User as UserEvents;
 use App\Http\Controllers\Controller;
-use App\Jobs\NotificationJob;
 use App\Models\User;
 use App\Models\UserPasswordReset;
 use App\Services\CaptchaService;
-use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -56,17 +55,7 @@ class ForgotController extends Controller
                 'expires_at' => now()->addMinutes(60),
             ]);
 
-            NotificationJob::dispatch(
-                $user->email,
-                'user_password_reset', 
-                [
-                    'client_name' => $user->fullname,
-                    'company_name' => Billmora::getGeneral('company_name'),
-                    'reset_url' => route('client.password.reset', ['token' => $newToken]),
-                    'clientarea_url' => config('app.url'),
-                ],
-                $user->language
-            );
+            event(new UserEvents\PasswordResetRequested($user, $newToken));
         }
 
         return redirect()->route('client.password.forgot')->with('success', __('auth.password.reset_request_sent'));

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Billmora;
+use App\Events\User as UserEvents;
 use App\Http\Controllers\Controller;
-use App\Jobs\NotificationJob;
 use App\Models\User;
 use App\Models\UserEmailVerification;
 use App\Services\CaptchaService;
+use Billmora;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -122,17 +122,7 @@ class RegisterController extends Controller
             'expires_at' => now()->addMinutes(60),
         ]);
 
-        NotificationJob::dispatch(
-            $user->email,
-            'user_registration', 
-            [
-                'client_name' => $user->fullname,
-                'company_name' => Billmora::getGeneral('company_name'),
-                'verify_url' => route('client.email.verify', ['token' => $token]),
-                'clientarea_url' => config('app.url'),
-            ],
-            $user->language
-        );
+        event(new UserEvents\Registered($user, $token));
 
         return redirect()->route('client.login')->with('success', __('auth.registration_successful'));
     }

@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Facades\Audit;
+use App\Events\User as UserEvents;
 use App\Http\Controllers\Controller;
-use App\Jobs\NotificationJob;
 use App\Models\UserEmailVerification;
 use App\Traits\AuditsUser;
-use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -90,17 +88,7 @@ class EmailVerificationController extends Controller
                 'expires_at' => now()->addMinutes(60),
             ]);
 
-            NotificationJob::dispatch(
-                $user->email,
-                'user_resend_verification', 
-                [
-                    'client_name' => $user->fullname,
-                    'company_name' => Billmora::getGeneral('company_name'),
-                    'verify_url' => route('client.email.verify', ['token' => $newToken]),
-                    'clientarea_url' => config('app.url'),
-                ],
-                $user->language
-            );
+            event(new UserEvents\VerificationResent($user, $newToken));
 
             return redirect()->route('client.login')->with('success', __('auth.email.resent'));
         } catch (\Exception $e) {

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\User as UserEvents;
 use App\Facades\Audit;
 use App\Models\User;
 use App\Models\UserEmailVerification;
 use App\Models\UserPasswordReset;
 use App\Http\Controllers\Controller;
-use App\Jobs\NotificationJob;
 use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Database\Eloquent\Builder;
@@ -155,17 +155,7 @@ class UsersController extends Controller
                 'expires_at' => now()->addMinutes(60),
             ]);
 
-            NotificationJob::dispatch(
-                $user->email,
-                'user_password_reset', 
-                [
-                    'client_name' => $user->fullname,
-                    'company_name' => Billmora::getGeneral('company_name'),
-                    'reset_url' => route('client.password.reset', ['token' => $token]),
-                    'clientarea_url' => config('app.url'),
-                ],
-                $user->language
-            );
+            event(new UserEvents\PasswordResetRequested($user, $token));
         }
 
         if ($validated['role'] === 'root' && Auth::user()->isRootAdmin()) {
