@@ -16,6 +16,11 @@
                 'icon' => 'lucide-landmark',
                 'label' => __('admin/invoices.tabs.transaction'),
             ],
+            [
+                'route' => route('admin.invoices.refund', ['invoice' => $invoice->invoice_number]),
+                'icon' => 'lucide-banknote',
+                'label' => __('admin/invoices.tabs.refund'),
+            ],
         ]" 
         active="{{ request()->url() }}"
     />
