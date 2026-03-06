@@ -10,5 +10,11 @@ class Approved
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(public ServiceCancellation $cancellation) {}
+    /**
+     * Create a new event instance.
+     */
+    public function __construct(public ServiceCancellation $cancellation) 
+    {
+        // 
+    }
 }

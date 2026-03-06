@@ -10,5 +10,11 @@ class ProvisioningScaled
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(public Service $service, public $oldPackage = null) {}
+    /**
+     * Create a new event instance.
+     */
+    public function __construct(public Service $service, public $oldPackage = null) 
+    {
+        // 
+    }
 }

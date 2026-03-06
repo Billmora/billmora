@@ -10,5 +10,11 @@ class ProvisioningUnsuspended
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(public Service $service) {}
+    /**
+     * Create a new event instance.
+     */
+    public function __construct(public Service $service) 
+    {
+        // 
+    }
 }

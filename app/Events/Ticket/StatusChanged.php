@@ -10,5 +10,11 @@ class StatusChanged
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(public Ticket $ticket, public string $oldStatus, public string $newStatus) {}
+    /**
+     * Create a new event instance.
+     */
+    public function __construct(public Ticket $ticket, public string $oldStatus, public string $newStatus) 
+    {
+        // 
+    }
 }

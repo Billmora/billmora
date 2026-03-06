@@ -11,10 +11,11 @@ class Created
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Invoice $invoice;
-
-    public function __construct(Invoice $invoice, public bool $sendEmail = true)
+    /**
+     * Create a new event instance.
+     */
+    public function __construct(public Invoice $invoice, public bool $sendEmail = true)
     {
-        $this->invoice = $invoice;
+        // 
     }
 }

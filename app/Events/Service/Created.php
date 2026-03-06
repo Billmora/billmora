@@ -10,5 +10,8 @@ class Created
 {
     use Dispatchable, SerializesModels;
 
+    /**
+     * Create a new event instance.
+     */
     public function __construct(public Service $service) {}
 }

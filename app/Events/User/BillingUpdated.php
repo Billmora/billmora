@@ -11,13 +11,11 @@ class BillingUpdated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public UserBilling $billing;
-
     /**
      * Create a new event instance.
      */
-    public function __construct(UserBilling $billing)
+    public function __construct(public UserBilling $billing)
     {
-        $this->billing = $billing;
+        // 
     }
 }

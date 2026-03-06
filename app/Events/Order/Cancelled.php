@@ -11,13 +11,11 @@ class Cancelled
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Order $order;
-
     /**
      * Create a new event instance.
      */
-    public function __construct(Order $order)
+    public function __construct(public Order $order)
     {
-        $this->order = $order;
+        // 
     }
 }

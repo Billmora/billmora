@@ -10,5 +10,11 @@ class Replied
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(public TicketMessage $message) {}
+    /**
+     * Create a new event instance.
+     */
+    public function __construct(public TicketMessage $message) 
+    {
+        // 
+    }
 }

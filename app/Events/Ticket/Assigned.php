@@ -10,5 +10,11 @@ class Assigned
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(public Ticket $ticket) {}
+    /**
+     * Create a new event instance.
+     */
+    public function __construct(public Ticket $ticket) 
+    {
+        // 
+    }
 }
