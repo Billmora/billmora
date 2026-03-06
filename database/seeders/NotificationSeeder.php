@@ -331,6 +331,54 @@ class NotificationSeeder extends Seeder
                 ],
             ],
             [
+                'key' => 'invoice_refunded',
+                'name' => 'Invoice Refunded',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'invoice_number' => 'Invoice Number (e.g. INV-0001)',
+                    'invoice_total' => 'Total amount of the invoice',
+                    'refunded_amount' => 'The amount that was refunded',
+                    'invoice_url' => 'Direct link to the invoice',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Refund Processed - {invoice_number}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-warning">
+                                <p>A refund has been successfully processed for your invoice <strong>{invoice_number}</strong>.</p>
+                            </div>
+                            <br />
+                            
+                            <table>
+                                <tr>
+                                    <td>Invoice Total</td>
+                                    <td>{invoice_total}</td>
+                                </tr>
+                                <tr>
+                                    <td style="color: #6d7178;"><strong>Amount Refunded</strong></td>
+                                    <td>
+                                        <strong><span style="font-size: 16px; color: #e74c3c;">{refunded_amount}</span></strong>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <br />
+                            <p>Please note that it may take a few business days for the funds to appear in your account, depending on the payment method used.</p>
+                            <br />
+                            <div class="text-center">
+                                <a href="{invoice_url}" target="_blank" class="btn btn-primary">View Invoice</a>
+                            </div>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
                 'key' => 'ticket_created',
                 'name' => 'Ticket Created',
                 'placeholder' => [
