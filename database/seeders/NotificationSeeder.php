@@ -379,6 +379,67 @@ class NotificationSeeder extends Seeder
                 ],
             ],
             [
+                'key' => 'transaction_recorded',
+                'name' => 'Transaction Recorded (Receipt)',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'transaction_type' => 'Payment or Refund',
+                    'transaction_amount' => 'Amount of transaction',
+                    'transaction_date' => 'Date of transaction',
+                    'transaction_description' => 'Description of transaction',
+                    'transaction_reference' => 'Gateway Reference ID',
+                    'invoice_number' => 'Related Invoice Number',
+                    'invoice_url' => 'Direct link to the invoice',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'New {transaction_type} Recorded - {invoice_number}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <p>A new <strong>{transaction_type}</strong> has been successfully recorded on your account.</p>
+                            <br />
+                            
+                            <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                                <tr>
+                                    <td style="color: #6d7178;">Invoice</td>
+                                    <td style="font-weight: 600; color: #333;">{invoice_number}</td>
+                                </tr>
+                                <tr>
+                                    <td style="color: #6d7178;">Description</td>
+                                    <td>{transaction_description}</td>
+                                </tr>
+                                <tr>
+                                    <td style="color: #6d7178;">Date</td>
+                                    <td>{transaction_date}</td>
+                                </tr>
+                                <tr>
+                                    <td style="color: #6d7178;">Reference</td>
+                                    <td>{transaction_reference}</td>
+                                </tr>
+                                <tr>
+                                    <td style="color: #6d7178;"><strong>{transaction_type} Amount</strong></td>
+                                    <td>
+                                        <strong><span style="font-size: 16px; color: #7267ef;">{transaction_amount}</span></strong>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <br />
+                            <p>You can view your updated invoice by clicking the button below:</p>
+                            <br />
+                            <div class="text-center">
+                                <a href="{invoice_url}" target="_blank" class="btn btn-primary">View Invoice</a>
+                            </div>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
                 'key' => 'ticket_created',
                 'name' => 'Ticket Created',
                 'placeholder' => [
