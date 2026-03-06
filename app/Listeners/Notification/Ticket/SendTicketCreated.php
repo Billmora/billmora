@@ -51,6 +51,7 @@ class SendTicketCreated
         $placeholder = [
             'client_name' => $client->fullname,
             'company_name' => Billmora::getGeneral('company_name'),
+            'ticket_number' => $ticket->ticket_number,
             'ticket_subject' => $ticket->subject,
             'ticket_department' => $ticket->department,
             'ticket_url' => route('client.tickets.reply', ['ticket' => $ticket->ticket_number]),

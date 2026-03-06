@@ -295,6 +295,7 @@ class NotificationSeeder extends Seeder
                 'placeholder' => [
                     'client_name' => 'Client Name',
                     'company_name' => 'Company Name',
+                    'ticket_number' => 'Ticket Number (e.g. TKT-0001)',
                     'ticket_subject' => 'Ticket Subject',
                     'ticket_department' => 'Ticket Department',
                     'ticket_url' => 'Link to the ticket',
@@ -308,6 +309,10 @@ class NotificationSeeder extends Seeder
                             <p>A ticket has been opened for your account.</p>
                             <br />
                             <table>
+                                <tr>
+                                    <td>Ticket Number</td>
+                                    <td>{ticket_number}</td>
+                                </tr>
                                 <tr>
                                     <td>Subject</td>
                                     <td>{ticket_subject}</td>
