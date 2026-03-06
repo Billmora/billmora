@@ -12,7 +12,7 @@ class TicketMessageObserver
      */
     public function created(TicketMessage $ticketMessage): void
     {
-        event(new TicketEvents\Replied($ticketMessage));
+        event(new TicketEvents\Replied($ticketMessage->ticket, $ticketMessage));
     }
 
     /**

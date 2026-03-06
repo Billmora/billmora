@@ -211,7 +211,7 @@ class NotificationSeeder extends Seeder
                             </div>
                             <br />
                             <p>Here are the details of the login:</p>
-                            <table class="data-table">
+                            <table>
                                 <tr>
                                     <td>IP Address</td>
                                     <td>{ip_address}</td>
@@ -228,10 +228,85 @@ class NotificationSeeder extends Seeder
                             <br />
                             <p>If this was you, you can safely ignore this email.</p>
                             <br />
-                            <p class="text-danger"><strong>If you did not authorize this login</strong>, please change your password immediately and contact our support team to secure your account.</p>
+                            <p class="text-danger"><strong>If you did not authorize this login</strong>, please change your password immediately and contact our team to secure your account.</p>
                             <br />
                             <p>Best Regards,</p>
                             <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'ticket_created',
+                'name' => 'Ticket Created',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'ticket_subject' => 'Ticket Subject',
+                    'ticket_department' => 'Ticket Department',
+                    'ticket_url' => 'Link to the ticket',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Ticket Opened - {ticket_subject}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <p>A ticket has been opened for your account.</p>
+                            <br />
+                            <table>
+                                <tr>
+                                    <td>Subject</td>
+                                    <td>{ticket_subject}</td>
+                                </tr>
+                                <tr>
+                                    <td>Department</td>
+                                    <td>{ticket_department}</td>
+                                </tr>
+                            </table>
+                            <br />
+                            <p>We will review your request and get back to you as soon as possible. You can track the progress or add more details by clicking the button below:</p>
+                            <br />
+                            <div class="text-center">
+                                <a href="{ticket_url}" target="_blank" class="btn btn-primary">View Ticket</a>
+                            </div>
+                            <br />
+                            <hr class="divider" />
+                            <p class="text-muted" style="font-size: 14px;">If the button doesn't work, copy and paste this link into your browser:</p>
+                            <p class="text-muted" style="font-size: 14px;"><a href="{ticket_url}">{ticket_url}</a></p>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'ticket_replied',
+                'name' => 'Support Ticket Replied',
+                'placeholder' => [
+                    'recipient_name' => 'Client or Staff Name',
+                    'company_name' => 'Company Name',
+                    'ticket_number' => 'Ticket ID (e.g. TICK-001)',
+                    'ticket_subject' => 'Ticket Subject',
+                    'ticket_status' => 'Current Ticket Status',
+                    'reply_content' => 'The full reply message (HTML supported)',
+                    'ticket_url' => 'Link to the ticket',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'New Reply - [#{ticket_number}] {ticket_subject}',
+                        'body' => <<<HTML
+                            <div>
+                                {reply_content}
+                            </div>
+                            
+                            <hr class="divider" />
+                            
+                            <p><strong>Ticket Number:</strong> #{ticket_number}</p>
+                            <p><strong>Subject:</strong> {ticket_subject}</p>
+                            <p><strong>Status:</strong> {ticket_status}</p>
+                            <p><strong>Ticket URL:</strong> <a href="{ticket_url}">{ticket_url}</a></p>
                         HTML,
                     ],
                 ],
@@ -276,7 +351,7 @@ class NotificationSeeder extends Seeder
                                 <a href="{invoice_url}" target="_blank" class="btn btn-primary">View & Pay Invoice</a>
                             </div>
                             <br /><br />
-                            <p>If you have any questions regarding this invoice, please contact our support team.</p>
+                            <p>If you have any questions regarding this invoice, please contact our team.</p>
                             
                             <hr class="divider" />
                             <p class="text-muted" style="font-size: 14px;">If the button doesn't work, copy and paste this link into your browser:</p>
