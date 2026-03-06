@@ -340,7 +340,7 @@ class NotificationSeeder extends Seeder
                 'placeholder' => [
                     'recipient_name' => 'Client or Staff Name',
                     'company_name' => 'Company Name',
-                    'ticket_number' => 'Ticket ID (e.g. TICK-001)',
+                    'ticket_number' => 'Ticket Number (e.g. TKT-0001)',
                     'ticket_subject' => 'Ticket Subject',
                     'ticket_status' => 'Current Ticket Status',
                     'reply_content' => 'The full reply message (HTML supported)',
