@@ -51,7 +51,7 @@
                 margin: 0.5rem 0;
             }
             a {
-                color: #7267ef !important;
+                color: #7267ef;
                 font-weight: bold;
             }
             p {
@@ -86,7 +86,7 @@
             .btn {
                 display: inline-block;
                 padding: 10px 18px;
-                color: #ffffff !important;
+                color: #ffffff;
                 text-decoration: none;
                 border-radius: 6px;
                 font-weight: bold;
@@ -125,9 +125,9 @@
             .text-center { text-align: center; }
             .text-right { text-align: right; }
             
-            .text-danger { color: #e74c3c !important; }
-            .text-success { color: #2ecc71 !important; }
-            .text-muted { color: #9ca3af !important; }
+            .text-danger { color: #e74c3c; }
+            .text-success { color: #2ecc71; }
+            .text-muted { color: #9ca3af; }
             .divider {
                 border: none;
                 border-top: 2px dashed #eceeff;
