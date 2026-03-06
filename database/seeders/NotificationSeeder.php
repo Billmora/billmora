@@ -296,9 +296,9 @@ class NotificationSeeder extends Seeder
                     'client_name' => 'Client Name',
                     'company_name' => 'Company Name',
                     'invoice_number' => 'Invoice Number (e.g. INV-0001)',
-                    'total_amount' => 'Total Amount with Currency',
                     'paid_at' => 'Payment Date',
                     'payment_method' => 'Payment Method / Gateway',
+                    'invoice_items_table' => 'Dynamic table containing invoice items and totals',
                     'invoice_url' => 'Direct link to the invoice',
                 ],
                 'translations' => [
@@ -311,28 +311,18 @@ class NotificationSeeder extends Seeder
                                 <p><strong>Thank You!</strong> We have successfully received your payment for invoice <strong>{invoice_number}</strong>.</p>
                             </div>
                             <br />
-                            <table class="data-table">
-                                <tr>
-                                    <td>Amount Paid</td>
-                                    <td>{total_amount}</td>
-                                </tr>
-                                <tr>
-                                    <td>Date Paid</td>
-                                    <td>{paid_at}</td>
-                                </tr>
-                                <tr>
-                                    <td>Payment Method</td>
-                                    <td>{payment_method}</td>
-                                </tr>
-                            </table>
+                            
+                            {invoice_items_table}
+                            <br />
+                            
+                            <p><strong>Payment Date:</strong> {paid_at}</p>
+                            <p><strong>Payment Method:</strong> {payment_method}</p>
                             <br />
                             <p>You can view or download your PDF receipt by clicking the button below:</p>
                             <br />
                             <div class="text-center">
                                 <a href="{invoice_url}" target="_blank" class="btn btn-primary">View Receipt</a>
                             </div>
-                            <br />
-                            <p>We appreciate your business!</p>
                             <br />
                             <p>Best Regards,</p>
                             <p>{company_name}</p>
