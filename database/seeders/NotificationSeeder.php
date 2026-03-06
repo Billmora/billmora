@@ -191,6 +191,52 @@ class NotificationSeeder extends Seeder
                 ],
             ],
             [
+                'key' => 'user_login_detected',
+                'name' => 'New Login Detected',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'ip_address' => 'IP Address',
+                    'user_agent' => 'Browser / OS Information',
+                    'login_time' => 'Time of Login',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Security Alert: New Login to Your Account',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-warning">
+                                <p>We noticed a new login to your <strong>{company_name}</strong> account.</p>
+                            </div>
+                            <br />
+                            <p>Here are the details of the login:</p>
+                            <table class="data-table">
+                                <tr>
+                                    <td>IP Address</td>
+                                    <td>{ip_address}</td>
+                                </tr>
+                                <tr>
+                                    <td>Device/Browser</td>
+                                    <td>{user_agent}</td>
+                                </tr>
+                                <tr>
+                                    <td>Time</td>
+                                    <td>{login_time}</td>
+                                </tr>
+                            </table>
+                            <br />
+                            <p>If this was you, you can safely ignore this email.</p>
+                            <br />
+                            <p class="text-danger"><strong>If you did not authorize this login</strong>, please change your password immediately and contact our support team to secure your account.</p>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
                 'key' => 'invoice_created',
                 'name' => 'New Invoice Created',
                 'placeholder' => [
