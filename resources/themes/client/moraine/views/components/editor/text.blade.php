@@ -90,6 +90,7 @@
             'specialCharacters', 'insertHR', 'selectAll', 'help', 'fullscreen', 'codeBlock', 'html',
         ],
         quickInsertTags: [],
+        enter: 1,
         height: 500,
         spellcheck: false,
         imageUpload: true,
