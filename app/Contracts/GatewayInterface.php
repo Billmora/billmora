@@ -19,13 +19,13 @@ interface GatewayInterface extends PluginInterface
    /**
      * Process the payment request and return gateway response.
      *
-     * @param string $transactionId
+     * @param string $invoiceNumber
      * @param float $amount
      * @param string $currency ISO 4217 currency code (e.g., 'IDR', 'USD')
      * @param array<string, mixed> $options
      * @return mixed
      */
-    public function pay(string $transactionId, float $amount, string $currency, array $options = []);
+    public function pay(string $invoiceNumber, float $amount, string $currency, array $options = []);
 
     /**
      * Handle payment gateway callback and update invoice status.
