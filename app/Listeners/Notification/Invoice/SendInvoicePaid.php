@@ -31,6 +31,7 @@ class SendInvoicePaid
             return;
         }
 
+        $dateFormat = Billmora::getGeneral('company_date_format') . ' g:i A';
         $lastTransaction = $invoice->transactions()->latest()->first();
 
         $placeholder = [
@@ -38,7 +39,7 @@ class SendInvoicePaid
             'company_name' => Billmora::getGeneral('company_name'),
             'invoice_number' => $invoice->invoice_number,
             'total_amount' => $this->currencyService->format($invoice->total, $invoice->currency),
-            'paid_at' => $invoice->paid_at ? $invoice->paid_at->format('d M Y, H:i') : now()->format('d M Y, H:i'),
+            'paid_at' => $invoice->paid_at ? $invoice->paid_at->format($dateFormat) : now()->format($dateFormat),
             'payment_method' => $lastTransaction->plugin->name ?? 'Manual Payment',
             'invoice_url' => route('client.invoices.show', $invoice->invoice_number),
         ];
