@@ -190,6 +190,59 @@ class NotificationSeeder extends Seeder
                     ],
                 ],
             ],
+            [
+                'key' => 'invoice_created',
+                'name' => 'New Invoice Created',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'invoice_number' => 'Invoice Number (e.g. INV-0001)',
+                    'total_amount' => 'Total Amount with Currency',
+                    'due_date' => 'Invoice Due Date',
+                    'invoice_url' => 'Direct link to the invoice',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'New Invoice Generated - {invoice_number}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-info">
+                                <p>A new invoice <strong>{invoice_number}</strong> has been generated for your account.</p>
+                            </div>
+                            <br />
+                            
+                            <table>
+                                <tr>
+                                    <td>Amount Due</td>
+                                    <td>{total_amount}</td>
+                                </tr>
+                                <tr>
+                                    <td>Due Date</td>
+                                    <td>{due_date}</td>
+                                </tr>
+                            </table>
+                            <br />
+                            
+                            <p>You can view and pay your invoice by clicking the button below:</p>
+                            <br />
+                            <div class="text-center">
+                                <a href="{invoice_url}" target="_blank" class="btn btn-primary">View & Pay Invoice</a>
+                            </div>
+                            <br /><br />
+                            <p>If you have any questions regarding this invoice, please contact our support team.</p>
+                            
+                            <hr class="divider" />
+                            <p class="text-muted" style="font-size: 14px;">If the button doesn't work, copy and paste this link into your browser:</p>
+                            <p class="text-muted" style="font-size: 14px;"><a href="{invoice_url}">{invoice_url}</a></p>
+                            <br />
+                            
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
         ];
 
         foreach ($notifications as $notification) {
