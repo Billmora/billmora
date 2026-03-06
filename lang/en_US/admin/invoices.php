@@ -4,6 +4,7 @@ return [
     'tabs' => [
         'summary' => 'Summary',
         'transaction' => 'Transaction',
+        'refund' => 'Refund',
     ],
 
     'number_label' => 'Invoice Number',
@@ -32,4 +33,24 @@ return [
     'total_label' => 'Total',
     'download_label' => 'Download as PDF',
     'add_new_items_label' => 'Add new items',
+
+    'refund' => [
+        'type_label' => 'Refund Type',
+        'type_helper' => 'Select the refund method. Gateway processes the refund through the payment gateway, Manual records it manually.',
+        'amount_label' => 'Refund Amount',
+        'amount_helper' => 'Enter the amount to be refunded from this transaction.',
+        'reference_label' => 'Reference Number',
+        'reference_helper' => 'Enter the reference number or ID for this refund. Only applicable for manual refunds.',
+
+        'already_fully_refunded'      => 'This invoice has already been fully refunded.',
+        'no_gateway_associated'       => 'No payment gateway is associated with this invoice.',
+        'gateway_not_support_refund'  => 'The selected gateway does not support automated refunds.',
+        'gateway_rejected'            => 'The gateway rejected the refund request. Please try again or process it manually.',
+
+        'success' => 'Refund processed successfully.',
+        'transaction_description' => 'Refund Processed (:type)',
+
+        'type_gateway' => 'Automatic via Gateway',
+        'type_manual'  => 'Manual Process (External)',
+    ],
 ];
