@@ -135,7 +135,7 @@ class InvoicesController extends Controller
             }
 
             if ($request->boolean('invoice_email')) {
-                // TODO: Send email notify to user
+                $invoice->sendEmailNotification = $request->boolean('invoice_email');
             }
 
             DB::commit();

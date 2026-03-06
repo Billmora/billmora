@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 #[ObservedBy([InvoiceObserver::class])]
 class Invoice extends Model
 {
+    public bool $sendEmailNotification = true;
+    
     /**
      * The attributes that aren't mass assignable.
      *

@@ -13,7 +13,7 @@ class Created
 
     public Invoice $invoice;
 
-    public function __construct(Invoice $invoice)
+    public function __construct(Invoice $invoice, public bool $sendEmail = true)
     {
         $this->invoice = $invoice;
     }

@@ -19,7 +19,7 @@ class InvoiceObserver
             });
         }
         
-        event(new InvoiceEvents\Created($invoice));
+        event(new InvoiceEvents\Created($invoice, $invoice->sendEmailNotification));
     }
 
     /**
