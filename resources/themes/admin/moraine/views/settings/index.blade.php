@@ -81,5 +81,16 @@
             </div>
         </a>
     @endcan
+    @can('settings.automation.view')
+        <a href="{{ route('admin.settings.automation.scheduling') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary rounded-2xl transition ease-in-out duration-150">
+            <div class="bg-billmora-primary p-2 rounded-full">
+                <x-lucide-clock class="w-auto h-10 text-white" />
+            </div>
+            <div>
+            <h4 class="text-lg text-slate-700 font-semibold">{{ __('admin/settings/automation.title') }}</h4> 
+            <p class="text-slate-500">{{ __('admin/settings/automation.description') }}</p>
+            </div>
+        </a>
+    @endcan
 </div>
 @endsection
