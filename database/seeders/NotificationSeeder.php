@@ -796,6 +796,110 @@ class NotificationSeeder extends Seeder
                 ],
             ],
             [
+                'key' => 'invoice_reminder',
+                'name' => 'Invoice Payment Reminder',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'invoice_number' => 'Invoice Number',
+                    'due_date' => 'Due Date of the invoice',
+                    'invoice_items_table' => 'Pre-rendered table containing invoice items',
+                    'invoice_url' => 'Direct link to the invoice',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Invoice Payment Reminder - {invoice_number}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p><br />
+                            <div class="alert alert-info">
+                                <p>This is a friendly reminder that your invoice <strong>{invoice_number}</strong> will be due on <strong>{due_date}</strong>. Please ensure payment is made to avoid any service interruptions.</p>
+                            </div><br />
+                            {invoice_items_table}<br />
+                            <div class="text-center"><a href="{invoice_url}" target="_blank" class="btn btn-primary">Pay Invoice Now</a></div><br />
+                            <p>Best Regards,</p><p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'invoice_overdue_1',
+                'name' => 'First Overdue Notice',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'invoice_number' => 'Invoice Number',
+                    'due_date' => 'Due Date of the invoice',
+                    'invoice_items_table' => 'Pre-rendered table containing invoice items',
+                    'invoice_url' => 'Direct link to the invoice',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'First Overdue Notice - {invoice_number}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p><br />
+                            <div class="alert alert-warning">
+                                <p>This is the first notice that your invoice <strong>{invoice_number}</strong> is now overdue. The original due date was <strong>{due_date}</strong>.</p>
+                            </div><br />
+                            {invoice_items_table}<br />
+                            <div class="text-center"><a href="{invoice_url}" target="_blank" class="btn btn-primary">Pay Invoice Now</a></div><br />
+                            <p>Best Regards,</p><p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'invoice_overdue_2',
+                'name' => 'Second Overdue Notice',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'invoice_number' => 'Invoice Number',
+                    'due_date' => 'Due Date of the invoice',
+                    'invoice_items_table' => 'Pre-rendered table containing invoice items',
+                    'invoice_url' => 'Direct link to the invoice',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Second Overdue Notice - {invoice_number}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p><br />
+                            <div class="alert alert-warning">
+                                <p>This is the second notice regarding your overdue invoice <strong>{invoice_number}</strong>. If payment is not received promptly, your active services may be suspended.</p>
+                            </div><br />
+                            {invoice_items_table}<br />
+                            <div class="text-center"><a href="{invoice_url}" target="_blank" class="btn btn-primary">Pay Invoice Now</a></div><br />
+                            <p>Best Regards,</p><p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'invoice_overdue_3',
+                'name' => 'Third (Final) Overdue Notice',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'invoice_number' => 'Invoice Number',
+                    'due_date' => 'Due Date of the invoice',
+                    'invoice_items_table' => 'Pre-rendered table containing invoice items',
+                    'invoice_url' => 'Direct link to the invoice',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'URGENT: Final Overdue Notice - {invoice_number}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p><br />
+                            <div class="alert alert-danger">
+                                <p>This is the final notice regarding your severely overdue invoice <strong>{invoice_number}</strong>. Immediate payment is required to prevent permanent termination of your services.</p>
+                            </div><br />
+                            {invoice_items_table}<br />
+                            <div class="text-center"><a href="{invoice_url}" target="_blank" class="btn btn-primary">Pay Invoice Now</a></div><br />
+                            <p>Best Regards,</p><p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
                 'key' => 'transaction_recorded',
                 'name' => 'Transaction Recorded (Receipt)',
                 'placeholder' => [

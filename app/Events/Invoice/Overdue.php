@@ -14,7 +14,7 @@ class Overdue
     /**
      * Create a new event instance.
      */
-    public function __construct(public Invoice $invoice)
+    public function __construct(public Invoice $invoice, public string $noticeLevel = 'overdue_1')
     {
         // 
     }
