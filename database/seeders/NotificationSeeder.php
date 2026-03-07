@@ -899,6 +899,52 @@ class NotificationSeeder extends Seeder
                     ],
                 ],
             ],
+            [
+                'key' => 'ticket_closed',
+                'name' => 'Ticket Closed',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'ticket_subject' => 'Ticket Subject',
+                    'ticket_number' => 'Ticket Number (e.g., TKT-0001)',
+                    'ticket_url' => 'Direct link to the ticket',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Ticket Closed - [#{ticket_number}] {ticket_subject}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-info">
+                                <p>This is a notification that your support ticket <strong>#{ticket_number}</strong> has been marked as closed.</p>
+                            </div>
+                            <br />
+                            
+                            <table>
+                                <tr>
+                                    <td>Subject</td>
+                                    <td>{ticket_subject}</td>
+                                </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td style="color: #6d7178;">Closed</td>
+                                </tr>
+                            </table>
+                            <br />
+                            
+                            <p>We hope your issue was resolved satisfactorily! If you still need assistance with this specific issue, you can usually reply to the ticket to reopen it. For any new issues, please open a new support ticket.</p>
+                            <br />
+                            
+                            <div class="text-center">
+                                <a href="{ticket_url}" target="_blank" class="btn btn-primary">View Ticket</a>
+                            </div>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
         ];
 
         foreach ($notifications as $notification) {

@@ -26,6 +26,10 @@ class TicketObserver
                 $ticket->getOriginal('status'), 
                 $ticket->status
             ));
+
+            if ($ticket->status === 'closed') {
+                event(new TicketEvents\Closed($ticket));
+            }
         }
 
         if ($ticket->wasChanged('assigned_to') && $ticket->assigned_to !== null) {
