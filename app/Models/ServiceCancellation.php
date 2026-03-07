@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\Observers\ServiceCanellationObserver;
+use App\Observers\ServiceCancellationObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 
-#[ObservedBy(ServiceCanellationObserver::class)]
+#[ObservedBy(ServiceCancellationObserver::class)]
 class ServiceCancellation extends Model
 {
     /**

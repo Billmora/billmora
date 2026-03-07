@@ -5,7 +5,7 @@ namespace App\Observers;
 use App\Events\ServiceCancellation as ServiceCancellationEvents;
 use App\Models\ServiceCancellation;
 
-class ServiceCanellationObserver
+class ServiceCancellationObserver
 {
     /**
      * Handle the ServiceCancellation "created" event.
