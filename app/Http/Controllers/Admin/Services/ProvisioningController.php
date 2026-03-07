@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Services;
 
+use App\Events\Service as ServiceEvents;
 use App\Facades\Audit;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
@@ -192,6 +193,8 @@ class ProvisioningController extends Controller
                 'service_id' => $service->id,
                 'status' => 'success',
             ]);
+
+            event(new ServiceEvents\ProvisioningRenewed($service));
             
             return back()->with('success', __('admin/services.provisioning.renew.success'));
         } catch (\Exception $e) {
@@ -231,6 +234,8 @@ class ProvisioningController extends Controller
                 'service_id' => $service->id,
                 'status' => 'success',
             ]);
+
+            event(new ServiceEvents\ProvisioningScaled($service));
 
             return back()->with('success', __('admin/services.provisioning.scale.success'));
         } catch (\Exception $e) {

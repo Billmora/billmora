@@ -278,6 +278,345 @@ class NotificationSeeder extends Seeder
                 ],
             ],
             [
+                'key' => 'service_provisioning_activated',
+                'name' => 'Service Provisioning Activated',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'service_name' => 'Name of the service / package',
+                    'recurring_amount' => 'Recurring amount to be paid',
+                    'billing_cycle' => 'Billing cycle (e.g., Monthly, Yearly)',
+                    'next_due_date' => 'Next due date of the service',
+                    'service_url' => 'Direct link to manage the service',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Service Activated - {service_name}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-success">
+                                <p>Great news! Your service <strong>{service_name}</strong> has been successfully activated and is now ready to use.</p>
+                            </div>
+                            <br />
+                            
+                            <table>
+                                <tr>
+                                    <td>Service Name</td>
+                                    <td>{service_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>Recurring Amount</td>
+                                    <td>{recurring_amount}</td>
+                                </tr>
+                                <tr>
+                                    <td>Billing Cycle</td>
+                                    <td>{billing_cycle}</td>
+                                </tr>
+                                <tr>
+                                    <td>Next Due Date</td>
+                                    <td>{next_due_date}</td>
+                                </tr>
+                            </table>
+                            <br />
+                            
+                            <p>You can manage your service, view details, and access control panels by logging into your client area:</p>
+                            <br />
+                            
+                            <div class="text-center">
+                                <a href="{service_url}" target="_blank" class="btn btn-primary">Manage Service</a>
+                            </div>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'service_provisioning_failed',
+                'name' => 'Service Provisioning Failed',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'service_name' => 'Name of the service / package',
+                    'action' => 'The action that failed (e.g., Create, Suspend)',
+                    'error_message' => 'Technical error message (Internal use)',
+                    'service_url' => 'Direct link to manage the service',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Service Update Delayed - {service_name}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-warning">
+                                <p>We wanted to let you know that there is a slight delay in processing your service. Our system encountered a temporary issue during the <strong>{action}</strong> process.</p>
+                            </div>
+                            <br />
+                            
+                            <table>
+                                <tr>
+                                    <td>Service Name</td>
+                                    <td>{service_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>Pending Action</td>
+                                    <td>{action}</td>
+                                </tr>
+                            </table>
+                            <br />
+                            
+                            <p><strong>Rest assured, our technical team has been automatically notified of this issue and is working to resolve it manually.</strong> You do not need to take any further action at this time.</p>
+                            <br />
+                            
+                            <div class="text-center">
+                                <a href="{service_url}" target="_blank" class="btn btn-primary">View Service Status</a>
+                            </div>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                            
+                            HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'service_provisioning_suspended',
+                'name' => 'Service Suspended',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'service_name' => 'Name of the service / package',
+                    'service_url' => 'Direct link to manage the service',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Service Suspended - {service_name}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-danger">
+                                <p>This is a notification that your service <strong>{service_name}</strong> has been suspended.</p>
+                            </div>
+                            <br />
+                            
+                            <table>
+                                <tr>
+                                    <td>Service Name</td>
+                                    <td>{service_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td style="color: #e74c3c;">Suspended</td>
+                                </tr>
+                            </table>
+                            <br />
+                            
+                            <p>This is usually due to an overdue invoice. To reactivate your service and avoid permanent data loss (termination), please log in to your client area and settle any pending balances.</p>
+                            <br />
+                            
+                            <div class="text-center">
+                                <a href="{service_url}" target="_blank" class="btn btn-primary">Manage Service</a>
+                            </div>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'service_provisioning_unsuspended',
+                'name' => 'Service Reactivated (Unsuspended)',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'service_name' => 'Name of the service / package',
+                    'service_url' => 'Direct link to manage the service',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Service Reactivated - {service_name}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-success">
+                                <p>Great news! Your service <strong>{service_name}</strong> has been successfully reactivated and is now fully operational.</p>
+                            </div>
+                            <br />
+                            
+                            <table>
+                                <tr>
+                                    <td>Service Name</td>
+                                    <td>{service_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td style="color: #2ecc71;">Active</td>
+                                </tr>
+                            </table>
+                            <br />
+                            
+                            <p>You can manage your service by logging into your client area:</p>
+                            <br />
+                            
+                            <div class="text-center">
+                                <a href="{service_url}" target="_blank" class="btn btn-primary">Manage Service</a>
+                            </div>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'service_provisioning_terminated',
+                'name' => 'Service Terminated',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'service_name' => 'Name of the service / package',
+                    'service_url' => 'Direct link to the service history',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Service Terminated - {service_name}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-danger">
+                                <p>This is a formal notification that your service <strong>{service_name}</strong> has been permanently terminated.</p>
+                            </div>
+                            <br />
+                            
+                            <table>
+                                <tr>
+                                    <td>Service Name</td>
+                                    <td>{service_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td style="color: #c0392b;">Terminated</td>
+                                </tr>
+                            </table>
+                            <br />
+                            
+                            <p>As per our terms of service, all data associated with this service has been completely removed from our servers and cannot be recovered. If this termination was due to an overdue invoice, please note that paying the invoice now will not restore your service data.</p>
+                            <br />
+                            
+                            <p>You can still view your service history in your client area:</p>
+                            <br />
+                            
+                            <div class="text-center">
+                                <a href="{service_url}" target="_blank" class="btn btn-primary">View Service History</a>
+                            </div>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'service_provisioning_renewed',
+                'name' => 'Service Renewed',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'service_name' => 'Name of the service / package',
+                    'next_due_date' => 'The new next due date',
+                    'service_url' => 'Direct link to manage the service',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Service Renewed - {service_name}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-success">
+                                <p>Thank you for your continued business! Your service <strong>{service_name}</strong> has been successfully renewed.</p>
+                            </div>
+                            <br />
+                            
+                            <table>
+                                <tr>
+                                    <td>Service Name</td>
+                                    <td>{service_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>New Due Date</td>
+                                    <td>{next_due_date}</td>
+                                </tr>
+                            </table>
+                            <br />
+                            
+                            <p>You can manage your service by logging into your client area:</p>
+                            <br />
+                            
+                            <div class="text-center">
+                                <a href="{service_url}" target="_blank" class="btn btn-primary">Manage Service</a>
+                            </div>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'service_provisioning_scaled',
+                'name' => 'Service Scaled',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'service_name' => 'Name of the service / package',
+                    'recurring_amount' => 'New recurring amount to be paid',
+                    'billing_cycle' => 'Billing cycle (e.g., Monthly, Yearly)',
+                    'service_url' => 'Direct link to manage the service',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Service Scaled Successfully - {service_name}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-success">
+                                <p>Great news! Your service <strong>{service_name}</strong> has been successfully scaled. The new resources or features have been applied to your account and are now active.</p>
+                            </div>
+                            <br />
+                            
+                            <table>
+                                <tr>
+                                    <td>Service Name</td>
+                                    <td>{service_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>New Recurring Amount</td>
+                                    <td>{recurring_amount}</td>
+                                </tr>
+                                <tr>
+                                    <td>Billing Cycle</td>
+                                    <td>{billing_cycle}</td>
+                                </tr>
+                            </table>
+                            <br />
+                            
+                            <p>You can verify your new service limits and manage your service by logging into your client area:</p>
+                            <br />
+                            
+                            <div class="text-center">
+                                <a href="{service_url}" target="_blank" class="btn btn-primary">Manage Service</a>
+                            </div>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
                 'key' => 'invoice_created',
                 'name' => 'New Invoice Created',
                 'placeholder' => [
