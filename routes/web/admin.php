@@ -369,6 +369,22 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::get('/notify', [Settings\Ticket\NotifyController::class, 'index'])->name('admin.settings.ticket.notify');
             Route::patch('/notify', [Settings\Ticket\NotifyController::class, 'update'])->name('admin.settings.ticket.notify.update');
         });
+
+        /**
+         * Admin ticket settings interface routes.
+         *
+         * Prefix: /admin/settings/ticket
+         */
+        Route::group(['prefix' => 'automation'], function () {
+            Route::get('/', [Settings\Automation\SchedulingController::class, 'index'])->name('admin.settings.automation.scheduling'); 
+            Route::patch('/', [Settings\Automation\SchedulingController::class, 'update'])->name('admin.settings.automation.scheduling.update'); 
+            Route::get('/billing', [Settings\Automation\BillingController::class, 'index'])->name('admin.settings.automation.billing'); 
+            Route::patch('/billing', [Settings\Automation\BillingController::class, 'update'])->name('admin.settings.automation.billing.update'); 
+            Route::get('/service', [Settings\Automation\ServiceController::class, 'index'])->name('admin.settings.automation.service'); 
+            Route::patch('/service', [Settings\Automation\ServiceController::class, 'update'])->name('admin.settings.automation.service.update'); 
+            Route::get('/ticket', [Settings\Automation\TicketController::class, 'index'])->name('admin.settings.automation.ticket'); 
+            Route::patch('/ticket', [Settings\Automation\TicketController::class, 'update'])->name('admin.settings.automation.ticket.update'); 
+        });
     });
 
     /**
