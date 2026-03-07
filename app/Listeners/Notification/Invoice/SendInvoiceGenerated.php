@@ -67,7 +67,7 @@ class SendInvoiceGenerated
             'client_name' => $client->fullname,
             'company_name' => Billmora::getGeneral('company_name'),
             'invoice_number' => $invoice->invoice_number,
-            'due_date' => $invoice->due_date->format('d M Y'),
+            'due_date' => $invoice->due_date->format(Billmora::getGeneral('company_date_format')),
             'invoice_items_table' => $invoiceItemsHtml,
             'invoice_url' => route('client.invoices.show', ['invoice' => $invoice->invoice_number]),
         ];
