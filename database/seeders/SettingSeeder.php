@@ -126,7 +126,6 @@ class SettingSeeder extends Seeder
             ['category' => 'automation', 'key' => 'invoice_overdue_first_days', 'value' => 1],
             ['category' => 'automation', 'key' => 'invoice_overdue_second_days', 'value' => 3],
             ['category' => 'automation', 'key' => 'invoice_overdue_third_days', 'value' => 5],
-            ['category' => 'automation', 'key' => 'invoice_late_fee_days', 'value' => 5],
             ['category' => 'automation', 'key' => 'invoice_auto_cancel_days', 'value' => 14],
             ['category' => 'automation', 'key' => 'service_suspend_days', 'value' => 3],
             ['category' => 'automation', 'key' => 'service_terminate_days', 'value' => 7],

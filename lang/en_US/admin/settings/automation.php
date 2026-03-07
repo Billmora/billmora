@@ -27,8 +27,6 @@ return [
     'invoice_overdue_second_days_helper' => 'Enter the number of days after the invoice due date to send the second overdue notice.',
     'invoice_overdue_third_days_label' => 'Third Overdue Reminder',
     'invoice_overdue_third_days_helper' => 'Enter the number of days after the invoice due date to send the third (final) overdue notice.',
-    'invoice_late_fee_days_label' => 'Add Late Fee Days',
-    'invoice_late_fee_days_helper' => 'Enter the number of days after the due payment date you want to add the late fee (Leave 0 to disable).',
     'invoice_auto_cancel_days_label' => 'Auto Cancel Unpaid Invoices',
     'invoice_auto_cancel_days_helper' => 'Cancel unpaid invoices automatically after this many days overdue (Leave 0 to disable).',
     

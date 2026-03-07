@@ -77,15 +77,6 @@
             required
         />
         <x-admin::input 
-            name="invoice_late_fee_days"
-            type="number"
-            min="0"
-            label="{{ __('admin/settings/automation.invoice_late_fee_days_label') }}"
-            helper="{{ __('admin/settings/automation.invoice_late_fee_days_helper') }}"
-            value="{{ old('invoice_late_fee_days', Billmora::getAutomation('invoice_late_fee_days')) }}"
-            required
-        />
-        <x-admin::input 
             name="invoice_auto_cancel_days"
             type="number"
             min="0"

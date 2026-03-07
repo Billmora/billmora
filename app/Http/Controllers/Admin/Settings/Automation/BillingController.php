@@ -46,7 +46,6 @@ class BillingController extends Controller
             'invoice_overdue_first_days' => ['required', 'integer', 'min:0'],
             'invoice_overdue_second_days' => ['required', 'integer', 'min:0'],
             'invoice_overdue_third_days' => ['required', 'integer', 'min:0'],
-            'invoice_late_fee_days' => ['required', 'integer', 'min:0'],
             'invoice_auto_cancel_days' => ['required', 'integer', 'min:0'],
         ]);
 
