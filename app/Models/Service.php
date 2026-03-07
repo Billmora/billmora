@@ -237,7 +237,7 @@ class Service extends Model
             return null;
         }
 
-        $date = $this->activated_at ? $this->activated_at->copy() : now();
+        $date = $this->next_due_date ? $this->next_due_date->copy() : ($this->activated_at ? $this->activated_at->copy() : now());
         
         switch ($this->billing_period) {
             case 'daily':
