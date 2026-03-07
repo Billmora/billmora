@@ -112,6 +112,26 @@ class SettingSeeder extends Seeder
             ['category' => 'ticket', 'key' => 'notify_client_on_staff_answered', 'value' => true],
             ['category' => 'ticket', 'key' => 'notify_staff_on_client_reply', 'value' => true],
             ['category' => 'ticket', 'key' => 'notify_staff_fallback', 'value' => 'department'],
+
+            /**
+             * Run seeder of automation category.
+             *
+             * Seeds initial data into the 'automation' category.
+             */
+            ['category' => 'automation', 'key' => 'time_of_day', 'value' => '00:00'],
+            ['category' => 'automation', 'key' => 'prune_email_history_days', 'value' => 30],
+            ['category' => 'automation', 'key' => 'prune_system_logs_days', 'value' => 30],
+            ['category' => 'automation', 'key' => 'invoice_generation_days', 'value' => 7],
+            ['category' => 'automation', 'key' => 'invoice_reminder_days', 'value' => 3],
+            ['category' => 'automation', 'key' => 'invoice_overdue_first_days', 'value' => 1],
+            ['category' => 'automation', 'key' => 'invoice_overdue_second_days', 'value' => 3],
+            ['category' => 'automation', 'key' => 'invoice_overdue_third_days', 'value' => 5],
+            ['category' => 'automation', 'key' => 'invoice_late_fee_days', 'value' => 5],
+            ['category' => 'automation', 'key' => 'invoice_auto_cancel_days', 'value' => 14],
+            ['category' => 'automation', 'key' => 'service_suspend_days', 'value' => 3],
+            ['category' => 'automation', 'key' => 'service_terminate_days', 'value' => 7],
+            ['category' => 'automation', 'key' => 'auto_accept_cancellation', 'value' => true],
+            ['category' => 'automation', 'key' => 'ticket_close_days', 'value' => 7],
         ];
 
         /**
