@@ -262,6 +262,37 @@ class BillmoraService
     }
 
     /**
+     * Retrieve a automation setting value by its key.
+     *
+     * This is a shortcut method that internally calls 'getAutomation()' using
+     * the 'automation' category.
+     *
+     * @param string $key     The key of the setting to retrieve.
+     * @param mixed  $default The default value to return if the setting is not found.
+     *
+     * @return mixed The value of the setting or the default if not found.
+     */
+    public static function getAutomation(string $key, mixed $default = null): mixed
+    {
+        return self::getSetting('automation', $key, $default);
+    }
+
+    /**
+     * Store or update automation settings.
+     *
+     * This is a shortcut method that internally calls 'setAutomation()' using
+     * the 'automation' category.
+     *
+     * @param array $data An associative array of key-value pairs to store or update.
+     *
+     * @return void
+     */
+    public static function setAutomation(array $data): void
+    {
+        self::setSetting('automation', $data);
+    }
+
+    /**
      * Update or append environment variables in the '.env' file.
      *
      * This method accepts an array of key-value pairs and updates or appends them to the '.env' file.
