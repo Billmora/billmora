@@ -132,6 +132,7 @@ class SettingSeeder extends Seeder
             ['category' => 'automation', 'key' => 'service_terminate_days', 'value' => 7],
             ['category' => 'automation', 'key' => 'auto_accept_cancellation', 'value' => true],
             ['category' => 'automation', 'key' => 'ticket_close_days', 'value' => 7],
+            ['category' => 'automation', 'key' => 'prune_ticket_attachments_days', 'value' => 0],
         ];
 
         /**
