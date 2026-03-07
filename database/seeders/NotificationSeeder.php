@@ -759,6 +759,43 @@ class NotificationSeeder extends Seeder
                 ],
             ],
             [
+                'key' => 'invoice_generated',
+                'name' => 'Invoice Generated',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'invoice_number' => 'Invoice Number (e.g. INV-0001)',
+                    'due_date' => 'Due Date of the invoice',
+                    'invoice_items_table' => 'Pre-rendered table containing invoice items',
+                    'invoice_url' => 'Direct link to the invoice',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Upcoming Renewal Invoice - {invoice_number}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-info">
+                                <p>This is a billing notice that your service is due for renewal. A new invoice <strong>{invoice_number}</strong> has been generated for your upcoming billing cycle.</p>
+                            </div>
+                            <br />
+                            
+                            {invoice_items_table}
+                            
+                            <br />
+                            <p>To ensure your service remains active without interruption, please complete the payment before the due date: <strong>{due_date}</strong>.</p>
+                            <br />
+                            <div class="text-center">
+                                <a href="{invoice_url}" target="_blank" class="btn btn-primary">Pay Invoice Now</a>
+                            </div>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
                 'key' => 'transaction_recorded',
                 'name' => 'Transaction Recorded (Receipt)',
                 'placeholder' => [
