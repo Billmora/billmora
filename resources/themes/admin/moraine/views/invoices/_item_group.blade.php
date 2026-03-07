@@ -4,6 +4,9 @@
             {{ __('common.delete') }}
         </button>
     </div>
+    @if (!empty($id))
+        <input type="hidden" name="invoice_items[{{ $index }}][id]" value="{{ $id }}">
+    @endif
     <x-admin::textarea
         name="invoice_items[{{ $index }}][description]"
         label="{{ __('admin/invoices.invoice_items.description_label') }}"

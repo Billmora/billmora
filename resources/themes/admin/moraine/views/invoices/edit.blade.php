@@ -104,6 +104,7 @@
                 @foreach(old('invoice_items', $invoiceItems) as $index => $item)
                     @include('admin::invoices._item_group', [
                         'index' => $index,
+                        'id' => $item['id'] ?? null,
                         'description' => $item['description'] ?? '',
                         'quantity' => $item['quantity'] ?? 1,
                         'unit_price' => $item['unit_price'] ?? ''

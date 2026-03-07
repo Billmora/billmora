@@ -49,7 +49,7 @@ class InvoicesController extends Controller
             });
         }
 
-        $invoices = $query->latest()->paginate(25);
+        $invoices = $query->latest('id')->paginate(25);
 
         return view('admin::invoices.index', compact('invoices'));
     }
@@ -168,6 +168,7 @@ class InvoicesController extends Controller
         $currencies = Currency::select('code')->get();
 
         $invoiceItems = $invoice->items->map(fn($item) => [
+            'id' => $item->id,
             'description' => $item->description,
             'quantity' => $item->quantity,
             'unit_price' => $item->unit_price
@@ -193,6 +194,7 @@ class InvoicesController extends Controller
             'invoice_currency' => ['required', Rule::exists('currencies', 'code')],
             'invoice_email' => ['nullable', 'boolean'],
             'invoice_items' => ['nullable', 'array'],
+            'invoice_items.*.id' => ['nullable', Rule::exists('invoice_items', 'id')],
             'invoice_items.*.description' => ['required', 'string', 'max:1000'],
             'invoice_items.*.quantity' => ['required', 'integer', 'min:1'],
             'invoice_items.*.unit_price' => ['required', 'numeric'],
@@ -219,7 +221,7 @@ class InvoicesController extends Controller
             $total = $subtotal - $discount;
 
             $oldData = [
-                'invoice' => $invoice->getChanges(),
+                'invoice' => $invoice->getOriginal(),
                 'items' => $invoice->items->toArray(),
             ];
 
@@ -235,22 +237,35 @@ class InvoicesController extends Controller
                 'created_at' => $validated['invoice_date'],
             ]);
 
-            $invoice->items()->delete();
+            $invoiceChanges = $invoice->getChanges();
 
-            if (!empty($validated['invoice_items'])) {
-                foreach ($validated['invoice_items'] as $item) {
+            $submittedIds = collect($validated['invoice_items'] ?? [])->pluck('id')->filter();
+
+            $invoice->items()->whereNotIn('id', $submittedIds)->delete();
+
+            foreach ($validated['invoice_items'] ?? [] as $item) {
+                $lineAmount = $item['quantity'] * $item['unit_price'];
+
+                if (!empty($item['id'])) {
+                    $invoice->items()->where('id', $item['id'])->update([
+                        'description' => $item['description'],
+                        'quantity'    => $item['quantity'],
+                        'unit_price'  => $item['unit_price'],
+                        'amount'      => $lineAmount,
+                    ]);
+                } else {
                     $invoice->items()->create([
                         'description' => $item['description'],
-                        'quantity' => $item['quantity'],
-                        'unit_price' => $item['unit_price'],
-                        'amount' => $item['quantity'] * $item['unit_price'],
+                        'quantity'    => $item['quantity'],
+                        'unit_price'  => $item['unit_price'],
+                        'amount'      => $lineAmount,
                     ]);
                 }
             }
 
             $invoice->refresh();
             $newData = [
-                'invoice' => $invoice->getChanges(),
+                'invoice' => $invoiceChanges,
                 'items' => $invoice->items->toArray(),
             ];
 
