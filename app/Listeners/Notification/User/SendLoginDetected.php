@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Request;
 
-class SendLoginDetected
+class SendLoginDetected implements ShouldQueue
 {
     /**
      * Create the event listener.

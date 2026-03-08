@@ -8,7 +8,7 @@ use Billmora;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class SendServiceProvisioningSuspended
+class SendServiceProvisioningSuspended implements ShouldQueue
 {
     use InteractsWithQueue;
 

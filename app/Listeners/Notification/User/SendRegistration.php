@@ -8,7 +8,7 @@ use Billmora;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class SendRegistration
+class SendRegistration implements ShouldQueue
 {
     use InteractsWithQueue;
 

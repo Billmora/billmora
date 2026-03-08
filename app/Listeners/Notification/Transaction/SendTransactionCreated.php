@@ -9,7 +9,7 @@ use Billmora;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class SendTransactionCreated
+class SendTransactionCreated implements ShouldQueue
 {
     use InteractsWithQueue;
 

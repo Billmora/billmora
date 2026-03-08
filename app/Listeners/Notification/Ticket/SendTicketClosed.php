@@ -8,7 +8,7 @@ use Billmora;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class SendTicketClosed
+class SendTicketClosed implements ShouldQueue
 {
     use InteractsWithQueue;
 

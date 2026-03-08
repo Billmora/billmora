@@ -8,7 +8,7 @@ use Billmora;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class SendPasswordReset
+class SendPasswordReset implements ShouldQueue
 {
     /**
      * Create the event listener.
