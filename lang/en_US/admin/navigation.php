@@ -18,6 +18,7 @@ return [
     'modules' => 'Modules',
     'settings' => 'Settings',
     'plugins' => 'Plugins',
+    'tasks' => 'Tasks',
     'audits' => 'Audits',
     'group' => [
         'management' => 'Management',
