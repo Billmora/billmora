@@ -30,8 +30,14 @@ class PluginServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if ($this->app->runningInConsole() && !Schema::hasTable('plugins')) {
-            return;
+        if ($this->app->runningInConsole()) {
+            try {
+                if (!Schema::hasTable('plugins')) {
+                    return;
+                }
+            } catch (\Throwable $e) {
+                return;
+            }
         }
 
         try {
