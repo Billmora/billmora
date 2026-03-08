@@ -43,6 +43,7 @@ class SchedulingController extends Controller
         $validated = $request->validate([
             'time_of_day' => ['required', 'date_format:H:i'],
             'prune_email_history_days' => ['required', 'integer', 'min:0'],
+            'prune_user_activity_days' => ['required', 'integer', 'min:0'],
             'prune_system_logs_days' => ['required', 'integer', 'min:0'],
         ]);
 

@@ -49,6 +49,15 @@
             required
         />
         <x-admin::input 
+            name="prune_user_activity_days"
+            type="number"
+            min="0"
+            label="{{ __('admin/settings/automation.prune_user_activity_days_label') }}"
+            helper="{{ __('admin/settings/automation.prune_user_activity_days_helper') }}"
+            value="{{ old('prune_user_activity_days', Billmora::getAutomation('prune_user_activity_days')) }}"
+            required
+        />
+        <x-admin::input 
             name="prune_system_logs_days"
             type="number"
             min="0"

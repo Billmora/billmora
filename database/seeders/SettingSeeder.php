@@ -120,6 +120,7 @@ class SettingSeeder extends Seeder
              */
             ['category' => 'automation', 'key' => 'time_of_day', 'value' => '00:00'],
             ['category' => 'automation', 'key' => 'prune_email_history_days', 'value' => 30],
+            ['category' => 'automation', 'key' => 'prune_user_activity_days', 'value' => 30],
             ['category' => 'automation', 'key' => 'prune_system_logs_days', 'value' => 30],
             ['category' => 'automation', 'key' => 'invoice_generation_days', 'value' => 7],
             ['category' => 'automation', 'key' => 'invoice_reminder_days', 'value' => 3],
