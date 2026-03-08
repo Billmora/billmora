@@ -152,6 +152,16 @@
         </a>
       @endcan
     </div>
+    <div class="w-full flex gap-4 mt-auto pt-4">
+        <a href="https://github.com/sponsors/Billmora" target="_blank" class="flex justify-center gap-1 items-center bg-billmora-2 hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+            <x-lucide-book class="w-auto h-5" />
+            Documentation
+        </a>
+        <a href="https://github.com/sponsors/Billmora" class="w-full flex justify-center gap-1 items-center bg-billmora-2 hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+            <x-lucide-heart-handshake class="w-auto h-5" />
+            Sponsor
+        </a>
+    </div>
   </div>
 </nav>
 <!-- Backdrop -->
