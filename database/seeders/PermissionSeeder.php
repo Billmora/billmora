@@ -103,6 +103,7 @@ class PermissionSeeder extends Seeder
             'plugins.install',
             'plugins.update',
             'plugins.uninstall',
+            'automations.view',
             'tasks.view',
             'tasks.retry',
             'tasks.dismiss',
