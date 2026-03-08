@@ -400,6 +400,17 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin tasks interface routes.
+     *
+     * Prefix: /admin/tasks
+     */
+    Route::group(['prefix' => 'tasks'], function () {
+        Route::get('/', [Admin\TasksController::class, 'index'])->name('admin.tasks');
+        Route::post('/{task}/retry', [Admin\TasksController::class, 'retry'])->name('admin.tasks.retry');
+        Route::post('/{task}/dismiss', [Admin\TasksController::class, 'dismiss'])->name('admin.tasks.dismiss');
+    });
+
+    /**
      * Admin audits interface routes.
      *
      * Prefix: /admin/audits
