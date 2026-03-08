@@ -400,6 +400,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin automations interface routes.
+     *
+     * Prefix: /admin/automations
+     */
+    Route::group(['prefix' => 'automations'], function () {
+        Route::get('/', [Admin\AutomationsController::class, 'index'])->name('admin.automations');
+    });
+
+    /**
      * Admin tasks interface routes.
      *
      * Prefix: /admin/tasks
