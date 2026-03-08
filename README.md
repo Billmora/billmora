@@ -35,8 +35,6 @@ extensible, and community-driven.
 
 ![Billmora Dashboard Overview](https://media.billmora.com/image/admin-dashboard.png)
 
----
-
 ## Key Features
 
 - **Automated Billing & Invoicing** — Generate recurring invoices, send payment
@@ -56,8 +54,6 @@ extensible, and community-driven.
 - **Audit & Activity Logs** — Detailed logging of system events, automated
   processes, and user actions for security and transparency.
 
----
-
 ## Links
 
 - [Website](https://billmora.com)
@@ -66,15 +62,11 @@ extensible, and community-driven.
 - [Marketplace](https://market.billmora.com)
 - [Discord Community](https://dsc.gg/billmora)
 
----
-
 ## Contributing
 
 Contributions are welcome. Please read the contributing guidelines before
 submitting a pull request. For major changes, open an issue first to discuss
 what you would like to change.
-
----
 
 ## Sponsors
 
@@ -83,13 +75,9 @@ of Billmora.
 
 *(Become a sponsor to have your name or logo featured here.)*
 
----
-
 ## Repository Activity
 
 ![Repobeats Analytics](https://repobeats.axiom.co/api/embed/10dcae2b571138e9211b450237a32a4d9c3406c7.svg "Repobeats analytics image")
-
----
 
 ## License
 
