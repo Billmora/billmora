@@ -29,7 +29,7 @@ class SendTicketReplied
      */
     public function handle(Replied $event): void
     {
-        $ticket = $event->ticket;
+        $ticket = $event->ticket->fresh();
         $message = $event->message;
         $client = $ticket->user; 
 
