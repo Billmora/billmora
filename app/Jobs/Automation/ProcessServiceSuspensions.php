@@ -59,6 +59,7 @@ class ProcessServiceSuspensions implements ShouldQueue
 
                         $this->recordSystem('service.provisioning.suspend', [
                             'service_id' => $service->id,
+                            'status' => 'success',
                             'reason' => 'overdue_invoice',
                         ], 'cron');
 

@@ -65,6 +65,7 @@ class ProcessServiceTerminations implements ShouldQueue
 
                             $this->recordSystem('service.provisioning.terminate', [
                                 'service_id' => $service->id,
+                                'status' => 'success',
                                 'reason' => 'overdue_invoice_limit',
                             ], 'cron');
                         });
