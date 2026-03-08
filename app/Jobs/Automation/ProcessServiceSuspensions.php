@@ -67,8 +67,9 @@ class ProcessServiceSuspensions implements ShouldQueue
                     } catch (\Throwable $e) {
                         Log::error("Automation: Failed to suspend Service ID {$service->id}. Error: " . $e->getMessage());
                         
-                        $this->recordSystem('service.provisioning.suspend.failed', [
+                        $this->recordSystem('service.provisioning.suspend', [
                             'service_id' => $service->id,
+                            'status' => 'failed',
                             'error' => $e->getMessage(),
                         ], 'cron');
                     }

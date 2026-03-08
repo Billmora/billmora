@@ -74,8 +74,9 @@ class ProcessServiceTerminations implements ShouldQueue
                     } catch (\Throwable $e) {
                         Log::error("Automation: Failed to terminate Service ID {$service->id}. Error: " . $e->getMessage());
                         
-                        $this->recordSystem('service.provisioning.terminate.failed', [
+                        $this->recordSystem('service.provisioning.terminate', [
                             'service_id' => $service->id,
+                            'status' => 'failed',
                             'error' => $e->getMessage(),
                         ], 'cron');
                     }

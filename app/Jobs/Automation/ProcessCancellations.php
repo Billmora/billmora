@@ -102,9 +102,10 @@ class ProcessCancellations implements ShouldQueue
                         } catch (\Throwable $e) {
                             Log::error("Automation: Failed to auto-process cancellation for Service ID {$service->id}. Error: " . $e->getMessage());
 
-                            $this->recordSystem('service.cancellation.approve.failed', [
+                            $this->recordSystem('service.cancellation.approve', [
                                 'cancellation_id' => $cancellation->id,
                                 'service_id' => $service->id,
+                                'status' => 'failed',
                                 'error' => $e->getMessage(),
                             ], 'cron');
                         }
