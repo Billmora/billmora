@@ -617,6 +617,69 @@ class NotificationSeeder extends Seeder
                 ],
             ],
             [
+                'key' => 'service_cancellation_approved',
+                'name' => 'Service Cancellation Approved',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'service_name' => 'The name of the service',
+                    'cancellation_type' => 'Immediate or End of Billing Period',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Service Cancellation Approved - {service_name}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>,</p>
+                            <br />
+                            <p>This email is to confirm that your cancellation request for the service <strong>{service_name}</strong> has been reviewed and <strong>approved</strong>.</p>
+                            <ul>
+                                <li><strong>Service:</strong> {service_name}</li>
+                                <li><strong>Cancellation Type:</strong> {cancellation_type}</li>
+                            </ul>
+                            <br />
+                            <p>If you requested an immediate cancellation, the service will be terminated shortly. If you chose end of billing period, the service will remain active until the end of your current cycle and will not be renewed.</p>
+                            <br />
+                            <p>We are sorry to see you go. If you change your mind or need any other services in the future, we would be happy to welcome you back!</p>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'service_cancellation_rejected',
+                'name' => 'Service Cancellation Rejected',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'service_name' => 'The name of the service',
+                    'rejection_note' => 'Reason why the cancellation was rejected',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Service Cancellation Update - {service_name}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>,</p>
+                            <br />
+                            <p>We have reviewed your cancellation request for the service <strong>{service_name}</strong>.</p>
+                            <br />
+                            <div class="alert alert-warning">
+                                <p>Unfortunately, we are unable to process your cancellation at this time. Your request has been <strong>rejected</strong> for the following reason:</p>
+                                <blockquote style="border-left: 4px solid #f39c12; padding-left: 10px; margin-left: 0;">
+                                    <em>"{rejection_note}"</em>
+                                </blockquote>
+                            </div>
+                            <br />
+                            <p>If you believe this is an error or if you have any questions, please reply to this email or open a support ticket from your client area.</p>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
                 'key' => 'invoice_created',
                 'name' => 'New Invoice Created',
                 'placeholder' => [
