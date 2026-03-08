@@ -188,4 +188,17 @@ class User extends Authenticatable
 
         return !$this->permissions()->exists() && !$this->roles()->whereHas('permissions')->exists();
     }
+
+    /**
+     * Scope a query to only include client users (non-admins).
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeClients(Builder $query)
+    {
+        return $query->where('is_root_admin', false)
+            ->whereDoesntHave('permissions')
+            ->whereDoesntHave('roles', fn($r) => $r->whereHas('permissions'));
+    }
 }
