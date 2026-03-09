@@ -9,6 +9,7 @@ return [
     'browse_close' => 'to close',
 
     'none' => 'None',
+    'never' => 'Never',
     'key' => 'Key',
     'value' => 'Value',
 ];
