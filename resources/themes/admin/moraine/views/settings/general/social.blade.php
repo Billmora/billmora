@@ -38,6 +38,11 @@
                 'icon' => 'lucide-circle-fading-plus',
                 'label' => __('admin/settings/general.tabs.social'),
             ],
+            [
+                'route' => route('admin.settings.general.misc'),
+                'icon' => 'lucide-wrench',
+                'label' => __('admin/settings/general.tabs.misc'),
+            ],
         ]" 
         active="{{ request()->url() }}" />
     <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
