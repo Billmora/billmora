@@ -35,4 +35,14 @@ class PackagePrice extends Model
     {
         return $this->belongsTo(Package::class);
     }
+
+    /**
+     * Get all services using this package price.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function services()
+    {
+        return $this->hasMany(Service::class, 'package_price_id');
+    }
 }
