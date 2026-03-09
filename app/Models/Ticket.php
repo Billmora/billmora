@@ -2,15 +2,20 @@
 
 namespace App\Models;
 
+use App\Contracts\BrowseInterface;
 use App\Observers\TicketObserver;
+use App\Traits\BrowseTrait;
 use Billmora;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 #[ObservedBy(TicketObserver::class)]
-class Ticket extends Model
+class Ticket extends Model implements BrowseInterface
 {
+    use BrowseTrait;
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -144,5 +149,22 @@ class Ticket extends Model
 
             return $ticketNumber;
         }); 
+    }
+
+    /**
+     * Return a collection of ticket records formatted as browse items for quick search indexing.
+     *
+     * @return \Illuminate\Support\Collection
+     */ 
+    public static function toBrowseItems(): Collection
+    {
+        return static::select('id', 'ticket_number')
+            ->limit(50)
+            ->get()
+            ->map(fn($item) => [
+                'title' => "{$item->ticket_number}",
+                'category' => 'ticket',
+                'url' => route('admin.tickets.edit', ['ticket' => $item->ticket_number]),
+            ]);
     }
 }

@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
+use App\Contracts\BrowseInterface;
+use App\Traits\BrowseTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
-class Package extends Model
+class Package extends Model implements BrowseInterface
 {
+    use BrowseTrait;
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -149,5 +154,22 @@ class Package extends Model
     public function provisioning()
     {
         return $this->plugin()->where('type', 'provisioning');
+    }
+
+    /**
+     * Return a collection of package records formatted as browse items for quick search indexing.
+     *
+     * @return \Illuminate\Support\Collection
+     */ 
+    public static function toBrowseItems(): Collection
+    {
+        return static::select('id', 'name')
+            ->limit(50)
+            ->get()
+            ->map(fn($item) => [
+                'title' => "{$item->name}",
+                'category' => 'package',
+                'url' => route('admin.packages.edit', ['id' => $item->id]),
+            ]);
     }
 }

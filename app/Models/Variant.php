@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use App\Contracts\BrowseInterface;
+use App\Traits\BrowseTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
-class Variant extends Model
+class Variant extends Model implements BrowseInterface
 {
+    use BrowseTrait;
+    
     /**
      * The attributes that aren't mass assignable.
      *
@@ -45,5 +50,22 @@ class Variant extends Model
     public function options()
     {
         return $this->hasMany(VariantOption::class);
+    }
+
+    /**
+     * Return a collection of variant records formatted as browse items for quick search indexing.
+     *
+     * @return \Illuminate\Support\Collection
+     */ 
+    public static function toBrowseItems(): Collection
+    {
+        return static::select('id', 'name')
+            ->limit(50)
+            ->get()
+            ->map(fn($item) => [
+                'title' => "{$item->name}",
+                'category' => 'variant',
+                'url' => route('admin.variants.edit', ['id' => $item->id]),
+            ]);
     }
 }

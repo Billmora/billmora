@@ -2,20 +2,23 @@
 
 namespace App\Models;
 
+use App\Contracts\BrowseInterface;
 use App\Observers\UserObserver;
+use App\Traits\BrowseTrait;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Spatie\Permission\Traits\HasRoles;
 
 #[ObservedBy([UserObserver::class])]
-class User extends Authenticatable
+class User extends Authenticatable implements BrowseInterface
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes, HasRoles;
+    use HasFactory, Notifiable, SoftDeletes, HasRoles, BrowseTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -200,5 +203,22 @@ class User extends Authenticatable
         return $query->where('is_root_admin', false)
             ->whereDoesntHave('permissions')
             ->whereDoesntHave('roles', fn($r) => $r->whereHas('permissions'));
+    }
+
+    /**
+     * Return a collection of user records formatted as browse items for quick search indexing.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public static function toBrowseItems(): Collection
+    {
+        return static::select('id', 'email', 'first_name', 'last_name')
+            ->limit(50)
+            ->get()
+            ->map(fn($item) => [
+                'title' => "{$item->fullname} - {$item->email}",
+                'category' => 'user',
+                'url' => route('admin.users.summary', ['id' => $item->id]),
+            ]);
     }
 }

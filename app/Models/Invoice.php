@@ -2,16 +2,21 @@
 
 namespace App\Models;
 
+use App\Contracts\BrowseInterface;
 use App\Observers\InvoiceObserver;
+use App\Traits\BrowseTrait;
 use Billmora;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 #[ObservedBy([InvoiceObserver::class])]
-class Invoice extends Model
+class Invoice extends Model implements BrowseInterface
 {
+    use BrowseTrait;
+
     public bool $sendEmailNotification = true;
     
     /**
@@ -202,5 +207,22 @@ class Invoice extends Model
     public function scopePaid(Builder $query)
     {
         return $query->where('status', 'paid');
+    }
+
+    /**
+     * Return a collection of invoice records formatted as browse items for quick search indexing.
+     *
+     * @return \Illuminate\Support\Collection
+     */ 
+    public static function toBrowseItems(): Collection
+    {
+        return static::select('id', 'invoice_number')
+            ->limit(50)
+            ->get()
+            ->map(fn($item) => [
+                'title' => "{$item->invoice_number}",
+                'category' => 'invoice',
+                'url' => route('admin.invoices.edit', ['invoice' => $item->invoice_number]),
+            ]);
     }
 }

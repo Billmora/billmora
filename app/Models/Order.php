@@ -2,16 +2,21 @@
 
 namespace App\Models;
 
+use App\Contracts\BrowseInterface;
 use App\Observers\OrderObserver;
+use App\Traits\BrowseTrait;
 use Billmora;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 #[ObservedBy(OrderObserver::class)]
-class Order extends Model
+class Order extends Model implements BrowseInterface
 {
+    use BrowseTrait;
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -195,5 +200,22 @@ class Order extends Model
             'status' => 'completed',
             'completed_at' => now(),
         ]);
+    }
+
+    /**
+     * Return a collection of order records formatted as browse items for quick search indexing.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public static function toBrowseItems(): Collection
+    {
+        return static::select('id', 'order_number')
+            ->limit(50)
+            ->get()
+            ->map(fn($item) => [
+                'title' => "{$item->order_number}",
+                'category' => 'order',
+                'url' => route('admin.orders.edit', ['order' => $item->order_number]),
+            ]);
     }
 }
