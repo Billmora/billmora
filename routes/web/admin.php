@@ -461,10 +461,4 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         });
     });
 
-    /**
-     * Admin quick search routes.
-     *
-     * Prefix: /admin/quick-search
-     */
-    Route::get('/quick-search', [Admin\QuickSearchController::class, 'search'])->name('admin.quick-search');
 });

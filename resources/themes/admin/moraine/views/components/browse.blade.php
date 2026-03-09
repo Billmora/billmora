@@ -1,5 +1,5 @@
 <div 
-    x-data="globalSearch()" 
+    x-data="globalSearch({{ Js::from($browseItems) }})" 
     x-init="init()" 
     x-cloak
     x-on:keydown.window.ctrl.k.prevent="openModal()"
@@ -28,7 +28,7 @@
                     x-ref="input" 
                     x-model="query"
                     type="text"
-                    placeholder="{{ __('admin/common.quick_search') }} e.g. setting:General"
+                    placeholder="{{ __('admin/common.browse') }} e.g. setting:General"
                     x-on:keydown.escape="close"
                     x-on:keydown.arrow-up.prevent="moveSelection(-1)"
                     x-on:keydown.arrow-down.prevent="moveSelection(1)"
@@ -78,7 +78,7 @@
                     x-show="!results.length && query" 
                     class="text-center text-slate-500"
                 >
-                    {{ __('admin/common.quick_search_not_found') }}
+                    {{ __('admin/common.browse_not_found') }}
                 </div>
             </div>
 
@@ -91,15 +91,15 @@
                     <div class="bg-billmora-1 p-1 text-sm text-slate-600 font-semibold rounded-lg">
                         <x-lucide-arrow-down class="w-auto h-5" />
                     </div>
-                    <span class="font-semibold text-slate-600">{{ __('admin/common.quick_search_navigate') }}</span>
+                    <span class="font-semibold text-slate-600">{{ __('admin/common.browse_navigate') }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
                     <span class="bg-billmora-1 p-1 text-sm text-slate-600 font-semibold rounded-lg uppercase">enter</span>
-                    <span class="font-semibold text-slate-600">{{ __('admin/common.quick_search_select') }}</span>
+                    <span class="font-semibold text-slate-600">{{ __('admin/common.browse_select') }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
                     <span class="bg-billmora-1 p-1 text-sm text-slate-600 font-semibold rounded-lg uppercase">esc</span>
-                    <span class="font-semibold text-slate-600">{{ __('admin/common.quick_search_close') }}</span>
+                    <span class="font-semibold text-slate-600">{{ __('admin/common.browse_close') }}</span>
                 </div>
             </div>
         </div>
@@ -107,43 +107,29 @@
 </div>
 
 <script>
-    /**
-     * Alpine.JS component for global quick-search modal
-     */
-    function globalSearch() {
+    function globalSearch(items) {
         return {
-            open: false, // modal visibility
-            query: '', // user input
-            list: [], // loaded items
-            selectedIndex: -1, // currently highlighted index
+            open: false,
+            query: '',
+            list: items, // ← langsung dari View Composer, tidak perlu fetch
+            selectedIndex: -1,
 
             init() {
-                // listen to custom event dispatched from outside
-                window.addEventListener('openQuickSearch', this.openModal.bind(this));
+                window.addEventListener('openBrowse', this.openModal.bind(this));
             },
 
-            async openModal() {
+            openModal() {
                 this.open = true;
                 this.selectedIndex = -1;
-
-                // lazy-load results only the first time
-                if (this.list.length === 0) {
-                    const res = await fetch("{{ route('admin.quick-search') }}");
-                    this.list = await res.json();
-                }
-
-                // focus search input when opening
                 this.$nextTick(() => this.$refs.input.focus());
             },
 
             close() {
-                // reset when closing
                 this.open = false;
                 this.query = '';
                 this.selectedIndex = -1;
             },
 
-            // filter results based on query (supports `category:title` syntax)
             get results() {
                 if (!this.query) return [];
                 return this.list.filter(item =>
@@ -151,7 +137,6 @@
                 );
             },
 
-            // handle UP / DOWN navigation
             moveSelection(step) {
                 if (this.results.length === 0) {
                     this.selectedIndex = -1;
@@ -166,16 +151,14 @@
                 const newIndex = this.selectedIndex + step;
                 this.selectedIndex = Math.max(0, Math.min(newIndex, this.results.length - 1));
 
-                // auto-scroll to keep selected item visible
                 this.$nextTick(() => {
-                    const container = this.$refs.resultsContainer
-                    const items = container.querySelectorAll('a')
-                    const selectedElement = items[this.selectedIndex]
-                    selectedElement?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
-                })
+                    const container = this.$refs.resultsContainer;
+                    const items = container.querySelectorAll('a');
+                    const selectedElement = items[this.selectedIndex];
+                    selectedElement?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                });
             },
 
-            // redirect to selected item URL
             selectItem() {
                 if (this.selectedIndex >= 0 && this.results[this.selectedIndex]) {
                     window.location.href = this.results[this.selectedIndex].url;

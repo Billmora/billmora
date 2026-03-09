@@ -4,11 +4,11 @@
     <x-lucide-menu class="w-auto h-5" />
   </button>
 
-  <!-- Quick Search (DESKTOP) -->
+  <!-- Browse (DESKTOP) -->
   <div class="hidden md:block w-[400px] mr-auto">
-    <button type="button" id="quickSearch" class="flex gap-2 items-center w-full bg-billmora-1 px-2 py-2 text-slate-500 text-start outline-none ring-billmora-primary hover:ring-2 rounded-lg transition-all cursor-pointer group">
+    <button type="button" id="browse" class="flex gap-2 items-center w-full bg-billmora-1 px-2 py-2 text-slate-500 text-start outline-none ring-billmora-primary hover:ring-2 rounded-lg transition-all cursor-pointer group">
       <x-lucide-search class="w-auto h-5 pointer-events-none group-hover:text-billmora-primary transition-colors duration-150" />
-      <span class="text-slate-400">{{ __('admin/common.quick_search') }}</span>
+      <span class="text-slate-400">{{ __('admin/common.browse') }}</span>
       <div class="flex gap-2 ml-auto pointer-events-none text-slate-400 group-hover:text-billmora-primary transition-colors duration-150">
         <span class="bg-white px-1 py-0.25 text-sm font-semibold rounded-lg">CTRL</span>
         <span class="bg-white px-1 py-0.25 text-sm font-semibold rounded-lg">K</span>
@@ -16,8 +16,8 @@
     </button>
   </div>
 
-  <!-- Quick Search (MOBILE) -->
-  <button type="button" id="quickSearch" class="block md:hidden bg-billmora-1 hover:bg-billmora-primary p-2.5 mr-auto text-slate-600 hover:text-white rounded-full transition-colors duration-150 cursor-pointer">
+  <!-- Browse (MOBILE) -->
+  <button type="button" id="browse" class="block md:hidden bg-billmora-1 hover:bg-billmora-primary p-2.5 mr-auto text-slate-600 hover:text-white rounded-full transition-colors duration-150 cursor-pointer">
     <x-lucide-search class="w-auto h-5 pointer-events-none" />
   </button>
 

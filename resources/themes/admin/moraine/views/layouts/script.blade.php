@@ -27,10 +27,10 @@
   close.addEventListener('click', closeSidebar);
 </script>
 <script>
-    // Bind click on any #quickSearch element to trigger opening the global quick-search modal
-    document.querySelectorAll('#quickSearch').forEach(button => {
+    // Bind click on any #browse element to trigger opening the global quick-search modal
+    document.querySelectorAll('#browse').forEach(button => {
         button.addEventListener('click', () => {
-            window.dispatchEvent(new CustomEvent('openQuickSearch'));
+            window.dispatchEvent(new CustomEvent('openBrowse'));
         });
     });
 </script>

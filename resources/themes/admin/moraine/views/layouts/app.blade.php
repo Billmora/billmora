@@ -35,7 +35,7 @@
 
     </div>
   </div>
-  <x-admin::quick-search />
+  <x-admin::browse />
   {{-- Scripts --}}
   @include('admin::layouts.script')
   @livewireScripts
