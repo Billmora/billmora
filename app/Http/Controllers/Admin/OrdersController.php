@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\Coupon;
 use App\Models\Currency;
@@ -58,7 +59,7 @@ class OrdersController extends Controller
             });
         }
 
-        $orders = $query->latest()->paginate(25);
+        $orders = $query->latest()->paginate(Billmora::getGeneral('misc_admin_pagination'));
 
         return view('admin::orders.index', compact('orders'));
     }

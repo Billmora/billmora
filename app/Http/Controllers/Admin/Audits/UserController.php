@@ -48,7 +48,7 @@ class UserController extends Controller
                 $query->where('event', 'like', "%{$search}%");
             })
             ->latest()
-            ->paginate(25)
+            ->paginate(Billmora::getGeneral('misc_admin_pagination'))
             ->withQueryString();
 
         if ($user) {

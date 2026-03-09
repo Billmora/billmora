@@ -47,7 +47,7 @@ class TicketsController extends Controller
             });
         }
 
-        $tickets = $query->orderByDesc('created_at')->paginate(25);
+        $tickets = $query->orderByDesc('created_at')->paginate(Billmora::getGeneral('misc_admin_pagination'));
 
         $tickets->appends(['search' => $search]);
 

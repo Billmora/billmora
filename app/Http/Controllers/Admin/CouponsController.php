@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\Coupon;
 use App\Models\Package;
@@ -35,7 +36,7 @@ class CouponsController extends Controller
     {
         $coupons = Coupon::select('id', 'code', 'start_at', 'expires_at', 'total_uses', 'created_at')
             ->orderBy('created_at', 'desc')
-            ->paginate(25);
+            ->paginate(Billmora::getGeneral('misc_admin_pagination'));
         
         return view('admin::coupons.index', compact('coupons'));
     }

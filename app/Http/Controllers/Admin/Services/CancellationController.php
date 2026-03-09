@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Services;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\ServiceCancellation;
 use App\Traits\AuditsSystem;
@@ -49,7 +50,7 @@ class CancellationController extends Controller
             });
         }
 
-        $cancellations = $query->latest()->paginate(25);
+        $cancellations = $query->latest()->paginate(Billmora::getGeneral('misc_admin_pagination'));
             
         return view('admin::services.cancellations.index', compact('cancellations'));
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\Package;
 use App\Models\Currency;
@@ -67,7 +68,7 @@ class ServicesController extends Controller
             });
         }
 
-        $services = $query->latest()->paginate(25);
+        $services = $query->latest()->paginate(Billmora::getGeneral('misc_admin_pagination'));
 
         return view('admin::services.index', compact('services'));
     }

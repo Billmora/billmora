@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Settings;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
@@ -33,7 +34,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::with('permissions')->paginate(25);
+        $roles = Role::with('permissions')->paginate(Billmora::getGeneral('misc_admin_pagination'));
         
         return view('admin::settings.roles.index', compact('roles'));
     }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Client;
 
+use Billmora;
 use App\Contracts\GatewayInterface;
-use App\Facades\Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use App\Models\Plugin;
@@ -26,7 +26,7 @@ class InvoicesController extends Controller
         $invoices = Invoice::where('user_id', $user->id)
             ->with(['order.service.package.catalog'])
             ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            ->paginate(Billmora::getGeneral('misc_client_pagination'));
 
         return view('client::invoices.index', compact('invoices'));
     }

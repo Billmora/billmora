@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use App\Models\Plugin;
@@ -46,7 +47,7 @@ class GatewaysController extends Controller
             });
         }
 
-        $gateways = $query->orderByDesc('created_at')->paginate(25);
+        $gateways = $query->orderByDesc('created_at')->paginate(Billmora::getGeneral('misc_admin_pagination'));
         $gateways->appends(['search' => $search]);
 
         return view('admin::gateways.index', compact('gateways'));

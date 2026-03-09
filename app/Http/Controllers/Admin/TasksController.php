@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Billmora;
 use App\Facades\Audit;
 use App\Http\Controllers\Controller;
 use App\Models\AuditSystem;
@@ -36,7 +37,7 @@ class TasksController extends Controller
             });
         }
 
-        $failedTasks = $query->orderByDesc('created_at')->paginate(25);
+        $failedTasks = $query->orderByDesc('created_at')->paginate(Billmora::getGeneral('misc_admin_pagination'));
 
         $failedTasks->appends(['search' => $search]);
 

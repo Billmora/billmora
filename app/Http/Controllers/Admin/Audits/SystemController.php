@@ -41,7 +41,7 @@ class SystemController extends Controller
                                     });
                                 })
                                 ->latest()
-                                ->paginate(25)
+                                ->paginate(Billmora::getGeneral('misc_admin_pagination'))
                                 ->withQueryString();
 
         return view('admin::audits.system.index', compact('logs'));

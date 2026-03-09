@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\Package;
 use App\Models\Variant;
@@ -39,7 +40,7 @@ class VariantsController extends Controller
                 'packages:id,name,catalog_id',
                 'packages.catalog:id,name',
             ])
-            ->paginate(25);
+            ->paginate(Billmora::getGeneral('misc_admin_pagination'));
 
         return view('admin::variants.index', compact('variants'));
     }

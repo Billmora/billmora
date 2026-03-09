@@ -49,7 +49,7 @@ class InvoicesController extends Controller
             });
         }
 
-        $invoices = $query->latest('id')->paginate(25);
+        $invoices = $query->latest('id')->paginate(Billmora::getGeneral('misc_admin_pagination'));
 
         return view('admin::invoices.index', compact('invoices'));
     }

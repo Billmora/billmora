@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Variants;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Variants;
 use App\Models\Currency;
@@ -41,7 +42,7 @@ class OptionController extends Controller
 
         $options = $variant->options()
             ->select(['id', 'variant_id', 'name', 'value', 'created_at'])
-            ->paginate(25)
+            ->paginate(Billmora::getGeneral('misc_admin_pagination'))
             ->withQueryString();
 
         return view('admin::variants.option.index', compact('variant', 'options'));

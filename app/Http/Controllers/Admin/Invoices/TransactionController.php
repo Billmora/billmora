@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Invoices;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use App\Models\Plugin;
@@ -51,7 +52,7 @@ class TransactionController extends Controller
             });
         }
 
-        $transactions = $query->latest()->paginate(25);
+        $transactions = $query->latest()->paginate(Billmora::getGeneral('misc_admin_pagination'));
 
         return view('admin::invoices.transaction.index', compact('invoice', 'transactions'));
     }

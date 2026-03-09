@@ -54,7 +54,7 @@ class UsersController extends Controller
                     ->with('roles:id,name')
                     ->when($search, fn ($query) => $this->searchUser($query, $search))
                     ->tap(fn ($query) => $this->sortUser($query, $sort, $direction))
-                    ->paginate(25)
+                    ->paginate(Billmora::getGeneral('misc_admin_pagination'))
                     ->withQueryString();
         
         return view('admin::users.index', compact('users', 'search', 'sort', 'direction'));

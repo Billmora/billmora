@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\Plugin;
 use App\Services\PluginManager;
@@ -43,7 +44,7 @@ class ModulesControler extends Controller
             });
         }
 
-        $modules = $query->orderByDesc('created_at')->paginate(25);
+        $modules = $query->orderByDesc('created_at')->paginate(Billmora::getGeneral('misc_admin_pagination'));
 
         $modules->appends(['search' => $search]);
 

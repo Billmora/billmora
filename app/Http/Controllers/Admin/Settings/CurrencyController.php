@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Settings;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\Currency;
 use App\Traits\AuditsSystem;
@@ -34,7 +35,7 @@ class CurrencyController extends Controller
     {
         $currencies = Currency::select('id', 'code', 'prefix', 'suffix', 'format', 'base_rate', 'is_default', 'created_at')
                 ->orderBy('is_default', 'desc')
-                ->paginate(25);
+                ->paginate(Billmora::getGeneral('misc_admin_pagination'));
         
         return view('admin::settings.currencies.index', compact('currencies'));
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\Package;
 use App\Models\Plugin;
@@ -45,7 +46,7 @@ class ProvisioningsController extends Controller
             });
         }
 
-        $provisionings = $query->orderByDesc('created_at')->paginate(25);
+        $provisionings = $query->orderByDesc('created_at')->paginate(Billmora::getGeneral('misc_admin_pagination'));
 
         $provisionings->appends(['search' => $search]);
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Settings\Mail;
 
+use Billmora;
 use App\Models\Notification;
 use App\Http\Controllers\Controller;
 use App\Traits\AuditsSystem;
@@ -38,7 +39,7 @@ class NotificationController extends Controller
                     ->orWhere('name', 'like', "%{$search}%");
                 });
             })
-            ->paginate(25)
+            ->paginate(Billmora::getGeneral('misc_admin_pagination'))
             ->withQueryString();
 
         return view('admin::settings.mail.notification.index', compact('notifications', 'search'));

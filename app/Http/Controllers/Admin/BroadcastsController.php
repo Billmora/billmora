@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Jobs\BroadcastJob;
 use App\Models\Broadcast;
@@ -42,7 +43,7 @@ class BroadcastsController extends Controller
                     $q->where('subject', 'like', "%{$search}%");
                 });
             })
-            ->paginate(25)
+            ->paginate(Billmora::getGeneral('misc_admin_pagination'))
             ->withQueryString();
 
         return view('admin::broadcasts.index', compact('broadcasts'));

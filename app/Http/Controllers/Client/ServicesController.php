@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\VariantOption;
@@ -23,7 +24,7 @@ class ServicesController extends Controller
                 'package.catalog',
             ])
             ->orderBy('created_at', 'desc')
-            ->paginate(15);
+            ->paginate(Billmora::getGeneral('misc_client_pagination'));
 
         return view('client::services.index', compact('services'));
     }

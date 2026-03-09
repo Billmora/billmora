@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\Catalog;
 use App\Models\Currency;
@@ -49,7 +50,7 @@ class PackagesController extends Controller
             });
         }
 
-        $packages = $query->paginate(25);
+        $packages = $query->paginate(Billmora::getGeneral('misc_admin_pagination'));
 
         return view('admin::packages.index', compact('packages'));
     }

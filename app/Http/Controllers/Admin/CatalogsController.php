@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\Catalog;
 use App\Traits\AuditsSystem;
@@ -32,7 +33,7 @@ class CatalogsController extends Controller
      */
     public function index()
     {
-        $catalogs = Catalog::select('id', 'name', 'slug', 'status', 'created_at')->paginate(25);
+        $catalogs = Catalog::select('id', 'name', 'slug', 'status', 'created_at')->paginate(Billmora::getGeneral('misc_admin_pagination'));
 
         return view('admin::catalogs.index', compact('catalogs'));
     }
