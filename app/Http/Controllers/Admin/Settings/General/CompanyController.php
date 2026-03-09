@@ -47,10 +47,10 @@ class CompanyController extends Controller
     public function update(Request $request)
     {
         $langsAllowed = collect(File::directories(base_path('lang')))
-                ->map(fn ($path) => basename($path))
-                ->toArray();
+            ->map(fn($path) => basename($path))
+            ->toArray();
 
-        $validated = $request->validate( [
+        $validated = $request->validate([
             'company_name' => ['required', 'string'],
             'company_logo' => ['required', 'url'],
             'company_favicon' => ['required', 'url'],

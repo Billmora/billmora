@@ -90,8 +90,6 @@
                         {{ $lang['name'] }}</option>
                 @endforeach
             </x-admin::select>
-            <x-admin::toggle name="company_debug" label="{{ __('admin/settings/general.company_debug_label') }}"
-                helper="{{ __('admin/settings/general.company_debug_helper') }}" :checked="config('app.debug')" />
         </div>
     </div>
     <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
