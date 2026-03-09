@@ -71,7 +71,7 @@ class Package extends Model implements BrowseInterface
      */
     protected function primaryPrice(): Attribute
     {
-        return Attribute::make(fn () => $this->prices->sortBy('id')->first());
+        return Attribute::make(fn() => $this->prices->sortBy('id')->first());
     }
 
     /**
@@ -82,13 +82,13 @@ class Package extends Model implements BrowseInterface
     public function scalablePackages()
     {
         return $this->belongsToMany(
-            Package::class, 
+            Package::class,
             'package_scalings',
             'package_id',
             'target_package_id'
         )
-        ->using(PackageScaling::class)
-        ->withTimestamps();
+            ->using(PackageScaling::class)
+            ->withTimestamps();
     }
 
     /**
@@ -99,7 +99,7 @@ class Package extends Model implements BrowseInterface
     public function sourceScalablePackages()
     {
         return $this->belongsToMany(
-            Package::class, 
+            Package::class,
             'package_scalings',
             'target_package_id',
             'package_id'
@@ -160,7 +160,7 @@ class Package extends Model implements BrowseInterface
      * Return a collection of package records formatted as browse items for quick search indexing.
      *
      * @return \Illuminate\Support\Collection
-     */ 
+     */
     public static function toBrowseItems(): Collection
     {
         return static::select('id', 'name')
@@ -169,7 +169,7 @@ class Package extends Model implements BrowseInterface
             ->map(fn($item) => [
                 'title' => "{$item->name}",
                 'category' => 'package',
-                'url' => route('admin.packages.edit', ['id' => $item->id]),
+                'url' => route('admin.packages.edit', ['package' => $item->id]),
             ]);
     }
 }

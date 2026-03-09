@@ -50,15 +50,14 @@ class SystemController extends Controller
     /**
      * Display details of a specific system audit log.
      *
-     * @param int $id The ID of the system audit log.
+     * @param \App\Models\AuditSystem $system The ID of the system audit log.
      *
      * @return \Illuminate\View\View
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function show($id)
+    public function show(AuditSystem $system)
     {
-        $log = AuditSystem::findOrFail($id);
         $user = User::select('email')->find($log->user_id);
 
         return view('admin::audits.system.show', compact('log', 'user'));

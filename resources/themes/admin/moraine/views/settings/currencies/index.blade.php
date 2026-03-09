@@ -36,7 +36,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $currency->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                 @can('settings.currencies.update')
-                                    <a href="{{ route('admin.settings.currencies.edit', ['id' => $currency->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                                    <a href="{{ route('admin.settings.currencies.edit', ['currency' => $currency->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                                         {{ __('common.edit') }}
                                     </a>
                                 @endcan
@@ -65,7 +65,7 @@
             position="centered"
             title="{{ __('common.delete_modal_title') }}"
             description="{{ __('common.delete_modal_description', ['item' => $currency->code]) }}">
-            <form action="{{ route('admin.settings.currencies.destroy', ['id' => $currency->id]) }}" method="POST">
+            <form action="{{ route('admin.settings.currencies.destroy', ['currency' => $currency->id]) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <div class="flex justify-end gap-2 mt-4">

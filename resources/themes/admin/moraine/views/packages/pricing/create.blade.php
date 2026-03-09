@@ -3,7 +3,7 @@
 @section('title', "Package Pricing - Create")
 
 @section('body')
-<form action="{{ route('admin.packages.pricing.store', ['id' => $package->id]) }}" method="POST" class="flex flex-col gap-5" x-data="{ pricingType: '{{ old('pricing_type', 'free') }}' }">
+<form action="{{ route('admin.packages.pricing.store', ['package' => $package->id]) }}" method="POST" class="flex flex-col gap-5" x-data="{ pricingType: '{{ old('pricing_type', 'free') }}' }">
     @csrf
     <div class="flex flex-col gap-5">
         <div class="w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
@@ -102,7 +102,7 @@
         </div>
     </div>
     <div class="flex gap-4 ml-auto">
-        <a href="{{ route('admin.packages.pricing', ['id' => $package->id]) }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
+        <a href="{{ route('admin.packages.pricing', ['package' => $package->id]) }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
         <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.create') }}</button>
     </div>
 </form>

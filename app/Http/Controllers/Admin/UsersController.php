@@ -194,15 +194,14 @@ class UsersController extends Controller
     /**
      * Remove the specified user from storage.
      *
-     * @param int $id The ID of the user to delete.
+     * @param \App\Models\User $user The ID of the user to delete.
      *
      * @return \Illuminate\Http\RedirectResponse Redirects back with an error message if attempting to delete self, otherwise to the user list with success message.
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the user does not exist.
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        $user = User::findOrFail($id);
 
         $this->authorize('delete', $user);
 
@@ -221,16 +220,15 @@ class UsersController extends Controller
     /**
      * Manually verify a user's email address.
      *
-     * @param int $id The ID of the user whose email should be verified.
+     * @param \App\Models\User $user The ID of the user whose email should be verified.
      *
      * @return \Illuminate\Http\RedirectResponse Redirects back with a success message after verification.
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the user is not found.
      * @throws \Throwable If the verification record is not found or cannot be updated.
      */
-    public function verify(Request $request, $id)
+    public function verify(Request $request, User $user)
     {
-        $user = User::findOrFail($id);
 
         $verification = UserEmailVerification::where('user_id', $user->id)
                 ->whereNull('verified_at')

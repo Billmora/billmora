@@ -3,7 +3,7 @@
 @section('title', "Role & Permission Edit - {$role->name}")
 
 @section('body')
-<form action="{{ route('admin.settings.roles.update', ['id' => $role->id]) }}" method="POST" class="flex flex-col gap-5">
+<form action="{{ route('admin.settings.roles.update', ['role' => $role->id]) }}" method="POST" class="flex flex-col gap-5">
     @csrf
     @method('PUT')
     <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">

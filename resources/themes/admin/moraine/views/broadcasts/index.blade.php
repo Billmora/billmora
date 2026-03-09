@@ -47,7 +47,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $broadcast->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                 @can('broadcasts.update')
-                                    <a href="{{ route('admin.broadcasts.edit', ['id' => $broadcast->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                                    <a href="{{ route('admin.broadcasts.edit', ['broadcast' => $broadcast->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                                         {{ __('common.edit') }}
                                     </a>
                                 @endcan
@@ -74,7 +74,7 @@
                 position="centered"
                 title="{{ __('common.delete_modal_title') }}"
                 description="{{ __('common.delete_modal_description', ['item' => $broadcast->subject]) }}">
-                <form action="{{ route('admin.broadcasts.destroy', ['id' => $broadcast->id]) }}" method="POST">
+                <form action="{{ route('admin.broadcasts.destroy', ['broadcast' => $broadcast->id]) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <div class="flex justify-end gap-2 mt-4">

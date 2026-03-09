@@ -7,17 +7,17 @@
     <x-admin::tabs 
         :tabs="[
             [
-                'route' => route('admin.packages.edit', ['id' => $package->id]),
+                'route' => route('admin.packages.edit', ['package' => $package->id]),
                 'icon' => 'lucide-package',
                 'label' => __('admin/packages.tabs.summary'),
             ],
             [
-                'route' => route('admin.packages.pricing', ['id' => $package->id]),
+                'route' => route('admin.packages.pricing', ['package' => $package->id]),
                 'icon' => 'lucide-badge-cent',
                 'label' => __('admin/packages.tabs.pricing'),
             ],
             [
-                'route' => route('admin.packages.provisioning', ['id' => $package->id]),
+                'route' => route('admin.packages.provisioning', ['package' => $package->id]),
                 'icon' => 'lucide-plug',
                 'label' => 'Provisioning',
             ],
@@ -28,7 +28,7 @@
             ],
         ]" 
         active="{{ request()->url() }}" />
-    <form action="{{ route('admin.packages.update', ['id' => $package->id]) }}" method="POST" class="flex flex-col gap-5" enctype="multipart/form-data">
+    <form action="{{ route('admin.packages.update', ['package' => $package->id]) }}" method="POST" class="flex flex-col gap-5" enctype="multipart/form-data">
         @method('PUT')
         @csrf
         <div class="flex flex-col lg:flex-row gap-5">

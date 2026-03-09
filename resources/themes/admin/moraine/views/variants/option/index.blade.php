@@ -7,19 +7,19 @@
     <x-admin::tabs 
         :tabs="[
             [
-                'route' => route('admin.variants.edit', ['id' => $variant->id]),
+                'route' => route('admin.variants.edit', ['variant' => $variant->id]),
                 'icon' => 'lucide-boxes',
                 'label' => __('admin/variants.tabs.summary'),
             ],
             [
-                'route' => route('admin.variants.options', ['id' => $variant->id]),
+                'route' => route('admin.variants.options', ['variant' => $variant->id]),
                 'icon' => 'lucide-codesandbox',
                 'label' => __('admin/variants.tabs.options'),
             ],
         ]" 
         active="{{ request()->url() }}" />
     <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
-        <a href="{{ route('admin.variants.options.create', ['id' => $variant->id]) }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+        <a href="{{ route('admin.variants.options.create', ['variant' => $variant->id]) }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
             <x-lucide-plus class="w-auto h-5" />
             {{ __('common.create') }}
         </a>

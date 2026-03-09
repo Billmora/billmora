@@ -12,7 +12,7 @@
                 <label for="user_id" class="flex text-slate-600 font-semibold mb-1">
                     {{ __('admin/services.user_label') }}
                 </label>
-                <a href="{{ route('admin.users.summary', ['id' => $service->user_id]) }}" class="relative inline-block max-w-150 w-full group" target="_blank">
+                <a href="{{ route('admin.users.summary', ['user' => $service->user_id]) }}" class="relative inline-block max-w-150 w-full group" target="_blank">
                     <input type="text" name="user_id" id="user_id" value="{{ $service->user->email }}" class="w-full px-3 py-2.25 bg-billmora-1 placeholder:text-gray-400 border-2 border-billmora-2 rounded-xl cursor-not-allowed" disabled>
                     <div class="absolute top-1/2 -translate-y-1/2 right-1.5">
                         <button type="button" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">

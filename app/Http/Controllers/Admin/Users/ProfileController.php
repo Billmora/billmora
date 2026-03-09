@@ -30,15 +30,15 @@ class ProfileController extends Controller
     /**
      * Display the profile edit page for a specific user.
      *
-     * @param int $id The ID of the user to be edited.
+     * @param \App\Models\User $user The ID of the user to be edited.
      *
      * @return \Illuminate\View\View The profile edit view with user data.
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the user is not found.
      */
-    public function index($id)
+    public function index(User $user)
     {
-        $user = User::with('billing')->findOrFail($id);
+        $user->load('billing');
         $roles = Role::pluck('name', 'id');
 
         $this->authorize('update', $user);
@@ -50,16 +50,15 @@ class ProfileController extends Controller
      * Update the specified user's profile and billing information.
      *
      * @param \Illuminate\Http\Request $request The HTTP request containing profile data.
-     * @param int $id The ID of the user being updated.
+     * @param \App\Models\User $user The ID of the user being updated.
      *
      * @return \Illuminate\Http\RedirectResponse Redirects back with a success message.
      *
      * @throws \Illuminate\Validation\ValidationException If validation fails.
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the user is not found.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        $user = User::findOrFail($id);
 
         $this->authorize('update', $user);
 

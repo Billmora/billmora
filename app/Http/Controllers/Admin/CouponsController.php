@@ -120,12 +120,12 @@ class CouponsController extends Controller
     /**
      * Show the form for editing the specified coupon.
      *
-     * @param  int  $id
+     * @param  \App\Models\Coupon  $coupon
      * @return \Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(Coupon $coupon)
     {
-        $coupon = Coupon::with('packages')->findOrFail($id);
+        $coupon->load('packages');
     
         $packageOptions = Package::with('catalog')
             ->get()
@@ -154,12 +154,11 @@ class CouponsController extends Controller
      * Update the specified coupon in database.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Coupon  $coupon
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Coupon $coupon)
     {
-        $coupon = Coupon::findOrFail($id);
         
         $availableBillingCycles = PackagePrice::select('name')
             ->distinct()
@@ -220,12 +219,11 @@ class CouponsController extends Controller
     /**
      * Remove the specified coupon from database.
      *
-     * @param  int  $id
+     * @param  \App\Models\Coupon  $coupon
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(Coupon $coupon)
     {
-        $coupon = Coupon::findOrFail($id);
 
         $coupon->delete();
 

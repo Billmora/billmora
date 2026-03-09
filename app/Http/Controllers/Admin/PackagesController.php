@@ -136,12 +136,11 @@ class PackagesController extends Controller
     /**
      * Show the form for editing the specified package.
      *
-     * @param int $id The package identifier.
+     * @param \App\Models\Package $package The package identifier.
      * @return \Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(Package $package)
     {
-        $package = Package::findOrFail($id);
         $catalogs = Catalog::select('id', 'name', 'slug')->get();
 
         return view('admin::packages.edit', compact('package', 'catalogs'));
@@ -151,12 +150,11 @@ class PackagesController extends Controller
      * Update the specified package in database.
      *
      * @param \Illuminate\Http\Request $request The request containing updated fields and optional icon file.
-     * @param int $id The package identifier.
+     * @param \App\Models\Package $package The package identifier.
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Package $package)
     {
-        $package = Package::findOrFail($id);
 
         $validated = $request->validate([
             'catalog_id' => ['required', Rule::exists('catalogs', 'id')],
@@ -201,12 +199,11 @@ class PackagesController extends Controller
     /**
      * Remove the specified package from database.
      *
-     * @param int $id The package identifier.
+     * @param \App\Models\Package $package The package identifier.
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(Package $package)
     {
-        $package = Package::findOrFail($id);
 
         $package->delete();
         

@@ -7,17 +7,17 @@
     <x-admin::tabs 
         :tabs="[
             [
-                'route' => route('admin.users.summary', ['id' => $user->id]),
+                'route' => route('admin.users.summary', ['user' => $user->id]),
                 'icon' => 'lucide-contact',
                 'label' => __('admin/users.tabs.summary'),
             ],
             [
-                'route' => route('admin.users.profile', ['id' => $user->id]),
+                'route' => route('admin.users.profile', ['user' => $user->id]),
                 'icon' => 'lucide-user-pen',
                 'label' => __('admin/users.tabs.profile'),
             ],
             [
-                'route' => route('admin.users.activity', ['id' => $user->id]),
+                'route' => route('admin.users.activity', ['user' => $user->id]),
                 'icon' => 'lucide-activity',
                 'label' => __('admin/users.tabs.activity'),
             ],
@@ -27,7 +27,7 @@
         @if (!$user->isEmailVerified())
             <x-admin::alert variant="warning" title="{{ __('admin/users.email_verification_alert_label') }}">
                 {{ __('admin/users.email_verification_alert_helper') }}
-                <form action="{{ route('admin.users.verify', ['id' => $user->id]) }}" method="POST" class="ml-auto">
+                <form action="{{ route('admin.users.verify', ['user' => $user->id]) }}" method="POST" class="ml-auto">
                     @csrf
                     <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('admin/users.marked_as_verified') }}</button>
                 </form>
@@ -87,7 +87,7 @@
             </div>
             @if (Auth::id() !== $user->id)
                 @can('users.impersonate')
-                    <form action="{{ route('admin.users.impersonate', ['id' => $user->id]) }}" method="POST">
+                    <form action="{{ route('admin.users.impersonate', ['user' => $user->id]) }}" method="POST">
                         @csrf
                         <button type="submit" class="w-full flex gap-2 justify-center items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
                             <x-lucide-user class="w-auto h-5" />
@@ -172,7 +172,7 @@
                 position="centered"
                 title="{{ __('common.delete_modal_title') }}"
                 description="{{ __('common.delete_modal_description', ['item' => $user->email]) }}">
-                <form action="{{ route('admin.users.destroy', ['id' => $user->id]) }}" method="POST">
+                <form action="{{ route('admin.users.destroy', ['user' => $user->id]) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <div class="flex justify-end gap-2 mt-4">

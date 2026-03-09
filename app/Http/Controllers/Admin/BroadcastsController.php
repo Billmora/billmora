@@ -124,14 +124,13 @@ class BroadcastsController extends Controller
     /**
      * Show the form for editing an existing broadcast.
      *
-     * @param  int  $id  The ID of the broadcast to edit.
+     * @param  \App\Models\Broadcast  $broadcast  The ID of the broadcast to edit.
      * @return \Illuminate\View\View The view containing the edit form.
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the broadcast is not found.
      */
-    public function edit($id)
+    public function edit(Broadcast $broadcast)
     {
-        $broadcast = Broadcast::findOrFail($id);
         $users = User::select('id', 'first_name', 'last_name', 'email')->get();
 
         return view("admin::broadcasts.edit", compact('broadcast', 'users'));
@@ -141,15 +140,14 @@ class BroadcastsController extends Controller
      * Update an existing broadcast.
      *
      * @param  \Illuminate\Http\Request  $request  The incoming request containing broadcast update data.
-     * @param  int  $id  The ID of the broadcast to update.
+     * @param  \App\Models\Broadcast  $broadcast  The ID of the broadcast to update.
      * @return \Illuminate\Http\RedirectResponse Redirects back to the broadcast index with success message.
      *
      * @throws \Illuminate\Validation\ValidationException If validation fails.
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the broadcast is not found.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Broadcast $broadcast)
     {
-        $broadcast = Broadcast::findOrFail($id);
         
         $validated = $request->validate([
             'broadcast_subject' => ['required', 'string', 'max:255'],
@@ -207,14 +205,13 @@ class BroadcastsController extends Controller
     /**
      * Remove the specified broadcast from storage.
      *
-     * @param  int  $id  The ID of the broadcast to delete.
+     * @param  \App\Models\Broadcast  $broadcast  The ID of the broadcast to delete.
      * @return \Illuminate\Http\RedirectResponse Redirects back to the broadcast index with success message.
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the broadcast is not found.
      */
-    public function destroy($id)
+    public function destroy(Broadcast $broadcast)
     {
-        $broadcast = Broadcast::findOrFail($id);
 
         $this->recordDelete('mail.broadcast.delete', [
             'name' => $broadcast->subject,

@@ -63,7 +63,7 @@
         @endforeach
     </div>
     <div class="flex gap-4 ml-auto">
-        <a href="{{ route('admin.variants.options', ['id' => $variant->id]) }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors duration-150">{{ __('common.cancel') }}</a>
+        <a href="{{ route('admin.variants.options', ['variant' => $variant->id]) }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors duration-150">{{ __('common.cancel') }}</a>
         <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors duration-150 cursor-pointer">{{ __('common.update') }}</button>
     </div>
     <template id="pricing-template">

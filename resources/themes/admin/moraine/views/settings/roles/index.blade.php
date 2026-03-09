@@ -33,7 +33,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $role->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                     @can('settings.roles.update')
-                                        <a href="{{ route('admin.settings.roles.edit', ['id' => $role->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                                        <a href="{{ route('admin.settings.roles.edit', ['role' => $role->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                                             {{ __('common.edit') }}
                                         </a>
                                     @endcan
@@ -60,7 +60,7 @@
                 position="centered"
                 title="{{ __('common.delete_modal_title') }}"
                 description="{{ __('common.delete_modal_description', ['item' => $role->name]) }}">
-                <form action="{{ route('admin.settings.roles.destroy', ['id' => $role->id]) }}" method="POST">
+                <form action="{{ route('admin.settings.roles.destroy', ['role' => $role->id]) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <div class="flex justify-end gap-2 mt-4">

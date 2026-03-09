@@ -31,9 +31,9 @@ class SummaryController extends Controller
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the user does not exist.
      */
-    public function index(Request $request, $id)
+    public function index(Request $request, User $user)
     {
-        $user = User::with('billing')->findOrFail($id);
+        $user->load('billing');
         
         return view('admin::users.summary', compact('user'));
     }
@@ -49,9 +49,8 @@ class SummaryController extends Controller
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the target user does not exist.
      */
-    public function impersonate(Request $request, $id)
+    public function impersonate(Request $request, User $user)
     {
-        $user = User::findOrFail($id);
 
         if ($user->id === Auth::id()) {
             return redirect()->back()->with('error', __('admin/users.login_as_user_error'));

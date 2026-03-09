@@ -84,14 +84,13 @@ class CurrencyController extends Controller
     /**
      * Show the form for editing the specified currency.
      *
-     * @param  int  $id
+     * @param  \App\Models\Currency  $currency
      * @return \Illuminate\View\View
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function edit($id)
+    public function edit(Currency $currency)
     {
-        $currency = Currency::findOrFail($id);
         
         return view('admin::settings.currencies.edit', compact('currency'));
     }
@@ -100,14 +99,13 @@ class CurrencyController extends Controller
      * Update the specified currency in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Currency  $currency
      * @return \Illuminate\Http\RedirectResponse
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Currency $currency)
     {
-        $currency = Currency::findOrFail($id);
 
         $validated = $request->validate([
             'currency_code' => ['required', 'string', 'size:3', Rule::unique('currencies', 'code')->ignore($currency->id)],
@@ -143,14 +141,13 @@ class CurrencyController extends Controller
      *
      * Prevents deletion if the currency is set as default.
      *
-     * @param  int  $id
+     * @param  \App\Models\Currency  $currency
      * @return \Illuminate\Http\RedirectResponse
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function destroy($id)
+    public function destroy(Currency $currency)
     {
-        $currency = Currency::findOrFail($id);
 
         if ($currency->is_default) {
             return redirect()

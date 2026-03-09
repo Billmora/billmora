@@ -29,12 +29,12 @@ class PricingController extends Controller
     /**
      * Display a listing of pricing options for a specific package.
      *
-     * @param  int  $id  Package ID
+     * @param  \App\Models\Package  $package  Package ID
      * @return \Illuminate\View\View
      */
-    public function index($id)
+    public function index(Package $package)
     {
-        $package = Package::with('prices')->findOrFail($id);
+        $package->load('prices');
 
         return view('admin::packages.pricing.index', compact('package'));
     }
@@ -42,12 +42,11 @@ class PricingController extends Controller
     /**
      * Show the form for creating a new pricing entry for the given package.
      *
-     * @param  int  $id  Package ID
+     * @param  \App\Models\Package  $package  Package ID
      * @return \Illuminate\View\View
      */
-    public function create($id)
+    public function create(Package $package)
     {
-        $package = Package::findOrFail($id);
         $currencies = Currency::orderBy('is_default', 'desc')->get();
 
         return view('admin::packages.pricing.create', compact('package', 'currencies'));
@@ -57,10 +56,10 @@ class PricingController extends Controller
      * Store a newly created pricing configuration for a package.
      *
      * @param \App\Http\Requests\Admin\Packages\PricingRequest $request
-     * @param int $id Package ID
+     * @param \App\Models\Package $package Package ID
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(PricingRequest $request, $id)
+    public function store(PricingRequest $request, Package $package)
     {
         $package = $request->getPackage();
         
@@ -81,13 +80,12 @@ class PricingController extends Controller
     /**
      * Show the form for editing an existing pricing entry for the given package.
      *
-     * @param  int  $id  Package ID
+     * @param  \App\Models\Package  $package  Package ID
      * @param  \App\Models\PackagePrice  $pricing
      * @return \Illuminate\View\View|\Symfony\Component\HttpFoundation\Response
      */
-    public function edit($id, PackagePrice $pricing)
+    public function edit(Package $package, PackagePrice $pricing)
     {
-        $package = Package::findOrFail($id);
 
         if ($pricing->package_id !== $package->id) {
             abort(404);
@@ -102,11 +100,11 @@ class PricingController extends Controller
      * Update an existing pricing configuration for a package.
      *
      * @param \App\Http\Requests\Admin\Packages\PricingRequest $request
-     * @param int $id Package ID
+     * @param \App\Models\Package $package Package ID
      * @param int $priceId Price row ID
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(PricingRequest $request, $id, $priceId)
+    public function update(PricingRequest $request, Package $package, $priceId)
     {
         $package = $request->getPackage();
         $price = $request->getPricing();
@@ -127,13 +125,12 @@ class PricingController extends Controller
     /**
      * Remove a pricing entry from storage.
      *
-     * @param  int  $id  Package ID
+     * @param  \App\Models\Package  $package  Package ID
      * @param  \App\Models\PackagePrice  $pricing
      * @return \Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function destroy($id, PackagePrice $pricing)
+    public function destroy(Package $package, PackagePrice $pricing)
     {
-        $package = Package::findOrFail($id);
 
         if ($pricing->package_id !== $package->id) {
             abort(404);

@@ -89,15 +89,15 @@ class RoleController extends Controller
     /**
      * Show the form for editing an existing role.
      *
-     * @param int $id The ID of the role to edit.
+     * @param \App\Models\Role $role The ID of the role to edit.
      *
      * @return \Illuminate\View\View The view instance for editing the role.
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the role does not exist.
      */
-    public function edit($id)
+    public function edit(Role $role)
     {
-        $role = Role::with('permissions')->findOrFail($id);
+        $role->load('permissions');
 
         $permissions = Permission::all();
 
@@ -115,9 +115,8 @@ class RoleController extends Controller
      * @throws \Illuminate\Validation\ValidationException If the request validation fails.
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the role does not exist.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Role $role)
     {
-        $role = Role::findOrFail($id);
 
         $oldRole = [
             'name' => $role->name,
@@ -155,15 +154,14 @@ class RoleController extends Controller
     /**
      * Remove a role from the database.
      *
-     * @param int $id The ID of the role to delete.
+     * @param \App\Models\Role $role The ID of the role to delete.
      *
      * @return \Illuminate\Http\RedirectResponse Redirects to the roles index with a success flash message.
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the role does not exist.
      */
-    public function destroy($id)
+    public function destroy(Role $role)
     {
-        $role = Role::findOrFail($id);
 
         $userCount = $role->users()->count();
         if ($userCount > 0) {

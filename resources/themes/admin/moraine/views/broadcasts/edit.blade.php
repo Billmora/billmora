@@ -3,7 +3,7 @@
 @section('title', "Broadcast Edit - {$broadcast->id}")
 
 @section('body')
-<form action="{{ route('admin.broadcasts.update', ['id' => $broadcast->id]) }}" method="POST" class="flex flex-col gap-5">
+<form action="{{ route('admin.broadcasts.update', ['broadcast' => $broadcast->id]) }}" method="POST" class="flex flex-col gap-5">
     @csrf
     @method('PUT')
     <x-admin::alert variant="warning" title="{{ __('admin/broadcasts.alert_label') }}">{{ __('admin/broadcasts.alert_helper') }}</x-admin::alert>

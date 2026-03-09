@@ -7,17 +7,17 @@
     <x-admin::tabs 
         :tabs="[
             [
-                'route' => route('admin.packages.edit', ['id' => $package->id]),
+                'route' => route('admin.packages.edit', ['package' => $package->id]),
                 'icon' => 'lucide-package',
                 'label' => __('admin/packages.tabs.summary'),
             ],
             [
-                'route' => route('admin.packages.pricing', ['id' => $package->id]),
+                'route' => route('admin.packages.pricing', ['package' => $package->id]),
                 'icon' => 'lucide-badge-cent',
                 'label' => __('admin/packages.tabs.pricing'),
             ],
             [
-                'route' => route('admin.packages.provisioning', ['id' => $package->id]),
+                'route' => route('admin.packages.provisioning', ['package' => $package->id]),
                 'icon' => 'lucide-plug',
                 'label' => 'Provisioning',
             ],
@@ -30,7 +30,7 @@
         active="{{ request()->url() }}" />
     <div class="flex flex-col gap-4">
         <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
-            <a href="{{ route('admin.packages.pricing.create', ['id' => $package->id]) }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+            <a href="{{ route('admin.packages.pricing.create', ['package' => $package->id]) }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                 <x-lucide-plus class="w-auto h-5" />
                 {{ __('common.create') }}
             </a>

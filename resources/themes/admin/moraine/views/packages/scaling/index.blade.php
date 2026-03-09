@@ -7,17 +7,17 @@
     <x-admin::tabs 
         :tabs="[
             [
-                'route' => route('admin.packages.edit', ['id' => $package->id]),
+                'route' => route('admin.packages.edit', ['package' => $package->id]),
                 'icon' => 'lucide-package',
                 'label' => __('admin/packages.tabs.summary'),
             ],
             [
-                'route' => route('admin.packages.pricing', ['id' => $package->id]),
+                'route' => route('admin.packages.pricing', ['package' => $package->id]),
                 'icon' => 'lucide-badge-cent',
                 'label' => __('admin/packages.tabs.pricing'),
             ],
             [
-                'route' => route('admin.packages.provisioning', ['id' => $package->id]),
+                'route' => route('admin.packages.provisioning', ['package' => $package->id]),
                 'icon' => 'lucide-plug',
                 'label' => __('admin/packages.tabs.provisioning'),
             ],

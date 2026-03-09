@@ -83,12 +83,11 @@ class CatalogsController extends Controller
     /**
      * Show the form for editing the specified catalog.
      *
-     * @param int $id
+     * @param \App\Models\Catalog $catalog
      * @return \Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(Catalog $catalog)
     {
-        $catalog = Catalog::findOrFail($id);
 
         return view('admin::catalogs.edit', compact('catalog'));
     }
@@ -97,12 +96,11 @@ class CatalogsController extends Controller
      * Update the specified catalog in the database.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param \App\Models\Catalog $catalog
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Catalog $catalog)
     {
-        $catalog = Catalog::findOrFail($id);
 
         $validated = $request->validate([
             'catalog_name' => ['required', 'string', 'max:255'],
@@ -134,12 +132,11 @@ class CatalogsController extends Controller
     /**
      * Remove the specified catalog from the database.
      *
-     * @param int $id
+     * @param \App\Models\Catalog $catalog
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(Catalog $catalog)
     {
-        $catalog = Catalog::findOrFail($id);
 
         if ($catalog->packages()->count() > 0) {
             return redirect()->route('admin.catalogs')->with('error', __('common.delete_failed_related', [

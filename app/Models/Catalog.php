@@ -45,7 +45,7 @@ class Catalog extends Model implements BrowseInterface
      * Return a collection of catalog records formatted as browse items for quick search indexing.
      *
      * @return \Illuminate\Support\Collection
-     */ 
+     */
     public static function toBrowseItems(): Collection
     {
         return static::select('id', 'name')
@@ -54,7 +54,7 @@ class Catalog extends Model implements BrowseInterface
             ->map(fn($item) => [
                 'title' => "{$item->name}",
                 'category' => 'catalog',
-                'url' => route('admin.catalogs.edit', ['id' => $item->id]),
+                'url' => route('admin.catalogs.edit', ['catalog' => $item->id]),
             ]);
     }
 }

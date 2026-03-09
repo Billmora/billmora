@@ -7,23 +7,23 @@
     <x-admin::tabs 
         :tabs="[
             [
-                'route' => route('admin.users.summary', ['id' => $user->id]),
+                'route' => route('admin.users.summary', ['user' => $user->id]),
                 'icon' => 'lucide-contact',
                 'label' => __('admin/users.tabs.summary'),
             ],
             [
-                'route' => route('admin.users.profile', ['id' => $user->id]),
+                'route' => route('admin.users.profile', ['user' => $user->id]),
                 'icon' => 'lucide-user-pen',
                 'label' => __('admin/users.tabs.profile'),
             ],
             [
-                'route' => route('admin.users.activity', ['id' => $user->id]),
+                'route' => route('admin.users.activity', ['user' => $user->id]),
                 'icon' => 'lucide-activity',
                 'label' => __('admin/users.tabs.activity'),
             ],
         ]" 
         active="{{ request()->url() }}" />
-    <form action="{{ route('admin.users.profile.update', ['id' => $user->id]) }}" method="POST" class="flex flex-col gap-5">
+    <form action="{{ route('admin.users.profile.update', ['user' => $user->id]) }}" method="POST" class="flex flex-col gap-5">
         @csrf
         @method('PUT')
         <div class="flex flex-col lg:flex-row gap-5">

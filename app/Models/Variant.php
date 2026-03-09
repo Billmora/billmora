@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 class Variant extends Model implements BrowseInterface
 {
     use BrowseTrait;
-    
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -56,7 +56,7 @@ class Variant extends Model implements BrowseInterface
      * Return a collection of variant records formatted as browse items for quick search indexing.
      *
      * @return \Illuminate\Support\Collection
-     */ 
+     */
     public static function toBrowseItems(): Collection
     {
         return static::select('id', 'name')
@@ -65,7 +65,7 @@ class Variant extends Model implements BrowseInterface
             ->map(fn($item) => [
                 'title' => "{$item->name}",
                 'category' => 'variant',
-                'url' => route('admin.variants.edit', ['id' => $item->id]),
+                'url' => route('admin.variants.edit', ['variant' => $item->id]),
             ]);
     }
 }

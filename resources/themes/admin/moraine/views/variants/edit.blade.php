@@ -7,18 +7,18 @@
     <x-admin::tabs 
         :tabs="[
             [
-                'route' => route('admin.variants.edit', ['id' => $variant->id]),
+                'route' => route('admin.variants.edit', ['variant' => $variant->id]),
                 'icon' => 'lucide-boxes',
                 'label' => __('admin/variants.tabs.summary'),
             ],
             [
-                'route' => route('admin.variants.options', ['id' => $variant->id]),
+                'route' => route('admin.variants.options', ['variant' => $variant->id]),
                 'icon' => 'lucide-codesandbox',
                 'label' => __('admin/variants.tabs.options'),
             ],
         ]" 
         active="{{ request()->url() }}" />
-    <form action="{{ route('admin.variants.update', ['id' => $variant->id]) }}" method="POST" class="flex flex-col gap-5">
+    <form action="{{ route('admin.variants.update', ['variant' => $variant->id]) }}" method="POST" class="flex flex-col gap-5">
         @csrf
         @method('PUT')
         <div class="w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl space-y-4">

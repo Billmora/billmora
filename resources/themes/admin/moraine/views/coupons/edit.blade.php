@@ -3,7 +3,7 @@
 @section('title', "Coupon Edit - {$coupon->code}")
 
 @section('body')
-<form action="{{ route('admin.coupons.update', ['id' => $coupon->id]) }}" method="POST" class="flex flex-col gap-5">
+<form action="{{ route('admin.coupons.update', ['coupon' => $coupon->id]) }}" method="POST" class="flex flex-col gap-5">
     @csrf
     @method('PUT')
     <div class="flex flex-col gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">

@@ -56,15 +56,14 @@ class EmailController extends Controller
     /**
      * Display the details of a specific email audit history.
      *
-     * @param int $id The ID of the email audit record.
+     * @param \App\Models\AuditEmail $email The ID of the email audit record.
      *
      * @return \Illuminate\View\View
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function show($id)
+    public function show(AuditEmail $email)
     {
-        $history = AuditEmail::findOrFail($id);
 
         return view('admin::audits.email.show', compact('history'));
     }
@@ -72,15 +71,14 @@ class EmailController extends Controller
     /**
      * Preview the content of a specific email audit history.
      *
-     * @param int $id The ID of the email audit record to preview.
+     * @param \App\Models\AuditEmail $email The ID of the email audit record to preview.
      *
      * @return \Illuminate\View\View
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function preview($id)
+    public function preview(AuditEmail $email)
     {
-        $history = AuditEmail::findOrFail($id);
 
         if ($history->event === 'broadcast.email') {
             $broadcast = Broadcast::findOrFail($history->properties['id']);

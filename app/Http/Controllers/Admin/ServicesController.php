@@ -75,16 +75,16 @@ class ServicesController extends Controller
     /**
      * Show the form for editing the specified service with packages, pricing, and plugin schemas.
      *
-     * @param int $id
+     * @param \App\Models\Service $service
      * @param \App\Services\PricingService $pricingService
      * @param \App\Services\PluginManager $pluginManager
      * @return \Illuminate\Contracts\View\View
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function edit($id, PricingService $pricingService, PluginManager $pluginManager)
+    public function edit(Service $service, PricingService $pricingService, PluginManager $pluginManager)
     {
-        $service = Service::with('user')->findOrFail($id);
+        $service->load('user');
         
         $currencies = Currency::orderBy('code')->get();
 
@@ -124,7 +124,7 @@ class ServicesController extends Controller
      * Update the specified service with validated data, configuration, and optional price recalculation.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param \App\Models\Service $service
      * @param \App\Services\PricingService $pricingService
      * @param \App\Services\Package\OrderValidationService $validationService
      * @param \App\Services\PluginManager $pluginManager
@@ -133,7 +133,7 @@ class ServicesController extends Controller
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, $id, PricingService $pricingService, OrderValidationService $validationService, PluginManager $pluginManager)
+    public function update(Request $request, Service $service, PricingService $pricingService, OrderValidationService $validationService, PluginManager $pluginManager)
     {
         $validated = $request->validate([
             'service_status' => ['required', Rule::in(['pending', 'active', 'suspended', 'terminated', 'cancelled'])],
@@ -152,7 +152,7 @@ class ServicesController extends Controller
             'variant_selections' => ['nullable', 'array'],
         ]);
 
-        $service = Service::findOrFail($id);
+
         $oldService = $service->getOriginal();
 
         $package = Package::with(['plugin', 'variants.options'])->findOrFail($validated['package_id']);
@@ -242,21 +242,21 @@ class ServicesController extends Controller
 
         $this->recordUpdate('service.update', $oldService, $service->getChanges());
 
-        return redirect()->route('admin.services.edit', $id)
+        return redirect()->route('admin.services.edit', $service->id)
             ->with('success', __('common.update_success', ['attribute' => $service->name]));
     }
 
     /**
      * Remove the specified service from database with status validation.
      *
-     * @param int $id
+     * @param \App\Models\Service $service
      * @return \Illuminate\Http\RedirectResponse
      * 
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function destroy($id)
+    public function destroy(Service $service)
     {
-        $service = Service::findOrFail($id);
+
 
         if ($service->status === 'active') {
             return back()->with('error', __('admin/services.delete.active_services'));

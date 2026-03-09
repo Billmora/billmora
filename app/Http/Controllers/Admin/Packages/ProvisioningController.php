@@ -27,13 +27,12 @@ class ProvisioningController extends Controller
      * Display the provisioning configuration page for the specified package.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param \App\Models\Package $package
      * @param \App\Services\PluginManager $manager
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(Request $request, $id, PluginManager $manager)
+    public function index(Request $request, Package $package, PluginManager $manager)
     {
-        $package = Package::findOrFail($id);
 
         $provisionings = Plugin::where('type', 'provisioning')
             ->orderBy('name')
@@ -76,13 +75,12 @@ class ProvisioningController extends Controller
      * Update the provisioning plugin and configuration for the specified package.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param \App\Models\Package $package
      * @param \App\Services\PluginManager $manager
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id, PluginManager $manager)
+    public function update(Request $request, Package $package, PluginManager $manager)
     {
-        $package = Package::findOrFail($id);
 
         $oldPackage = $package->getOriginal();
 

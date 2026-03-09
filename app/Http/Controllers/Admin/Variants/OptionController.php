@@ -30,16 +30,14 @@ class OptionController extends Controller
     /**
      * Display a listing of options for the given variant.
      *
-     * @param  int  $id  Variant ID
+     * @param  \App\Models\Variant  $variant  Variant ID
      * @return \Illuminate\View\View
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function index($id)
+    public function index(Variant $variant)
     {
-        $variant = Variant::query()
-            ->select(['id', 'name'])
-            ->findOrFail($id);
+
 
         $options = $variant->options()
             ->select(['id', 'variant_id', 'name', 'value', 'created_at'])
@@ -52,14 +50,13 @@ class OptionController extends Controller
     /**
      * Show the form for creating a new option for the given variant.
      *
-     * @param  int  $id  Variant ID
+     * @param  \App\Models\Variant  $variant  Variant ID
      * @return \Illuminate\View\View
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function create($id)
+    public function create(Variant $variant)
     {
-        $variant = Variant::findOrFail($id);
 
         return view('admin::variants.option.create', compact('variant'));
     }
@@ -68,16 +65,15 @@ class OptionController extends Controller
      * Store a newly created variant option along with its pricing configurations.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id  Variant ID
+     * @param  \App\Models\Variant  $variant  Variant ID
      * @return \Illuminate\Http\RedirectResponse
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      * @throws \Illuminate\Validation\ValidationException
      * @throws \Throwable
      */
-    public function store(Variants\OptionRequest $request, $id)
+    public function store(Variants\OptionRequest $request, Variant $variant)
     {
-        $variant = Variant::findOrFail($id);
 
         $validated = $request->validated();
 
@@ -123,18 +119,16 @@ class OptionController extends Controller
     /**
      * Show the edit form for a specific variant option.
      *
-     * @param  int  $id  Variant ID
+     * @param  \App\Models\Variant  $variant  Variant ID
      * @param  \App\Models\VariantOption  $option
      * @return \Illuminate\View\View
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function edit($id, VariantOption $option)
+    public function edit(Variant $variant, VariantOption $option)
     {
-        $variant = Variant::query()
-            ->select(['id', 'name'])
-            ->findOrFail($id);
+
 
         if ($option->variant_id !== $variant->id) {
             abort(404);
@@ -183,7 +177,7 @@ class OptionController extends Controller
      * Update an existing variant option and its pricing configurations.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id  Variant ID
+     * @param  \App\Models\Variant  $variant  Variant ID
      * @param  \App\Models\VariantOption  $option
      * @return \Illuminate\Http\RedirectResponse
      *
@@ -191,9 +185,8 @@ class OptionController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      * @throws \Throwable
      */
-    public function update(Variants\OptionRequest $request, $id, VariantOption $option)
+    public function update(Variants\OptionRequest $request, Variant $variant, VariantOption $option)
     {
-        $variant = Variant::findOrFail($id);
 
         if ($option->variant_id !== $variant->id) {
             abort(404);
@@ -247,7 +240,7 @@ class OptionController extends Controller
     /**
      * Delete a specific variant option.
      *
-     * @param  int  $id  Variant ID
+     * @param  \App\Models\Variant  $variant  Variant ID
      * @param  \App\Models\VariantOption  $option
      * @return \Illuminate\Http\RedirectResponse
      *
@@ -255,11 +248,9 @@ class OptionController extends Controller
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Throwable
      */
-    public function destroy($id, VariantOption $option)
+    public function destroy(Variant $variant, VariantOption $option)
     {
-        $variant = Variant::query()
-            ->select(['id'])
-            ->findOrFail($id);
+
 
         if ($option->variant_id !== $variant->id) {
             abort(404);

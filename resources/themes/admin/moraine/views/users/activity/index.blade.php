@@ -7,17 +7,17 @@
     <x-admin::tabs 
         :tabs="[
             [
-                'route' => route('admin.users.summary', ['id' => $user->id]),
+                'route' => route('admin.users.summary', ['user' => $user->id]),
                 'icon' => 'lucide-contact',
                 'label' => __('admin/users.tabs.summary'),
             ],
             [
-                'route' => route('admin.users.profile', ['id' => $user->id]),
+                'route' => route('admin.users.profile', ['user' => $user->id]),
                 'icon' => 'lucide-user-pen',
                 'label' => __('admin/users.tabs.profile'),
             ],
             [
-                'route' => route('admin.users.activity', ['id' => $user->id]),
+                'route' => route('admin.users.activity', ['user' => $user->id]),
                 'icon' => 'lucide-activity',
                 'label' => __('admin/users.tabs.activity'),
             ],
@@ -26,7 +26,7 @@
     <div class="flex flex-col gap-4">
         <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
             <div class="w-full md:w-100">
-                <form action="{{ route('admin.users.activity', ['id' => $user->id]) }}" method="GET" class="relative inline-block max-w-150 w-full group">
+                <form action="{{ route('admin.users.activity', ['user' => $user->id]) }}" method="GET" class="relative inline-block max-w-150 w-full group">
                     <div class="absolute top-1/2 -translate-y-1/2 left-2.5 pointer-events-none">
                         <x-lucide-search class="w-5 h-auto text-slate-500 group-focus-within:text-billmora-primary" />
                     </div>
@@ -38,7 +38,7 @@
             </div>
             <div class="flex gap-4 ml-auto">
                 @can('audit.user.activity.export')
-                    <form action="{{ route('admin.users.activity.export', ['id' => $user->id]) }}" method="POST">
+                    <form action="{{ route('admin.users.activity.export', ['user' => $user->id]) }}" method="POST">
                         @csrf
                         <button type="submit" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                             <x-lucide-file-down class="w-auto h-5" />
@@ -96,7 +96,7 @@
             position="centered"
             title="{{ __('common.clear_modal_title') }}"
             description="{{ __('common.clear_modal_description', ['item' => __('admin/audits/user.title')]) }}">
-            <form action="{{ route('admin.users.activity.clear', ['id' => $user->id]) }}" method="POST">
+            <form action="{{ route('admin.users.activity.clear', ['user' => $user->id]) }}" method="POST">
                 @csrf
                 <div class="flex justify-end gap-2 mt-4">
                     <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>

@@ -38,7 +38,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $coupon->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                 @can('coupons.edit')
-                                    <a href="{{ route('admin.coupons.edit', ['id' => $coupon->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                                    <a href="{{ route('admin.coupons.edit', ['coupon' => $coupon->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                                         {{ __('common.edit') }}
                                     </a>
                                 @endcan
@@ -65,7 +65,7 @@
                 position="centered"
                 title="{{ __('common.delete_modal_title') }}"
                 description="{{ __('common.delete_modal_description', ['item' => $coupon->code]) }}">
-                <form action="{{ route('admin.coupons.destroy', ['id' => $coupon->id]) }}" method="POST">
+                <form action="{{ route('admin.coupons.destroy', ['coupon' => $coupon->id]) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <div class="flex justify-end gap-2 mt-4">

@@ -218,7 +218,7 @@ class User extends Authenticatable implements BrowseInterface
             ->map(fn($item) => [
                 'title' => "{$item->fullname} - {$item->email}",
                 'category' => 'user',
-                'url' => route('admin.users.summary', ['id' => $item->id]),
+                'url' => route('admin.users.summary', ['user' => $item->id]),
             ]);
     }
 }

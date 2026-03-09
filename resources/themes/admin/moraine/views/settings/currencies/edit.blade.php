@@ -3,7 +3,7 @@
 @section('title', "Currency Edit - {$currency->code}")
 
 @section('body')
-<form action="{{ route('admin.settings.currencies.update', ['id' => $currency->id]) }}" method="POST" class="flex flex-col gap-5">
+<form action="{{ route('admin.settings.currencies.update', ['currency' => $currency->id]) }}" method="POST" class="flex flex-col gap-5">
     @csrf
     <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-3 gap-4">

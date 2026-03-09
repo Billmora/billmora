@@ -103,14 +103,14 @@ class VariantsController extends Controller
     /**
      * Show the form for editing the specified variant.
      *
-     * @param  int  $id  Variant ID
+     * @param  \App\Models\Variant  $variant  Variant ID
      * @return \Illuminate\View\View
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function edit($id)
+    public function edit(Variant $variant)
     {
-        $variant = Variant::with([ 'packages:id,name,catalog_id'])->findOrFail($id);
+        $variant->load(['packages:id,name,catalog_id']);
 
         $packageOptions = Package::query()
             ->select(['id', 'name', 'catalog_id'])
@@ -131,15 +131,14 @@ class VariantsController extends Controller
      * Update the specified variant in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id  Variant ID
+     * @param  \App\Models\Variant  $variant  Variant ID
      * @return \Illuminate\Http\RedirectResponse
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Variant $variant)
     {
-        $variant = Variant::findOrFail($id);
 
         $validated = $request->validate([
             'variant_name' => ['required', 'string', 'max:255'],
@@ -182,14 +181,13 @@ class VariantsController extends Controller
     /**
      * Remove the specified variant from storage.
      *
-     * @param  int  $id  Variant ID
+     * @param  \App\Models\Variant  $variant  Variant ID
      * @return \Illuminate\Http\RedirectResponse
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function destroy($id)
+    public function destroy(Variant $variant)
     {
-        $variant = Variant::findOrFail($id);
 
         $variant->delete();
 

@@ -48,17 +48,17 @@ class NotificationController extends Controller
      * Show the form for editing a specific mail notification translation.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request, optionally containing a `lang` query parameter.
-     * @param int $id The ID of the mail notification to edit.
+     * @param \App\Models\Notification $notification The ID of the mail notification to edit.
      *
      * @return \Illuminate\View\View The view displaying the mail notification edit form with the chosen translation.
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the mail notification is not found.
      */
-    public function edit(Request $request, $id)
+    public function edit(Request $request, Notification $notification)
     {
         $lang = $request->query('lang', config('app.fallback_locale'));
 
-        $notification = Notification::with('translations')->findOrFail($id);
+        $notification->load('translations');
 
         $translation = $notification->translations->where('lang', $lang)->first();
 
@@ -75,15 +75,15 @@ class NotificationController extends Controller
      * Update the specified mail notification and its translation.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing notification update data.
-     * @param int $id The ID of the mail notification to update.
+     * @param \App\Models\Notification $notification The ID of the mail notification to update.
      *
      * @return \Illuminate\Http\RedirectResponse Redirects back with a success flash message.
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the mail notification is not found.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Notification $notification)
     {
-        $notification = Notification::with('translations')->findOrFail($id);
+        $notification->load('translations');
 
         $validated = $request->validate([
             'notification_language' => ['required', 'string'],
