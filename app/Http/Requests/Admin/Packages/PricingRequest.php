@@ -151,7 +151,7 @@ class PricingRequest extends FormRequest
     public function getPackage(): Package
     {
         if (!$this->package) {
-            $this->package = Package::findOrFail($this->route('id'));
+            $this->package = $this->route('package');
         }
 
         return $this->package;
@@ -167,10 +167,7 @@ class PricingRequest extends FormRequest
     public function getPricing(): ?PackagePrice
     {
         if (!$this->pricing && $this->route('pricing')) {
-            $package = $this->getPackage();
-            $pricingId = $this->route('pricing');
-            
-            $this->pricing = $package->prices()->findOrFail($pricingId);
+            $this->pricing = $this->route('pricing');
         }
 
         return $this->pricing;

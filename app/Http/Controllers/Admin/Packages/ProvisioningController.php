@@ -103,7 +103,7 @@ class ProvisioningController extends Controller
         $this->recordUpdate('package.provisioning.update', $oldPackage, $package->getChanges());
 
         return redirect()
-            ->route('admin.packages.provisioning', ['id' => $package->id])
+            ->route('admin.packages.provisioning', ['package' => $package->id])
             ->with('success', __('common.update_success', ['attribute' => $package->name]));
     }
 

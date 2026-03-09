@@ -14,7 +14,7 @@
             <div class="grid">
                 <span class="text-slate-600 font-semibold">{{ __('admin/audits/email.to_label') }}</span>
                 @if ($history->user_id)
-                    <a href="{{ route('admin.users.summary', ['id' => $history->user_id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                    <a href="{{ route('admin.users.summary', ['user' => $history->user_id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                         {{ $history->to }}
                     </a>
                 @else

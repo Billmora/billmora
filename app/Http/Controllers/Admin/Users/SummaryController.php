@@ -25,7 +25,7 @@ class SummaryController extends Controller
      * Display the summary information of a specific user.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request.
-     * @param int                      $id      The ID of the user to display.
+     * @param \App\Models\User         $user    The user to display.
      *
      * @return \Illuminate\View\View The view instance displaying the user summary.
      *
@@ -42,7 +42,7 @@ class SummaryController extends Controller
      * Impersonate a specific user account.
      *
      * @param \Illuminate\Http\Request $request The current HTTP request instance.
-     * @param int                      $id      The ID of the user to impersonate.
+     * @param \App\Models\User         $user    The user to impersonate.
      *
      * @return \Illuminate\Http\RedirectResponse Redirects to the client dashboard on success,
      *                                           or back with an error message if impersonation fails.

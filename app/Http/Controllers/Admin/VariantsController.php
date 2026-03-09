@@ -97,7 +97,7 @@ class VariantsController extends Controller
 
         $this->recordCreate('variant.create', $variant->toArray());
 
-        return redirect()->route('admin.variants.edit', ['id' => $variant->id])->with('success', __('common.create_success', ['attribute' => $variant->name]));
+        return redirect()->route('admin.variants.edit', ['variant' => $variant->id])->with('success', __('common.create_success', ['attribute' => $variant->name]));
     }
 
     /**
@@ -175,7 +175,7 @@ class VariantsController extends Controller
 
         $this->recordUpdate('variant.update', $variantOld, $changes);
 
-        return redirect()->route('admin.variants.edit', ['id' => $variant->id])->with('success', __('common.update_success', ['attribute' => $variant->name]));
+        return redirect()->route('admin.variants.edit', ['variant' => $variant->id])->with('success', __('common.update_success', ['attribute' => $variant->name]));
     }
 
     /**

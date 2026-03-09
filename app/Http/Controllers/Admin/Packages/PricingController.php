@@ -62,16 +62,16 @@ class PricingController extends Controller
     public function store(PricingRequest $request, Package $package)
     {
         $package = $request->getPackage();
-        
+
         $package->prices()->create($request->getPricingData());
-        
+
         $this->recordCreate('package.pricing.create', [
             'package_id' => $package->id,
             'pricing' => $package->prices()->latest()->first()->toArray(),
         ]);
 
         return redirect()
-            ->route('admin.packages.pricing', ['id' => $package->id])
+            ->route('admin.packages.pricing', ['package' => $package->id])
             ->with('success', __('common.create_success', [
                 'attribute' => $request->input('pricing_name')
             ]));
@@ -104,19 +104,19 @@ class PricingController extends Controller
      * @param int $priceId Price row ID
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(PricingRequest $request, Package $package, $priceId)
+    public function update(PricingRequest $request, Package $package, PackagePrice $pricing)
     {
         $package = $request->getPackage();
         $price = $request->getPricing();
 
         $oldPrice = $price->getOriginal();
-        
+
         $price->update($request->getPricingData());
-        
+
         $this->recordUpdate('package.pricing.update', $oldPrice, $price->getChanges());
 
         return redirect()
-            ->route('admin.packages.pricing', ['id' => $package->id])
+            ->route('admin.packages.pricing', ['package' => $package->id])
             ->with('success', __('common.update_success', [
                 'attribute' => $request->input('pricing_name')
             ]));
@@ -144,7 +144,7 @@ class PricingController extends Controller
         ]);
 
         return redirect()
-            ->route('admin.packages.pricing', ['id' => $package->id])
+            ->route('admin.packages.pricing', ['package' => $package->id])
             ->with('success', __('common.delete_success', [
                 'attribute' => $pricing->name
             ]));

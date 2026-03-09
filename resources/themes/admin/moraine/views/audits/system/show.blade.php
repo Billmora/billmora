@@ -14,7 +14,7 @@
             <div class="grid">
                 <span class="text-slate-600 font-semibold">{{ __('admin/audits/system.actor_label') }}</span>
                 @if ($log->user_id)
-                    <a href="{{ route('admin.users.summary', ['id' => $log->user_id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                    <a href="{{ route('admin.users.summary', ['user' => $log->user_id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                         {{ $user->email }}
                     </a>
                 @else

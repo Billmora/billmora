@@ -3,7 +3,7 @@
 @section('title', "Package Pricing - Edit")
 
 @section('body')
-<form action="{{ route('admin.packages.pricing.update', ['id' => $package->id, 'pricing' => $pricing->id]) }}" method="POST" class="flex flex-col gap-5" x-data="{ pricingType: '{{ old('pricing_type', $pricing->type) }}' }">
+<form action="{{ route('admin.packages.pricing.update', ['package' => $package->id, 'pricing' => $pricing->id]) }}" method="POST" class="flex flex-col gap-5" x-data="{ pricingType: '{{ old('pricing_type', $pricing->type) }}' }">
     @csrf
     @method('PUT')
     <div class="flex flex-col gap-5">

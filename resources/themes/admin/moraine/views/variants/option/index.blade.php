@@ -45,7 +45,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $option->value }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $option->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
-                                <a href="{{ route('admin.variants.options.edit', ['id' => $variant->id, 'option' => $option->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                                <a href="{{ route('admin.variants.options.edit', ['variant' => $variant->id, 'option' => $option->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                                     {{ __('common.edit') }}
                                 </a>
                                 <x-admin::modal.trigger modal="deleteModal-{{ $option->id }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.delete') }}</x-admin::modal.trigger>
@@ -68,7 +68,7 @@
             position="centered"
             title="{{ __('common.delete_modal_title') }}"
             description="{{ __('common.delete_modal_description', ['item' => $option->name]) }}">
-            <form action="{{ route('admin.variants.options.destroy', ['id' => $variant->id, 'option' => $option->id]) }}" method="POST">
+            <form action="{{ route('admin.variants.options.destroy', ['variant' => $variant->id, 'option' => $option->id]) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <div class="flex justify-end gap-2 mt-4">

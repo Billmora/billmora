@@ -69,11 +69,11 @@
                             @foreach ($activities as $activity)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
-                                    <a href="{{ route('admin.users.activity.show', ['id' => $user->id, 'activity' => $activity->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $activity->event }}</a>
+                                    <a href="{{ route('admin.users.activity.show', ['user' => $user->id, 'activity' => $activity->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $activity->event }}</a>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $activity->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
-                                    <a href="{{ route('admin.users.activity.show', ['id' => $user->id, 'activity' => $activity->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                                    <a href="{{ route('admin.users.activity.show', ['user' => $user->id, 'activity' => $activity->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                                         {{ __('common.view') }}
                                     </a>
                                 </td>

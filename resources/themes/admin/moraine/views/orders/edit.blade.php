@@ -43,7 +43,7 @@
         <div class="w-full lg:w-5/7 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
             <div class="flex justify-between">
                 <span class="text-slate-600 font-semibold">{{ __('admin/orders.user_label') }}</span>
-                <a href="{{ route('admin.users.summary', ['id' => $order->user->id]) }}" class="text-billmora-primary hover:text-billmora-primary-hover font-medium transition cursor-pointer">{{ $order->user->fullname }}</a>
+                <a href="{{ route('admin.users.summary', ['user' => $order->user->id]) }}" class="text-billmora-primary hover:text-billmora-primary-hover font-medium transition cursor-pointer">{{ $order->user->fullname }}</a>
             </div>
             <hr class="border-t-2 border-billmora-2">
             <div class="flex justify-between">

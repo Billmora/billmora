@@ -57,7 +57,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
                                 @if ($history->user_id)
-                                    <a href="{{ route('admin.users.summary', ['id' => $history->user_id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                                    <a href="{{ route('admin.users.summary', ['user' => $history->user_id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                                         {{ $history->to }}
                                     </a>
                                 @else

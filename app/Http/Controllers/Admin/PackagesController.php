@@ -130,7 +130,7 @@ class PackagesController extends Controller
 
         $this->recordCreate('package.create', $package->toArray());
 
-        return redirect()->route('admin.packages.edit', ['id' => $package->id])->with('success', __('common.create_success', ['attribute' => $package->name]));
+        return redirect()->route('admin.packages.edit', ['package' => $package->id])->with('success', __('common.create_success', ['attribute' => $package->name]));
     }
 
     /**
@@ -193,7 +193,7 @@ class PackagesController extends Controller
 
         $this->recordUpdate('package.update', $oldPackage, $package->getChanges());
 
-        return redirect()->route('admin.packages.edit', ['id' => $package->id])->with('success', __('common.update_success', ['attribute' => $package->name]));
+        return redirect()->route('admin.packages.edit', ['package' => $package->id])->with('success', __('common.update_success', ['attribute' => $package->name]));
     }
 
     /**

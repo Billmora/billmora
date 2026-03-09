@@ -110,7 +110,7 @@ class OptionController extends Controller
         $this->recordCreate('variant.option.create', $option->toArray());
 
         return redirect()
-            ->route('admin.variants.options', ['id' => $variant->id])
+            ->route('admin.variants.options', ['variant' => $variant->id])
             ->with('success', __('common.create_success', [
                 'attribute' => $validated['variant_options_name']
             ]));
@@ -231,7 +231,7 @@ class OptionController extends Controller
         $this->recordUpdate('variant.option.update', $oldOption, $changesOption->toArray());
 
         return redirect()
-            ->route('admin.variants.options', ['id' => $variant->id])
+            ->route('admin.variants.options', ['variant' => $variant->id])
             ->with('success', __('common.update_success', [
                 'attribute' => $validated['variant_options_name'],
             ]));
@@ -266,7 +266,7 @@ class OptionController extends Controller
         ]);
 
         return redirect()
-            ->route('admin.variants.options', ['id' => $variant->id])
+            ->route('admin.variants.options', ['variant' => $variant->id])
             ->with('success', __('common.delete_success', [
                 'attribute' => $option->name,
             ]));

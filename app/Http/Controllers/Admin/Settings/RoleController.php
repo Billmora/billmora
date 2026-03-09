@@ -89,7 +89,7 @@ class RoleController extends Controller
     /**
      * Show the form for editing an existing role.
      *
-     * @param \App\Models\Role $role The ID of the role to edit.
+     * @param \Spatie\Permission\Models\Role $role The ID of the role to edit.
      *
      * @return \Illuminate\View\View The view instance for editing the role.
      *
@@ -108,7 +108,7 @@ class RoleController extends Controller
      * Update an existing role in the database.
      *
      * @param \Illuminate\Http\Request $request The incoming HTTP request containing updated role data.
-     * @param int                      $id      The ID of the role to update.
+     * @param \Spatie\Permission\Models\Role $role    The role to update.
      *
      * @return \Illuminate\Http\RedirectResponse Redirects to the roles index with a success flash message.
      *
@@ -154,7 +154,7 @@ class RoleController extends Controller
     /**
      * Remove a role from the database.
      *
-     * @param \App\Models\Role $role The ID of the role to delete.
+     * @param \Spatie\Permission\Models\Role $role The ID of the role to delete.
      *
      * @return \Illuminate\Http\RedirectResponse Redirects to the roles index with a success flash message.
      *
