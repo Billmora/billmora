@@ -70,6 +70,8 @@ class SettingSeeder extends Seeder
             ['category' => 'general', 'key' => 'social_reddit', 'value' => null],
             ['category' => 'general', 'key' => 'social_skype', 'value' => null],
             ['category' => 'general', 'key' => 'social_telegram', 'value' => null],
+            ['category' => 'general', 'key' => 'misc_admin_pagination', 'value' => 25],
+            ['category' => 'general', 'key' => 'misc_client_pagination', 'value' => 15],
 
             /**
              * Run seeder of authentication category.

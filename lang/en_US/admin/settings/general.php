@@ -11,6 +11,7 @@ return [
         'affiliate' => 'Affiliate',
         'term' => 'Term',
         'social' => 'Social',
+        'misc' => 'Misc',
     ],
 
     'company_name_label' => 'Company Name',
@@ -27,8 +28,6 @@ return [
     'company_date_format_helper' => 'Choose the date format to display.',
     'company_timezone_label' => 'Company Timezone',
     'company_timezone_helper' => 'Set the default timezone for your company.',
-    'company_debug_label' => 'Company Debug',
-    'company_debug_helper' => 'Enable or disable debug mode for the application.',
     'company_language_label' => 'Company Language',
     'company_language_helper' => 'Set the default language for your company.',
     'company_maintenance_label' => 'Company Maintenance',
@@ -76,15 +75,6 @@ return [
     'credit_max_label' => 'Credit Max',
     'credit_max_helper' => 'Set the maximum account credit balance a customer can hold.',
 
-    'affiliate_use_label' => 'Affiliate Use',
-    'affiliate_use_helper' => 'Enable the affiliate program, allowing customers to earn commissions for referrals.',
-    'affiliate_min_payment_label' => 'Affiliate Min Payment',
-    'affiliate_min_payment_helper' => 'Set the minimum payment amount required for a customer to qualify for the affiliate program.',
-    'affiliate_reward_label' => 'Affiliate Reward',
-    'affiliate_reward_helper' => 'Set the commission percentage affiliates earn from referred customer payments.',
-    'affiliate_discount_label' => 'Affiliate Discount',
-    'affiliate_discount_helper' => 'Set the discount percentage affiliates can offer to referred customers.',
-
     'term_tos_label' => 'Term Tos',
     'term_tos_helper' => 'Enable to display and enforce your Terms of Service for customers.',
     'term_tos_url_label' => 'Term Tos Url',
@@ -128,4 +118,11 @@ return [
     'social_skype_helper' => 'Enter the full URL to your company Skype invite link or community group.',
     'social_telegram_label' => 'Social Telegram',
     'social_telegram_helper' => 'Enter the full URL to your company Telegram number or community group.',
+
+    'misc_debug_label' => 'Misc Debug',
+    'misc_debug_helper' => 'Enable or disable debug mode for the application.',
+    'misc_admin_pagination_label' => 'Misc Admin Pagination',
+    'misc_admin_pagination_helper' => 'Set the default number of items to display per page in the admin area.',
+    'misc_client_pagination_label' => 'Misc Client Pagination',
+    'misc_client_pagination_helper' => 'Set the default number of items to display per page in the client area.',
 ];

@@ -287,6 +287,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::patch('/term', [Settings\General\TermController::class, 'update'])->name('admin.settings.general.term.update');
             Route::get('/social', [Settings\General\SocialController::class, 'index'])->name('admin.settings.general.social');
             Route::patch('/social', [Settings\General\SocialController::class, 'update'])->name('admin.settings.general.social.update');
+            Route::get('/misc', [Settings\General\MiscController::class, 'index'])->name('admin.settings.general.misc');
+            Route::patch('/misc', [Settings\General\MiscController::class, 'update'])->name('admin.settings.general.misc.update');
         });
 
         /**
