@@ -62,6 +62,8 @@ class RunAutomationCommand extends Command
 
         $this->info('Automation dispatch completed successfully!');
         
+        Billmora::setAutomation(['last_run' => now()->toDateTimeString()]);
+        
         return Command::SUCCESS;
     }
 }

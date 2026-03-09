@@ -17,14 +17,18 @@
                 </div>
             </div>
         </div>
-        <div class="bg-white rounded-lg p-6 border-l-4 border-green-500">
+        <div class="bg-white rounded-lg p-6 border-l-4 {{ $isUpToDate ? 'border-green-500' : 'border-red-500' }}">
             <div class="flex items-center">
-                <div class="p-3 rounded-full bg-green-100 text-green-500 mr-4">
-                    <x-lucide-check class="w-6 h-6" />
+                <div class="p-3 rounded-full {{ $isUpToDate ? 'bg-green-100 text-green-500' : 'bg-red-100 text-red-500' }} mr-4">
+                    @if($isUpToDate)
+                        <x-lucide-check class="w-6 h-6" />
+                    @else
+                        <x-lucide-x class="w-6 h-6" />
+                    @endif
                 </div>
                 <div>
                     <p class="mb-2 text-sm font-semibold text-slate-500">{{ __('admin/automations.last_run') }}</p>
-                    <p class="text-lg font-semibold text-slate-600">{{ $lastRun->format(Billmora::getGeneral('company_date_format') . ' H:i') }}</p>
+                    <p class="text-lg font-semibold text-slate-600">{{ $lastRun }}</p>
                 </div>
             </div>
         </div>
@@ -35,7 +39,7 @@
                 </div>
                 <div>
                     <p class="mb-2 text-sm font-semibold text-slate-500">{{ __('admin/automations.next_run') }}</p>
-                    <p class="text-lg font-semibold text-slate-600">{{ $nextRun->format(Billmora::getGeneral('company_date_format') . ' H:i') }}</p>
+                    <p class="text-lg font-semibold text-slate-600">{{ $nextRun }}</p>
                 </div>
             </div>
         </div>
