@@ -29,11 +29,6 @@
                 'label' => __('admin/settings/general.tabs.credit'),
             ],
             [
-                'route' => route('admin.settings.general.affiliate'),
-                'icon' => 'lucide-handshake',
-                'label' => __('admin/settings/general.tabs.affiliate'),
-            ],
-            [
                 'route' => route('admin.settings.general.term'),
                 'icon' => 'lucide-badge-check',
                 'label' => __('admin/settings/general.tabs.term'),

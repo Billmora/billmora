@@ -283,8 +283,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::patch('/invoice', [Settings\General\InvoiceController::class, 'update'])->name('admin.settings.general.invoice.update');
             Route::get('/credit', [Settings\General\CreditController::class, 'index'])->name('admin.settings.general.credit');
             Route::patch('/credit', [Settings\General\CreditController::class, 'update'])->name('admin.settings.general.credit.update');
-            Route::get('/affiliate', [Settings\General\AffiliateController::class, 'index'])->name('admin.settings.general.affiliate');
-            Route::patch('/affiliate', [Settings\General\AffiliateController::class, 'update'])->name('admin.settings.general.affiliate.update');
             Route::get('/term', [Settings\General\TermController::class, 'index'])->name('admin.settings.general.term');
             Route::patch('/term', [Settings\General\TermController::class, 'update'])->name('admin.settings.general.term.update');
             Route::get('/social', [Settings\General\SocialController::class, 'index'])->name('admin.settings.general.social');
