@@ -136,6 +136,15 @@ class PricingController extends Controller
             abort(404);
         }
 
+        if ($pricing->services()->exists()) {
+            return redirect()
+                ->back()
+                ->with('error', __('common.delete_failed_related', [
+                    'attribute' => $pricing->name,
+                    'related' => 'Service',
+                ]));
+        }
+
         $pricing->delete();
 
         $this->recordDelete('package.pricing.delete', [
@@ -149,4 +158,5 @@ class PricingController extends Controller
                 'attribute' => $pricing->name
             ]));
     }
+
 }
