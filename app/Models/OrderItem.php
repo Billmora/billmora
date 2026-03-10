@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\OrderItemType;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderItem extends Model
@@ -25,6 +26,7 @@ class OrderItem extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'item_type' => OrderItemType::class,
         'quantity' => 'integer',
         'price' => 'decimal:2',
         'setup_fee' => 'decimal:2',
