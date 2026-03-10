@@ -11,6 +11,7 @@ use App\Models\CouponUsage;
 use App\Models\Package;
 use App\OrderItemType;
 use App\Traits\AuditsSystem;
+use Billmora;
 use Illuminate\Support\Facades\DB;
 
 class OrderService
@@ -103,6 +104,8 @@ class OrderService
                 }
             }
 
+            $invoiceDueDate = (int) Billmora::getAutomation('invoice_generation_days');
+
             $invoice = Invoice::create([
                 'user_id' => $userId,
                 'order_id' => $order->id,
@@ -113,7 +116,7 @@ class OrderService
                 'discount' => $totals['discount'],
                 'setup_fee' => $totals['setup_fee'],
                 'total' => $totals['total'],
-                'due_date' => now()->addDays(7),
+                'due_date' => now()->addDays($invoiceDueDate),
             ]);
 
             $this->recordCreate('invoice.created', $invoice->toArray());
