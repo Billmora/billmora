@@ -3,6 +3,7 @@
 namespace App\Services\Package\Admin;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Service;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
@@ -11,39 +12,31 @@ use App\Models\Package;
 use App\Models\PackagePrice;
 use App\Models\Coupon;
 use App\Models\VariantOption;
+use App\OrderItemType;
 use App\Services\Package\PricingService;
 use Illuminate\Support\Facades\DB;
+use Billmora;
 
 class OrderService
 {
-    /**
-     * The pricing service instance.
-     *
-     * @var \App\Services\Package\PricingService
-     */
-    protected $pricingService;
-
-    /**
-     * Create a new order service instance.
-     *
-     * @param \App\Services\Package\PricingService $pricingService
-     * @return void
-     */
-    public function __construct(PricingService $pricingService)
+    public function __construct(protected PricingService $pricingService)
     {
-        $this->pricingService = $pricingService;
+        // 
     }
 
     /**
-     * Create a new order, service, and invoice with pricing, configuration, and coupon usage.
+     * Create a new order, services, and invoice for a package with pricing, coupon, and quantity support.
      *
-     * @param int $userId
-     * @param int $packagePriceId
-     * @param array<int|string, mixed> $variantSelections
-     * @param \App\Models\Coupon|null $coupon
-     * @param array<string, mixed> $checkoutData
-     * @param array<string, mixed> $configuration
-     * @return array{order:\App\Models\Order,service:\App\Models\Service,invoice:\App\Models\Invoice}
+     * @param  int  $userId
+     * @param  \App\Models\Package  $package
+     * @param  \App\Models\PackagePrice  $packagePrice
+     * @param  array  $variantSelections
+     * @param  \App\Models\Coupon|null  $coupon
+     * @param  string  $currency
+     * @param  string  $status
+     * @param  array  $configuration
+     * @param  int  $quantity
+     * @return array{order: \App\Models\Order, services: array, invoice: \App\Models\Invoice}
      */
     public function createOrder(
         int $userId,
@@ -54,6 +47,7 @@ class OrderService
         string $currency,
         string $status = 'pending',
         array $configuration = [],
+        int $quantity = 1
     ): array {
         $pricing = $this->pricingService->calculatePricing(
             $packagePrice,
@@ -63,31 +57,36 @@ class OrderService
         );
 
         return DB::transaction(function () use (
-            $userId,
-            $package,
-            $packagePrice,
-            $variantSelections,
-            $pricing,
-            $coupon,
-            $currency,
-            $status,
-            $configuration,
+            $userId, $package, $packagePrice, $variantSelections, $pricing,
+            $coupon, $currency, $status, $configuration, $quantity,
         ) {
             $order = Order::create([
                 'user_id' => $userId,
-                'package_id' => $package->id,
-                'package_price_id' => $packagePrice->id,
                 'coupon_id' => $coupon?->id,
                 'status' => $status,
                 'currency' => $currency,
-                'subtotal' => $pricing['subtotal'],
-                'discount' => $pricing['discount'],
-                'setup_fee' => $pricing['setup_fee_total'],
-                'total' => $pricing['total'],
-                'variant_selections' => $variantSelections,
+                'subtotal' => $pricing['subtotal'] * $quantity,
+                'discount' => $pricing['discount'] * $quantity,
+                'setup_fee' => $pricing['setup_fee_total'] * $quantity,
+                'total' => $pricing['total'] * $quantity,
                 'terms_accepted' => true,
                 'completed_at' => $status === 'completed' ? now() : null,
-                'cancelled_at' => $status === 'cancelled' ? now() : null,
+                'cancelled_at' => in_array($status, ['cancelled', 'failed']) ? now() : null,
+            ]);
+
+            $orderItem = OrderItem::create([
+                'order_id' => $order->id,
+                'item_type' => OrderItemType::Service->value,
+                'item_id' => $package->id,
+                'name' => $package->name,
+                'quantity' => $quantity,
+                'billing_type' => $packagePrice->type,
+                'billing_interval' => $packagePrice->time_interval,
+                'billing_period' => $packagePrice->billing_period,
+                'price' => $pricing['recurring_total'],
+                'setup_fee' => $pricing['setup_fee_total'],
+                'config_options' => $configuration,
+                'variant_selections' => $variantSelections,
             ]);
 
             $serviceStatus = match($status) {
@@ -102,7 +101,6 @@ class OrderService
             if ($packagePrice->type === 'recurring' && $serviceStatus === 'active') {
                 $activatedAt = now();
                 $date = now();
-                
                 $nextDueDate = match($packagePrice->billing_period) {
                     'daily'   => $date->copy()->addDays($packagePrice->time_interval),
                     'weekly'  => $date->copy()->addWeeks($packagePrice->time_interval),
@@ -116,26 +114,30 @@ class OrderService
 
             $finalConfig = $this->resolveServiceConfiguration($package, $variantSelections, $configuration);
 
-            $service = Service::create([
-                'user_id' => $userId,
-                'order_id' => $order->id,
-                'package_id' => $package->id,
-                'package_price_id' => $packagePrice->id,
-                'plugin_id' => $package->plugin_id,
-                'name' => $package->name,
-                'status' => $serviceStatus,
-                'currency' => $currency,
-                'billing_type' => $packagePrice->type,
-                'billing_interval' => $packagePrice->time_interval,
-                'billing_period' => $packagePrice->billing_period,
-                'price' => $pricing['recurring_total'],
-                'setup_fee' => $pricing['setup_fee_total'],
-                'configuration' => $finalConfig, 
-                'variant_selections' => $variantSelections,
-                'activated_at' => $activatedAt,
-                'next_due_date' => $nextDueDate,
-                'cancelled_at' => $serviceStatus === 'cancelled' ? now() : null,
-            ]);
+            $services = [];
+            for ($i = 0; $i < $quantity; $i++) {
+                $services[] = Service::create([
+                    'user_id' => $userId,
+                    'order_id' => $order->id,
+                    'order_item_id' => $orderItem->id,
+                    'package_id' => $package->id,
+                    'package_price_id' => $packagePrice->id,
+                    'plugin_id' => $package->plugin_id,
+                    'name' => $package->name,
+                    'status' => $serviceStatus,
+                    'currency' => $currency,
+                    'billing_type' => $packagePrice->type,
+                    'billing_interval' => $packagePrice->time_interval,
+                    'billing_period' => $packagePrice->billing_period,
+                    'price' => $pricing['recurring_total'],
+                    'setup_fee' => $pricing['setup_fee_total'],
+                    'configuration' => $finalConfig, 
+                    'variant_selections' => $variantSelections,
+                    'activated_at' => $activatedAt,
+                    'next_due_date' => $nextDueDate,
+                    'cancelled_at' => $serviceStatus === 'cancelled' ? now() : null,
+                ]);
+            }
 
             $invoiceStatus = match($status) {
                 'completed' => 'paid',
@@ -143,19 +145,21 @@ class OrderService
                 default => 'unpaid'
             };
 
+            $invoiceDays = (int) (Billmora::getAutomation('invoice_generation_days') ?? 7);
+
             $invoice = Invoice::create([
                 'user_id' => $userId,
                 'order_id' => $order->id,
                 'status' => $invoiceStatus,
                 'currency' => $currency,
-                'subtotal' => $pricing['subtotal'],
-                'discount' => $pricing['discount'],
-                'total' => $pricing['total'],
-                'due_date' => now()->addDays(7),
+                'subtotal' => $pricing['subtotal'] * $quantity,
+                'discount' => $pricing['discount'] * $quantity,
+                'total' => $pricing['total'] * $quantity,
+                'due_date' => now()->addDays($invoiceDays),
                 'paid_at' => $status === 'completed' ? now() : null,
             ]);
 
-            $this->createInvoiceItems($invoice, $service, $package, $packagePrice, $pricing, $coupon);
+            $this->createInvoiceItems($invoice, $package, $packagePrice, $pricing, $coupon, $quantity);
 
             if ($coupon) {
                 CouponUsage::create([
@@ -166,15 +170,15 @@ class OrderService
                 ]);
             }
 
-            return compact('order', 'service', 'invoice');
+            return ['order' => $order, 'services' => $services, 'invoice' => $invoice];
         });
     }
 
     /**
-     * Update order status and sync related service and invoice statuses.
+     * Update the order status and synchronize associated services and invoice status accordingly.
      *
-     * @param \App\Models\Order $order
-     * @param string $newStatus
+     * @param  \App\Models\Order  $order
+     * @param  string  $newStatus
      * @return \App\Models\Order
      */
     public function updateOrderStatus(Order $order, string $newStatus): Order
@@ -186,19 +190,19 @@ class OrderService
                 'cancelled_at' => in_array($newStatus, ['cancelled', 'failed']) ? now() : null,
             ]);
 
-            if ($order->service) {
+            foreach ($order->services as $service) {
                 if ($newStatus === 'completed') {
-                    if ($order->service->status !== 'active') {
-                        $order->service->forceFill(['cancelled_at' => null])->save(); 
-                        $order->service->activate();
+                    if ($service->status !== 'active') {
+                        $service->forceFill(['cancelled_at' => null])->save(); 
+                        $service->activate();
                     }
                 } elseif (in_array($newStatus, ['cancelled', 'failed'])) {
-                    $order->service->update([
+                    $service->update([
                         'status' => 'cancelled',
                         'cancelled_at' => now(),
                     ]);
                 } else {
-                    $order->service->update([
+                    $service->update([
                         'status' => 'pending',
                         'cancelled_at' => null,
                         'terminated_at' => null,
@@ -226,159 +230,135 @@ class OrderService
     }
 
     /**
-     * Create invoice items for package, variants, setup fees, and discount.
+     * Create and persist invoice line items including variants, setup fees, and discount entries.
      *
-     * @param \App\Models\Invoice $invoice
-     * @param \App\Models\Service $service
-     * @param \App\Models\Package $package
-     * @param \App\Models\PackagePrice $packagePrice
-     * @param array $pricing
-     * @param \App\Models\Coupon|null $coupon
+     * @param  \App\Models\Invoice  $invoice
+     * @param  \App\Models\Package  $package
+     * @param  \App\Models\PackagePrice  $packagePrice
+     * @param  array  $pricing
+     * @param  \App\Models\Coupon|null  $coupon
+     * @param  int  $quantity
      * @return void
      */
     private function createInvoiceItems(
         Invoice $invoice,
-        Service $service,
         Package $package,
         PackagePrice $packagePrice,
         array $pricing,
-        ?Coupon $coupon
+        ?Coupon $coupon,
+        int $quantity
     ): void {
+        $description = $this->buildPackageDescription($package, $packagePrice);
+
         InvoiceItem::create([
             'invoice_id' => $invoice->id,
-            'service_id' => $service->id,
-            'description' => $this->buildPackageDescription($package, $packagePrice),
-            'quantity' => 1,
+            'service_id' => null,
+            'description' => $description,
+            'quantity' => $quantity,
             'unit_price' => $pricing['base_price'],
-            'amount' => $pricing['base_price'],
+            'amount' => $pricing['base_price'] * $quantity,
         ]);
 
         foreach ($pricing['variant_items'] as $item) {
             if ($item['price'] <= 0) continue;
-
             InvoiceItem::create([
                 'invoice_id' => $invoice->id,
-                'service_id' => $service->id,
+                'service_id' => null,
                 'description' => $item['description'],
-                'quantity' => 1,
+                'quantity' => $quantity,
                 'unit_price' => $item['price'],
-                'amount' => $item['price'],
+                'amount' => $item['price'] * $quantity,
             ]);
         }
 
         if ($pricing['setup_fee_package'] > 0) {
             InvoiceItem::create([
                 'invoice_id' => $invoice->id,
-                'service_id' => $service->id,
+                'service_id' => null,
                 'description' => 'Setup Fee - ' . $package->name,
-                'quantity' => 1,
+                'quantity' => $quantity,
                 'unit_price' => $pricing['setup_fee_package'],
-                'amount' => $pricing['setup_fee_package'],
+                'amount' => $pricing['setup_fee_package'] * $quantity,
             ]);
         }
 
         foreach ($pricing['setup_fee_variants'] as $item) {
             if ($item['amount'] <= 0) continue;
-
             InvoiceItem::create([
                 'invoice_id' => $invoice->id,
-                'service_id' => $service->id,
+                'service_id' => null,
                 'description' => 'Setup Fee - ' . $item['description'],
-                'quantity' => 1,
+                'quantity' => $quantity,
                 'unit_price' => $item['amount'],
-                'amount' => $item['amount'],
+                'amount' => $item['amount'] * $quantity,
             ]);
         }
 
         if ($pricing['discount'] > 0 && $coupon) {
             InvoiceItem::create([
                 'invoice_id' => $invoice->id,
-                'service_id' => $service->id,
+                'service_id' => null,
                 'description' => 'Discount - Coupon: ' . $coupon->code,
                 'quantity' => 1,
-                'unit_price' => -$pricing['discount'],
-                'amount' => -$pricing['discount'],
+                'unit_price' => -($pricing['discount'] * $quantity),
+                'amount' => -($pricing['discount'] * $quantity),
             ]);
         }
     }
 
     /**
-     * Build package description with catalog and billing cycle information.
+     * Build a human-readable invoice description for the package including billing period date range.
      *
-     * @param \App\Models\Package $package
-     * @param \App\Models\PackagePrice $packagePrice
+     * @param  \App\Models\Package  $package
+     * @param  \App\Models\PackagePrice  $packagePrice
      * @return string
      */
     private function buildPackageDescription(Package $package, PackagePrice $packagePrice): string
     {
-        $catalogName = $package->catalog->name;
-        $packageName = $package->name;
-        
-        $description = "{$catalogName} - {$packageName}";
-
-        if (in_array(strtolower($packagePrice->type), ['recurring', 'onetime'])) {
-            $period = $this->calculateServicePeriod($packagePrice);
-            $description .= " ({$period})";
+        $description = "{$package->catalog->name} - {$package->name}";
+        if ($packagePrice->type === 'recurring') {
+            $start = now();
+            $end = $start->copy();
+            switch ($packagePrice->billing_period) {
+                case 'daily': $end->addDays($packagePrice->time_interval); break;
+                case 'weekly': $end->addWeeks($packagePrice->time_interval); break;
+                case 'monthly': $end->addMonths($packagePrice->time_interval); break;
+                case 'yearly': $end->addYears($packagePrice->time_interval); break;
+            }
+            $description .= " (" . $start->format('d/m/Y') . " - " . $end->format('d/m/Y') . ")";
         }
-
         return $description;
     }
 
     /**
-     * Calculate service period based on billing cycle.
+     * Resolve the final service configuration by merging package defaults, variant values, and checkout input.
      *
-     * @param \App\Models\PackagePrice $packagePrice
-     * @return string
-     */
-    private function calculateServicePeriod(PackagePrice $packagePrice): string
-    {
-        $start = now();
-        
-        $end = match(strtolower($packagePrice->billing_period)) {
-            'daily' => $start->copy()->addDays($packagePrice->time_interval),
-            'weekly' => $start->copy()->addWeeks($packagePrice->time_interval),
-            'monthly' => $start->copy()->addMonths($packagePrice->time_interval),
-            'yearly' => $start->copy()->addYears($packagePrice->time_interval),
-            default => $start->copy()->addMonths(1),
-        };
-
-        return $start->toDateString() . ' - ' . $end->toDateString();
-    }
-
-    /**
-     * Resolve final service configuration from package defaults, variants, and checkout data.
-     *
-     * @param \App\Models\Package $package
-     * @param array<int|string, mixed> $variantSelections
-     * @param array<string, mixed> $checkoutConfiguration
-     * @return array<string, mixed>
+     * @param  \App\Models\Package  $package
+     * @param  array  $variantSelections
+     * @param  array  $checkoutConfiguration
+     * @return array
      */
     protected function resolveServiceConfiguration(Package $package, array $variantSelections, array $checkoutConfiguration = []): array
     {
         $config = $package->provisioning_config ?? [];
-
         if (!empty($variantSelections)) {
             $optionIds = collect($variantSelections)->flatten()->filter()->toArray();
             if (!empty($optionIds)) {
-                $options = VariantOption::with('variant')
-                    ->whereIn('id', $optionIds)
-                    ->get();
+                $options = VariantOption::with('variant')->whereIn('id', $optionIds)->get();
                 foreach ($options as $option) {
                     $key = $option->variant->code ?? null;
                     if (empty($key)) continue;
                     $value = $option->value;
-                    if (is_numeric($value))              $value = $value + 0;
-                    elseif (strtolower($value) === 'true')  $value = true;
+                    if (is_numeric($value)) $value = $value + 0;
+                    elseif (strtolower($value) === 'true') $value = true;
                     elseif (strtolower($value) === 'false') $value = false;
                     $config[$key] = $value;
                 }
             }
         }
-
         if (!empty($checkoutConfiguration)) {
             $config = array_merge($config, $checkoutConfiguration);
         }
-
         return $config;
     }
 }

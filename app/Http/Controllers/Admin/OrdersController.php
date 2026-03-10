@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\Coupon;
-use App\Models\Currency;
 use App\Models\Order;
 use App\Models\Package;
 use App\Models\User;
@@ -44,8 +43,6 @@ class OrdersController extends Controller
     {
         $query = Order::with([
             'user:id,email,first_name,last_name', 
-            'package:id,name,slug', 
-            'packagePrice:id,package_id,name,type,billing_period',
             'coupon:id,code,type,value'
         ]);
 
@@ -67,7 +64,7 @@ class OrdersController extends Controller
     /**
      * Show the form for creating a new order with pricing, packages, and plugin schemas.
      *
-     * @param \App\Services\PricingService $pricingService
+     * @param \App\Services\Package\PricingService $pricingService
      * @param \App\Services\PluginManager $pluginManager
      * @return \Illuminate\Contracts\View\View
      */
@@ -133,22 +130,15 @@ class OrdersController extends Controller
 
         try {
             $user = User::where('email', $validated['order_user'])->firstOrFail();
-            $package = Package::with(['prices', 'variants.options.prices', 'catalog', 'plugin'])
-                ->findOrFail($validated['order_package']);
+            $package = Package::with(['prices', 'variants.options.prices', 'catalog', 'plugin'])->findOrFail($validated['order_package']);
             $packagePrice = $package->prices->firstWhere('id', $validated['order_package_billing']);
 
             if (!$packagePrice) {
                 return back()->withInput()->with('error', __('client/store.order.cycle_mismatch'));
             }
 
-            $variantSelections = $validationService->buildVariantSelections(
-                $validated['variant_options'] ?? []
-            );
-
-            $validation = $validationService->validateConfiguration(
-                $package, $packagePrice, $variantSelections, $validated['order_currency']
-            );
-
+            $variantSelections = $validationService->buildVariantSelections($validated['variant_options'] ?? []);
+            $validation = $validationService->validateConfiguration($package, $packagePrice, $variantSelections, $validated['order_currency']);
             if (!$validation['valid']) {
                 return back()->withInput()->with('error', $validation['message']);
             }
@@ -159,12 +149,9 @@ class OrdersController extends Controller
                 if ($instance && method_exists($instance, 'getCheckoutSchema')) {
                     $schema = $instance->getCheckoutSchema();
                     if (!empty($schema)) {
-                        $configRules      = [];
-                        $configAttributes = [];
+                        $configRules = []; $configAttributes = [];
                         foreach ($schema as $key => $field) {
-                            $configRules["configuration.{$key}"] = is_array($field['rules'] ?? null)
-                                ? $field['rules']
-                                : explode('|', $field['rules'] ?? 'nullable');
+                            $configRules["configuration.{$key}"] = is_array($field['rules'] ?? null) ? $field['rules'] : explode('|', $field['rules'] ?? 'nullable');
                             $configAttributes["configuration.{$key}"] = $field['label'] ?? $key;
                         }
                         $configValidated = $request->validate($configRules, [], $configAttributes);
@@ -173,74 +160,32 @@ class OrdersController extends Controller
                 }
             }
 
-            $coupon = $validated['order_coupon'] 
-                ? Coupon::where('code', $validated['order_coupon'])->first() 
-                : null;
+            $coupon = $validated['order_coupon'] ? Coupon::where('code', $validated['order_coupon'])->first() : null;
 
             $result = $orderService->createOrder(
-                $user->id,
-                $package,
-                $packagePrice,
-                $variantSelections,
-                $coupon,
-                $validated['order_currency'],
-                $validated['order_status'],
-                $configuration ,
+                $user->id, $package, $packagePrice, $variantSelections, $coupon,
+                $validated['order_currency'], $validated['order_status'], $configuration
             );
 
-            if ($request->boolean('order_email')) {
-                // TODO: Send email notify to user
-            }
+            $this->recordCreate('order.create', $result['order']->toArray());
 
-            $this->recordCreate('order.create', isset($result['order']) ? $result['order']->toArray() : (array) $result);
-
-            return redirect()
-                ->route('admin.orders')
-                ->with('success', __('common.create_success', ['attribute' => $result['order']->order_number]));
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            throw $e; 
+            return redirect()->route('admin.orders')->with('success', __('common.create_success', ['attribute' => $result['order']->order_number]));
         } catch (\Exception $e) {
-            return back()
-                ->withInput()
-                ->with('error', __('common.create_failed', ['attribute' => $e->getMessage()]));
+            return back()->withInput()->with('error', __('common.create_failed', ['attribute' => $e->getMessage()]));
         }
     }
 
     /**
-     * Show the form for editing the specified order with variant details.
+     * Show the form for editing the specified order.
      *
      * @param \App\Models\Order $order
      * @return \Illuminate\View\View
      */
     public function edit(Order $order)
     {
-        $order->load([
-            'package.catalog',
-            'package.variants.options',
-            'packagePrice'
-        ]);
+        $order->load(['user', 'items', 'services']);
 
-        $variantDetails = [];
-    
-        if ($order->variant_selections && is_array($order->variant_selections)) {
-            foreach ($order->variant_selections as $variantId => $optionIds) {
-                $variant = $order->package->variants->firstWhere('id', $variantId);
-                
-                if (!$variant) continue;
-                
-                $optionIds = is_array($optionIds) ? $optionIds : [$optionIds];
-                
-                $selectedOptions = $variant->options->whereIn('id', $optionIds);
-                
-                foreach ($selectedOptions as $option) {
-                    $variantDetails[] = [
-                        'name' => "{$variant->name}: {$option->name}"
-                    ];
-                }
-            }
-        }
-
-        return view('admin::orders.edit', compact('order', 'variantDetails'));
+        return view('admin::orders.edit', compact('order'));
     }
 
     /**
@@ -286,10 +231,7 @@ class OrdersController extends Controller
 
         $order->delete();
 
-        $this->recordDelete('order.delete', [
-            'id' => $tempOrder->id,
-            'name' => $tempOrder->order_number,
-        ]);
+        $this->recordDelete('order.delete', $order->toArray());
 
         return redirect()->route('admin.orders')->with('success', __('common.delete_success', ['attribute' => $tempOrder->order_number]));
     }

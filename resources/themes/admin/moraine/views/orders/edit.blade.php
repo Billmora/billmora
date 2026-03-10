@@ -4,19 +4,25 @@
 
 @section('body')
 <div class="grid gap-4">
-    <div class="flex flex-col lg:flex-row gap-5">
-        <form action="{{ route('admin.orders.update', ['order' => $order->order_number]) }}" method="POST" class="w-full lg:w-2/7 h-fit grid gap-4">
+    <div class="flex flex-col-reverse lg:flex-row gap-5">
+        <form action="{{ route('admin.orders.update', ['order' => $order->order_number]) }}" method="POST" class="w-full lg:w-2/3 h-fit grid gap-4">
             @csrf
-            @method('PUT')
-            <div class="w-full h-fit grid items-center bg-white p-8 border-2 border-billmora-2 rounded-2xl">
-                <span class="text-slate-600 font-semibold text-start break-all">{{ $order->package->catalog->name }} - {{ $order->package->name }}</span>
-                @foreach ($variantDetails as $variant)
-                    <span class="text-slate-500 font-semibold text-start break-all">{{ $variant['name'] }}</span>
-                @endforeach
-                <hr class="border-t-2 border-billmora-2 my-4">
-                <div class="flex gap-3 justify-between">
-                    <span class="text-slate-600 font-semibold text-start break-all">{{ __('admin/orders.package_billing_label') }}</span>
-                    <span class="text-slate-500 font-semibold text-end break-all">{{ $order->packagePrice->name }}</span>
+            @method('PATCH')
+            <div class="w-full h-fit grid gap-6 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+                <div class="grid gap-4">
+                    <h3 class="text-lg font-bold text-slate-600">{{ __('admin/orders.items_label') }}</h3>
+                    @foreach ($order->items as $item)
+                        <div class="flex justify-between p-4 bg-white border-2 border-billmora-2 rounded-xl">
+                            <div class="grid text-start">
+                                <span class="text-billmora-primary font-bold">{{ $item->name }}</span>
+                                <span class="text-slate-500 font-medium">x{{ $item->quantity }}</span>
+                            </div>
+                            <div class="grid text-end">
+                                <span class="text-billmora-primary font-bold">{{ Currency::format($item->price, $order->currency) }}</span>
+                                <span class="text-slate-500 font-medium">{{ $item->cycle_label }}</span>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
             <div class="grid gap-8 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
@@ -40,7 +46,7 @@
                 </button>
             </div>
         </form>
-        <div class="w-full lg:w-5/7 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+        <div class="w-full lg:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
             <div class="flex justify-between">
                 <span class="text-slate-600 font-semibold">{{ __('admin/orders.user_label') }}</span>
                 <a href="{{ route('admin.users.summary', ['user' => $order->user->id]) }}" class="text-billmora-primary hover:text-billmora-primary-hover font-medium transition cursor-pointer">{{ $order->user->fullname }}</a>

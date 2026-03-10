@@ -37,7 +37,7 @@ class InvoicesController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Invoice::with(['order.service.package.catalog', 'user']);
+        $query = Invoice::with(['order.items', 'user']);
 
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {

@@ -24,7 +24,7 @@ class InvoicesController extends Controller
         $user = Auth::user();
 
         $invoices = Invoice::where('user_id', $user->id)
-            ->with(['order.service.package.catalog'])
+            ->with(['order.items'])
             ->orderBy('created_at', 'desc')
             ->paginate(Billmora::getGeneral('misc_client_pagination'));
 
@@ -42,7 +42,7 @@ class InvoicesController extends Controller
     {
         $user = Auth::user();
 
-        $invoice->loadMissing(['order.service.package.catalog', 'order.user']);
+        $invoice->loadMissing(['order.items', 'order.user']);
 
         if ($user->id !== $invoice->user_id) {
             abort(403);
