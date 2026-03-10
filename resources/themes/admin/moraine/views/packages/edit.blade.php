@@ -120,6 +120,16 @@
                     helper="{{ __('admin/packages.allow_cancellation_helper') }}"
                     :checked="old('package_allow_cancellation', $package->allow_cancellation)"
                 />
+                <x-admin::select
+                    name="package_allow_quantity"
+                    label="{{ __('admin/packages.allow_quantity_label') }}"
+                    helper="{{ __('admin/packages.allow_quantity_helper') }}"
+                    required
+                >
+                    @foreach (['single', 'multiple'] as $quantity)
+                        <option value="{{ $quantity }}" {{ old('package_allow_quantity', $package->allow_quantity) === $quantity ? 'selected' : '' }}>{{ ucwords($quantity) }}</option>
+                    @endforeach
+                </x-admin::select>
                 <x-admin::radio.group 
                     name="package_status"
                     label="{{ __('admin/packages.status_label') }}"

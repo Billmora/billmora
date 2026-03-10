@@ -89,6 +89,7 @@ class PackagesController extends Controller
             'package_stock' => ['required', 'integer', 'min:-1'],
             'package_per_user_limit' => ['required', 'integer', 'min:-1'],
             'package_allow_cancellation' => ['required', 'boolean'],
+            'package_allow_quantity' => ['required', Rule::in(['single', 'multiple'])],
             'package_status' => ['required', 'in:visible,hidden'],
         ]);
 
@@ -105,6 +106,7 @@ class PackagesController extends Controller
             'stock' => $validated['package_stock'],
             'per_user_limit' => $validated['package_per_user_limit'],
             'allow_cancellation' => $validated['package_allow_cancellation'],
+            'allow_quantity' => $validated['package_allow_quantity'],
             'status' => $validated['package_status'],
         ]);
 
@@ -171,6 +173,7 @@ class PackagesController extends Controller
             'package_stock' => ['required', 'integer', 'min:-1'],
             'package_per_user_limit' => ['required', 'integer', 'min:-1'],
             'package_allow_cancellation' => ['required', 'boolean'],
+            'package_allow_quantity' => ['required', Rule::in(['single', 'multiple'])],
             'package_status' => ['required', 'in:visible,hidden'],
         ]);
 
@@ -189,6 +192,7 @@ class PackagesController extends Controller
             'stock' => $validated['package_stock'],
             'per_user_limit' => $validated['package_per_user_limit'],
             'allow_cancellation' => $validated['package_allow_cancellation'],
+            'allow_quantity' => $validated['package_allow_quantity'],
             'status' => $validated['package_status'],
         ]);
 
@@ -205,7 +209,6 @@ class PackagesController extends Controller
      */
     public function destroy(Package $package)
     {
-
         $package->delete();
         
         $this->recordDelete('package.delete', [
