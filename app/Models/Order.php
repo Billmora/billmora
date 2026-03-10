@@ -137,13 +137,13 @@ class Order extends Model implements BrowseInterface
     }
 
     /**
-     * Get the service created from this order.
+     * Get the services created from this order.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function service()
+    public function services()
     {
-        return $this->hasOne(Service::class);
+        return $this->hasMany(Service::class);
     }
 
     /**
