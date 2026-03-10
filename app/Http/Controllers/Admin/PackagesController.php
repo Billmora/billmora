@@ -211,9 +211,7 @@ class PackagesController extends Controller
     {
         $package->delete();
         
-        $this->recordDelete('package.delete', [
-            $package->name
-        ]);
+        $this->recordDelete('package.delete', $package->toArray());
 
         return redirect()->route('admin.packages')->with('success', __('common.delete_success', ['attribute' => $package->name]));
     }
