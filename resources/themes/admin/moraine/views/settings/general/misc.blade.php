@@ -19,6 +19,11 @@
                 'label' => __('admin/settings/general.tabs.ordering'),
             ],
             [
+                'route' => route('admin.settings.general.service'),
+                'icon' => 'lucide-scan-text',
+                'label' => __('admin/settings/general.tabs.service'),
+            ],
+            [
                 'route' => route('admin.settings.general.invoice'),
                 'icon' => 'lucide-file',
                 'label' => __('admin/settings/general.tabs.invoice'),
