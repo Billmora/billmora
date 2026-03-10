@@ -11,6 +11,7 @@ use App\Services\Checkout\CartService;
 use App\Services\Package\PricingService;
 use App\Services\Package\OrderValidationService;
 use App\Services\PluginManager;
+use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -75,6 +76,7 @@ class CartController extends Controller
             'variants_multi' => ['nullable', 'array'],
             'variants_multi.*' => ['array'],
             'variants_multi.*.*' => [Rule::exists('variant_options', 'id')],
+            'quantity' => ['nullable', 'integer', 'min:1', 'max:' . Billmora::getGeneral('ordering_max_quantity')],
         ]);
 
         $currencyCode = Session::get('currency');
@@ -147,7 +149,7 @@ class CartController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'quantity' => ['required', 'integer', 'min:1', 'max:100'],
+            'quantity' => ['required', 'integer', 'min:1', 'max:' . Billmora::getGeneral('ordering_max_quantity')],
         ]);
 
         if ($validator->fails()) {
