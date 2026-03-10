@@ -38,6 +38,7 @@ class SettingSeeder extends Seeder
             ['category' => 'general', 'key' => 'ordering_redirect', 'value' => 'payment'],
             ['category' => 'general', 'key' => 'ordering_tos', 'value' => true],
             ['category' => 'general', 'key' => 'ordering_notes', 'value' => false],
+            ['category' => 'general', 'key' => 'ordering_max_quantity', 'value' => 10],
             ['category' => 'general', 'key' => 'ordering_number_increment', 'value' => 1],
             ['category' => 'general', 'key' => 'ordering_number_padding', 'value' => 4],
             ['category' => 'general', 'key' => 'ordering_number_format', 'value' => 'ORD-{number}'],

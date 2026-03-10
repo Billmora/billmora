@@ -64,6 +64,15 @@
             </x-admin::radio.group>
             <x-admin::toggle name="ordering_tos" label="{{ __('admin/settings/general.ordering_tos_label') }}" helper="{{ __('admin/settings/general.ordering_tos_helper') }}" :checked="Billmora::getGeneral('ordering_tos')" required />
             <x-admin::toggle name="ordering_notes" label="{{ __('admin/settings/general.ordering_notes_label') }}" helper="{{ __('admin/settings/general.ordering_notes_helper') }}" :checked="Billmora::getGeneral('ordering_notes')" required />
+            <x-admin::input 
+                name="ordering_max_quantity"
+                label="{{ __('admin/settings/general.ordering_max_quantity_label') }}"
+                helper="{{ __('admin/settings/general.ordering_max_quantity_helper') }}"
+                type="number"
+                :value="Billmora::getGeneral('ordering_max_quantity')"
+                min="1"
+                required
+            />
         </div>
         <div class="grid gap-4">
             <x-admin::input 

@@ -48,6 +48,7 @@ class OrderingController extends Controller
             'ordering_redirect' => ['required', 'string'],
             'ordering_tos' => ['required', 'boolean'],
             'ordering_notes' => ['required', 'boolean'],
+            'ordering_max_quantity' => ['required', 'integer', 'min:1'],
             'ordering_number_increment' => ['required', 'integer', 'min:1'],
             'ordering_number_padding' => ['required', 'integer', 'min:0'],
             'ordering_number_format' => [

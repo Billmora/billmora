@@ -49,6 +49,8 @@ return [
     'ordering_tos_helper' => 'Require customers to agree to the Terms of Service before placing an order.',
     'ordering_notes_label' => 'Ordering Notes',
     'ordering_notes_helper' => 'Allow customers to add special notes or instructions when placing an order.',
+    'ordering_max_quantity_label' => 'Ordering Maximum Item Quantity',
+    'ordering_max_quantity_helper' => 'Set the maximum quantity limit for items in the cart (applies to packages that allow multiple quantities).',
     'ordering_number_increment_label' => 'Ordering Number Increment',
     'ordering_number_increment_helper' => 'Set the increment value for order numbers.',
     'ordering_number_padding_label' => 'Ordering Number Padding',
