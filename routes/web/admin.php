@@ -279,6 +279,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::patch('/', [Settings\General\CompanyController::class, 'update'])->name('admin.settings.general.company.update');
             Route::get('/ordering', [Settings\General\OrderingController::class, 'index'])->name('admin.settings.general.ordering');
             Route::patch('/ordering', [Settings\General\OrderingController::class, 'update'])->name('admin.settings.general.ordering.update');
+            Route::get('/service', [Settings\General\ServiceController::class, 'index'])->name('admin.settings.general.service');
+            Route::patch('/service', [Settings\General\ServiceController::class, 'update'])->name('admin.settings.general.service.update');
             Route::get('/invoice', [Settings\General\InvoiceController::class, 'index'])->name('admin.settings.general.invoice');
             Route::patch('/invoice', [Settings\General\InvoiceController::class, 'update'])->name('admin.settings.general.invoice.update');
             Route::get('/credit', [Settings\General\CreditController::class, 'index'])->name('admin.settings.general.credit');

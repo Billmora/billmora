@@ -6,6 +6,7 @@ return [
     'tabs' => [
         'company' => 'Company',
         'ordering' => 'Ordering',
+        'service' => 'Service',
         'invoice' => 'Invoice',
         'credit' => 'Credit',
         'affiliate' => 'Affiliate',
@@ -54,6 +55,13 @@ return [
     'ordering_number_padding_helper' => 'Set the number of digits to pad order numbers with leading zeros.',
     'ordering_number_format_label' => 'Ordering Number Format',
     'ordering_number_format_helper' => 'Define the format for order numbers using {number} as a required placeholder. Optional placeholders: {day}, {month}, {year}.',
+
+    'service_number_increment_label' => 'Service Number Increment',
+    'service_number_increment_helper' => 'Set the increment value for service numbers.',
+    'service_number_padding_label' => 'Service Number Padding',
+    'service_number_padding_helper' => 'Set the number of digits to pad service numbers with leading zeros.',
+    'service_number_format_label' => 'Service Number Format',
+    'service_number_format_helper' => 'Define the format for service numbers using {number} as a required placeholder. Optional placeholders: {day}, {month}, {year}.',
 
     'invoice_pdf_label' => 'Invoice PDF',
     'invoice_pdf_helper' => 'Allow clients to download invoices as PDF from the client area and receive them via email.',
