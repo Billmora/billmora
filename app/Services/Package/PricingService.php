@@ -267,7 +267,7 @@ class PricingService
     public function getAvailableVariants(Package $package, string $currencyCode): Collection
     {
         return $package->variants->map(function ($variant) use ($currencyCode) {
-            $variant->options = $variant->options->map(function ($option) use ($currencyCode) {
+            $filteredOptions = $variant->options->map(function ($option) use ($currencyCode) {
                 $filtered = $option->prices->filter(function ($price) use ($currencyCode) {
                     if (strtolower($price->type) === 'free') {
                         return true;
@@ -279,16 +279,17 @@ class PricingService
                     return $rate && $this->isRateValid($rate);
                 })->values();
 
-                $option->prices_by_name = $filtered->mapWithKeys(function ($price) use ($currencyCode) {
+                $option->setAttribute('prices_by_name', $filtered->mapWithKeys(function ($price) use ($currencyCode) {
                     return [
                         $price->name => $this->mapPriceToPayload($price, $currencyCode)
                     ];
-                });
+                }));
 
-                $option->prices = $filtered;
+                $option->setRelation('prices', $filtered);
                 return $option;
             })->values();
 
+            $variant->setRelation('options', $filteredOptions);
             return $variant;
         })->values();
     }
