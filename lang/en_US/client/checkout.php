@@ -28,8 +28,7 @@ return [
 
     'coupon' => [
         'invalid' => 'Invalid or expired coupon code.',
-        'package_mismatch' => 'This coupon is not applicable to the selected package.',
-        'billing_mismatch' => 'This coupon is not applicable to the selected billing cycle.',
+        'cart_mismatch' => 'This coupon is not applicable to any items in your cart.',
         'limit_reached' => 'This coupon has reached its usage limit.',
         'user_limit_reached' => 'You have reached the usage limit for this coupon.',
         'applied' => 'Coupon applied successfully!',
