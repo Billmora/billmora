@@ -178,7 +178,7 @@ class Service extends Model
      */
     public function activate()
     {
-        $this->update([
+        return $this->update([
             'status' => 'active',
             'activated_at' => now(),
             'next_due_date' => $this->calculateNextDueDate(),
