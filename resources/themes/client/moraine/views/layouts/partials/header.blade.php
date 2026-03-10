@@ -3,12 +3,17 @@
   <button id="toggleSidebar" class="block xl:hidden bg-billmora-1 hover:bg-billmora-primary p-2.5 mr-4 text-slate-600 hover:text-white rounded-full transition-colors duration-300 cursor-pointer">
     <x-lucide-menu class="w-auto h-5" />
   </button>
-  {{-- Toggle Preferences --}}
-  <x-client::modal.trigger modal="preferenceModal" class="flex gap-3 items-center bg-billmora-2 hover:bg-billmora-primary px-3 py-2 ml-auto text-billmora-primary hover:text-white font-semibold rounded-lg transition-colors duration-300 group cursor-pointer">
-    <x-dynamic-component component="flag-country-{{ strtolower($langActive['country']) }}" class="w-auto h-5 pointer-events-none" />
-    <div class="w-1 h-5 bg-billmora-3"></div>
-    <span>{{ $currencyActive['code'] }}</span>
-  </x-client::modal.trigger>
+  <div class="flex gap-4 ml-auto">
+    <a href="{{ route('client.checkout.cart') }}" class="block items-center bg-billmora-1 hover:bg-billmora-primary p-2.5 mr-auto text-billmora-primary hover:text-white rounded-full transition-colors duration-150 cursor-pointer">
+      <x-lucide-shopping-cart class="w-5 h-auto" />
+    </a>
+    {{-- Toggle Preferences --}}
+    <x-client::modal.trigger modal="preferenceModal" class="flex gap-3 items-center bg-billmora-2 hover:bg-billmora-primary px-3 py-2 ml-auto text-billmora-primary hover:text-white font-semibold rounded-lg transition-colors duration-300 group cursor-pointer">
+      <x-dynamic-component component="flag-country-{{ strtolower($langActive['country']) }}" class="w-auto h-5 pointer-events-none" />
+      <div class="w-1 h-5 bg-billmora-3"></div>
+      <span>{{ $currencyActive['code'] }}</span>
+    </x-client::modal.trigger>
+  </div>
   @auth
     <!-- Profile -->
     <div class="relative w-fit flex items-center"
