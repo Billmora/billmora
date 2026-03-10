@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'items_label' => 'Order Items',
     'number_label' => 'Order Number',
     'user_label' => 'User',
     'user_helper' => 'Select the customer who will be associated with this order',
