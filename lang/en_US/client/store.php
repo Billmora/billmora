@@ -2,6 +2,7 @@
 
 return [
     'view_package' => 'View Package',
+    'view_store' => 'View Store',
     
     'order_now' => 'Order Now',
     'order_unavailable' => 'Order Unavailable',
@@ -18,6 +19,7 @@ return [
         'setup_fee' => 'Setup Fee',
         'due_today' => 'Total Due Today',
         'next_billing' => 'Price that will be charged on the next billing cycle',
+        'add_to_cart' => 'Add to Cart',
         'checkout' => 'Checkout',
     ],
 

@@ -14,6 +14,18 @@ return [
     'next_billing' => 'Price that will be charged on the next billing cycle',
     'complete_order' => 'Complete Order',
 
+    'cart' => [
+        'review_order' => 'Review Your Order',
+        'contiue_shopping' => 'Continue Shopping',
+
+        'empty' => 'Your cart is empty',
+        'empty_message' => "Looks like you haven't added any services to your cart yet.",
+
+        'item_not_found' => 'Item not found in cart.',
+        'item_added' => 'Item added to cart successfully.',
+        'item_removed' => 'Item removed from cart successfully.',
+    ],
+
     'coupon' => [
         'invalid' => 'Invalid or expired coupon code.',
         'package_mismatch' => 'This coupon is not applicable to the selected package.',
@@ -34,7 +46,6 @@ return [
     ],
 
     'session' => [
-        'expired' => 'Session expired. Please select a package again.',
         'missing_data' => 'No checkout data found. Please select a package first.',
         'currency_mismatch' => 'The selected configuration is not available for the current currency. Please select again.',
     ],
