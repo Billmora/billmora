@@ -49,13 +49,13 @@
         </div>
         <div class="w-full lg:w-2/7 h-fit grid gap-5">
             <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
-                <a href="{{ route('client.services.show', ['service' => $service->id]) }}" class="w-full flex gap-2 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="w-full flex gap-2 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     <x-lucide-view class="w-auto h-5" />
                     {{ __('client/services.action.overview') }}
                 </a>
                 @inject('scalingService', 'App\Services\Service\ScalingService')
                 @if($scalingService->canBeScaled($service))
-                    <a href="{{ route('client.services.scaling.show',['service' => $service->id]) }}" class="w-full flex gap-2 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                    <a href="{{ route('client.services.scaling.show', ['service' => $service->service_number]) }}" class="w-full flex gap-2 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                         <x-lucide-arrow-up-down class="w-auto h-5" />
                         {{ __('client/services.action.scale') }}
                     </a>
@@ -66,7 +66,7 @@
                         {{ __('client/services.action.cancel') }}
                     </button>
                 @elseif ($service->package->allow_cancellation && in_array($service->status, ['active', 'suspended']))
-                    <a href="{{ route('client.services.cancellation.create', ['service' => $service->id]) }}" class="w-full flex gap-2 items-center bg-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                    <a href="{{ route('client.services.cancellation.create', ['service' => $service->service_number]) }}" class="w-full flex gap-2 items-center bg-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                         <x-lucide-ban class="w-auto h-5" />
                         {{ __('client/services.action.cancel') }}
                     </a>
@@ -76,7 +76,7 @@
                 <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
                     @foreach($clientActions as $slug => $action)
                         @if(in_array($action['type'], ['page', 'form']))
-                            <a href="{{ route('client.services.provisioning.show', ['service' => $service->id, 'slug' => $slug]) }}"
+                            <a href="{{ route('client.services.provisioning.show', ['service' => $service->service_number, 'slug' => $slug]) }}"
                                class="w-full flex gap-3 items-center bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-all duration-200 cursor-pointer"
                             >
                                 @if(!empty($action['icon']))
@@ -85,7 +85,7 @@
                                 <span class="font-medium">{{ $action['label'] }}</span>
                             </a>
                         @elseif($action['type'] === 'link')
-                            <a href="{{ route('client.services.provisioning.handle', ['service' => $service->id, 'slug' => $slug]) }}"
+                            <a href="{{ route('client.services.provisioning.handle', ['service' => $service->service_number, 'slug' => $slug]) }}"
                                target="_blank"
                                class="w-full flex gap-3 items-center bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-all duration-200 cursor-pointer"
                             >
@@ -112,7 +112,7 @@
                                 title="{{ __('common.confirm_modal_title')}}"
                                 description="{{ __('common.confirm_modal_description', ['item' => $action['label']]) }}"
                             >
-                                <form action="{{ route('client.services.provisioning.handle', ['service' => $service->id, 'slug' => $slug]) }}" method="POST">
+                                <form action="{{ route('client.services.provisioning.handle', ['service' => $service->service_number, 'slug' => $slug]) }}" method="POST">
                                     @csrf
                                     @if(in_array(strtoupper($action['method'] ?? 'POST'), ['PUT', 'PATCH', 'DELETE']))
                                         @method(strtoupper($action['method']))

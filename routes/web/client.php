@@ -62,16 +62,16 @@ Route::group(['prefix' => 'checkout', 'middleware' => ['maintenance']], function
  */
 Route::group(['prefix' => 'services', 'middleware' => ['auth', 'maintenance', '2fa']], function () {
     Route::get('/', [Client\ServicesController::class, 'index'])->name('client.services');
-    Route::get('/{service}', [Client\ServicesController::class, 'show'])->name('client.services.show');
+    Route::get('/{service:service_number}', [Client\ServicesController::class, 'show'])->name('client.services.show');
 
-    Route::get('/{service}/cancellation', [Client\Services\CancellationController::class, 'create'])->name('client.services.cancellation.create');
-    Route::post('/{service}/cancellation', [Client\Services\CancellationController::class, 'store'])->name('client.services.cancellation.store');
+    Route::get('/{service:service_number}/cancellation', [Client\Services\CancellationController::class, 'create'])->name('client.services.cancellation.create');
+    Route::post('/{service:service_number}/cancellation', [Client\Services\CancellationController::class, 'store'])->name('client.services.cancellation.store');
 
-    Route::get('/{service}/scaling', [Client\Services\ScalingController::class, 'show'])->name('client.services.scaling.show');
-    Route::post('/{service}/scaling', [Client\Services\ScalingController::class, 'store'])->name('client.services.scaling.store');
+    Route::get('/{service:service_number}/scaling', [Client\Services\ScalingController::class, 'show'])->name('client.services.scaling.show');
+    Route::post('/{service:service_number}/scaling', [Client\Services\ScalingController::class, 'store'])->name('client.services.scaling.store');
 
-    Route::get('/{service}/provisioning/{slug}', [Client\Services\ProvisioningController::class, 'show'])->name('client.services.provisioning.show');
-    Route::any('/{service}/provisioning/{slug}/handle', [Client\Services\ProvisioningController::class, 'handle'])->name('client.services.provisioning.handle');
+    Route::get('/{service:service_number}/provisioning/{slug}', [Client\Services\ProvisioningController::class, 'show'])->name('client.services.provisioning.show');
+    Route::any('/{service:service_number}/provisioning/{slug}/handle', [Client\Services\ProvisioningController::class, 'handle'])->name('client.services.provisioning.handle');
 });
 
 /**

@@ -11,7 +11,7 @@
         </h3>
     </div>
     <div class="p-6">
-        <form action="{{ route('client.services.provisioning.handle', ['service' => $service->id, 'slug' => $slug]) }}" method="POST" class="space-y-6">
+        <form action="{{ route('client.services.provisioning.handle', ['service' => $service->service_number, 'slug' => $slug]) }}" method="POST" class="space-y-6">
             @csrf
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @foreach($pageSchema as $key => $field)

@@ -14,7 +14,7 @@ class ScalingController extends Controller
     /**
      * Inject the ScalingService dependency into the scaling controller.
      *
-     * @param  \App\Services\ScalingService  $scalingService
+     * @param  \App\Services\Service\ScalingService  $scalingService
      */
     public function __construct(private ScalingService $scalingService)
     {
@@ -35,7 +35,7 @@ class ScalingController extends Controller
         try {
             $this->scalingService->validateRequest($service);
         } catch (\Exception $e) {
-            return redirect()->route('client.services.show', $service->id)->with('error', $e->getMessage());
+            return redirect()->route('client.services.show', ['service' => $service->service_number])->with('error', $e->getMessage());
         }
 
         $step = session('scaling.step', 1);
@@ -50,7 +50,7 @@ class ScalingController extends Controller
             $targetPackage = $this->scalingService->getStrictTargetPackage($service, $targetId);
 
             if (!$targetPackage) {
-                return redirect()->route('client.services.scaling.show', ['service' => $service->id])
+                return redirect()->route('client.services.scaling.show', ['service' => $service->service_number])
                     ->with('error', __('client/services.scaling.invalid_package'));
             }
 
@@ -64,6 +64,9 @@ class ScalingController extends Controller
 
             return view('client::services.workspaces.scaling', compact('service', 'step', 'targetPackage', 'calculation'));
         }
+
+        session()->forget(['scaling.step', 'scaling.package_id']);
+        return redirect()->route('client.services.show', ['service' => $service->service_number]);
     }
 
     /**
@@ -87,7 +90,7 @@ class ScalingController extends Controller
             }
 
             session(['scaling.step' => 2, 'scaling.package_id' => $request->package_id]);
-            return redirect()->route('client.services.scaling.show', ['service' => $service->id]);
+            return redirect()->route('client.services.scaling.show', ['service' => $service->service_number]);
         }
 
         if ($step == 2) {
@@ -96,7 +99,7 @@ class ScalingController extends Controller
 
             if (!$targetPackage) {
                 session()->forget(['scaling.step', 'scaling.package_id']);
-                return redirect()->route('client.services.scaling.show', $service->id);
+                return redirect()->route('client.services.scaling.show', ['service' => $service->service_number]);
             }
 
             $rules = ['variants' => 'nullable|array'];
@@ -154,5 +157,8 @@ class ScalingController extends Controller
                 return back()->with('error', $e->getMessage());
             }
         }
+
+        session()->forget(['scaling.step', 'scaling.package_id']);
+        return redirect()->route('client.services.show', ['service' => $service->service_number]);
     }
 }

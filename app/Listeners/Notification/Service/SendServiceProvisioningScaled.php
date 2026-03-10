@@ -42,7 +42,7 @@ class SendServiceProvisioningScaled implements ShouldQueue
             'recurring_amount' => $this->currencyService->format($service->price, $service->currency),
             'billing_cycle' => $service->cycle_label, 
             
-            'service_url' => route('client.services.show', ['service' => $service->id]),
+            'service_url' => route('client.services.show', ['service' => $service->service_number]),
         ];
 
         NotificationJob::dispatch(

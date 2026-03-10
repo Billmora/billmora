@@ -40,7 +40,7 @@ class SendServiceProvisioningFailed implements ShouldQueue
             'service_name' => $service->name,
             'action' => ucfirst($event->action), 
             'error_message' => $event->errorMessage,
-            'service_url' => route('client.services.show', ['service' => $service->id]),
+            'service_url' => route('client.services.show', ['service' => $service->service_number]),
         ];
 
         NotificationJob::dispatch(

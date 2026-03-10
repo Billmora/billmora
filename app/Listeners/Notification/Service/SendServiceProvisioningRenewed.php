@@ -41,7 +41,7 @@ class SendServiceProvisioningRenewed implements ShouldQueue
             'company_name' => Billmora::getGeneral('company_name'),
             'service_name' => $service->name,
             'next_due_date' => $nextDueDate,
-            'service_url' => route('client.services.show', ['service' => $service->id]),
+            'service_url' => route('client.services.show', ['service' => $service->service_number]),
         ];
 
         NotificationJob::dispatch(

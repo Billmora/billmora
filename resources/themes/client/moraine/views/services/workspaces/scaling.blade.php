@@ -1,7 +1,7 @@
 @extends('client::services.show')
 
 @section('workspaces')
-<form action="{{ route('client.services.scaling.store', ['service' => $service->id]) }}" method="POST" class="bg-white border-2 border-billmora-2 rounded-2xl overflow-hidden">
+<form action="{{ route('client.services.scaling.store', ['service' => $service->service_number]) }}" method="POST" class="bg-white border-2 border-billmora-2 rounded-2xl overflow-hidden">
     @csrf
     @if ($step == 1)
         <div class="bg-billmora-1 px-6 py-4 border-b-2 border-billmora-2">
@@ -76,7 +76,7 @@
                 @endforeach
             </div>
             <div class="flex justify-end gap-2">
-                <a href="{{ route('client.services.show', ['service' => $service->id]) }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     {{ __('common.cancel') }}
                 </a>
                 <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-6 py-2 text-white font-medium rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
@@ -205,7 +205,7 @@
                 <p class="text-slate-500">{{ __('client/services.scaling.no_variants') }}</p>
             @endif
             <div class="flex justify-end gap-2">
-                <a href="{{ route('client.services.show', ['service' => $service->id]) }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     {{ __('common.cancel') }}
                 </a>
                 <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-6 py-2 text-white font-medium rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
