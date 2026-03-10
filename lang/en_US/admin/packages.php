@@ -15,7 +15,7 @@ return [
     'slug_label' => 'Slug',
     'slug_helper' => 'Enter a unique URL-friendly identifier for this package. It will be used in product URLs.',
     'description_label' => 'Description',
-    'description_helper' => 'Provide a brief description of the package.',
+    'description_helper' => 'Provide a brief description of the package. HTML element supported.',
     'icon_label' => 'Icon',
     'icon_helper' => 'Choose an icon file to represent the package.',
     'stock_label' => 'Stock',
@@ -24,6 +24,8 @@ return [
     'per_user_limit_helper' => 'Set the maximum number of this package a single user can purchase. Use -1 for no limit.',
     'allow_cancellation_label' => 'Allow Cancellation',
     'allow_cancellation_helper' => 'Enable to let customers request service cancellation for this package.',
+    'allow_quantity_label' => 'Allow Quantity',
+    'allow_quantity_helper' => 'Enable to let customers purchase multiple or single quantities of this package.',
     'status_label' => 'Status',
     'status_helper' => 'Set the status of the package to visible or hidden.',
     'status_options' => [
