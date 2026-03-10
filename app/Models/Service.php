@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Observers\ServiceObserver;
+use Billmora;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 #[ObservedBy(ServiceObserver::class)]
 class Service extends Model
@@ -37,6 +39,69 @@ class Service extends Model
         'price' => 'decimal:2',
         'setup_fee' => 'decimal:2',
     ];
+
+    /**
+     * Boot method to auto-generate service_number.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($service) {
+            if (empty($service->service_number)) {
+                $service->service_number = static::generateServiceNumber();
+            }
+        });
+    }
+
+    /**
+     * Generate service number based on settings.
+     *
+     * @return string
+     */
+    public static function generateServiceNumber(): string
+    {
+        $format = Billmora::getGeneral('service_number_format');
+        $padding = (int) Billmora::getGeneral('service_number_padding');
+        $increment = (int) Billmora::getGeneral('service_number_increment');
+
+        return DB::transaction(function () use ($format, $padding, $increment) {
+            $lastService = static::whereNotNull('service_number')
+                ->orderBy('id', 'desc')
+                ->lockForUpdate()
+                ->first();
+
+            if ($lastService && preg_match_all('/(\d+)/', $lastService->service_number, $matches)) {
+                $lastNumber = (int) end($matches[1]);
+                $nextNumber = $lastNumber + $increment;
+            } else {
+                $nextNumber = $increment;
+            }
+
+            $paddedNumber = str_pad($nextNumber, $padding, '0', STR_PAD_LEFT);
+
+            $serviceNumber = str_replace(
+                ['{number}', '{day}', '{month}', '{year}'],
+                [
+                    $paddedNumber,
+                    date('d'),
+                    date('m'),
+                    date('Y'),
+                ],
+                $format
+            );
+
+            $counter = 0;
+            $originalNumber = $serviceNumber;
+            while (static::where('service_number', $serviceNumber)->exists()) {
+                $counter++;
+                $serviceNumber = $originalNumber . '-' . $counter;
+            }
+
+            return $serviceNumber;
+
+        }); 
+    }
 
     /**
      * Boot the model and register event listeners.
