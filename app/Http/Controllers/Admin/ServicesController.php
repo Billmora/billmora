@@ -59,6 +59,7 @@ class ServicesController extends Controller
         if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
+                ->orWhere('service_number', 'like', "%{$search}%")
                 ->orWhere('status', 'like', "%{$search}%")
                 ->orWhereHas('user', function ($userQuery) use ($search) {
                     $userQuery->where('email', 'like', "%{$search}%")
