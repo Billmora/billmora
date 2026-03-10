@@ -185,7 +185,7 @@ class Order extends Model implements BrowseInterface
      */
     public function markAsCompleted()
     {
-        $this->update([
+        return $this->update([
             'status' => 'completed',
             'completed_at' => now(),
         ]);
