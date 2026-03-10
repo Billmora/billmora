@@ -43,13 +43,16 @@ Route::group(['prefix' => 'store', 'middleware' => ['maintenance']], function ()
  * Prefix: /checkout
  */
 Route::group(['prefix' => 'checkout', 'middleware' => ['maintenance']], function () {
-    Route::post('/review', [Client\Checkout\ReviewController::class, 'initiate'])->name('client.checkout.review.initiate');
-    Route::get('/review', [Client\Checkout\ReviewController::class, 'review'])->name('client.checkout.review');
-    Route::post('/process', [Client\Checkout\ReviewController::class, 'process'])->name('client.checkout.process');
-    Route::get('/complete', [Client\Checkout\ReviewController::class, 'complete'])->name('client.checkout.complete');
+    Route::get('/cart', [Client\Checkout\CartController::class, 'index'])->name('client.checkout.cart');
+    Route::post('/cart', [Client\Checkout\CartController::class, 'add'])->name('client.checkout.cart.add');
+    Route::post('/cart/{id}/update', [Client\Checkout\CartController::class, 'update'])->name('client.checkout.cart.update');
+    Route::post('/cart/{id}/remove', [Client\Checkout\CartController::class, 'remove'])->name('client.checkout.cart.remove');
 
     Route::post('/coupon/check', [Client\Checkout\CouponController::class, 'check'])->name('client.checkout.coupon.check');
     Route::post('/coupon/remove', [Client\Checkout\CouponController::class, 'remove'])->name('client.checkout.coupon.remove');
+
+    Route::post('/process', [Client\CheckoutController::class, 'process'])->name('client.checkout.process');
+    Route::get('/complete', [Client\CheckoutController::class, 'complete'])->name('client.checkout.complete');
 });
 
 /**

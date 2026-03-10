@@ -5,17 +5,22 @@ namespace App\Http\Controllers\Client\Checkout;
 use App\Http\Controllers\Controller;
 use App\Models\Coupon;
 use App\Models\CouponUsage;
-use App\Models\PackagePrice;
+use App\Services\Checkout\CartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class CouponController extends Controller
 {
+    public function __construct(protected CartService $cartService)
+    {
+        // 
+    }
+
     /**
-     * Validate and apply coupon code to current checkout session.
+     * Validate and apply a coupon code to the current cart session.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function check(Request $request)
@@ -24,110 +29,82 @@ class CouponController extends Controller
             'coupon_code' => ['required', 'string'],
         ]);
 
-        $checkoutData = Session::get('checkout_data');
+        $cartItems = $this->cartService->getItems();
 
-        if (!$checkoutData) {
-            return redirect()->route('client.checkout.review')
-                ->with('error', __('client/checkout.session.expired'));
+        if (empty($cartItems)) {
+            return redirect()->route('client.checkout.cart')->with('error', __('client/checkout.session.expired'));
         }
 
         $user = Auth::user();
-        $packagePrice = PackagePrice::with('package')->findOrFail($checkoutData['price_id']);
 
         try {
-            $coupon = $this->validateCoupon($request->coupon_code, $packagePrice->package, $user, $packagePrice->name);
+            $coupon = Coupon::with('packages')->where('code', $request->coupon_code)
+                ->where(function ($q) {
+                    $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
+                })
+                ->where(function ($q) {
+                    $q->whereNull('start_at')->orWhere('start_at', '<=', now());
+                })
+                ->first();
+
+            if (!$coupon) {
+                throw new \RuntimeException(__('client/checkout.coupon.invalid'));
+            }
+
+            if ($coupon->max_uses && $coupon->total_uses >= $coupon->max_uses) {
+                throw new \RuntimeException(__('client/checkout.coupon.limit_reached'));
+            }
+
+            if ($user && $coupon->max_uses_per_user) {
+                $userUsage = CouponUsage::where('coupon_id', $coupon->id)->where('user_id', $user->id)->count();
+                if ($userUsage >= $coupon->max_uses_per_user) {
+                    throw new \RuntimeException(__('client/checkout.coupon.user_limit_reached'));
+                }
+            }
+
+            $allowedPackages = $coupon->packages->pluck('id')->toArray();
+            $allowedCycles = $coupon->billing_cycles ?? [];
+
+            $isCartEligible = false;
+            foreach ($cartItems as $item) {
+                $packageMatch = empty($allowedPackages) || in_array($item['package_id'], $allowedPackages);
+                $cycleMatch = empty($allowedCycles) || in_array($item['cycle_name'], $allowedCycles);
+
+                if ($packageMatch && $cycleMatch) {
+                    $isCartEligible = true;
+                    break;
+                }
+            }
+
+            if (!$isCartEligible) {
+                throw new \RuntimeException(__('client/checkout.coupon.cart_mismatch'));
+            }
 
             Session::put('applied_coupon', [
                 'id' => $coupon->id,
                 'code' => $coupon->code,
                 'type' => $coupon->type,
                 'value' => $coupon->value,
+                'allowed_packages' => $allowedPackages,
+                'allowed_cycles' => $allowedCycles,
             ]);
 
-            return redirect()
-                ->route('client.checkout.review')
-                ->with('success', __('client/checkout.coupon.applied'));
+            return redirect()->back()->with('success', __('client/checkout.coupon.applied'));
 
         } catch (\Exception $e) {
             Session::forget('applied_coupon');
-
-            return redirect()
-                ->route('client.checkout.review')
-                ->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
         }
-
     }
 
     /**
-     * Remove applied coupon from checkout session.
+     * Remove the currently applied coupon from the cart session.
      *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function remove()
     {
-        $checkoutData = Session::get('checkout_data');
-
-        if (!$checkoutData) {
-            return redirect()->route('client.checkout.review')
-                ->with('error', 'Session expired.');
-        }
-
         Session::forget('applied_coupon');
-
-        return redirect()
-            ->route('client.checkout.review')
-            ->with('success', __('client/checkout.coupon.removed'));
-    }
-
-    /**
-     * Validate coupon eligibility for package, billing cycle, and user.
-     *
-     * @param string $code
-     * @param \App\Models\Package $package
-     * @param \App\Models\User $user
-     * @param string $billingCycleName
-     * @return \App\Models\Coupon
-     * @throws \RuntimeException
-     */
-    protected function validateCoupon(string $code, $package, $user, string $billingCycleName): Coupon
-    {
-        $coupon = Coupon::where('code', $code)
-            ->where(function ($q) {
-                $q->whereNull('expires_at')
-                ->orWhere('expires_at', '>', now());
-            })
-            ->where(function ($q) {
-                $q->whereNull('start_at')
-                ->orWhere('start_at', '<=', now());
-            })
-            ->first();
-
-        if (!$coupon) {
-            throw new \RuntimeException(__('client/checkout.coupon.invalid'));
-        }
-
-        if ($coupon->packages()->exists() && !$coupon->packages->contains($package->id)) {
-            throw new \RuntimeException(__('client/checkout.coupon.package_mismatch'));
-        }
-
-        if (!empty($coupon->billing_cycles) && !in_array($billingCycleName, $coupon->billing_cycles)) {
-            throw new \RuntimeException(__('client/checkout.coupon.billing_mismatch'));
-        }
-
-        if ($coupon->max_uses && $coupon->total_uses >= $coupon->max_uses) {
-            throw new \RuntimeException(__('client/checkout.coupon.limit_reached'));
-        }
-
-        if ($coupon->max_uses_per_user) {
-            $userUsage = CouponUsage::where('coupon_id', $coupon->id)
-                ->where('user_id', $user->id)
-                ->count();
-
-            if ($userUsage >= $coupon->max_uses_per_user) {
-                throw new \RuntimeException(__('client/checkout.coupon.user_limit_reached'));
-            }
-        }
-
-        return $coupon;
+        return redirect()->back()->with('success', __('client/checkout.coupon.removed'));
     }
 }

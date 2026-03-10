@@ -20,7 +20,7 @@
     }
 @endphp
 <div x-data="orderSummary()" x-init="init()">
-    <form action="{{ route('client.checkout.review.initiate') }}" method="POST" class="flex flex-col lg:flex-row gap-5">
+    <form action="{{ route('client.checkout.cart.add') }}" method="POST" class="flex flex-col lg:flex-row gap-5">
         @csrf
         <div class="w-full lg:w-2/3 h-fit grid gap-4">
             <div class="bg-white p-8 border-2 border-billmora-2 rounded-2xl">
@@ -215,7 +215,7 @@
                 type="submit"
                 class="w-full bg-billmora-primary hover:bg-billmora-primary-hover p-3 text-white rounded-xl font-semibold transition-all cursor-pointer"
             >
-                {{ __('client/store.package.checkout') }}
+                {{ __('client/store.package.add_to_cart') }}
             </button>
         </div>
     </form>

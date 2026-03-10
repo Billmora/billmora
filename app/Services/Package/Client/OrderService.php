@@ -3,15 +3,13 @@
 namespace App\Services\Package\Client;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Service;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\CouponUsage;
 use App\Models\Package;
-use App\Models\PackagePrice;
-use App\Models\Coupon;
-use App\Models\VariantOption;
-use App\Services\Package\PricingService;
+use App\OrderItemType;
 use App\Traits\AuditsSystem;
 use Illuminate\Support\Facades\DB;
 
@@ -20,105 +18,90 @@ class OrderService
     use AuditsSystem;
 
     /**
-     * The pricing service instance.
+     * Create a new master order, order items, services, and invoice from cart data.
      *
-     * @var \App\Services\Package\PricingService
-     */
-    protected $pricingService;
-
-    /**
-     * Create a new order service instance.
-     *
-     * @param \App\Services\Package\PricingService $pricingService
-     * @return void
-     */
-    public function __construct(PricingService $pricingService)
-    {
-        $this->pricingService = $pricingService;
-    }
-
-    /**
-     * Create a new order, service, and invoice with pricing, configuration, and coupon usage.
-     *
-     * @param int $userId
-     * @param int $packagePriceId
-     * @param array<int|string, mixed> $variantSelections
-     * @param \App\Models\Coupon|null $coupon
-     * @param array<string, mixed> $checkoutData
-     * @param array<string, mixed> $configuration
-     * @return array{order:\App\Models\Order,service:\App\Models\Service,invoice:\App\Models\Invoice}
+     * @param  int  $userId
+     * @param  array  $cartItems
+     * @param  array  $totals
+     * @param  array|null  $appliedCoupon
+     * @param  array  $checkoutData
+     * @return array{order: \App\Models\Order, invoice: \App\Models\Invoice}
      */
     public function createOrder(
         int $userId,
-        int $packagePriceId,
-        array $variantSelections,
-        ?Coupon $coupon,
-        array $checkoutData,
-        array $configuration = [],
+        array $cartItems,
+        array $totals,
+        ?array $appliedCoupon,
+        array $checkoutData
     ): array {
-        $packagePrice = PackagePrice::with('package.catalog')->findOrFail($packagePriceId);
-        $package = $packagePrice->package;
         $currency = session('currency');
-
-        $pricing = $this->pricingService->calculatePricing(
-            $packagePrice,
-            $variantSelections,
-            $coupon,
-            $currency
-        );
 
         return DB::transaction(function () use (
             $userId,
-            $package,
-            $packagePrice,
-            $variantSelections,
-            $pricing,
-            $coupon,
+            $cartItems,
+            $totals,
+            $appliedCoupon,
             $checkoutData,
             $currency,
-            $configuration,
         ) {
             $order = Order::create([
                 'user_id' => $userId,
-                'package_id' => $package->id,
-                'package_price_id' => $packagePrice->id,
-                'coupon_id' => $coupon?->id,
+                'coupon_id' => $appliedCoupon['id'] ?? null,
                 'status' => 'pending',
                 'currency' => $currency,
-                'subtotal' => $pricing['subtotal'],
-                'discount' => $pricing['discount'],
-                'setup_fee' => $pricing['setup_fee_total'],
-                'total' => $pricing['total'],
+                'subtotal' => $totals['subtotal'],
+                'discount' => $totals['discount'],
+                'setup_fee' => $totals['setup_fee'],
+                'total' => $totals['total'],
                 'notes' => $checkoutData['notes'] ?? null,
-                'variant_selections' => $variantSelections,
                 'terms_accepted' => $checkoutData['terms_accepted'] ?? true,
             ]);
 
             $this->recordCreate('order.created', $order->toArray());
 
-            $initialDueDate = ($packagePrice->type === 'recurring') ? now() : null;
-            $finalConfig = $this->resolveServiceConfiguration($package, $variantSelections, $configuration);
+            foreach ($cartItems as $item) {
+                $orderItem = OrderItem::create([
+                    'order_id' => $order->id,
+                    'item_type' => OrderItemType::tryFrom($item['type']),
+                    'item_id' => $item['package_id'],
+                    'name' => $item['name'],
+                    'quantity' => $item['quantity'],
+                    'billing_type' => $item['billing_type'],
+                    'billing_interval' => $item['billing_interval'],
+                    'billing_period' => $item['billing_period'],
+                    'price' => $item['price'],
+                    'setup_fee' => $item['setup_fee'],
+                    'config_options' => $item['config_options'],
+                    'variant_selections' => $item['variant_selections'],
+                ]);
 
-            $service = Service::create([
-                'user_id' => $userId,
-                'order_id' => $order->id,
-                'package_id' => $package->id,
-                'package_price_id' => $packagePrice->id,
-                'plugin_id' => $package->plugin_id,
-                'name' => $package->name,
-                'status' => 'pending',
-                'currency' => $currency,
-                'billing_type' => $packagePrice->type,
-                'billing_interval' => $packagePrice->time_interval,
-                'billing_period' => $packagePrice->billing_period,
-                'price' => $pricing['recurring_total'],
-                'setup_fee' => $pricing['setup_fee_total'],
-                'next_due_date' => $initialDueDate,
-                'configuration' => $finalConfig, 
-                'variant_selections' => $variantSelections,
-            ]);
+                $package = Package::find($item['package_id']);
+                $initialDueDate = ($item['billing_type'] === 'recurring') ? now() : null;
 
-            $this->recordCreate('service.created', $service->toArray());
+                for ($i = 0; $i < $item['quantity']; $i++) {
+                    $service = Service::create([
+                        'user_id' => $userId,
+                        'order_id' => $order->id,
+                        'order_item_id' => $orderItem->id,
+                        'package_id' => $item['package_id'],
+                        'package_price_id' => $item['package_price_id'],
+                        'plugin_id' => $package->plugin_id ?? null,
+                        'name' => $item['name'],
+                        'status' => 'pending',
+                        'currency' => $currency,
+                        'billing_type' => $item['billing_type'],
+                        'billing_interval' => $item['billing_interval'],
+                        'billing_period' => $item['billing_period'],
+                        'price' => $item['price'],
+                        'setup_fee' => $item['setup_fee'],
+                        'next_due_date' => $initialDueDate,
+                        'configuration' => $item['config_options'],
+                        'variant_selections' => $item['variant_selections'],
+                    ]);
+
+                    $this->recordCreate('service.created', $service->toArray());
+                }
+            }
 
             $invoice = Invoice::create([
                 'user_id' => $userId,
@@ -126,192 +109,98 @@ class OrderService
                 'plugin_id' => $checkoutData['payment_method'] ?? null,
                 'status' => 'unpaid',
                 'currency' => $currency,
-                'subtotal' => $pricing['subtotal'],
-                'discount' => $pricing['discount'],
-                'setup_fee' => $pricing['setup_fee_total'],
-                'total' => $pricing['total'],
+                'subtotal' => $totals['subtotal'],
+                'discount' => $totals['discount'],
+                'setup_fee' => $totals['setup_fee'],
+                'total' => $totals['total'],
                 'due_date' => now()->addDays(7),
             ]);
 
             $this->recordCreate('invoice.created', $invoice->toArray());
 
-            $this->createInvoiceItems($invoice, $service, $package, $packagePrice, $pricing, $coupon);
+            $this->createInvoiceItems($invoice, $cartItems, $totals, $appliedCoupon);
 
-            if ($coupon) {
-                $coupon = CouponUsage::create([
-                    'coupon_id' => $coupon->id,
+            if ($appliedCoupon) {
+                $couponUsage = CouponUsage::create([
+                    'coupon_id' => $appliedCoupon['id'],
                     'user_id' => $userId,
                     'order_id' => $order->id,
                     'used_at' => now(),
                 ]);
 
-                $this->recordCreate('coupon.used', $coupon->toArray());
+                $this->recordCreate('coupon.used', $couponUsage->toArray());
             }
 
-            return compact('order', 'service', 'invoice');
+            return compact('order', 'invoice');
         });
     }
 
     /**
-     * Create invoice items for base package, variants, setup fees, and discount lines.
+     * Create and persist invoice line items including setup fees and discount entries from cart data.
      *
-     * @param \App\Models\Invoice $invoice
-     * @param \App\Models\Service $service
-     * @param \App\Models\Package $package
-     * @param \App\Models\PackagePrice $packagePrice
-     * @param array<string, mixed> $pricing
-     * @param \App\Models\Coupon|null $coupon
+     * @param  \App\Models\Invoice  $invoice
+     * @param  array  $cartItems
+     * @param  array  $totals
+     * @param  array|null  $appliedCoupon
      * @return void
      */
-    private function createInvoiceItems(
-        Invoice $invoice,
-        Service $service,
-        Package $package,
-        PackagePrice $packagePrice,
-        array $pricing,
-        ?Coupon $coupon
-    ): void {
-        InvoiceItem::create([
-            'invoice_id' => $invoice->id,
-            'service_id' => $service->id,
-            'description' => $this->buildPackageDescription($package, $packagePrice),
-            'quantity' => 1,
-            'unit_price' => $pricing['base_price'],
-            'amount' => $pricing['base_price'],
-        ]);
-
-        foreach ($pricing['variant_items'] as $item) {
-            if ($item['price'] <= 0) continue;
-
-            InvoiceItem::create([
-                'invoice_id' => $invoice->id,
-                'service_id' => $service->id,
-                'description' => $item['description'],
-                'quantity' => 1,
-                'unit_price' => $item['price'],
-                'amount' => $item['price'],
-            ]);
-        }
-
-        if ($pricing['setup_fee_package'] > 0) {
-            InvoiceItem::create([
-                'invoice_id' => $invoice->id,
-                'service_id' => $service->id,
-                'description' => 'Setup Fee - ' . $package->name,
-                'quantity' => 1,
-                'unit_price' => $pricing['setup_fee_package'],
-                'amount' => $pricing['setup_fee_package'],
-            ]);
-        }
-
-        foreach ($pricing['setup_fee_variants'] as $item) {
-            if ($item['amount'] <= 0) continue;
-
-            InvoiceItem::create([
-                'invoice_id' => $invoice->id,
-                'service_id' => $service->id,
-                'description' => 'Setup Fee - ' . $item['description'],
-                'quantity' => 1,
-                'unit_price' => $item['amount'],
-                'amount' => $item['amount'],
-            ]);
-        }
-
-        if ($pricing['discount'] > 0 && $coupon) {
-            InvoiceItem::create([
-                'invoice_id' => $invoice->id,
-                'service_id' => $service->id,
-                'description' => 'Discount - Coupon: ' . $coupon->code,
-                'quantity' => 1,
-                'unit_price' => -$pricing['discount'],
-                'amount' => -$pricing['discount'],
-            ]);
-        }
-    }
-
-    /**
-     * Build main package invoice description including catalog and service period.
-     *
-     * @param \App\Models\Package $package
-     * @param \App\Models\PackagePrice $packagePrice
-     * @return string
-     */
-    private function buildPackageDescription(Package $package, PackagePrice $packagePrice): string
+    private function createInvoiceItems(Invoice $invoice, array $cartItems, array $totals, ?array $appliedCoupon): void
     {
-        $catalogName = $package->catalog->name ?? '';
-        $packageName = $package->name;
-        $description = "{$catalogName} - {$packageName}";
+        foreach ($cartItems as $item) {
+            $description = $item['name'];
 
-        if (in_array(strtolower($packagePrice->type), ['recurring', 'onetime'])) {
-            $period = $this->calculateServicePeriod($packagePrice);
-            $description .= " ({$period})";
-        }
-
-        return $description;
-    }
-
-    /**
-     * Calculate formatted service period range string from billing period and interval.
-     *
-     * @param \App\Models\PackagePrice $packagePrice
-     * @return string
-     */
-    private function calculateServicePeriod(PackagePrice $packagePrice): string
-    {
-        $start = now();
-        $end = match(strtolower($packagePrice->billing_period)) {
-            'daily' => $start->copy()->addDays($packagePrice->time_interval),
-            'weekly' => $start->copy()->addWeeks($packagePrice->time_interval),
-            'monthly' => $start->copy()->addMonths($packagePrice->time_interval),
-            'yearly' => $start->copy()->addYears($packagePrice->time_interval),
-            default => $start->copy()->addMonths(1),
-        };
-
-        return $start->toDateString() . ' - ' . $end->toDateString();
-    }
-
-    /**
-     * Resolve final service configuration from package defaults, variants, and checkout data.
-     *
-     * @param \App\Models\Package $package
-     * @param array<int|string, mixed> $variantSelections
-     * @param array<string, mixed> $checkoutConfiguration
-     * @return array<string, mixed>
-     */
-    protected function resolveServiceConfiguration(Package $package, array $variantSelections, array $checkoutConfiguration = []): array
-    {
-        $config = $package->provisioning_config ?? [];
-
-        if (!empty($variantSelections)) {
-            $optionIds = collect($variantSelections)->flatten()->filter()->toArray();
-            
-            if (!empty($optionIds)) {
-                $options = VariantOption::with('variant')
-                    ->whereIn('id', $optionIds)
-                    ->get();
-
-                foreach ($options as $option) {
-                    $key = $option->variant->code ?? null;
-                    if (empty($key)) continue;
-
-                    $value = $option->value;
-                    if (is_numeric($value)) {
-                        $value = $value + 0;
-                    } elseif (strtolower($value) === 'true') {
-                        $value = true;
-                    } elseif (strtolower($value) === 'false') {
-                        $value = false;
-                    }
-
-                    $config[$key] = $value;
+            if ($item['billing_type'] === 'recurring') {
+                $startDate = now();
+                $endDate = $startDate->copy();
+                
+                switch ($item['billing_period']) {
+                    case 'daily':
+                        $endDate->addDays($item['billing_interval']);
+                        break;
+                    case 'weekly':
+                        $endDate->addWeeks($item['billing_interval']);
+                        break;
+                    case 'monthly':
+                        $endDate->addMonths($item['billing_interval']);
+                        break;
+                    case 'yearly':
+                        $endDate->addYears($item['billing_interval']);
+                        break;
                 }
+
+                $description .= " (" . $startDate->format('d/m/Y') . " - " . $endDate->format('d/m/Y') . ")";
+            }
+
+            InvoiceItem::create([
+                'invoice_id' => $invoice->id,
+                'service_id' => null,
+                'description' => $description,
+                'quantity' => $item['quantity'],
+                'unit_price' => $item['price'],
+                'amount' => $item['price'] * $item['quantity'],
+            ]);
+
+            if ($item['setup_fee'] > 0) {
+                InvoiceItem::create([
+                    'invoice_id' => $invoice->id,
+                    'service_id' => null,
+                    'description' => "Setup Fee - {$item['name']}",
+                    'quantity' => $item['quantity'],
+                    'unit_price' => $item['setup_fee'],
+                    'amount' => $item['setup_fee'] * $item['quantity'],
+                ]);
             }
         }
 
-        if (!empty($checkoutConfiguration)) {
-            $config = array_merge($config, $checkoutConfiguration);
+        if ($totals['discount'] > 0 && $appliedCoupon) {
+            InvoiceItem::create([
+                'invoice_id' => $invoice->id,
+                'service_id' => null,
+                'description' => 'Discount - Coupon: ' . $appliedCoupon['code'],
+                'quantity' => 1,
+                'unit_price' => -$totals['discount'],
+                'amount' => -$totals['discount'],
+            ]);
         }
-
-        return $config;
     }
 }
