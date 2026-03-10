@@ -34,7 +34,6 @@ class Order extends Model implements BrowseInterface
      * @var array<string, string>
      */
     protected $casts = [
-        'variant_selections' => 'array',
         'terms_accepted' => 'boolean',
         'completed_at' => 'datetime',
         'cancelled_at' => 'datetime',
@@ -108,6 +107,16 @@ class Order extends Model implements BrowseInterface
     }
 
     /**
+     * Get all items belonging to the order.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    /**
      * Get the user that owns this order.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -115,26 +124,6 @@ class Order extends Model implements BrowseInterface
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get the package associated with this order.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function package()
-    {
-        return $this->belongsTo(Package::class);
-    }
-
-    /**
-     * Get the package price for this order.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function packagePrice()
-    {
-        return $this->belongsTo(PackagePrice::class);
     }
 
     /**

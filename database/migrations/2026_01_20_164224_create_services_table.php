@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->id();
+            $table->string('service_number')->unique();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('order_item_id')->nullable()->constrained('order_items')->nullOnDelete();
             $table->foreignId('package_id')->constrained();
             $table->foreignId('package_price_id')->constrained();
             $table->foreignId('plugin_id')->nullable()->constrained('plugins')->nullOnDelete();

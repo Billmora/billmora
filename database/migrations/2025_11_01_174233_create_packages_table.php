@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('stock')->default(-1);
             $table->integer('per_user_limit')->default(-1);
             $table->boolean('allow_cancellation')->default(true);
+            $table->enum('allow_quantity', ['single', 'multiple'])->default('single');
             $table->enum('status', ['visible', 'hidden'])->default('visible');
 
             $table->foreignId('plugin_id')->nullable()->constrained('plugins')->nullOnDelete(); 

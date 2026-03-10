@@ -14,10 +14,6 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('package_id')->constrained();
-            $table->foreignId('package_price_id')->constrained();
-            $table->json('variant_selections')->nullable();
-
             $table->string('order_number')->unique();
             $table->enum('status', ['pending', 'processing', 'completed', 'cancelled', 'failed'])->default('pending');
             
