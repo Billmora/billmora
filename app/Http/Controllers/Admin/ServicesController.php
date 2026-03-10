@@ -56,7 +56,7 @@ class ServicesController extends Controller
             'provisioning:id,name'
         ]);
 
-        if ($search = $request->get('search')) {
+        if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                 ->orWhere('status', 'like', "%{$search}%")
@@ -77,7 +77,7 @@ class ServicesController extends Controller
      * Show the form for editing the specified service with packages, pricing, and plugin schemas.
      *
      * @param \App\Models\Service $service
-     * @param \App\Services\PricingService $pricingService
+     * @param \App\Services\Package\PricingService $pricingService
      * @param \App\Services\PluginManager $pluginManager
      * @return \Illuminate\Contracts\View\View
      *
@@ -126,7 +126,7 @@ class ServicesController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Service $service
-     * @param \App\Services\PricingService $pricingService
+     * @param \App\Services\Package\PricingService $pricingService
      * @param \App\Services\Package\OrderValidationService $validationService
      * @param \App\Services\PluginManager $pluginManager
      * @return \Illuminate\Http\RedirectResponse
