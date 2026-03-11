@@ -45,14 +45,12 @@ class UserCredit extends Model
      * @param  int|null  $relatedId
      * @return self
      */
-    public function addCredit(float $amount, string $description, ?string $relatedType = null, ?int $relatedId = null): self
+    public function addCredit(float $amount): self
     {
         if ($amount <= 0) return $this;
 
         $this->balance += $amount;
         $this->save();
-
-        $this->recordCreditAudit('credit.added', $amount, $description, $relatedType, $relatedId);
 
         return $this;
     }
@@ -68,7 +66,7 @@ class UserCredit extends Model
      *
      * @throws \Exception
      */
-    public function removeCredit(float $amount, string $description, ?string $relatedType = null, ?int $relatedId = null): self
+    public function removeCredit(float $amount): self
     {
         if ($amount <= 0) return $this;
         
@@ -78,8 +76,6 @@ class UserCredit extends Model
 
         $this->balance -= $amount;
         $this->save();
-
-        $this->recordCreditAudit('credit.removed', $amount, $description, $relatedType, $relatedId);
 
         return $this;
     }
