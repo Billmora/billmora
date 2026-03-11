@@ -2,6 +2,7 @@
 
 return [
     'items_label' => 'Order Items',
+    'services_label' => 'Services',
     'number_label' => 'Order Number',
     'user_label' => 'User',
     'user_helper' => 'Select the customer who will be associated with this order',
