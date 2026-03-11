@@ -8,23 +8,6 @@
         <form action="{{ route('admin.orders.update', ['order' => $order->order_number]) }}" method="POST" class="w-full lg:w-2/3 h-fit grid gap-4">
             @csrf
             @method('PATCH')
-            <div class="w-full h-fit grid gap-6 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
-                <div class="grid gap-4">
-                    <h3 class="text-lg font-bold text-slate-600">{{ __('admin/orders.items_label') }}</h3>
-                    @foreach ($order->items as $item)
-                        <div class="flex justify-between p-4 bg-white border-2 border-billmora-2 rounded-xl">
-                            <div class="grid text-start">
-                                <span class="text-billmora-primary font-bold">{{ $item->name }}</span>
-                                <span class="text-slate-500 font-medium">x{{ $item->quantity }}</span>
-                            </div>
-                            <div class="grid text-end">
-                                <span class="text-billmora-primary font-bold">{{ Currency::format($item->price, $order->currency) }}</span>
-                                <span class="text-slate-500 font-medium">{{ $item->cycle_label }}</span>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
             <div class="grid gap-8 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
                <x-admin::select
                     name="order_status"
@@ -45,8 +28,41 @@
                     {{ __('common.update') }}
                 </button>
             </div>
+            <div class="w-full h-fit grid gap-6 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+                <div class="grid gap-4">
+                    <h3 class="text-lg font-bold text-slate-600">{{ __('admin/orders.items_label') }}</h3>
+                    @foreach ($order->items as $item)
+                        <div class="flex justify-between p-4 bg-white border-2 border-billmora-2 rounded-xl">
+                            <div class="grid text-start">
+                                <span class="text-billmora-primary font-bold">{{ $item->name }}</span>
+                                <span class="text-slate-500 font-medium">x{{ $item->quantity }}</span>
+                            </div>
+                            <div class="grid text-end">
+                                <span class="text-billmora-primary font-bold">{{ Currency::format($item->price, $order->currency) }}</span>
+                                <span class="text-slate-500 font-medium">{{ $item->cycle_label }}</span>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <hr class="border-t-2 border-billmora-2 border-dashed">
+                <div class="grid gap-4">
+                    <h3 class="text-lg font-bold text-slate-700">{{ __('admin/orders.services_label') }}</h3>
+                    <div class="grid gap-2">
+                        @foreach ($order->services as $service)
+                            <div class="flex justify-between items-center p-3 bg-white border-2 border-billmora-2 rounded-lg">
+                                <a href="{{ route('admin.services.edit', ['service' => $service->id]) }}" class="text-billmora-primary font-semibold hover:underline">
+                                    {{ $service->service_number }}
+                                </a>
+                                <span class="px-2 py-1 text-sm text-slate-600 font-semibold rounded-md">
+                                    {{ ucfirst($service->status) }}
+                                </span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
         </form>
-        <div class="w-full lg:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+        <div class="w-full lg:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl lg:sticky top-28 shrink-0">
             <div class="flex justify-between">
                 <span class="text-slate-600 font-semibold">{{ __('admin/orders.user_label') }}</span>
                 <a href="{{ route('admin.users.summary', ['user' => $order->user->id]) }}" class="text-billmora-primary hover:text-billmora-primary-hover font-medium transition cursor-pointer">{{ $order->user->fullname }}</a>
