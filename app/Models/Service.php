@@ -2,16 +2,21 @@
 
 namespace App\Models;
 
+use App\Contracts\BrowseInterface;
 use App\Observers\ServiceObserver;
+use App\Traits\BrowseTrait;
 use Billmora;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 #[ObservedBy(ServiceObserver::class)]
-class Service extends Model
+class Service extends Model implements BrowseInterface
 {
+    use BrowseTrait;
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -350,5 +355,22 @@ class Service extends Model
         }
 
         return;
+    }
+
+    /**
+     * Return a collection of service records formatted as browse items for quick search indexing.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public static function toBrowseItems(): Collection
+    {
+        return static::select('id', 'service_number')
+            ->limit(50)
+            ->get()
+            ->map(fn($item) => [
+                'title' => "{$item->service_number}",
+                'category' => 'service',
+                'url' => route('admin.services.edit', ['service' => $item->id]),
+            ]);
     }
 }
