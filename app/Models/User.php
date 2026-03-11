@@ -100,6 +100,29 @@ class User extends Authenticatable implements BrowseInterface
     }
 
     /**
+     * Get the credits associated with the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function credits()
+    {
+        return $this->hasMany(UserCredit::class);
+    }
+
+    /**
+     * Get the credit wallet for the specified currency.
+     *
+     * @param  string  $currencyCode
+     * @return \App\Models\UserCredit
+     */
+    public function getCreditWallet(string $currencyCode)
+    {
+        return $this->credits()->firstOrCreate([
+            'currency' => $currencyCode
+        ]);
+    }
+
+    /**
      * Get the coupon usages for this user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
