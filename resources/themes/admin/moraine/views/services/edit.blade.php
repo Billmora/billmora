@@ -73,6 +73,7 @@
                 helper="{{ __('admin/services.expires_helper') }}"
                 type="date"
                 value="{{ old('service_next_due_date', $service->next_due_date?->format('Y-m-d')) }}"
+                required
             />
             <x-admin::toggle 
                 name="service_recalculate_price"

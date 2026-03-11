@@ -142,7 +142,7 @@ class ServicesController extends Controller
             'service_status' => ['required', Rule::in(['pending', 'active', 'suspended', 'terminated', 'cancelled'])],
             'service_currency' => ['required', 'string', 'size:3'],
             'service_recalculate_price' => ['nullable', 'boolean'],
-            'service_next_due_date' => ['nullable', 'date'],
+            'service_next_due_date' => ['required', 'date'],
             'service_price' => ['nullable', 'numeric', 'min:0'],
             'service_setup_fee' => ['nullable', 'numeric', 'min:0'],
             'package_id' => ['required', Rule::exists('packages', 'id')],
