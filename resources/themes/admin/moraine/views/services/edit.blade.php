@@ -25,12 +25,26 @@
                 </p>
             </div>
             <x-admin::input 
+                name="service_number"
+                label="{{ __('admin/services.number_label') }}"
+                helper="{{ __('admin/services.number_helper') }}"
+                value="{{ $service->service_number }}"
+                required
+                disabled
+            />
+            <x-admin::input 
                 name="service_name"
                 label="{{ __('admin/services.name_label') }}"
                 helper="{{ __('admin/services.name_helper') }}"
                 value="{{ $service->name }}"
                 required
                 disabled
+            />
+            <x-admin::input 
+                name="service_subscription"
+                label="{{ __('admin/services.subscription_label') }}"
+                helper="{{ __('admin/services.subscription_helper') }}"
+                value="{{ $service->subscription_id }}"
             />
             <x-admin::select 
                 name="service_currency"

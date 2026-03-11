@@ -138,9 +138,10 @@ class ServicesController extends Controller
     public function update(Request $request, Service $service, PricingService $pricingService, OrderValidationService $validationService, PluginManager $pluginManager)
     {
         $validated = $request->validate([
+            'service_subscription' => ['nullable', 'string'],
             'service_status' => ['required', Rule::in(['pending', 'active', 'suspended', 'terminated', 'cancelled'])],
             'service_currency' => ['required', 'string', 'size:3'],
-            'service_recalculate_price' => ['nullable'],
+            'service_recalculate_price' => ['nullable', 'boolean'],
             'service_next_due_date' => ['nullable', 'date'],
             'service_price' => ['nullable', 'numeric', 'min:0'],
             'service_setup_fee' => ['nullable', 'numeric', 'min:0'],
@@ -229,6 +230,7 @@ class ServicesController extends Controller
             'package_id' => $package->id,
             'package_price_id' => $packagePrice->id,
             'name' => $package->name,
+            'subscription_id' => $validated['service_subscription'],
             'status' => $validated['service_status'],
             'currency' => $validated['service_currency'],
             'billing_type' => $packagePrice->type,
