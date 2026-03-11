@@ -39,7 +39,7 @@ class TransactionController extends Controller
     {
         $query = Transaction::with(['user', 'invoice', 'plugin'])->where('invoice_id', $invoice->id);
 
-        if ($search = $request->get('search')) {
+        if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('reference', 'like', "%{$search}%")
                 ->orWhere('description', 'like', "%{$search}%")

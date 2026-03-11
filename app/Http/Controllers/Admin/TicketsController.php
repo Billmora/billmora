@@ -40,7 +40,7 @@ class TicketsController extends Controller
     {
         $query = Ticket::with('user', 'service');
 
-        if ($search = $request->get('search')) {
+        if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('ticket_number', 'like', "%{$search}%")
                   ->orWhere('subject', 'like', "%{$search}%");

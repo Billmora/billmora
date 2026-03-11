@@ -30,7 +30,7 @@ class TasksController extends Controller
     {
         $query = AuditSystem::where('properties->status', 'failed');
 
-        if ($search = $request->get('search')) {
+        if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('event', 'like', "%{$search}%")
                   ->orWhere('properties', 'like', "%{$search}%");

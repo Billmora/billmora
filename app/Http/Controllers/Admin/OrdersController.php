@@ -46,7 +46,7 @@ class OrdersController extends Controller
             'coupon:id,code,type,value'
         ]);
 
-        if ($search = $request->get('search')) {
+        if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('order_number', 'like', "%{$search}%")
                 ->orWhere('status', 'like', "%{$search}%")

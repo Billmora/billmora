@@ -62,7 +62,7 @@ class PluginsController extends Controller
             }
         }
 
-        if ($search = $request->get('search')) {
+        if ($search = $request->input('search')) {
             $plugins = collect($plugins)->filter(function ($plugin) use ($search) {
                 return stripos($plugin['name'] ?? '', $search) !== false ||
                        stripos($plugin['type'] ?? '', $search) !== false ||

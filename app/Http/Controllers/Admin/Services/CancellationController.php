@@ -36,7 +36,7 @@ class CancellationController extends Controller
     {
         $query = ServiceCancellation::with(['service.package.catalog', 'user', 'reviewedBy']);
 
-        if ($search = $request->get('search')) {
+        if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('reason', 'like', "%{$search}%")
                 ->orWhere('status', 'like', "%{$search}%")

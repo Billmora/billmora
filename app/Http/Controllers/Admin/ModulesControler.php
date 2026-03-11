@@ -37,7 +37,7 @@ class ModulesControler extends Controller
     {
         $query = Plugin::where('type', 'module');
 
-        if ($search = $request->get('search')) {
+        if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('provider', 'like', "%{$search}%");

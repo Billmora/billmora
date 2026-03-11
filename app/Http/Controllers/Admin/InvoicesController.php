@@ -39,7 +39,7 @@ class InvoicesController extends Controller
     {
         $query = Invoice::with(['order.items', 'user']);
 
-        if ($search = $request->get('search')) {
+        if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('invoice_number', 'like', "%{$search}%")
                 ->orWhere('status', 'like', "%{$search}%")
