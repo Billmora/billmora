@@ -53,7 +53,7 @@
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $histories->total() - $loop->index }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
-                                <a href="{{ route('admin.audits.email.show', ['email' => $history->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $history->event }}</a>
+                                <a href="{{ route('admin.audits.email.show', ['id' => $history->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $history->event }}</a>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
                                 @if ($history->user_id)
@@ -67,10 +67,10 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $history->status }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $history->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
-                                <a href="{{ route('admin.audits.email.show', ['email' => $history->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                                <a href="{{ route('admin.audits.email.show', ['id' => $history->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                                     {{ __('common.view') }}
                                 </a>
-                                <a href="{{ route('admin.audits.email.preview', ['email' => $history->id]) }}" class="inline-flex items-center text-sm font-semibold text-yellow-400 hover:text-yellow-500"
+                                <a href="{{ route('admin.audits.email.preview', ['id' => $history->id]) }}" class="inline-flex items-center text-sm font-semibold text-yellow-400 hover:text-yellow-500"
                                     x-data="{ windowWidth: 900, windowHeight: 600 }"
                                     x-on:click.prevent="
                                             const left = (screen.width/2) - (windowWidth/2);

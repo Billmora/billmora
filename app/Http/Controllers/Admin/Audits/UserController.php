@@ -29,19 +29,21 @@ class UserController extends Controller
      * Display a paginated list of user activity logs.
      *
      * @param \Illuminate\Http\Request $request The HTTP request instance.
-     * @param \App\Models\User|null $user The user.
+     * @param int|null $id The ID of the user.
      *
      * @return \Illuminate\View\View
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function index(Request $request, User $user = null)
+    public function index(Request $request, $id = null)
     {
         $search = $request->query('searchActiviyUser');
 
+        $user = $id ? User::findOrFail($id) : null;
+
         $activities = AuditUser::with('user:id,email,first_name,last_name')
             ->select('id', 'event', 'user_id', 'created_at')
-            ->when($user, function ($query) use ($user) {
+            ->when($id, function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             })
             ->when($search, function ($query, $search) {
@@ -51,7 +53,7 @@ class UserController extends Controller
             ->paginate(Billmora::getGeneral('misc_admin_pagination'))
             ->withQueryString();
 
-        if ($user) {
+        if ($id) {
             return view('admin::users.activity.index', compact('user', 'activities'));
         } else {
             return view('admin::audits.user.index', compact('user', 'activities'));
@@ -61,15 +63,16 @@ class UserController extends Controller
     /**
      * Display the details of a specific user activity.
      *
-     * @param \App\Models\User $user The ID of the user.
+     * @param int $id The ID of the user.
      * @param int $activity The ID of the activity log.
      *
      * @return \Illuminate\View\View
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function show(User $user, $activity)
+    public function show($id, $activity)
     {
+        $user = User::findOrFail($id);
 
         $activity = AuditUser::where('id', $activity)
                             ->where('user_id', $user->id)
@@ -81,18 +84,19 @@ class UserController extends Controller
     /**
      * Export all activity logs of a user as a JSON file.
      *
-     * @param \App\Models\User|null $user The user.
+     * @param int int|null $id The ID of the user.
      *
      * @return \Symfony\Component\HttpFoundation\StreamedResponse
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function export(User $user = null)
+    public function export($id = null)
     {
         $companyName = Billmora::getGeneral('company_name');
         $nowDate = now()->format('Ymd_His');
 
-        if ($user) {
+        if ($id) {
+            $user = User::findOrFail($id);
             $activities = AuditUser::where('user_id', $user->id)->get();
             $filename = "{$companyName}_{$user->fullname}_audit-user-activity-{$nowDate}.json";
         } else {
@@ -111,14 +115,15 @@ class UserController extends Controller
     /**
      * Clear all activity logs for a specific user.
      *
-     * @param \App\Models\User $user The ID of the user.
+     * @param int $id The ID of the user.
      *
      * @return \Illuminate\Http\RedirectResponse
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function clear(User $user)
+    public function clear($id)
     {
+        $user = User::findOrFail($id);
 
         $this->recordDelete('user.activity.clear', [
             'user' => [

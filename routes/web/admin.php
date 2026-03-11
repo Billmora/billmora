@@ -436,8 +436,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
          */
         Route::group(['prefix' => 'email'], function () {
             Route::get('/', [Audits\EmailController::class, 'index'])->name('admin.audits.email');
-            Route::get('/{email}', [Audits\EmailController::class, 'show'])->name('admin.audits.email.show');
-            Route::get('/{email}/preview', [Audits\EmailController::class, 'preview'])->name('admin.audits.email.preview');
+            Route::get('/{id}', [Audits\EmailController::class, 'show'])->name('admin.audits.email.show');
+            Route::get('/{id}/preview', [Audits\EmailController::class, 'preview'])->name('admin.audits.email.preview');
             Route::post('/export', [Audits\EmailController::class, 'export'])->name('admin.audits.email.export');
             Route::post('/clear', [Audits\EmailController::class, 'clear'])->name('admin.audits.email.clear');
         });
@@ -459,7 +459,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
          */
         Route::group(['prefix' => 'system'], function () {
             Route::get('/', [Audits\SystemController::class, 'index'])->name('admin.audits.system');
-            Route::get('/{system}', [Audits\SystemController::class, 'show'])->name('admin.audits.system.show');
+            Route::get('/{id}', [Audits\SystemController::class, 'show'])->name('admin.audits.system.show');
             Route::post('/export', [Audits\SystemController::class, 'export'])->name('admin.audits.system.export');
             Route::post('/clear', [Audits\SystemController::class, 'clear'])->name('admin.audits.system.clear');
         });
