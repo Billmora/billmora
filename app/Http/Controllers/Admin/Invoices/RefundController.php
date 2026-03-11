@@ -109,7 +109,7 @@ class RefundController extends Controller
 
         $this->recordCreate('invoice.transaction.refund', $transaction->toArray());
 
-        return redirect()->route('admin.invoices.edit', ['invoice' => $invoice->invoice_number])
+        return redirect()->route('admin.invoices.edit', ['invoice' => $invoice->id])
             ->with('success', __('admin/invoices.refund.success'));
     }
 }

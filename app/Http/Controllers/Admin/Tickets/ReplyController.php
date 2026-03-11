@@ -98,7 +98,7 @@ class ReplyController extends Controller
         $this->recordCreate('ticket.message.create', $message->toArray());
 
         return redirect()
-            ->route('admin.tickets.reply', $ticket->ticket_number)
+            ->route('admin.tickets.reply', ['ticket' => $ticket->id])
             ->with('success', __('common.send_success', ['attribute' => __('common.reply')]));
     }
 
@@ -134,7 +134,7 @@ class ReplyController extends Controller
         $this->recordDelete('ticket.message.delete', $message->toArray());
 
         return redirect()
-            ->route('admin.tickets.reply', $ticket->ticket_number)
+            ->route('admin.tickets.reply', $ticket->id)
             ->with('success', __('common.delete_success', ['attribute' => __('common.reply')]));
     }
 }

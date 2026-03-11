@@ -164,7 +164,7 @@ class Ticket extends Model implements BrowseInterface
             ->map(fn($item) => [
                 'title' => "{$item->ticket_number}",
                 'category' => 'ticket',
-                'url' => route('admin.tickets.edit', ['ticket' => $item->ticket_number]),
+                'url' => route('admin.tickets.edit', ['ticket' => $item->id]),
             ]);
     }
 }

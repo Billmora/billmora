@@ -3,7 +3,7 @@
 @section('title', 'Transaction Create - Invoice')
 
 @section('body')
-<form action="{{ route('admin.invoices.transaction.create', ['invoice' => $invoice->invoice_number]) }}" method="POST" class="flex flex-col gap-5">
+<form action="{{ route('admin.invoices.transaction.create', ['invoice' => $invoice->id]) }}" method="POST" class="flex flex-col gap-5">
     @csrf
     <div class="flex flex-col gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -71,7 +71,7 @@
         >{{ old('transaction_description') }}</x-admin::textarea>
     </div>
     <div class="flex gap-4 ml-auto">
-        <a href="{{ route('admin.invoices.transaction', ['invoice' => $invoice->invoice_number]) }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
+        <a href="{{ route('admin.invoices.transaction', ['invoice' => $invoice->id]) }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
         <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.create') }}</button>
     </div>
 </form>

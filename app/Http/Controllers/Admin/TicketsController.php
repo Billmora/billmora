@@ -232,7 +232,7 @@ class TicketsController extends Controller
         $this->recordUpdate('ticket.update', $oldTicket, $ticket->getChanges());
 
         return redirect()
-            ->route('admin.tickets.reply', $ticket->ticket_number)
+            ->route('admin.tickets.reply', ['ticket' => $ticket->id])
             ->with('success', __('common.close_success', ['attribute' => $ticket->ticket_number]));
     }
 }

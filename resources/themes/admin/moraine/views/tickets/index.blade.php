@@ -42,7 +42,7 @@
                         @foreach ($tickets as $ticket)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
-                                    <a href="{{ route('admin.tickets.reply', ['ticket' => $ticket->ticket_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $ticket->ticket_number }}</a>
+                                    <a href="{{ route('admin.tickets.reply', ['ticket' => $ticket->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $ticket->ticket_number }}</a>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $ticket->subject }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ ucwords(str_replace('_', ' ', $ticket->status)) }}</td>
@@ -51,12 +51,12 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $ticket->user->email }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                     @can('tickets.reply')
-                                        <a href="{{ route('admin.tickets.reply', ['ticket' => $ticket->ticket_number]) }}" class="inline-flex items-center text-sm font-semibold text-yellow-500 hover:text-yellow-600">
+                                        <a href="{{ route('admin.tickets.reply', ['ticket' => $ticket->id]) }}" class="inline-flex items-center text-sm font-semibold text-yellow-500 hover:text-yellow-600">
                                             {{ __('common.manage') }}
                                         </a>                               
                                     @endcan
                                     @can('tickets.update')
-                                        <a href="{{ route('admin.tickets.edit', ['ticket' => $ticket->ticket_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                                        <a href="{{ route('admin.tickets.edit', ['ticket' => $ticket->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                                             {{ __('common.edit') }}
                                         </a>                               
                                     @endcan
@@ -85,7 +85,7 @@
                 position="centered"
                 title="{{ __('common.delete_modal_title') }}"
                 description="{{ __('common.delete_modal_description', ['item' => $ticket->ticket_number]) }}">
-                <form action="{{ route('admin.tickets.destroy', ['ticket' => $ticket->ticket_number]) }}" method="POST">
+                <form action="{{ route('admin.tickets.destroy', ['ticket' => $ticket->id]) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <div class="flex justify-end gap-2 mt-4">

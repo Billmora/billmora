@@ -43,7 +43,7 @@
                         @foreach ($transactions as $transaction)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
-                                    <a href="{{ route('admin.invoices.edit', ['invoice' => $transaction->invoice->invoice_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                                    <a href="{{ route('admin.invoices.edit', ['invoice' => $transaction->invoice->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
                                         {{ $transaction->invoice->invoice_number }}
                                     </a>
                                 </td>

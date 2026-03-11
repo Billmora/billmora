@@ -5,7 +5,7 @@
 @section('body')
 <div class="grid gap-4">
     <div class="flex flex-col-reverse lg:flex-row gap-5">
-        <form action="{{ route('admin.orders.update', ['order' => $order->order_number]) }}" method="POST" class="w-full lg:w-2/3 h-fit grid gap-4">
+        <form action="{{ route('admin.orders.update', ['order' => $order->id]) }}" method="POST" class="w-full lg:w-2/3 h-fit grid gap-4">
             @csrf
             @method('PATCH')
             <div class="grid gap-8 bg-white p-8 border-2 border-billmora-2 rounded-2xl">

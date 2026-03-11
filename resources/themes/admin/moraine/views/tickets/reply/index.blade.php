@@ -123,7 +123,7 @@
                 @endif
             @endforeach
         </div>
-        <form action="{{ route('admin.tickets.reply.send', ['ticket' => $ticket->ticket_number]) }}" method="POST" enctype="multipart/form-data"
+        <form action="{{ route('admin.tickets.reply.send', ['ticket' => $ticket->id]) }}" method="POST" enctype="multipart/form-data"
             id="formMessage"
             class="flex flex-col gap-4 bg-white p-6 border-2 border-billmora-2 rounded-2xl"
             x-data="{
@@ -275,7 +275,7 @@
         position="centered"
         title="{{ __('common.confirm_modal_title') }}"
         description="{{ __('common.confirm_modal_description', ['item' => __('admin/tickets.ticket_message_label')]) }}">
-        <form action="{{ route('admin.tickets.reply.destroy', ['ticket' => $ticket->ticket_number, 'message' => $message->id]) }}" method="POST">
+        <form action="{{ route('admin.tickets.reply.destroy', ['ticket' => $ticket->id, 'message' => $message->id]) }}" method="POST">
             @csrf
             @method('DELETE')
             <div class="flex justify-end gap-2 mt-4">
@@ -297,7 +297,7 @@
         position="centered"
         title="{{ __('common.confirm_modal_title') }}"
         description="{{ __('common.confirm_modal_description', ['item' => $ticket->ticket_number]) }}">
-        <form action="{{ route('admin.tickets.close', ['ticket' => $ticket->ticket_number]) }}" method="POST">
+        <form action="{{ route('admin.tickets.close', ['ticket' => $ticket->id]) }}" method="POST">
             @csrf
             @method('PATCH')
             <div class="flex justify-end gap-2 mt-4">

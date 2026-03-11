@@ -104,7 +104,7 @@ class TransactionController extends Controller
 
         $this->recordCreate('invoice.transaction.create', $transaction->toArray());
 
-        return redirect()->route('admin.invoices.transaction', ['invoice' => $invoice->invoice_number])
+        return redirect()->route('admin.invoices.transaction', ['invoice' => $invoice->id])
             ->with('success', __('common.create_success', ['attribute' => __('admin/navigation.transactions')]));
     }
 
@@ -121,7 +121,7 @@ class TransactionController extends Controller
 
         $this->recordDelete('invoice.transaction.delete', $transaction->toArray());
 
-        return redirect()->route('admin.invoices.edit', ['invoice' => $invoice->invoice_number])
+        return redirect()->route('admin.invoices.edit', ['invoice' => $invoice->id])
             ->with('success', __('common.delete_success', ['attribute' => $transaction->reference ?? $transaction->id]));
     }
 }

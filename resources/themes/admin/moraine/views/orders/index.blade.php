@@ -43,7 +43,7 @@
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $order->id }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
-                                    <a href="{{ route('admin.orders.edit', ['order' => $order->order_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $order->order_number }}</a>
+                                    <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $order->order_number }}</a>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $order->user->email }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $order->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
@@ -51,7 +51,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $order->status }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                     @can('orders.update')
-                                        <a href="{{ route('admin.orders.edit', ['order' => $order->order_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ __('common.edit') }}</a>                               
+                                        <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ __('common.edit') }}</a>                               
                                     @endcan
                                     @can('orders.delete')
                                         <x-admin::modal.trigger modal="deleteModal-{{ $order->order_number }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.delete') }}</x-admin::modal.trigger>
@@ -76,7 +76,7 @@
                 position="centered"
                 title="{{ __('common.delete_modal_title') }}"
                 description="{{ __('common.delete_modal_description', ['item' => $order->order_number]) }}">
-                <form action="{{ route('admin.orders.destroy', ['order' => $order->order_number]) }}" method="POST">
+                <form action="{{ route('admin.orders.destroy', ['order' => $order->id]) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <div class="flex justify-end gap-2 mt-4">

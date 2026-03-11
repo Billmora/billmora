@@ -222,7 +222,7 @@ class Invoice extends Model implements BrowseInterface
             ->map(fn($item) => [
                 'title' => "{$item->invoice_number}",
                 'category' => 'invoice',
-                'url' => route('admin.invoices.edit', ['invoice' => $item->invoice_number]),
+                'url' => route('admin.invoices.edit', ['invoice' => $item->id]),
             ]);
     }
 }

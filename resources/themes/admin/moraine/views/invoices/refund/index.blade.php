@@ -7,24 +7,24 @@
     <x-admin::tabs 
         :tabs="[
             [
-                'route' => route('admin.invoices.edit', ['invoice' => $invoice->invoice_number]),
+                'route' => route('admin.invoices.edit', ['invoice' => $invoice->id]),
                 'icon' => 'lucide-receipt-text',
                 'label' => __('admin/invoices.tabs.summary'),
             ],
             [
-                'route' => route('admin.invoices.transaction', ['invoice' => $invoice->invoice_number]),
+                'route' => route('admin.invoices.transaction', ['invoice' => $invoice->id]),
                 'icon' => 'lucide-landmark',
                 'label' => __('admin/invoices.tabs.transaction'),
             ],
             [
-                'route' => route('admin.invoices.refund', ['invoice' => $invoice->invoice_number]),
+                'route' => route('admin.invoices.refund', ['invoice' => $invoice->id]),
                 'icon' => 'lucide-banknote',
                 'label' => __('admin/invoices.tabs.refund'),
             ],
         ]" 
         active="{{ request()->url() }}"
     />
-    <form action="{{ route('admin.invoices.refund.store', ['invoice' => $invoice->invoice_number]) }}" method="POST" class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <form action="{{ route('admin.invoices.refund.store', ['invoice' => $invoice->id]) }}" method="POST" class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         @csrf
         <div 
             class="grid grid-cols-1 md:grid-cols-2 gap-4"

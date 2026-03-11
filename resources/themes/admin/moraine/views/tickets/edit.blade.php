@@ -3,7 +3,7 @@
 @section('title', "Ticket Edit - {$ticket->ticket_number}")
 
 @section('body')
-<form action="{{ route('admin.tickets.update', ['ticket' => $ticket->ticket_number]) }}" method="POST"
+<form action="{{ route('admin.tickets.update', ['ticket' => $ticket->id]) }}" method="POST"
     class="flex flex-col gap-5"
     x-data="{
         attachments: [{ id: 1 }],

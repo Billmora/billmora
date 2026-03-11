@@ -43,7 +43,7 @@
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->id }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
-                                    <a href="{{ route('admin.invoices.edit', ['invoice' => $invoice->invoice_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $invoice->invoice_number }}</a>
+                                    <a href="{{ route('admin.invoices.edit', ['invoice' => $invoice->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $invoice->invoice_number }}</a>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->user->email }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
@@ -51,8 +51,8 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->status }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                     @can('invoices.update')
-                                        <a href="{{ route('admin.invoices.download', ['invoice' => $invoice->invoice_number]) }}" class="inline-flex items-center text-sm font-semibold text-yellow-500 hover:text-yellow-600">{{ __('common.download') }}</a>
-                                        <a href="{{ route('admin.invoices.edit', ['invoice' => $invoice->invoice_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ __('common.edit') }}</a>
+                                        <a href="{{ route('admin.invoices.download', ['invoice' => $invoice->id]) }}" class="inline-flex items-center text-sm font-semibold text-yellow-500 hover:text-yellow-600">{{ __('common.download') }}</a>
+                                        <a href="{{ route('admin.invoices.edit', ['invoice' => $invoice->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ __('common.edit') }}</a>
                                     @endcan
                                     @can('invoices.delete')                                   
                                         <x-admin::modal.trigger modal="deleteModal-{{ $invoice->id }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.delete') }}</x-admin::modal.trigger>
@@ -77,7 +77,7 @@
                 position="centered"
                 title="{{ __('common.delete_modal_title') }}"
                 description="{{ __('common.delete_modal_description', ['item' => $invoice->invoice_number]) }}">
-                <form action="{{ route('admin.invoices.destroy', ['invoice' => $invoice->invoice_number]) }}" method="POST">
+                <form action="{{ route('admin.invoices.destroy', ['invoice' => $invoice->id]) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <div class="flex justify-end gap-2 mt-4">

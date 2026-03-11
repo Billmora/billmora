@@ -7,17 +7,17 @@
     <x-admin::tabs 
         :tabs="[
             [
-                'route' => route('admin.invoices.edit', ['invoice' => $invoice->invoice_number]),
+                'route' => route('admin.invoices.edit', ['invoice' => $invoice->id]),
                 'icon' => 'lucide-receipt-text',
                 'label' => __('admin/invoices.tabs.summary'),
             ],
             [
-                'route' => route('admin.invoices.transaction', ['invoice' => $invoice->invoice_number]),
+                'route' => route('admin.invoices.transaction', ['invoice' => $invoice->id]),
                 'icon' => 'lucide-landmark',
                 'label' => __('admin/invoices.tabs.transaction'),
             ],
             [
-                'route' => route('admin.invoices.refund', ['invoice' => $invoice->invoice_number]),
+                'route' => route('admin.invoices.refund', ['invoice' => $invoice->id]),
                 'icon' => 'lucide-banknote',
                 'label' => __('admin/invoices.tabs.refund'),
             ],
@@ -37,7 +37,7 @@
             </form>
         </div>
         @can('transactions.create')
-            <a href="{{ route('admin.invoices.transaction.create', ['invoice' => $invoice->invoice_number]) }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+            <a href="{{ route('admin.invoices.transaction.create', ['invoice' => $invoice->id]) }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                 <x-lucide-plus class="w-auto h-5" />
                 {{ __('common.create') }}
             </a>
@@ -91,7 +91,7 @@
                 position="centered"
                 title="{{ __('common.delete_modal_title') }}"
                 description="{{ __('common.delete_modal_description', ['item' => $transaction->reference ?? $transaction->id]) }}">
-                <form action="{{ route('admin.invoices.transaction.destroy', ['invoice' => $invoice->invoice_number, 'transaction' => $transaction->id]) }}" method="POST">
+                <form action="{{ route('admin.invoices.transaction.destroy', ['invoice' => $invoice->id, 'transaction' => $transaction->id]) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <div class="flex justify-end gap-2 mt-4">

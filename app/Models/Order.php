@@ -204,7 +204,7 @@ class Order extends Model implements BrowseInterface
             ->map(fn($item) => [
                 'title' => "{$item->order_number}",
                 'category' => 'order',
-                'url' => route('admin.orders.edit', ['order' => $item->order_number]),
+                'url' => route('admin.orders.edit', ['order' => $item->id]),
             ]);
     }
 }

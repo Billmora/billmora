@@ -44,9 +44,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/', [Admin\OrdersController::class, 'index'])->name('admin.orders');
         Route::get('/create', [Admin\OrdersController::class, 'create'])->name('admin.orders.create');
         Route::post('/create', [Admin\OrdersController::class, 'store'])->name('admin.orders.store');
-        Route::get('/{order:order_number}/edit', [Admin\OrdersController::class, 'edit'])->name('admin.orders.edit');
-        Route::patch('/{order:order_number}/edit', [Admin\OrdersController::class, 'update'])->name('admin.orders.update');
-        Route::delete('/{order:order_number}', [Admin\OrdersController::class, 'destroy'])->name('admin.orders.destroy');
+        Route::get('/{order}/edit', [Admin\OrdersController::class, 'edit'])->name('admin.orders.edit');
+        Route::patch('/{order}/edit', [Admin\OrdersController::class, 'update'])->name('admin.orders.update');
+        Route::delete('/{order}', [Admin\OrdersController::class, 'destroy'])->name('admin.orders.destroy');
     });
 
     /**
@@ -83,18 +83,18 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/', [Admin\InvoicesController::class, 'index'])->name('admin.invoices');
         Route::get('/create', [Admin\InvoicesController::class, 'create'])->name('admin.invoices.create');
         Route::post('/create', [Admin\InvoicesController::class, 'store'])->name('admin.invoices.store');
-        Route::get('/{invoice:invoice_number}/edit', [Admin\InvoicesController::class, 'edit'])->name('admin.invoices.edit');
-        Route::put('/{invoice:invoice_number}/edit', [Admin\InvoicesController::class, 'update'])->name('admin.invoices.update');
-        Route::delete('/{invoice:invoice_number}', [Admin\InvoicesController::class, 'destroy'])->name('admin.invoices.destroy');
-        Route::get('/{invoice:invoice_number}/download', [Admin\InvoicesController::class, 'download'])->name('admin.invoices.download');
+        Route::get('/{invoice}/edit', [Admin\InvoicesController::class, 'edit'])->name('admin.invoices.edit');
+        Route::put('/{invoice}/edit', [Admin\InvoicesController::class, 'update'])->name('admin.invoices.update');
+        Route::delete('/{invoice}', [Admin\InvoicesController::class, 'destroy'])->name('admin.invoices.destroy');
+        Route::get('/{invoice}/download', [Admin\InvoicesController::class, 'download'])->name('admin.invoices.download');
 
-        Route::get('/{invoice:invoice_number}/transaction', [Admin\Invoices\TransactionController::class, 'index'])->name('admin.invoices.transaction');
-        Route::get('/{invoice:invoice_number}/transaction/create', [Admin\Invoices\TransactionController::class, 'create'])->name('admin.invoices.transaction.create');
-        Route::post('/{invoice:invoice_number}/transaction/create', [Admin\Invoices\TransactionController::class, 'store'])->name('admin.invoices.transaction.store');
-        Route::delete('/{invoice:invoice_number}/transaction/{transaction}', [Admin\Invoices\TransactionController::class, 'destroy'])->name('admin.invoices.transaction.destroy');
+        Route::get('/{invoice}/transaction', [Admin\Invoices\TransactionController::class, 'index'])->name('admin.invoices.transaction');
+        Route::get('/{invoice}/transaction/create', [Admin\Invoices\TransactionController::class, 'create'])->name('admin.invoices.transaction.create');
+        Route::post('/{invoice}/transaction/create', [Admin\Invoices\TransactionController::class, 'store'])->name('admin.invoices.transaction.store');
+        Route::delete('/{invoice}/transaction/{transaction}', [Admin\Invoices\TransactionController::class, 'destroy'])->name('admin.invoices.transaction.destroy');
 
-        Route::get('/{invoice:invoice_number}/refund', [Admin\Invoices\RefundController::class, 'index'])->name('admin.invoices.refund');
-        Route::post('/{invoice:invoice_number}/refund', [Admin\Invoices\RefundController::class, 'store'])->name('admin.invoices.refund.store');
+        Route::get('/{invoice}/refund', [Admin\Invoices\RefundController::class, 'index'])->name('admin.invoices.refund');
+        Route::post('/{invoice}/refund', [Admin\Invoices\RefundController::class, 'store'])->name('admin.invoices.refund.store');
     });
 
     /**
@@ -132,14 +132,14 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/', [Admin\TicketsController::class, 'index'])->name('admin.tickets');
         Route::get('/create', [Admin\TicketsController::class, 'create'])->name('admin.tickets.create');
         Route::post('/create', [Admin\TicketsController::class, 'store'])->name('admin.tickets.store');
-        Route::get('/{ticket:ticket_number}/edit', [Admin\TicketsController::class, 'edit'])->name('admin.tickets.edit');
-        Route::put('/{ticket:ticket_number}/edit', [Admin\TicketsController::class, 'update'])->name('admin.tickets.update');
-        Route::patch('/{ticket:ticket_number}', [Admin\TicketsController::class, 'close'])->name('admin.tickets.close');
-        Route::delete('/{ticket:ticket_number}', [Admin\TicketsController::class, 'destroy'])->name('admin.tickets.destroy');
+        Route::get('/{ticket}/edit', [Admin\TicketsController::class, 'edit'])->name('admin.tickets.edit');
+        Route::put('/{ticket}/edit', [Admin\TicketsController::class, 'update'])->name('admin.tickets.update');
+        Route::patch('/{ticket}', [Admin\TicketsController::class, 'close'])->name('admin.tickets.close');
+        Route::delete('/{ticket}', [Admin\TicketsController::class, 'destroy'])->name('admin.tickets.destroy');
 
-        Route::get('/{ticket:ticket_number}/reply', [Admin\Tickets\ReplyController::class, 'index'])->name('admin.tickets.reply');
-        Route::post('/{ticket:ticket_number}/reply', [Admin\Tickets\ReplyController::class, 'send'])->name('admin.tickets.reply.send');
-        Route::delete('/{ticket:ticket_number}/reply/{message}', [Admin\Tickets\ReplyController::class, 'destroy'])->name('admin.tickets.reply.destroy');
+        Route::get('/{ticket}/reply', [Admin\Tickets\ReplyController::class, 'index'])->name('admin.tickets.reply');
+        Route::post('/{ticket}/reply', [Admin\Tickets\ReplyController::class, 'send'])->name('admin.tickets.reply.send');
+        Route::delete('/{ticket}/reply/{message}', [Admin\Tickets\ReplyController::class, 'destroy'])->name('admin.tickets.reply.destroy');
     });
 
     /**
