@@ -24,15 +24,10 @@ class CallbackController extends Controller
      * @param \App\Services\PluginManager $pluginManager
      * @return \Illuminate\Http\JsonResponse
      */
-    public function handle(Request $request, string $provider, PluginManager $pluginManager)
+    public function handle(Request $request, Plugin $plugin, PluginManager $pluginManager)
     {
-        $plugin = Plugin::where('type', 'gateway')
-            ->where('provider', $provider)
-            ->where('is_active', true)
-            ->first();
-
-        if (!$plugin) {
-            return response()->json(['error' => 'Gateway not found.'], 404);
+        if (!$plugin->is_active || $plugin->type !== 'gateway') {
+            return response()->json(['error' => 'Gateway instance not found or inactive.'], 404);
         }
 
         $gateway = $pluginManager->bootInstance($plugin);

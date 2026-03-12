@@ -69,6 +69,10 @@ class PluginManager
 
             $instance->setInstanceConfig($plugin->config ?? []);
 
+            if (method_exists($instance, 'setPluginModel')) {
+                $instance->setPluginModel($plugin);
+            }
+
             return $instance;
         }
 

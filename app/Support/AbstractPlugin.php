@@ -4,6 +4,7 @@ namespace App\Support;
 
 use Illuminate\Support\ServiceProvider;
 use App\Contracts\PluginInterface;
+use App\Models\Plugin;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
@@ -31,6 +32,13 @@ abstract class AbstractPlugin extends ServiceProvider implements PluginInterface
      * @var array<string, mixed>
      */
     protected array $instanceConfig = [];
+
+    /**
+     * The Eloquent Plugin model instance.
+     *
+     * @var \App\Models\Plugin|null
+     */
+    protected ?Plugin $pluginModel = null;
 
     /**
      * Create a new plugin instance, load manifest, and register view namespace.
@@ -99,6 +107,27 @@ abstract class AbstractPlugin extends ServiceProvider implements PluginInterface
     public function getInstanceConfig(string $key, $default = null)
     {
         return data_get($this->instanceConfig, $key, $default);
+    }
+
+    /**
+     * Set the plugin model instance.
+     *
+     * @param \App\Models\Plugin $pluginModel
+     * @return void
+     */
+    public function setPluginModel(Plugin $pluginModel): void
+    {
+        $this->pluginModel = $pluginModel;
+    }
+
+    /**
+     * Get the plugin model instance.
+     *
+     * @return \App\Models\Plugin|null
+     */
+    public function getPluginModel(): ?\App\Models\Plugin
+    {
+        return $this->pluginModel;
     }
 
     /**
