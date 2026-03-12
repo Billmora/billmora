@@ -40,9 +40,6 @@ class UserCredit extends Model
      * Add the specified amount to the user's credit balance and record the audit log.
      *
      * @param  float  $amount
-     * @param  string  $description
-     * @param  string|null  $relatedType
-     * @param  int|null  $relatedId
      * @return self
      */
     public function addCredit(float $amount): self
@@ -59,9 +56,6 @@ class UserCredit extends Model
      * Deduct the specified amount from the user's credit balance and record the audit log.
      *
      * @param  float  $amount
-     * @param  string  $description
-     * @param  string|null  $relatedType
-     * @param  int|null  $relatedId
      * @return self
      *
      * @throws \Exception
@@ -71,7 +65,9 @@ class UserCredit extends Model
         if ($amount <= 0) return $this;
         
         if ($this->balance < $amount) {
-            throw new \Exception("Insufficient credit balance in {$this->currency} wallet.");
+            throw new \Exception(__('client/account.credits.insufficient_balance', [
+                'currency' => $this->currency,
+            ]));
         }
 
         $this->balance -= $amount;
