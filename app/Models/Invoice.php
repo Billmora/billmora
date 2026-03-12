@@ -41,7 +41,6 @@ class Invoice extends Model implements BrowseInterface
         'discount' => 'decimal:2',
         'tax' => 'decimal:2',
         'total' => 'decimal:2',
-        'applied_credit' => 'decimal:2',
     ];
 
     /**
@@ -211,13 +210,15 @@ class Invoice extends Model implements BrowseInterface
     }
 
     /**
-     * Get the remaining amount due for this invoice.
+     * Get the remaining amount due for this invoice dynamically based on recorded transactions.
      *
      * @return float
      */
     public function getAmountDueAttribute(): float
     {
-        return max(0, $this->total - ($this->applied_credit ?? 0));
+        $totalPaid = $this->transactions()->sum('amount');
+        
+        return max(0, $this->total - $totalPaid);
     }
 
     /**
