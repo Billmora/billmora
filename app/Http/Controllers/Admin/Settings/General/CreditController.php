@@ -45,9 +45,9 @@ class CreditController extends Controller
     {
         $validated = $request->validate([
             'credit_use' => ['nullable', 'boolean'],
-            'credit_min_deposit' => ['required', 'integer', 'min:1'],
-            'credit_max_deposit' => ['required', 'integer', 'min:1', 'max:1000000'],
-            'credit_max' => ['required', 'integer', 'min:1', 'max:10000000'],
+            'credit_min_deposit' => ['required', 'numeric', 'min:1'],
+            'credit_max_deposit' => ['required', 'numeric', 'min:1'],
+            'credit_max' => ['required', 'numeric', 'min:1',],
         ]);
 
         $this->updateSettings('general', $validated);
