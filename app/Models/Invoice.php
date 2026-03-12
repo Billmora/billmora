@@ -41,6 +41,7 @@ class Invoice extends Model implements BrowseInterface
         'discount' => 'decimal:2',
         'tax' => 'decimal:2',
         'total' => 'decimal:2',
+        'applied_credit' => 'decimal:2',
     ];
 
     /**
@@ -207,6 +208,52 @@ class Invoice extends Model implements BrowseInterface
     public function scopePaid(Builder $query)
     {
         return $query->where('status', 'paid');
+    }
+
+    /**
+     * Get the remaining amount due for this invoice.
+     *
+     * @return float
+     */
+    public function getAmountDueAttribute(): float
+    {
+        return max(0, $this->total - ($this->applied_credit ?? 0));
+    }
+
+    /**
+     * Attempt to pay this invoice using the user's credit balance.
+     *
+     * @return bool True if fully paid, False if partially paid or no balance.
+     */
+    public function payWithCredit(): bool
+    {
+        if ($this->status === 'paid' || $this->amount_due <= 0) {
+            return true; 
+        }
+
+        $wallet = $this->user->getCreditWallet($this->currency);
+        
+        if ($wallet->balance <= 0) {
+            return false;
+        }
+
+        $amountToApply = min($wallet->balance, $this->amount_due);
+
+        $wallet->removeCredit($amountToApply);
+
+        $this->applied_credit += $amountToApply;
+        
+        if ($this->amount_due <= 0) {
+            $this->status = 'paid';
+            $this->paid_at = now();
+            
+            $this->save(); 
+            
+            return true;
+        }
+
+        $this->save();
+        return false;
     }
 
     /**
