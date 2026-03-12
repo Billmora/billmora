@@ -221,42 +221,6 @@ class Invoice extends Model implements BrowseInterface
     }
 
     /**
-     * Attempt to pay this invoice using the user's credit balance.
-     *
-     * @return bool True if fully paid, False if partially paid or no balance.
-     */
-    public function payWithCredit(): bool
-    {
-        if ($this->status === 'paid' || $this->amount_due <= 0) {
-            return true; 
-        }
-
-        $wallet = $this->user->getCreditWallet($this->currency);
-        
-        if ($wallet->balance <= 0) {
-            return false;
-        }
-
-        $amountToApply = min($wallet->balance, $this->amount_due);
-
-        $wallet->removeCredit($amountToApply);
-
-        $this->applied_credit += $amountToApply;
-        
-        if ($this->amount_due <= 0) {
-            $this->status = 'paid';
-            $this->paid_at = now();
-            
-            $this->save(); 
-            
-            return true;
-        }
-
-        $this->save();
-        return false;
-    }
-
-    /**
      * Return a collection of invoice records formatted as browse items for quick search indexing.
      *
      * @return \Illuminate\Support\Collection

@@ -14,8 +14,6 @@ class InvoiceObserver
      */
     public function created(Invoice $invoice): void
     {
-        $this->attemptAutoApplyCredit($invoice);
-        
         if ($invoice->amount_due <= 0 && $invoice->status !== 'paid') {
             DB::afterCommit(function () use ($invoice) {
                 $invoice->update([
@@ -76,14 +74,5 @@ class InvoiceObserver
     public function forceDeleted(Invoice $invoice): void
     {
         //
-    }
-
-    protected function attemptAutoApplyCredit(Invoice $invoice): void
-    {
-        $isAddFunds = $invoice->items()->where('description', 'like', '%(credits)%')->exists();
-
-        if ($invoice->status === 'unpaid' && !$isAddFunds && Billmora::getGeneral('credit_use')) {
-            $invoice->payWithCredit();
-        }
     }
 }
