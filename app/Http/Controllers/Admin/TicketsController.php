@@ -140,10 +140,6 @@ class TicketsController extends Controller
 
         $this->recordCreate('ticket.create', $ticket->toArray());
 
-        if (Billmora::getTicket('notify_client_on_staff_open')) {
-            # TODO: add notify to client when ticket opened by staff member
-        }
-
         return redirect()->route('admin.tickets')->with('success', __('common.create_success', ['attribute' => $ticket->ticket_number]));
     }
 

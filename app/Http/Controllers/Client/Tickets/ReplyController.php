@@ -90,10 +90,6 @@ class ReplyController extends Controller
             return $message;
         });
 
-        if (Billmora::getTicket('notify_staff_on_client_reply')) {
-            # TODO: add notify to staff when client replied
-        }
-
         $this->recordCreate('ticket.message.create', $message->toArray());
 
         return redirect()
