@@ -25,7 +25,7 @@ Route::group(['middleware' => ['auth', 'maintenance', '2fa']], function () {
         Route::put('/security/password', [Account\SecurityController::class, 'updatePassword'])->name('client.account.security.password.update');
 
         Route::get('/credits', [Account\CreditController::class, 'index'])->name('client.account.credits');
-        Route::post('/credits/topup', [Account\CreditController::class, 'topup'])->name('client.account.credits.topup');
+        Route::post('/credits/deposit', [Account\CreditController::class, 'deposit'])->name('client.account.credits.deposit');
     });
 });
 

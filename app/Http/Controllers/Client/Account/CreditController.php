@@ -32,7 +32,7 @@ class CreditController extends Controller
             }
 
             return $next($request);
-        })->only(['index', 'topup']);
+        })->only(['index', 'deposit']);
     }
 
     /**
@@ -67,7 +67,7 @@ class CreditController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function topup(Request $request)
+    public function deposit(Request $request)
     {
         $currencyCode = $request->credit_currency;
         $currency = Currency::where('code', $currencyCode)->first();
@@ -92,7 +92,7 @@ class CreditController extends Controller
         if (($wallet->balance + $validated['credit_amount']) > $maxBalance) {
             return back()
                 ->withInput()
-                ->with('error', __('client/account.credits.topup_exceeds_max_balance', [
+                ->with('error', __('client/account.credits.deposit_exceeds_max_balance', [
                     'max_balance' => \Currency::format($maxBalance, $currencyCode),
                 ]));
         }
@@ -113,7 +113,7 @@ class CreditController extends Controller
         InvoiceItem::create([
             'invoice_id' => $invoice->id,
             'service_id' => null,
-            'description' => 'Add funds (credits)', // (credits) is a identifier for credit topup, don't change it!
+            'description' => "Credit Deposit - {$currencyCode}", // identifier for credit topup, don't change it!
             'quantity' => 1,
             'unit_price' => $validated['credit_amount'],
             'amount' => $validated['credit_amount'],

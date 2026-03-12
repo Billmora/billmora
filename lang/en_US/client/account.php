@@ -15,9 +15,9 @@ return [
         'payment_method_label' => 'Payment Method',
 
         'no_credits' => 'You have no credits.',
-        'topup_submit' => 'Add Funds',
-        'topup_success' => 'Invoice for adding funds has been generated. Please complete your payment.',
+        'deposit_submit' => 'Deposit',
+        'deposit_success' => 'Invoice for deposit credits has been generated. Please complete your payment.',
         'insufficient_balance' => 'Insufficient credit balance in :currency wallet.',
-        'topup_exceeds_max_balance' => 'This deposit exceeds your maximum allowed wallet balance of :max_balance.',
+        'deposit_exceeds_max_balance' => 'This deposit exceeds your maximum allowed wallet balance of :max_balance.',
     ],
 ];

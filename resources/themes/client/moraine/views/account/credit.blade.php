@@ -18,7 +18,7 @@
             @endforelse
         </div>  
     </div>
-    <form action="{{ route('client.account.credits.topup') }}" method="POST" class="w-full lg:w-1/3 grid grid-cols-1 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <form action="{{ route('client.account.credits.deposit') }}" method="POST" class="w-full lg:w-1/3 grid grid-cols-1 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         @csrf
         <x-client::select 
             name="credit_currency"
@@ -50,7 +50,7 @@
             @endforeach
         </x-client::select>
         <button type="submit" class="w-full bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-            {{ __('client/account.credits.topup_submit') }}
+            {{ __('client/account.credits.deposit_submit') }}
         </button>
     </form>
 </div>
