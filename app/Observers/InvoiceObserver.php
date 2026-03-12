@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Events\Invoice as InvoiceEvents;
 use App\Models\Invoice;
+use Billmora;
 use Illuminate\Support\Facades\DB;
 
 class InvoiceObserver
@@ -13,9 +14,14 @@ class InvoiceObserver
      */
     public function created(Invoice $invoice): void
     {
-        if ($invoice->total <= 0 && $invoice->status !== 'paid') {
+        $this->attemptAutoApplyCredit($invoice);
+        
+        if ($invoice->amount_due <= 0 && $invoice->status !== 'paid') {
             DB::afterCommit(function () use ($invoice) {
-                $invoice->update(['status' => 'paid']);
+                $invoice->update([
+                    'status' => 'paid',
+                    'paid_at' => now()
+                ]);
             });
         }
         
@@ -70,5 +76,14 @@ class InvoiceObserver
     public function forceDeleted(Invoice $invoice): void
     {
         //
+    }
+
+    protected function attemptAutoApplyCredit(Invoice $invoice): void
+    {
+        $isAddFunds = $invoice->items()->where('description', 'like', '%(credits)%')->exists();
+
+        if ($invoice->status === 'unpaid' && !$isAddFunds && Billmora::getGeneral('credit_use')) {
+            $invoice->payWithCredit();
+        }
     }
 }
