@@ -82,7 +82,7 @@
         <div class="grid bg-billmora-primary p-6 rounded-xl">
             <div class="grid">
                 <span class="text-md font-semibold text-white">{{ __('client/invoices.total_due') }}</span>
-                <span class="text-2xl font-bold text-white">{{ Currency::format($invoice->total, $invoice->currency) }}</span>
+                <span class="text-2xl font-bold text-white">{{ Currency::format($invoice->amount_due, $invoice->currency) }}</span>
             </div>
             <hr class="border-t-2 border-billmora-2 my-4">
             <div class="grid">
@@ -103,23 +103,40 @@
             </div>
         </div>
         @if ($invoice->status === 'unpaid')
-            <form action="{{ route('client.invoices.pay', ['invoice' => $invoice->invoice_number]) }}" class="grid gap-6 p-6">
-                <x-client::select
-                    name="payment_method"
-                    label="{{ __('client/invoices.payment_label') }}"
-                    :value="old('payment_method')"
-                    required
-                >
-                    @foreach($gateways as $gateway)
-                        <option value="{{ $gateway->id }}" {{ old('payment_method', $invoice->plugin_id) == $gateway->id ? 'selected' : '' }}>
-                            {{ $gateway->name }}
-                        </option>
-                    @endforeach
-                </x-client::select>
-                <button type="submit" class="w-full bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                    {{ __('client/invoices.payment_process_label') }}
-                </button>
-            </form>
+            @php
+                $isCreditDeposit = $invoice->items()->where('description', 'like', 'Credit Deposit%')->exists();
+            @endphp
+            @if(!$isCreditDeposit && $creditBalance > 0 && $invoice->amount_due > 0)
+                <div class="m-6 mb-0 p-4 bg-white border-2 border-billmora-2 rounded-xl">
+                    <span class="block text-sm font-semibold text-slate-600 mb-2">
+                        {{ __('client/invoices.credit.available') }} <span class="text-billmora-primary">{{ Currency::format($creditBalance, $invoice->currency) }}</span></span>
+                    <form action="{{ route('client.invoices.settle', ['invoice' => $invoice->invoice_number]) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="w-full bg-green-500 hover:bg-green-600 px-3 py-2 text-white font-semibold rounded-lg transition-colors cursor-pointer">
+                            {{ __('client/invoices.credit.submit_payment') }}
+                        </button>
+                    </form>
+                </div>
+            @endif
+            @if($invoice->amount_due > 0)
+                <form action="{{ route('client.invoices.pay', ['invoice' => $invoice->invoice_number]) }}" class="grid gap-6 p-6">
+                    <x-client::select
+                        name="payment_method"
+                        label="{{ __('client/invoices.payment_label') }}"
+                        :value="old('payment_method')"
+                        required
+                    >
+                        @foreach($gateways as $gateway)
+                            <option value="{{ $gateway->id }}" {{ old('payment_method', $invoice->plugin_id) == $gateway->id ? 'selected' : '' }}>
+                                {{ $gateway->name }}
+                            </option>
+                        @endforeach
+                    </x-client::select>
+                    <button type="submit" class="w-full bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                        {{ __('client/invoices.payment_process_label') }}
+                    </button>
+                </form>
+            @endif
         @endif
     </div>
 </div>

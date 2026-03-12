@@ -42,11 +42,13 @@ class InvoicesController extends Controller
     {
         $user = Auth::user();
 
-        $invoice->loadMissing(['order.items', 'order.user']);
+        $invoice->loadMissing(['order.items', 'order.user', 'transactions']);
 
         if ($user->id !== $invoice->user_id) {
             abort(403);
         }
+
+        $creditBalance = $user->getCreditWallet($invoice->currency)->balance;
 
         $activeGateways = Plugin::where('type', 'gateway')->where('is_active', true)->get();
         $gateways = collect();
@@ -55,13 +57,13 @@ class InvoicesController extends Controller
             $instance = $pluginManager->bootInstance($gatewayRecord);
             
             if ($instance instanceof GatewayInterface) {
-                if ($instance->isApplicable((float) $invoice->total, $invoice->currency)) {
+                if ($instance->isApplicable((float) $invoice->amount_due, $invoice->currency)) {
                     $gateways->push($gatewayRecord);
                 }
             }
         }
 
-        return view('client::invoices.show', compact('invoice', 'gateways'));
+        return view('client::invoices.show', compact('invoice', 'gateways', 'creditBalance'));
     }
 
     /**

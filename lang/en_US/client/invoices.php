@@ -34,4 +34,15 @@ return [
         'method_required' => 'Please select a payment method first.',
         'invalid_method' => 'Payment method is invalid.',
     ],
+
+    'credit' => [
+        'available' => 'Available Credit:',
+        'submit_payment' => 'Settle with Credit Balance',
+
+        'cannot_pay_deposit' => 'Credit balance cannot be used to pay a Credit Deposit invoice.',
+        'insufficient_balance' => 'You do not have sufficient credit balance to complete this payment.',
+        'fully_settled' => 'Your invoice has been fully settled using your credit balance.',
+        'partially_applied' => 'Credit balance applied. Please pay the remaining amount due.',
+        'transaction_description' => 'Credit Balance Applied',
+    ],
 ];

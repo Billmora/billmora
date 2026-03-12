@@ -87,6 +87,7 @@ Route::group(['prefix' => 'invoices', 'middleware' => ['auth', 'maintenance', '2
     Route::get('/{invoice:invoice_number}', [Client\InvoicesController::class, 'show'])->name('client.invoices.show');
     Route::get('/{invoice:invoice_number}/download', [Client\InvoicesController::class, 'download'])->name('client.invoices.download');
     Route::get('/{invoice:invoice_number}/pay', [Client\PaymentController::class, 'process'])->name('client.invoices.pay');
+    Route::post('/invoices/{invoice:invoice_number}/settle', [Client\PaymentController::class, 'settle'])->name('client.invoices.settle');
 });
 
 /**
