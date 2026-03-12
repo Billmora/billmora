@@ -81,6 +81,13 @@ class PaymentController extends Controller
         return redirect()->route('client.invoices.show', ['invoice' => $invoice->invoice_number])->with('error', $response['message']);
     }
 
+    /**
+     * Apply the user's credit balance to settle an unpaid invoice fully or partially.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Invoice  $invoice
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function settle(Request $request, Invoice $invoice)
     {
         if ($invoice->status !== 'unpaid') {
