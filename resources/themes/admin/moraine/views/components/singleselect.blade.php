@@ -12,7 +12,9 @@
     x-data="{
         open: false,
         search: '',
-        selected: @js($selected),
+        selected: @js($selected) !== null && @js($selected) !== undefined 
+            ? String(@js($selected)) 
+            : null,
         errorVisible: {{ $error ? 'true' : 'false' }},
         select(value) {
             this.selected = value;
@@ -34,13 +36,14 @@
             return option ? option.title : '';
         },
         filteredOptions() {
-            return this.search === ''
-                ? this.options
-                : this.options.filter(o =>
-                    o.title.toLowerCase().includes(this.search.toLowerCase())
-                  );
+            if (this.search === '') return this.options;
+            const q = this.search.toLowerCase();
+            return this.options.filter(o =>
+                (o.title ?? '').toLowerCase().includes(q) ||
+                (o.subtitle ?? '').toLowerCase().includes(q)
+            );
         },
-        options: @js($options)
+        options: @js($options).map(o => ({ ...o, value: String(o.value) }))
     }"
     class="w-full"
 >
