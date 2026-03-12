@@ -30,7 +30,7 @@ class ProvisionOnInvoicePaid implements ShouldQueue
     {
         $invoice = $event->invoice;
 
-        $invoice->loadMissing('order.service.provisioning');
+        $invoice->loadMissing('order.services');
 
         $service = $invoice->order?->service;
 
