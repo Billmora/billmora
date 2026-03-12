@@ -11,11 +11,7 @@
                 name="invoice_user"
                 label="{{ __('admin/invoices.user_label') }}"
                 helper="{{ __('admin/invoices.user_helper') }}"
-                :options="$users->map(fn($user) => [
-                    'value' => $user->email,
-                    'title' => $user->email,
-                    'subtitle' => $user->fullname
-                ])->toArray()"
+                :options="$userOptions"
                 :selected="old('invoice_user')"
                 required
             />

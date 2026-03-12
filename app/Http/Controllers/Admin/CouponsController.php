@@ -48,11 +48,16 @@ class CouponsController extends Controller
      */
     public function create()
     {
-        $packageOptions = Package::with('catalog')
+        $packageOptions = Package::query()
+            ->select(['id', 'name', 'catalog_id'])
+            ->with([
+                'catalog:id,name',
+            ])
             ->get()
             ->map(fn ($package) => [
                 'value' => $package->id,
-                'title' => "{$package->catalog->name} - {$package->name}",
+                'title' => $package->name,
+                'subtitle' => $package->catalog->name,
             ])
             ->values()
             ->toArray();
@@ -128,11 +133,16 @@ class CouponsController extends Controller
     {
         $coupon->load('packages');
     
-        $packageOptions = Package::with('catalog')
+        $packageOptions = Package::query()
+            ->select(['id', 'name', 'catalog_id'])
+            ->with([
+                'catalog:id,name',
+            ])
             ->get()
             ->map(fn ($package) => [
                 'value' => $package->id,
-                'title' => "{$package->catalog->name} - {$package->name}",
+                'title' => $package->name,
+                'subtitle' => $package->catalog->name,
             ])
             ->values()
             ->toArray();

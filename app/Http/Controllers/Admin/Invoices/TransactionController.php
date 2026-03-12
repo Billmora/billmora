@@ -65,10 +65,31 @@ class TransactionController extends Controller
      */
     public function create(Invoice $invoice)
     {
-        $users = User::select('id', 'first_name', 'last_name', 'email')->get();
-        $plugins = Plugin::select('id', 'name', 'type', 'provider')->where('type', 'gateway')->where('is_active', true)->get();
+        $userOptions = User::query()
+            ->select('id', 'first_name', 'last_name', 'email')
+            ->get()
+            ->map(fn ($user) => [
+                'value' => $user->id,
+                'title' => $user->fullname,
+                'subtitle' => $user->email,
+            ])
+            ->values()
+            ->toArray();
 
-        return view('admin::invoices.transaction.create', compact('invoice', 'users', 'plugins'));
+        $pluginOptions = Plugin::query()
+            ->select('id', 'name', 'type', 'provider')
+            ->where('type', 'gateway')
+            ->where('is_active', true)
+            ->get()
+            ->map(fn ($plugin) => [
+                'value' => $plugin->id,
+                'title' => $plugin->name,
+                'subtitle' => $plugin->provider,
+            ])
+            ->values()
+            ->toArray();
+
+        return view('admin::invoices.transaction.create', compact('invoice', 'userOptions', 'pluginOptions'));
     }
 
     /**

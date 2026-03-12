@@ -62,11 +62,41 @@ class TransactionsController extends Controller
      */
     public function create()
     {
-        $users = User::select('id', 'first_name', 'last_name', 'email')->get();
-        $invoices = Invoice::select('id', 'invoice_number', 'currency')->get();
-        $plugins = Plugin::select('id', 'name', 'type', 'provider')->where('type', 'gateway')->where('is_active', true)->get();
+        $userOptions = User::query()
+            ->select('id', 'first_name', 'last_name', 'email')
+            ->get()
+            ->map(fn ($user) => [
+                'value' => $user->id,
+                'title' => $user->fullname,
+                'subtitle' => $user->email,
+            ])
+            ->values()
+            ->toArray();
 
-        return view('admin::transactions.create', compact('users', 'invoices', 'plugins'));
+        $invoiceOptions = Invoice::select('id', 'invoice_number', 'currency')
+            ->get()
+            ->map(fn ($invoice) => [
+                'value' => $invoice->id,
+                'title' => $invoice->invoice_number,
+                'subtitle' => $invoice->currency,
+            ])
+            ->values()
+            ->toArray();
+
+        $pluginOptions = Plugin::select('id', 'name', 'type', 'provider')
+            ->where('type', 'gateway')
+            ->where('is_active', true)
+            ->get()
+            ->map(fn ($plugin) => [
+                'value' => $plugin->id,
+                'title' => $plugin->name,
+                'subtitle' => $plugin->provider,
+            ])
+            ->values()
+            ->toArray();
+
+
+        return view('admin::transactions.create', compact('userOptions', 'invoiceOptions', 'pluginOptions'));
     }
 
     /**

@@ -43,9 +43,16 @@ class PlacementController extends Controller
      */
     public function index()
     {
-        $forms = $this->FORM;
+        $formOptions = collect($this->FORM)
+            ->map(fn ($form) => [
+                'value' => $form,
+                'title' => ucwords(str_replace('_', ' ', $form)),
+            ])
+            ->values()
+            ->toArray();
 
-        return view('admin::settings.captcha.placement', compact('forms'));
+
+        return view('admin::settings.captcha.placement', compact('formOptions'));
     }
 
     /**

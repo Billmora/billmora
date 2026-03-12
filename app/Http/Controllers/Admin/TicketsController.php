@@ -61,7 +61,16 @@ class TicketsController extends Controller
      */
     public function create()
     {
-        $users = User::select('id', 'first_name', 'last_name', 'email')->get();
+        $userOptions = User::query()
+            ->select('id', 'first_name', 'last_name', 'email')
+            ->get()
+            ->map(fn ($user) => [
+                'value' => $user->id,
+                'title' => $user->fullname,
+                'subtitle' => $user->email,
+            ])
+            ->values()
+            ->toArray();
 
         $assigneds = User::select('id', 'first_name', 'last_name', 'email')
             ->admins()
@@ -69,7 +78,7 @@ class TicketsController extends Controller
 
         $services = Service::select('id', 'name', 'status', 'user_id')->get();
 
-        return view('admin::tickets.create', compact('users', 'assigneds', 'services'));
+        return view('admin::tickets.create', compact('userOptions', 'assigneds', 'services'));
     }
 
     /**
@@ -146,15 +155,31 @@ class TicketsController extends Controller
      */
     public function edit(Ticket $ticket)
     {
-        $users = User::select('id', 'first_name', 'last_name', 'email')->get();
+        $userOptions = User::query()
+            ->select('id', 'first_name', 'last_name', 'email')
+            ->get()
+            ->map(fn ($user) => [
+                'value' => $user->id,
+                'title' => $user->fullname,
+                'subtitle' => $user->email,
+            ])
+            ->values()
+            ->toArray();
 
-        $assigneds = User::select('id', 'first_name', 'last_name', 'email')
+        $assignedOptions = User::select('id', 'first_name', 'last_name', 'email')
             ->admins()
-            ->get();
+            ->get()
+            ->map(fn ($user) => [
+                'value' => $user->id,
+                'title' => "{$user->first_name} {$user->last_name}",
+                'subtitle' => $user->email,
+            ])
+            ->values()
+            ->toArray();
 
         $services = Service::select('id', 'name', 'status', 'user_id')->get();
 
-        return view('admin::tickets.edit', compact('ticket', 'users', 'assigneds', 'services'));
+        return view('admin::tickets.edit', compact('ticket', 'userOptions', 'assignedOptions', 'services'));
     }
 
     /**

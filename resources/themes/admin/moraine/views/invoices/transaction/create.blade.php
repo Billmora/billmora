@@ -11,11 +11,7 @@
                 name="transaction_user"
                 label="{{ __('admin/transactions.user_label') }}"
                 helper="{{ __('admin/transactions.user_helper') }}"
-                :options="$users->map(fn($user) => [
-                    'value' => $user->id,
-                    'title' => $user->email,
-                    'subtitle' => $user->fullname
-                ])->toArray()"
+                :options="$userOptions"
                 :selected="old('transaction_user', $invoice->user_id)"
                 required
             />
@@ -31,11 +27,7 @@
                 name="transaction_gateway"
                 label="{{ __('admin/transactions.gateway_label') }}"
                 helper="{{ __('admin/transactions.gateway_helper') }}"
-                :options="$plugins->map(fn($plugin) => [
-                    'value' => $plugin->id,
-                    'title' => $plugin->name,
-                    'subtitle' => $plugin->provider,
-                ])->toArray()"
+                :options="$pluginOptions"
                 :selected="old('transaction_gateway')"
             />
             <x-admin::input 

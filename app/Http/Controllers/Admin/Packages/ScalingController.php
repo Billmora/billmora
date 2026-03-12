@@ -32,9 +32,20 @@ class ScalingController extends Controller
     {
         $availablePackages = Package::with('catalog')
             ->where('id', '!=', $package->id)
-            ->get();
+            ->get()
+            ->map(fn ($package) => [
+                'value' => $package->id,
+                'title' => $package->name,
+                'subtitle' => $package->catalog->name,
+            ])
+            ->values()
+            ->toArray();
 
-        $selectedTargets = $package->scalablePackages()->pluck('packages.id')->toArray();
+        $selectedTargets = $package->scalablePackages()
+            ->pluck('packages.id')
+            ->map(fn($id) => $id)
+            ->values()
+            ->toArray();
 
         return view('admin::packages.scaling.index', compact('package', 'availablePackages', 'selectedTargets'));
     }

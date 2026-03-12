@@ -25,11 +25,7 @@
             <div x-show="recipient_custom === 'custom_users'">
                 <x-admin::multiselect
                     name="broadcast_recipient_custom"
-                    :options="$users->map(fn($user) => [
-                        'value' => $user->email,
-                        'title' => $user->fullname,
-                        'subtitle' => $user->email,
-                    ])"
+                    :options="$userOptions"
                     :selected="old('broadcast_recipient_custom', $broadcast->recipient_custom ?? [])"
                     helper="{{ __('admin/broadcasts.recipient_custom_helper') }}"
                 />

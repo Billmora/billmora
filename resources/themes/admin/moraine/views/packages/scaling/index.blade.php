@@ -41,11 +41,7 @@
                 name="scaling_target_packages"
                 label="{{ __('admin/packages.scaling.target_packages_label') }}"
                 helper="{{ __('admin/packages.scaling.target_packages_helper') }}"
-                :options="$availablePackages->map(fn($package) => [
-                    'value' => $package->id,
-                    'title' => $package->name,
-                    'subtitle' => $package->catalog->name,
-                ])"
+                :options="$availablePackages"
                 :selected="old('scaling_target_packages', $selectedTargets)"
             />
         </div>

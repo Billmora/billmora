@@ -39,12 +39,8 @@
                     name="invoice_user"
                     label="{{ __('admin/invoices.user_label') }}"
                     helper="{{ __('admin/invoices.user_helper') }}"
-                    :options="$users->map(fn($user) => [
-                        'value' => $user->email,
-                        'title' => $user->email,
-                        'subtitle' => $user->fullname
-                    ])->toArray()"
-                    :selected="old('invoice_user', $invoice->user->email)"
+                    :options="$userOptions"
+                    :selected="old('invoice_user', $invoice->user->id)"
                     required
                 />
                 <x-admin::select

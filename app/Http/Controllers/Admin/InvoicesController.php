@@ -61,11 +61,20 @@ class InvoicesController extends Controller
      */
     public function create()
     {
-        $users = User::select('id', 'first_name', 'last_name', 'email')->get();
+        $userOptions = User::query()
+            ->select('id', 'first_name', 'last_name', 'email')
+            ->get()
+            ->map(fn ($user) => [
+                'value' => $user->id,
+                'title' => $user->fullname,
+                'subtitle' => $user->email,
+            ])
+            ->values()
+            ->toArray();
 
         $currencies = Currency::select('id', 'code')->get();
 
-        return view('admin::invoices.create', compact('users', 'currencies'));
+        return view('admin::invoices.create', compact('userOptions', 'currencies'));
     }
 
     /**
@@ -77,7 +86,7 @@ class InvoicesController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'invoice_user' => ['required', Rule::exists('users', 'email')],
+            'invoice_user' => ['required', Rule::exists('users', 'id')],
             'invoice_status' => ['required', Rule::in(['unpaid', 'paid', 'cancelled', 'refunded'])],
             'invoice_date' => ['required', 'date'],
             'invoice_due_date' => ['required', 'date', 'after_or_equal:invoice_date'],
@@ -110,7 +119,7 @@ class InvoicesController extends Controller
             $total = $subtotal - $discount;
 
             $invoice = Invoice::create([
-                'user_id' => User::where('email', $validated['invoice_user'])->value('id'),
+                'user_id' => $validated['invoice_user'],
                 'status' => $validated['invoice_status'],
                 'invoice_number' => Invoice::generateInvoiceNumber(),
                 'currency' => $validated['invoice_currency'],
@@ -163,7 +172,16 @@ class InvoicesController extends Controller
      */
     public function edit(Invoice $invoice)
     {
-        $users = User::select('id', 'first_name', 'last_name', 'email')->get();
+        $userOptions = User::query()
+            ->select('id', 'first_name', 'last_name', 'email')
+            ->get()
+            ->map(fn ($user) => [
+                'value' => $user->id,
+                'title' => $user->fullname,
+                'subtitle' => $user->email,
+            ])
+            ->values()
+            ->toArray();
 
         $currencies = Currency::select('code')->get();
 
@@ -174,7 +192,7 @@ class InvoicesController extends Controller
             'unit_price' => $item->unit_price
         ])->toArray();
 
-        return view('admin::invoices.edit', compact('invoice', 'users', 'currencies', 'invoiceItems'));
+        return view('admin::invoices.edit', compact('invoice', 'userOptions', 'currencies', 'invoiceItems'));
     }
 
     /**
@@ -187,7 +205,7 @@ class InvoicesController extends Controller
     public function update(Request $request, Invoice $invoice)
     {
         $validated = $request->validate([
-            'invoice_user' => ['required', Rule::exists('users', 'email')],
+            'invoice_user' => ['required', Rule::exists('users', 'id')],
             'invoice_status' => ['required', Rule::in(['unpaid', 'paid', 'cancelled', 'refunded'])],
             'invoice_date' => ['required', 'date'],
             'invoice_due_date' => ['required', 'date', 'after_or_equal:invoice_date'],
@@ -226,7 +244,7 @@ class InvoicesController extends Controller
             ];
 
             $invoice->update([
-                'user_id' => User::where('email', $validated['invoice_user'])->value('id'),
+                'user_id' => $validated['invoice_user'],
                 'status' => $validated['invoice_status'],
                 'currency' => $validated['invoice_currency'],
                 'subtotal' => $subtotal,
@@ -249,16 +267,16 @@ class InvoicesController extends Controller
                 if (!empty($item['id'])) {
                     $invoice->items()->where('id', $item['id'])->update([
                         'description' => $item['description'],
-                        'quantity'    => $item['quantity'],
-                        'unit_price'  => $item['unit_price'],
-                        'amount'      => $lineAmount,
+                        'quantity' => $item['quantity'],
+                        'unit_price' => $item['unit_price'],
+                        'amount' => $lineAmount,
                     ]);
                 } else {
                     $invoice->items()->create([
                         'description' => $item['description'],
-                        'quantity'    => $item['quantity'],
-                        'unit_price'  => $item['unit_price'],
-                        'amount'      => $lineAmount,
+                        'quantity' => $item['quantity'],
+                        'unit_price' => $item['unit_price'],
+                        'amount' => $lineAmount,
                     ]);
                 }
             }

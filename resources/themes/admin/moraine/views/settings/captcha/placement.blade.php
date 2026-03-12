@@ -23,10 +23,7 @@
     <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <x-admin::multiselect
             name="placements_enabled_forms"
-            :options="collect($forms)->map(fn($form) => [
-                'value' => $form,
-                'title' => ucwords(str_replace('_', ' ', $form)),
-            ])->toArray()"
+            :options="$formOptions"
             :selected="old('placements_enabled_forms', Billmora::getCaptcha('placements_enabled_forms'))"
             label="{{ __('admin/settings/captcha.placements_enabled_forms_label') }}"
             helper="{{ __('admin/settings/captcha.placements_enabled_forms_helper') }}"

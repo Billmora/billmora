@@ -70,10 +70,28 @@ class OrdersController extends Controller
      */
     public function create(PricingService $pricingService, PluginManager $pluginManager)
     {
-        $users = User::select('id', 'first_name', 'last_name', 'email')->get();
-        $coupons = Coupon::select('id', 'code')->where(function ($q) {
-            $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
-        })->get();
+        $userOptions = User::query()
+            ->select('id', 'first_name', 'last_name', 'email')
+            ->get()
+            ->map(fn ($user) => [
+                'value' => $user->id,
+                'title' => $user->fullname,
+                'subtitle' => $user->email,
+            ])
+            ->values()
+            ->toArray();
+
+        $couponOptions = Coupon::select('id', 'code')
+            ->where(function ($q) {
+                $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
+            })
+            ->get()
+            ->map(fn ($coupon) => [
+                'value' => $coupon->id,
+                'title' => $coupon->code,
+            ])
+            ->values()
+            ->toArray();
 
         $packages = Package::select('id', 'name', 'catalog_id', 'plugin_id') 
             ->with([
@@ -100,8 +118,8 @@ class OrdersController extends Controller
         }
 
         return view('admin::orders.create', compact(
-            'users',
-            'coupons',
+            'userOptions',
+            'couponOptions',
             'packagesPayload',
             'checkoutSchema',
         ));
@@ -119,7 +137,7 @@ class OrdersController extends Controller
     public function store(Request $request, OrderService $orderService, OrderValidationService $validationService, PluginManager $pluginManager)
     {
         $validated = $request->validate([
-            'order_user' => ['required', Rule::exists('users', 'email')],
+            'order_user' => ['required', Rule::exists('users', 'id')],
             'order_currency' => ['required', Rule::exists('currencies', 'code')],
             'order_coupon' => ['nullable', Rule::exists('coupons', 'code')],
             'order_status' => ['required', Rule::in(['pending', 'processing', 'completed', 'cancelled', 'failed'])],
@@ -129,7 +147,6 @@ class OrdersController extends Controller
         ]);
 
         try {
-            $user = User::where('email', $validated['order_user'])->firstOrFail();
             $package = Package::with(['prices', 'variants.options.prices', 'catalog', 'plugin'])->findOrFail($validated['order_package']);
             $packagePrice = $package->prices->firstWhere('id', $validated['order_package_billing']);
 
@@ -163,7 +180,7 @@ class OrdersController extends Controller
             $coupon = $validated['order_coupon'] ? Coupon::where('code', $validated['order_coupon'])->first() : null;
 
             $result = $orderService->createOrder(
-                $user->id, $package, $packagePrice, $variantSelections, $coupon,
+                $validated['order_user'], $package, $packagePrice, $variantSelections, $coupon,
                 $validated['order_currency'], $validated['order_status'], $configuration
             );
 

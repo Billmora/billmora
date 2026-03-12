@@ -38,11 +38,7 @@
                 name="ticket_user_id"
                 label="{{ __('admin/tickets.ticket_user_label') }}"
                 helper="{{ __('admin/tickets.ticket_user_helper') }}"
-                :options="$users->map(fn($user) => [
-                    'value' => $user->id,
-                    'title' => $user->email,
-                    'subtitle' => $user->fullname
-                ])->toArray()"
+                :options="$userOptions"
                 :selected="(int) old('ticket_user_id', $ticket->user_id)"
                 required
             />
@@ -86,11 +82,7 @@
                 name="ticket_assigned_id"
                 label="{{ __('admin/tickets.ticket_assigned_label') }}"
                 helper="{{ __('admin/tickets.ticket_assigned_helper') }}"
-                :options="$assigneds->map(fn($assigned) => [
-                    'value' => $assigned->id,
-                    'title' => $assigned->email,
-                    'subtitle' => $assigned->fullname
-                ])->toArray()"
+                :options="$assignedOptions"
                 :selected="old('ticket_assigned_id', $ticket->assigned_to)"
             />
             <x-admin::select

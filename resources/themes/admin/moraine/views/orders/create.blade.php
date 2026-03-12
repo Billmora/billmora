@@ -11,11 +11,7 @@
                 name="order_user"
                 label="{{ __('admin/orders.user_label') }}"
                 helper="{{ __('admin/orders.user_helper') }}"
-                :options="$users->map(fn($user) => [
-                    'value' => $user->email,
-                    'title' => $user->email,
-                    'subtitle' => $user->fullname
-                ])->toArray()"
+                :options="$userOptions"
                 :selected="old('order_user')"
                 required
             />
@@ -34,10 +30,7 @@
                 name="order_coupon"
                 label="{{ __('admin/orders.coupon_label') }}"
                 helper="{{ __('admin/orders.coupon_helper') }}"
-                :options="$coupons->map(fn($coupon) => [
-                    'value' => $coupon->code,
-                    'title' => $coupon->code,
-                ])->toArray()"
+                :options="$couponOptions"
                 :selected="old('order_coupon')"
             />
             <x-admin::select 

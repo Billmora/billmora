@@ -56,9 +56,17 @@ class BroadcastsController extends Controller
      */
     public function create()
     {
-        $users = User::select('id', 'first_name', 'last_name', 'email')->get();
+        $userOptions = User::query()
+            ->select('id', 'first_name', 'last_name', 'email')
+            ->get()
+            ->map(fn ($user) => [
+                'value' => $user->id,
+                'title' => "{$user->fullname}",
+                'subtitle' => "{$user->email}",
+            ])
+            ->values();
 
-        return view('admin::broadcasts.create', compact('users'));
+        return view('admin::broadcasts.create', compact('userOptions'));
     }
 
     /**
@@ -82,7 +90,7 @@ class BroadcastsController extends Controller
                 Rule::requiredIf($request->input('broadcast_recipient_group') === 'custom_users'),
                 'array',
             ],
-            'broadcast_recipient_custom.*' => ['email', 'exists:users,email'],
+            'broadcast_recipient_custom.*' => ['integer', Rule::exists('users', 'id')],
             'broadcast_cc' => ['nullable', 'array'],
             'broadcast_cc.*' => ['email'],
             'broadcast_bcc' => ['nullable', 'array'],
@@ -132,9 +140,17 @@ class BroadcastsController extends Controller
      */
     public function edit(Broadcast $broadcast)
     {
-        $users = User::select('id', 'first_name', 'last_name', 'email')->get();
+        $userOptions = User::query()
+            ->select('id', 'first_name', 'last_name', 'email')
+            ->get()
+            ->map(fn ($user) => [
+                'value' => $user->id,
+                'title' => "{$user->fullname}",
+                'subtitle' => "{$user->email}",
+            ])
+            ->values();
 
-        return view("admin::broadcasts.edit", compact('broadcast', 'users'));
+        return view("admin::broadcasts.edit", compact('broadcast', 'userOptions'));
     }
 
     /**
@@ -161,7 +177,7 @@ class BroadcastsController extends Controller
                 Rule::requiredIf($request->input('broadcast_recipient_group') === 'custom_users'),
                 'array',
             ],
-            'broadcast_recipient_custom.*' => ['email'],
+            'broadcast_recipient_custom.*' => ['integer', Rule::exists('users', 'id')],
             'broadcast_cc' => ['nullable', 'array'],
             'broadcast_cc.*' => ['email'],
             'broadcast_bcc' => ['nullable', 'array'],
