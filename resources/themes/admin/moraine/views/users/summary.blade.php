@@ -17,17 +17,33 @@
                 'label' => __('admin/users.tabs.profile'),
             ],
             [
-                'route' => route('admin.users.activity', ['user' => $user->id]),
-                'icon' => 'lucide-activity',
-                'label' => __('admin/users.tabs.activity'),
+                'route' => route('admin.users.services', ['user' => $user->id]),
+                'icon' => 'lucide-scan-text',
+                'label' => __('admin/users.tabs.services'),
+            ],
+            [
+                'route' => route('admin.users.invoices', ['user' => $user->id]),
+                'icon' => 'lucide-receipt-text',
+                'label' => __('admin/users.tabs.invoices'),
             ],
             [
                 'route' => route('admin.users.credits', ['user' => $user->id]),
                 'icon' => 'lucide-badge-cent',
                 'label' => __('admin/users.tabs.credits'),
             ],
+            [
+                'route' => route('admin.users.tickets', ['user' => $user->id]),
+                'icon' => 'lucide-ticket',
+                'label' => __('admin/users.tabs.tickets'),
+            ],
+            [
+                'route' => route('admin.users.activity', ['user' => $user->id]),
+                'icon' => 'lucide-activity',
+                'label' => __('admin/users.tabs.activity'),
+            ],
         ]" 
-        active="{{ request()->url() }}" />
+        active="{{ request()->url() }}"
+    />
     @can('uses.update')
         @if (!$user->isEmailVerified())
             <x-admin::alert variant="warning" title="{{ __('admin/users.email_verification_alert_label') }}">
