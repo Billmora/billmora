@@ -13,6 +13,16 @@ class CreditController extends Controller
     use AuditsSystem;
 
     /**
+     * Applies permission-based middleware for accessing users management.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:users.update')->only(['index', 'update']);
+    }
+
+    /**
      * Display the credit wallet balances for the specified user.
      *
      * @param  \App\Models\User  $user
