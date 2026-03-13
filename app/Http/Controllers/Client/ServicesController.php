@@ -52,8 +52,6 @@ class ServicesController extends Controller
             'unpaidInvoice',
         ]);
 
-        $unpaidInvoice = $service->unpaidInvoice->first();
-
         $variantOptions = collect();
         
         if (!empty($service->variant_selections)) {
@@ -100,6 +98,6 @@ class ServicesController extends Controller
             }
         }
 
-        return view('client::services.workspaces.overview', compact('service', 'variantOptions', 'clientActions', 'checkoutData', 'unpaidInvoice'));
+        return view('client::services.workspaces.overview', compact('service', 'variantOptions', 'clientActions', 'checkoutData'));
     }
 }
