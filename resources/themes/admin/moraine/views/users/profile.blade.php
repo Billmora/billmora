@@ -21,6 +21,11 @@
                 'icon' => 'lucide-activity',
                 'label' => __('admin/users.tabs.activity'),
             ],
+            [
+                'route' => route('admin.users.credits', ['user' => $user->id]),
+                'icon' => 'lucide-badge-cent',
+                'label' => __('admin/users.tabs.credits'),
+            ],
         ]" 
         active="{{ request()->url() }}" />
     <form action="{{ route('admin.users.profile.update', ['user' => $user->id]) }}" method="POST" class="flex flex-col gap-5">

@@ -21,6 +21,11 @@
                 'icon' => 'lucide-activity',
                 'label' => __('admin/users.tabs.activity'),
             ],
+            [
+                'route' => route('admin.users.credits', ['user' => $user->id]),
+                'icon' => 'lucide-badge-cent',
+                'label' => __('admin/users.tabs.credits'),
+            ],
         ]" 
         active="{{ request()->url() }}" />
     @can('uses.update')
