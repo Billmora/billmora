@@ -35,7 +35,7 @@ class CouponsController extends Controller
     public function index()
     {
         $coupons = Coupon::select('id', 'code', 'start_at', 'expires_at', 'total_uses', 'created_at')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->paginate(Billmora::getGeneral('misc_admin_pagination'));
         
         return view('admin::coupons.index', compact('coupons'));

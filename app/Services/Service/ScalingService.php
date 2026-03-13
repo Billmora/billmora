@@ -126,7 +126,7 @@ class ScalingService
         $targetPackage->target_price_model = $validPackagePrice;
 
         $targetPackage->load(['variants' => function ($q) {
-            $q->where('is_scalable', true)->where('status', 'visible')->orderBy('created_at', 'asc');
+            $q->where('is_scalable', true)->where('status', 'visible')->orderBy('id', 'asc');
         }, 'variants.options.prices']);
 
         $targetPackage->variants->transform(function ($variant) use ($currentPriceName, $currency) {

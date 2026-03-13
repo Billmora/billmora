@@ -28,7 +28,7 @@ class TicketsController extends Controller
     {
         $tickets = Ticket::where('user_id', Auth::id())
             ->with('service')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->paginate(Billmora::getGeneral('misc_client_pagination'));
 
         return view('client::tickets.index', compact('tickets'));

@@ -23,7 +23,7 @@ class ServicesController extends Controller
             ->with([
                 'package.catalog',
             ])
-            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->paginate(Billmora::getGeneral('misc_client_pagination'));
 
         return view('client::services.index', compact('services'));

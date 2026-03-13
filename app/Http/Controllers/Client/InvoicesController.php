@@ -25,7 +25,7 @@ class InvoicesController extends Controller
 
         $invoices = Invoice::where('user_id', $user->id)
             ->with(['order.items'])
-            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->paginate(Billmora::getGeneral('misc_client_pagination'));
 
         return view('client::invoices.index', compact('invoices'));
