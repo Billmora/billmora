@@ -117,9 +117,8 @@ class User extends Authenticatable implements BrowseInterface
      */
     public function getCreditWallet(string $currencyCode)
     {
-        return $this->credits()->firstOrCreate([
-            'currency' => $currencyCode
-        ]);
+        return $this->credits
+            ->firstWhere('currency', $currencyCode) ?? $this->credits()->firstOrCreate(['currency' => $currencyCode]);
     }
 
     /**
