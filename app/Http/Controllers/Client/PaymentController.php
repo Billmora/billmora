@@ -109,7 +109,9 @@ class PaymentController extends Controller
 
         DB::transaction(function () use ($invoice, $wallet, $request) {
             
-            $amountToApply = min($wallet->balance, $invoice->amount_due);
+            $currentAmountDue = $invoice->amount_due;
+            
+            $amountToApply = min($wallet->balance, $currentAmountDue);
 
             $wallet->removeCredit($amountToApply);
 
@@ -126,7 +128,7 @@ class PaymentController extends Controller
 
             $this->recordSystem('transaction.created', $transaction->toArray(), 'credit');
 
-            $remainingDue = $invoice->amount_due - $amountToApply;
+            $remainingDue = $currentAmountDue - $amountToApply;
 
             if ($remainingDue <= 0) {
                 $invoice->status = 'paid';
