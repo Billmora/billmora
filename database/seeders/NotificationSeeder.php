@@ -243,8 +243,7 @@ class NotificationSeeder extends Seeder
                     'client_name' => 'Client Name',
                     'company_name' => 'Company Name',
                     'order_number' => 'Order Number (e.g. ORD-0001)',
-                    'package_name' => 'Purchased Package Name',
-                    'order_total' => 'Total Amount of the Order',
+                    'order_items_table' => 'Pre-rendered table containing order items',
                 ],
                 'translations' => [
                     'en_US' => [
@@ -257,18 +256,9 @@ class NotificationSeeder extends Seeder
                             </div>
                             <br />
                             
-                            <table>
-                                <tr>
-                                    <td>Package</td>
-                                    <td>{package_name}</td>
-                                </tr>
-                                <tr>
-                                    <td>Total</td>
-                                    <td>{order_total}</td>
-                                </tr>
-                            </table>
-                            <br />
+                            {order_items_table}
                             
+                            <br />
                             <p>If you have any unpaid invoices associated with this order, your service will be automatically activated once the payment is successfully verified.</p>
                             <br />
                             <p>Best Regards,</p>

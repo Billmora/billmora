@@ -11,6 +11,10 @@ use Illuminate\Queue\InteractsWithQueue;
 
 class SendOrderCreated implements ShouldQueue
 {
+    use InteractsWithQueue;
+
+    public bool $afterCommit = true;
+    
     /**
      * Create the event listener.
      */
@@ -31,14 +35,49 @@ class SendOrderCreated implements ShouldQueue
             return;
         }
         
-        $order->loadMissing('package');
+        $order->loadMissing('items');
+
+        $itemsData = [];
+        foreach ($order->items as $item) {
+            $itemsData[] = [
+                $item->description,
+                $item->quantity,
+                $this->currencyService->format($item->amount, $order->currency), 
+            ];
+        }
+
+        $totalsData = [
+            [
+                'label' => 'Subtotal', 
+                'value' => $this->currencyService->format($order->subtotal ?? $order->total, $order->currency)
+            ]
+        ];
+
+        if (isset($order->discount) && $order->discount > 0) {
+            $totalsData[] = [
+                'label' => 'Discount', 
+                'value' => $this->currencyService->format($order->discount, $order->currency),
+                'is_discount' => true 
+            ];
+        }
+
+        $totalsData[] = [
+            'label' => 'Total', 
+            'value' => $this->currencyService->format($order->total, $order->currency),
+            'is_highlighted' => true 
+        ];
+
+        $orderItemsHtml = view('email::components.items', [
+            'headers' => ['Description', 'Qty', 'Amount'], 
+            'items' => $itemsData,
+            'totals' => $totalsData
+        ])->render();
 
         $placeholder = [
             'client_name' => $client->fullname,
             'company_name' => Billmora::getGeneral('company_name'),
             'order_number' => $order->order_number,
-            'package_name' => $order->package->name,
-            'order_total' => $this->currencyService->format($order->total, $order->currency),
+            'order_items_table' => $orderItemsHtml,
         ];
 
         NotificationJob::dispatch(
