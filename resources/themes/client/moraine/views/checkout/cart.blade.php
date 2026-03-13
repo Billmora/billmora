@@ -33,7 +33,7 @@
                     <div class="bg-white p-8 border-2 border-billmora-2 rounded-2xl">
                         <div class="flex flex-col md:flex-row justify-between gap-6">
                             <div class="flex-1">
-                                <h2 class="text-xl font-semibold text-slate-600">{{ $item['name'] }}</h2>
+                                <h2 class="text-xl font-semibold text-slate-600">{{ $item['description'] }}</h2>
                                 <p class="text-slate-500 font-medium">{{ $item['cycle_name'] }}</p>
                                 @if(!empty($item['variant_details']))
                                     <div class="mt-4 space-y-2">
@@ -54,7 +54,7 @@
                             </div>
                             <div class="flex flex-col items-end justify-between gap-4">
                                 <div class="text-right">
-                                    <span class="text-xl font-bold text-slate-700">{{ Currency::format($item['price'] * $item['quantity']) }}</span>
+                                    <span class="text-xl font-bold text-slate-700">{{ Currency::format($item['unit_price'] * $item['quantity']) }}</span>
                                     @if($item['setup_fee'] > 0)
                                         <p class="text-sm font-medium text-slate-500">+ {{ Currency::format($item['setup_fee'] * $item['quantity']) }} {{ __('client/checkout.setup_fee') }}</p>
                                     @endif

@@ -18,15 +18,16 @@ return new class extends Migration
             $table->string('item_type');
             $table->unsignedBigInteger('item_id')->nullable();
             
-            $table->string('name'); 
+            $table->string('description');
             $table->integer('quantity')->default(1);
             
             $table->enum('billing_type', ['free', 'onetime', 'recurring'])->default('free');
             $table->integer('billing_interval')->nullable();
             $table->enum('billing_period', ['daily', 'weekly', 'monthly', 'yearly'])->nullable();
             
-            $table->decimal('price', 15, 2);
+            $table->decimal('unit_price', 15, 2);
             $table->decimal('setup_fee', 15, 2)->default(0);
+            $table->decimal('amount', 15, 2);
             
             $table->json('config_options')->nullable();
             $table->json('variant_selections')->nullable();

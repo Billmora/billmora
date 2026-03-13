@@ -34,11 +34,11 @@
                     @foreach ($order->items as $item)
                         <div class="flex justify-between p-4 bg-white border-2 border-billmora-2 rounded-xl">
                             <div class="grid text-start">
-                                <span class="text-billmora-primary font-bold">{{ $item->name }}</span>
+                                <span class="text-billmora-primary font-bold">{{ $item->description }}</span>
                                 <span class="text-slate-500 font-medium">x{{ $item->quantity }}</span>
                             </div>
                             <div class="grid text-end">
-                                <span class="text-billmora-primary font-bold">{{ Currency::format($item->price, $order->currency) }}</span>
+                                <span class="text-billmora-primary font-bold">{{ Currency::format($item->unit_price, $order->currency) }}</span>
                                 <span class="text-slate-500 font-medium">{{ $item->cycle_label }}</span>
                             </div>
                         </div>
