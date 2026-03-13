@@ -10,6 +10,10 @@ use Illuminate\Queue\InteractsWithQueue;
 
 class SendPasswordReset implements ShouldQueue
 {
+    use InteractsWithQueue;
+
+    public bool $afterCommit = true;
+    
     /**
      * Create the event listener.
      */

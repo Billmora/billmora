@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Request;
 
 class SendLoginDetected implements ShouldQueue
 {
+    use InteractsWithQueue;
+
+    public bool $afterCommit = true;
+    
     /**
      * Create the event listener.
      */
