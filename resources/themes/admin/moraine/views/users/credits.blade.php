@@ -53,9 +53,11 @@
                     value="{{ old('credit_balance', $user->getCreditWallet($currency->code)->balance) }}"
                     required
                 />
-                <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">
-                    {{ __('common.save') }}
-                </button>
+                @can('users.update')
+                    <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">
+                        {{ __('common.save') }}
+                    </button>
+                @endcan
             </form>
         @endforeach
     </div>

@@ -19,7 +19,8 @@ class CreditController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:users.update')->only(['index', 'update']);
+        $this->middleware('permission:users.view')->only(['index']);
+        $this->middleware('permission:users.update')->only(['update']);
     }
 
     /**
