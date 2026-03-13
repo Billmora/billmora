@@ -188,6 +188,23 @@ class Service extends Model implements BrowseInterface
     }
 
     /**
+     * Get the first unpaid invoice associated with this service.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function unpaidInvoice()
+    {
+        return $this->belongsToMany(
+            Invoice::class, 
+            'invoice_items',
+            'service_id',
+            'invoice_id'
+        )
+        ->where('status', 'unpaid')
+        ->limit(1);
+    }
+
+    /**
      * Get all cancellation requests associated with the service.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

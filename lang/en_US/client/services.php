@@ -14,6 +14,8 @@ return [
     'scale_label' => 'Scaling Service',
     'scale_package_helper' => 'Choose a package want to scale to',
     'scale_variant_helper' => 'Choose a variant want to scale to',
+    'unpaid_invoice_notice' => 'Your service has an outstanding invoice that requires payment. Please complete your payment at your earliest convenience.',
+    'unpaid_invoice_pay_now' => 'Pay Now',
 
     'action' => [
         'overview' => 'Overview',
