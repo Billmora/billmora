@@ -12,6 +12,8 @@ return [
 
     'time_of_day_label' => 'Automation Time of Day',
     'time_of_day_helper' => 'The time of day you want the daily automation cron job to execute (e.g., 01:00).',
+    'user_inactive_days_label'  => 'User Inactivity Threshold',
+    'user_inactive_days_helper' => 'Number of days before a user is considered inactive. Set to 0 to disable inactivity tracking.',
     'prune_email_history_days_label' => 'Prune Email History',
     'prune_email_history_days_helper' => 'Enter the number of days to retain the sent email history (Leave 0 to never delete).',
     'prune_user_activity_days_label' => 'Prune User Activity Logs',

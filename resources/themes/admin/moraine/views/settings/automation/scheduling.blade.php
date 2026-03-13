@@ -40,6 +40,15 @@
             required
         />
         <x-admin::input 
+            name="user_inactive_days"
+            type="number"
+            min="0"
+            label="{{ __('admin/settings/automation.user_inactive_days_label') }}"
+            helper="{{ __('admin/settings/automation.user_inactive_days_helper') }}"
+            value="{{ old('user_inactive_days', Billmora::getAutomation('user_inactive_days')) }}"
+            required
+        />
+        <x-admin::input 
             name="prune_email_history_days"
             type="number"
             min="0"
