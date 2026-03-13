@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Admin\Users;
 
 use App\Http\Controllers\Controller;
-use App\Models\Invoice;
+use App\Models\Ticket;
 use App\Models\User;
 use Billmora;
 use Illuminate\Http\Request;
 
-class InvoiceController extends Controller
+class TicketsController extends Controller
 {
+
     /**
      * Applies permission-based middleware for accessing users management.
      * 
@@ -19,9 +20,9 @@ class InvoiceController extends Controller
     {
         $this->middleware('permission:users.view')->only(['index']);
     }
-
+    
     /**
-     * Display a paginated list of invoices belonging to the specified user with optional search filtering.
+     * Display a paginated list of tickets belonging to the specified user with optional search filtering.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\User  $user
@@ -29,17 +30,19 @@ class InvoiceController extends Controller
      */
     public function index(Request $request, User $user)
     {
-        $query = Invoice::with(['order.items', 'user'])->where('user_id', $user->id);
+        $query = Ticket::with('user', 'service')->where('user_id', $user->id);
 
         if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
-                $q->where('invoice_number', 'like', "%{$search}%")
-                ->orWhere('status', 'like', "%{$search}%");
+                $q->where('ticket_number', 'like', "%{$search}%")
+                  ->orWhere('subject', 'like', "%{$search}%");
             });
         }
 
-        $invoices = $query->latest('id')->paginate(Billmora::getGeneral('misc_admin_pagination'));
+        $tickets = $query->orderByDesc('created_at')->paginate(Billmora::getGeneral('misc_admin_pagination'));
 
-        return view('admin::users.invoices', compact('user', 'invoices'));
+        $tickets->appends(['search' => $search]);
+
+        return view('admin::users.tickets', compact('user', 'tickets'));
     }
 }

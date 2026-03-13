@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 
-class CreditController extends Controller
+class CreditsController extends Controller
 {
     use AuditsSystem;
 
