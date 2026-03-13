@@ -32,28 +32,35 @@ class ProvisionOnInvoicePaid implements ShouldQueue
 
         $invoice->loadMissing('order.services');
 
-        $service = $invoice->order?->service;
+        $services = $invoice->order?->services;
 
-        if (!$service || $service->status !== 'pending') {
+        if (!$services || $services->isEmpty()) {
             return;
         }
 
-        if (!$service->provisioning) {
-            $service->activate();
-            return;
-        }
-
-        try {
-            [$plugin, $instanceConfig] = $this->provisioningService->bootPluginFor($service);
-
-            $plugin->create($service, $instanceConfig);
-
-            $service->activate();
-
-        } catch (\Throwable $e) {
-            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'create'));
+        foreach ($services as $service) {
             
-            $this->fail($e);
+            if ($service->status !== 'pending') {
+                continue;
+            }
+
+            if (!$service->provisioning) {
+                $service->activate();
+                continue;
+            }
+
+            try {
+                [$plugin, $instanceConfig] = $this->provisioningService->bootPluginFor($service);
+
+                $plugin->create($service, $instanceConfig);
+
+                $service->activate();
+
+            } catch (\Throwable $e) {
+                event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'create'));
+                
+                $this->fail($e);
+            }
         }
     }
 }
