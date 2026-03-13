@@ -22,6 +22,7 @@ return [
     
     'account_settings' => 'Account Settings',
     'account_security' => 'Account Security',
+    'account_credits' => 'Account Credits',
     'personal_information' => 'Personal Information',
     'fullname' => 'Fullname',
     'first_name' => 'First Name',
