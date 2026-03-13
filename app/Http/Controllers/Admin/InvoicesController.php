@@ -44,7 +44,9 @@ class InvoicesController extends Controller
                 $q->where('invoice_number', 'like', "%{$search}%")
                 ->orWhere('status', 'like', "%{$search}%")
                 ->orWhereHas('user', function ($userQuery) use ($search) {
-                    $userQuery->where('email', 'like', "%{$search}%");
+                    $userQuery->where('email', 'like', "%{$search}%")
+                              ->orWhere('first_name', 'like', "%{$search}%")
+                              ->orWhere('last_name', 'like', "%{$search}%");
                 });
             });
         }

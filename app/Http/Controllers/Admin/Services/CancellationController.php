@@ -42,7 +42,9 @@ class CancellationController extends Controller
                 ->orWhere('status', 'like', "%{$search}%")
                 ->orWhere('type', 'like', "%{$search}%")
                 ->orWhereHas('user', function ($userQuery) use ($search) {
-                    $userQuery->where('email', 'like', "%{$search}%");
+                    $userQuery->where('email', 'like', "%{$search}%")
+                              ->orWhere('first_name', 'like', "%{$search}%")
+                              ->orWhere('last_name', 'like', "%{$search}%");
                 })
                 ->orWhereHas('service', function ($serviceQuery) use ($search) {
                     $serviceQuery->where('name', 'like', "%{$search}%");

@@ -44,7 +44,9 @@ class TransactionController extends Controller
                 $q->where('reference', 'like', "%{$search}%")
                 ->orWhere('description', 'like', "%{$search}%")
                 ->orWhereHas('user', function ($userQuery) use ($search) {
-                    $userQuery->where('email', 'like', "%{$search}%");
+                    $userQuery->where('email', 'like', "%{$search}%")
+                              ->orWhere('first_name', 'like', "%{$search}%")
+                              ->orWhere('last_name', 'like', "%{$search}%");
                 })
                 ->orWhereHas('plugin', function ($pluginQuery) use ($search) {
                     $pluginQuery->where('name', 'like', "%{$search}%");
