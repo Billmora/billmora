@@ -65,13 +65,14 @@ class OrderService
                     'order_id' => $order->id,
                     'item_type' => OrderItemType::tryFrom($item['type']),
                     'item_id' => $item['package_id'],
-                    'name' => $item['name'],
+                    'description' => $item['description'],
                     'quantity' => $item['quantity'],
                     'billing_type' => $item['billing_type'],
                     'billing_interval' => $item['billing_interval'],
                     'billing_period' => $item['billing_period'],
-                    'price' => $item['price'],
+                    'unit_price' => $item['unit_price'],
                     'setup_fee' => $item['setup_fee'],
+                    'amount' => ($item['unit_price'] * $item['quantity']) + ($item['setup_fee'] * $item['quantity']),
                     'config_options' => $item['config_options'],
                     'variant_selections' => $item['variant_selections'],
                 ]);
@@ -87,13 +88,13 @@ class OrderService
                         'package_id' => $item['package_id'],
                         'package_price_id' => $item['package_price_id'],
                         'plugin_id' => $package->plugin_id ?? null,
-                        'name' => $item['name'],
+                        'name' => $item['description'],
                         'status' => 'pending',
                         'currency' => $currency,
                         'billing_type' => $item['billing_type'],
                         'billing_interval' => $item['billing_interval'],
                         'billing_period' => $item['billing_period'],
-                        'price' => $item['price'],
+                        'price' => $item['unit_price'],
                         'setup_fee' => $item['setup_fee'],
                         'next_due_date' => $initialDueDate,
                         'configuration' => $item['config_options'],
@@ -150,7 +151,7 @@ class OrderService
     private function createInvoiceItems(Invoice $invoice, array $cartItems, array $totals, ?array $appliedCoupon): void
     {
         foreach ($cartItems as $item) {
-            $description = $item['name'];
+            $description = $item['description'];
 
             if ($item['billing_type'] === 'recurring') {
                 $startDate = now();
@@ -179,15 +180,15 @@ class OrderService
                 'service_id' => null,
                 'description' => $description,
                 'quantity' => $item['quantity'],
-                'unit_price' => $item['price'],
-                'amount' => $item['price'] * $item['quantity'],
+                'unit_price' => $item['unit_price'],
+                'amount' => $item['unit_price'] * $item['quantity'],
             ]);
 
             if ($item['setup_fee'] > 0) {
                 InvoiceItem::create([
                     'invoice_id' => $invoice->id,
                     'service_id' => null,
-                    'description' => "Setup Fee - {$item['name']}",
+                    'description' => "Setup Fee - {$item['description']}",
                     'quantity' => $item['quantity'],
                     'unit_price' => $item['setup_fee'],
                     'amount' => $item['setup_fee'] * $item['quantity'],

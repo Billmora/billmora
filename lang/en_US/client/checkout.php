@@ -24,6 +24,7 @@ return [
         'item_not_found' => 'Item not found in cart.',
         'item_added' => 'Item added to cart successfully.',
         'item_removed' => 'Item removed from cart successfully.',
+        'items_removed_currency_mismatch' => 'One or more items in your cart are not supported by the selected currency and have been removed.',
     ],
 
     'coupon' => [

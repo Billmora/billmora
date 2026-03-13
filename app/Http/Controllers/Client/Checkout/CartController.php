@@ -31,11 +31,59 @@ class CartController extends Controller
      * @param  \App\Services\PluginManager  $pluginManager
      * @return \Illuminate\View\View
      */
-    public function index(PluginManager $pluginManager)
+    public function index(PluginManager $pluginManager, OrderValidationService $validationService, PricingService $pricingService) 
     {
         $cartItems = $this->cartService->getItems();
-        $totals = $this->cartService->getTotals();
         $currencyCode = Session::get('currency');
+        
+        $removedItems = false;
+        $pricesUpdated = false;
+
+        foreach ($cartItems as $key => $item) {
+            $packagePrice = PackagePrice::find($item['package_price_id']);
+            $isValid = true;
+
+            if (!$packagePrice) {
+                $isValid = false;
+            } else {
+                if (!$validationService->isPriceAvailableForCurrency($packagePrice, $currencyCode)) {
+                    $isValid = false;
+                } elseif (!empty($item['variant_selections'])) {
+                    $variantValidation = $validationService->validateVariantPrices($item['variant_selections'], $currencyCode, $packagePrice->name);
+                    if (!$variantValidation['valid']) {
+                        $isValid = false;
+                    }
+                }
+            }
+
+            if (!$isValid) {
+                $this->cartService->removeItem($key);
+                $removedItems = true;
+            } else {
+                $pricing = $pricingService->calculatePricing(
+                    $packagePrice,
+                    $item['variant_selections'] ?? [],
+                    null,
+                    $currencyCode
+                );
+
+                if ($item['unit_price'] != $pricing['recurring_total'] || $item['setup_fee'] != $pricing['setup_fee_total']) {
+                    $this->cartService->updateItemPrices($key, $pricing['recurring_total'], $pricing['setup_fee_total']);
+                    $pricesUpdated = true;
+                }
+            }
+        }
+
+        if ($removedItems) {
+            return redirect()->route('client.checkout.cart')
+                ->with('error', __('client/checkout.cart.items_removed_currency_mismatch'));
+        }
+
+        if ($pricesUpdated) {
+            $cartItems = $this->cartService->getItems();
+        }
+
+        $totals = $this->cartService->getTotals();
         $appliedCoupon = Session::get('applied_coupon');
 
         foreach ($cartItems as &$item) {

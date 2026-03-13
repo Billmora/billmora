@@ -57,12 +57,12 @@ class CartService
             'type' => OrderItemType::Service->value,
             'package_id' => $package->id,
             'package_price_id' => $price->id,
-            'name' => $package->name,
+            'description' => $package->name,
             'cycle_name' => $price->name,
             'billing_type' => $price->type,
             'billing_interval' => $price->time_interval,
             'billing_period' => $price->billing_period,
-            'price' => $resolvedPrice,
+            'unit_price' => $resolvedPrice,
             'setup_fee' => $resolvedSetupFee,
             'quantity' => $quantity,
             'allow_quantity' => $package->allow_quantity,
@@ -139,7 +139,7 @@ class CartService
         $appliedCoupon = Session::get('applied_coupon');
 
         foreach ($items as $item) {
-            $itemSubtotal = $item['price'] * $item['quantity'];
+            $itemSubtotal = $item['unit_price'] * $item['quantity']; 
             $itemSetupFee = $item['setup_fee'] * $item['quantity'];
             $itemTotalBeforeDiscount = $itemSubtotal + $itemSetupFee;
 
@@ -174,5 +174,23 @@ class CartService
             'total' => max(0, $total),
             'count' => array_sum(array_column($items, 'quantity')),
         ];
+    }
+
+    /**
+     * Update the prices of a specific cart item by its cart item ID.
+     *
+     * @param  string  $cartItemId
+     * @param  float  $unitPrice
+     * @param  float  $setupFee
+     * @return void
+     */
+    public function updateItemPrices(string $cartItemId, float $unitPrice, float $setupFee): void
+    {
+        $cart = $this->getItems();
+        
+        if (isset($cart[$cartItemId])) {
+            Session::put("{$this->sessionKey}.{$cartItemId}.unit_price", $unitPrice);
+            Session::put("{$this->sessionKey}.{$cartItemId}.setup_fee", $setupFee);
+        }
     }
 }
