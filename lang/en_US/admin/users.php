@@ -5,6 +5,7 @@ return [
         'summary' => 'Summary',
         'profile' => 'Profile',
         'activity' => 'Activity',
+        'credits' => 'Credits',
     ],
 
     'email_verification_alert_label' => 'Pending Email Verification',
@@ -17,4 +18,9 @@ return [
     'login_as_user_error' => 'You cannot login as the same user you are currently logged in as.',
 
     'self_delete_error' => 'You cannot delete your own account.',
+
+    'credit_currency_label' => 'Currency',
+    'credit_formatted_label' => 'Formatted Balance',
+    'credit_balance_label' => 'Credit Balance',
+    'credit_balance_helper' => 'Enter the credit amount available for this currency.',
 ];
