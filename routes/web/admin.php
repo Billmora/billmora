@@ -32,13 +32,17 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::put('/{user}/profile', [Users\ProfileController::class, 'update'])->name('admin.users.profile.update');
         Route::delete('/{user}', [Admin\UsersController::class, 'destroy'])->name('admin.users.destroy');
 
+        Route::get('/{user}/services', [Users\ServiceController::class, 'index'])->name('admin.users.services');
+        Route::get('/{user}/invoices', [Users\InvoiceController::class, 'index'])->name('admin.users.invoices');
+        Route::get('/{user}/tickets', [Users\TicketController::class, 'index'])->name('admin.users.tickets');
+
+        Route::get('/{user}/credits', [Users\CreditController::class, 'index'])->name('admin.users.credits');
+        Route::put('/{user}/credits/{currency}', [Users\CreditController::class, 'update'])->name('admin.users.credits.update');
+
         Route::get('/{user}/activity', [Admin\Audits\UserController::class, 'index'])->name('admin.users.activity');
         Route::get('/{user}/activity/{activity}', [Admin\Audits\UserController::class, 'show'])->name('admin.users.activity.show');
         Route::post('/{user}/activity/export', [Admin\Audits\UserController::class, 'export'])->name('admin.users.activity.export');
         Route::post('/{user}/activity/clear', [Admin\Audits\UserController::class, 'clear'])->name('admin.users.activity.clear');
-
-        Route::get('/{user}/credits', [Users\CreditController::class, 'index'])->name('admin.users.credits');
-        Route::put('/{user}/credits/{currency}', [Users\CreditController::class, 'update'])->name('admin.users.credits.update');
     });
 
     /**
