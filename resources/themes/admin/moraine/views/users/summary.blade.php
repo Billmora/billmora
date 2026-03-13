@@ -131,8 +131,8 @@
                         <x-lucide-badge-check class="w-auto h-10" />
                     </div>
                     <div>
-                        <h4 class="text-lg font-semibold text-slate-500">Active Orders</h4>
-                        <span class="text-2xl font-semibold text-slate-600">0</span>
+                        <h4 class="text-lg font-semibold text-slate-500">{{ __('admin/users.active_orders') }}</h4>
+                        <span class="text-2xl font-semibold text-slate-600">{{ $ordersActive }}</span>
                     </div>
                 </div>
                 <div class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
@@ -140,8 +140,8 @@
                         <x-lucide-badge-x class="w-auto h-10" />
                     </div>
                     <div>
-                        <h4 class="text-lg font-semibold text-slate-500">Canceled Orders</h4>
-                        <span class="text-2xl font-semibold text-slate-600">0</span>
+                        <h4 class="text-lg font-semibold text-slate-500">{{ __('admin/users.cancelled_orders') }}</h4>
+                        <span class="text-2xl font-semibold text-slate-600">{{ $ordersCancelled }}</span>
                     </div>
                 </div>
                 <div class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
@@ -149,8 +149,8 @@
                         <x-lucide-badge-dollar-sign class="w-auto h-10" />
                     </div>
                     <div>
-                        <h4 class="text-lg font-semibold text-slate-500">Total Orders</h4>
-                        <span class="text-2xl font-semibold text-slate-600">0</span>
+                        <h4 class="text-lg font-semibold text-slate-500">{{ __('admin/users.total_orders') }}</h4>
+                        <span class="text-2xl font-semibold text-slate-600">{{ $ordersTotal }}</span>
                     </div>
                 </div>
             </div>
@@ -161,26 +161,37 @@
                             <thead class="bg-billmora-2">
                                 <tr>
                                     <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">ID</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Products</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Status</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Created At</th>
-                                    <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">Action</th>
+                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/orders.number_label') }}</th>
+                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/orders.date_label') }}</th>
+                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/orders.total_label') }}</th>
+                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.status') }}</th>
+                                    <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y-2 divide-billmora-2 bg-white">
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">1</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">Minecraft</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">Active</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">2025-09-12 00:17:45</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
-                                        <a href="#" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">Manage</a>
-                                    </td>
-                                </tr>
+                                @foreach ($orders as $order)
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $order->id }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
+                                            <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $order->order_number }}</a>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $order->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ Currency::format($order->total, $order->currency) }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $order->status }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
+                                            @can('orders.update')
+                                                <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ __('common.edit') }}</a>                               
+                                            @endcan
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
                 </div>
+            </div>
+            <div>
+                {{ $orders->links('admin::layouts.partials.pagination') }}
             </div>
         </div>
     </div>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin\Users;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,8 +36,16 @@ class SummaryController extends Controller
     public function index(Request $request, User $user)
     {
         $user->load('billing');
-        
-        return view('admin::users.summary', compact('user'));
+
+        $baseQuery = Order::where('user_id', $user->id);
+
+        $ordersTotal = (clone $baseQuery)->count();
+        $ordersActive = (clone $baseQuery)->where('status', 'active')->count();
+        $ordersCancelled = (clone $baseQuery)->where('status', 'cancelled')->count();
+
+        $orders = (clone $baseQuery)->latest()->paginate(Billmora::getGeneral('misc_admin_pagination'));
+
+        return view('admin::users.summary', compact('user', 'ordersTotal', 'ordersActive', 'ordersCancelled', 'orders'));
     }
 
     /**
