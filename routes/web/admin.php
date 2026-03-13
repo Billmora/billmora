@@ -24,15 +24,21 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/create', [Admin\UsersController::class, 'create'])->name('admin.users.create');
         Route::post('/create', [Admin\UsersController::class, 'store'])->name('admin.users.store');
         Route::post('/{user}/verify', [Admin\UsersController::class, 'verify'])->name('admin.users.verify');
+
         Route::get('/{user}/summary', [Users\SummaryController::class, 'index'])->name('admin.users.summary');
         Route::post('/{user}/impersonate', [Users\SummaryController::class, 'impersonate'])->name('admin.users.impersonate');
+
         Route::get('/{user}/profile', [Users\ProfileController::class, 'index'])->name('admin.users.profile');
         Route::put('/{user}/profile', [Users\ProfileController::class, 'update'])->name('admin.users.profile.update');
         Route::delete('/{user}', [Admin\UsersController::class, 'destroy'])->name('admin.users.destroy');
+
         Route::get('/{user}/activity', [Admin\Audits\UserController::class, 'index'])->name('admin.users.activity');
         Route::get('/{user}/activity/{activity}', [Admin\Audits\UserController::class, 'show'])->name('admin.users.activity.show');
         Route::post('/{user}/activity/export', [Admin\Audits\UserController::class, 'export'])->name('admin.users.activity.export');
         Route::post('/{user}/activity/clear', [Admin\Audits\UserController::class, 'clear'])->name('admin.users.activity.clear');
+
+        Route::get('/{user}/credits', [Users\CreditController::class, 'index'])->name('admin.users.credits');
+        Route::put('/{user}/credits/{currency}', [Users\CreditController::class, 'update'])->name('admin.users.credits.update');
     });
 
     /**
