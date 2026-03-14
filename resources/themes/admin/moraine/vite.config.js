@@ -3,13 +3,26 @@ import laravel from "laravel-vite-plugin";
 import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "url";
+import fs from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const themeJsonPath = path.resolve(__dirname, 'theme.json');
+let assetsOutDir = "/themes/admin/moraine";
+
+if (fs.existsSync(themeJsonPath)) {
+    const themeData = JSON.parse(fs.readFileSync(themeJsonPath, 'utf-8'));
+    if (themeData.assets) {
+        assetsOutDir = themeData.assets;
+    }
+}
+
+const finalOutDir = path.resolve(process.cwd(), `public${assetsOutDir}`);
+
 export default defineConfig({
     build: {
-        outDir: path.resolve(process.cwd(), "public/themes/admin/moraine"),
+        outDir: finalOutDir,
         emptyOutDir: true,
         rollupOptions: {
             input: {
