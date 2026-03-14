@@ -10,7 +10,7 @@
         'sort' => $column, 
         'direction' => ($sort === $column && $direction === 'asc') ? 'desc' : 'asc'
     ]) }}"
-    class="inline-flex items-center gap-1 hover:text-billmora-primary transition duration-300"
+    class="inline-flex items-center gap-1 hover:text-billmora-primary-500 transition duration-300"
 >
     <span>{{ $label }}</span>
     <span>

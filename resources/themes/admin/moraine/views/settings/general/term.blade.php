@@ -72,7 +72,7 @@
         <x-admin::editor.text name="term_privacy_content" label="{{ __('admin/settings/general.term_privacy_content_label') }}" helper="{{ __('admin/settings/general.term_privacy_content_helper') }}">{{ old('term_privacy_content', Billmora::getGeneral('term_privacy_content')) }}</x-admin::editor.text>
     </div>
     @can('settings.general.update')
-        <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+        <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
             {{ __('common.save') }}
         </button>
     @endcan

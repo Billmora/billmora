@@ -45,7 +45,7 @@
             step="1"
             x-model="idx"
             x-on:input="update($event.target.value)"
-            class="w-full h-2 cursor-pointer accent-billmora-primary"
+            class="w-full h-2 cursor-pointer accent-billmora-primary-500"
         >
         <template x-for="(opt, i) in opts" :key="opt.id">
             <span class="grid text-sm absolute"

@@ -30,9 +30,9 @@
                         <label for="package_id_{{ $package->id }}" 
                             class="flex flex-col h-full gap-4 p-6 border-2 rounded-2xl cursor-pointer transition-all duration-200 ease-in-out
                                     bg-white border-billmora-2 hover:border-billmora-primary
-                                    peer-checked:border-billmora-primary">
+                                    peer-checked:border-billmora-primary-500">
                             @if($isCurrent)
-                                <span class="absolute top-0 right-0 bg-billmora-primary text-white text-xs uppercase tracking-wider font-bold px-3 py-1 rounded-bl-xl rounded-tr-lg z-10">
+                                <span class="absolute top-0 right-0 bg-billmora-primary-500 text-white text-xs uppercase tracking-wider font-bold px-3 py-1 rounded-bl-xl rounded-tr-lg z-10">
                                     {{ __('client/services.scaling.current_label') }}
                                 </span>
                             @endif
@@ -40,7 +40,7 @@
                                 <img src="{{ Storage::url($package->icon) }}" alt="package icon" class="max-w-48 h-auto m-auto object-cover rounded-lg">
                             @endif
                             <div class="space-y-2 text-center mt-2">
-                                <h4 class="text-xl text-billmora-primary font-semibold">{{ $package->name }}</h4>
+                                <h4 class="text-xl text-billmora-primary-500 font-semibold">{{ $package->name }}</h4>
                                 @if ($package->prices->contains(fn ($p) => $p->type === 'free'))
                                     <div class="grid">
                                         <span class="text-xl text-slate-500 font-semibold">Free</span>
@@ -76,10 +76,10 @@
                 @endforeach
             </div>
             <div class="flex justify-end gap-2">
-                <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     {{ __('common.cancel') }}
                 </a>
-                <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-6 py-2 text-white font-medium rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-6 py-2 text-white font-medium rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     {{ __('common.next') }}
                 </button>
             </div>
@@ -205,10 +205,10 @@
                 <p class="text-slate-500">{{ __('client/services.scaling.no_variants') }}</p>
             @endif
             <div class="flex justify-end gap-2">
-                <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     {{ __('common.cancel') }}
                 </a>
-                <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-6 py-2 text-white font-medium rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-6 py-2 text-white font-medium rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     {{ __('common.submit') }}
                 </button>
             </div>

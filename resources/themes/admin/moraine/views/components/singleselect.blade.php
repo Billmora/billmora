@@ -62,7 +62,7 @@
             tabindex="0"
             x-on:click="open = !open"
             @class([
-                'cursor-pointer border-2 px-3 py-2 bg-white text-slate-700 rounded-lg focus-within:ring-2 ring-billmora-primary',
+                'cursor-pointer border-2 px-3 py-2 bg-white text-slate-700 rounded-lg focus-within:ring-2 ring-billmora-primary-500',
                 'border-red-400' => $error,
                 'border-billmora-2' => !$error,
             ])
@@ -95,7 +95,7 @@
                 placeholder="{{ __('admin/common.search') }}"
                 x-model="search"
                 x-on:input="errorVisible = false"
-                class="w-full mb-2 text-slate-700 rounded-lg px-3 py-2 border-2 border-billmora-2 outline-none focus:ring-2 ring-billmora-primary placeholder:text-slate-500"
+                class="w-full mb-2 text-slate-700 rounded-lg px-3 py-2 border-2 border-billmora-2 outline-none focus:ring-2 ring-billmora-primary-500 placeholder:text-slate-500"
             />
             <ul class="max-h-50 overflow-y-auto">
                 <template x-for="option in filteredOptions()" :key="option.value">
@@ -103,8 +103,8 @@
                         x-on:click="select(option.value)"
                         class="flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition ease-in-out duration-150"
                         :class="isSelected(option.value) 
-                            ? 'bg-billmora-primary text-white' 
-                            : 'text-slate-700 hover:bg-billmora-primary hover:text-white'"
+                            ? 'bg-billmora-primary-500 text-white' 
+                            : 'text-slate-700 hover:bg-billmora-primary-500 hover:text-white'"
                     >
                         <div class="grid gap-1">
                             <span x-text="option.title" class="font-semibold"></span>

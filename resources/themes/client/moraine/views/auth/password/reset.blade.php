@@ -27,11 +27,11 @@
                         <x-client::input type="password" name="password" label="{{ __('common.password') }}" required/>
                         <x-client::input type="password" name="password_confirmation" label="{{ __('common.confirm_password') }}" required/>
                     </div>
-                    <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.submit') }}</button>
+                    <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.submit') }}</button>
                 </div>
             </div>
         </form>
-        <div class="w-auto max-w-140 lg:max-w-none lg:w-1/2 h-auto lg:flex justify-center bg-billmora-primary m-8 lg:m-0 mx-8 sm:mx-auto rounded-2xl lg:rounded-none lg:rounded-br-[100px]">
+        <div class="w-auto max-w-140 lg:max-w-none lg:w-1/2 h-auto lg:flex justify-center bg-billmora-primary-500 m-8 lg:m-0 mx-8 sm:mx-auto rounded-2xl lg:rounded-none lg:rounded-br-[100px]">
             <div class="max-w-140 my-8 lg:my-auto mx-8 space-y-6">
                 <img src="https://media.billmora.com/logo/main-invert-bgnone.png" alt="brand logo" class="w-auto h-32">
                 <span class="text-2xl md:text-3xl lg:text-4xl font-bold text-white">Grow your business with Billmora!</span>

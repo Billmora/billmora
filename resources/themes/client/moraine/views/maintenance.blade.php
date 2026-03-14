@@ -10,7 +10,7 @@
 <body class="bg-white">
     <div class="flex justify-center w-full min-h-dvh">
         <div class="bg-billmora-1 my-auto mx-4 md:mx-none p-8 border-2 border-billmora-2 rounded-xl">
-            <p class="text-xl text-billmora-primary font-semibold">{{ $message }}</p>
+            <p class="text-xl text-billmora-primary-500 font-semibold">{{ $message }}</p>
         </div>
     </div>
     @livewireScripts

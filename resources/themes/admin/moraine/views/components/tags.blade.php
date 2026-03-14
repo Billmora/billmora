@@ -39,7 +39,7 @@
 
     <div
         @class([
-            'my-1 rounded-lg border-2 focus-within:ring-2 ring-billmora-primary',
+            'my-1 rounded-lg border-2 focus-within:ring-2 ring-billmora-primary-500',
             'border-red-400' => $error,
             'border-billmora-2' => !$error,
         ])

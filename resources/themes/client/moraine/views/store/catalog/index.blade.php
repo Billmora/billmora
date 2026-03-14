@@ -4,7 +4,7 @@
 
 @section('body')
 <div class="mb-6">
-    <h2 class="text-3xl text-billmora-primary font-semibold">{{ $catalog->name }}</h2>
+    <h2 class="text-3xl text-billmora-primary-500 font-semibold">{{ $catalog->name }}</h2>
     <p class="text-slate-500">{{ $catalog->description }}</p>
 </div>
 <div class="grid grid-cols-1 gap-5">
@@ -31,7 +31,7 @@
                         <img src="{{ Storage::url($package->icon) }}" alt="package icon" class="max-w-48 h-auto mx-auto object-cover rounded-lg">
                     @endif
                     <div class="space-y-2 text-center">
-                        <h4 class="text-xl text-billmora-primary font-semibold">{{ $package->name }}</h4>
+                        <h4 class="text-xl text-billmora-primary-500 font-semibold">{{ $package->name }}</h4>
                         @if ($package->prices->contains(fn ($p) => $p->type === 'free'))
                             <div class="grid">
                                 <span class="text-xl text-slate-500 font-semibold">Free</span>
@@ -79,7 +79,7 @@
                         @if ($package->stock !== 0) 
                             <a 
                                 href="{{ route('client.store.catalog.package', ['catalog' => $package->catalog->slug, 'package' => $package->slug]) }}"
-                                class="flex gap-2 items-center bg-billmora-primary text-white px-3 py-2 mx-auto rounded-lg hover:text-white transition-colors duration-300"
+                                class="flex gap-2 items-center bg-billmora-primary-500 text-white px-3 py-2 mx-auto rounded-lg hover:text-white transition-colors duration-300"
                             >
                                 {{ __('client/store.order_now') }}
                             </a>

@@ -57,7 +57,7 @@
             </div>
         </div>
         <div class="flex gap-4 ml-auto">
-            <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+            <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                 {{ __('common.submit') }}
             </button>
         </div>

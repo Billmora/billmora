@@ -64,7 +64,7 @@
         <x-admin::input type="url" name="social_telegram" label="{{ __('admin/settings/general.social_telegram_label') }}" helper="{{ __('admin/settings/general.social_telegram_helper') }}" value="{{ old('social_telegram', Billmora::getGeneral('social_telegram')) }}" required/>
     </div>
     @can('settings.general.update')
-        <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+        <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
             {{ __('common.save') }}
         </button>
     @endcan

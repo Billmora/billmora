@@ -27,7 +27,7 @@
                         <span class="text-slate-600">
                             {{ $item->name }} 
                             @if($item->quantity > 1)
-                                <span class="inline-block text-xs bg-billmora-2 text-billmora-primary font-bold px-2 py-0.5 rounded-md ml-1">
+                                <span class="inline-block text-xs bg-billmora-2 text-billmora-primary-500 font-bold px-2 py-0.5 rounded-md ml-1">
                                     x{{ $item->quantity }}
                                 </span>
                             @endif
@@ -43,7 +43,7 @@
         <hr class="border-t-2 border-dashed border-slate-200 my-2">
         <div class="flex justify-between font-bold text-base mt-1 items-center">
             <span class="text-slate-600 uppercase tracking-wider text-sm">{{ __('client/checkout.total_due') }}</span>
-            <span class="text-billmora-primary text-xl">{{ Currency::format($order->total, $order->currency) }}</span>
+            <span class="text-billmora-primary-500 text-xl">{{ Currency::format($order->total, $order->currency) }}</span>
         </div>
     </div>
     @if ($invoice?->status === 'unpaid')
@@ -54,7 +54,7 @@
             </a>
         </div>
     @endif
-    <a href="{{ route('client.dashboard') }}" class="bg-billmora-primary hover:bg-billmora-primary-hover mx-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+    <a href="{{ route('client.dashboard') }}" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 mx-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
         {{ __('client/checkout.complete.back_to_client') }}
     </a>
 </div>

@@ -23,8 +23,8 @@
                </x-admin::select>
             </div>
             <div class="flex gap-4 ml-auto">
-                <a href="{{ route('admin.orders') }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
-                <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <a href="{{ route('admin.orders') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
+                <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     {{ __('common.update') }}
                 </button>
             </div>
@@ -34,11 +34,11 @@
                     @foreach ($order->items as $item)
                         <div class="flex justify-between p-4 bg-white border-2 border-billmora-2 rounded-xl">
                             <div class="grid text-start">
-                                <span class="text-billmora-primary font-bold">{{ $item->description }}</span>
+                                <span class="text-billmora-primary-500 font-bold">{{ $item->description }}</span>
                                 <span class="text-slate-500 font-medium">x{{ $item->quantity }}</span>
                             </div>
                             <div class="grid text-end">
-                                <span class="text-billmora-primary font-bold">{{ Currency::format($item->unit_price, $order->currency) }}</span>
+                                <span class="text-billmora-primary-500 font-bold">{{ Currency::format($item->unit_price, $order->currency) }}</span>
                                 <span class="text-slate-500 font-medium">{{ $item->cycle_label }}</span>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                     <div class="grid gap-2">
                         @foreach ($order->services as $service)
                             <div class="flex justify-between items-center p-3 bg-white border-2 border-billmora-2 rounded-lg">
-                                <a href="{{ route('admin.services.edit', ['service' => $service->id]) }}" class="text-billmora-primary font-semibold hover:underline">
+                                <a href="{{ route('admin.services.edit', ['service' => $service->id]) }}" class="text-billmora-primary-500 font-semibold hover:underline">
                                     {{ $service->service_number }}
                                 </a>
                                 <span class="px-2 py-1 text-sm text-slate-600 font-semibold rounded-md">
@@ -65,7 +65,7 @@
         <div class="w-full lg:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl lg:sticky top-28 shrink-0">
             <div class="flex justify-between">
                 <span class="text-slate-600 font-semibold">{{ __('admin/orders.user_label') }}</span>
-                <a href="{{ route('admin.users.summary', ['user' => $order->user->id]) }}" class="text-billmora-primary hover:text-billmora-primary-hover font-medium transition cursor-pointer">{{ $order->user->fullname }}</a>
+                <a href="{{ route('admin.users.summary', ['user' => $order->user->id]) }}" class="text-billmora-primary-500 hover:text-billmora-primary-600 font-medium transition cursor-pointer">{{ $order->user->fullname }}</a>
             </div>
             <hr class="border-t-2 border-billmora-2">
             <div class="flex justify-between">

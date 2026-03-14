@@ -63,7 +63,7 @@
             <x-lucide-triangle-alert class="w-auto h-7 text-red-500"/>
             @break
           @default
-            <x-lucide-info class="w-auto h-7 text-billmora-primary"/>
+            <x-lucide-info class="w-auto h-7 text-billmora-primary-500"/>
         @endswitch
       </div>
 
@@ -76,7 +76,7 @@
 
       <div 
         x-on:click="$store.modal.close()"
-        class="absolute top-0 right-0 bg-billmora-1 hover:bg-billmora-primary p-2.5 text-slate-600 hover:text-white rounded-full transition-colors duration-300 cursor-pointer">
+        class="absolute top-0 right-0 bg-billmora-1 hover:bg-billmora-primary-500 p-2.5 text-slate-600 hover:text-white rounded-full transition-colors duration-300 cursor-pointer">
         <x-lucide-x class="w-auto h-5"/>
       </div>
     </div>

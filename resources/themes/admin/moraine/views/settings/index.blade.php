@@ -5,8 +5,8 @@
 @section('body')
 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
     @can('settings.general.view')
-        <a href="{{ route('admin.settings.general.company') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary rounded-2xl transition ease-in-out duration-150">
-            <div class="bg-billmora-primary p-2 rounded-full">
+        <a href="{{ route('admin.settings.general.company') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary-500 rounded-2xl transition ease-in-out duration-150">
+            <div class="bg-billmora-primary-500 p-2 rounded-full">
                 <x-lucide-bolt class="w-auto h-10 text-white" />
             </div>
             <div>
@@ -16,8 +16,8 @@
         </a>
     @endcan
     @can('settings.mail.view')
-        <a href="{{ route('admin.settings.mail.mailer') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary rounded-2xl transition ease-in-out duration-150">
-            <div class="bg-billmora-primary p-2 rounded-full">
+        <a href="{{ route('admin.settings.mail.mailer') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary-500 rounded-2xl transition ease-in-out duration-150">
+            <div class="bg-billmora-primary-500 p-2 rounded-full">
                 <x-lucide-mail class="w-auto h-10 text-white" />
             </div>
             <div>
@@ -27,8 +27,8 @@
         </a>
     @endcan
     @can('settings.auth.view')
-        <a href="{{ route('admin.settings.auth.user') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary rounded-2xl transition ease-in-out duration-150">
-            <div class="bg-billmora-primary p-2 rounded-full">
+        <a href="{{ route('admin.settings.auth.user') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary-500 rounded-2xl transition ease-in-out duration-150">
+            <div class="bg-billmora-primary-500 p-2 rounded-full">
                 <x-lucide-user-cog class="w-auto h-10 text-white" />
             </div>
             <div>
@@ -38,8 +38,8 @@
         </a>
     @endcan
     @can('settings.captcha.view')
-        <a href="{{ route('admin.settings.captcha.provider') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary rounded-2xl transition ease-in-out duration-150">
-            <div class="bg-billmora-primary p-2 rounded-full">
+        <a href="{{ route('admin.settings.captcha.provider') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary-500 rounded-2xl transition ease-in-out duration-150">
+            <div class="bg-billmora-primary-500 p-2 rounded-full">
                 <x-lucide-shield class="w-auto h-10 text-white" />
             </div>
             <div>
@@ -49,8 +49,8 @@
         </a>
     @endcan
     @can('settings.roles.view')
-        <a href="{{ route('admin.settings.roles') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary rounded-2xl transition ease-in-out duration-150">
-            <div class="bg-billmora-primary p-2 rounded-full">
+        <a href="{{ route('admin.settings.roles') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary-500 rounded-2xl transition ease-in-out duration-150">
+            <div class="bg-billmora-primary-500 p-2 rounded-full">
                 <x-lucide-venetian-mask class="w-auto h-10 text-white" />
             </div>
             <div>
@@ -60,8 +60,8 @@
         </a>
     @endcan
     @can('settings.currencies.view')
-        <a href="{{ route('admin.settings.currencies') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary rounded-2xl transition ease-in-out duration-150">
-            <div class="bg-billmora-primary p-2 rounded-full">
+        <a href="{{ route('admin.settings.currencies') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary-500 rounded-2xl transition ease-in-out duration-150">
+            <div class="bg-billmora-primary-500 p-2 rounded-full">
                 <x-lucide-badge-dollar-sign class="w-auto h-10 text-white" />
             </div>
             <div>
@@ -71,8 +71,8 @@
         </a>
     @endcan
     @can('settings.ticket.view')
-        <a href="{{ route('admin.settings.ticket.ticketing') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary rounded-2xl transition ease-in-out duration-150">
-            <div class="bg-billmora-primary p-2 rounded-full">
+        <a href="{{ route('admin.settings.ticket.ticketing') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary-500 rounded-2xl transition ease-in-out duration-150">
+            <div class="bg-billmora-primary-500 p-2 rounded-full">
                 <x-lucide-ticket class="w-auto h-10 text-white" />
             </div>
             <div>
@@ -82,8 +82,8 @@
         </a>
     @endcan
     @can('settings.automation.view')
-        <a href="{{ route('admin.settings.automation.scheduling') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary rounded-2xl transition ease-in-out duration-150">
-            <div class="bg-billmora-primary p-2 rounded-full">
+        <a href="{{ route('admin.settings.automation.scheduling') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary-500 rounded-2xl transition ease-in-out duration-150">
+            <div class="bg-billmora-primary-500 p-2 rounded-full">
                 <x-lucide-clock class="w-auto h-10 text-white" />
             </div>
             <div>

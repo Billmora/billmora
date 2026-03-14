@@ -13,9 +13,9 @@
                     {{ __('admin/services.user_label') }}
                 </label>
                 <a href="{{ route('admin.users.summary', ['user' => $service->user_id]) }}" class="relative inline-block max-w-150 w-full group" target="_blank">
-                    <input type="text" name="user_id" id="user_id" value="{{ $service->user->email }}" class="w-full px-3 py-2.25 bg-billmora-1 placeholder:text-gray-400 border-2 border-billmora-2 rounded-xl cursor-not-allowed" disabled>
+                    <input type="text" name="user_id" id="user_id" value="{{ $service->user->email }}" class="w-full px-3 py-2.25 bg-billmora-1 text-slate-700 placeholder:text-slate-500 border-2 border-billmora-2 rounded-xl cursor-not-allowed" disabled>
                     <div class="absolute top-1/2 -translate-y-1/2 right-1.5">
-                        <button type="button" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">
+                        <button type="button" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">
                             {{ __('admin/services.go_to_user') }}
                         </button>
                     </div>
@@ -288,8 +288,8 @@
             @endforeach
         @endif
         <div class="flex gap-4 ml-auto">
-            <a href="{{ route('admin.services') }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
-            <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+            <a href="{{ route('admin.services') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
+            <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                 {{ __('common.update') }}
             </button>
         </div>

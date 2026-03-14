@@ -95,7 +95,7 @@
                 @endforeach
             </div>
             <div class="flex justify-end">
-                <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-6 py-2 text-white font-medium rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-6 py-2 text-white font-medium rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     {{ __('common.submit') }}
                 </button>
             </div>

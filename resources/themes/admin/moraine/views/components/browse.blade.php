@@ -22,7 +22,7 @@
             <!-- Search Input -->
             <div class="flex gap-4 relative w-full mr-auto group">
                 <x-lucide-search 
-                    class="w-auto h-5 absolute top-1/2 left-2 -translate-y-1/2 pointer-events-none text-slate-400 group-focus-within:text-billmora-primary transition-colors duration-150" 
+                    class="w-auto h-5 absolute top-1/2 left-2 -translate-y-1/2 pointer-events-none text-slate-400 group-focus-within:text-billmora-primary-500 transition-colors duration-150" 
                 />
                 <input 
                     x-ref="input" 
@@ -33,11 +33,11 @@
                     x-on:keydown.arrow-up.prevent="moveSelection(-1)"
                     x-on:keydown.arrow-down.prevent="moveSelection(1)"
                     x-on:keydown.enter.prevent="selectItem()"
-                    class="w-full bg-billmora-1 p-2 pl-9 placeholder:text-slate-500 rounded-lg outline-none focus:ring-2 ring-billmora-primary" 
+                    class="w-full bg-billmora-1 p-2 pl-9 text-slate-700 placeholder:text-slate-500 rounded-lg outline-none focus:ring-2 ring-billmora-primary-500" 
                 />
                 <button 
                     type="button"
-                    class="block bg-billmora-1 hover:bg-billmora-primary p-2.5 text-slate-600 hover:text-white rounded-full transition-colors duration-300 cursor-pointer"
+                    class="block bg-billmora-1 hover:bg-billmora-primary-500 p-2.5 text-slate-600 hover:text-white rounded-full transition-colors duration-300 cursor-pointer"
                     x-on:click="close()"
                 >
                     <x-lucide-x class="w-auto h-5" />
@@ -54,7 +54,7 @@
                                 x-on:mouseenter="selectedIndex = index"
                                 class="flex flex-col px-4 py-3 rounded-xl transition-colors duration-150"
                                 :class="{
-                                    'bg-billmora-primary text-white': selectedIndex === index,
+                                    'bg-billmora-primary-500 text-white': selectedIndex === index,
                                     'hover:bg-billmora-100': selectedIndex !== index
                                 }"
                             >

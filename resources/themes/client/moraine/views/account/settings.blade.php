@@ -11,7 +11,7 @@
                 <span class="text-xl text-slate-600 font-bold break-all">{{ $user->fullname }}</span>
                 <span class="text-md text-slate-500 font-semibold break-all">{{ $user->email }}</span>
             </div>
-            <a href="https://gravatar.com/emails" target="_blank" class="w-full flex gap-2 justify-center items-center bg-billmora-primary hover:bg-billmora-primary px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300">
+            <a href="https://gravatar.com/emails" target="_blank" class="w-full flex gap-2 justify-center items-center bg-billmora-primary-500 hover:bg-billmora-primary-500 px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300">
                 <x-lucide-external-link class="w-auto h-5" />
                 Change Avatar
             </a>
@@ -64,7 +64,7 @@
                         @endforeach
                     </x-client::select>
                 </div>
-                <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.save') }}</button>
+                <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 ml-auto px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.save') }}</button>
             </div>
         </form>
     </div>

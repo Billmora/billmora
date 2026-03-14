@@ -14,7 +14,7 @@
             <div class="grid">
                 <span class="text-slate-600 font-semibold">{{ __('admin/audits/email.to_label') }}</span>
                 @if ($history->user_id)
-                    <a href="{{ route('admin.users.summary', ['user' => $history->user_id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                    <a href="{{ route('admin.users.summary', ['user' => $history->user_id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-hover">
                         {{ $history->to }}
                     </a>
                 @else
@@ -55,7 +55,7 @@
         @endif
     </div>
     <div class="flex gap-4 ml-auto">
-        <a href="{{ route('admin.audits.email') }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
+        <a href="{{ route('admin.audits.email') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
     </div>
 </div>
 @endsection

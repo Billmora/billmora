@@ -54,7 +54,7 @@
             step="1"
             x-model="sliderIdx"
             x-on:input="updateSelection"
-            class="w-full h-2 cursor-pointer accent-billmora-primary"
+            class="w-full h-2 cursor-pointer accent-billmora-primary-500"
             :class="hasError ? 'border-red-400' : ''"
         />
 

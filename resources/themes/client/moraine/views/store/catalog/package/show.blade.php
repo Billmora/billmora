@@ -44,11 +44,11 @@
                                 x-on:change="selectCycle({{ json_encode($p) }})"
                                 :checked="selectedBillingId == {{ $p['id'] }}"
                             >
-                            <div class="h-full bg-white p-4 border-2 rounded-xl transition-all hover:border-billmora-primary"
-                                :class="selectedBillingId == {{ $p['id'] }} ? 'border-billmora-primary' : 'border-billmora-2'">
+                            <div class="h-full bg-white p-4 border-2 rounded-xl transition-all hover:border-billmora-primary-500"
+                                :class="selectedBillingId == {{ $p['id'] }} ? 'border-billmora-primary-500' : 'border-billmora-2'">
                                 <div class="flex items-start gap-3">
                                     <div class="mt-1 h-4 w-4 rounded-full border-2 transition-all"
-                                        :class="selectedBillingId == {{ $p['id'] }} ? 'border-billmora-primary bg-billmora-primary' : 'border-slate-500'">
+                                        :class="selectedBillingId == {{ $p['id'] }} ? 'border-billmora-primary-500 bg-billmora-primary-500' : 'border-slate-500'">
                                     </div>
                                     <div class="flex flex-col">
                                         <h4 class="text-sm font-semibold text-slate-600">{{ $p['name'] }}</h4>
@@ -201,7 +201,7 @@
                 <span class="text-slate-600 font-semibold">
                     {{ __('client/store.package.due_today') }}
                 </span>
-                <span class="text-2xl text-billmora-primary font-bold" x-text="totalFormatted"></span>
+                <span class="text-2xl text-billmora-primary-500 font-bold" x-text="totalFormatted"></span>
             </div>
             <template x-if="setupFee > 0">
                 <div class="mt-2 p-2 bg-billmora-1 rounded-lg text-sm font-medium text-slate-500 border border-slate-100">
@@ -213,7 +213,7 @@
             </template>
             <button
                 type="submit"
-                class="w-full bg-billmora-primary hover:bg-billmora-primary-hover p-3 text-white rounded-xl font-semibold transition-all cursor-pointer"
+                class="w-full bg-billmora-primary-500 hover:bg-billmora-primary-600 p-3 text-white rounded-xl font-semibold transition-all cursor-pointer"
             >
                 {{ __('client/store.package.add_to_cart') }}
             </button>

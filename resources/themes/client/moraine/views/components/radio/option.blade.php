@@ -24,11 +24,11 @@
             id="{{ $name }}-{{ $value }}"
             value="{{ $value }}"
             x-on:change="hasError = false"
-            class="peer h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-billmora-2 checked:border-billmora-primary transition"
+            class="peer h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-billmora-2 checked:border-billmora-primary-500 transition"
             @checked($resolvedValue == $value)
         />
         <span
-            class="absolute w-3 h-3 rounded-full bg-billmora-primary opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            class="absolute w-3 h-3 rounded-full bg-billmora-primary-500 opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         </span>
     </label>
 

@@ -43,7 +43,7 @@
             placeholder="{{ $placeholder }}"
             x-on:input="errorVisible = false"
             @class([
-                'w-full text-slate-700 rounded-lg px-3 py-2 border-2 outline-none focus:ring-2 ring-billmora-primary placeholder:text-slate-500',
+                'w-full text-slate-700 rounded-lg px-3 py-2 border-2 outline-none focus:ring-2 ring-billmora-primary-500 placeholder:text-slate-500',
                 'bg-billmora-1 cursor-not-allowed' => $attributes->has('disabled'),
                 'cursor-text' => !$attributes->has('disabled'),
                 'border-red-400' => $resolvedError,

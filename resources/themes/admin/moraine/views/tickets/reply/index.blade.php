@@ -44,7 +44,7 @@
                                                 href="{{ Storage::url($attachment->file_path) }}"
                                                 target="_blank"
                                                 download="{{ $attachment->file_name }}"
-                                                class="flex items-center gap-2 bg-billmora-1 hover:bg-billmora-primary border-2 border-billmora-2 hover:border-billmora-primary px-3 py-2 rounded-lg transition group"
+                                                class="flex items-center gap-2 bg-billmora-1 hover:bg-billmora-primary-500 border-2 border-billmora-2 hover:border-billmora-primary-500 px-3 py-2 rounded-lg transition group"
                                             >
                                                 <x-lucide-link class="w-4 h-auto text-slate-500 group-hover:text-white flex-shrink-0" />
                                                 <span class="text-sm text-slate-600 group-hover:text-white font-medium truncate max-w-40">
@@ -97,7 +97,7 @@
                                                 href="{{ Storage::url($attachment->file_path) }}"
                                                 target="_blank"
                                                 download="{{ $attachment->file_name }}"
-                                                class="flex items-center gap-2 bg-billmora-1 hover:bg-billmora-primary border-2 border-billmora-2 hover:border-billmora-primary px-3 py-2 rounded-lg transition group"
+                                                class="flex items-center gap-2 bg-billmora-1 hover:bg-billmora-primary-500 border-2 border-billmora-2 hover:border-billmora-primary-500 px-3 py-2 rounded-lg transition group"
                                             >
                                                 <x-lucide-link class="w-4 h-auto text-slate-500 group-hover:text-white flex-shrink-0" />
                                                 <span class="text-sm text-slate-600 group-hover:text-white font-medium truncate max-w-40">
@@ -149,7 +149,7 @@
             <button 
                 type="button" 
                 x-on:click="add()"
-                class="bg-billmora-primary hover:bg-billmora-primary-hover px-4 py-2 ml-auto text-white rounded-lg transition-colors duration-150 cursor-pointer"
+                class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-4 py-2 ml-auto text-white rounded-lg transition-colors duration-150 cursor-pointer"
             >
                 {{ __('admin/tickets.ticket_add_attachments') }}
             </button>
@@ -174,7 +174,7 @@
                 </div>
             </template>
             <div class="flex gap-4 ml-auto">
-                <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     {{ __('common.send') }}
                 </button>
             </div>
@@ -235,7 +235,7 @@
                 <button 
                     type="button"
                     onclick="document.getElementById('formMessage').scrollIntoView({ behavior: 'smooth', block: 'start' })"
-                    class="w-full bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
+                    class="w-full bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
                 >
                     {{ __('common.reply') }}
                 </button>
@@ -256,7 +256,7 @@
             </h3>
             @foreach ($ticket->messages as $message)
                 @foreach ($message->attachments as $attachment)
-                    <a href="{{ Storage::url($attachment->file_path) }}" class="flex items-center gap-2 bg-white hover:bg-billmora-primary border-2 border-billmora-2 hover:border-billmora-primary px-3 py-2 rounded-lg transition group">
+                    <a href="{{ Storage::url($attachment->file_path) }}" class="flex items-center gap-2 bg-white hover:bg-billmora-primary-500 border-2 border-billmora-2 hover:border-billmora-primary-500 px-3 py-2 rounded-lg transition group">
                         <x-lucide-download class="w-4 h-auto text-slate-500 group-hover:text-white" />
                         <span class="text-slate-500 group-hover:text-white font-medium">
                             {{ $attachment->file_name }}
@@ -279,7 +279,7 @@
             @csrf
             @method('DELETE')
             <div class="flex justify-end gap-2 mt-4">
-                <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     {{ __('common.cancel') }}
                 </x-admin::modal.trigger>
                 <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
@@ -301,7 +301,7 @@
             @csrf
             @method('PATCH')
             <div class="flex justify-end gap-2 mt-4">
-                <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     {{ __('common.cancel') }}
                 </x-admin::modal.trigger>
                 <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">

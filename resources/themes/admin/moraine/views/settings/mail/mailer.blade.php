@@ -78,7 +78,7 @@
     </div>
     <div class="grid md:grid-cols-1 gap-5">
         @can('settings.mail.update')
-            <x-admin::modal.trigger type="button" modal="testConnectionModal" class="flex items-center gap-2 bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+            <x-admin::modal.trigger type="button" modal="testConnectionModal" class="flex items-center gap-2 bg-billmora-primary-500 hover:bg-billmora-primary-600 ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                 <x-lucide-cable class="w-auto h-5" />
                 {{ __('admin/settings/mail.mailer_test_label') }}
             </x-admin::modal.trigger>
@@ -168,7 +168,7 @@
     </div>
     <div class="flex gap-2 ml-auto">
         @can('settings.mail.update')
-            <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+            <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                 {{ __('common.save') }}
             </button>
         @endcan
@@ -189,7 +189,7 @@
                 <x-admin::modal.trigger 
                     type="button" 
                     variant="close" 
-                    class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
+                    class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
                 >
                     {{ __('common.cancel') }}
                 </x-admin::modal.trigger>

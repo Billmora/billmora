@@ -5,8 +5,8 @@
 @section('body')
 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
     @can('audit.email.history.view')
-        <a href="{{ route('admin.audits.email') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary rounded-2xl transition ease-in-out duration-150">
-            <div class="bg-billmora-primary p-2 rounded-full">
+        <a href="{{ route('admin.audits.email') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary-500 rounded-2xl transition ease-in-out duration-150">
+            <div class="bg-billmora-primary-500 p-2 rounded-full">
                 <x-lucide-mails class="w-auto h-10 text-white" />
             </div>
             <div>
@@ -16,8 +16,8 @@
         </a>
     @endcan
     @can('audit.user.activity.view')
-        <a href="{{ route('admin.audits.user') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary rounded-2xl transition ease-in-out duration-150">
-            <div class="bg-billmora-primary p-2 rounded-full">
+        <a href="{{ route('admin.audits.user') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary-500 rounded-2xl transition ease-in-out duration-150">
+            <div class="bg-billmora-primary-500 p-2 rounded-full">
                 <x-lucide-activity class="w-auto h-10 text-white" />
             </div>
             <div>
@@ -27,8 +27,8 @@
         </a>
     @endcan
     @can('audit.system.logs.view')
-        <a href="{{ route('admin.audits.system') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary rounded-2xl transition ease-in-out duration-150">
-            <div class="bg-billmora-primary p-2 rounded-full">
+        <a href="{{ route('admin.audits.system') }}" class="flex gap-4 items-center bg-white p-4 border-2 border-billmora-2 hover:border-billmora-primary-500 rounded-2xl transition ease-in-out duration-150">
+            <div class="bg-billmora-primary-500 p-2 rounded-full">
                 <x-lucide-history class="w-auto h-10 text-white" />
             </div>
             <div>

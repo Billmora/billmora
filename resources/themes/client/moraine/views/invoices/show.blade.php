@@ -7,7 +7,7 @@
     <div class="w-full lg:w-5/7 h-fit grid gap-6">
         @if (Billmora::getGeneral('invoice_pdf'))
             <form action="{{ route('client.invoices.download', ['invoice' => $invoice->invoice_number]) }}" class="ml-auto">
-                <button type="submit" class="flex gap-2 items-center bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <button type="submit" class="flex gap-2 items-center bg-billmora-primary-500 hover:bg-billmora-primary-600 ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     <x-lucide-download class="w-5 h-auto" />
                     {{ __('client/invoices.download_label') }}
                 </button>
@@ -79,7 +79,7 @@
         </div>
     </div>
     <div class="w-full lg:w-2/7 h-fit bg-white border-2 border-billmora-2 rounded-2xl">
-        <div class="grid bg-billmora-primary p-6 rounded-xl">
+        <div class="grid bg-billmora-primary-500 p-6 rounded-xl">
             <div class="grid">
                 <span class="text-md font-semibold text-white">{{ __('client/invoices.total_due') }}</span>
                 <span class="text-2xl font-bold text-white">{{ Currency::format($invoice->amount_due, $invoice->currency) }}</span>
@@ -109,7 +109,7 @@
             @if(!$isCreditDeposit && $creditBalance > 0 && $invoice->amount_due > 0)
                 <div class="m-6 mb-0 p-4 bg-white border-2 border-billmora-2 rounded-xl">
                     <span class="block text-sm font-semibold text-slate-600 mb-2">
-                        {{ __('client/invoices.credit.available') }} <span class="text-billmora-primary">{{ Currency::format($creditBalance, $invoice->currency) }}</span></span>
+                        {{ __('client/invoices.credit.available') }} <span class="text-billmora-primary-500">{{ Currency::format($creditBalance, $invoice->currency) }}</span></span>
                     <form action="{{ route('client.invoices.settle', ['invoice' => $invoice->invoice_number]) }}" method="POST">
                         @csrf
                         <button type="submit" class="w-full bg-green-500 hover:bg-green-600 px-3 py-2 text-white font-semibold rounded-lg transition-colors cursor-pointer">
@@ -132,7 +132,7 @@
                             </option>
                         @endforeach
                     </x-client::select>
-                    <button type="submit" class="w-full bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                    <button type="submit" class="w-full bg-billmora-primary-500 hover:bg-billmora-primary-600 ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                         {{ __('client/invoices.payment_process_label') }}
                     </button>
                 </form>

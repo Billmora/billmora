@@ -31,18 +31,18 @@
                         <div class="flex gap-2 ml-auto">
                             <form action="{{ route('client.two-factor.backup.download') }}" method="POST">
                                 @csrf
-                                <button type="submit" class="bg-billmora-primary border-2 border-billmora-primary hover:bg-billmora-primary-hover hover:border-billmora-primary-hover ml-auto px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.download') }}</button>
+                                <button type="submit" class="bg-billmora-primary-500 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 hover:border-billmora-primary-600 ml-auto px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.download') }}</button>
                             </form>
                             <form action="{{ route('client.two-factor.backup.store') }}" method="POST">
                                 @csrf
-                                <button type="submit" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.continue') }}</button>
+                                <button type="submit" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.continue') }}</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="w-auto max-w-170 lg:max-w-none lg:w-1/2 h-auto lg:flex justify-center bg-billmora-primary m-8 lg:m-0 mx-8 sm:mx-auto rounded-2xl lg:rounded-none lg:rounded-br-[100px]">
+        <div class="w-auto max-w-170 lg:max-w-none lg:w-1/2 h-auto lg:flex justify-center bg-billmora-primary-500 m-8 lg:m-0 mx-8 sm:mx-auto rounded-2xl lg:rounded-none lg:rounded-br-[100px]">
             <div class="max-w-170 my-8 lg:my-auto mx-8 space-y-6">
                 <img src="https://media.billmora.com/logo/main-invert-bgnone.png" alt="brand logo" class="w-auto h-32">
                 <span class="text-2xl md:text-3xl lg:text-4xl font-bold text-white">Grow your business with Billmora!</span>

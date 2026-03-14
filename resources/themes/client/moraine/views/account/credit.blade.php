@@ -49,7 +49,7 @@
                 </option>
             @endforeach
         </x-client::select>
-        <button type="submit" class="w-full bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+        <button type="submit" class="w-full bg-billmora-primary-500 hover:bg-billmora-primary-600 ml-auto px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
             {{ __('client/account.credits.deposit_submit') }}
         </button>
     </form>

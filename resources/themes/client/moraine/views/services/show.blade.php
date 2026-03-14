@@ -17,7 +17,7 @@
     <div class="flex flex-col lg:flex-row gap-5">
         <div class="w-full lg:w-5/7 flex flex-col gap-5">
             <div class="w-full flex flex-col lg:flex-row gap-5">
-                <div class="w-full flex justify-center bg-billmora-primary p-8 border-2 border-billmora-2 rounded-2xl">
+                <div class="w-full flex justify-center bg-billmora-primary-500 p-8 border-2 border-billmora-2 rounded-2xl">
                     <div class="flex flex-col items-center m-auto">
                         <span class="text-xl lg:text-3xl font-semibold text-slate-50">{{ $service->package->catalog->name }}</span>
                         <span class="text-md lg:text-2xl font-medium text-slate-100">{{ $service->name }}</span>
@@ -56,13 +56,13 @@
         </div>
         <div class="w-full lg:w-2/7 h-fit grid gap-5">
             <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
-                <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="w-full flex gap-2 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="w-full flex gap-2 items-center bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     <x-lucide-view class="w-auto h-5" />
                     {{ __('client/services.action.overview') }}
                 </a>
                 @inject('scalingService', 'App\Services\Service\ScalingService')
                 @if($scalingService->canBeScaled($service))
-                    <a href="{{ route('client.services.scaling.show', ['service' => $service->service_number]) }}" class="w-full flex gap-2 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                    <a href="{{ route('client.services.scaling.show', ['service' => $service->service_number]) }}" class="w-full flex gap-2 items-center bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                         <x-lucide-arrow-up-down class="w-auto h-5" />
                         {{ __('client/services.action.scale') }}
                     </a>
@@ -84,7 +84,7 @@
                     @foreach($clientActions as $slug => $action)
                         @if(in_array($action['type'], ['page', 'form']))
                             <a href="{{ route('client.services.provisioning.show', ['service' => $service->service_number, 'slug' => $slug]) }}"
-                               class="w-full flex gap-3 items-center bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-all duration-200 cursor-pointer"
+                               class="w-full flex gap-3 items-center bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-all duration-200 cursor-pointer"
                             >
                                 @if(!empty($action['icon']))
                                     <i class="{{ $action['icon'] }}"></i>
@@ -94,7 +94,7 @@
                         @elseif($action['type'] === 'link')
                             <a href="{{ route('client.services.provisioning.handle', ['service' => $service->service_number, 'slug' => $slug]) }}"
                                target="_blank"
-                               class="w-full flex gap-3 items-center bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-all duration-200 cursor-pointer"
+                               class="w-full flex gap-3 items-center bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-all duration-200 cursor-pointer"
                             >
                                 @if(!empty($action['icon']))
                                     <i class="{{ $action['icon'] }}"></i>
@@ -104,7 +104,7 @@
                         @elseif($action['type'] === 'submit')
                             <x-client::modal.trigger 
                                 modal="modalAction-{{ $slug }}"
-                                class="w-full flex gap-3 items-center bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-all duration-200 cursor-pointer"
+                                class="w-full flex gap-3 items-center bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-all duration-200 cursor-pointer"
                             >
                                 @if(!empty($action['icon']))
                                     <i class="{{ $action['icon'] }}"></i>
@@ -128,7 +128,7 @@
                                         <x-client::modal.trigger 
                                             type="button" 
                                             variant="close" 
-                                            class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
+                                            class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
                                         >
                                             {{ __('common.cancel') }}
                                         </x-client::modal.trigger>

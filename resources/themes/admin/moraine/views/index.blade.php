@@ -57,7 +57,7 @@
                     <hr class="border-t-2 border-billmora-2 my-3">
                     <li class="flex justify-between items-center">
                         <span class="text-slate-500 font-semibold uppercase">{{ __('admin/dashboard.billing_all_time') }}</span>
-                        <span class="text-billmora-primary font-bold text-lg">{{ $billingSummary['all_time'] }}</span>
+                        <span class="text-billmora-primary-500 font-bold text-lg">{{ $billingSummary['all_time'] }}</span>
                     </li>
                 </ul>
             </div>

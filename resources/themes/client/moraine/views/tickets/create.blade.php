@@ -67,7 +67,7 @@
         <button 
             type="button" 
             x-on:click="add()"
-            class="bg-billmora-primary hover:bg-billmora-primary-hover px-4 py-2 ml-auto text-white rounded-lg transition-colors duration-150 cursor-pointer"
+            class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-4 py-2 ml-auto text-white rounded-lg transition-colors duration-150 cursor-pointer"
         >
             {{ __('client/tickets.ticket_add_attachments') }}
         </button>
@@ -93,10 +93,10 @@
         <x-client::captcha form="ticket_form" class="mt-4 mx-auto" />
     </div>
     <div class="flex gap-4 ml-auto">
-        <a href="{{ route('client.tickets') }}" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+        <a href="{{ route('client.tickets') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
             {{ __('common.cancel') }}
         </a>
-        <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+        <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
             {{ __('common.create') }}
         </button>
     </div>

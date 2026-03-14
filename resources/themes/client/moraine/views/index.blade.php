@@ -10,7 +10,7 @@
             <span class="text-xl text-slate-600 font-bold break-all">{{ $user->fullname }}</span>
             <span class="text-md text-slate-500 font-semibold break-all">{{ $user->email }}</span>
         </div>
-        <div class="grid gap-2 bg-billmora-primary p-4 text-xs rounded-xl">
+        <div class="grid gap-2 bg-billmora-primary-500 p-4 text-xs rounded-xl">
             <div class="flex gap-3 justify-between">
                 <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.phone_number') }}</span>
                 <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->phone_number }}</span>
@@ -80,7 +80,7 @@
                 <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
                     <div class="flex justify-between bg-white items-center p-4">
                         <h5 class="text-lg font-semibold text-slate-600">{{ __('client/dashboard.active_services') }}</h5>
-                        <a href="{{ route('client.store') }}" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                        <a href="{{ route('client.store') }}" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                             {{ __('client/dashboard.order_new_services') }}
                         </a>
                     </div>
@@ -100,7 +100,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->name }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->next_due_date->format(Billmora::getGeneral('company_date_format')) }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
-                                        <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ __('common.manage') }}</a>
+                                        <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">{{ __('common.manage') }}</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -115,7 +115,7 @@
                     <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
                         <div class="flex justify-between bg-white items-center p-4">
                             <h5 class="text-lg font-semibold text-slate-600">{{ __('client/dashboard.unpaid_invoices') }}</h5>
-                            <a href="{{ route('client.invoices') }}" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                            <a href="{{ route('client.invoices') }}" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                                 {{ __('client/dashboard.view_all') }}
                             </a>
                         </div>
@@ -135,7 +135,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ Currency::format($invoice->total, $invoice->currency) }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ ucwords($invoice->status) }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
-                                            <a href="{{ route('client.invoices.show', ['invoice' => $invoice->invoice_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                                            <a href="{{ route('client.invoices.show', ['invoice' => $invoice->invoice_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">
                                                 {{ __('common.manage') }}
                                             </a>
                                         </td>
@@ -151,7 +151,7 @@
                     <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
                         <div class="flex justify-between bg-white items-center p-4">
                             <h5 class="text-lg font-semibold text-slate-600">{{ __('client/dashboard.open_tickets') }}</h5>
-                            <a href="{{ route('client.tickets') }}" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                            <a href="{{ route('client.tickets') }}" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                                 {{ __('client/dashboard.view_all') }}
                             </a>
                         </div>
@@ -171,7 +171,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $ticket->subject }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ ucwords($ticket->status) }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
-                                            <a href="{{ route('client.tickets.reply', ['ticket' => $ticket->ticket_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">
+                                            <a href="{{ route('client.tickets.reply', ['ticket' => $ticket->ticket_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">
                                                 {{ __('common.manage') }}
                                             </a>
                                         </td>

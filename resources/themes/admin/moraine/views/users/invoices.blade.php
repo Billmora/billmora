@@ -47,11 +47,11 @@
     <div class="w-full md:w-100">
         <form action="{{ route('admin.users.invoices', ['user' => $user->id]) }}" method="GET" class="relative inline-block max-w-150 w-full group">
             <div class="absolute top-1/2 -translate-y-1/2 left-2.5 pointer-events-none">
-                <x-lucide-search class="w-5 h-auto text-slate-500 group-focus-within:text-billmora-primary" />
+                <x-lucide-search class="w-5 h-auto text-slate-500 group-focus-within:text-billmora-primary-500" />
             </div>
-            <input type="text" name="search" id="search" placeholder="{{ __('admin/common.search') }}" value="{{ request('search') }}" class="w-full px-6 py-3 pl-10 bg-white placeholder:text-gray-400 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary">
+            <input type="text" name="search" id="search" placeholder="{{ __('admin/common.search') }}" value="{{ request('search') }}" class="w-full px-6 py-3 pl-10 bg-white text-slate-700 placeholder:text-slate-500 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary-500">
             <div class="absolute top-1/2 -translate-y-1/2 right-1.5">
-                <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">{{ __('common.submit') }}</button>
+                <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">{{ __('common.submit') }}</button>
             </div>
         </form>
     </div>
@@ -74,14 +74,14 @@
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->id }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
-                                    <a href="{{ route('admin.invoices.edit', ['invoice' => $invoice->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $invoice->invoice_number }}</a>
+                                    <a href="{{ route('admin.invoices.edit', ['invoice' => $invoice->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-hover">{{ $invoice->invoice_number }}</a>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ Currency::format($invoice->total, $invoice->currency) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->status }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                     @can('invoices.update')
-                                        <a href="{{ route('admin.invoices.edit', ['invoice' => $invoice->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ __('common.edit') }}</a>
+                                        <a href="{{ route('admin.invoices.edit', ['invoice' => $invoice->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-hover">{{ __('common.edit') }}</a>
                                     @endcan
                                 </td>
                             </tr>

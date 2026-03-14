@@ -5,7 +5,7 @@
 @section('body')
 <div class="flex flex-col gap-4">
     <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
-        <a href="{{ route('client.tickets.create') }}" class="flex gap-1 items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+        <a href="{{ route('client.tickets.create') }}" class="flex gap-1 items-center bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
             <x-lucide-plus class="w-auto h-5" />
             {{ __('common.create') }}
         </a>
@@ -28,7 +28,7 @@
                         @foreach ($tickets as $ticket)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
-                                    <a href="{{ route('client.tickets.reply', ['ticket' => $ticket->ticket_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $ticket->ticket_number }}</a>
+                                    <a href="{{ route('client.tickets.reply', ['ticket' => $ticket->ticket_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">{{ $ticket->ticket_number }}</a>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $ticket->subject }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ ucwords(str_replace('_', ' ', $ticket->status)) }}</td>

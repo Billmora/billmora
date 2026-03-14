@@ -26,16 +26,16 @@
                         </div>
                         <div class="mt-4 space-y-2">
                             <x-client::input type="text" name="totp" label="{{ __('auth.2fa.verify.totp') }}" autocomplete="off" required />
-                            <a href="{{ route('client.two-factor.recovery') }}" class="text-billmora-primary hover:text-billmora-primary-hover   font-semibold">{{ __('auth.2fa.recovery.lost_access') }}</a>
+                            <a href="{{ route('client.two-factor.recovery') }}" class="text-billmora-primary-500 hover:text-billmora-primary-600   font-semibold">{{ __('auth.2fa.recovery.lost_access') }}</a>
                         </div>
                         <div class="flex gap-2 ml-auto mt-6">
-                            <button type="submit" variant="secondary" class="bg-billmora-primary hover:bg-billmora-primary-hover ml-auto px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.continue') }}</button>
+                            <button type="submit" variant="secondary" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 ml-auto px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.continue') }}</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        <div class="w-auto max-w-170 lg:max-w-none lg:w-1/2 h-auto lg:flex justify-center bg-billmora-primary m-8 lg:m-0 mx-8 sm:mx-auto rounded-2xl lg:rounded-none lg:rounded-br-[100px]">
+        <div class="w-auto max-w-170 lg:max-w-none lg:w-1/2 h-auto lg:flex justify-center bg-billmora-primary-500 m-8 lg:m-0 mx-8 sm:mx-auto rounded-2xl lg:rounded-none lg:rounded-br-[100px]">
             <div class="max-w-170 my-8 lg:my-auto mx-8 space-y-6">
                 <img src="https://media.billmora.com/logo/main-invert-bgnone.png" alt="brand logo" class="w-auto h-32">
                 <span class="text-2xl md:text-3xl lg:text-4xl font-bold text-white">Grow your business with Billmora!</span>

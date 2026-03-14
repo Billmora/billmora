@@ -14,7 +14,7 @@
         name="variants[{{ $variant->id }}]"
         x-model="selectedOptionByVariant[{{ $variant->id }}]"
         x-on:change="handleChange"
-        class="w-full text-slate-700 rounded-lg px-3 py-2.5 border-2 border-billmora-2 outline-none focus:ring-2 ring-billmora-primary appearance-none"
+        class="w-full text-slate-700 rounded-lg px-3 py-2.5 border-2 border-billmora-2 outline-none focus:ring-2 ring-billmora-primary-500 appearance-none"
     >
         <option class="text-slate-500" selected disabled>{{ __('common.choose_option') }}</option>
         @foreach($variant->options as $option)

@@ -50,7 +50,7 @@
                 {{ __('admin/users.email_verification_alert_helper') }}
                 <form action="{{ route('admin.users.verify', ['user' => $user->id]) }}" method="POST" class="ml-auto">
                     @csrf
-                    <button type="submit" class="bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('admin/users.marked_as_verified') }}</button>
+                    <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('admin/users.marked_as_verified') }}</button>
                 </form>
             </x-admin::alert>
         @endif
@@ -72,7 +72,7 @@
                     @endif
                 </span>
             </div>
-            <div class="grid gap-2 bg-billmora-primary p-4 text-xs rounded-xl">
+            <div class="grid gap-2 bg-billmora-primary-500 p-4 text-xs rounded-xl">
                 <div class="flex gap-3 justify-between">
                     <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.phone_number') }}</span>
                     <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->phone_number }}</span>
@@ -110,7 +110,7 @@
                 @can('users.impersonate')
                     <form action="{{ route('admin.users.impersonate', ['user' => $user->id]) }}" method="POST">
                         @csrf
-                        <button type="submit" class="w-full flex gap-2 justify-center items-center bg-billmora-primary hover:bg-billmora-primary-hover px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
+                        <button type="submit" class="w-full flex gap-2 justify-center items-center bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
                             <x-lucide-user class="w-auto h-5" />
                             {{ __('admin/users.login_as_user') }}
                         </button>
@@ -173,14 +173,14 @@
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $order->id }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
-                                            <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ $order->order_number }}</a>
+                                            <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">{{ $order->order_number }}</a>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $order->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ Currency::format($order->total, $order->currency) }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $order->status }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                             @can('orders.update')
-                                                <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary hover:text-billmora-primary-hover">{{ __('common.edit') }}</a>                               
+                                                <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">{{ __('common.edit') }}</a>                               
                                             @endcan
                                         </td>
                                     </tr>
@@ -208,7 +208,7 @@
                     @csrf
                     @method('DELETE')
                     <div class="flex justify-end gap-2 mt-4">
-                        <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary hover:bg-billmora-primary-hover px-3 py-2 text-billmora-primary hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                        <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
                         <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
                     </div>
                 </form>
