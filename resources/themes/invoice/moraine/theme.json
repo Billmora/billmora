@@ -1,4 +1,5 @@
 {
+    "provider": "moraine",
     "name": "Moraine",
     "type": "invoice",
     "version": "1.0.0",
