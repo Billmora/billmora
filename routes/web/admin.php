@@ -412,6 +412,18 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin themes interface routes.
+     *
+     * Prefix: /admin/themes
+     */
+    Route::group(['prefix' => 'themes'], function () {
+        Route::get('/', [Admin\ThemesController::class, 'index'])->name('admin.themes');
+        Route::post('/install', [Admin\ThemesController::class, 'install'])->name('admin.themes.install');
+        Route::post('/{theme}/update', [Admin\ThemesController::class, 'update'])->name('admin.themes.update');
+        Route::delete('/{theme}/uninstall', [Admin\ThemesController::class, 'uninstall'])->name('admin.themes.uninstall');
+    });
+
+    /**
      * Admin automations interface routes.
      *
      * Prefix: /admin/automations
