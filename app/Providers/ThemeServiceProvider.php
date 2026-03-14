@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\BillmoraService;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
@@ -20,7 +21,7 @@ class ThemeServiceProvider extends ServiceProvider
 
     /**
      * Register default theme information, view namespaces, and Blade anonymous components
-     * for each predefined role (admin, client, portal, email, invoice).
+     * for each predefined type (admin, client, portal, email, invoice).
      *
      * This dynamically shares theme metadata with views, registers paths for Blade templates,
      * and auto-registers component aliases found under each theme’s components directory.
@@ -29,45 +30,54 @@ class ThemeServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $defaultThemes = [
-            'admin' => 'moraine',
-            'portal' => 'moraine',
-            'client' => 'moraine',
-            'email' => 'moraine',
-            'invoice' => 'moraine',
-        ];
+        $types = ['admin', 'client', 'portal', 'email', 'invoice'];
 
-        foreach ($defaultThemes as $role => $themeName) {
-            $basePath = resource_path("themes/{$role}/{$themeName}");
+        foreach ($types as $type) {
+            try {
+                $activeTheme = BillmoraService::getActiveThemeModel($type);
+                $provider = $activeTheme ? strtolower($activeTheme->provider) : 'moraine';
+                
+                $themeConfig = BillmoraService::getThemeConfig($type);
+                
+            } catch (\Exception $e) {
+                $provider = 'moraine';
+                $themeConfig = [];
+            }
 
-            $themeInfo = File::exists("{$basePath}/theme.php")
-                ? require "{$basePath}/theme.php"
+            $basePath = resource_path("themes/{$type}/{$provider}");
+            $jsonPath = "{$basePath}/theme.json";
+
+            $themeInfo = File::exists($jsonPath)
+                ? json_decode(File::get($jsonPath), true)
                 : [
-                    'name' => ucfirst($themeName),
+                    'name' => ucfirst($provider),
                     'version' => '1.0.0',
                     'author' => 'Billmora',
-                    'url' => 'https://billmora.com',
-                    'assets' => "/themes/{$role}/{$themeName}",
+                    'assets' => "/themes/{$type}/{$provider}",
                 ];
 
-            View::share("{$role}Theme", $themeInfo);
+            View::share("{$type}Theme", $themeInfo);
+            
+            View::share("{$type}ThemeConfig", $themeConfig);
 
             $viewPath = "{$basePath}/views";
-            View::addNamespace($role, $viewPath);
+            if (File::exists($viewPath)) {
+                View::addNamespace($type, $viewPath);
+            }
 
             $componentPath = "{$basePath}/views/components";
-            Blade::anonymousComponentPath($componentPath, $role);
-
             if (File::exists($componentPath)) {
-                collect(File::allFiles($componentPath))->each(function ($file) use ($componentPath, $role) {
+                Blade::anonymousComponentPath($componentPath, $type);
+
+                collect(File::allFiles($componentPath))->each(function ($file) use ($componentPath, $type) {
                     $relativePath = Str::of($file->getRealPath())
                         ->replace('\\', '/')
                         ->after(Str::of($componentPath)->replace('\\', '/') . '/')
                         ->before('.blade.php')
                         ->replace('/', '.');
 
-                    $view  = "{$role}::components.{$relativePath}";
-                    $alias = "{$role}.{$relativePath}";
+                    $view  = "{$type}::components.{$relativePath}";
+                    $alias = "{$type}.{$relativePath}";
 
                     Blade::component($view, $alias);
                 });

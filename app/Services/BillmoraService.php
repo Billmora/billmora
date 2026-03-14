@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Setting;
+use App\Models\Theme;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
@@ -17,6 +18,7 @@ class BillmoraService
      * Cache key prefix for settings.
      */
     protected const CACHE_PREFIX = 'setting_';
+    protected const CACHE_PREFIX_THEME = 'theme_config_';
 
     /**
      * Cache time-to-live for settings (in seconds).
@@ -354,4 +356,69 @@ class BillmoraService
         return $value;
     }
 
+    /**
+     * Retrieve the active theme configuration for a specific role/type.
+     *
+     * @param string $type The theme type (admin, client, portal, email, invoice).
+     * @param string|null $key Specific config key to retrieve (e.g., 'primary_500').
+     * @param mixed $default Default value if the key is not found.
+     * @return mixed
+     */
+    public static function getThemeConfig(string $type, ?string $key = null, mixed $default = null): mixed
+    {
+        $cacheKey = self::CACHE_PREFIX_THEME . $type;
+
+        $themeConfig = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($type) {
+            $theme = Theme::where('type', $type)
+                ->where('is_active', true)
+                ->first();
+
+            return $theme ? ($theme->config ?? []) : [];
+        });
+
+        if ($key) {
+            return data_get($themeConfig, $key, $default);
+        }
+
+        return $themeConfig;
+    }
+
+    /**
+     * Set/Update configuration for the currently active theme of a specific type.
+     *
+     * @param string $type The theme type (admin, client, etc.).
+     * @param array $data Key/value pairs of configuration to persist.
+     * @return void
+     * @throws \Exception If no active theme is found for the given type.
+     */
+    public static function setThemeConfig(string $type, array $data): void
+    {
+        $theme = Theme::where('type', $type)->where('is_active', true)->first();
+
+        if (!$theme) {
+            throw new \Exception("No active theme found for type: {$type}");
+        }
+
+        $currentConfig = $theme->config ?? [];
+        $newConfig = array_merge($currentConfig, $data);
+
+        $theme->update(['config' => $newConfig]);
+
+        Cache::forget(self::CACHE_PREFIX_THEME . $type);
+    }
+    
+    /**
+     * Get the active theme Model/Provider name (not just config). Useful for asset paths or view namespaces.
+     * 
+     * * @param string $type
+     * @return Theme|null
+     */
+    public static function getActiveThemeModel(string $type): ?Theme
+    {
+        $cacheKey = 'active_theme_model_' . $type;
+        
+        return Cache::remember($cacheKey, self::CACHE_TTL, function() use ($type) {
+            return Theme::where('type', $type)->where('is_active', true)->first();
+        });
+    }
 }
