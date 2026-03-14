@@ -80,8 +80,8 @@
                             </p>
                         </div>
                         <div class="border-t-2 border-dashed border-billmora-2 pt-4 flex items-center justify-between mt-auto">
-                            <a href="#" class="bg-billmora-2 hover:bg-billmora-3 px-3 py-2 text-billmora-primary-600 rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                                {{ __('common.manage') }}
+                            <a href="{{ route('admin.themes.config', ['theme' => $theme->id]) }}" class="bg-billmora-2 hover:bg-billmora-3 px-3 py-2 text-billmora-primary-600 rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                                {{ __('common.configure') }}
                             </a>
                             <div class="flex items-center gap-2">
                                 @can('themes.update')

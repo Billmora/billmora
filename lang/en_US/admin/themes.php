@@ -7,10 +7,14 @@ return [
     'version_label' => 'Version',
     'author_label' => 'Author',
     'folder_label' => 'Folder',
-    
+
     'active_theme' => 'Active Theme',
     'theme_label' => ':type Theme',
     'theme_helper' => 'Choose the theme you want to activate for the :type area',
+
+    'configure' => [
+        'not_provide' => 'This theme does not provide a custom configuration page.'
+    ],
     
     'install' => [
         'already_exists' => 'Theme :provider is already installed. Use the update feature instead.',

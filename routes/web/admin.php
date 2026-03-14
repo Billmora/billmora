@@ -423,6 +423,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::delete('/{theme}/uninstall', [Admin\ThemesController::class, 'uninstall'])->name('admin.themes.uninstall');
 
         Route::post('/activate', [Admin\ThemesController::class, 'activate'])->name('admin.themes.activate');
+
+        Route::get('/{theme}/config', [Admin\Themes\ConfigController::class, 'index'])->name('admin.themes.config');
+        Route::post('/{theme}/config', [Admin\Themes\ConfigController::class, 'update'])->name('admin.themes.config.update');
     });
 
     /**
