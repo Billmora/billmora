@@ -69,6 +69,7 @@ return [
     'preview' => 'Preview',
     'apply' => 'Apply',
     'manage' => 'Manage',
+    'configure' => 'Configure',
     'key' => 'Key',
     'value' => 'Value',
     'install' => 'Install',
