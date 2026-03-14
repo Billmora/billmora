@@ -18,6 +18,7 @@ return [
     'modules' => 'Modules',
     'settings' => 'Settings',
     'plugins' => 'Plugins',
+    'themes' => 'Themes',
     'automations' => 'Automations',
     'tasks' => 'Tasks',
     'audits' => 'Audits',

@@ -116,6 +116,12 @@
           <span class="font-semibold">{{ __('admin/navigation.plugins') }}</span>
         </a>
       @endcan
+      @can('themes.view')
+        <a href="{{ route('admin.themes') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.themes*') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-paintbrush class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('admin/navigation.themes') }}</span>
+        </a>
+      @endcan
       @can('automations.view')
         <a href="{{ route('admin.automations') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.automations*') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
           <x-lucide-clock class="w-5 h-auto" />
