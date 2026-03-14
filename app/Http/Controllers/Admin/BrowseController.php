@@ -93,6 +93,11 @@ class BrowseController extends Controller
                 'url' => route('admin.plugins')
             ],
             [
+                'title' => 'Themes',
+                'category' => 'system',
+                'url' => route('admin.themes')
+            ],
+            [
                 'title' => 'Automations',
                 'category' => 'system',
                 'url' => route('admin.automations')
