@@ -121,9 +121,11 @@
                     @endforeach
                 </x-admin::select>
             @endforeach
-            <button type="submit" class="w-full bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                {{ __('common.save') }}
-            </button>
+            @can('themes.update')
+                <button type="submit" class="w-full bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                    {{ __('common.save') }}
+                </button>
+            @endcan
         </form>
     </div>
     @can('themes.uninstall')
