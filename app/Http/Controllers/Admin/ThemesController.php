@@ -7,9 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Theme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use ZipArchive;
 
 class ThemesController extends Controller
@@ -22,7 +25,7 @@ class ThemesController extends Controller
     {
         $this->middleware('permission:themes.view')->only(['index']);
         $this->middleware('permission:themes.install')->only(['install']);
-        $this->middleware('permission:themes.update')->only(['update']);
+        $this->middleware('permission:themes.update')->only(['update', 'activate']);
         $this->middleware('permission:themes.uninstall')->only(['uninstall']);
     }
 
@@ -43,8 +46,51 @@ class ThemesController extends Controller
         }
 
         $themes = $query->orderBy('type')->get();
+        $activeThemes = Theme::where('is_active', true)
+            ->pluck('id', 'type');
 
-        return view('admin::themes.index', compact('themes'));
+        return view('admin::themes.index', compact('themes', 'activeThemes'));
+    }
+
+    /**
+     * Update the active theme for all types from a single form.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function activate(Request $request)
+    {
+        $validated = $request->validate([
+            'active_themes' => ['required', 'array', 'size:5'],
+            'active_themes.admin' => ['required', Rule::exists('themes', 'id')],
+            'active_themes.client' => ['required', Rule::exists('themes', 'id')],
+            'active_themes.portal' => ['required', Rule::exists('themes', 'id')],
+            'active_themes.email' => ['required', Rule::exists('themes', 'id')],
+            'active_themes.invoice' => ['required', Rule::exists('themes', 'id')],
+        ]);
+
+        DB::transaction(function () use ($validated, &$auditData) {
+            foreach ($validated['active_themes'] as $type => $themeId) {
+                $theme = Theme::where('id', $themeId)->where('type', $type)->firstOrFail();
+
+                $previousTheme = Theme::where('type', $type)->where('is_active', true)->first();
+
+                Theme::where('type', $type)->update(['is_active' => false]);
+                $theme->update(['is_active' => true]);
+
+                Cache::forget("theme_config_{$type}");
+                Cache::forget("active_theme_model_{$type}");
+
+                $auditData[$type] = [
+                    'old' => $previousTheme?->only('id', 'name', 'provider'),
+                    'new' => $theme->only('id', 'name', 'provider'),
+                ];
+            }
+        });
+
+        Audit::system(Auth::id(), 'theme.activate', $auditData);
+
+        return back()->with('success', __('common.update_success', ['attribute' => __('admin/themes.active_theme')]));
     }
 
     /**

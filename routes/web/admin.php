@@ -421,6 +421,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::post('/install', [Admin\ThemesController::class, 'install'])->name('admin.themes.install');
         Route::post('/{theme}/update', [Admin\ThemesController::class, 'update'])->name('admin.themes.update');
         Route::delete('/{theme}/uninstall', [Admin\ThemesController::class, 'uninstall'])->name('admin.themes.uninstall');
+
+        Route::post('/activate', [Admin\ThemesController::class, 'activate'])->name('admin.themes.activate');
     });
 
     /**

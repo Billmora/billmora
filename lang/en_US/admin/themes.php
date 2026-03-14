@@ -8,6 +8,10 @@ return [
     'author_label' => 'Author',
     'folder_label' => 'Folder',
     
+    'active_theme' => 'Active Theme',
+    'theme_label' => ':type Theme',
+    'theme_helper' => 'Choose the theme you want to activate for the :type area',
+    
     'install' => [
         'already_exists' => 'Theme :provider is already installed. Use the update feature instead.',
         'success' => 'Theme :name has been installed successfully.',
@@ -32,7 +36,7 @@ return [
 
     'upload' => [
         'instruction' => 'Click to upload or drag and drop',
-        'type_hint' => 'ZIP File (Plugin)',
+        'type_hint' => 'ZIP File (Theme)',
         'selected_prefix' => 'Selected: ',
         'replace_hint' => '(Drop another file to replace)',
     ],
