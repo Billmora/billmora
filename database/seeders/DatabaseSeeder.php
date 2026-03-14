@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             SettingSeeder::class,
+            ThemeSeeder::class,
             NotificationSeeder::class,
             PermissionSeeder::class,
             CurrencySeeder::class,
