@@ -21,7 +21,6 @@ class ThemeSeeder extends Seeder
                 'auth_message_description' => 'Billmora — short for Billing Management, Operation, and Recurring Automation — is a free, open-source platform built for hosting providers and service businesses that need full control over their billing infrastructure without paying recurring licensing fees.',
                 
                 'billmora_bg' => '#ffffff',
-                'billmora_text' => '#0f172a',
                 
                 'billmora_1' => '#f4f7fe',
                 'billmora_2' => '#eceeff',

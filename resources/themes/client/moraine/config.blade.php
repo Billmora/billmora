@@ -46,7 +46,6 @@
                 @php
                     $colorPalette = [
                         'billmora_bg' => ['label' => 'Background', 'default' => '#ffffff'],
-                        'billmora_text' => ['label' => 'Text Default', 'default' => '#0f172a'],
                         'billmora_1' => ['label' => 'Billmora 1 (Base)', 'default' => '#f4f7fe'],
                         'billmora_2' => ['label' => 'Billmora 2 (Border)', 'default' => '#eceeff'],
                         'billmora_3' => ['label' => 'Billmora 3', 'default' => '#e0e2ff'],
