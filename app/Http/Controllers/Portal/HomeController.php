@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    /**
+     * Display the portal homepage with all visible catalogs and their available packages.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         $catalogs = Catalog::where('status', 'visible')
