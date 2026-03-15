@@ -12,7 +12,7 @@
         <form action="{{ route('client.login.store') }}" method="POST" class="w-full lg:w-1/2 h-auto p-8">
             @csrf
             <div class="max-w-140 h-full flex flex-col justify-between mx-auto">
-                <a href="#" class="flex gap-2 items-center mb-10 lg:mb-0 text-slate-500 font-semibold">
+                <a href="{{ route('portal.home') }}" class="flex gap-2 items-center mb-10 lg:mb-0 text-slate-500 font-semibold">
                     <x-lucide-chevron-left class="w-auto h-5" />
                     <span>{{ __('common.back_to', ['page' => __('common.page.portal')]) }}</span>
                 </a>
