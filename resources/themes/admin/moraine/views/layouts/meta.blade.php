@@ -1,7 +1,7 @@
 <!-- Prevent indexing -->
 <meta name="robots" content="noindex, nofollow">
 {{-- Meta --}}
-<link rel="icon" href="https://media.billmora.com/logo/main-bgnone.svg">
+<link rel="icon" href="{{ Billmora::getGeneral('company_favicon') }}">
 <title>@yield('title', 'Admin') | {{ Billmora::getGeneral('company_name') }}</title>
 <!-- Styles -->
 <link rel="stylesheet" href="{{ $adminTheme['assets'] }}/css/style.css">
