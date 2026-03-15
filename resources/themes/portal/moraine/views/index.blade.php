@@ -61,7 +61,7 @@
 							:style="`width: calc(${100 / cols}% - ${16 * (cols - 1) / cols}px)`"
 						>
 							@if ($catalog->icon)
-								<div class="w-24 h-24 rounded-xl bg-billmora-2 flex items-center justify-center flex-shrink-0 overflow-hidden">
+								<div class="w-24 h-24 rounded-xl bg-billmora-2 flex items-center justify-center shrink-0 overflow-hidden">
 									<img
 										src="{{ $catalog->icon }}"
 										alt="{{ $catalog->name }}"
