@@ -30,8 +30,8 @@
             @foreach ($themes as $theme)
                 <div class="bg-white border-2 border-billmora-2 rounded-2xl flex flex-col overflow-hidden transition-all hover:border-billmora-primary-300">
                     <div class="flex h-48 w-full bg-white relative border-b-2 border-billmora-2">
-                        @if ($theme->manifest['icon'] ?? false)
-                            <img src="{{ $theme->manifest['icon'] ?? '' }}" 
+                        @if ($theme->manifest['preview'] ?? false)
+                            <img src="{{ $theme->manifest['preview'] ?? '' }}" 
                                 alt="{{ $theme->name }} Preview" 
                                 class="object-cover w-full h-full"
                             >
