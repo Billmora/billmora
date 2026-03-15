@@ -26,7 +26,7 @@
         Previous
       </span>
     @else
-      <a href="{{ $paginator->previousPageUrl() }}" class="flex items-center gap-2 px-4 py-2 bg-white border-2 border-billmora-2 hover:bg-billmora-primary-500 text-slate-600 hover:text-white rounded-lg transition ease-in-out duration-300">
+      <a href="{{ $paginator->previousPageUrl() }}" class="flex items-center gap-2 px-4 py-2 bg-billmora-bg border-2 border-billmora-2 hover:bg-billmora-primary-500 text-slate-600 hover:text-white rounded-lg transition ease-in-out duration-300">
         <x-lucide-chevron-left class="w-5 h-auto" />
         Previous
       </a>
@@ -38,12 +38,12 @@
         @elseif ($page == $current)
           <span class="px-3 py-2 bg-billmora-primary-500 border-2 border-billmora-2 text-white rounded-lg">{{ $page }}</span>
         @else
-          <a href="{{ $paginator->url($page) }}" class="px-3 py-2 bg-white border-2 border-billmora-2 hover:bg-billmora-primary-500 text-slate-600 hover:text-white rounded-lg transition ease-in-out duration-300">{{ $page }}</a>
+          <a href="{{ $paginator->url($page) }}" class="px-3 py-2 bg-billmora-bg border-2 border-billmora-2 hover:bg-billmora-primary-500 text-slate-600 hover:text-white rounded-lg transition ease-in-out duration-300">{{ $page }}</a>
         @endif
       @endforeach
     </div>
     @if ($paginator->hasMorePages())
-      <a href="{{ $paginator->nextPageUrl() }}" class="flex items-center gap-2 px-4 py-2 bg-white border-2 border-billmora-2 hover:bg-billmora-primary-500 text-slate-600 hover:text-white rounded-lg transition ease-in-out duration-300">
+      <a href="{{ $paginator->nextPageUrl() }}" class="flex items-center gap-2 px-4 py-2 bg-billmora-bg border-2 border-billmora-2 hover:bg-billmora-primary-500 text-slate-600 hover:text-white rounded-lg transition ease-in-out duration-300">
         Next
         <x-lucide-chevron-right class="w-5 h-auto" />
       </a>

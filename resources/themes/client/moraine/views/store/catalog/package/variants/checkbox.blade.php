@@ -21,7 +21,7 @@
                 x-on:change="toggle({{ $option->id }}, $event.target.checked)"
                 :checked="isSelected({{ $option->id }})"
             >
-            <div class="h-full bg-white p-4 border-2 border-billmora-2 rounded-xl transition-all group-has-[:checked]:border-billmora-primary-500 hover:border-billmora-primary-500">
+            <div class="h-full bg-billmora-bg p-4 border-2 border-billmora-2 rounded-xl transition-all group-has-[:checked]:border-billmora-primary-500 hover:border-billmora-primary-500">
                 <div class="flex items-start gap-3">
                     <div class="mt-1 h-4 w-4 border-2 border-slate-500 rounded group-has-[:checked]:border-billmora-primary-500 group-has-[:checked]:bg-billmora-primary-500 transition-all"></div>
                     <div class="flex flex-col">

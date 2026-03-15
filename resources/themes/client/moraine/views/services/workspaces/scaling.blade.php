@@ -1,7 +1,7 @@
 @extends('client::services.show')
 
 @section('workspaces')
-<form action="{{ route('client.services.scaling.store', ['service' => $service->service_number]) }}" method="POST" class="bg-white border-2 border-billmora-2 rounded-2xl overflow-hidden">
+<form action="{{ route('client.services.scaling.store', ['service' => $service->service_number]) }}" method="POST" class="bg-billmora-bg border-2 border-billmora-2 rounded-2xl overflow-hidden">
     @csrf
     @if ($step == 1)
         <div class="bg-billmora-1 px-6 py-4 border-b-2 border-billmora-2">
@@ -29,7 +29,7 @@
                         >
                         <label for="package_id_{{ $package->id }}" 
                             class="flex flex-col h-full gap-4 p-6 border-2 rounded-2xl cursor-pointer transition-all duration-200 ease-in-out
-                                    bg-white border-billmora-2 hover:border-billmora-primary
+                                    bg-billmora-bg border-billmora-2 hover:border-billmora-primary
                                     peer-checked:border-billmora-primary-500">
                             @if($isCurrent)
                                 <span class="absolute top-0 right-0 bg-billmora-primary-500 text-white text-xs uppercase tracking-wider font-bold px-3 py-1 rounded-bl-xl rounded-tr-lg z-10">

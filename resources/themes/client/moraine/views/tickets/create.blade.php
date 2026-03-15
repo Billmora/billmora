@@ -19,7 +19,7 @@
     }"
 >
     @csrf
-    <div class="flex flex-col gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="flex flex-col gap-4 w-full h-fit bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <x-client::select
                 name="ticket_priority"

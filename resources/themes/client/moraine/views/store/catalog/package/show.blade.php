@@ -23,13 +23,13 @@
     <form action="{{ route('client.checkout.cart.add') }}" method="POST" class="flex flex-col lg:flex-row gap-5">
         @csrf
         <div class="w-full lg:w-2/3 h-fit grid gap-4">
-            <div class="bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+            <div class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
                 <h1 class="text-xl font-semibold text-slate-600">
                     {{ $package->catalog->name }} – {{ $package->name }}
                 </h1>
                 <p class="text-slate-500">{!! $package->description !!}</p>
             </div>
-            <div class="bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+            <div class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
                 <span class="text-xl text-slate-600 font-semibold">
                     {{ __('client/store.package.billing_cycle') }}
                 </span>
@@ -44,7 +44,7 @@
                                 x-on:change="selectCycle({{ json_encode($p) }})"
                                 :checked="selectedBillingId == {{ $p['id'] }}"
                             >
-                            <div class="h-full bg-white p-4 border-2 rounded-xl transition-all hover:border-billmora-primary-500"
+                            <div class="h-full bg-billmora-bg p-4 border-2 rounded-xl transition-all hover:border-billmora-primary-500"
                                 :class="selectedBillingId == {{ $p['id'] }} ? 'border-billmora-primary-500' : 'border-billmora-2'">
                                 <div class="flex items-start gap-3">
                                     <div class="mt-1 h-4 w-4 rounded-full border-2 transition-all"
@@ -70,7 +70,7 @@
                 <div 
                     x-show="variants.some(v => variantHasAvailableOptions(v.id))"
                     x-cloak
-                    class="bg-white p-6 border-2 border-billmora-2 rounded-2xl grid gap-4">
+                    class="bg-billmora-bg p-6 border-2 border-billmora-2 rounded-2xl grid gap-4">
                     @foreach ($variants as $variant)
                         <template x-if="variantHasAvailableOptions({{ $variant['id'] }})">
                             <div>
@@ -95,7 +95,7 @@
                 </div>
             @endif
             @if (!empty($checkoutSchema))
-                <div class="bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+                <div class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
                     <span class="text-xl text-slate-600 font-semibold">
                         {{ __('client/store.package.configuration') }}
                     </span>
@@ -171,7 +171,7 @@
                 </div>
             @endif
         </div>
-        <div class="w-full lg:w-1/3 h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl space-y-4">
+        <div class="w-full lg:w-1/3 h-fit bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl space-y-4">
             <h2 class="text-xl font-semibold text-slate-600 mb-4">
                 {{ __('client/store.package.order_summary') }}
             </h2>

@@ -33,7 +33,7 @@
             @checked(old($name, $checked))
         >
         <div
-            class="relative w-11 h-6 rounded-full bg-billmora-2 peer peer-checked:bg-billmora-primary-500 after:absolute after:top-0.5 after:start-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:border after:border-billmora-2 after:transition-all peer-checked:after:translate-x-full peer-checked:after:border-billmora-primary-500"
+            class="relative w-11 h-6 rounded-full bg-billmora-2 peer peer-checked:bg-billmora-primary-500 after:absolute after:top-0.5 after:start-[2px] after:h-5 after:w-5 after:rounded-full after:bg-billmora-bg after:border after:border-billmora-2 after:transition-all peer-checked:after:translate-x-full peer-checked:after:border-billmora-primary-500"
         ></div>
     </label>
 

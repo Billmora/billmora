@@ -24,7 +24,7 @@
                             <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y-2 divide-billmora-2 bg-white">
+                    <tbody class="divide-y-2 divide-billmora-2 bg-billmora-bg">
                         @foreach ($tickets as $ticket)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">

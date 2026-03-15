@@ -4,7 +4,7 @@
 
 @section('body')
 <div class="flex flex-col lg:flex-row gap-5">
-    <div class="w-full lg:w-1/4 h-fit grid gap-6 items-center bg-white p-8 text-center border-2 border-billmora-2 rounded-2xl">
+    <div class="w-full lg:w-1/4 h-fit grid gap-6 items-center bg-billmora-bg p-8 text-center border-2 border-billmora-2 rounded-2xl">
         <img src="{{ $user->avatar }}?s=128" alt="user avatar" class="rounded-full w-32 h-auto mx-auto">
         <div class="flex flex-col">
             <span class="text-xl text-slate-600 font-bold break-all">{{ $user->fullname }}</span>
@@ -47,7 +47,7 @@
     </div>
     <div class="w-full lg:w-3/4 h-fit grid gap-5">
         <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <a href="{{ route('client.services') }}" class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 hover:border-green-500 transition-colors rounded-2xl">
+            <a href="{{ route('client.services') }}" class="flex items-center gap-4 bg-billmora-bg p-6 border-2 border-billmora-2 hover:border-green-500 transition-colors rounded-2xl">
                 <div class="bg-green-200 p-3 text-green-500 rounded-full">
                     <x-lucide-shopping-bag class="w-auto h-10" />
                 </div>
@@ -56,7 +56,7 @@
                     <span class="text-3xl font-bold text-slate-600">{{ $activeServicesCount }}</span>
                 </div>
             </a>
-            <a href="{{ route('client.invoices') }}" class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 hover:border-red-500 transition-colors rounded-2xl">
+            <a href="{{ route('client.invoices') }}" class="flex items-center gap-4 bg-billmora-bg p-6 border-2 border-billmora-2 hover:border-red-500 transition-colors rounded-2xl">
                 <div class="bg-red-200 p-3 text-red-500 rounded-full">
                     <x-lucide-receipt-text class="w-auto h-10" />
                 </div>
@@ -65,7 +65,7 @@
                     <span class="text-3xl font-bold text-slate-600">{{ $unpaidInvoicesCount }}</span>
                 </div>
             </a>
-            <a href="{{ route('client.tickets') }}" class="md:col-span-full lg:col-span-1 flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 hover:border-violet-500 transition-colors rounded-2xl">
+            <a href="{{ route('client.tickets') }}" class="md:col-span-full lg:col-span-1 flex items-center gap-4 bg-billmora-bg p-6 border-2 border-billmora-2 hover:border-violet-500 transition-colors rounded-2xl">
                 <div class="bg-violet-200 p-3 text-violet-500 rounded-full">
                     <x-lucide-ticket class="w-auto h-10" />
                 </div>
@@ -78,7 +78,7 @@
         <div class="overflow-x-auto">
             <div class="min-w-full inline-block align-middle">
                 <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
-                    <div class="flex justify-between bg-white items-center p-4">
+                    <div class="flex justify-between bg-billmora-bg items-center p-4">
                         <h5 class="text-lg font-semibold text-slate-600">{{ __('client/dashboard.active_services') }}</h5>
                         <a href="{{ route('client.store') }}" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                             {{ __('client/dashboard.order_new_services') }}
@@ -93,7 +93,7 @@
                                 <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y-2 divide-billmora-2 bg-white">
+                        <tbody class="divide-y-2 divide-billmora-2 bg-billmora-bg">
                             @foreach ($activeServices as $service)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->package->catalog->name }}</td>
@@ -113,7 +113,7 @@
             <div class="overflow-x-auto">
                 <div class="min-w-full inline-block align-middle">
                     <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
-                        <div class="flex justify-between bg-white items-center p-4">
+                        <div class="flex justify-between bg-billmora-bg items-center p-4">
                             <h5 class="text-lg font-semibold text-slate-600">{{ __('client/dashboard.unpaid_invoices') }}</h5>
                             <a href="{{ route('client.invoices') }}" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                                 {{ __('client/dashboard.view_all') }}
@@ -128,7 +128,7 @@
                                     <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y-2 divide-billmora-2 bg-white">
+                            <tbody class="divide-y-2 divide-billmora-2 bg-billmora-bg">
                                 @foreach ($unpaidInvoices as $invoice)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->invoice_number }}</td>
@@ -149,7 +149,7 @@
             <div class="overflow-x-auto">
                 <div class="min-w-full inline-block align-middle">
                     <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
-                        <div class="flex justify-between bg-white items-center p-4">
+                        <div class="flex justify-between bg-billmora-bg items-center p-4">
                             <h5 class="text-lg font-semibold text-slate-600">{{ __('client/dashboard.open_tickets') }}</h5>
                             <a href="{{ route('client.tickets') }}" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                                 {{ __('client/dashboard.view_all') }}
@@ -164,7 +164,7 @@
                                     <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y-2 divide-billmora-2 bg-white">
+                            <tbody class="divide-y-2 divide-billmora-2 bg-billmora-bg">
                                 @foreach ($openTickets as $ticket)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $ticket->ticket_number }}</td>

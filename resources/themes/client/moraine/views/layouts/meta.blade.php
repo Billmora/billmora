@@ -4,6 +4,24 @@
 <link rel="icon" href="https://media.billmora.com/logo/main-bgnone.svg">
 <title>@yield('title', 'Client Area') | {{ Billmora::getGeneral('company_name') }}</title>
 <!-- Styles -->
+@php
+    $themeCssVariables = '';
+    if (!empty($clientThemeConfig)) {
+        foreach ($clientThemeConfig as $key => $value) {
+            if (str_starts_with($key, 'billmora_') && !empty($value)) {
+                $cssVarName = str_replace('_', '-', $key);
+                $themeCssVariables .= "--{$cssVarName}: {$value} !important;\n\t\t";
+            }
+        }
+    }
+@endphp
+@if($themeCssVariables !== '')
+<style>
+    :root {
+        {!! $themeCssVariables !!}
+    }
+</style>
+@endif
 <link rel="stylesheet" href="{{ $clientTheme['assets'] }}/css/style.css">
 <script src="{{ $clientTheme['assets'] }}/js/app.js" type="module"></script>
 {{-- Additional Styles --}}

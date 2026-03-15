@@ -7,18 +7,18 @@
     <div class="w-full lg:w-2/3">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         @forelse ($credits as $credit)
-                <div class="grid w-full bg-white p-6 border-b-4 border-green-500 rounded-lg">
+                <div class="grid w-full bg-billmora-bg p-6 border-b-4 border-green-500 rounded-lg">
                     <span class="text-md font-medium text-slate-500">{{ $credit->currency }}</span>
                     <span class="text-xl font-bold text-green-500">{{ Currency::format($credit->balance, $credit->currency)}}</span>
                 </div>
             @empty
-            <div class="w-full col-span-full bg-white p-8 border-2 border-billmora-2 rounded-2xl text-center">
+            <div class="w-full col-span-full bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl text-center">
                 <span class="text-slate-500 font-semibold">{{ __('client/account.credits.no_credits') }}</span>
             </div>
             @endforelse
         </div>  
     </div>
-    <form action="{{ route('client.account.credits.deposit') }}" method="POST" class="w-full lg:w-1/3 grid grid-cols-1 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <form action="{{ route('client.account.credits.deposit') }}" method="POST" class="w-full lg:w-1/3 grid grid-cols-1 gap-4 bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
         @csrf
         <x-client::select 
             name="credit_currency"

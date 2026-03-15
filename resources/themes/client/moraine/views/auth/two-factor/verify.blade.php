@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @include('client::layouts.meta')
 </head>
-<body class="bg-white">
+<body class="bg-billmora-bg">
     <div class="flex flex-col lg:flex-row-reverse w-full min-h-dvh">
         <div class="w-full lg:w-1/2 h-auto p-8">
             <div class="max-w-170 h-full flex flex-col justify-between mx-auto">
@@ -18,7 +18,7 @@
                     @if (session('error'))
                         <x-client::alert variant="danger" title="{{ session('error') }}" />
                     @endif
-                    <form action="{{ route('client.two-factor.verify.store') }}" method="POST" class="flex flex-col gap-4 bg-white w-full p-8 rounded-xl border-2 border-billmora-2">
+                    <form action="{{ route('client.two-factor.verify.store') }}" method="POST" class="flex flex-col gap-4 bg-billmora-bg w-full p-8 rounded-xl border-2 border-billmora-2">
                         @csrf
                         <div class="flex flex-col gap-2">
                             <h2 class="text-xl text-center text-slate-700 font-bold">{{ __('auth.2fa.verify.title') }}</h2>
@@ -37,9 +37,9 @@
         </div>
         <div class="w-auto max-w-170 lg:max-w-none lg:w-1/2 h-auto lg:flex justify-center bg-billmora-primary-500 m-8 lg:m-0 mx-8 sm:mx-auto rounded-2xl lg:rounded-none lg:rounded-br-[100px]">
             <div class="max-w-170 my-8 lg:my-auto mx-8 space-y-6">
-                <img src="https://media.billmora.com/logo/main-invert-bgnone.png" alt="brand logo" class="w-auto h-32">
-                <span class="text-2xl md:text-3xl lg:text-4xl font-bold text-white">Grow your business with Billmora!</span>
-                <p class="text-slate-200">Billmora is a free and open-source billing management platform designed to automate recurring services and simplify operations for hosting businesses.</p>
+                <img src="{{ $clientThemeConfig['auth_logo_url'] }}" alt="brand logo" class="w-auto h-32">
+                <span class="text-2xl md:text-3xl lg:text-4xl font-bold text-white">{{ $clientThemeConfig['auth_message_title'] }}</span>
+                <p class="text-slate-200">{{ $clientThemeConfig['auth_message_description'] }}</p>
             </div>
         </div>
     </div>

@@ -9,7 +9,7 @@
 </div>
 <div class="grid grid-cols-1 gap-5">
     <div 
-        class="bg-white rounded-2xl max-w-80"
+        class="bg-billmora-bg rounded-2xl max-w-80"
         x-data="{ base: '{{ route('client.store.catalog', $catalog) }}'.replace('{{ $catalog->slug }}', '') }"
         x-on:change="window.location.href = base + $event.target.value"
     >
@@ -25,7 +25,7 @@
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         @foreach ($packages as $package)
-            <div class="w-full h-fit bg-white border-2 border-billmora-2 rounded-xl">
+            <div class="w-full h-fit bg-billmora-bg border-2 border-billmora-2 rounded-xl">
                 <div class="flex flex-col gap-4 p-6">
                     @if ($package->icon)
                         <img src="{{ Storage::url($package->icon) }}" alt="package icon" class="max-w-48 h-auto mx-auto object-cover rounded-lg">

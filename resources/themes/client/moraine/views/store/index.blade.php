@@ -5,7 +5,7 @@
 @section('body')
 <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-3 gap-5">
     @foreach ($catalogs as $catalog)
-        <div class="w-full h-fit bg-white border-2 border-billmora-2 rounded-xl">
+        <div class="w-full h-fit bg-billmora-bg border-2 border-billmora-2 rounded-xl">
             <div class="flex flex-col gap-4 p-6">
                 @if ($catalog->icon)
                     <img src="{{ Storage::url($catalog->icon) }}" alt="catalog icon" class="w-auto max-h-48 object-cover rounded-lg">

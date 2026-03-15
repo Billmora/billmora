@@ -11,7 +11,7 @@
         @csrf
         <div class="w-full h-fit grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             
-            <div class="grid gap-4 col-span-12 lg:col-span-1 bg-white p-6 border-2 border-billmora-2 rounded-2xl h-fit">
+            <div class="grid gap-4 col-span-12 lg:col-span-1 bg-billmora-bg p-6 border-2 border-billmora-2 rounded-2xl h-fit">
                 <div class="border-b-2 border-billmora-2 pb-4">
                     <h2 class="text-xl font-semibold text-slate-800">Auth Configuration</h2>
                     <p class="text-sm text-slate-500">Customize the text of the Moraine client theme in the authentication page.</p>
@@ -38,7 +38,7 @@
                 </div>
             </div>
 
-            <div class="w-full h-fit grid gap-4 col-span-12 lg:col-span-2 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
+            <div class="w-full h-fit grid gap-4 col-span-12 lg:col-span-2 bg-billmora-bg p-6 border-2 border-billmora-2 rounded-2xl">
                 <div class="border-b-2 border-billmora-2 pb-4">
                     <h2 class="text-xl font-semibold text-slate-800">Color Configuration</h2>
                     <p class="text-sm text-slate-500">Customize the global appearance and palette of the Moraine client theme.</p>

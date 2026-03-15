@@ -4,13 +4,13 @@
 @endphp
 
 <nav id="sidebar" class="fixed z-100 xl:sticky top-0 left-0 xl:block shrink-0 p-5 xl:pr-0 w-[350px] sm:w-[400px] h-dvh -translate-x-full xl:translate-x-0 transition-transform duration-300 ease-in-out">
-  <div class="bg-white flex flex-col w-full h-full border-2 border-billmora-2 rounded-2xl p-8">
+  <div class="bg-billmora-bg flex flex-col w-full h-full border-2 border-billmora-2 rounded-2xl p-8">
     <a href="{{ route('client.dashboard') }}" class="relative flex gap-3 items-center">
       <img src="{{ Billmora::getGeneral('company_logo') }}" alt="billmora logo" class="w-auto h-11 rounded-lg">
       <h3 class="text-2xl font-extrabold uppercase text-billmora-primary-500">{{ Billmora::getGeneral('company_name') }}</h3>
     </a>
     {{-- Sidebar close toggle --}}
-    <div id="closeSidebar" role="button" class="absolute top-14 right-0 xl:hidden bg-white hover:bg-billmora-primary-500 border-2 border-billmora-2 text-slate-600 hover:text-white shadow p-2 rounded-full cursor-pointer transition">
+    <div id="closeSidebar" role="button" class="absolute top-14 right-0 xl:hidden bg-billmora-bg hover:bg-billmora-primary-500 border-2 border-billmora-2 text-slate-600 hover:text-white shadow p-2 rounded-full cursor-pointer transition">
       <x-lucide-x class="w-auto h-5" />
     </div>
     <hr class="border-t-2 border-billmora-2 my-7">

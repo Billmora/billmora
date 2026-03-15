@@ -22,7 +22,7 @@
     x-show="$store.modal.open === '{{ $modal }}'"
     x-transition
     @class([
-      "w-full h-auto mx-2 xl:mx-0 bg-white rounded-xl shadow-md p-6 z-51",
+      "w-full h-auto mx-2 xl:mx-0 bg-billmora-bg rounded-xl shadow-md p-6 z-51",
       "max-w-sm" => $size === 'sm',
       "max-w-md" => $size === 'md',
       "max-w-lg" => $size === 'lg',

@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @include('client::layouts.meta')
 </head>
-<body class="bg-white">
+<body class="bg-billmora-bg">
     <div class="flex justify-center w-full min-h-dvh">
         <div class="bg-billmora-1 my-auto mx-4 md:mx-none p-8 border-2 border-billmora-2 rounded-xl">
             <p class="text-xl text-billmora-primary-500 font-semibold">{{ $message }}</p>

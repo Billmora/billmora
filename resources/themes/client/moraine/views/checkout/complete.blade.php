@@ -3,7 +3,7 @@
 @section('title', 'Checkout Complete')
 
 @section('body')
-<div class="grid justify-center gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+<div class="grid justify-center gap-4 bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
     <div class="flex flex-col items-center text-center gap-2">
         <div class="bg-green-200 p-4 rounded-full">
             <x-lucide-check class="w-auto h-8 text-green-500" />

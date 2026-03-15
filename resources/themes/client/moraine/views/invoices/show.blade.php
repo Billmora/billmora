@@ -13,7 +13,7 @@
                 </button>
             </form>
         @endif
-        <div class="grid gap-8 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+        <div class="grid gap-8 bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-0 items-center">
                 <div class="col-span-8">
                     <span class="text-3xl font-semibold text-slate-600">{{ __('client/invoices.invoice_label', ['number' => $invoice->invoice_number]) }}</span>
@@ -42,7 +42,7 @@
             <div class="overflow-x-auto">
                 <div class="min-w-full inline-block align-middle">
                     <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
-                        <div class="flex justify-between bg-white items-center p-4">
+                        <div class="flex justify-between bg-billmora-bg items-center p-4">
                             <h5 class="text-lg font-semibold text-slate-600">{{ __('client/invoices.invoice_items') }}</h5>
                         </div>
                         <table class="min-w-full divide-y-2 divide-billmora-2">
@@ -54,7 +54,7 @@
                                     <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/invoices.amount') }}</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y-2 divide-billmora-2 bg-white">
+                            <tbody class="divide-y-2 divide-billmora-2 bg-billmora-bg">
                                 @foreach ($invoice->items as $items)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">{{ $items->description }}</td>
@@ -64,7 +64,7 @@
                                     </tr>
                                 @endforeach
                             </tbody>
-                            <tfoot class="bg-white">
+                            <tfoot class="bg-billmora-bg">
                                 <tr>
                                     <td></td>
                                     <td></td>
@@ -78,7 +78,7 @@
             </div>
         </div>
     </div>
-    <div class="w-full lg:w-2/7 h-fit bg-white border-2 border-billmora-2 rounded-2xl">
+    <div class="w-full lg:w-2/7 h-fit bg-billmora-bg border-2 border-billmora-2 rounded-2xl">
         <div class="grid bg-billmora-primary-500 p-6 rounded-xl">
             <div class="grid">
                 <span class="text-md font-semibold text-white">{{ __('client/invoices.total_due') }}</span>
@@ -107,7 +107,7 @@
                 $isCreditDeposit = $invoice->items()->where('description', 'like', 'Credit Deposit%')->exists();
             @endphp
             @if(!$isCreditDeposit && $creditBalance > 0 && $invoice->amount_due > 0)
-                <div class="m-6 mb-0 p-4 bg-white border-2 border-billmora-2 rounded-xl">
+                <div class="m-6 mb-0 p-4 bg-billmora-bg border-2 border-billmora-2 rounded-xl">
                     <span class="block text-sm font-semibold text-slate-600 mb-2">
                         {{ __('client/invoices.credit.available') }} <span class="text-billmora-primary-500">{{ Currency::format($creditBalance, $invoice->currency) }}</span></span>
                     <form action="{{ route('client.invoices.settle', ['invoice' => $invoice->invoice_number]) }}" method="POST">

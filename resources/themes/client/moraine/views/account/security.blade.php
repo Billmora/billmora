@@ -8,7 +8,7 @@
         <x-client::alert variant="danger" title="{{ $message }}" />
     @enderror
     <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-3 gap-5">
-        <form action="{{ route('client.account.security.email.update') }}" method="POST" class="w-full h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-xl">
+        <form action="{{ route('client.account.security.email.update') }}" method="POST" class="w-full h-fit grid gap-4 bg-billmora-bg p-8 border-2 border-billmora-2 rounded-xl">
             @csrf
             @method('PUT')
             <h3 class="text-xl font-semibold text-slate-700">{{ __('client/account.update_email') }} </h3>
@@ -16,7 +16,7 @@
             <x-client::input type="password" name="confirm_password" label="{{ __('common.confirm_password') }}" required />
             <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 ml-auto px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.update') }}</button>
         </form>
-        <form action="{{ route('client.account.security.password.update') }}" method="POST" class="w-full h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-xl">
+        <form action="{{ route('client.account.security.password.update') }}" method="POST" class="w-full h-fit grid gap-4 bg-billmora-bg p-8 border-2 border-billmora-2 rounded-xl">
             @csrf
             @method('PUT')
             <h3 class="text-xl font-semibold text-slate-700">{{ __('client/account.update_password') }} </h3>
@@ -25,7 +25,7 @@
             <x-client::input type="password" name="new_password_confirmation" label="{{ __('client/account.confirm_new_password') }}" required />
             <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 ml-auto px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.update') }}</button>
         </form>
-        <div class="w-full h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-xl">
+        <div class="w-full h-fit grid gap-4 bg-billmora-bg p-8 border-2 border-billmora-2 rounded-xl">
             <h3 class="text-xl font-semibold text-slate-700">{{ __('auth.2fa.title') }} </h3>
             <p class="text-slate-500">{{ __('auth.2fa.description') }}</p>
             @if ($user->twoFactor && $user->twoFactor->isActive())

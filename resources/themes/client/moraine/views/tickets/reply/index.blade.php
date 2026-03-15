@@ -18,7 +18,7 @@
                 @foreach ($ticket->messages as $message)
                     @if (!$message->is_staff_reply)
                         <div class="flex gap-4 ml-auto">
-                            <div class="w-auto md:min-w-100 grid gap-2 bg-white p-5 break-words border-2 border-billmora-2 rounded-2xl rounded-tr-none">
+                            <div class="w-auto md:min-w-100 grid gap-2 bg-billmora-bg p-5 break-words border-2 border-billmora-2 rounded-2xl rounded-tr-none">
                                 <div class="grid">
                                     <span class="text-slate-500 font-semibold">
                                         {{ $message->user->first_name }}
@@ -66,7 +66,7 @@
                     @else
                         <div class="flex gap-4 mr-auto">
                         <img src="{{ $message->user->avatar }}" alt="User Avatar" class="w-10 h-10 rounded-full">
-                            <div class="w-auto md:min-w-100 grid gap-2 bg-white p-5 break-words border-2 border-billmora-2 rounded-2xl rounded-tl-none">
+                            <div class="w-auto md:min-w-100 grid gap-2 bg-billmora-bg p-5 break-words border-2 border-billmora-2 rounded-2xl rounded-tl-none">
                                 <div class="grid">
                                     <span class="text-slate-500 font-semibold">
                                         {{ $message->user->first_name }}
@@ -119,7 +119,7 @@
             </div>
             <form action="{{ route('client.tickets.reply.send', ['ticket' => $ticket->ticket_number]) }}" method="POST" enctype="multipart/form-data"
                 id="formMessage"
-                class="flex flex-col gap-4 bg-white p-6 border-2 border-billmora-2 rounded-2xl"
+                class="flex flex-col gap-4 bg-billmora-bg p-6 border-2 border-billmora-2 rounded-2xl"
                 x-data="{
                     attachments: [{ id: 1 }],
                     nextId: 2,
@@ -178,7 +178,7 @@
                 <h3 class="text-lg text-slate-600 font-semibold">
                     {{ __('client/tickets.ticket_information') }}
                 </h3>
-                <div class="bg-white p-4 border-2 border-billmora-2 rounded-2xl">
+                <div class="bg-billmora-bg p-4 border-2 border-billmora-2 rounded-2xl">
                     <div class="grid">
                         <h4 class="text-sm text-slate-400 font-semibold">{{ __('client/tickets.ticket_subject_label') }}</h4>
                         <span class="text-slate-500 font-medium">{{ $ticket->subject }}</span>
@@ -270,7 +270,7 @@
                 </h3>
                 @foreach ($ticket->messages as $message)
                     @foreach ($message->attachments as $attachment)
-                        <a href="{{ Storage::url($attachment->file_path) }}" class="flex items-center gap-2 bg-white hover:bg-billmora-primary-500 border-2 border-billmora-2 hover:border-billmora-primary-500 px-3 py-2 rounded-lg transition group">
+                        <a href="{{ Storage::url($attachment->file_path) }}" class="flex items-center gap-2 bg-billmora-bg hover:bg-billmora-primary-500 border-2 border-billmora-2 hover:border-billmora-primary-500 px-3 py-2 rounded-lg transition group">
                             <x-lucide-download class="w-4 h-auto text-slate-500 group-hover:text-white" />
                             <span class="text-slate-500 group-hover:text-white font-medium">
                                 {{ $attachment->file_name }}

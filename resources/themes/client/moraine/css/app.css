@@ -9,16 +9,28 @@
 
 :root {
     /* Background & Text default (Light) */
-    --b-bg: #ffffff;
-    --b-text: #0f172a;
+    --billmora-bg: #ffffff;
     
     /* Billmora 1-6 (Light Mode) */
-    --b-1: #f4f7fe;
-    --b-2: #eceeff;
-    --b-3: #e0e2ff;
-    --b-4: #d6d9ff;
-    --b-5: #cdd0ff;
-    --b-6: #c3c6ff;
+    --billmora-1: #f4f7fe;
+    --billmora-2: #eceeff;
+    --billmora-3: #e0e2ff;
+    --billmora-4: #d6d9ff;
+    --billmora-5: #cdd0ff;
+    --billmora-6: #c3c6ff;
+
+    /* Billmora Primary Palette */
+    --billmora-primary-50: #f0f0ff;
+    --billmora-primary-100: #e0e0ff;
+    --billmora-primary-200: #c2c2ff;
+    --billmora-primary-300: #9494ff;
+    --billmora-primary-400: #7b71f9;
+    --billmora-primary-500: #7267ef; /* Base Primary */
+    --billmora-primary-600: #6659e0; /* Hover Primary */
+    --billmora-primary-700: #5345cc;
+    --billmora-primary-800: #4338a8;
+    --billmora-primary-900: #383087;
+    --billmora-primary-950: #211c4d;
 }
 
 /* Moraine not supported with dark mode by default, list same as :root */
@@ -31,29 +43,28 @@
 
 @theme {
     /* Mapping Background & Text */
-    --color-billmora-bg: var(--b-bg);
-    --color-billmora-text: var(--b-text);
+    --color-billmora-bg: var(--billmora-bg);
 
     /* Mapping Billmora 1-6 dynamic */
-    --color-billmora-1: var(--b-1);
-    --color-billmora-2: var(--b-2);
-    --color-billmora-3: var(--b-3);
-    --color-billmora-4: var(--b-4);
-    --color-billmora-5: var(--b-5);
-    --color-billmora-6: var(--b-6);
+    --color-billmora-1: var(--billmora-1);
+    --color-billmora-2: var(--billmora-2);
+    --color-billmora-3: var(--billmora-3);
+    --color-billmora-4: var(--billmora-4);
+    --color-billmora-5: var(--billmora-5);
+    --color-billmora-6: var(--billmora-6);
 
     /* Primary Palette */
-    --color-billmora-primary-50: #f0f0ff;
-    --color-billmora-primary-100: #e0e0ff;
-    --color-billmora-primary-200: #c2c2ff;
-    --color-billmora-primary-300: #9494ff;
-    --color-billmora-primary-400: #7b71f9;
-    --color-billmora-primary-500: #7267ef; /* Base Primary */
-    --color-billmora-primary-600: #6659e0; /* Hover Primary */
-    --color-billmora-primary-700: #5345cc;
-    --color-billmora-primary-800: #4338a8;
-    --color-billmora-primary-900: #383087;
-    --color-billmora-primary-950: #211c4d;
+    --color-billmora-primary-50: var(--billmora-primary-50);
+    --color-billmora-primary-100: var(--billmora-primary-100);
+    --color-billmora-primary-200: var(--billmora-primary-200);
+    --color-billmora-primary-300: var(--billmora-primary-300);
+    --color-billmora-primary-400: var(--billmora-primary-400);
+    --color-billmora-primary-500: var(--billmora-primary-500); /* Base Primary */
+    --color-billmora-primary-600: var(--billmora-primary-600); /* Hover Primary */
+    --color-billmora-primary-700: var(--billmora-primary-700);
+    --color-billmora-primary-800: var(--billmora-primary-800);
+    --color-billmora-primary-900: var(--billmora-primary-900);
+    --color-billmora-primary-950: var(--billmora-primary-950);
 }
 
 .fr-box {
@@ -80,7 +91,7 @@
     height: 8px;
 }
 ::-webkit-scrollbar-track {
-    background: var(--b-2);
+    background: var(--billmora-2);
 }
 ::-webkit-scrollbar-thumb {
     background-color: var(--color-billmora-primary-500);
@@ -88,7 +99,7 @@
 }
 * {
     scrollbar-width: thin;
-    scrollbar-color: var(--color-billmora-primary-500) var(--b-2);
+    scrollbar-color: var(--color-billmora-primary-500) var(--billmora-2);
 }
 
 #sidemenu {
@@ -112,7 +123,7 @@
 /* Froala Editor Content */
 @layer components {
     .froala-content {
-        @apply min-w-0 max-w-full overflow-hidden text-billmora-text;
+        @apply min-w-0 max-w-full overflow-hidden;
     }
     .froala-content pre {
         @apply bg-[#0d1117] rounded-xl p-2 my-3 overflow-x-auto max-w-full;

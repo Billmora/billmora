@@ -2,7 +2,7 @@
 
 @section('workspaces')
     @if($variantOptions->isNotEmpty())
-        <div class="bg-white border-2 border-billmora-2 rounded-2xl overflow-hidden">
+        <div class="bg-billmora-bg border-2 border-billmora-2 rounded-2xl overflow-hidden">
             <div class="bg-billmora-1 px-6 py-4 border-b-2 border-billmora-2">
                 <h3 class="flex gap-2 items-center font-semibold text-slate-600">
                     <x-lucide-boxes class="w-auto h-5" />
@@ -27,7 +27,7 @@
         </div>
     @endif
     @if(!empty($checkoutData))
-        <div class="bg-white border-2 border-billmora-2 rounded-2xl overflow-hidden">
+        <div class="bg-billmora-bg border-2 border-billmora-2 rounded-2xl overflow-hidden">
             <div class="bg-billmora-1 px-6 py-4 border-b-2 border-billmora-2 flex justify-between items-center">
                 <h3 class="flex gap-2 items-center font-semibold text-slate-600">
                     <x-lucide-server class="w-auto h-5" />
