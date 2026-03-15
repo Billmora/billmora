@@ -14,7 +14,7 @@
                 {{ __('portal.store') }}
             </a>
             @if (Billmora::getGeneral('term_tos'))
-                <a href="{{ Billmora::getGeneral('term_tos_url') ?: '#' }}" class="text-slate-500 hover:text-billmora-primary-500 font-semibold">
+                <a href="{{ Billmora::getGeneral('term_tos_url') ?: route('portal.terms.service') }}" class="text-slate-500 hover:text-billmora-primary-500 font-semibold">
                     {{ __('portal.terms_of_service') }}
                 </a>
             @endif
@@ -65,7 +65,7 @@
             {{ __('portal.store') }}
         </a>
         @if (Billmora::getGeneral('term_tos'))
-            <a href="{{ Billmora::getGeneral('term_tos_url') ?: '#' }}" class="text-slate-500 hover:text-billmora-primary-500 font-semibold py-1">
+            <a href="{{ Billmora::getGeneral('term_tos_url') ?: route('portal.terms.service') }}" class="text-slate-500 hover:text-billmora-primary-500 font-semibold py-1">
                 {{ __('portal.terms_of_service') }}
             </a>
         @endif

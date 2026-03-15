@@ -43,17 +43,17 @@
                         <h4 class="text-slate-600 font-bold">{{ __('portal.company') }}</h4>
                         <div class="grid gap-2">
                             @if (Billmora::getGeneral('term_tos'))
-                                <a href="{{ Billmora::getGeneral('term_tos_url') ? Billmora::getGeneral('term_tos_url') : '#' }}" class="text-slate-600 hover:text-billmora-primary-500">
+                                <a href="{{ Billmora::getGeneral('term_tos_url') ?: route('portal.terms.service') }}" class="text-slate-600 hover:text-billmora-primary-500">
                                     {{ __('portal.terms_of_service') }}
                                 </a>
                             @endif
                             @if (Billmora::getGeneral('term_toc'))
-                                <a href="{{ Billmora::getGeneral('term_toc_url') ? Billmora::getGeneral('term_toc_url') : '#' }}" class="text-slate-600 hover:text-billmora-primary-500">
+                                <a href="{{ Billmora::getGeneral('term_toc_url') ?: route('portal.terms.condition') }}" class="text-slate-600 hover:text-billmora-primary-500">
                                     {{ __('portal.terms_of_condition') }}
                                 </a>
                             @endif
                             @if (Billmora::getGeneral('term_privacy'))
-                                <a href="{{ Billmora::getGeneral('term_privacy_url') ? Billmora::getGeneral('term_privacy_url') : '#' }}" class="text-slate-600 hover:text-billmora-primary-500">
+                                <a href="{{ Billmora::getGeneral('term_privacy_url') ?: route('portal.terms.privacy') }}" class="text-slate-600 hover:text-billmora-primary-500">
                                     {{ __('portal.terms_privacy') }}
                                 </a>
                             @endif
