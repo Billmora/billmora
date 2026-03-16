@@ -4,10 +4,42 @@ namespace App\Http\Controllers\Portal;
 
 use App\Http\Controllers\Controller;
 use App\Models\Catalog;
+use Billmora;
 use Illuminate\Http\Request;
 
 class TermsController extends Controller
 {
+    /**
+     * Applies permission-based middleware for accessing service scalings.
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (!Billmora::getGeneral('term_tos')) {
+                abort(404);
+            }
+
+            return $next($request);
+        })->only(['service']);
+
+        $this->middleware(function ($request, $next) {
+            if (!Billmora::getGeneral('term_toc')) {
+                abort(404);
+            }
+
+            return $next($request);
+        })->only(['condition']);
+
+        $this->middleware(function ($request, $next) {
+            if (!Billmora::getGeneral('term_privacy')) {
+                abort(404);
+            }
+
+            return $next($request);
+        })->only(['privacy']);
+    }
 
     /**
      * Display the terms of service page with visible catalogs and their available packages.
