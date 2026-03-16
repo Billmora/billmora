@@ -9,6 +9,7 @@ return [
         'monthly' => 'Monthly',
         'yearly' => 'Annually',
         'every' => 'Every :count :unit',
+        'setup_fee' => 'Setup Fee',
     ],
     'units' => [
         'daily' => 'Day(s)',
