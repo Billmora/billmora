@@ -5,21 +5,28 @@
 @section('body')
 <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-3 gap-5">
     @foreach ($catalogs as $catalog)
-        <div class="w-full h-fit bg-billmora-bg border-2 border-billmora-2 rounded-xl">
-            <div class="flex flex-col gap-4 p-6">
-                @if ($catalog->icon)
-                    <img src="{{ Storage::url($catalog->icon) }}" alt="catalog icon" class="w-auto max-h-48 object-cover rounded-lg">
-                @endif
-                <div class="space-y-2">
-                    <h4 class="text-lg text-slate-600 font-semibold">{{ $catalog->name }}</h4>
-                    <p class="text-slate-500 line-clamp-3">{{ $catalog->description }}</p>
+        <a
+            href="{{ route('client.store.catalog', ['catalog' => $catalog->slug]) }}"
+            class="flex-none bg-white border-2 border-billmora-2 rounded-2xl p-6 hover:border-billmora-primary-500 transition duration-200 grid gap-3"
+        >
+            @if ($catalog->icon)
+                <div class="w-24 h-24 rounded-xl bg-billmora-2 flex items-center justify-center shrink-0 overflow-hidden">
+                    <img
+                        src="{{ $catalog->icon }}"
+                        alt="{{ $catalog->name }}"
+                        class="w-full h-full object-contain p-3"
+                    >
                 </div>
-                <a href="{{ route('client.store.catalog', ['catalog' => $catalog->slug]) }}" class="flex items-center text-billmora-primary-500 font-semibold text-end ml-auto hover:text-billmora-primary-600 transition">
-                    {{ __('client/store.view_package') }}
-                    <x-lucide-chevron-right class="w-5 h-auto" />
-                </a>
+            @endif
+            <div class="grid gap-1 min-w-0 mb-auto">
+                <span class="text-slate-700 font-semibold text-lg truncate">{{ $catalog->name }}</span>
+                <p class="text-slate-500 text-sm line-clamp-2">{!! $catalog->description !!}</p>
             </div>
-        </div>
+            <span class="text-billmora-primary-500 text-sm font-semibold inline-flex items-center gap-1 mt-auto">
+                {{ __('client/store.view_package') }}
+                <x-lucide-arrow-right class="w-4 h-4" />
+            </span>
+        </a>
     @endforeach
 </div>
 @endsection
