@@ -38,6 +38,9 @@ return [
 
     'scaling' => [
         'current_label' => 'Current Package',
+        'current_amount_label' => 'Current Recurring Amount',
+        'new_amount_label' => 'New Recurring Amount',
+        'remaining_days_label' => 'Days Remaining in Cycle',
 
         'must_be_active' => 'Only active services can be scaled.',
         'unpaid_invoice_exists' => 'Please pay all outstanding invoices before making changes to this service.',

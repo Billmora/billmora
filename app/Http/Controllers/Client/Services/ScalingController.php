@@ -22,51 +22,17 @@ class ScalingController extends Controller
     }
 
     /**
-     * Display the multi-step scaling wizard for the specified client service.
+     * Display the Livewire multi-step scaling wizard for the specified client service.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Service  $service
-     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     * @return \Illuminate\View\View
      */
     public function show(Request $request, Service $service)
     {
         abort_if($service->user_id !== Auth::id(), 403);
 
-        try {
-            $this->scalingService->validateRequest($service);
-        } catch (\Exception $e) {
-            return redirect()->route('client.services.show', ['service' => $service->service_number])->with('error', $e->getMessage());
-        }
-
-        $step = session('scaling.step', 1);
-
-        if ($step == 1) {
-            $availablePackages = $this->scalingService->getStrictCandidates($service);
-            return view('client::services.workspaces.scaling', compact('service', 'step', 'availablePackages'));
-        }
-
-        if ($step == 2) {
-            $targetId = session('scaling.package_id');
-            $targetPackage = $this->scalingService->getStrictTargetPackage($service, $targetId);
-
-            if (!$targetPackage) {
-                return redirect()->route('client.services.scaling.show', ['service' => $service->service_number])
-                    ->with('error', __('client/services.scaling.invalid_package'));
-            }
-
-            $selectedVariants = $targetPackage->variants->mapWithKeys(fn($v) => [$v->id => $v->options->first()->id ?? null])->filter()->toArray();
-
-            try {
-                $calculation = $this->scalingService->calculateProrata($service, $targetPackage, $selectedVariants);
-            } catch (\Exception $e) {
-                return back()->with('error', $e->getMessage());
-            }
-
-            return view('client::services.workspaces.scaling', compact('service', 'step', 'targetPackage', 'calculation'));
-        }
-
-        session()->forget(['scaling.step', 'scaling.package_id']);
-        return redirect()->route('client.services.show', ['service' => $service->service_number]);
+        return view('client::services.workspaces.scaling', compact('service'));
     }
 
     /**
