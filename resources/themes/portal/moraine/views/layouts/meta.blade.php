@@ -4,8 +4,8 @@
 <!-- Styles -->
 @php
     $themeCssVariables = '';
-    if (!empty($clientThemeConfig)) {
-        foreach ($clientThemeConfig as $key => $value) {
+    if (!empty($portalThemeConfig)) {
+        foreach ($portalThemeConfig as $key => $value) {
             if (str_starts_with($key, 'billmora_') && !empty($value)) {
                 $cssVarName = str_replace('_', '-', $key);
                 $themeCssVariables .= "--{$cssVarName}: {$value} !important;\n\t\t";
