@@ -51,7 +51,7 @@ class PackageController extends Controller
             }
         }
 
-        return view('client::store.catalog.package.show', compact(
+        return view('client::store.package.show', compact(
             'package',
             'prices',
             'packagePricesPayload',
