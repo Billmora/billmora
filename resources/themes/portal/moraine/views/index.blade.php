@@ -57,7 +57,7 @@
 					@foreach ($catalogs as $catalog)
 						<a
 							href="{{ route('client.store.catalog', ['catalog' => $catalog->slug]) }}"
-							class="flex-none bg-white border-2 border-billmora-2 rounded-2xl p-6 hover:border-billmora-primary-500 hover:shadow-lg transition duration-200 grid gap-3"
+							class="flex-none bg-white border-2 border-billmora-2 rounded-2xl p-6 hover:border-billmora-primary-500 transition duration-200 grid gap-3"
 							:style="`width: calc(${100 / cols}% - ${16 * (cols - 1) / cols}px)`"
 						>
 							@if ($catalog->icon)
