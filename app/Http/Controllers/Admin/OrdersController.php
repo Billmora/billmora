@@ -64,67 +64,13 @@ class OrdersController extends Controller
     }
 
     /**
-     * Show the form for creating a new order with pricing, packages, and plugin schemas.
+     * Show the form for creating a new order. Logic for fetching reactive options is delegated to the Livewire component.
      *
-     * @param \App\Services\Package\PricingService $pricingService
-     * @param \App\Services\PluginManager $pluginManager
      * @return \Illuminate\Contracts\View\View
      */
-    public function create(PricingService $pricingService, PluginManager $pluginManager)
+    public function create()
     {
-        $userOptions = User::query()
-            ->select('id', 'first_name', 'last_name', 'email')
-            ->get()
-            ->map(fn ($user) => [
-                'value' => $user->id,
-                'title' => $user->fullname,
-                'subtitle' => $user->email,
-            ])
-            ->values()
-            ->toArray();
-
-        $couponOptions = Coupon::select('id', 'code')
-            ->where(function ($q) {
-                $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
-            })
-            ->get()
-            ->map(fn ($coupon) => [
-                'value' => $coupon->id,
-                'title' => $coupon->code,
-            ])
-            ->values()
-            ->toArray();
-
-        $packages = Package::select('id', 'name', 'catalog_id', 'plugin_id') 
-            ->with([
-                'prices',
-                'catalog:id,name',
-                'plugin',
-                'variants' => fn($q) => $q->where('status', 'visible'),
-                'variants.options.prices',
-            ])
-            ->get();
-
-        $packagesPayload = $pricingService->buildPackagesPayload($packages);
-
-        $checkoutSchema = [];
-        foreach ($packages as $package) {
-            if (!$package->plugin) continue;
-            $instance = $pluginManager->bootInstance($package->plugin);
-            if ($instance && method_exists($instance, 'getCheckoutSchema')) {
-                $schema = $instance->getCheckoutSchema();
-                if (!empty($schema)) {
-                    $checkoutSchema[$package->id] = $schema;
-                }
-            }
-        }
-
-        return view('admin::orders.create', compact(
-            'userOptions',
-            'couponOptions',
-            'packagesPayload',
-            'checkoutSchema',
-        ));
+        return view('admin::orders.create');
     }
 
     /**
