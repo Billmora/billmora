@@ -63,20 +63,7 @@ class InvoicesController extends Controller
      */
     public function create()
     {
-        $userOptions = User::query()
-            ->select('id', 'first_name', 'last_name', 'email')
-            ->get()
-            ->map(fn ($user) => [
-                'value' => $user->id,
-                'title' => $user->fullname,
-                'subtitle' => $user->email,
-            ])
-            ->values()
-            ->toArray();
-
-        $currencies = Currency::select('id', 'code')->get();
-
-        return view('admin::invoices.create', compact('userOptions', 'currencies'));
+        return view('admin::invoices.create');
     }
 
     /**
@@ -174,27 +161,7 @@ class InvoicesController extends Controller
      */
     public function edit(Invoice $invoice)
     {
-        $userOptions = User::query()
-            ->select('id', 'first_name', 'last_name', 'email')
-            ->get()
-            ->map(fn ($user) => [
-                'value' => $user->id,
-                'title' => $user->fullname,
-                'subtitle' => $user->email,
-            ])
-            ->values()
-            ->toArray();
-
-        $currencies = Currency::select('code')->get();
-
-        $invoiceItems = $invoice->items->map(fn($item) => [
-            'id' => $item->id,
-            'description' => $item->description,
-            'quantity' => $item->quantity,
-            'unit_price' => $item->unit_price
-        ])->toArray();
-
-        return view('admin::invoices.edit', compact('invoice', 'userOptions', 'currencies', 'invoiceItems'));
+        return view('admin::invoices.edit', compact('invoice'));
     }
 
     /**
