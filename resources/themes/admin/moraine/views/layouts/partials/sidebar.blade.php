@@ -158,12 +158,12 @@
         </a>
       @endcan
     </div>
-    <div class="w-full flex gap-4 mt-auto pt-4">
+    <div class="w-full grid grid-cols-2 gap-4 mt-auto pt-4">
         <a href="https://billmora.com/docs/introduction" target="_blank" class="flex justify-center gap-1 items-center bg-billmora-2 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
             <x-lucide-book class="w-auto h-5" />
-            Documentation
+            Docs
         </a>
-        <a href="https://github.com/sponsors/Billmora" target="_blank" class="w-full flex justify-center gap-1 items-center bg-billmora-2 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+        <a href="https://github.com/sponsors/Billmora" target="_blank" class="flex justify-center gap-1 items-center bg-billmora-2 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
             <x-lucide-heart-handshake class="w-auto h-5" />
             Sponsor
         </a>
