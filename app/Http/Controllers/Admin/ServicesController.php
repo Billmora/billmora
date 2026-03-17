@@ -75,51 +75,16 @@ class ServicesController extends Controller
     }
 
     /**
-     * Show the form for editing the specified service with packages, pricing, and plugin schemas.
+     * Show the form for editing the specified service using Hybrid Livewire.
      *
      * @param \App\Models\Service $service
-     * @param \App\Services\Package\PricingService $pricingService
-     * @param \App\Services\PluginManager $pluginManager
      * @return \Illuminate\Contracts\View\View
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function edit(Service $service, PricingService $pricingService, PluginManager $pluginManager)
+    public function edit(Service $service)
     {
         $service->load('user');
         
-        $currencies = Currency::orderBy('code')->get();
-
-        $packages = Package::with([
-                'catalog:id,name',
-                'prices', 
-                'plugin',
-                'variants' => fn($q) => $q->where('status', 'visible'),
-                'variants.options.prices'
-            ])
-            ->where('status', 'visible')
-            ->get();
-
-        $packagesPayload = $pricingService->buildPackagesPayload($packages);
-
-        $schemasPayload = [];
-        foreach ($packages as $package) {
-            if (!$package->plugin) continue;
-            $instance = $pluginManager->bootInstance($package->plugin);
-            if ($instance && method_exists($instance, 'getCheckoutSchema')) {
-                $schema = $instance->getCheckoutSchema();
-                if (!empty($schema)) {
-                    $schemasPayload[$package->id] = $schema;
-                }
-            }
-        }
-
-        return view('admin::services.edit', compact(
-            'service',
-            'currencies',
-            'packagesPayload',
-            'schemasPayload',
-        ));
+        return view('admin::services.edit', compact('service'));
     }
 
     /**
