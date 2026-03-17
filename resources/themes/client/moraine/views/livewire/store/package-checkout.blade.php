@@ -242,7 +242,7 @@
                 </div>
             @endif
         @endif
-        <button type="submit" class="w-full bg-billmora-primary-500 hover:bg-billmora-primary-600 p-3 text-white rounded-xl font-semibold transition-all cursor-pointer">
+        <button type="submit" class="w-full bg-billmora-primary-500 hover:bg-billmora-primary-600 p-3 text-white rounded-lg font-semibold transition-all cursor-pointer">
             {{ __('client/store.package.add_to_cart') }}
         </button>
     </div>

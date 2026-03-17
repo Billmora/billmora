@@ -87,7 +87,7 @@
                         @if ($isOrderable)
                             <a 
                                 href="{{ route('client.store.catalog.package', ['catalog' => $package->catalog->slug, 'package' => $package->slug]) }}"
-                                class="w-full text-center bg-billmora-primary-500 hover:bg-billmora-primary-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors duration-200"
+                                class="w-full text-center bg-billmora-primary-500 hover:bg-billmora-primary-600 text-white text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors duration-200"
                             >
                                 {{ __('client/store.order_now') }}
                             </a>
@@ -97,7 +97,7 @@
                                 </span>
                             @endif
                         @else
-                            <span class="w-full text-center bg-billmora-2 text-slate-400 text-sm font-semibold px-4 py-2.5 rounded-xl cursor-not-allowed">
+                            <span class="w-full text-center bg-billmora-2 text-slate-400 text-sm font-semibold px-4 py-2.5 rounded-lg cursor-not-allowed">
                                 {{ $package->stock === 0 ? __('client/store.order_out_of_stock') : __('client/store.order_unavailable') }}
                             </span>
                         @endif
