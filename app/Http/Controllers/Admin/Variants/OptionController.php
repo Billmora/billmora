@@ -38,8 +38,6 @@ class OptionController extends Controller
      */
     public function index(Variant $variant)
     {
-
-
         $options = $variant->options()
             ->select(['id', 'variant_id', 'name', 'value', 'created_at'])
             ->paginate(Billmora::getGeneral('misc_admin_pagination'))
@@ -53,12 +51,9 @@ class OptionController extends Controller
      *
      * @param  \App\Models\Variant  $variant  Variant ID
      * @return \Illuminate\View\View
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function create(Variant $variant)
     {
-
         return view('admin::variants.option.create', compact('variant'));
     }
 
@@ -75,7 +70,6 @@ class OptionController extends Controller
      */
     public function store(Variants\OptionRequest $request, Variant $variant)
     {
-
         $validated = $request->validated();
 
         $option = DB::transaction(function () use ($validated, $variant) {
@@ -123,55 +117,14 @@ class OptionController extends Controller
      * @param  \App\Models\Variant  $variant  Variant ID
      * @param  \App\Models\VariantOption  $option
      * @return \Illuminate\View\View
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function edit(Variant $variant, VariantOption $option)
     {
-
-
         if ($option->variant_id !== $variant->id) {
             abort(404);
         }
 
-        $option->load(['prices' => function ($q) {
-            $q->select([
-                'id',
-                'variant_option_id',
-                'name',
-                'type',
-                'time_interval',
-                'billing_period',
-                'rates',
-                'created_at',
-            ])->orderBy('id');
-        }]);
-
-        $currencies = Currency::query()
-            ->select(['id', 'code', 'is_default'])
-            ->orderByDesc('is_default')
-            ->orderBy('code')
-            ->get();
-
-        $pricingsFromDb = $option->prices->map(function ($price) {
-            return [
-                'name' => $price->name,
-                'type' => $price->type,
-                'time_interval' => $price->time_interval,
-                'billing_period' => $price->billing_period,
-                'rates' => $price->rates ?? [],
-            ];
-        })->values()->all();
-
-        $pricings = old('pricings', $pricingsFromDb);
-
-        return view('admin::variants.option.edit', compact(
-            'variant',
-            'option',
-            'currencies',
-            'pricings',
-        ));
+        return view('admin::variants.option.edit', compact('variant', 'option'));
     }
 
     /**
@@ -251,7 +204,6 @@ class OptionController extends Controller
      */
     public function destroy(Variant $variant, VariantOption $option)
     {
-
 
         if ($option->variant_id !== $variant->id) {
             abort(404);
