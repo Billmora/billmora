@@ -39,7 +39,7 @@ class LoginController extends Controller
 
         CaptchaService::verifyOrFail('login_form', $request);
     
-        if (Auth::attempt($request->only('email', 'password'))) {
+        if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
             $user = Auth::user();
 
             if (Billmora::getAuth('user_require_verified') && !$user->isEmailVerified()) {

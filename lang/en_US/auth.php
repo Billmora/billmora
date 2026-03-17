@@ -9,6 +9,7 @@ return [
     ],
     
     'remembered_password' => 'Already remembered your password?',
+    'remember_me' => 'Remember me',
     'forgot_password' => 'Forgot Password?',
     'have_account' => 'Already have an account?',
     'dont_have_account' => 'Don\'t have an account?',

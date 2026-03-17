@@ -34,7 +34,13 @@
                     <div class="grid gap-3">
                         <x-client::input type="email" name="email" label="{{ __('common.email') }}" required />
                         <x-client::input type="password" name="password" label="{{ __('common.password') }}" required />
-                        <a href="{{ route('client.password.forgot') }}" class="text-billmora-primary-500 hover:text-billmora-primary-600 font-semibold ml-auto">{{ __('auth.forgot_password') }}</a>
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="remember" class="w-4 h-4 accent-billmora-primary-500 text-red border-2 outline-none focus:ring-2 ring-billmora-primary-500 cursor-pointer">
+                                <span class="text-sm text-slate-600">{{ __('auth.remember_me') }}</span>
+                            </label>
+                            <a href="{{ route('client.password.forgot') }}" class="text-billmora-primary-500 hover:text-billmora-primary-600 font-semibold">{{ __('auth.forgot_password') }}</a>
+                        </div>
                         <x-client::captcha form="login_form" class="mx-auto" />
                     </div>
                     <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.sign_in') }}</button>
