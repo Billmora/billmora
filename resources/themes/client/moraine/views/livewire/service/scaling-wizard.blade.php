@@ -1,4 +1,6 @@
-<div class="bg-billmora-bg border-2 border-billmora-2 rounded-2xl overflow-hidden relative">
+<form action="{{ route('client.services.scaling.store', ['service' => $service->service_number]) }}" method="POST" class="bg-billmora-bg border-2 border-billmora-2 rounded-2xl overflow-hidden relative">
+    @csrf
+    <input type="hidden" name="package_id" value="{{ $selectedPackageId }}">
     @if ($step == 1)
         <div class="bg-billmora-1 px-6 py-4 border-b-2 border-billmora-2">
             <h3 class="flex gap-2 items-center font-semibold text-slate-600">
@@ -19,8 +21,14 @@
                         $isCurrent = $service->package_id == $package->id;
                         $priceData = $package->prices->first();
                     @endphp
-                    <div class="relative">
-                        <input type="radio" wire:model="selectedPackageId" id="package_id_{{ $package->id }}" value="{{ $package->id }}" class="peer hidden">
+                    <div class="relative" wire:key="pkg-{{ $package->id }}">
+                        <input 
+                            type="radio" 
+                            wire:model="selectedPackageId" 
+                            id="package_id_{{ $package->id }}" 
+                            value="{{ $package->id }}" 
+                            class="peer hidden"
+                        >
                         <label for="package_id_{{ $package->id }}" class="flex flex-col h-full gap-4 p-6 border-2 rounded-2xl cursor-pointer transition-all duration-200 ease-in-out bg-billmora-bg border-billmora-2 hover:border-billmora-primary peer-checked:border-billmora-primary-500">
                             @if($isCurrent)
                                 <span class="absolute top-0 right-0 bg-billmora-primary-500 text-white text-xs uppercase tracking-wider font-bold px-3 py-1 rounded-bl-xl rounded-tr-lg z-10">
@@ -86,60 +94,72 @@
             @enderror
             <div class="grid gap-4 relative">
                 @foreach ($this->targetPackage->variants as $variant)
-                    @switch($variant->type)
-                        @case('select')
-                            <x-client::select name="variants[{{ $variant->id }}]" wire:model.live="variantSelections.{{ $variant->id }}" label="{{ $variant->name }}" required>
-                                @foreach ($variant->options as $option)
-                                    <option value="{{ $option->id }}">
-                                        {{ $option->name }} | {{ $this->formatOptionPrice($option) }}
-                                    </option>
-                                @endforeach
-                            </x-client::select>
-                            @break
-                        @case('radio')
-                            <x-client::radio.group name="variants[{{ $variant->id }}]" wire:model.live="variantSelections.{{ $variant->id }}" label="{{ $variant->name }}" required>
-                                @foreach ($variant->options as $option)
-                                    <x-client::radio.option
-                                        name="variants[{{ $variant->id }}]"
-                                        label="{{ $option->name }} | {{ $this->formatOptionPrice($option) }}"
-                                        value="{{ $option->id }}"
-                                    />
-                                @endforeach
-                            </x-client::radio.group>
-                            @break
-                        @case('checkbox')
-                            @php
-                                $checkboxOpts = [];
-                                foreach($variant->options as $opt) {
-                                    $checkboxOpts[$opt->id] = $opt->name . ' | ' . $this->formatOptionPrice($opt);
-                                }
-                            @endphp
-                            <x-client::checkbox 
-                                name="variants[{{ $variant->id }}]" 
-                                wire:model.live="variantSelections.{{ $variant->id }}" 
-                                label="{{ $variant->name }}" 
-                                :options="$checkboxOpts" 
-                            />
-                            @break
-                        @case('slider')
-                            @php
-                                $sliderOpts = [];
-                                foreach($variant->options as $opt) {
-                                    $sliderOpts[] = [
-                                        'value' => $opt->id, 
-                                        'title' => $opt->name . ' | ' . $this->formatOptionPrice($opt)
-                                    ];
-                                }
-                            @endphp
-                            <x-client::slider 
-                                name="variants[{{ $variant->id }}]" 
-                                wire:model.live="variantSelections.{{ $variant->id }}" 
-                                label="{{ $variant->name }}" 
-                                :options="$sliderOpts" 
-                                required 
-                            />
-                            @break
-                    @endswitch
+                    <div wire:key="variant-wrapper-{{ $variant->id }}">
+                        @switch($variant->type)
+                            @case('select')
+                                <x-client::select 
+                                    name="variants[{{ $variant->id }}]" 
+                                    wire:model.live="variantSelections.{{ $variant->id }}" 
+                                    label="{{ $variant->name }}" 
+                                    required
+                                >
+                                    @foreach ($variant->options as $option)
+                                        <option value="{{ $option->id }}">
+                                            {{ $option->name }} | {{ $this->formatOptionPrice($option) }}
+                                        </option>
+                                    @endforeach
+                                </x-client::select>
+                                @break
+                            @case('radio')
+                                <x-client::radio.group 
+                                    name="variants[{{ $variant->id }}]" 
+                                    wire:model.live="variantSelections.{{ $variant->id }}" 
+                                    label="{{ $variant->name }}" 
+                                    required
+                                >
+                                    @foreach ($variant->options as $option)
+                                        <x-client::radio.option
+                                            name="variants[{{ $variant->id }}]"
+                                            label="{{ $option->name }} | {{ $this->formatOptionPrice($option) }}"
+                                            value="{{ $option->id }}"
+                                        />
+                                    @endforeach
+                                </x-client::radio.group>
+                                @break
+                            @case('checkbox')
+                                @php
+                                    $checkboxOpts = [];
+                                    foreach($variant->options as $opt) {
+                                        $checkboxOpts[$opt->id] = $opt->name . ' | ' . $this->formatOptionPrice($opt);
+                                    }
+                                @endphp
+                                <x-client::checkbox 
+                                    name="variants[{{ $variant->id }}]" 
+                                    wire:model.live="variantSelections.{{ $variant->id }}" 
+                                    label="{{ $variant->name }}" 
+                                    :options="$checkboxOpts" 
+                                />
+                                @break
+                            @case('slider')
+                                @php
+                                    $sliderOpts = [];
+                                    foreach($variant->options as $opt) {
+                                        $sliderOpts[] = [
+                                            'value' => $opt->id, 
+                                            'title' => $opt->name . ' | ' . $this->formatOptionPrice($opt)
+                                        ];
+                                    }
+                                @endphp
+                                <x-client::slider 
+                                    name="variants[{{ $variant->id }}]" 
+                                    wire:model.live="variantSelections.{{ $variant->id }}" 
+                                    label="{{ $variant->name }}" 
+                                    :options="$sliderOpts" 
+                                    required 
+                                />
+                                @break
+                        @endswitch
+                    </div>
                 @endforeach
                 @if($this->targetPackage->variants->isEmpty())
                     <p class="text-slate-500">{{ __('client/services.scaling.no_variants') }}</p>
@@ -175,10 +195,10 @@
                 <button type="button" wire:click="goToStep1" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     {{ __('common.back') }}
                 </button>
-                <button type="button" wire:click="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-6 py-2 text-white font-medium rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-6 py-2 text-white font-medium rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     {{ __('common.submit') }}
                 </button>
             </div>
         </div>
     @endif
-</div>
+</form>

@@ -45,86 +45,63 @@ class ScalingController extends Controller
     public function store(Request $request, Service $service)
     {
         abort_if($service->user_id !== Auth::id(), 403);
-        $step = session('scaling.step', 1);
 
-        if ($step == 1) {
-            $request->validate(['package_id' => 'required|integer']);
+        $request->validate(['package_id' => 'required', 'integer']);
 
-            $candidates = $this->scalingService->getStrictCandidates($service);
-            if (!$candidates->contains('id', $request->package_id)) {
-                return back()->with('error', __('client/services.scaling.invalid_package'));
-            }
+        $targetPackage = $this->scalingService->getStrictTargetPackage($service, $request->package_id);
 
-            session(['scaling.step' => 2, 'scaling.package_id' => $request->package_id]);
-            return redirect()->route('client.services.scaling.show', ['service' => $service->service_number]);
+        if (!$targetPackage) {
+            return back()->withInput()->with('error', __('client/services.scaling.invalid_package'));
         }
 
-        if ($step == 2) {
-            $targetId = session('scaling.package_id');
-            $targetPackage = $this->scalingService->getStrictTargetPackage($service, $targetId);
+        $rules = ['variants' => 'nullable|array'];
+        $customAttributes = [];
 
-            if (!$targetPackage) {
-                session()->forget(['scaling.step', 'scaling.package_id']);
-                return redirect()->route('client.services.scaling.show', ['service' => $service->service_number]);
+        foreach ($targetPackage->variants as $variant) {
+            $field = "variants.{$variant->id}";
+            $fieldRules = [];
+
+            if (in_array(strtolower($variant->type), ['select', 'radio', 'slider'])) {
+                $fieldRules[] = 'required';
+            } else {
+                $fieldRules[] = 'nullable';
             }
 
-            $rules = ['variants' => 'nullable|array'];
+            $fieldRules[] = Rule::exists('variant_options', 'id')
+                ->where('variant_id', $variant->id);
+
+            $rules[$field] = $fieldRules;
+            $customAttributes[$field] = $variant->name; 
+        }
+
+        $validated = $request->validate($rules, [], $customAttributes);
+        $cleanVariants = $validated['variants'] ?? [];
+
+        $isSamePackage = $targetPackage->id === $service->package_id;
+        
+        if ($isSamePackage) {
+            $currentVariants = $service->variant_selections ?? [];
+            ksort($currentVariants);
+            ksort($cleanVariants);
             
-            $customAttributes = [];
-
-            foreach ($targetPackage->variants as $variant) {
-                $field = "variants.{$variant->id}";
-                $fieldRules = [];
-
-                if (in_array(strtolower($variant->type), ['select', 'radio', 'slider'])) {
-                    $fieldRules[] = 'required';
-                } else {
-                    $fieldRules[] = 'nullable';
-                }
-
-                $fieldRules[] = Rule::exists('variant_options', 'id')
-                    ->where('variant_id', $variant->id);
-
-                $rules[$field] = $fieldRules;
-                
-                $customAttributes[$field] = $variant->name; 
-            }
-
-            $validated = $request->validate($rules, [], $customAttributes);
-            
-            $cleanVariants = $validated['variants'] ?? [];
-
-            $isSamePackage = $targetPackage->id === $service->package_id;
-            
-            if ($isSamePackage) {
-                $currentVariants = $service->variant_selections ?? [];
-                
-                ksort($currentVariants);
-                ksort($cleanVariants);
-                
-                if (json_encode($currentVariants) === json_encode($cleanVariants)) {
-                    return back()->with('error', __('client/services.scaling.no_variant_changes'));
-                }
-            }
-
-            try {
-                $calculation = $this->scalingService->calculateProrata($service, $targetPackage, $cleanVariants);
-                
-                $invoice = $this->scalingService->executeOrder($service, $targetPackage, $calculation, $cleanVariants);
-
-                session()->forget(['scaling.step', 'scaling.package_id']);
-
-                $msg = $calculation['is_downgrade']
-                    ? __('client/services.scaling.downgrade_success')
-                    : __('client/services.scaling.upgrade_success');
-                return redirect()->route('client.invoices.show', ['invoice' => $invoice->invoice_number])->with('success', $msg);
-
-            } catch (\Exception $e) {
-                return back()->with('error', $e->getMessage());
+            if (json_encode($currentVariants) === json_encode($cleanVariants)) {
+                return back()->withInput()->with('error', __('client/services.scaling.no_variant_changes'));
             }
         }
 
-        session()->forget(['scaling.step', 'scaling.package_id']);
-        return redirect()->route('client.services.show', ['service' => $service->service_number]);
+        try {
+            $calculation = $this->scalingService->calculateProrata($service, $targetPackage, $cleanVariants);
+            
+            $invoice = $this->scalingService->executeOrder($service, $targetPackage, $calculation, $cleanVariants);
+
+            $msg = $calculation['is_downgrade']
+                ? __('client/services.scaling.downgrade_success')
+                : __('client/services.scaling.upgrade_success');
+
+            return redirect()->route('client.invoices.show', ['invoice' => $invoice->invoice_number])->with('success', $msg);
+
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', $e->getMessage());
+        }
     }
 }
