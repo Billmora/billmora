@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'service_number' => 'Service Number',
     'package_label' => 'Package',
     'catalog_label' => 'Catalog',
     'registration_label' => 'Registration Date',

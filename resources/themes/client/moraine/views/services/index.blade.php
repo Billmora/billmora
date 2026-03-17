@@ -9,8 +9,8 @@
             <table class="min-w-full divide-y divide-billmora-2">
                 <thead class="bg-billmora-2">
                     <tr>
+                        <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/services.service_number') }}</th>
                         <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/services.package_label') }}</th>
-                        <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/services.catalog_label') }}</th>
                         <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/services.billing_cycle_label') }}</th>
                         <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/services.price_label') }}</th>
                         <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/services.expires_label') }}</th>
@@ -22,9 +22,9 @@
                     @foreach ($services as $service)
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
-                                <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">{{ $service->name }}</a>
+                                <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">{{ $service->service_number }}</a>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->package->catalog->name }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->cycle_label }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ Currency::format($service->price, $service->currency) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->next_due_date?->format(Billmora::getGeneral('company_date_format')) }}</td>

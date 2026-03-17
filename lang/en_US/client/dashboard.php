@@ -8,6 +8,7 @@ return [
     'order_new_services' => 'Order New Services',
     'view_all' => 'View All',
 
+    'service_number' => 'Number',
     'service_catalog' => 'Catalog',
     'service_package' => 'Package',
     'service_next_due_date' => 'Next Due Date',

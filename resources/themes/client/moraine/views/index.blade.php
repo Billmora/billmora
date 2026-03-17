@@ -87,6 +87,7 @@
                     <table class="min-w-full divide-y divide-billmora-2">
                         <thead class="bg-billmora-2">
                             <tr>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_number') }}</th>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_catalog') }}</th>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_package') }}</th>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_next_due_date') }}</th>
@@ -96,6 +97,7 @@
                         <tbody class="divide-y-2 divide-billmora-2 bg-billmora-bg">
                             @foreach ($activeServices as $service)
                                 <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->service_number }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->package->catalog->name }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->name }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->next_due_date->format(Billmora::getGeneral('company_date_format')) }}</td>
