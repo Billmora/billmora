@@ -3,10 +3,5 @@
 @section('title', 'Store')
 
 @section('body')
-    @livewire(\App\Livewire\Client\Store\PackageCheckout::class, [
-        'package' => $package,
-        'pricesPayload' => $packagePricesPayload,
-        'variantsPayload' => $variantsPayload,
-        'checkoutSchema' => $checkoutSchema
-    ])
+    @livewire('client.store.package-checkout', ['package' => $package])
 @endsection

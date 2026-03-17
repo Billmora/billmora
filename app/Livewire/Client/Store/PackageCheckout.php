@@ -3,82 +3,86 @@
 namespace App\Livewire\Client\Store;
 
 use App\Models\Package;
+use App\Models\PackagePrice;
+use App\Services\Package\PricingService;
+use App\Services\PluginManager;
 use Illuminate\Support\Facades\Session;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use App\Facades\Currency;
 
 class PackageCheckout extends Component
 {
     public Package $package;
-    public array $pricesPayload = [];
-    public array $variantsPayload = [];
-    public array $checkoutSchema = [];
     public string $currencyCode;
 
     public $selectedBillingId;
     public array $variantSelections = [];
     public array $sliderIndexes = [];
 
-    public array $pricingSummary = [];
+    protected PricingService $pricingService;
+    protected PluginManager $pluginManager;
 
     /**
-     * Initialize the checkout component with package data, pricing, variants, and schema.
-     * Sets the default billing cycle, initializes checkbox variant selections,
-     * then runs validation and total calculation on first load.
+     * Inject required services via Livewire's boot lifecycle hook,
+     * which runs on every request before mount.
      *
-     * @param  \App\Models\Package  $package
-     * @param  array  $pricesPayload      Flattened billing cycle data (id, name, price, setup_fee)
-     * @param  array  $variantsPayload    Flattened variant & option data with prices_by_name map
-     * @param  array  $checkoutSchema     Dynamic form field schema for the order form
+     * @param  \App\Services\Package\PricingService  $pricingService
+     * @param  \App\Services\PluginManager   $pluginManager
      * @return void
      */
-    public function mount(Package $package, array $pricesPayload, array $variantsPayload, array $checkoutSchema)
+    public function boot(PricingService $pricingService, PluginManager $pluginManager)
     {
-        $this->package = $package;
-        $this->pricesPayload = $pricesPayload;
-        $this->variantsPayload = $variantsPayload;
-        $this->checkoutSchema = $checkoutSchema;
-        $this->currencyCode = Session::get('currency');
-
-        if (!empty($this->pricesPayload)) {
-            $this->selectedBillingId = $this->pricesPayload[0]['id'];
-        }
-
-        foreach ($this->variantsPayload as $variant) {
-            if ($variant['type'] === 'checkbox') {
-                $this->variantSelections[$variant['id']] = [];
-            }
-        }
-
-        $this->validateSelections();
-        $this->calculateTotals();
+        $this->pricingService = $pricingService;
+        $this->pluginManager = $pluginManager;
     }
 
     /**
-     * React to billing cycle change by re-validating variant availability
-     * and recalculating totals for the newly selected cycle.
+     * Initialize the checkout component for the given package.
+     * Restores the billing cycle and variant selections from old input,
+     * merging both single and multi-select variant values. Falls back to
+     * the first available price when no prior billing selection exists,
+     * then validates all selections against the active billing cycle.
+     *
+     * @param  \App\Models\Package  $package
+     * @return void
+     */
+    public function mount(Package $package)
+    {
+        $this->package = $package;
+        $this->currencyCode = Session::get('currency');
+
+        $this->selectedBillingId = old('price_id');
+        
+        $oldVariants = old('variants', []);
+        $oldMultiVariants = old('variants_multi', []);
+        
+        foreach (array_replace($oldVariants, $oldMultiVariants) as $key => $val) {
+            $this->variantSelections[$key] = $val;
+        }
+
+        if (!$this->selectedBillingId && !empty($this->availablePrices)) {
+            $this->selectedBillingId = $this->availablePrices[0]['id'];
+        }
+
+        $this->validateSelections();
+    }
+
+    /**
+     * Re-validate variant selections whenever the billing cycle changes
+     * to ensure all current selections remain valid for the new cycle.
      *
      * @return void
      */
     public function updatedSelectedBillingId()
     {
         $this->validateSelections();
-        $this->calculateTotals();
     }
 
     /**
-     * React to any variant selection change and recalculate the pricing summary.
-     *
-     * @return void
-     */
-    public function updatedVariantSelections()
-    {
-        $this->calculateTotals();
-    }
-
-    /**
-     * React to slider index change for a specific variant, resolve the corresponding
-     * option from the available options list, update the variant selection, and recalculate totals.
+     * React to a slider index change for a specific variant, resolve the
+     * corresponding option from the available options list, and update
+     * the variant selection to match the new slider position.
      *
      * @param  int|string  $value      The new slider index position
      * @param  int|string  $variantId  The ID of the slider variant being updated
@@ -86,26 +90,26 @@ class PackageCheckout extends Component
      */
     public function updatedSliderIndexes($value, $variantId)
     {
-        $variant = collect($this->variantsPayload)->firstWhere('id', $variantId);
+        $variant = collect($this->availableVariants)->firstWhere('id', $variantId);
         if ($variant) {
             $options = array_values($this->getAvailableOptions($variant));
             if (isset($options[$value])) {
                 $this->variantSelections[$variantId] = $options[$value]['id'];
-                $this->calculateTotals();
             }
         }
     }
 
     /**
-     * Validate and normalize current variant selections against available options
-     * for the selected billing cycle. Resets out-of-scope selections to the first
-     * available option and syncs slider indexes accordingly.
+     * Validate and normalize all current variant selections against the options
+     * available for the selected billing cycle. Resets out-of-scope selections
+     * to the first available option and syncs slider indexes accordingly.
+     * Checkbox selections are intersected with the available option IDs.
      *
      * @return void
      */
     private function validateSelections()
     {
-        foreach ($this->variantsPayload as $variant) {
+        foreach ($this->availableVariants as $variant) {
             $availableOptions = array_values($this->getAvailableOptions($variant));
             $availableIds = array_column($availableOptions, 'id');
             
@@ -131,17 +135,87 @@ class PackageCheckout extends Component
     }
 
     /**
-     * Filter a variant's options to only those that have a price defined
+     * Retrieve the available billing cycle prices for the current package
+     * and currency, mapped to a flat payload array for use in the component.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    #[Computed]
+    public function availablePrices()
+    {
+        $prices = $this->pricingService->getAvailablePackagePrices($this->package, $this->currencyCode);
+        return $prices->map(
+            fn($price) => $this->pricingService->mapPriceToPayload($price, $this->currencyCode)
+        )->values()->toArray();
+    }
+
+    /**
+     * Retrieve the available variants for the current package and currency,
+     * built into a structured payload array ready for rendering.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    #[Computed]
+    public function availableVariants()
+    {
+        $variants = $this->pricingService->getAvailableVariants($this->package, $this->currencyCode);
+        return $this->pricingService->buildVariantsPayload($variants);
+    }
+
+    /**
+     * Resolve the dynamic checkout form schema from the package's associated
+     * plugin instance. Returns an empty array if the package has no plugin
+     * or the plugin does not implement getCheckoutSchema().
+     *
+     * @return array
+     */
+    #[Computed]
+    public function checkoutSchema()
+    {
+        if (!$this->package->plugin) return [];
+
+        $instance = $this->pluginManager->bootInstance($this->package->plugin);
+        return ($instance && method_exists($instance, 'getCheckoutSchema')) 
+            ? ($instance->getCheckoutSchema() ?: []) 
+            : [];
+    }
+
+    /**
+     * Calculate the full pricing summary for the currently selected billing cycle,
+     * variant selections, and currency via PricingService.
+     * Returns an empty array if no billing cycle is selected or the price record
+     * cannot be resolved.
+     *
+     * @return array<string, mixed>
+     */
+    #[Computed]
+    public function pricingSummary()
+    {
+        if (!$this->selectedBillingId) return [];
+
+        $packagePrice = PackagePrice::find($this->selectedBillingId);
+        if (!$packagePrice) return [];
+
+        return $this->pricingService->calculatePricing(
+            $packagePrice,
+            $this->variantSelections,
+            null, 
+            $this->currencyCode
+        );
+    }
+
+    /**
+     * Filter a variant's options to only those with a price defined
      * under the currently selected billing cycle name.
      *
-     * @param  array  $variant  A single variant entry from $variantsPayload
+     * @param  array  $variant  A single variant entry from $availableVariants
      * @return array            Filtered options keyed by their original index
      */
     public function getAvailableOptions($variant)
     {
         if (!$this->selectedBillingId) return [];
         
-        $cycleName = collect($this->pricesPayload)->firstWhere('id', $this->selectedBillingId)['name'] ?? '';
+        $cycleName = collect($this->availablePrices)->firstWhere('id', $this->selectedBillingId)['name'] ?? '';
 
         return array_filter($variant['options'], function ($option) use ($cycleName) {
             return isset($option['prices_by_name'][$cycleName]);
@@ -149,86 +223,18 @@ class PackageCheckout extends Component
     }
 
     /**
-     * Calculate the full pricing summary from in-memory payload data without any
-     * database queries. Resolves base price, per-variant line items, setup fees,
-     * subtotal, and grand total, then stores the result in $pricingSummary.
-     *
-     * @return void
-     */
-    public function calculateTotals()
-    {
-        if (!$this->selectedBillingId) return;
-
-        $cycleName = '';
-        $basePrice = 0;
-        $setupFeePackage = 0;
-
-        foreach ($this->pricesPayload as $p) {
-            if ($p['id'] == $this->selectedBillingId) {
-                $cycleName = $p['name'];
-                $basePrice = $p['price'];
-                $setupFeePackage = $p['setup_fee'];
-                break;
-            }
-        }
-
-        $variantTotal = 0;
-        $variantItems = [];
-        $setupFeeVariants = [];
-
-        foreach ($this->variantsPayload as $variant) {
-            $vId = $variant['id'];
-            $selectedOptionIds = $variant['type'] === 'checkbox' 
-                ? ($this->variantSelections[$vId] ?? []) 
-                : [$this->variantSelections[$vId] ?? null];
-
-            foreach ($selectedOptionIds as $optionId) {
-                if (!$optionId) continue;
-                $option = collect($variant['options'])->firstWhere('id', $optionId);
-                
-                if ($option && isset($option['prices_by_name'][$cycleName])) {
-                    $p = $option['prices_by_name'][$cycleName];
-                    if ($p['price'] > 0) {
-                        $variantTotal += $p['price'];
-                        $variantItems[] = [
-                            'description' => $variant['name'] . ': ' . $option['name'],
-                            'price' => $p['price'],
-                        ];
-                    }
-                    if ($p['setup_fee'] > 0) {
-                        $setupFeeVariants[] = [
-                            'description' => $variant['name'] . ': ' . $option['name'],
-                            'amount' => $p['setup_fee'],
-                        ];
-                    }
-                }
-            }
-        }
-
-        $recurringTotal = $basePrice + $variantTotal;
-        $setupFeeTotal = $setupFeePackage + array_sum(array_column($setupFeeVariants, 'amount'));
-
-        $this->pricingSummary = [
-            'base_price' => $basePrice,
-            'variant_items' => $variantItems,
-            'subtotal' => $recurringTotal,
-            'setup_fee_total' => $setupFeeTotal,
-            'total' => $recurringTotal + $setupFeeTotal,
-        ];
-    }
-
-    /**
-     * Format a display label for a variant option's price under the current billing cycle.
-     * Returns 'Free' when both price and setup fee are zero, otherwise formats the
-     * recurring price and appends the setup fee suffix when applicable.
+     * Format a human-readable price label for a variant option based on the
+     * active billing cycle and session currency. Returns 'Free' when both
+     * the recurring price and setup fee are zero, and appends a setup fee
+     * suffix when applicable.
      *
      * @param  array   $option  A single option entry from a variant's options list
-     * @return string           Human-readable price string, or empty string if unavailable
+     * @return string           Formatted price string, or empty string if unavailable
      */
     public function formatOptionPrice($option)
     {
         if (!$this->selectedBillingId) return '';
-        $cycleName = collect($this->pricesPayload)->firstWhere('id', $this->selectedBillingId)['name'] ?? '';
+        $cycleName = collect($this->availablePrices)->firstWhere('id', $this->selectedBillingId)['name'] ?? '';
         
         $priceData = $option['prices_by_name'][$cycleName] ?? null;
         if (!$priceData) return '';
@@ -236,19 +242,19 @@ class PackageCheckout extends Component
         $price = (float) $priceData['price'];
         $setupFee = (float) $priceData['setup_fee'];
 
-        if ($price == 0 && $setupFee == 0) return 'Free';
+        if ($price == 0 && $setupFee == 0) return __('billing.cycles.free');
         
-        $priceStr = $price == 0 ? 'Free' : Currency::format($price);
+        $priceStr = $price == 0 ? __('billing.cycles.free') : Currency::format($price, $this->currencyCode);
         
         if ($setupFee > 0) {
-            return $priceStr . ' + ' . Currency::format($setupFee) . ' ' . __('client/store.package.setup_fee');
+            return $priceStr . ' + ' . Currency::format($setupFee, $this->currencyCode) . ' ' . __('client/store.package.setup_fee');
         }
 
         return $priceStr;
     }
 
     /**
-     * Render the Livewire component view.
+     * Render the package checkout Livewire component view.
      *
      * @return \Illuminate\View\View
      */
