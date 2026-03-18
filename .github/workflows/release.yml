@@ -16,9 +16,8 @@ jobs:
       matrix:
         theme:
           - resources/themes/admin/moraine/vite.config.js
-          # client and portal theme under development
-          # - resources/themes/client/default/vite.config.js
-          # - resources/themes/portal/moraine/vite.config.js
+          - resources/themes/client/moraine/vite.config.js
+          - resources/themes/portal/moraine/vite.config.js
 
     steps:
       - name: Checkout code
