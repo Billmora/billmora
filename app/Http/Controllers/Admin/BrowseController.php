@@ -143,6 +143,11 @@ class BrowseController extends Controller
                 'url' => route('admin.settings.currencies')
             ],
             [
+                'title' => 'Taxes Settings',
+                'category' => 'settings',
+                'url' => route('admin.settings.taxes')
+            ],
+            [
                 'title' => 'Ticket Settings',
                 'category' => 'settings',
                 'url' => route('admin.settings.ticket.ticketing')
