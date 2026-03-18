@@ -66,7 +66,8 @@ class CheckoutController extends Controller
         }
 
         try {
-            $totals = $this->cartService->getTotals();
+            $country = Auth::check() ? Auth::user()->billing?->country : null;
+            $totals = $this->cartService->getTotals($country);
             $appliedCoupon = Session::get('applied_coupon');
 
             $result = $orderService->createOrder(

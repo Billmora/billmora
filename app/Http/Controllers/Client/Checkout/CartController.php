@@ -13,6 +13,7 @@ use App\Services\Package\OrderValidationService;
 use App\Services\PluginManager;
 use Billmora;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -83,7 +84,8 @@ class CartController extends Controller
             $cartItems = $this->cartService->getItems();
         }
 
-        $totals = $this->cartService->getTotals();
+        $country = Auth::check() ? Auth::user()->billing?->country : null;
+        $totals = $this->cartService->getTotals($country);
         $appliedCoupon = Session::get('applied_coupon');
 
         foreach ($cartItems as &$item) {
