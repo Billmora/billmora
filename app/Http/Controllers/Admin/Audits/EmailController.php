@@ -9,6 +9,7 @@ use App\Mail\NotificationMail;
 use App\Models\AuditEmail;
 use App\Models\Broadcast;
 use App\Models\Notification;
+use App\Models\User;
 use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Str;
@@ -82,9 +83,16 @@ class EmailController extends Controller
     {
         $history = AuditEmail::findOrFail($id);
 
+        $user = $history->user_id ? User::find($history->user_id) : User::first();
+
+        $data = [
+            'client_name' => $user ? $user->fullname : 'John Doe',
+            'company_name' => Billmora::getGeneral('company_name'),
+        ];
+
         if ($history->event === 'broadcast.email') {
             $broadcast = Broadcast::findOrFail($history->properties['id']);
-            $mailable = new BroadcastMail($broadcast, []);
+            $mailable = new BroadcastMail($broadcast, $data);
         } else  {
             $key = Str::after($history->event, 'notification.');
             
@@ -95,12 +103,10 @@ class EmailController extends Controller
             $notification->subject = $translation->subject;
             $notification->body = $translation->body;
             
-            $mailable = new NotificationMail($notification, []);
+            $mailable = new NotificationMail($notification, $data);
         }
 
-        $content = $mailable->content();
-
-        return view($content->view, $content->with);
+        return $mailable->render();
     }
 
     /**
