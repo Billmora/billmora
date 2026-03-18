@@ -53,6 +53,7 @@ class OrderService
                 'subtotal' => $totals['subtotal'],
                 'discount' => $totals['discount'],
                 'setup_fee' => $totals['setup_fee'],
+                'tax' => $totals['tax'] ?? 0,
                 'total' => $totals['total'],
                 'notes' => $checkoutData['notes'] ?? null,
                 'terms_accepted' => $checkoutData['terms_accepted'] ?? true,
@@ -116,6 +117,7 @@ class OrderService
                 'subtotal' => $totals['subtotal'],
                 'discount' => $totals['discount'],
                 'setup_fee' => $totals['setup_fee'],
+                'tax' => $totals['tax'] ?? 0,
                 'total' => $totals['total'],
                 'due_date' => now()->addDays($invoiceDueDate),
             ]);
@@ -204,6 +206,17 @@ class OrderService
                 'quantity' => 1,
                 'unit_price' => -$totals['discount'],
                 'amount' => -$totals['discount'],
+            ]);
+        }
+
+        if (isset($totals['tax']) && $totals['tax'] > 0) {
+            InvoiceItem::create([
+                'invoice_id' => $invoice->id,
+                'service_id' => null,
+                'description' => $totals['tax_name'] ?? 'Tax',
+                'quantity' => 1,
+                'unit_price' => $totals['tax'],
+                'amount' => $totals['tax'],
             ]);
         }
     }
