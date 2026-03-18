@@ -29,19 +29,23 @@ class SocialiteServiceProvider extends ServiceProvider
         });
 
         $this->app->booted(function () {
-            $providers = ['google', 'discord', 'github'];
+            try {
+                $providers = ['google', 'discord', 'github'];
 
-            foreach ($providers as $provider) {
-                $clientId = Billmora::getAuth("oauth_{$provider}_client_id");
-                $clientSecret = Billmora::getAuth("oauth_{$provider}_client_secret");
+                foreach ($providers as $provider) {
+                    $clientId = Billmora::getAuth("oauth_{$provider}_client_id");
+                    $clientSecret = Billmora::getAuth("oauth_{$provider}_client_secret");
 
-                if ($clientId && $clientSecret) {
-                    config([
-                        "services.{$provider}.client_id" => $clientId,
-                        "services.{$provider}.client_secret" => $clientSecret,
-                        "services.{$provider}.redirect" => url("/auth/oauth/{$provider}/callback"),
-                    ]);
+                    if ($clientId && $clientSecret) {
+                        config([
+                            "services.{$provider}.client_id" => $clientId,
+                            "services.{$provider}.client_secret" => $clientSecret,
+                            "services.{$provider}.redirect" => url("/auth/oauth/{$provider}/callback"),
+                        ]);
+                    }
                 }
+            } catch (\Throwable $e) {
+                // Ignore errors during setup/migrations when DB isn't available
             }
         });
     }
