@@ -371,6 +371,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         });
 
         /**
+         * Admin tax settings interface routes.
+         *
+         * Prefix: /admin/settings/taxes
+         */
+        Route::group(['prefix' => 'taxes'], function () {
+            Route::get('/', [Settings\TaxController::class, 'index'])->name('admin.settings.taxes');
+            Route::get('/create', [Settings\TaxController::class, 'create'])->name('admin.settings.taxes.create');
+            Route::post('/', [Settings\TaxController::class, 'store'])->name('admin.settings.taxes.store');
+            Route::get('/{tax}/edit', [Settings\TaxController::class, 'edit'])->name('admin.settings.taxes.edit');
+            Route::put('/{tax}', [Settings\TaxController::class, 'update'])->name('admin.settings.taxes.update');
+            Route::delete('/{tax}', [Settings\TaxController::class, 'destroy'])->name('admin.settings.taxes.destroy');
+        });
+
+        /**
          * Admin ticket settings interface routes.
          *
          * Prefix: /admin/settings/ticket
