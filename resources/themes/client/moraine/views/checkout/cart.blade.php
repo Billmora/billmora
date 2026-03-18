@@ -160,6 +160,12 @@
                                 </span>
                             </div>
                         @endif
+                        @if(isset($totals['tax']) && $totals['tax'] > 0)
+                            <div class="flex justify-between text-slate-500">
+                                <span>{{ $totals['tax_name'] ?? 'Tax' }}</span>
+                                <span class="text-slate-700 font-semibold">{{ Currency::format($totals['tax']) }}</span>
+                            </div>
+                        @endif
                         <hr class="border-t-2 border-billmora-2">
                         <div class="flex justify-between items-center">
                             <span class="text-slate-600 font-bold text-lg">{{ __('client/checkout.total_due') }}</span>
