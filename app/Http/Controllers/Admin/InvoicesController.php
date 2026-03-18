@@ -285,10 +285,7 @@ class InvoicesController extends Controller
 
         $invoice->delete();
 
-        $this->recordDelete('invoice.delete', [
-            'id' => $tempInvoice->id,
-            'invoice_number' => $tempInvoice->invoice_number,
-        ]);
+        $this->recordDelete('invoice.delete', $tempInvoice->toArray());
 
         return redirect()->route('admin.invoices')->with('success', __('common.delete_success', ['attribute' => $tempInvoice->invoice_number]));
     }

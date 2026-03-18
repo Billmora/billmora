@@ -172,9 +172,7 @@ class RoleController extends Controller
             ]));
         }
 
-        $this->recordDelete('role.delete', [
-            'name' => $role->name,
-        ]);
+        $this->recordDelete('role.delete', $role->toArray());
 
         $role->delete();
 

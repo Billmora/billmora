@@ -158,9 +158,7 @@ class CurrencyController extends Controller
                 ]));
         }
 
-        $this->recordDelete('currency.delete', [
-            'code' => $currency->code,
-        ]);
+        $this->recordDelete('currency.delete', $currency->toArray());
 
         $currency->delete();
 

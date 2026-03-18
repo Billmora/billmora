@@ -238,10 +238,7 @@ class CouponsController extends Controller
 
         $coupon->delete();
 
-        $this->recordDelete('coupon.delete', [
-            'id' => $coupon->id,
-            'code' => $coupon->code,
-        ]);
+        $this->recordDelete('coupon.delete', $coupon->toArray());
 
         return redirect()->route('admin.coupons')->with('success', __('common.delete_success', ['attribute' => $coupon->code]));
     }

@@ -148,9 +148,7 @@ class CatalogsController extends Controller
 
         $catalog->delete();
 
-        $this->recordDelete('catalog.delete', [
-            'name' => $catalog->name,
-        ]);
+        $this->recordDelete('catalog.delete', $catalog->toArray());
 
         return redirect()->route('admin.catalogs')->with('success', __('common.delete_success', ['attribute' => $catalog->name]));
     }

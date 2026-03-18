@@ -199,10 +199,7 @@ class VariantsController extends Controller
 
         $variant->delete();
 
-        $this->recordDelete('variant.delete', [
-            'id' => $variant->id,
-            'name' => $variant->name,
-        ]);
+        $this->recordDelete('variant.delete', $variant->toArray());
 
         return redirect()->route('admin.variants')->with('success', __('common.delete_success', ['attribute' => $variant->name]));
     }

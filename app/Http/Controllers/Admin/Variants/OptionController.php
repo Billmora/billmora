@@ -213,10 +213,7 @@ class OptionController extends Controller
             $option->delete();
         });
 
-        $this->recordDelete('variant.option.delete', [
-            'id' => $option->id,
-            'name' => $option->name,
-        ]);
+        $this->recordDelete('variant.option.delete', $option->toArray());
 
         return redirect()
             ->route('admin.variants.options', ['variant' => $variant->id])

@@ -147,10 +147,7 @@ class PricingController extends Controller
 
         $pricing->delete();
 
-        $this->recordDelete('package.pricing.delete', [
-            'package_id' => $package->id,
-            'pricing_name' => $pricing->name
-        ]);
+        $this->recordDelete('package.pricing.delete', $pricing->toArray());
 
         return redirect()
             ->route('admin.packages.pricing', ['package' => $package->id])

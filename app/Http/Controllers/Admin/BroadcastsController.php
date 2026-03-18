@@ -230,9 +230,7 @@ class BroadcastsController extends Controller
     public function destroy(Broadcast $broadcast)
     {
 
-        $this->recordDelete('mail.broadcast.delete', [
-            'name' => $broadcast->subject,
-        ]);
+        $this->recordDelete('mail.broadcast.delete', $broadcast->toArray());
 
         $broadcast->delete();
 
