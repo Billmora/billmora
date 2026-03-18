@@ -7,5 +7,6 @@ return [
     App\Providers\BillmoraServiceProvider::class,
     App\Providers\CurrencyServiceProvider::class,
     App\Providers\PluginServiceProvider::class,
+    App\Providers\SocialiteServiceProvider::class,
     App\Providers\ThemeServiceProvider::class,
 ];

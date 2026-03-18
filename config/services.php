@@ -35,4 +35,32 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | OAuth Social Login Providers
+    |--------------------------------------------------------------------------
+    |
+    | Credentials are dynamically loaded from database settings
+    | via SocialiteServiceProvider at boot time.
+    |
+    */
+
+    'google' => [
+        'client_id' => '',
+        'client_secret' => '',
+        'redirect' => '',
+    ],
+
+    'discord' => [
+        'client_id' => '',
+        'client_secret' => '',
+        'redirect' => '',
+    ],
+
+    'github' => [
+        'client_id' => '',
+        'client_secret' => '',
+        'redirect' => '',
+    ],
+
 ];
