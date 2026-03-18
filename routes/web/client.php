@@ -23,6 +23,8 @@ Route::group(['middleware' => ['auth', 'maintenance', '2fa']], function () {
         Route::get('/security', [Account\SecurityController::class, 'index'])->name('client.account.security');
         Route::put('/security/email', [Account\SecurityController::class, 'updateEmail'])->name('client.account.security.email.update');
         Route::put('/security/password', [Account\SecurityController::class, 'updatePassword'])->name('client.account.security.password.update');
+        Route::delete('/security/sessions/{id}', [Account\SecurityController::class, 'revokeSession'])->name('client.account.security.session.revoke');
+        Route::delete('/security/sessions', [Account\SecurityController::class, 'revokeOtherSessions'])->name('client.account.security.sessions.revoke-others');
 
         Route::get('/credits', [Account\CreditController::class, 'index'])->name('client.account.credits');
         Route::post('/credits/deposit', [Account\CreditController::class, 'deposit'])->name('client.account.credits.deposit');
