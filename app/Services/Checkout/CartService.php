@@ -4,6 +4,7 @@ namespace App\Services\Checkout;
 
 use App\Models\Package;
 use App\Models\PackagePrice;
+use App\Models\Tax;
 use App\OrderItemType;
 use Illuminate\Support\Facades\Session;
 
@@ -125,11 +126,12 @@ class CartService
     }
 
     /**
-     * Calculate and return the cart totals including subtotal, setup fee, discount, and grand total.
+     * Calculate and return the cart totals including subtotal, setup fee, discount, tax, and grand total.
      *
+     * @param string|null $country
      * @return array
      */
-    public function getTotals(): array
+    public function getTotals(?string $country = null): array
     {
         $items = $this->getItems();
         $subtotal = 0;
@@ -165,12 +167,29 @@ class CartService
             }
         }
 
-        $total = ($subtotal + $setupFee) - $discount;
+        $taxAmount = 0;
+        $taxModel = null;
+        if ($country) {
+            $taxModel = Tax::where('country', strtoupper($country))->first();
+        }
+        
+        if (!$taxModel) {
+            $taxModel = Tax::whereNull('country')->orWhere('country', '')->first();
+        }
+
+        if ($taxModel) {
+            $taxableAmount = max(0, ($subtotal + $setupFee) - $discount);
+            $taxAmount = ($taxableAmount * $taxModel->value) / 100;
+        }
+
+        $total = ($subtotal + $setupFee) - $discount + $taxAmount;
 
         return [
             'subtotal' => $subtotal,
             'setup_fee' => $setupFee,
             'discount' => $discount,
+            'tax' => $taxAmount,
+            'tax_name' => $taxModel ? $taxModel->name : null,
             'total' => max(0, $total),
             'count' => array_sum(array_column($items, 'quantity')),
         ];
