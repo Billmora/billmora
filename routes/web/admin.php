@@ -325,6 +325,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::group(['prefix' => 'auth'], function () {
             Route::get('/', [Settings\Auth\UserController::class, 'index'])->name('admin.settings.auth.user');
             Route::patch('/', [Settings\Auth\UserController::class, 'update'])->name('admin.settings.auth.user.update');
+            Route::get('/social', [Settings\Auth\SocialController::class, 'index'])->name('admin.settings.auth.social');
+            Route::patch('/social', [Settings\Auth\SocialController::class, 'update'])->name('admin.settings.auth.social.update');
         });
 
         /**

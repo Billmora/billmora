@@ -13,6 +13,11 @@
                 'icon' => 'lucide-user',
                 'label' => __('admin/settings/auth.tabs.user'),
             ],
+            [
+                'route' => route('admin.settings.auth.social'),
+                'icon' => 'lucide-globe',
+                'label' => __('admin/settings/auth.tabs.social'),
+            ],
         ]" 
         active="{{ request()->url() }}" />
     <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
