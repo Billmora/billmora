@@ -128,6 +128,9 @@ Route::group(['prefix' => 'auth'], function () {
 
         Route::get('/password/reset/{token}', [Auth\Password\ResetController::class, 'index'])->name('client.password.reset');
         Route::post('/password/reset', [Auth\Password\ResetController::class, 'store'])->name('client.password.reset.store');
+
+        Route::get('/oauth/{provider}/redirect', [Auth\SocialiteController::class, 'redirect'])->name('client.oauth.redirect');
+        Route::get('/oauth/{provider}/callback', [Auth\SocialiteController::class, 'callback'])->name('client.oauth.callback');
     });
 
     Route::group(['middleware' => 'auth'], function () {
