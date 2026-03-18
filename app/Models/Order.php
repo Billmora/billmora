@@ -40,6 +40,7 @@ class Order extends Model implements BrowseInterface
         'subtotal' => 'decimal:2',
         'discount' => 'decimal:2',
         'setup_fee' => 'decimal:2',
+        'tax' => 'decimal:2',
         'total' => 'decimal:2',
     ];
 
