@@ -2,7 +2,7 @@
 
 return [
     'title' => 'Mail settings',
-    'description' => 'Configure mail settings for the system.',
+    'description' => 'Manage email delivery and notification templates.',
     'tabs' => [
         'mailer' => 'Mailer',
         'notification' => 'Notification',

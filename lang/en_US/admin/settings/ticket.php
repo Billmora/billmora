@@ -7,7 +7,7 @@ return [
         'notify' => 'Notify',
     ],
     'title' => 'Ticket settings',
-    'description' => 'Configure ticket settings for the system.',
+    'description' => 'Manage support departments, email piping, and tickets.',
 
     'ticketing_departments_label' => 'Ticket Departments',
     'ticketing_departments_helper' => 'Add a list of departments available for ticket categorization.',

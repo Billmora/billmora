@@ -2,7 +2,7 @@
 
 return [
     'title' => 'Currency settings',
-    'description' => 'Configure currency settings for the system.',
+    'description' => 'Manage system currencies and exchange rates.',
 
     'currency_table' => [
         'code' => 'Code',

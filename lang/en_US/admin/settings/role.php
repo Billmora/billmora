@@ -2,7 +2,7 @@
 
 return [
     'title' => 'Role Permission settings',
-    'description' => 'Configure role permission settings for the system.',
+    'description' => 'Manage administrator roles and permissions.',
 
     'role_table' => [
         'permission_count' => 'Permission Count',

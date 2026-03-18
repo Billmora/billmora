@@ -2,7 +2,7 @@
 
 return [
     'title' => 'Captcha settings',
-    'description' => 'Configure captcha settings for the system.',
+    'description' => 'Manage form protection and captcha providers.',
     'tabs' => [
         'provider' => 'Provider',
         'placement' => 'Placement',

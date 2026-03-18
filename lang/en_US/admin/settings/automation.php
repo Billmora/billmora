@@ -8,7 +8,7 @@ return [
         'ticket' => 'Ticket',
     ],
     'title' => 'Automation settings',
-    'description' => 'Configure automation settings for the system.',
+    'description' => 'Manage system automation, billing, and scheduling.',
 
     'time_of_day_label' => 'Automation Time of Day',
     'time_of_day_helper' => 'The time of day you want the daily automation cron job to execute (e.g., 01:00).',

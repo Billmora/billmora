@@ -2,7 +2,7 @@
 
 return [
     'title' => 'Authentication settings',
-    'description' => 'Configure authentication settings for the system.',
+    'description' => 'Manage user registration and social logins.',
     'tabs' => [
         'user' => 'User',
         'social' => 'Social Login',

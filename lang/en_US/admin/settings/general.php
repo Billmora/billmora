@@ -2,7 +2,7 @@
 
 return [
     'title' => 'General settings',
-    'description' => 'Configure general settings for the system.',
+    'description' => 'Manage company details, ordering, and general preferences.',
     'tabs' => [
         'company' => 'Company',
         'ordering' => 'Ordering',
