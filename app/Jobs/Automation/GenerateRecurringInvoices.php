@@ -6,6 +6,7 @@ use App\Events\Invoice as InvoiceEvents;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Service;
+use App\Models\Tax;
 use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -60,6 +61,22 @@ class GenerateRecurringInvoices implements ShouldQueue
                 $invoice = null;
 
                 DB::transaction(function () use ($service, $currentDueDate, $newDueDate, &$invoice) {
+                    $country = $service->user->billing?->country;
+                    $taxModel = null;
+                    if ($country) {
+                        $taxModel = Tax::where('country', strtoupper($country))->first();
+                    }
+                    
+                    if (!$taxModel) {
+                        $taxModel = Tax::whereNull('country')->orWhere('country', '')->first();
+                    }
+
+                    $taxAmount = 0;
+                    if ($taxModel) {
+                        $taxAmount = max(0, ($service->price * $taxModel->value) / 100);
+                    }
+
+                    $total = $service->price + $taxAmount;
                     
                     $invoice = new Invoice([
                         'user_id' => $service->user_id,
@@ -67,7 +84,8 @@ class GenerateRecurringInvoices implements ShouldQueue
                         'currency' => $service->currency,
                         'subtotal' => $service->price,
                         'discount' => 0,
-                        'total' => $service->price,
+                        'tax' => $taxAmount,
+                        'total' => $total,
                         'due_date' => $service->next_due_date,
                     ]);
 
@@ -83,6 +101,17 @@ class GenerateRecurringInvoices implements ShouldQueue
                         'unit_price' => $service->price,
                         'amount' => $service->price,
                     ]);
+
+                    if ($taxAmount > 0) {
+                        InvoiceItem::create([
+                            'invoice_id' => $invoice->id,
+                            'service_id' => null,
+                            'description' => $taxModel->name ?? 'Tax',
+                            'quantity' => 1,
+                            'unit_price' => $taxAmount,
+                            'amount' => $taxAmount,
+                        ]);
+                    }
 
                     $this->recordSystem('invoice.created', [
                         'service_id' => $service->id,
