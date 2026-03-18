@@ -36,6 +36,8 @@ class User extends Authenticatable implements BrowseInterface
         'language',
         'department',
         'email_verified_at',
+        'oauth_provider',
+        'oauth_provider_id',
     ];
 
     /**
@@ -159,6 +161,26 @@ class User extends Authenticatable implements BrowseInterface
     public function isEmailVerified()
     {
         return $this->email_verified_at !== null;
+    }
+
+    /**
+     * Determine if the user has a password set.
+     *
+     * @return bool
+     */
+    public function hasPassword(): bool
+    {
+        return $this->password !== null;
+    }
+
+    /**
+     * Determine if the user registered via OAuth.
+     *
+     * @return bool
+     */
+    public function isOAuthUser(): bool
+    {
+        return $this->oauth_provider !== null;
     }
 
     /**
