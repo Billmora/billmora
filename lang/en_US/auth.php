@@ -77,6 +77,14 @@ return [
         ],
     ],
 
+    'oauth' => [
+        'or_continue_with' => 'or continue with',
+        'login_failed' => 'Unable to login with :provider. Please try again.',
+        'invalid_provider' => 'Invalid login provider.',
+        'provider_disabled' => 'This login provider is currently disabled.',
+        'account_inactive' => 'Your account is not active. Please contact support.',
+    ],
+
     'captcha' => [
         'invalid' => 'Captcha verification failed, please try again.',
     ],

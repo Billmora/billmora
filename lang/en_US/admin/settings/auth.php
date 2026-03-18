@@ -5,6 +5,7 @@ return [
     'description' => 'Configure authentication settings for the system.',
     'tabs' => [
         'user' => 'User',
+        'social' => 'Social Login',
     ],
 
     'user_registration_label' => 'User Registration',
@@ -17,4 +18,15 @@ return [
     'user_registration_disabled_inputs_helper' => 'Select the fields to hide from the registration form. Users will not see or fill in these fields.',
     'user_billing_required_inputs_label' => 'Required Billing Information Inputs',
     'user_billing_required_inputs_helper' => 'Select the fields that users must fill in as required. Unselected fields remain optional.',
+
+    'social' => [
+        'title' => 'Social Login',
+        'google' => 'Google',
+        'discord' => 'Discord',
+        'github' => 'GitHub',
+        'enabled_label' => 'Enabled',
+        'enabled_helper' => 'Allow users to login using :provider.',
+        'client_id_label' => 'Client ID',
+        'client_secret_label' => 'Client Secret',
+    ],
 ];
