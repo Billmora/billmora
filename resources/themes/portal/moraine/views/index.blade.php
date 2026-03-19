@@ -63,7 +63,7 @@
 							@if ($catalog->icon)
 								<div class="w-24 h-24 rounded-xl bg-billmora-2 flex items-center justify-center shrink-0 overflow-hidden">
 									<img
-										src="{{ $catalog->icon }}"
+										src="{{ Storage::url($catalog->icon) }}"
 										alt="{{ $catalog->name }}"
 										class="w-full h-full object-contain p-3"
 									>
