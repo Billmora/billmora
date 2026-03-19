@@ -425,6 +425,19 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::get('/ticket', [Settings\Automation\TicketController::class, 'index'])->name('admin.settings.automation.ticket'); 
             Route::patch('/ticket', [Settings\Automation\TicketController::class, 'update'])->name('admin.settings.automation.ticket.update'); 
         });
+
+        /**
+         * Admin API settings interface routes.
+         *
+         * Prefix: /admin/settings/api
+         */
+        Route::group(['prefix' => 'api'], function () {
+            Route::get('/', [Settings\ApiController::class, 'index'])->name('admin.settings.api');
+            Route::get('/create', [Settings\ApiController::class, 'create'])->name('admin.settings.api.create');
+            Route::post('/', [Settings\ApiController::class, 'store'])->name('admin.settings.api.store');
+            Route::post('/{token}/regenerate', [Settings\ApiController::class, 'regenerate'])->name('admin.settings.api.regenerate');
+            Route::delete('/{token}', [Settings\ApiController::class, 'destroy'])->name('admin.settings.api.destroy');
+        });
     });
 
     /**
