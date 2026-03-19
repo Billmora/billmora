@@ -105,7 +105,7 @@ class MakeUserCommand extends Command
                     )
                     ->map(fn ($name, $code) => $code ? "$code - $name" : $name)
                     ->all(),
-                required: true
+                required: false
             );
 
             if ($selectedCountry && $selectedCountry !== '(skip)') {
