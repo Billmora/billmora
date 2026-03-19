@@ -163,6 +163,11 @@ class BrowseController extends Controller
                 'url' => route('admin.settings.automation.scheduling')
             ],
             [
+                'title' => 'API Settings',
+                'category' => 'settings',
+                'url' => route('admin.settings.api')
+            ],
+            [
                 'title' => 'Provisionings',
                 'category' => 'plugins',
                 'url' => route('admin.provisionings')
