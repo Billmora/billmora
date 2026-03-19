@@ -42,6 +42,11 @@ class LoginController extends Controller
         if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
             $user = Auth::user();
 
+            if (in_array($user->status, ['suspended', 'closed'])) {
+                Auth::logout();
+                return redirect()->back()->with('error', __('auth.account_' . $user->status));
+            }
+
             if (Billmora::getAuth('user_require_verified') && !$user->isEmailVerified()) {
                 $intended = session()->get('intended');
 

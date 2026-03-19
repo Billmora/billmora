@@ -90,6 +90,10 @@ class SocialiteController extends Controller
             $user->billing()->create([]);
         }
 
+        if (in_array($user->status, ['suspended', 'closed'])) {
+            return redirect()->route('client.login')->with('error', __('auth.account_' . $user->status));
+        }
+
         if ($user->status !== 'active') {
             return redirect()->route('client.login')->with('error', __('auth.oauth.account_inactive'));
         }
