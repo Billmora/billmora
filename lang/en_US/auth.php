@@ -15,6 +15,8 @@ return [
     'dont_have_account' => 'Don\'t have an account?',
 
     'invalid_credentials' => 'No account matching those credentials could be found.',
+    'account_suspended' => 'Your account has been suspended. Please contact support for more information.',
+    'account_closed' => 'Your account has been closed.',
     'registration_successful' => 'Thank you for registering. We have sent you an email for verification. Please check your inbox and follow the instructions to verify your email.',
     'registration_disabled' => 'User registration is currently disabled. New accounts cannot be created at this time.',
 
