@@ -56,46 +56,52 @@
         </div>
         <div class="w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl" x-show="pricingType !== 'free'">
             <div class="flex flex-col gap-6">
-                @foreach ($currencies as $currency)
+                @foreach ($currencies as $code => $currency)
+                    @php
+                        $rate = $pricing->rates[$code];
+                        $oldPrice = old('rates.' . $code . '.price', $rate['price'] ?? 0);
+                        $oldSetupFee = old('rates.' . $code . '.setup_fee', $rate['setup_fee'] ?? 0);
+                        $oldEnabled = (bool) old('rates.' . $code . '.enabled', $rate['enabled'] ?? false);
+                    @endphp
                     <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-4 gap-5 border-2 border-billmora-2 p-4 rounded-xl">
-                        <x-admin::input 
-                            name="rates[{{ $currency->code }}][currency]"
+                        <x-admin::input
+                            name="rates[{{ $code }}][currency]"
                             type="text"
                             label="{{ __('admin/packages.pricing.currency_code_label') }}"
                             helper="{{ __('admin/packages.pricing.currency_code_helper') }}"
-                            value="{{ $currency->code }}"
+                            value="{{ $code }}"
                             readonly
                             required
                         />
-                        <x-admin::input 
-                            name="rates[{{ $currency->code }}][price]"
+                        <x-admin::input
+                            name="rates[{{ $code }}][price]"
                             type="number"
                             step="0.01"
                             min="1"
                             label="{{ __('admin/packages.pricing.price_label') }}"
                             helper="{{ __('admin/packages.pricing.price_helper') }}"
-                            value="{{ old('rates.' . $currency->code . '.price', $pricing->rates[$currency->code]['price']) }}"
+                            :value="$oldPrice"
                             required
                         />
-                        <x-admin::input 
-                            name="rates[{{ $currency->code }}][setup_fee]"
+                        <x-admin::input
+                            name="rates[{{ $code }}][setup_fee]"
                             type="number"
                             step="0.01"
                             min="0"
                             label="{{ __('admin/packages.pricing.setup_fee_label') }}"
                             helper="{{ __('admin/packages.pricing.setup_fee_helper') }}"
-                            value="{{ old('rates.' . $currency->code . '.setup_fee', $pricing->rates[$currency->code]['setup_fee']) }}"
+                            :value="$oldSetupFee"
                             required
                         />
                         @if (!$currency->is_default)
-                            <x-admin::toggle 
-                                name="rates[{{ $currency->code }}][enabled]"
+                            <x-admin::toggle
+                                name="rates[{{ $code }}][enabled]"
                                 label="{{ __('admin/packages.pricing.enabled_label') }}"
                                 helper="{{ __('admin/packages.pricing.enabled_helper') }}"
-                                :checked="old('rates.' . $currency->code . '.enabled', $pricing->rates[$currency->code]['enabled'])"
+                                :checked="$oldEnabled"
                             />
                         @else
-                            <input type="hidden" name="rates[{{ $currency->code }}][enabled]" value="1" />
+                            <input type="hidden" name="rates[{{ $code }}][enabled]" value="1" />
                         @endif
                     </div>
                 @endforeach

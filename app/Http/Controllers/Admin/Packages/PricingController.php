@@ -86,12 +86,22 @@ class PricingController extends Controller
      */
     public function edit(Package $package, PackagePrice $pricing)
     {
+        $currencies = Currency::orderBy('is_default', 'desc')->get()->keyBy('code');
 
-        if ($pricing->package_id !== $package->id) {
-            abort(404);
-        }
+        $existingRates = $pricing->rates ?? [];
 
-        $currencies = Currency::orderBy('is_default', 'desc')->get();
+        $rates = $currencies->mapWithKeys(function ($currency) use ($existingRates) {
+            return [
+                $currency->code => $existingRates[$currency->code] ?? [
+                    'currency' => $currency->code,
+                    'price' => null,
+                    'setup_fee' => null,
+                    'enabled' => false,
+                ],
+            ];
+        });
+
+        $pricing->rates = $rates->toArray();
 
         return view('admin::packages.pricing.edit', compact('package', 'currencies', 'pricing'));
     }
