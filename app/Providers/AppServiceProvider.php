@@ -21,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        \Laravel\Sanctum\Sanctum::usePersonalAccessTokenModel(\App\Models\PersonalAccessToken::class);
+
         View::composer('admin::components.browse', function ($view) {
             $view->with('browseItems', app(BrowseController::class)->getItems());
         });

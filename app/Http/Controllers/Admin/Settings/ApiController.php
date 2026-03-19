@@ -7,7 +7,7 @@ use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Sanctum\PersonalAccessToken;
+use App\Models\PersonalAccessToken;
 
 class ApiController extends Controller
 {
