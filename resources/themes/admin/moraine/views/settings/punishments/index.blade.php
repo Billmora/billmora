@@ -32,7 +32,7 @@
                             <td class="px-6 py-4 text-sm text-slate-800">
                                 <p class="max-w-[200px] truncate" title="{{ $punishment->reason }}">{{ $punishment->reason }}</p>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $punishment->expires_at ? $punishment->expires_at->format(Billmora::getGeneral('company_date_format')) : '-' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $punishment->expires_at ? $punishment->expires_at->format(Billmora::getGeneral('company_date_format') . ' H:i') : '-' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $punishment->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                 @can('settings.punishments.delete')

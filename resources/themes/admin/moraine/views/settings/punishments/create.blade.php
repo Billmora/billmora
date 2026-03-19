@@ -23,8 +23,6 @@
         </div>
         <div class="grid gap-4">
             <x-admin::textarea name="reason" label="{{ __('admin/settings/punishment.punishment_reason_label') }}" helper="{{ __('admin/settings/punishment.punishment_reason_helper') }}" value="{{ old('reason') }}" required />
-        </div>
-        <div class="grid grid-cols-none md:grid-cols-2 gap-4">
             <x-admin::input 
                 type="datetime-local" 
                 name="expires_at" 
