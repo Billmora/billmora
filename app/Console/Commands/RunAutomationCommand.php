@@ -63,6 +63,9 @@ class RunAutomationCommand extends Command
         $this->comment('8. Dispatching User Auto-Inactive...');
         AutomationJobs\ProcessInactiveUsers::dispatch();
 
+        $this->comment('9. Dispatching Expired Punishments...');
+        AutomationJobs\ProcessExpiredPunishments::dispatch();
+
         $this->info('Automation dispatch completed successfully!');
         
         Billmora::setAutomation(['last_run' => now()->toDateTimeString()]);
