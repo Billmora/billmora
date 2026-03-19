@@ -237,6 +237,64 @@ class NotificationSeeder extends Seeder
                 ],
             ],
             [
+                'key' => 'user_suspended',
+                'name' => 'Account Suspended',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'reason' => 'Reason for suspension',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Notice: Your Account has been Suspended',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-danger">
+                                <p>This is a formal notification that your <strong>{company_name}</strong> account has been suspended.</p>
+                            </div>
+                            <br />
+                            <p><strong>Reason:</strong></p>
+                            <em>"{reason}"</em>
+                            <br />
+                            <p>For more information or to appeal this decision, please contact our support team.</p>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'user_closed',
+                'name' => 'Account Closed',
+                'placeholder' => [
+                    'client_name' => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'reason' => 'Reason for closure',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Notice: Your Account has been Closed',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-danger">
+                                <p>This is a formal notification that your <strong>{company_name}</strong> account has been permanently closed.</p>
+                            </div>
+                            <br />
+                            <p><strong>Reason:</strong></p>
+                            <em>"{reason}"</em>
+                            <br />
+                            <p>If you believe this is an error, please reach out to our team immediately.</p>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
                 'key' => 'order_created',
                 'name' => 'Order Confirmation',
                 'placeholder' => [
