@@ -385,6 +385,18 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         });
 
         /**
+         * Admin punishment settings interface routes.
+         *
+         * Prefix: /admin/settings/punishments
+         */
+        Route::group(['prefix' => 'punishments'], function () {
+            Route::get('/', [Settings\PunishmentController::class, 'index'])->name('admin.settings.punishments');
+            Route::get('/create', [Settings\PunishmentController::class, 'create'])->name('admin.settings.punishments.create');
+            Route::post('/', [Settings\PunishmentController::class, 'store'])->name('admin.settings.punishments.store');
+            Route::delete('/{punishment}', [Settings\PunishmentController::class, 'destroy'])->name('admin.settings.punishments.destroy');
+        });
+
+        /**
          * Admin ticket settings interface routes.
          *
          * Prefix: /admin/settings/ticket
