@@ -7,18 +7,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    strategy:
-      matrix:
-        theme:
-          - resources/themes/admin/moraine/vite.config.js
-          - resources/themes/client/moraine/vite.config.js
-          - resources/themes/portal/moraine/vite.config.js
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -26,8 +16,8 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.4
-          extensions: bcmath, curl, mbstring, openssl, pdo, tokenizer, xml, zip
+          php-version: 8.3
+          extensions: bcmath, curl, gd, intl, mbstring, openssl, pdo, tokenizer, xml, zip
           tools: composer:v2
 
       - name: Setup Node.js
@@ -35,18 +25,20 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install PHP dependencies (no dev)
+      - name: Install PHP dependencies
         run: composer install --no-dev --optimize-autoloader
 
       - name: Install Node dependencies
         run: npm ci
 
-      - name: Build theme assets
-        run: npx vite build --config=${{ matrix.theme }}
+      - name: Build all theme assets
+        run: |
+          npx vite build --config=resources/themes/admin/moraine/vite.config.js
+          npx vite build --config=resources/themes/client/moraine/vite.config.js
+          npx vite build --config=resources/themes/portal/moraine/vite.config.js
 
       - name: Cleanup unnecessary files
-        run: |
-          rm -rf node_modules vendor tests .git .github
+        run: rm -rf node_modules vendor tests .git .github
 
       - name: Create release archive
         run: tar -czf billmora.tar.gz * .env.example
