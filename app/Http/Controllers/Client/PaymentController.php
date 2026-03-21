@@ -76,6 +76,10 @@ class PaymentController extends Controller
             if ($response['type'] === 'redirect') {
                 return redirect()->away($response['data']); 
             }
+
+            if ($response['type'] === 'view') {
+                return $response['data'];
+            }
         }
 
         return redirect()->route('client.invoices.show', ['invoice' => $invoice->invoice_number])->with('error', $response['message']);
