@@ -1,3 +1,8 @@
+@inject('pluginManager', 'App\Services\PluginManager')
+@php
+    $pluginPortalMenus = $pluginManager->getNavigationPortal();
+@endphp
+
 <header class="w-full bg-billmora-bg/80 border-b-2 border-billmora-2 backdrop-blur-lg fixed top-0 z-50"
     x-data="{ open: false }"
 >
@@ -17,6 +22,15 @@
                 <a href="{{ Billmora::getGeneral('term_tos_url') ?: route('portal.terms.service') }}" class="text-slate-500 hover:text-billmora-primary-500 font-semibold">
                     {{ __('portal.terms_of_service') }}
                 </a>
+            @endif
+            @if(!empty($pluginPortalMenus))
+                @foreach($pluginPortalMenus as $groupTitle => $menuItems)
+                    @foreach($menuItems as $menu)
+                        <a href="{{ $menu['route'] }}" class="text-slate-500 hover:text-billmora-primary-500 font-semibold">
+                            {{ $menu['label'] }}
+                        </a>
+                    @endforeach
+                @endforeach
             @endif
         </div>
         <div class="hidden md:flex items-center gap-2">
