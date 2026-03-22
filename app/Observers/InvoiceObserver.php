@@ -34,10 +34,6 @@ class InvoiceObserver
         if ($invoice->wasChanged('status')) {
             switch ($invoice->status) {
                 case 'paid':
-                    if ($invoice->order?->package?->stock > 0) {
-                        $invoice->order->package->decrement('stock');
-                    }
-                    
                     event(new InvoiceEvents\Paid($invoice));
                     break;
 

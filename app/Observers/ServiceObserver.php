@@ -28,12 +28,16 @@ class ServiceObserver
                 if ($oldStatus === 'suspended') {
                     event(new ServiceEvents\ProvisioningUnsuspended($service));
                 } else {
+                    if ($service->package && $service->package->stock > 0) {
+                        $service->package->decrement('stock');
+                    }
+                    
                     event(new ServiceEvents\ProvisioningActivated($service));
                 }
             } elseif ($newStatus === 'suspended') {
                 event(new ServiceEvents\ProvisioningSuspended($service));
             } elseif (in_array($newStatus, ['terminated', 'cancelled'])) {
-                if ($service->package && $service->package->stock !== null) {
+                if ($service->package && $service->package->stock >= 0) {
                     $service->package->increment('stock');
                 }
                 
