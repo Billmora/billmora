@@ -28,10 +28,18 @@ interface GatewayInterface extends PluginInterface
     public function pay(string $invoiceNumber, float $amount, string $currency, array $options = []);
 
     /**
-     * Handle payment gateway callback and update invoice status.
+     * Handle explicit background server-to-server webhook (stateless).
      *
      * @param \Illuminate\Http\Request $request
-     * @return mixed
+     * @return \App\Support\GatewayCallbackResponse
      */
-    public function callback(Request $request);
+    public function webhook(Request $request): \App\Support\GatewayCallbackResponse;
+
+    /**
+     * Handle explicit browser return redirect (stateful).
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \App\Support\GatewayCallbackResponse
+     */
+    public function return(Request $request): \App\Support\GatewayCallbackResponse;
 }
