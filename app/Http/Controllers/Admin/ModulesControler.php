@@ -59,7 +59,12 @@ class ModulesControler extends Controller
      */
     public function create(PluginManager $manager)
     {
-        $providers = $manager->getAvailableProviders('module');
+        $usedProviders = Plugin::where('type', 'module')->pluck('provider')->toArray();
+
+        $providers = collect($manager->getAvailableProviders('module'))
+            ->reject(fn($provider) => in_array($provider['provider'], $usedProviders))
+            ->values()
+            ->all();
 
         return view('admin::modules.create', compact('providers'));
     }
