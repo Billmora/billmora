@@ -9,6 +9,8 @@ return [
     'is_active_helper' => 'Toggle to enable or disable this gateway instance.',
     'version_label' => 'Version',
     'author_label' => 'Author',
+    'webhook_url_title' => 'Webhook / Callback URL',
+    'webhook_url_description' => 'If your payment gateway requires a webhook or callback URL to notify the system about payment statuses, please explicitly use the URL below.',
 
     'delete' => [
         'in_use' => 'This gateway cannot be deleted because it is associated with existing invoices or transactions.',

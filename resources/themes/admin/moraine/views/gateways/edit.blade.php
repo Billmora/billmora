@@ -10,6 +10,12 @@
 >
     @csrf
     @method('PUT')
+    <x-admin::alert variant="primary" title="{{ __('admin/gateways.webhook_url_title') }}">
+        <p class="text-sm">{{ __('admin/gateways.webhook_url_description') }}</p>
+        <div class="mt-2 w-full p-3 bg-white/50 border border-violet-200 rounded-lg flex items-center justify-between gap-4">
+            <code class="text-violet-900 break-all font-mono text-sm select-all">{{ route('api.gateways.webhook', ['plugin' => $gateway->id]) }}</code>
+        </div>
+    </x-admin::alert>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <x-admin::input 
             name="instance_name"
