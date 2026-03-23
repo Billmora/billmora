@@ -77,13 +77,20 @@ class TicketsController extends Controller
             ->values()
             ->toArray();
 
-        $assigneds = User::select('id', 'first_name', 'last_name', 'email')
+        $assignedOptions = User::select('id', 'first_name', 'last_name', 'email')
             ->admins()
-            ->get();
+            ->get()
+            ->map(fn ($user) => [
+                'value' => $user->id,
+                'title' => "{$user->first_name} {$user->last_name}",
+                'subtitle' => $user->email,
+            ])
+            ->values()
+            ->toArray();
 
         $services = Service::select('id', 'name', 'status', 'user_id')->get();
 
-        return view('admin::tickets.create', compact('userOptions', 'assigneds', 'services'));
+        return view('admin::tickets.create', compact('userOptions', 'assignedOptions', 'services'));
     }
 
     /**
@@ -99,7 +106,7 @@ class TicketsController extends Controller
             'ticket_priority' => ['required', Rule::in('low', 'normal', 'medium', 'high')],
             'ticket_department' => ['nullable', Rule::in(Billmora::getTicket('ticketing_departments'))],
             'ticket_user_id' => ['required', Rule::exists('users', 'id')],
-            'ticket_assigned_to' => ['nullable', Rule::exists('users', 'id')],
+            'ticket_assigned_id' => ['nullable', Rule::exists('users', 'id')],
             'ticket_service_id' => ['nullable', Rule::exists('services', 'id')],
             'ticket_subject' => ['required', 'string', 'max:255'],
             'ticket_message'=> ['required', 'string'],
