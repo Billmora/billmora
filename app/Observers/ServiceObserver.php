@@ -34,6 +34,14 @@ class ServiceObserver
                     
                     event(new ServiceEvents\ProvisioningActivated($service));
                 }
+
+                if ($service->order && $service->order->status !== 'completed') {
+                    $uncompletedServicesCount = $service->order->services()->where('status', '!=', 'active')->count();
+                    
+                    if ($uncompletedServicesCount === 0) {
+                        $service->order->markAsCompleted();
+                    }
+                }
             } elseif ($newStatus === 'suspended') {
                 event(new ServiceEvents\ProvisioningSuspended($service));
             } elseif (in_array($newStatus, ['terminated', 'cancelled'])) {
