@@ -25,14 +25,14 @@ class ProvisioningController extends Controller
         }
 
         if ($service->provisioning && !$service->provisioning->is_active) {
-            return redirect()->route('client.services.show', $service->id)
+            return redirect()->route('client.services.show', ['service' => $service->service_number])
                 ->with('error', __('validation.provisioning_disabled', ['name' => $service->provisioning->name]));
         }
 
         $plugin = $service->provisioning ? $manager->bootInstance($service->provisioning) : null;
 
         if (!$plugin || !method_exists($plugin, 'getClientAction')) {
-            return redirect()->route('client.services.show', $service->id)
+            return redirect()->route('client.services.show', ['service' => $service->service_number])
                 ->with('error', __('client/services.provisioning.not_found'));
         }
 
@@ -40,7 +40,7 @@ class ProvisioningController extends Controller
         $actionConfig = $actions[$slug] ?? null;
 
         if (!$actionConfig) {
-            return redirect()->route('client.services.show', $service->id)
+            return redirect()->route('client.services.show', ['service' => $service->service_number])
                 ->with('error', __('client/services.action.unavailable'));
         }
 
@@ -54,7 +54,7 @@ class ProvisioningController extends Controller
 
                 return $result;
             } catch (\Exception $e) {
-                return redirect()->route('client.services.show', $service->id)
+                return redirect()->route('client.services.show', ['service' => $service->service_number])
                     ->with('error', $e->getMessage());
             }
         }
@@ -68,7 +68,7 @@ class ProvisioningController extends Controller
             ]);
         }
 
-        return redirect()->route('client.services.show', $service->id)
+        return redirect()->route('client.services.show', ['service' => $service->service_number])
             ->with('error', __('client/services.action.invalid_type'));
     }
 
@@ -120,14 +120,14 @@ class ProvisioningController extends Controller
                 if (filter_var($result, FILTER_VALIDATE_URL)) {
                     return redirect()->away($result);
                 }
-                return redirect()->route('client.services.show', $service->id)->with('success', $result);
+                return redirect()->route('client.services.show', ['service' => $service->service_number])->with('success', $result);
             }
 
-            return redirect()->route('client.services.show', $service->id)
+            return redirect()->route('client.services.show', ['service' => $service->service_number])
                 ->with('success', __('client/services.action.success'));
 
         } catch (\Exception $e) {
-            return redirect()->route('client.services.show', $service->id)
+            return redirect()->route('client.services.show', ['service' => $service->service_number])
                 ->with('error', __('client/services.action.failed', ['message' => $e->getMessage()]));
         }
     }
