@@ -7,8 +7,8 @@
 <h1 align="center">Billmora</h1>
 
 <p align="center">
-  The Free, Open-Source Alternative to WHMCS and Blesta.<br>
-  Manage clients, automate billing, and provision servers — all without the licensing cost.
+  Run Your Hosting Business. Pay Nothing.<br>
+  Open-source billing management with automated provisioning, recurring automation, and full control — forever free.
 </p>
 
 <p align="center">
