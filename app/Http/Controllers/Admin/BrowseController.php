@@ -113,6 +113,11 @@ class BrowseController extends Controller
                 'url' => route('admin.audits')
             ],
             [
+                'title' => 'Health',
+                'category' => 'system',
+                'url' => route('admin.health')
+            ],
+            [
                 'title' => 'General Settings',
                 'category' => 'settings',
                 'url' => route('admin.settings.general.company')
