@@ -146,7 +146,11 @@ class ServicesController extends Controller
             return back()->withInput()->with('error', $validation['message']);
         }
 
-        $configuration = $package->provisioning_config ?? [];
+        $configuration = array_merge(
+            $service->configuration ?? [],
+            $package->provisioning_config ?? []
+        );
+
         if (!empty($variantSelections)) {
             $optionIds = collect($variantSelections)->flatten()->filter()->toArray();
             if (!empty($optionIds)) {
