@@ -1,0 +1,8 @@
+{
+    "name": "Announcement",
+    "provider": "Announcement",
+    "type": "module",
+    "version": "1.0.0",
+    "description": "Publish and manage announcements for clients.",
+    "author": "Billmora Team"
+}
