@@ -1,9 +1,18 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "billmora/billmora",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "Open-source billing management with automated provisioning, recurring automation, and full control — forever free.",
+    "keywords": [
+        "billmora",
+        "billing",
+        "automation",
+        "provisioning",
+        "recurring",
+        "open-source",
+        "free",
+        "self-hosted"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
