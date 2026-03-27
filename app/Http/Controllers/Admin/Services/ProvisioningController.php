@@ -50,7 +50,7 @@ class ProvisioningController extends Controller
 
             return back()->with('success', __('admin/services.provisioning.create.success'));
         } catch (\Exception $e) {
-            $this->logFailedAction('service.provisioning.create', $service, $e);
+            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'create'));
 
             return back()->with('error', __('admin/services.provisioning.create.failed', ['message' => $e->getMessage()]));
         }
@@ -83,7 +83,7 @@ class ProvisioningController extends Controller
 
             return back()->with('success', __('admin/services.provisioning.suspend.success'));
         } catch (\Exception $e) {
-            $this->logFailedAction('service.provisioning.suspend', $service, $e);
+            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'suspend'));
 
             return back()->with('error', __('admin/services.provisioning.suspend.failed', ['message' => $e->getMessage()]));
         }
@@ -116,7 +116,7 @@ class ProvisioningController extends Controller
 
             return back()->with('success', __('admin/services.provisioning.unsuspend.success'));
         } catch (\Exception $e) {
-            $this->logFailedAction('service.provisioning.unsuspend', $service, $e);
+            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'unsuspend'));
 
             return back()->with('error', __('admin/services.provisioning.unsuspend.failed', ['message' => $e->getMessage()]));
         }
@@ -149,7 +149,7 @@ class ProvisioningController extends Controller
 
             return back()->with('success', __('admin/services.provisioning.terminate.success'));
         } catch (\Exception $e) {
-            $this->logFailedAction('service.provisioning.terminate', $service, $e);
+            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'terminate'));
 
             return back()->with('error', __('admin/services.provisioning.terminate.failed', ['message' => $e->getMessage()]));
         }
@@ -182,7 +182,7 @@ class ProvisioningController extends Controller
             
             return back()->with('success', __('admin/services.provisioning.renew.success'));
         } catch (\Exception $e) {
-            $this->logFailedAction('service.provisioning.renew', $service, $e);
+            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'renew'));
 
             return back()->with('error', __('admin/services.provisioning.renew.failed', ['message' => $e->getMessage()]));
         }
@@ -219,43 +219,10 @@ class ProvisioningController extends Controller
 
             return back()->with('success', __('admin/services.provisioning.scale.success'));
         } catch (\Exception $e) {
-            $this->logFailedAction('service.provisioning.scale', $service, $e);
+            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'scale'));
 
             return back()->with('error', __('admin/services.provisioning.scale.failed', ['message' => $e->getMessage()]));
         }
     }
 
-    /**
-     * Log a failed provisioning action, ensuring no duplicates for the same service and event.
-     *
-     * @param string $event
-     * @param Service $service
-     * @param \Exception $e
-     * @return void
-     */
-    protected function logFailedAction(string $event, Service $service, \Exception $e): void
-    {
-        $existing = \App\Models\AuditSystem::where('event', $event)
-            ->where('properties->service_id', $service->id)
-            ->where('properties->status', 'failed')
-            ->first();
-
-        if ($existing) {
-            $properties = $existing->properties;
-            $properties['message'] = $e->getMessage();
-            $properties['attempts'] = ($properties['attempts'] ?? 1) + 1;
-            
-            $existing->update([
-                'properties' => $properties,
-                'created_at' => now(), // Bump timestamp so it appears at top of tasks
-            ]);
-        } else {
-            Audit::system(Auth::user()->id, $event, [
-                'service_id' => $service->id,
-                'status' => 'failed',
-                'message' => $e->getMessage(),
-                'attempts' => 1,
-            ]);
-        }
-    }
 }
