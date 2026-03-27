@@ -1,0 +1,9 @@
+{
+    "name": "Paypal Checkout",
+    "provider": "Paypal",
+    "type": "gateway",
+    "version": "1.0.0",
+    "description": "Accept payments via PayPal Checkout using the Orders API v2.",
+    "author": "Billmora Team",
+    "icon": "https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-small.png"
+}
