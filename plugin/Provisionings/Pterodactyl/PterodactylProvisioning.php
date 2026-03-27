@@ -162,12 +162,6 @@ class PterodactylProvisioning extends AbstractPlugin implements ProvisioningInte
         ];
     }
 
-    public function getPermissions(): array
-    {
-        return [
-            'provisionings.pterodactyl.view',
-        ];
-    }
 
     public function testConnection(array $config): bool
     {
