@@ -1,0 +1,9 @@
+{
+    "name": "Duitku Payment Gateway",
+    "provider": "Duitku",
+    "type": "gateway",
+    "version": "1.0.0",
+    "description": "Duitku payment gateway integration for Billmora.",
+    "author": "Billmora Team",
+    "icon": "https://www.duitku.com/wp-content/themes/duitku/img/logoblue.svg"
+}
