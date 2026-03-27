@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://billmora.com">
-    <img src="https://media.billmora.com/logo/main-invert-small.png" width="128px" alt="Billmora" style="border-radius: 15px;">
+    <img src="https://media.billmora.com/logo/main-bgnone.png" width="128px" alt="Billmora" style="border-radius: 15px;">
   </a>
 </p>
 
@@ -16,10 +16,6 @@
   <img src="https://img.shields.io/github/v/release/Billmora/billmora?style=flat-square&color=blue&label=Release">
   <img src="https://img.shields.io/discord/1334815648534102076?style=flat-square&color=blue&label=Discord&logo=Discord&logoColor=white">
 </p>
-
-> **IMPORTANT NOTICE:** Billmora is currently in active development (Alpha stage).
-> It is not yet ready for production use. Features may change, and bugs may be
-> present. Do not use this in a live environment until the official stable release.
 
 ## What is Billmora?
 
@@ -37,22 +33,23 @@ extensible, and community-driven.
 
 ## Key Features
 
-- **Automated Billing & Invoicing** — Generate recurring invoices, send payment
-  reminders, and process overdue fees automatically through a reliable task engine.
-- **Server Provisioning** — Automatically create, suspend, unsuspend, and terminate
-  client services across DirectAdmin, cPanel, Pterodactyl, Proxmox, and more.
-- **Recurring Automation** — Handle subscription renewals, expiry notifications,
-  and service lifecycle management on a fully automated schedule.
-- **Client Management** — Centralize client accounts, active services, and
-  transaction history in a single, organized dashboard.
-- **Support Ticket System** — A built-in helpdesk with auto-closure for inactive
-  tickets and file attachment support.
-- **Customizable Notifications** — Multi-language email templates for invoices,
-  service updates, and support communications.
+- **Plugin-Based Provisioning** — Extend and manage server provisioning through
+  an isolated plugin system supporting DirectAdmin, cPanel, Pterodactyl, Proxmox,
+  and more.
+- **Billing, Invoicing & Orders** — Handle the full billing lifecycle from checkout
+  and order creation to recurring invoices, credit wallet, and coupon support.
+- **Automation Engine** — Automate renewals, suspensions, terminations, invoice
+  reminders, and ticket closures on a fully scheduled engine.
+- **Support Ticket System** — A built-in helpdesk with departments, email piping,
+  file attachments, and auto-closure for inactive tickets.
+- **Multi-Currency & Tax Management** — Support global operations with multi-currency
+  pricing, region-based tax rates, and a client credit wallet.
+- **Security, Roles & Audit Logs** — Granular role permissions, two-factor
+  authentication, and comprehensive audit trails across all platform activity.
 - **Task Queue & Monitoring** — Track, manage, and retry failed background
   operations from a centralized system task log.
-- **Audit & Activity Logs** — Detailed logging of system events, automated
-  processes, and user actions for security and transparency.
+- **Customizable Notifications** — Multi-language email templates for invoices,
+  service updates, and support communications.
 
 ## Links
 
@@ -73,7 +70,7 @@ what you would like to change.
 We would like to thank the following sponsors for supporting the development
 of Billmora.
 
-*(Become a sponsor to have your name or logo featured here.)*
+_(Become a sponsor to have your name or logo featured here.)_
 
 ## Repository Activity
 
