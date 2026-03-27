@@ -1,0 +1,8 @@
+{
+    "name": "Pterodactyl Panel",
+    "provider": "Pterodactyl",
+    "type": "provisioning",
+    "version": "1.0.0",
+    "description": "Automate server provisioning via Pterodactyl Application API.",
+    "author": "Billmora Team"
+}
