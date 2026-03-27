@@ -138,6 +138,12 @@
         <x-lucide-file-text class="w-5 h-auto" />
         <span class="font-semibold">{{ __('admin/navigation.audits') }}</span>
       </a>
+      @can('health.view')
+        <a href="{{ route('admin.health') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.health*') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-activity class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('admin/navigation.health') }}</span>
+        </a>
+      @endcan
       <span class="mt-4 block text-slate-600 font-semibold text-md">{{ __('admin/navigation.group.plugin') }}</span>
       @can('provisionings.view')
         <a href="{{ route('admin.provisionings') }}" class="flex gap-2 items-center {{ request()->routeIs('admin.provisionings*') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-3 py-3 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">

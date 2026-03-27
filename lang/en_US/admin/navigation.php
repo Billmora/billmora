@@ -22,6 +22,7 @@ return [
     'automations' => 'Automations',
     'tasks' => 'Tasks',
     'audits' => 'Audits',
+    'health' => 'Health',
     'group' => [
         'management' => 'Management',
         'product' => 'Product',

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
  */
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/health', [Admin\HealthController::class, 'index'])->name('admin.health');
     
     /**
      * Admin users interface routes.
