@@ -1,0 +1,8 @@
+{
+    "name": "DirectAdmin",
+    "provider": "DirectAdmin",
+    "type": "provisioning",
+    "version": "1.0.0",
+    "description": "Automate web hosting provisioning via DirectAdmin Reseller API.",
+    "author": "Billmora Team"
+}
