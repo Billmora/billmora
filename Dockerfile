@@ -1,31 +1,33 @@
-# Use serversideup/php:8.3-fpm-nginx for a production-ready Laravel setup
-FROM serversideup/php:8.3-fpm-nginx
+# Stage 1: Build Assets (Compile Vite themes)
+FROM node:22-alpine AS build
+WORKDIR /app
 
-# Set the working directory
+# Copy only package files first to leverage Docker layer caching
+COPY package*.json ./
+RUN npm ci
+
+# Copy the rest of the application and build themes
+COPY . .
+RUN npx vite build --config=resources/themes/admin/moraine/vite.config.js
+RUN npx vite build --config=resources/themes/client/moraine/vite.config.js
+RUN npx vite build --config=resources/themes/portal/moraine/vite.config.js
+
+# Stage 2: Production PHP
+FROM serversideup/php:8.3-fpm-nginx
 WORKDIR /var/www/html
 
-# Switch to root to install dependencies if needed
+# Switch to root to install mandatory PHP extensions
 USER root
-
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    zip \
-    unzip \
-    git \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install PHP extensions
 RUN install-php-extensions intl gd pdo_mysql redis zip
+
+# Copy the application from the build stage
+COPY --from=build --chown=www-data:www-data /app /var/www/html
+
+# Clean up unnecessary files to keep image size small
+RUN rm -rf /var/www/html/node_modules /var/www/html/tests /var/www/html/.git
 
 # Switch back to the standard user
 USER www-data
-
-# Copy the application code
-COPY --chown=www-data:www-data . .
 
 # Install composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
