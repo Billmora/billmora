@@ -107,7 +107,8 @@
             </div>
 
             {{-- Version Comparison --}}
-            <div class="bg-white rounded-2xl p-6 border-2 border-billmora-2 flex flex-col gap-4 lg:col-span-3">
+            <div
+                class="bg-white rounded-2xl p-6 border-2 border-billmora-2 flex flex-col gap-4 md:col-span-2 lg:col-span-3">
                 <div class="flex items-center justify-between">
                     <div class="p-3 rounded-full bg-emerald-100 text-emerald-600">
                         <x-lucide-git-branch class="w-6 h-6" />
