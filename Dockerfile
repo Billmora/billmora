@@ -32,8 +32,11 @@ USER www-data
 # Install composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Set permissions for storage and bootstrap/cache
-RUN chmod -R 775 storage bootstrap/cache
+# Set permissions for storage, bootstrap/cache, and ensure .env is writable
+RUN cp .env.example .env && \
+    chown www-data:www-data .env && \
+    chmod 664 .env && \
+    chmod -R 775 storage bootstrap/cache
 
 # Expose port 8080 (serversideup default)
 EXPOSE 8080
