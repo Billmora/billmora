@@ -20,22 +20,22 @@
                 </div>
                 <div class="grid gap-2 col-span-4">
                     <div class="grid grid-cols-2">
-                        <span class="font-semibold text-slate-600">{{ __('client/invoices.invoice_date') }}</span>
+                        <span class="font-semibold text-slate-600">{{ __('client/invoices.invoice_date_label') }}</span>
                         <span class="font-semibold text-slate-500">{{ $invoice->created_at->format(Billmora::getGeneral('company_date_format')) }}</span>
                     </div>
                     <div class="grid grid-cols-2">
-                        <span class="font-semibold text-slate-600">{{ __('client/invoices.due_date') }}</span>
+                        <span class="font-semibold text-slate-600">{{ __('client/invoices.due_date_label') }}</span>
                         <span class="font-semibold text-slate-500">{{ $invoice->due_date->format(Billmora::getGeneral('company_date_format')) }}</span>
                     </div>
                 </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 sm:gap-0 items-center">
                 <div class="grid col-span-8">
-                    <span class="font-semibold text-slate-600">{{ __('client/invoices.bill_to') }}</span>
+                    <span class="font-semibold text-slate-600">{{ __('client/invoices.bill_to_label') }}</span>
                     <span class="font-semibold text-slate-500">{{ Billmora::getGeneral('company_name') }}</span>
                 </div>
                 <div class="grid col-span-4">
-                    <span class="font-semibold text-slate-600">{{ __('client/invoices.issued_to') }}</span>
+                    <span class="font-semibold text-slate-600">{{ __('client/invoices.issued_to_label') }}</span>
                     <span class="font-semibold text-slate-500">{{ $invoice->user->fullname }}</span>
                 </div>
             </div>
@@ -43,15 +43,15 @@
                 <div class="min-w-full inline-block align-middle">
                     <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
                         <div class="flex justify-between bg-billmora-bg items-center p-4">
-                            <h5 class="text-lg font-semibold text-slate-600">{{ __('client/invoices.invoice_items') }}</h5>
+                            <h5 class="text-lg font-semibold text-slate-600">{{ __('client/invoices.invoice_items_label') }}</h5>
                         </div>
                         <table class="min-w-full divide-y-2 divide-billmora-2">
                             <thead class="bg-billmora-2">
                                 <tr>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/invoices.description') }}</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/invoices.quantity') }}</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/invoices.unit_price') }}</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/invoices.amount') }}</th>
+                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/invoices.description_label') }}</th>
+                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/invoices.quantity_label') }}</th>
+                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/invoices.unit_price_label') }}</th>
+                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/invoices.amount_label') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y-2 divide-billmora-2 bg-billmora-bg">
@@ -68,7 +68,7 @@
                                 <tr>
                                     <td></td>
                                     <td></td>
-                                    <th class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/invoices.total') }}</th>
+                                    <th class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/invoices.total_label') }}</th>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">{{ Currency::format($invoice->total, $invoice->currency) }}</td>
                                 </tr>
                             </tfoot>
@@ -81,7 +81,7 @@
     <div class="w-full lg:w-2/7 h-fit bg-billmora-bg border-2 border-billmora-2 rounded-2xl">
         <div class="grid bg-billmora-primary-500 p-6 rounded-xl">
             <div class="grid">
-                <span class="text-md font-semibold text-white">{{ __('client/invoices.total_due') }}</span>
+                <span class="text-md font-semibold text-white">{{ __('client/invoices.total_due_label') }}</span>
                 <span class="text-2xl font-bold text-white">{{ Currency::format($invoice->amount_due, $invoice->currency) }}</span>
             </div>
             <hr class="border-t-2 border-billmora-2 my-4">

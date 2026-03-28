@@ -9,7 +9,7 @@
             <table class="min-w-full divide-y divide-billmora-2">
                 <thead class="bg-billmora-2">
                     <tr>
-                        <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/services.service_number') }}</th>
+                        <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/services.service_number_label') }}</th>
                         <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/services.package_label') }}</th>
                         <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/services.billing_cycle_label') }}</th>
                         <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/services.price_label') }}</th>

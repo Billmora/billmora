@@ -1,4 +1,4 @@
-@section('title', 'Login')
+@section('title', __('common.login'))
 
 <!DOCTYPE html>
 <html lang="en">

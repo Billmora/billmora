@@ -52,7 +52,7 @@
                     <x-lucide-shopping-bag class="w-auto h-10" />
                 </div>
                 <div>
-                    <h4 class="text-md font-semibold text-slate-500">{{ __('client/dashboard.active_services') }}</h4>
+                    <h4 class="text-md font-semibold text-slate-500">{{ __('client/dashboard.active_services_label') }}</h4>
                     <span class="text-3xl font-bold text-slate-600">{{ $activeServicesCount }}</span>
                 </div>
             </a>
@@ -61,7 +61,7 @@
                     <x-lucide-receipt-text class="w-auto h-10" />
                 </div>
                 <div>
-                    <h4 class="text-md font-semibold text-slate-500">{{ __('client/dashboard.unpaid_invoices') }}</h4>
+                    <h4 class="text-md font-semibold text-slate-500">{{ __('client/dashboard.unpaid_invoices_label') }}</h4>
                     <span class="text-3xl font-bold text-slate-600">{{ $unpaidInvoicesCount }}</span>
                 </div>
             </a>
@@ -70,7 +70,7 @@
                     <x-lucide-ticket class="w-auto h-10" />
                 </div>
                 <div>
-                    <h4 class="text-md font-semibold text-slate-500">{{ __('client/dashboard.open_tickets') }}</h4>
+                    <h4 class="text-md font-semibold text-slate-500">{{ __('client/dashboard.open_tickets_label') }}</h4>
                     <span class="text-3xl font-bold text-slate-600">{{ $openTicketsCount }}</span>
                 </div>
             </a>
@@ -79,18 +79,18 @@
             <div class="min-w-full inline-block align-middle">
                 <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
                     <div class="flex justify-between bg-billmora-bg items-center p-4">
-                        <h5 class="text-lg font-semibold text-slate-600">{{ __('client/dashboard.active_services') }}</h5>
+                        <h5 class="text-lg font-semibold text-slate-600">{{ __('client/dashboard.active_services_label') }}</h5>
                         <a href="{{ route('client.store') }}" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                            {{ __('client/dashboard.order_new_services') }}
+                            {{ __('client/dashboard.order_new_services_label') }}
                         </a>
                     </div>
                     <table class="min-w-full divide-y divide-billmora-2">
                         <thead class="bg-billmora-2">
                             <tr>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_number') }}</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_catalog') }}</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_package') }}</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_next_due_date') }}</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_number_label') }}</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_catalog_label') }}</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_package_label') }}</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_next_due_date_label') }}</th>
                                 <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                             </tr>
                         </thead>
@@ -116,17 +116,17 @@
                 <div class="min-w-full inline-block align-middle">
                     <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
                         <div class="flex justify-between bg-billmora-bg items-center p-4">
-                            <h5 class="text-lg font-semibold text-slate-600">{{ __('client/dashboard.unpaid_invoices') }}</h5>
+                            <h5 class="text-lg font-semibold text-slate-600">{{ __('client/dashboard.unpaid_invoices_label') }}</h5>
                             <a href="{{ route('client.invoices') }}" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                                {{ __('client/dashboard.view_all') }}
+                                {{ __('client/dashboard.view_all_label') }}
                             </a>
                         </div>
                         <table class="min-w-full divide-y divide-billmora-2">
                             <thead class="bg-billmora-2">
                                 <tr>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.invoice_number') }}</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.invoice_total') }}</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.invoice_status') }}</th>
+                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.invoice_number_label') }}</th>
+                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.invoice_total_label') }}</th>
+                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.invoice_status_label') }}</th>
                                     <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                                 </tr>
                             </thead>
@@ -152,17 +152,17 @@
                 <div class="min-w-full inline-block align-middle">
                     <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
                         <div class="flex justify-between bg-billmora-bg items-center p-4">
-                            <h5 class="text-lg font-semibold text-slate-600">{{ __('client/dashboard.open_tickets') }}</h5>
+                            <h5 class="text-lg font-semibold text-slate-600">{{ __('client/dashboard.open_tickets_label') }}</h5>
                             <a href="{{ route('client.tickets') }}" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                                {{ __('client/dashboard.view_all') }}
+                                {{ __('client/dashboard.view_all_label') }}
                             </a>
                         </div>
                         <table class="min-w-full divide-y divide-billmora-2">
                             <thead class="bg-billmora-2">
                                 <tr>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.ticket_number') }}</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.ticket_subject') }}</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.ticket_status') }}</th>
+                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.ticket_number_label') }}</th>
+                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.ticket_subject_label') }}</th>
+                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.ticket_status_label') }}</th>
                                     <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                                 </tr>
                             </thead>

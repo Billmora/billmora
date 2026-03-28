@@ -1,4 +1,4 @@
-@section('title', 'Register')
+@section('title', __('common.register'))
 
 <!DOCTYPE html>
 <html lang="en">

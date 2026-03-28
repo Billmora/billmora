@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Social Login Settings - Auth')
+@section('title', 'Social Sign In Settings - Auth')
 
 @section('body')
 <form action="{{ route('admin.settings.auth.social.update') }}" method="POST" class="flex flex-col gap-5">

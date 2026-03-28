@@ -10,7 +10,7 @@
     @if ($service->unpaidInvoice->first())
         <x-client::alert variant="warning" title="{{ __('client/services.unpaid_invoice_notice') }}">
             <a href="{{ route('client.invoices.show', $service->unpaidInvoice->first()->invoice_number) }}" class="bg-yellow-500 hover:bg-yellow-600 ml-auto px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">
-                {{ __('client/services.unpaid_invoice_pay_now') }}
+                {{ __('client/services.unpaid_invoice_pay_now_label') }}
             </a>
         </x-client::alert>
     @endif
