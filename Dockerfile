@@ -18,6 +18,9 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
+# Install PHP extensions
+RUN install-php-extensions intl gd pdo_mysql redis zip
+
 # Switch back to the standard user
 USER www-data
 
