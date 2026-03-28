@@ -1,42 +1,50 @@
-# Stage 1: Build Assets (Compile Vite themes)
-FROM node:22-alpine AS build
+# Stage 1: Compile Vite theme assets (admin, client, portal)
+FROM node:22-alpine AS asset-builder
 WORKDIR /app
 
-# Copy only package files first to leverage Docker layer caching
 COPY package*.json ./
 RUN npm ci
 
-# Copy the rest of the application and build themes
 COPY . .
-RUN npx vite build --config=resources/themes/admin/moraine/vite.config.js
-RUN npx vite build --config=resources/themes/client/moraine/vite.config.js
-RUN npx vite build --config=resources/themes/portal/moraine/vite.config.js
+RUN npx vite build --config=resources/themes/admin/moraine/vite.config.js && \
+    npx vite build --config=resources/themes/client/moraine/vite.config.js && \
+    npx vite build --config=resources/themes/portal/moraine/vite.config.js
 
-# Stage 2: Production PHP
+# Stage 2: Production (PHP 8.3 FPM + Nginx via serversideup/php)
 FROM serversideup/php:8.3-fpm-nginx
+
+LABEL org.opencontainers.image.title="Billmora"
+LABEL org.opencontainers.image.description="Billmora — Billing & Automation Platform"
+LABEL org.opencontainers.image.source="https://github.com/billmora/billmora"
+LABEL org.opencontainers.image.licenses="BUSL-1.1"
+
 WORKDIR /var/www/html
 
-# Switch to root to install mandatory PHP extensions
 USER root
-RUN install-php-extensions intl gd pdo_mysql redis zip
 
-# Copy the application from the build stage
-COPY --from=build --chown=www-data:www-data /app /var/www/html
+# PHP extensions required by linux-server.md
+RUN install-php-extensions \
+    bcmath \
+    curl \
+    gd \
+    intl \
+    mbstring \
+    pdo_mysql \
+    redis \
+    xml \
+    zip
 
-# Clean up unnecessary files to keep image size small
-RUN rm -rf /var/www/html/node_modules /var/www/html/tests /var/www/html/.git
+COPY --from=asset-builder --chown=www-data:www-data /app /var/www/html
 
-# Switch back to the standard user
+COPY .github/docker/entrypoint.sh /docker-entrypoint.d/10-ensure-env.sh
+RUN chmod +x /docker-entrypoint.d/10-ensure-env.sh
+
+RUN rm -rf node_modules tests .git .github
+
 USER www-data
 
-# Install composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Set permissions for storage, bootstrap/cache, and ensure .env is writable
-RUN cp .env.example .env && \
-    chown www-data:www-data .env && \
-    chmod 664 .env && \
-    chmod -R 775 storage bootstrap/cache
+RUN chmod -R 775 storage bootstrap/cache
 
-# Expose port 8080 (serversideup default)
 EXPOSE 8080
