@@ -85,13 +85,13 @@ class MakeUserCommand extends Command
         $billingData = [];
 
         if ($insertBilling) {
-            $billingData['phone_number'] = Prompts\text('Phone Number (optional)', required: false) ?: null;
-            $billingData['company_name'] = Prompts\text('Company name (optional)', required: false) ?: null;
-            $billingData['street_address_1'] = Prompts\text('Street address 1 (optional)', required: false) ?: null;
-            $billingData['street_address_2'] = Prompts\text('Street address 2 (optional)', required: false) ?: null;
-            $billingData['city'] = Prompts\text('City (optional)', required: false) ?: null;
-            $billingData['state'] = Prompts\text('State (optional)', required: false) ?: null;
-            $billingData['postcode'] = Prompts\text('Postcode (optional)', required: false) ?: null;
+            $billingData['phone_number'] = Prompts\text('Phone Number (optional)') ?: null;
+            $billingData['company_name'] = Prompts\text('Company name (optional)') ?: null;
+            $billingData['street_address_1'] = Prompts\text('Street address 1 (optional)') ?: null;
+            $billingData['street_address_2'] = Prompts\text('Street address 2 (optional)') ?: null;
+            $billingData['city'] = Prompts\text('City (optional)') ?: null;
+            $billingData['state'] = Prompts\text('State (optional)') ?: null;
+            $billingData['postcode'] = Prompts\text('Postcode (optional)') ?: null;
 
             $countries = config('utils.countries');
 
@@ -104,8 +104,7 @@ class MakeUserCommand extends Command
                         $code === ''
                     )
                     ->map(fn ($name, $code) => $code ? "$code - $name" : $name)
-                    ->all(),
-                required: false
+                    ->all()
             );
 
             if ($selectedCountry && $selectedCountry !== '(skip)') {
