@@ -33,7 +33,7 @@ return [
     'billing_cycle_label' => 'Billing Cycle',
     'billing_cycle_helper' => 'Select a package first to view available billing cycles.',
     'variant_option_label' => 'Variant Options',
-    'variant_option_helper' => 'Select additional variants are available for the chosen package.',
+    'variant_option_helper' => 'Select additional variants that are available for the chosen package.',
     'additional_configuration_label' => 'Additional Configuration',
     'additional_configuration_helper' => 'Provide any additional configuration required for provisioning this service.',
 
