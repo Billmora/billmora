@@ -22,8 +22,8 @@ return [
 
     'email' => [
         'not_verified' => 'Your email has not been verified. Please check your inbox or resend the verification email.',
-        'has_verified' => 'Your email has been successfully verified. You can login now.',
-        'already_verified' => 'Your email is already verified. Please login.',
+        'has_verified' => 'Your email has been successfully verified. You can sign in now.',
+        'already_verified' => 'Your email is already verified. Please sign in.',
         'invalid_token' => 'Invalid email verification token.',
         'expired_token' => 'Your verification token has expired. Please request a new one.',
         'already_requested' => 'You have already requested a verification email. Please check your inbox.',
@@ -37,7 +37,7 @@ return [
         'invalid_request' => 'Invalid password reset request.',
         'expired_request' => 'Your password reset request has expired. Please request again.',
         'email_not_found' => 'The email address does not match our records. Please try again.',
-        'reset_success' => 'Your password has been successfully reset. You can login now.',
+        'reset_success' => 'Your password has been successfully reset. You can sign in now.',
         'current_mismatch' => 'The provided password does not match your current password.',
     ],
 
@@ -81,9 +81,9 @@ return [
 
     'oauth' => [
         'or_continue_with' => 'or continue with',
-        'login_failed' => 'Unable to login with :provider. Please try again.',
-        'invalid_provider' => 'Invalid login provider.',
-        'provider_disabled' => 'This login provider is currently disabled.',
+        'login_failed' => 'Unable to sign in with :provider. Please try again.',
+        'invalid_provider' => 'Invalid sign in provider.',
+        'provider_disabled' => 'This sign in provider is currently disabled.',
         'account_inactive' => 'Your account is not active. Please contact support.',
     ],
 
