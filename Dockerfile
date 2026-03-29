@@ -41,8 +41,6 @@ RUN chmod +x /docker-entrypoint.d/10-ensure-env.sh
 
 RUN rm -rf node_modules tests .git .github
 
-USER www-data
-
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 RUN chmod -R 775 storage bootstrap/cache
