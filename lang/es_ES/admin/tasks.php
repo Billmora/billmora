@@ -8,7 +8,6 @@ return [
     
     'target_system' => 'System',
     'unknown_error' => 'Unknown Error',
-    'empty_state' => 'Hooray! No failed tasks in the queue.',
     
     'not_failed_state' => 'This task is not in a failed state or has already been resolved.',
     'retry_not_implemented' => 'Retry is not yet supported for this task type.',
