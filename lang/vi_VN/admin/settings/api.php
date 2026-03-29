@@ -19,7 +19,6 @@ return [
     'token_generated' => "Your API token has been generated. Copy it now — it won't be shown again.",
     'token_created_success' => 'API token created successfully.',
     'token_regenerated_success' => 'API token regenerated successfully. Copy the new token above.',
-    'no_tokens' => 'No API tokens have been created yet.',
     'all_permissions' => 'All',
     'all_ips' => 'All',
     'never' => 'Never',
