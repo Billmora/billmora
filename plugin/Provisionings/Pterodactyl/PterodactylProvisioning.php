@@ -5,6 +5,7 @@ namespace Plugins\Provisionings\Pterodactyl;
 use App\Support\AbstractPlugin;
 use App\Contracts\ProvisioningInterface;
 use App\Models\Service;
+use App\Exceptions\ProvisioningException;
 use Illuminate\Support\Facades\Http;
 
 class PterodactylProvisioning extends AbstractPlugin implements ProvisioningInterface
@@ -172,7 +173,7 @@ class PterodactylProvisioning extends AbstractPlugin implements ProvisioningInte
         ])->get($url);
 
         if (!$response->successful()) {
-            throw new \Exception('Failed to connect to Pterodactyl. HTTP Status: ' . $response->status());
+            throw new ProvisioningException('Failed to connect to Pterodactyl. HTTP Status: ' . $response->status(), ['response' => $response->json() ?: $response->body()]);
         }
 
         return true;
@@ -205,7 +206,7 @@ class PterodactylProvisioning extends AbstractPlugin implements ProvisioningInte
             $eggResponse = Http::withHeaders($this->_headers())->get($this->_url("/nests/{$nestId}/eggs/{$eggId}?include=variables"));
             
             if (!$eggResponse->successful()) {
-                throw new \Exception('Failed to fetch Pterodactyl Egg details to populate optional fields. HTTP Status: ' . $eggResponse->status());
+                throw new ProvisioningException('Failed to fetch Pterodactyl Egg details to populate optional fields. HTTP Status: ' . $eggResponse->status(), ['response' => $eggResponse->json() ?: $eggResponse->body()]);
             }
 
             $eggData = $eggResponse->json('attributes', []);
@@ -265,7 +266,7 @@ class PterodactylProvisioning extends AbstractPlugin implements ProvisioningInte
         $response = Http::withHeaders($this->_headers())->post($this->_url('/servers'), $payload);
 
         if (!$response->successful()) {
-            throw new \Exception('Failed to create server on Pterodactyl. HTTP Status: ' . $response->status());
+            throw new ProvisioningException('Failed to create server on Pterodactyl. HTTP Status: ' . $response->status(), ['response' => $response->json() ?: $response->body()]);
         }
 
         // No need to store the internal serverId locally. 
@@ -295,7 +296,7 @@ class PterodactylProvisioning extends AbstractPlugin implements ProvisioningInte
         ]);
 
         if (!$createResponse->successful()) {
-            throw new \Exception('Failed to create Pterodactyl user. HTTP Status: ' . $createResponse->status());
+            throw new ProvisioningException('Failed to create Pterodactyl user. HTTP Status: ' . $createResponse->status(), ['response' => $createResponse->json() ?: $createResponse->body()]);
         }
 
         return $createResponse->json('attributes.id');
@@ -309,7 +310,7 @@ class PterodactylProvisioning extends AbstractPlugin implements ProvisioningInte
             ->post($this->_url('/servers/' . $serverId . '/suspend'));
 
         if (!$response->successful() && $response->status() !== 404) {
-            throw new \Exception('Failed to suspend Pterodactyl server. HTTP Status: ' . $response->status());
+            throw new ProvisioningException('Failed to suspend Pterodactyl server. HTTP Status: ' . $response->status(), ['response' => $response->json() ?: $response->body()]);
         }
     }
 
@@ -321,7 +322,7 @@ class PterodactylProvisioning extends AbstractPlugin implements ProvisioningInte
             ->post($this->_url('/servers/' . $serverId . '/unsuspend'));
 
         if (!$response->successful() && $response->status() !== 404) {
-            throw new \Exception('Failed to unsuspend Pterodactyl server. HTTP Status: ' . $response->status());
+            throw new ProvisioningException('Failed to unsuspend Pterodactyl server. HTTP Status: ' . $response->status(), ['response' => $response->json() ?: $response->body()]);
         }
     }
 
@@ -333,7 +334,7 @@ class PterodactylProvisioning extends AbstractPlugin implements ProvisioningInte
             ->delete($this->_url('/servers/' . $serverId));
 
         if (!$response->successful() && $response->status() !== 404) {
-            throw new \Exception('Failed to terminate Pterodactyl server. HTTP Status: ' . $response->status());
+            throw new ProvisioningException('Failed to terminate Pterodactyl server. HTTP Status: ' . $response->status(), ['response' => $response->json() ?: $response->body()]);
         }
     }
 
@@ -350,7 +351,7 @@ class PterodactylProvisioning extends AbstractPlugin implements ProvisioningInte
         $config = $this->_mergeVariants($service, $config);
 
         if (!is_array($config) || empty($config['egg_id'])) {
-            throw new \Exception('Scale Failed: Pterodactyl Package Configuration is missing or invalid.');
+            throw new ProvisioningException('Scale Failed: Pterodactyl Package Configuration is missing or invalid.');
         }
 
         // 1. Fetch existing server to get the primary allocation ID
@@ -358,7 +359,7 @@ class PterodactylProvisioning extends AbstractPlugin implements ProvisioningInte
             ->get($this->_url('/servers/' . $serverId));
 
         if (!$getServerResponse->successful()) {
-            throw new \Exception('Failed to fetch existing server for scaling. HTTP: ' . $getServerResponse->status());
+            throw new ProvisioningException('Failed to fetch existing server for scaling. HTTP: ' . $getServerResponse->status(), ['response' => $getServerResponse->json() ?: $getServerResponse->body()]);
         }
 
         $allocationId = $getServerResponse->json('attributes.allocation');
@@ -384,7 +385,7 @@ class PterodactylProvisioning extends AbstractPlugin implements ProvisioningInte
             ->patch($this->_url('/servers/' . $serverId . '/build'), $buildPayload);
 
         if (!$buildResponse->successful()) {
-            throw new \Exception('Failed to scale Pterodactyl server build limits. HTTP Status: ' . $buildResponse->status());
+            throw new ProvisioningException('Failed to scale Pterodactyl server build limits. HTTP Status: ' . $buildResponse->status(), ['response' => $buildResponse->json() ?: $buildResponse->body()]);
         }
 
         // 3. Send Startup updates (if changed)
@@ -426,7 +427,7 @@ class PterodactylProvisioning extends AbstractPlugin implements ProvisioningInte
             ->patch($this->_url('/servers/' . $serverId . '/startup'), $startupPayload);
 
         if (!$startupResponse->successful()) {
-            throw new \Exception('Failed to scale Pterodactyl server startup variables. HTTP Status: ' . $startupResponse->status());
+            throw new ProvisioningException('Failed to scale Pterodactyl server startup variables. HTTP Status: ' . $startupResponse->status(), ['response' => $startupResponse->json() ?: $startupResponse->body()]);
         }
     }
 
@@ -442,7 +443,7 @@ class PterodactylProvisioning extends AbstractPlugin implements ProvisioningInte
             ->get($this->_url('/servers/external/' . $service->id));
 
         if (!$response->successful()) {
-            throw new \Exception('Action Aborted: Pterodactyl could not find a server linked to this Service ID (#'.$service->id.').');
+            throw new ProvisioningException('Action Aborted: Pterodactyl could not find a server linked to this Service ID (#' . $service->id . ').', ['response' => $response->json() ?: $response->body()]);
         }
 
         return $response->json('attributes', []);

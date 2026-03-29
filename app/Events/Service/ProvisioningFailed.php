@@ -13,7 +13,7 @@ class ProvisioningFailed
     /**
      * Create a new event instance.
      */
-    public function __construct(public Service $service, public string $errorMessage, public string $action = 'create')
+    public function __construct(public Service $service, public string $errorMessage, public string $action = 'create', public array $properties = [])
     {
         // 
     }

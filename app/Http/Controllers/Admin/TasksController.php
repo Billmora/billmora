@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AuditSystem;
 use App\Models\Service;
 use App\Services\ProvisioningService;
+use App\Exceptions\ProvisioningException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -66,6 +67,11 @@ class TasksController extends Controller
             Log::error("Failed to retry task ID {$task->id}: " . $e->getMessage());
             
             $properties['message'] = $e->getMessage();
+            
+            if ($e instanceof ProvisioningException) {
+                $properties = array_merge($properties, $e->getProperties());
+            }
+
             $task->update(['properties' => $properties]);
 
             return back()->with('error', __('admin/tasks.retry_failed', [

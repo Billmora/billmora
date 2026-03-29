@@ -26,6 +26,7 @@ class LogProvisioningFailedTask implements ShouldQueue
         if ($existing) {
             $properties = $existing->properties;
             $properties['message'] = $event->errorMessage;
+            $properties = array_merge($properties, $event->properties);
             $properties['attempts'] = ($properties['attempts'] ?? 1) + 1;
             
             $existing->update([
@@ -41,6 +42,8 @@ class LogProvisioningFailedTask implements ShouldQueue
                 'message' => $event->errorMessage,
                 'attempts' => 1,
             ];
+
+            $properties = array_merge($properties, $event->properties);
 
             if (!$userId) {
                 $properties['actor'] = 'system';

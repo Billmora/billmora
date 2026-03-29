@@ -5,6 +5,7 @@ namespace Plugins\Provisionings\DirectAdmin;
 use App\Support\AbstractPlugin;
 use App\Contracts\ProvisioningInterface;
 use App\Models\Service;
+use App\Exceptions\ProvisioningException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
@@ -99,7 +100,7 @@ class DirectAdminProvisioning extends AbstractPlugin implements ProvisioningInte
             ->get(rtrim($config['host'], '/') . '/CMD_API_SHOW_RESELLER_IPS');
 
         if (!$response->successful()) {
-            throw new \Exception('Failed to connect to DirectAdmin. HTTP Status: ' . $response->status());
+            throw new ProvisioningException('Failed to connect to DirectAdmin. HTTP Status: ' . $response->status(), ['response' => $response->body()]);
         }
 
         return true;
@@ -112,13 +113,13 @@ class DirectAdminProvisioning extends AbstractPlugin implements ProvisioningInte
         $clientInput = $service->configuration ?? [];
 
         if (empty($config['package_name'])) {
-            throw new \Exception('DirectAdmin Package Configuration is missing. Please configure the package in Admin Panel first.');
+            throw new ProvisioningException('DirectAdmin Package Configuration is missing. Please configure the package in Admin Panel first.');
         }
 
         $domain = $clientInput['domain'] ?? null;
 
         if (empty($domain)) {
-            throw new \Exception('Domain name is required. Please provide a valid domain during checkout.');
+            throw new ProvisioningException('Domain name is required. Please provide a valid domain during checkout.');
         }
 
         // 1. Generate credentials
@@ -191,7 +192,7 @@ class DirectAdminProvisioning extends AbstractPlugin implements ProvisioningInte
         $config = $service->package->provisioning_config ?? [];
 
         if (empty($config['package_name'])) {
-            throw new \Exception('Scale Failed: DirectAdmin Package Configuration is missing or invalid.');
+            throw new ProvisioningException('Scale Failed: DirectAdmin Package Configuration is missing or invalid.');
         }
 
         $this->_request('POST', 'CMD_API_MODIFY_USER', [
@@ -244,7 +245,7 @@ class DirectAdminProvisioning extends AbstractPlugin implements ProvisioningInte
             return redirect()->away($loginUrl);
         }
 
-        throw new \Exception("Unknown action requested: {$slug}");
+        throw new ProvisioningException("Unknown action requested: {$slug}");
     }
 
     /*
@@ -283,20 +284,20 @@ class DirectAdminProvisioning extends AbstractPlugin implements ProvisioningInte
             : $http->post($url, $params);
 
         if (!$response->successful()) {
-            throw new \Exception("DirectAdmin API request failed. HTTP Status: {$response->status()}");
+            throw new ProvisioningException("DirectAdmin API request failed. HTTP Status: {$response->status()}", ['response' => $response->body()]);
         }
-
-        // Parse DA's URL-encoded response
-        $parsed = [];
-        parse_str($response->body(), $parsed);
-
-        // DA returns error=1 on failure
-        if (isset($parsed['error']) && (int) $parsed['error'] === 1) {
-            $message = $parsed['text'] ?? 'Unknown DirectAdmin error';
-            $details = $parsed['details'] ?? '';
-
-            throw new \Exception("DirectAdmin Error: {$message}" . ($details ? " — {$details}" : ''));
-        }
+ 
+         // Parse DA's URL-encoded response
+         $parsed = [];
+         parse_str($response->body(), $parsed);
+ 
+         // DA returns error=1 on failure
+         if (isset($parsed['error']) && (int) $parsed['error'] === 1) {
+             $message = $parsed['text'] ?? 'Unknown DirectAdmin error';
+             $details = $parsed['details'] ?? '';
+ 
+             throw new ProvisioningException("DirectAdmin Error: {$message}" . ($details ? " — {$details}" : ''), ['response' => $parsed]);
+         }
 
         return $parsed;
     }
@@ -313,7 +314,7 @@ class DirectAdminProvisioning extends AbstractPlugin implements ProvisioningInte
         $username = $service->configuration['da_username'] ?? null;
 
         if (empty($username)) {
-            throw new \Exception('Action Aborted: No DirectAdmin username found for this Service (#' . $service->id . '). The account may not have been created.');
+            throw new ProvisioningException('Action Aborted: No DirectAdmin username found for this Service (#' . $service->id . '). The account may not have been created.');
         }
 
         return $username;

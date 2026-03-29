@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin\Services;
 
 use App\Events\Service as ServiceEvents;
+use App\Support\AbstractPlugin;
+use App\Exceptions\ProvisioningException;
 use App\Facades\Audit;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
@@ -50,10 +52,11 @@ class ProvisioningController extends Controller
 
             return back()->with('success', __('admin/services.provisioning.create.success'));
         } catch (\Exception $e) {
-            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'create'));
-
-            return back()->with('error', __('admin/services.provisioning.create.failed', ['message' => $e->getMessage()]));
-        }
+            $properties = ($e instanceof ProvisioningException) ? $e->getProperties() : [];
+            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'create', $properties));
+ 
+             return back()->with('error', __('admin/services.provisioning.create.failed', ['message' => $e->getMessage()]));
+         }
     }
 
     /**
@@ -83,10 +86,11 @@ class ProvisioningController extends Controller
 
             return back()->with('success', __('admin/services.provisioning.suspend.success'));
         } catch (\Exception $e) {
-            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'suspend'));
-
-            return back()->with('error', __('admin/services.provisioning.suspend.failed', ['message' => $e->getMessage()]));
-        }
+            $properties = ($e instanceof ProvisioningException) ? $e->getProperties() : [];
+            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'suspend', $properties));
+ 
+             return back()->with('error', __('admin/services.provisioning.suspend.failed', ['message' => $e->getMessage()]));
+         }
     }
 
     /**
@@ -116,10 +120,11 @@ class ProvisioningController extends Controller
 
             return back()->with('success', __('admin/services.provisioning.unsuspend.success'));
         } catch (\Exception $e) {
-            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'unsuspend'));
-
-            return back()->with('error', __('admin/services.provisioning.unsuspend.failed', ['message' => $e->getMessage()]));
-        }
+            $properties = ($e instanceof ProvisioningException) ? $e->getProperties() : [];
+            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'unsuspend', $properties));
+ 
+             return back()->with('error', __('admin/services.provisioning.unsuspend.failed', ['message' => $e->getMessage()]));
+         }
     }
 
     /**
@@ -149,10 +154,11 @@ class ProvisioningController extends Controller
 
             return back()->with('success', __('admin/services.provisioning.terminate.success'));
         } catch (\Exception $e) {
-            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'terminate'));
-
-            return back()->with('error', __('admin/services.provisioning.terminate.failed', ['message' => $e->getMessage()]));
-        }
+            $properties = ($e instanceof ProvisioningException) ? $e->getProperties() : [];
+            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'terminate', $properties));
+ 
+             return back()->with('error', __('admin/services.provisioning.terminate.failed', ['message' => $e->getMessage()]));
+         }
     }
 
     /**
@@ -182,10 +188,11 @@ class ProvisioningController extends Controller
             
             return back()->with('success', __('admin/services.provisioning.renew.success'));
         } catch (\Exception $e) {
-            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'renew'));
-
-            return back()->with('error', __('admin/services.provisioning.renew.failed', ['message' => $e->getMessage()]));
-        }
+            $properties = ($e instanceof ProvisioningException) ? $e->getProperties() : [];
+            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'renew', $properties));
+ 
+             return back()->with('error', __('admin/services.provisioning.renew.failed', ['message' => $e->getMessage()]));
+         }
     }
 
     /**
@@ -219,10 +226,11 @@ class ProvisioningController extends Controller
 
             return back()->with('success', __('admin/services.provisioning.scale.success'));
         } catch (\Exception $e) {
-            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'scale'));
-
-            return back()->with('error', __('admin/services.provisioning.scale.failed', ['message' => $e->getMessage()]));
-        }
+            $properties = ($e instanceof ProvisioningException) ? $e->getProperties() : [];
+            event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'scale', $properties));
+ 
+             return back()->with('error', __('admin/services.provisioning.scale.failed', ['message' => $e->getMessage()]));
+         }
     }
 
 }
