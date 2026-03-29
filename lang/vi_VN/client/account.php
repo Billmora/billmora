@@ -1,13 +1,13 @@
 <?php
 
 return [
-    'update_email' => 'Update Email',
-    'new_email' => 'New Email',
+    'update_email_label' => 'Update Email',
+    'new_email_label' => 'New Email',
 
-    'update_password' => 'Update Password',
-    'current_password' => 'Current Password',
-    'new_password' => 'New Password',
-    'confirm_new_password' => 'Confirm New Password',
+    'update_password_label' => 'Update Password',
+    'current_password_label' => 'Current Password',
+    'new_password_label' => 'New Password',
+    'confirm_new_password_label' => 'Confirm New Password',
 
     'credits' => [
         'currency_label' => 'Currency',
