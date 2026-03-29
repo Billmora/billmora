@@ -3,9 +3,8 @@
 @section('title', "User Summary - {$user->email}")
 
 @section('body')
-<div class="flex flex-col gap-5">
-    <x-admin::tabs 
-        :tabs="[
+    <div class="flex flex-col gap-5">
+        <x-admin::tabs :tabs="[
             [
                 'route' => route('admin.users.summary', ['user' => $user->id]),
                 'icon' => 'lucide-contact',
@@ -41,179 +40,212 @@
                 'icon' => 'lucide-activity',
                 'label' => __('admin/users.tabs.activity'),
             ],
-        ]" 
-        active="{{ request()->url() }}"
-    />
-    @can('uses.update')
-        @if (!$user->isEmailVerified())
-            <x-admin::alert variant="warning" title="{{ __('admin/users.email_verification_alert_label') }}">
-                {{ __('admin/users.email_verification_alert_helper') }}
-                <form action="{{ route('admin.users.verify', ['user' => $user->id]) }}" method="POST" class="ml-auto">
-                    @csrf
-                    <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('admin/users.marked_as_verified') }}</button>
-                </form>
-            </x-admin::alert>
-        @endif
-    @endcan
-    <div class="flex flex-col lg:flex-row gap-5">
-        <div class="w-full lg:w-1/4 h-fit grid gap-6 items-center bg-white p-8 text-center border-2 border-billmora-2 rounded-2xl">
-            <img src="{{ $user->avatar }}?s=128" alt="user avatar" class="rounded-full w-32 h-auto mx-auto">
-            <div class="flex flex-col">
-                <span class="text-xl text-slate-600 font-bold break-all">{{ $user->fullname }}</span>
-                <span class="text-md text-slate-500 font-semibold break-all">{{ $user->email }}</span>
-                <span class="text-sm text-slate-500 font-semibold break-all capitalize">{{ $user->status }}</span>
-                <span class="text-sm text-slate-500 font-semibold break-all">
-                    @if ($user->isRootAdmin())
-                        Administrator
-                    @elseif ($user->roles->isNotEmpty())
-                        {{ $user->roles->pluck('name')->implode(', ') }}
-                    @else
-                        Client
-                    @endif
-                </span>
-            </div>
-            <div class="grid gap-2 bg-billmora-primary-500 p-4 text-xs rounded-xl">
-                <div class="flex gap-3 justify-between">
-                    <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.phone_number') }}</span>
-                    <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->phone_number }}</span>
-                </div>
-                <div class="flex gap-3 justify-between">
-                    <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.company_name') }}</span>
-                    <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->company_name }}</span>
-                </div>
-                <div class="flex gap-3 justify-between">
-                    <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.street_address_1') }}</span>
-                    <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->street_address_1 }}</span>
-                </div>
-                <div class="flex gap-3 justify-between">
-                    <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.street_address_2') }}</span>
-                    <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->street_address_2 }}</span>
-                </div>
-                <div class="flex gap-3 justify-between">
-                    <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.city') }}</span>
-                    <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->city }}</span>
-                </div>
-                <div class="flex gap-3 justify-between">
-                    <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.state') }}</span>
-                    <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->state }}</span>
-                </div>
-                <div class="flex gap-3 justify-between">
-                    <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.postcode') }}</span>
-                    <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->postcode }}</span>
-                </div>
-                <div class="flex gap-3 justify-between">
-                    <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.country') }}</span>
-                    <span class="text-slate-200 font-semibold text-end break-all">{{ config('utils.countries')[$user->billing->country] ?? $user->billing->country }}</span>
-                </div>
-            </div>
-            @if (Auth::id() !== $user->id)
-                @can('users.impersonate')
-                    <form action="{{ route('admin.users.impersonate', ['user' => $user->id]) }}" method="POST">
+        ]" active="{{ request()->url() }}" />
+        @can('uses.update')
+            @if (!$user->isEmailVerified())
+                <x-admin::alert variant="warning" title="{{ __('admin/users.email_verification_alert_label') }}">
+                    {{ __('admin/users.email_verification_alert_helper') }}
+                    <form action="{{ route('admin.users.verify', ['user' => $user->id]) }}" method="POST" class="ml-auto">
                         @csrf
-                        <button type="submit" class="w-full flex gap-2 justify-center items-center bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
-                            <x-lucide-user class="w-auto h-5" />
-                            {{ __('admin/users.login_as_user') }}
-                        </button>
+                        <button type="submit"
+                            class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('admin/users.marked_as_verified') }}</button>
                     </form>
-                @endcan
-                @can('delete', $user)
-                    <x-admin::modal.trigger modal="deleteModal-{{ $user->id }}" variant="open" class="w-full flex gap-2 justify-center items-center bg-red-500 hover:bg-red-600 px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
-                        <x-lucide-trash class="w-auto h-5" />
-                        {{ __('common.delete') }}
-                    </x-admin::modal.trigger>
-                @endcan
+                </x-admin::alert>
             @endif
-        </div>
-        <div class="w-full lg:w-3/4 h-fit grid gap-5">
-            <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-3 gap-5">
-                <div class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
-                    <div class="bg-green-200 p-3 text-green-500 rounded-full">
-                        <x-lucide-badge-check class="w-auto h-10" />
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-semibold text-slate-500">{{ __('admin/users.active_orders') }}</h4>
-                        <span class="text-2xl font-semibold text-slate-600">{{ $ordersActive }}</span>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
-                    <div class="bg-red-200 p-3 text-red-500 rounded-full">
-                        <x-lucide-badge-x class="w-auto h-10" />
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-semibold text-slate-500">{{ __('admin/users.cancelled_orders') }}</h4>
-                        <span class="text-2xl font-semibold text-slate-600">{{ $ordersCancelled }}</span>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
-                    <div class="bg-violet-200 p-3 text-violet-500 rounded-full">
-                        <x-lucide-badge-dollar-sign class="w-auto h-10" />
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-semibold text-slate-500">{{ __('admin/users.total_orders') }}</h4>
-                        <span class="text-2xl font-semibold text-slate-600">{{ $ordersTotal }}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="overflow-x-auto">
-                <div class="min-w-full inline-block align-middle">
-                    <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
-                        <table class="min-w-full divide-y divide-billmora-2">
-                            <thead class="bg-billmora-2">
-                                <tr>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">ID</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/orders.number_label') }}</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/orders.date_label') }}</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/orders.total_label') }}</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.status') }}</th>
-                                    <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y-2 divide-billmora-2 bg-white">
-                                @foreach ($orders as $order)
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $order->id }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
-                                            <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">{{ $order->order_number }}</a>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $order->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ Currency::format($order->total, $order->currency) }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $order->status }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
-                                            @can('orders.update')
-                                                <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">{{ __('common.edit') }}</a>                               
-                                            @endcan
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div>
-                {{ $orders->links('admin::layouts.partials.pagination') }}
-            </div>
-        </div>
-    </div>
-    @if (Auth::id() !== $user->id)
-        @can('delete', $user)
-            <x-admin::modal.content
-                modal="deleteModal-{{ $user->id }}"
-                variant="danger"
-                size="xl"
-                position="centered"
-                title="{{ __('common.delete_modal_title') }}"
-                description="{{ __('common.delete_modal_description', ['item' => $user->email]) }}">
-                <form action="{{ route('admin.users.destroy', ['user' => $user->id]) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <div class="flex justify-end gap-2 mt-4">
-                        <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
-                        <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
-                    </div>
-                </form>
-            </x-admin::modal.content>
         @endcan
-    @endif
-</div>
+        <div class="flex flex-col lg:flex-row gap-5">
+            <div
+                class="w-full lg:w-1/4 h-fit grid gap-6 items-center bg-white p-8 text-center border-2 border-billmora-2 rounded-2xl">
+                <img src="{{ $user->avatar }}?s=128" alt="user avatar" class="rounded-full w-32 h-auto mx-auto">
+                <div class="flex flex-col">
+                    <span class="text-xl text-slate-600 font-bold break-all">{{ $user->fullname }}</span>
+                    <span class="text-md text-slate-500 font-semibold break-all">{{ $user->email }}</span>
+                    <span class="text-sm text-slate-500 font-semibold break-all capitalize">{{ $user->status }}</span>
+                    <span class="text-sm text-slate-500 font-semibold break-all">
+                        @if ($user->isRootAdmin())
+                            Administrator
+                        @elseif ($user->roles->isNotEmpty())
+                            {{ $user->roles->pluck('name')->implode(', ') }}
+                        @else
+                            Client
+                        @endif
+                    </span>
+                </div>
+                <div class="grid gap-2 bg-billmora-primary-500 p-4 text-xs rounded-xl">
+                    <div class="flex gap-3 justify-between">
+                        <span
+                            class="text-slate-100 font-semibold text-start break-all">{{ __('common.phone_number') }}</span>
+                        <span
+                            class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->phone_number }}</span>
+                    </div>
+                    <div class="flex gap-3 justify-between">
+                        <span
+                            class="text-slate-100 font-semibold text-start break-all">{{ __('common.company_name') }}</span>
+                        <span
+                            class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->company_name }}</span>
+                    </div>
+                    <div class="flex gap-3 justify-between">
+                        <span
+                            class="text-slate-100 font-semibold text-start break-all">{{ __('common.street_address_1') }}</span>
+                        <span
+                            class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->street_address_1 }}</span>
+                    </div>
+                    <div class="flex gap-3 justify-between">
+                        <span
+                            class="text-slate-100 font-semibold text-start break-all">{{ __('common.street_address_2') }}</span>
+                        <span
+                            class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->street_address_2 }}</span>
+                    </div>
+                    <div class="flex gap-3 justify-between">
+                        <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.city') }}</span>
+                        <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->city }}</span>
+                    </div>
+                    <div class="flex gap-3 justify-between">
+                        <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.state') }}</span>
+                        <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->state }}</span>
+                    </div>
+                    <div class="flex gap-3 justify-between">
+                        <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.postcode') }}</span>
+                        <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->postcode }}</span>
+                    </div>
+                    <div class="flex gap-3 justify-between">
+                        <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.country') }}</span>
+                        <span
+                            class="text-slate-200 font-semibold text-end break-all">{{ config('utils.countries')[$user->billing->country] ?? $user->billing->country }}</span>
+                    </div>
+                </div>
+                @if (Auth::id() !== $user->id)
+                    @can('users.impersonate')
+                        <form action="{{ route('admin.users.impersonate', ['user' => $user->id]) }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                class="w-full flex gap-2 justify-center items-center bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
+                                <x-lucide-user class="w-auto h-5" />
+                                {{ __('admin/users.login_as_user') }}
+                            </button>
+                        </form>
+                    @endcan
+                    @can('delete', $user)
+                        <x-admin::modal.trigger modal="deleteModal-{{ $user->id }}" variant="open"
+                            class="w-full flex gap-2 justify-center items-center bg-red-500 hover:bg-red-600 px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
+                            <x-lucide-trash class="w-auto h-5" />
+                            {{ __('common.delete') }}
+                        </x-admin::modal.trigger>
+                    @endcan
+                @endif
+            </div>
+            <div class="w-full lg:w-3/4 h-fit grid gap-5">
+                <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <div class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
+                        <div class="bg-green-200 p-3 text-green-500 rounded-full">
+                            <x-lucide-badge-check class="w-auto h-10" />
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-slate-500">{{ __('admin/users.active_orders_label') }}
+                            </h4>
+                            <span class="text-2xl font-semibold text-slate-600">{{ $ordersActive }}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
+                        <div class="bg-red-200 p-3 text-red-500 rounded-full">
+                            <x-lucide-badge-x class="w-auto h-10" />
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-slate-500">{{ __('admin/users.cancelled_orders_label') }}
+                            </h4>
+                            <span class="text-2xl font-semibold text-slate-600">{{ $ordersCancelled }}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
+                        <div class="bg-violet-200 p-3 text-violet-500 rounded-full">
+                            <x-lucide-badge-dollar-sign class="w-auto h-10" />
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-slate-500">{{ __('admin/users.total_orders_label') }}</h4>
+                            <span class="text-2xl font-semibold text-slate-600">{{ $ordersTotal }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <div class="min-w-full inline-block align-middle">
+                        <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
+                            <table class="min-w-full divide-y divide-billmora-2">
+                                <thead class="bg-billmora-2">
+                                    <tr>
+                                        <th scope="col"
+                                            class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">ID
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">
+                                            {{ __('admin/orders.number_label') }}</th>
+                                        <th scope="col"
+                                            class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">
+                                            {{ __('admin/orders.date_label') }}</th>
+                                        <th scope="col"
+                                            class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">
+                                            {{ __('admin/orders.total_label') }}</th>
+                                        <th scope="col"
+                                            class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">
+                                            {{ __('common.status') }}</th>
+                                        <th scope="col"
+                                            class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">
+                                            {{ __('common.action') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y-2 divide-billmora-2 bg-white">
+                                    @forelse ($orders as $order)
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $order->id }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
+                                                <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}"
+                                                    class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">{{ $order->order_number }}</a>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
+                                                {{ $order->created_at->format(Billmora::getGeneral('company_date_format')) }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
+                                                {{ Currency::format($order->total, $order->currency) }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $order->status }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
+                                                @can('orders.update')
+                                                    <a href="{{ route('admin.orders.edit', ['order' => $order->id]) }}"
+                                                        class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">{{ __('common.edit') }}</a>
+                                                @endcan
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="px-6 py-4 text-center text-sm text-slate-800">{{ __('common.no_data') }}</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    {{ $orders->links('admin::layouts.partials.pagination') }}
+                </div>
+            </div>
+        </div>
+        @if (Auth::id() !== $user->id)
+            @can('delete', $user)
+                <x-admin::modal.content modal="deleteModal-{{ $user->id }}" variant="danger" size="xl" position="centered"
+                    title="{{ __('common.delete_modal_title') }}"
+                    description="{{ __('common.delete_modal_description', ['item' => $user->email]) }}">
+                    <form action="{{ route('admin.users.destroy', ['user' => $user->id]) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <div class="flex justify-end gap-2 mt-4">
+                            <x-admin::modal.trigger type="button" variant="close"
+                                class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                            <button type="submit"
+                                class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
+                        </div>
+                    </form>
+                </x-admin::modal.content>
+            @endcan
+        @endif
+    </div>
 @endsection
