@@ -77,10 +77,10 @@
             </div>
             <div 
                 class="w-full lg:w-1/3 h-fit flex flex-col gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl"
-                x-data="{ isClient: {{ in_array(old('role', $user->isClient() ? 'client' : ($user->isRootAdmin() ? 'root' : ($user->roles->first()->name ?? 'client'))), ['client', 'root']) ? 'true' : 'false' }} }"
+                x-data="{ isClient: {{ (old('role', $user->isClient() ? 'client' : ($user->isRootAdmin() ? 'root' : ($user->roles->first()->name ?? 'client'))) === 'client') ? 'true' : 'false' }} }"
                 x-on:change="
                     const select = $event.target.closest('[name=role]') || $event.target;
-                    if (select.name === 'role') isClient = (select.value === 'client' || select.value === 'root');
+                    if (select.name === 'role') isClient = (select.value === 'client');
                 "
             >
                 <x-admin::select name="role" label="{{ __('common.role') }}" :disabled="($user->id === Auth::id()) || ($user->isRootAdmin() && !Auth::user()->isRootAdmin())" required>
@@ -99,7 +99,7 @@
                     @endforeach
                 </x-admin::select>
                 <div x-show="!isClient" x-cloak>
-                    <x-admin::select name="department" label="{{ __('common.department') }}">
+                    <x-admin::select name="department" label="{{ __('common.department') }}" required x-bind:disabled="isClient">
                         @foreach (Billmora::getTicket('ticketing_departments') as $department)
                             <option value="{{ $department }}" {{ old('department', $user->department) === $department ? 'selected' : '' }}>
                                 {{ ucfirst($department) }}

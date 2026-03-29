@@ -59,8 +59,9 @@ class ProfileController extends Controller
      */
     public function update(Request $request, User $user)
     {
-
         $this->authorize('update', $user);
+
+        $oldRole = $user->roles->pluck('name')->first() ?? ($user->is_root_admin ? 'root' : 'client');
 
         $validated = $request->validate([
             'first_name' => ['required', 'string', 'min:3', 'max:255'],
@@ -73,7 +74,7 @@ class ProfileController extends Controller
             ],
             'department' => [
                 'nullable',
-                Rule::requiredIf(fn() => !in_array($request->role, ['client', 'root'])),
+                Rule::requiredIf(fn() => ($request->role ?? $oldRole) !== 'client'),
                 Rule::in(Billmora::getTicket('ticketing_departments')),
             ],
             'status' => ['required', 'in:active,inactive,suspended,closed'],
@@ -129,11 +130,12 @@ class ProfileController extends Controller
             'first_name', 'last_name', 'email',
             'status', 'language', 'department',
         ]);
-        $oldRole = $user->roles->pluck('name')->first() ?? ($user->is_root_admin ? 'root' : 'client');
         $oldBilling  = $user->billing?->only([
             'phone_number', 'company_name', 'street_address_1', 'street_address_2',
             'city', 'state', 'postcode', 'country',
         ]) ?? [];
+
+        $role = $validated['role'] ?? $oldRole;
 
         $user->update([
             'first_name' => $validated['first_name'],
@@ -142,27 +144,19 @@ class ProfileController extends Controller
             'password' => $validated['password'] ? Hash::make($validated['password']) : $user->password,
             'status' => $validated['status'],
             'language' => $validated['language'],
+            'department' => ($role !== 'client') ? $validated['department'] : null,
         ]);
 
         if ($user->id !== Auth::id()) {
-            if ($validated['role'] === 'root' && Auth::user()->isRootAdmin()) {
+            if ($role === 'root' && Auth::user()->isRootAdmin()) {
                 $user->syncRoles([]);
-                $user->update([
-                    'is_root_admin' => true,
-                    'department' => null,
-                ]);
-            } elseif ($validated['role'] === 'client') {
+                $user->update(['is_root_admin' => true]);
+            } elseif ($role === 'client') {
                 $user->syncRoles([]);
-                $user->update([
-                    'is_root_admin' => false,
-                    'department' => null,
-                ]);
+                $user->update(['is_root_admin' => false]);
             } else {
-                $user->syncRoles([$validated['role']]);
-                $user->update([
-                    'is_root_admin' => false,
-                    'department' => $validated['department'],
-                ]);
+                $user->syncRoles([$role]);
+                $user->update(['is_root_admin' => false]);
             }
         }
 
@@ -185,12 +179,12 @@ class ProfileController extends Controller
             'status', 'language', 'department',
         ]));
 
-        $this->recordUpdate("user.role.update", 
-            ['role' => $oldRole], 
-            ['role' => $validated['role']]
+        $this->recordUpdate("user.role.update",
+            ['role' => $oldRole],
+            ['role' => $role]
         );
 
-        $this->recordUpdate("user.billing.update", $oldBilling, 
+        $this->recordUpdate("user.billing.update", $oldBilling,
             $user->fresh()->billing?->only([
                 'phone_number', 'company_name', 'street_address_1', 'street_address_2',
                 'city', 'state', 'postcode', 'country',
