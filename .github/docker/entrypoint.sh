@@ -8,9 +8,9 @@ ENV_EXAMPLE="/var/www/html/.env.example"
 # Link path in the app root
 ENV_ROOT_LINK="/var/www/html/.env"
 
-# 1. Ensure the persistent storage directory exists
+# 1. Ensure the persistent storage directory exists and fix volume ownership
 mkdir -p "${ENV_STORAGE_DIR}"
-chown -R www-data:www-data "${ENV_STORAGE_DIR}"
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # 2. Seed .env from example if it doesn't exist in the persistent storage
 if [ ! -f "${ENV_STORAGE_FILE}" ]; then
