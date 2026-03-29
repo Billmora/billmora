@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'service_number' => 'Service Number',
+    'service_number_label' => 'Service Number',
     'package_label' => 'Package',
     'catalog_label' => 'Catalog',
     'registration_label' => 'Registration Date',
@@ -13,10 +13,10 @@ return [
     'configuration_label' => 'Additional Configuration',
     'cancel_label' => 'Cancellation Request',
     'scale_label' => 'Scaling Service',
-    'scale_package_helper' => 'Choose a package want to scale to',
-    'scale_variant_helper' => 'Choose a variant want to scale to',
+    'scale_package_helper' => 'Choose a package you want to scale to',
+    'scale_variant_helper' => 'Choose a variant you want to scale to',
     'unpaid_invoice_notice' => 'Your service has an outstanding invoice that requires payment. Please complete your payment at your earliest convenience.',
-    'unpaid_invoice_pay_now' => 'Pay Now',
+    'unpaid_invoice_pay_now_label' => 'Pay Now',
 
     'action' => [
         'overview' => 'Overview',
