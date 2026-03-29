@@ -95,7 +95,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y-2 divide-billmora-2 bg-billmora-bg">
-                            @foreach ($activeServices as $service)
+                            @forelse ($activeServices as $service)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->service_number }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->package->catalog->name }}</td>
@@ -105,7 +105,11 @@
                                         <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">{{ __('common.manage') }}</a>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-6 py-8 text-center text-sm text-slate-400">{{ __('common.no_data') }}</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -131,7 +135,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y-2 divide-billmora-2 bg-billmora-bg">
-                                @foreach ($unpaidInvoices as $invoice)
+                                @forelse ($unpaidInvoices as $invoice)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->invoice_number }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ Currency::format($invoice->total, $invoice->currency) }}</td>
@@ -142,7 +146,11 @@
                                             </a>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="px-6 py-8 text-center text-sm text-slate-400">{{ __('common.no_data') }}</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -167,7 +175,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y-2 divide-billmora-2 bg-billmora-bg">
-                                @foreach ($openTickets as $ticket)
+                                @forelse ($openTickets as $ticket)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $ticket->ticket_number }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $ticket->subject }}</td>
@@ -178,7 +186,11 @@
                                             </a>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="px-6 py-8 text-center text-sm text-slate-400">{{ __('common.no_data') }}</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>

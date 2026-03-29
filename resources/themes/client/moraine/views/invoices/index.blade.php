@@ -18,7 +18,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y-2 divide-billmora-2 bg-billmora-bg">
-                    @foreach ($invoices as $invoice)
+                    @forelse ($invoices as $invoice)
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
                                 <a href="{{ route('client.invoices.show', ['invoice' => $invoice->invoice_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">{{ $invoice->invoice_number }}</a>
@@ -31,7 +31,11 @@
                                 <a href="{{ route('client.invoices.show', ['invoice' => $invoice->invoice_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">{{ __('common.manage') }}</a>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="6" class="px-6 py-8 text-center text-sm text-slate-400">{{ __('common.no_data') }}</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

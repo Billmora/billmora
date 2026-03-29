@@ -40,7 +40,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y-2 divide-billmora-2 bg-white">
-                        @foreach ($transactions as $transaction)
+                        @forelse ($transactions as $transaction)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
                                     <a href="{{ route('admin.invoices.edit', ['invoice' => $transaction->invoice->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-hover">
@@ -59,7 +59,11 @@
                                     @endcan
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="8" class="px-6 py-8 text-center text-sm text-slate-400">{{ __('common.no_data') }}</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

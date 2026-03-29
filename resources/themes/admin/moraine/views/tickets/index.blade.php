@@ -39,7 +39,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y-2 divide-billmora-2 bg-white">
-                        @foreach ($tickets as $ticket)
+                        @forelse ($tickets as $ticket)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
                                     <a href="{{ route('admin.tickets.reply', ['ticket' => $ticket->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-hover">{{ $ticket->ticket_number }}</a>
@@ -67,7 +67,11 @@
                                     @endcan
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="7" class="px-6 py-8 text-center text-sm text-slate-400">{{ __('common.no_data') }}</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

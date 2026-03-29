@@ -146,4 +146,6 @@ return [
     'unauthorized_admin' => 'You do not have permission to access the admin area.',
     'unauthorized_client' => 'You do not have permission to access the client area.',
     'unauthorized_portal' => 'You do not have permission to access the portal area.',
+
+    'no_data' => 'No records found',
 ];

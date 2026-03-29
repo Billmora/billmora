@@ -89,7 +89,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="8" class="px-6 py-8 text-center text-sm text-slate-400">{{ __('admin/settings/api.no_tokens') }}</td>
+                                <td colspan="8" class="px-6 py-8 text-center text-sm text-slate-400">{{ __('common.no_data') }}</td>
                             </tr>
                             @endforelse
                         </tbody>

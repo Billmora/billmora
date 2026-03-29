@@ -70,7 +70,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y-2 divide-billmora-2 bg-white">
-                        @foreach ($invoices as $invoice)
+                        @forelse ($invoices as $invoice)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->id }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
@@ -85,7 +85,11 @@
                                     @endcan
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-6 py-8 text-center text-sm text-slate-400">{{ __('common.no_data') }}</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

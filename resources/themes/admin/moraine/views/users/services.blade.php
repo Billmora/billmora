@@ -71,7 +71,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y-2 divide-billmora-2 bg-white">
-                        @foreach ($services as $service)
+                        @forelse ($services as $service)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->id }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
@@ -89,7 +89,11 @@
                                     @endcan
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="7" class="px-6 py-8 text-center text-sm text-slate-400">{{ __('common.no_data') }}</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

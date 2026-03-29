@@ -3,69 +3,87 @@
 @section('title', "Activity Audit - User")
 
 @section('body')
-<div class="flex flex-col gap-4">
-    <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
-        <div class="w-full md:w-100">
-            <form action="{{ route('admin.audits.user') }}" method="GET" class="relative inline-block max-w-150 w-full group">
-                <div class="absolute top-1/2 -translate-y-1/2 left-2.5 pointer-events-none">
-                    <x-lucide-search class="w-5 h-auto text-slate-500 group-focus-within:text-billmora-primary-500" />
-                </div>
-                <input type="text" name="searchActiviyUser" id="searchActiviyUser" placeholder="{{ __('admin/common.search') }}" value="{{ request('searchActiviyUser') }}" class="w-full px-6 py-3 pl-10 bg-white text-slate-700 placeholder:text-slate-500 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary-500">
-                <div class="absolute top-1/2 -translate-y-1/2 right-1.5">
-                    <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">{{ __('common.submit') }}</button>
-                </div>
-            </form>
-        </div>
-        <div class="flex gap-4 ml-auto">
-            @can('audit.user.activity.export')
-                <form action="{{ route('admin.audits.user.export') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="flex gap-1 items-center bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
-                        <x-lucide-file-down class="w-auto h-5" />
-                        {{ __('common.export') }}
-                    </button>
+    <div class="flex flex-col gap-4">
+        <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
+            <div class="w-full md:w-100">
+                <form action="{{ route('admin.audits.user') }}" method="GET"
+                    class="relative inline-block max-w-150 w-full group">
+                    <div class="absolute top-1/2 -translate-y-1/2 left-2.5 pointer-events-none">
+                        <x-lucide-search class="w-5 h-auto text-slate-500 group-focus-within:text-billmora-primary-500" />
+                    </div>
+                    <input type="text" name="searchActiviyUser" id="searchActiviyUser"
+                        placeholder="{{ __('admin/common.search') }}" value="{{ request('searchActiviyUser') }}"
+                        class="w-full px-6 py-3 pl-10 bg-white text-slate-700 placeholder:text-slate-500 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary-500">
+                    <div class="absolute top-1/2 -translate-y-1/2 right-1.5">
+                        <button type="submit"
+                            class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">{{ __('common.submit') }}</button>
+                    </div>
                 </form>
-            @endcan
-        </div>
-    </div>
-    <div class="overflow-x-auto">
-        <div class="min-w-full inline-block align-middle">
-            <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-billmora-2">
-                        <tr>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/audits/user.event_label') }}</th>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/audits/user.user_label') }}</th>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.created_at') }}</th>
-                            <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y-2 divide-billmora-2 bg-white">
-                        @foreach ($activities as $activity)
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
-                                <a href="{{ route('admin.users.activity.show', ['user' => $activity->user->id, 'activity' => $activity->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-hover">{{ $activity->event }}</a>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
-                                <a href="{{ route('admin.users.summary', ['user' => $activity->user->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-hover">
-                                    {{ $activity->user->email }}
-                                </a>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $activity->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
-                                <a href="{{ route('admin.users.activity.show', ['user' => $activity->user->id, 'activity' => $activity->id]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-hover">
-                                    {{ __('common.view') }}
-                                </a>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+            </div>
+            <div class="flex gap-4 ml-auto">
+                @can('audit.user.activity.export')
+                    <form action="{{ route('admin.audits.user.export') }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                            class="flex gap-1 items-center bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                            <x-lucide-file-down class="w-auto h-5" />
+                            {{ __('common.export') }}
+                        </button>
+                    </form>
+                @endcan
             </div>
         </div>
+        <div class="overflow-x-auto">
+            <div class="min-w-full inline-block align-middle">
+                <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-billmora-2">
+                            <tr>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">
+                                    {{ __('admin/audits/user.event_label') }}</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">
+                                    {{ __('admin/audits/user.user_label') }}</th>
+                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">
+                                    {{ __('common.created_at') }}</th>
+                                <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">
+                                    {{ __('common.action') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y-2 divide-billmora-2 bg-white">
+                            @forelse ($activities as $activity)
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
+                                        <a href="{{ route('admin.users.activity.show', ['user' => $activity->user->id, 'activity' => $activity->id]) }}"
+                                            class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-hover">{{ $activity->event }}</a>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
+                                        <a href="{{ route('admin.users.summary', ['user' => $activity->user->id]) }}"
+                                            class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-hover">
+                                            {{ $activity->user->email }}
+                                        </a>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
+                                        {{ $activity->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
+                                        <a href="{{ route('admin.users.activity.show', ['user' => $activity->user->id, 'activity' => $activity->id]) }}"
+                                            class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-hover">
+                                            {{ __('common.view') }}
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-6 py-8 text-center text-sm text-slate-400">
+                                        {{ __('common.no_data') }}</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div>
+            {{ $activities->links('admin::layouts.partials.pagination') }}
+        </div>
     </div>
-    <div>
-        {{ $activities->links('admin::layouts.partials.pagination') }}
-    </div>
-</div>
 @endsection

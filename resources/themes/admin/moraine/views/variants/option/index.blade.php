@@ -38,7 +38,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y-2 divide-billmora-2 bg-white">
-                        @foreach ($options as $option)
+                        @forelse ($options as $option)
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $loop->iteration }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $option->name }}</td>
@@ -51,7 +51,11 @@
                                 <x-admin::modal.trigger modal="deleteModal-{{ $option->id }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.delete') }}</x-admin::modal.trigger>
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="5" class="px-6 py-8 text-center text-sm text-slate-400">{{ __('common.no_data') }}</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

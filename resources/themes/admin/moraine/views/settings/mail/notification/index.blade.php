@@ -43,7 +43,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y-2 divide-billmora-2 bg-white">
-                            @foreach ($notifications as $notification)
+                            @forelse ($notifications as $notification)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $notification->key }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $notification->name }}</td>
@@ -60,7 +60,11 @@
                                     @endcan
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="4" class="px-6 py-8 text-center text-sm text-slate-400">{{ __('common.no_data') }}</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

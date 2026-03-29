@@ -60,7 +60,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y-2 divide-billmora-2 bg-white">
-                            @foreach ($users as $user)
+                            @forelse ($users as $user)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $user->id }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
@@ -83,7 +83,11 @@
                                     </a>
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="6" class="px-6 py-8 text-center text-sm text-slate-400">{{ __('common.no_data') }}</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
