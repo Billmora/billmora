@@ -78,7 +78,7 @@
                     <button 
                         type="button" 
                         x-on:click.stop="clear()" 
-                        class="hover:text-red-400 cursor-pointer flex-shrink-0"
+                        class="hover:text-red-400 cursor-pointer shrink-0"
                     >
                         <x-lucide-x class="w-auto h-4" />
                     </button>
