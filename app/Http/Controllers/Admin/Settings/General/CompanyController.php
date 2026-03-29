@@ -59,7 +59,6 @@ class CompanyController extends Controller
             'company_date_format' => ['required', Rule::in(array_keys(config('utils.dates')))],
             'company_timezone' => ['required', Rule::in(array_keys(config('utils.timezones')))],
             'company_language' => ['required', Rule::in(array_values($langsAllowed))],
-            'company_debug' => ['nullable', 'boolean'],
             'company_maintenance' => ['nullable', 'boolean'],
             'company_maintenance_url' => ['nullable', 'url'],
             'company_maintenance_message' => ['nullable', 'string'],
@@ -69,7 +68,6 @@ class CompanyController extends Controller
 
         Billmora::setEnv([
             'APP_LOCALE' => $validated['company_language'],
-            'APP_DEBUG' => $validated['company_debug'],
             'APP_TIMEZONE' => $validated['company_timezone'],
         ]);
 
