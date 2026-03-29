@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'title' => 'Authentication settings',
-    'description' => 'Manage user registration and social logins.',
+    'title' => 'Authentication Settings',
+    'description' => 'Manage user registration and social sign ins.',
     'tabs' => [
         'user' => 'User',
-        'social' => 'Social Login',
+        'social' => 'Social Sign In',
     ],
 
     'user_registration_label' => 'User Registration',
@@ -20,12 +20,12 @@ return [
     'user_billing_required_inputs_helper' => 'Select the fields that users must fill in as required. Unselected fields remain optional.',
 
     'social' => [
-        'title' => 'Social Login',
+        'title' => 'Social Sign In',
         'google' => 'Google',
         'discord' => 'Discord',
         'github' => 'GitHub',
         'enabled_label' => 'Enabled',
-        'enabled_helper' => 'Allow users to login using :provider.',
+        'enabled_helper' => 'Allow users to sign in using :provider.',
         'client_id_label' => 'Client ID',
         'client_secret_label' => 'Client Secret',
     ],
