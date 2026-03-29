@@ -2,14 +2,14 @@
 
 ## Supported Versions
 
-As Billmora is currently in active alpha development, only the latest
-alpha release receives security attention. Older alpha versions are not
+As Billmora is currently in active beta development, only the latest
+beta release receives security attention. Older beta versions are not
 maintained and should not be used in any environment.
 
-| Version         | Supported          |
-| --------------- | ------------------ |
-| 0.4.x (latest)  | :white_check_mark: |
-| < 0.4.0         | :x:                |
+| Version        | Supported          |
+| -------------- | ------------------ |
+| 0.6.x (latest) | :white_check_mark: |
+| < 0.6.0        | :x:                |
 
 > Once Billmora reaches a stable release, this policy will be updated
 > to reflect long-term supported versions.
