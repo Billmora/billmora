@@ -7,7 +7,7 @@ return [
         'service' => 'Service',
         'ticket' => 'Ticket',
     ],
-    'title' => 'Automation settings',
+    'title' => 'Automation Settings',
     'description' => 'Manage system automation, billing, and scheduling.',
 
     'time_of_day_label' => 'Automation Time of Day',
