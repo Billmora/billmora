@@ -36,13 +36,18 @@ RUN install-php-extensions \
 
 COPY --from=asset-builder --chown=www-data:www-data /app /var/www/html
 
-COPY .github/docker/entrypoint.sh /docker-entrypoint.d/10-ensure-env.sh
-RUN chmod +x /docker-entrypoint.d/10-ensure-env.sh
+COPY .github/docker/entrypoint.sh /etc/entrypoint.d/99-ensure-env.sh
+RUN chmod +x /etc/entrypoint.d/99-ensure-env.sh
 
 RUN rm -rf node_modules tests .git .github
 
+# Temporarily switch to www-data for safe Composer installation
+USER www-data
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 RUN chmod -R 775 storage bootstrap/cache
+
+# Privileges will be automatically dropped to www-data after initialization.
+USER root
 
 EXPOSE 8080
