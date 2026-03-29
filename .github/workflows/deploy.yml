@@ -1,9 +1,9 @@
-name: Build and Push Docker Image
+name: Deploy
 
 on:
   push:
-    branches: ["main"]
-    tags: ["v*"]
+    tags:
+      - "v*"
   workflow_dispatch:
 
 env:
