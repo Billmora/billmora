@@ -1,6 +1,6 @@
 {
-    "name": "Paypal Checkout",
-    "provider": "Paypal",
+    "name": "PayPal Checkout",
+    "provider": "PayPal",
     "type": "gateway",
     "version": "1.0.0",
     "description": "Accept payments via PayPal Checkout using the Orders API v2.",

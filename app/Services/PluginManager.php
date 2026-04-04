@@ -35,8 +35,8 @@ class PluginManager
                 
                 if (($manifest['type'] ?? '') === $type) {
                     $providerName = $manifest['provider'];
-                    $className = "Plugins\\{$folderName}\\{$providerName}\\{$providerName}" . ucfirst($type);
-                    
+                    $className = "Plugins\\{$folderName}\\" . Str::studly($providerName) . "\\" . Str::studly($providerName) . ucfirst($type);
+
                     $schema = [];
                     if (class_exists($className)) {
                         $instance = new $className(app());
@@ -62,7 +62,7 @@ class PluginManager
         $typePlural = Str::plural(ucfirst($plugin->type));
         $provider = $plugin->provider;
 
-        $className = "Plugins\\{$typePlural}\\{$provider}\\{$provider}" . ucfirst($plugin->type);
+        $className = "Plugins\\{$typePlural}\\" . Str::studly($provider) . "\\" . Str::studly($provider) . ucfirst($plugin->type);
 
         if (class_exists($className)) {
             $instance = new $className(app());

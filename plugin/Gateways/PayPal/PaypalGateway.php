@@ -1,6 +1,6 @@
 <?php
 
-namespace Plugins\Gateways\Paypal;
+namespace Plugins\Gateways\PayPal;
 
 use App\Contracts\GatewayInterface;
 use App\Support\AbstractPlugin;
@@ -8,7 +8,7 @@ use App\Support\GatewayCallbackResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class PaypalGateway extends AbstractPlugin implements GatewayInterface
+class PayPalGateway extends AbstractPlugin implements GatewayInterface
 {
     /*
     |--------------------------------------------------------------------------
