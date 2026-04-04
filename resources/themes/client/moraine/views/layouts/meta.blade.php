@@ -1,4 +1,5 @@
 {{-- Meta --}}
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <link rel="icon" href="{{ Billmora::getGeneral('company_favicon') }}">
 <title>@yield('title', 'Client Area') | {{ Billmora::getGeneral('company_name') }}</title>
 <!-- Styles -->

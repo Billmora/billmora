@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Controllers\Admin\BrowseController;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         \Laravel\Sanctum\Sanctum::usePersonalAccessTokenModel(\App\Models\PersonalAccessToken::class);
+
+        if (str_starts_with(config('app.url'), 'https://')) {
+            URL::forceScheme('https');
+        }
 
         View::composer('admin::components.browse', function ($view) {
             $view->with('browseItems', app(BrowseController::class)->getItems());

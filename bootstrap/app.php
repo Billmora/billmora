@@ -20,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\PreferenceMiddleware::class,
             \App\Http\Middleware\ServiceScalingMiddleware::class,
         ]);
+        $middleware->trustProxies(at: '*');
         $middleware->alias([
             'permission' => Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role' => Spatie\Permission\Middleware\RoleMiddleware::class,
