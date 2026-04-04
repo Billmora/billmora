@@ -17,7 +17,7 @@ class BillmoraService
     /**
      * Application version.
      */
-    public const VERSION = '0.6.0-beta.2';
+    public const VERSION = '0.6.0';
 
     /**
      * Cache key prefix for settings.
