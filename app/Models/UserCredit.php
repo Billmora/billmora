@@ -18,6 +18,15 @@ class UserCredit extends Model
     ];
 
     /**
+     * The attributes that should have default values.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'balance' => 0,
+    ];
+
+    /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
