@@ -13,7 +13,7 @@
                     </div>
                     <input type="text" name="search" id="search" placeholder="{{ __('admin/common.search') }}"
                         value="{{ request('search') }}"
-                        class="w-full px-6 py-3 pl-10 bg-white text-slate-700 placeholder:text-slate-500 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary-500">
+                        class="w-full px-4 py-2.5 pl-10 bg-white text-slate-700 placeholder:text-slate-500 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary-500">
                     <div class="absolute top-1/2 -translate-y-1/2 right-1.5">
                         <button type="submit"
                             class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">{{ __('common.submit') }}</button>

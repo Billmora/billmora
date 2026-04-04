@@ -1,11 +1,11 @@
-<header class="sticky z-90 top-5 right-0 flex justify-between items-center w-full bg-white p-4 border-2 border-billmora-2 rounded-2xl">
+<header class="sticky z-90 top-5 right-0 flex justify-between items-center w-full bg-white p-3 border-2 border-billmora-2 rounded-2xl">
   <!-- Toggle Sidebar -->
   <button id="toggleSidebar" class="block xl:hidden bg-billmora-1 hover:bg-billmora-primary-500 p-2.5 mr-4 text-slate-600 hover:text-white rounded-full transition-colors duration-300 cursor-pointer">
     <x-lucide-menu class="w-auto h-5" />
   </button>
 
   <!-- Browse (DESKTOP) -->
-  <div class="hidden md:block w-[400px] mr-auto">
+  <div class="hidden md:block w-[320px] mr-auto">
     <button type="button" id="browse" class="flex gap-2 items-center w-full bg-billmora-1 px-2 py-2 text-slate-500 text-start outline-none ring-billmora-primary-500 hover:ring-2 rounded-lg transition-all cursor-pointer group">
       <x-lucide-search class="w-auto h-5 pointer-events-none group-hover:text-billmora-primary-500 transition-colors duration-150" />
       <span class="text-slate-400">{{ __('admin/common.browse') }}</span>
@@ -35,10 +35,10 @@
     <button type="button" class="cursor-pointer ml-4"
         x-on:click="isOpen = ! isOpen" 
         aria-haspopup="true">
-      <img src="{{ auth()->user()->avatar }}" alt="billmora profile" class="w-10 h-10 rounded-full">
+      <img src="{{ auth()->user()->avatar }}" alt="billmora profile" class="w-8 h-8 rounded-full">
     </button>
     <!-- Dropdown Menu -->
-    <div class="absolute top-16 right-0 flex w-[300px] flex-col gap-2 bg-white p-4 border-2 border-billmora-2 rounded-2xl" role="menu"
+    <div class="absolute top-14 right-0 flex w-[260px] flex-col gap-2 bg-white p-3 border-2 border-billmora-2 rounded-2xl" role="menu"
         x-cloak x-show="isOpen || openedWithKeyboard"
         x-transition
         x-on:click.outside="isOpen = false, openedWithKeyboard = false">

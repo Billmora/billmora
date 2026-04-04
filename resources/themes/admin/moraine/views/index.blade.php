@@ -3,41 +3,41 @@
 @section('title', 'Admin Dashboard')
 
 @section('body')
-<div class="grid gap-5">
+<div class="grid gap-4">
     <h2 class="text-2xl font-bold text-slate-600">{{ __('admin/dashboard.welcome', ['name' => Auth::user()->first_name]) }}</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div class="bg-white rounded-lg p-6 border-b-4 border-green-500">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-lg p-5 border-b-4 border-green-500">
             <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">{{ __('admin/dashboard.revenue_this_month') }}</p>
             <h3 class="text-3xl font-bold text-slate-600 mt-2">{{ $formattedRevenue }}</h3>
         </div>
-        <div class="bg-white rounded-lg p-6 border-b-4 border-red-500">
+        <div class="bg-white rounded-lg p-5 border-b-4 border-red-500">
             <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">{{ __('admin/dashboard.unpaid_invoices') }}</p>
             <div class="flex items-baseline mt-2">
                 <h3 class="text-3xl font-bold text-slate-600">{{ $unpaidInvoicesCount }}</h3>
                 <span class="ml-2 text-sm text-red-500 font-semibold">{{ __('admin/dashboard.overdue_badge', ['count' => $overdueInvoicesCount]) }}</span>
             </div>
         </div>
-        <div class="bg-white rounded-lg p-6 border-b-4 border-blue-500">
+        <div class="bg-white rounded-lg p-5 border-b-4 border-blue-500">
             <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">{{ __('admin/dashboard.active_services') }}</p>
             <div class="flex items-baseline mt-2">
                 <h3 class="text-3xl font-bold text-slate-600">{{ $activeServices }}</h3>
                 <span class="ml-2 text-sm text-orange-500 font-semibold">{{ __('admin/dashboard.suspended_badge', ['count' => $suspendedServices]) }}</span>
             </div>
         </div>
-        <div class="bg-white rounded-lg p-6 border-b-4 border-purple-500">
+        <div class="bg-white rounded-lg p-5 border-b-4 border-purple-500">
             <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">{{ __('admin/dashboard.pending_tickets') }}</p>
             <h3 class="text-3xl font-bold text-slate-600 mt-2">{{ $pendingTickets }}</h3>
         </div>
     </div>
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <div class="h-fit bg-white border-2 border-billmora-2 rounded-2xl p-6 lg:col-span-2">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
+        <div class="h-fit bg-white border-2 border-billmora-2 rounded-2xl p-5 lg:col-span-2">
             <h3 class="text-lg font-semibold text-slate-600 mb-4">{{ __('admin/dashboard.revenue_overview', ['year' => now()->year]) }}</h3>
-            <div class="relative h-80 w-full">
+            <div class="relative h-64 w-full">
                 <canvas id="revenueChart"></canvas>
             </div>
         </div>
-        <div class="flex flex-col gap-6 lg:col-span-1">
-            <div class="bg-white border-2 border-billmora-2 rounded-2xl p-6">
+        <div class="flex flex-col gap-5 lg:col-span-1">
+            <div class="bg-white border-2 border-billmora-2 rounded-2xl p-5">
                 <h3 class="text-lg font-semibold text-slate-600 mb-4">{{ __('admin/dashboard.billing_summary') }}</h3>
                 <ul>
                     <li class="flex justify-between items-center">
@@ -61,7 +61,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="bg-white border-2 border-billmora-2 rounded-2xl p-6">
+            <div class="bg-white border-2 border-billmora-2 rounded-2xl p-5">
                 <h3 class="text-lg font-semibold text-slate-600 mb-4">{{ __('admin/dashboard.system_summary') }}</h3>
                 <ul>
                     <li class="flex justify-between items-center">

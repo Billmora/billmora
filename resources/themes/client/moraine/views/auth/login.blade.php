@@ -9,10 +9,10 @@
 </head>
 <body class="bg-billmora-bg">
     <div class="flex flex-col lg:flex-row-reverse w-full min-h-dvh">
-        <form action="{{ route('client.login.store') }}" method="POST" class="w-full lg:w-1/2 h-auto p-8">
+        <form action="{{ route('client.login.store') }}" method="POST" class="w-full lg:w-1/2 h-auto p-6">
             @csrf
-            <div class="max-w-140 h-full flex flex-col justify-between mx-auto">
-                <a href="{{ route('portal.home') }}" class="flex gap-2 items-center mb-10 lg:mb-0 text-slate-500 font-semibold">
+            <div class="max-w-120 h-full flex flex-col justify-between mx-auto">
+                <a href="{{ route('portal.home') }}" class="flex gap-2 items-center mb-8 lg:mb-0 text-slate-500 font-semibold">
                     <x-lucide-chevron-left class="w-auto h-5" />
                     <span>{{ __('common.back_to', ['page' => __('common.page.portal')]) }}</span>
                 </a>
@@ -30,7 +30,7 @@
                             @endif
                         </x-client::alert>
                     @endif
-                    <h3 class="font-semibold text-2xl text-slate-700">{{ __('auth.page.login') }}</h3>
+                    <h3 class="font-semibold text-xl text-slate-700">{{ __('auth.page.login') }}</h3>
                     <div class="grid gap-3">
                         <x-client::input type="email" name="email" label="{{ __('common.email') }}" required />
                         <x-client::input type="password" name="password" label="{{ __('common.password') }}" required />
@@ -75,10 +75,10 @@
                 </div>
             </div>
         </form>
-        <div class="w-auto max-w-140 lg:max-w-none lg:w-1/2 h-auto lg:flex justify-center bg-billmora-primary-500 m-8 lg:m-0 mx-8 sm:mx-auto rounded-2xl lg:rounded-none lg:rounded-br-[100px]">
-            <div class="max-w-140 my-8 lg:my-auto mx-8 space-y-6">
-                <img src="{{ $clientThemeConfig['auth_logo_url'] }}" alt="brand logo" class="w-auto h-32">
-                <span class="text-2xl md:text-3xl lg:text-4xl font-bold text-white">{{ $clientThemeConfig['auth_message_title'] }}</span>
+        <div class="w-auto max-w-120 lg:max-w-none lg:w-1/2 h-auto lg:flex justify-center bg-billmora-primary-500 m-8 lg:m-0 mx-8 sm:mx-auto rounded-2xl lg:rounded-none lg:rounded-br-[100px]">
+            <div class="max-w-120 my-8 lg:my-auto mx-8 space-y-5">
+                <img src="{{ $clientThemeConfig['auth_logo_url'] }}" alt="brand logo" class="w-auto h-24">
+                <span class="text-xl md:text-2xl lg:text-3xl font-bold text-white">{{ $clientThemeConfig['auth_message_title'] }}</span>
                 <p class="text-slate-200">{{ $clientThemeConfig['auth_message_description'] }}</p>
             </div>
         </div>

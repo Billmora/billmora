@@ -7,6 +7,10 @@
 @source '../../../../../plugin/**/resources/views/**/*.blade.php';
 @source '../../../../../resources/themes/*/config.blade.php';
 
+html {
+    font-size: 14px;
+}
+
 :root {
     /* Background & Text default (Light) */
     --billmora-bg: #ffffff;

@@ -1,4 +1,4 @@
-<header class="sticky z-90 top-5 right-0 flex justify-between items-center w-full bg-billmora-bg p-4 border-2 border-billmora-2 rounded-2xl">
+<header class="sticky z-90 top-5 right-0 flex justify-between items-center w-full bg-billmora-bg p-3 border-2 border-billmora-2 rounded-2xl">
   <!-- Toggle Sidebar -->
   <button id="toggleSidebar" class="block xl:hidden bg-billmora-1 hover:bg-billmora-primary-500 p-2.5 mr-4 text-slate-600 hover:text-white rounded-full transition-colors duration-300 cursor-pointer">
     <x-lucide-menu class="w-auto h-5" />
@@ -8,7 +8,7 @@
       <x-lucide-shopping-cart class="w-5 h-auto" />
     </a>
     {{-- Toggle Preferences --}}
-    <x-client::modal.trigger modal="preferenceModal" class="flex gap-3 items-center bg-billmora-2 hover:bg-billmora-primary-500 px-3 py-2 ml-auto text-billmora-primary-500 hover:text-white font-semibold rounded-lg transition-colors duration-300 group cursor-pointer">
+    <x-client::modal.trigger modal="preferenceModal" class="flex gap-3 items-center bg-billmora-2 hover:bg-billmora-primary-500 px-2.5 py-1.5 ml-auto text-billmora-primary-500 hover:text-white font-semibold rounded-lg transition-colors duration-300 group cursor-pointer">
       <x-dynamic-component component="flag-country-{{ strtolower($langActive['country']) }}" class="w-auto h-5 pointer-events-none" />
       <div class="w-1 h-5 bg-billmora-3"></div>
       <span>{{ $currencyActive['code'] }}</span>
@@ -22,10 +22,10 @@
       <button type="button" class="cursor-pointer ml-4"
           x-on:click="isOpen = ! isOpen" 
           aria-haspopup="true">
-        <img src="{{ auth()->user()->avatar }}" alt="user profile" class="w-10 h-10 rounded-full">
+        <img src="{{ auth()->user()->avatar }}" alt="user profile" class="w-8 h-8 rounded-full">
       </button>
       <!-- Dropdown Menu -->
-      <div class="absolute top-16 right-0 flex w-[300px] flex-col gap-2 bg-billmora-bg p-4 border-2 border-billmora-2 rounded-2xl" role="menu"
+      <div class="absolute top-14 right-0 flex w-[260px] flex-col gap-2 bg-billmora-bg p-3 border-2 border-billmora-2 rounded-2xl" role="menu"
           x-cloak x-show="isOpen || openedWithKeyboard"
           x-transition
           x-on:click.outside="isOpen = false, openedWithKeyboard = false">

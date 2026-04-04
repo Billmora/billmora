@@ -4,8 +4,8 @@
 
 @section('body')
 <div class="flex flex-col lg:flex-row gap-5">
-    <div class="w-full lg:w-1/4 h-fit grid gap-6 items-center bg-billmora-bg p-8 text-center border-2 border-billmora-2 rounded-2xl">
-        <img src="{{ $user->avatar }}?s=128" alt="user avatar" class="rounded-full w-32 h-auto mx-auto">
+    <div class="w-full lg:w-1/4 h-fit grid gap-5 items-center bg-billmora-bg p-6 text-center border-2 border-billmora-2 rounded-2xl">
+        <img src="{{ $user->avatar }}?s=128" alt="user avatar" class="rounded-full w-24 h-auto mx-auto">
         <div class="flex flex-col">
             <span class="text-xl text-slate-600 font-bold break-all">{{ $user->fullname }}</span>
             <span class="text-md text-slate-500 font-semibold break-all">{{ $user->email }}</span>
@@ -87,21 +87,21 @@
                     <table class="min-w-full divide-y divide-billmora-2">
                         <thead class="bg-billmora-2">
                             <tr>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_number_label') }}</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_catalog_label') }}</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_package_label') }}</th>
-                                <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_next_due_date_label') }}</th>
-                                <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
+                                <th scope="col" class="px-4 py-3 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_number_label') }}</th>
+                                <th scope="col" class="px-4 py-3 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_catalog_label') }}</th>
+                                <th scope="col" class="px-4 py-3 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_package_label') }}</th>
+                                <th scope="col" class="px-4 py-3 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.service_next_due_date_label') }}</th>
+                                <th scope="col" class="px-4 py-3 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y-2 divide-billmora-2 bg-billmora-bg">
                             @forelse ($activeServices as $service)
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->service_number }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->package->catalog->name }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->name }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $service->next_due_date->format(Billmora::getGeneral('company_date_format')) }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-800">{{ $service->service_number }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-800">{{ $service->package->catalog->name }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-800">{{ $service->name }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-800">{{ $service->next_due_date->format(Billmora::getGeneral('company_date_format')) }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                         <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">{{ __('common.manage') }}</a>
                                     </td>
                                 </tr>
@@ -128,19 +128,19 @@
                         <table class="min-w-full divide-y divide-billmora-2">
                             <thead class="bg-billmora-2">
                                 <tr>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.invoice_number_label') }}</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.invoice_total_label') }}</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.invoice_status_label') }}</th>
-                                    <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
+                                    <th scope="col" class="px-4 py-3 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.invoice_number_label') }}</th>
+                                    <th scope="col" class="px-4 py-3 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.invoice_total_label') }}</th>
+                                    <th scope="col" class="px-4 py-3 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.invoice_status_label') }}</th>
+                                    <th scope="col" class="px-4 py-3 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y-2 divide-billmora-2 bg-billmora-bg">
                                 @forelse ($unpaidInvoices as $invoice)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $invoice->invoice_number }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ Currency::format($invoice->total, $invoice->currency) }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ ucwords($invoice->status) }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-800">{{ $invoice->invoice_number }}</td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-800">{{ Currency::format($invoice->total, $invoice->currency) }}</td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-800">{{ ucwords($invoice->status) }}</td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                             <a href="{{ route('client.invoices.show', ['invoice' => $invoice->invoice_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">
                                                 {{ __('common.manage') }}
                                             </a>
@@ -168,19 +168,19 @@
                         <table class="min-w-full divide-y divide-billmora-2">
                             <thead class="bg-billmora-2">
                                 <tr>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.ticket_number_label') }}</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.ticket_subject_label') }}</th>
-                                    <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.ticket_status_label') }}</th>
-                                    <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
+                                    <th scope="col" class="px-4 py-3 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.ticket_number_label') }}</th>
+                                    <th scope="col" class="px-4 py-3 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.ticket_subject_label') }}</th>
+                                    <th scope="col" class="px-4 py-3 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('client/dashboard.ticket_status_label') }}</th>
+                                    <th scope="col" class="px-4 py-3 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y-2 divide-billmora-2 bg-billmora-bg">
                                 @forelse ($openTickets as $ticket)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $ticket->ticket_number }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $ticket->subject }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ ucwords($ticket->status) }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-800">{{ $ticket->ticket_number }}</td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-800">{{ $ticket->subject }}</td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-800">{{ ucwords($ticket->status) }}</td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                             <a href="{{ route('client.tickets.reply', ['ticket' => $ticket->ticket_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">
                                                 {{ __('common.manage') }}
                                             </a>
