@@ -25,10 +25,16 @@ class OptionCreate extends Component
 
         $oldPricings = old('pricings', []);
 
-        if (empty($oldPricings)) {
+        if (!empty($oldPricings)) {
+            $this->pricings = [];
+            foreach ($oldPricings as $pricing) {
+                $pricing['uid'] = $pricing['uid'] ?? uniqid('uid_');
+                $this->pricings[] = $pricing;
+            }
+        }
+
+        if (empty($this->pricings)) {
             $this->addPrice();
-        } else {
-            $this->pricings = $oldPricings;
         }
     }
 
@@ -60,6 +66,7 @@ class OptionCreate extends Component
         }
 
         return [
+            'uid' => uniqid('uid_'),
             'name' => '',
             'type' => 'free',
             'time_interval' => '',
@@ -87,10 +94,14 @@ class OptionCreate extends Component
      * @param  int  $index  The zero-based index of the pricing entry to remove
      * @return void
      */
-    public function removePrice($index)
+    public function removePrice($uid)
     {
-        unset($this->pricings[$index]);
-        $this->pricings = array_values($this->pricings);
+        $this->pricings = collect($this->pricings)
+            ->filter(function ($pricing) use ($uid) {
+                return ($pricing['uid'] ?? '') !== $uid;
+            })
+            ->values()
+            ->toArray();
 
         if (empty($this->pricings)) {
             $this->addPrice();

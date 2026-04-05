@@ -34,7 +34,8 @@ class OptionEdit extends Component
 
         $option->load(['prices' => fn($q) => $q->orderBy('id')]);
 
-        $pricingsFromDb = $option->prices->map(function ($price) use ($currenciesList) {
+        $pricingsFromDb = [];
+        foreach ($option->prices as $price) {
             $ratesDb = is_string($price->rates) ? json_decode($price->rates, true) : ($price->rates ?? []);
             $rates = [];
 
@@ -47,7 +48,8 @@ class OptionEdit extends Component
                 ];
             }
 
-            return [
+            $pricingsFromDb[] = [
+                'uid' => 'uid_' . $price->id,
                 'id' => $price->id,
                 'name' => $price->name,
                 'type' => $price->type,
@@ -55,9 +57,19 @@ class OptionEdit extends Component
                 'billing_period' => $price->billing_period,
                 'rates' => $rates,
             ];
-        })->toArray();
+        }
 
-        $this->pricings = old('pricings', $pricingsFromDb);
+        $oldPricings = old('pricings');
+
+        if (!empty($oldPricings)) {
+            $this->pricings = [];
+            foreach ($oldPricings as $pricing) {
+                $pricing['uid'] = $pricing['uid'] ?? uniqid('uid_');
+                $this->pricings[] = $pricing;
+            }
+        } else {
+            $this->pricings = $pricingsFromDb;
+        }
 
         if (empty($this->pricings)) {
             $this->addPrice();
@@ -92,6 +104,7 @@ class OptionEdit extends Component
         }
 
         return [
+            'uid' => uniqid('uid_'),
             'name' => '',
             'type' => 'free',
             'time_interval' => '',
@@ -116,13 +129,17 @@ class OptionEdit extends Component
      * Automatically appends a blank pricing entry if the list becomes empty
      * to ensure at least one pricing row is always present.
      *
-     * @param  int  $index  The zero-based index of the pricing entry to remove
+     * @param  string  $uid  The unique identifier of the pricing entry to remove
      * @return void
      */
-    public function removePrice($index)
+    public function removePrice($uid)
     {
-        unset($this->pricings[$index]);
-        $this->pricings = array_values($this->pricings);
+        $this->pricings = collect($this->pricings)
+            ->filter(function ($pricing) use ($uid) {
+                return ($pricing['uid'] ?? '') !== $uid;
+            })
+            ->values()
+            ->toArray();
 
         if (empty($this->pricings)) {
             $this->addPrice();
