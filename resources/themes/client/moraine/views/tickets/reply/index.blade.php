@@ -133,7 +133,8 @@
                         <div class="flex items-end gap-3">
                             <x-client::input name="ticket_attachments[]"
                                 label="{{ __('client/tickets.ticket_attachments_label') }}" type="file"
-                                accept="{{ Billmora::getGeneral('ticket_allowed_attachment_types') }}" />
+                                accept="{{ Billmora::getGeneral('ticket_allowed_attachment_types') }}"
+                                error="{{ $errors->first('ticket_attachments.*') }}" />
                             <button type="button" x-on:click="remove(attachment.id)" x-show="attachments.length > 1"
                                 class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
                                 title="{{ __('common.remove') }}">
