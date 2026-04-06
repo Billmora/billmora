@@ -76,10 +76,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/blade.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/nginx.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
-<script type='text/javascript'
-  src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>
-@foreach ($langs as $lang)
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/4.3.1/js/languages/{{ explode('_', $lang['lang'])[0] }}.min.js"></script>
-@endforeach
+
 @stack('scripts')
