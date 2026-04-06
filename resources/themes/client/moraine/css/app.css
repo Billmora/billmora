@@ -71,23 +71,140 @@ html {
     --color-billmora-primary-950: var(--billmora-primary-950);
 }
 
-.fr-box {
-    @apply border-2 border-billmora-2; 
+/* ── TipTap Editor Shell ── */
+.tiptap-editor {
+    @apply border-2 border-billmora-2 rounded-lg overflow-hidden;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
 }
-.fr-error .fr-box {
+.tiptap-has-error .tiptap-editor {
     @apply border-red-400;
 }
-.fr-toolbar .fr-newline {
-    @apply hidden!;
+.tiptap-toolbar {
+    @apply flex flex-wrap items-center gap-0.5 p-1.5 border-b-2 border-billmora-2 bg-billmora-1;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
-.fr-box .fr-toolbar {
-    @apply border-x-0! border-t-0! border-b-2! border-billmora-2!;
+.tiptap-tb-btn {
+    @apply flex items-center justify-center w-7 h-7 rounded text-slate-600 text-xs cursor-pointer transition-colors;
 }
-.fr-box .fr-second-toolbar {
-    @apply border-x-0! border-b-0! border-t-2! border-billmora-2!;
+.tiptap-tb-btn:hover,
+.tiptap-tb-btn.is-active {
+    @apply bg-billmora-primary-500 text-white;
 }
-.fr-box .fr-wrapper {
-    @apply border-none!;
+.tiptap-tb-text {
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1;
+}
+.tiptap-tb-sep {
+    @apply w-px h-5 bg-billmora-3 mx-0.5;
+    display: inline-block;
+}
+/* Dropdowns */
+.tiptap-tb-dropdown-wrap {
+    position: relative;
+    display: inline-flex;
+}
+.tiptap-tb-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 50;
+    @apply bg-white border-2 border-billmora-2 rounded-lg shadow-lg;
+    min-width: 140px;
+}
+.tiptap-tb-dropdown.open {
+    display: block;
+}
+.tiptap-tb-dropdown-list {
+    @apply py-1;
+}
+.tiptap-tb-dropdown-item {
+    @apply w-full text-left px-3 py-1.5 text-sm text-slate-600 hover:bg-billmora-1 cursor-pointer;
+}
+/* Table grid picker */
+.tiptap-tb-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1.5rem);
+    @apply gap-0.5 p-2;
+}
+.tiptap-table-cell {
+    @apply w-6 h-6 border border-billmora-3 rounded-sm cursor-pointer transition-colors;
+}
+.tiptap-table-cell.hover {
+    @apply bg-billmora-primary-500 border-billmora-primary-500;
+}
+.tiptap-table-hint {
+    @apply text-center text-xs text-slate-400 pb-1;
+}
+/* Editor content area */
+.tiptap-content-area {
+    @apply flex-1 p-3 overflow-y-auto;
+    min-height: 460px;
+}
+.tiptap-content-area:focus-within {
+    outline: none;
+}
+/* ProseMirror element styles */
+.tiptap-content-area .ProseMirror {
+    @apply outline-none min-h-full;
+}
+.tiptap-content-area .ProseMirror h1 { @apply text-2xl font-bold my-2; }
+.tiptap-content-area .ProseMirror h2 { @apply text-xl font-bold my-2; }
+.tiptap-content-area .ProseMirror h3 { @apply text-lg font-semibold my-2; }
+.tiptap-content-area .ProseMirror p  { @apply my-1; }
+.tiptap-content-area .ProseMirror ul { @apply list-disc pl-5 my-1; }
+.tiptap-content-area .ProseMirror ol { @apply list-decimal pl-5 my-1; }
+.tiptap-content-area .ProseMirror blockquote {
+    @apply border-l-4 border-billmora-primary-400 pl-4 my-2 text-slate-500 italic;
+}
+.tiptap-content-area .ProseMirror hr {
+    @apply border-t-2 border-billmora-2 my-3;
+}
+.tiptap-content-area .ProseMirror a {
+    @apply text-billmora-primary-500 underline;
+}
+.tiptap-content-area .ProseMirror img {
+    @apply max-w-full rounded;
+}
+.tiptap-content-area .ProseMirror code:not(pre code) {
+    @apply bg-billmora-2 text-billmora-primary-600 text-sm font-mono px-1.5 py-0.5 rounded;
+}
+.tiptap-content-area .ProseMirror pre {
+    @apply bg-[#0d1117] rounded-xl p-3 my-2 overflow-x-auto;
+}
+.tiptap-content-area .ProseMirror pre code {
+    @apply block text-sm font-mono text-gray-100 bg-transparent p-0 whitespace-pre;
+}
+/* Tables */
+.tiptap-content-area .ProseMirror table {
+    @apply w-full border-collapse my-2 text-sm;
+}
+.tiptap-content-area .ProseMirror th,
+.tiptap-content-area .ProseMirror td {
+    @apply border border-billmora-3 px-2 py-1 text-left;
+}
+.tiptap-content-area .ProseMirror th {
+    @apply bg-billmora-1 font-semibold;
+}
+.tiptap-content-area .ProseMirror .selectedCell {
+    @apply bg-billmora-3;
+}
+/* Fullscreen */
+.tiptap-fullscreen {
+    position: fixed !important;
+    inset: 0;
+    z-index: 9999;
+    border-radius: 0 !important;
+    border: none !important;
+    background-color: var(--color-billmora-bg);
+}
+.tiptap-fullscreen .tiptap-content-area {
+    min-height: calc(100dvh - 60px);
 }
 
 ::-webkit-scrollbar {
@@ -124,18 +241,31 @@ html {
     scrollbar-color: var(--color-billmora-primary-500) transparent;
 }
 
-/* Froala Editor Content */
+/* TipTap Rendered Content (ticket messages etc.) */
 @layer components {
-    .froala-content {
+    .tiptap-content {
         @apply min-w-0 max-w-full overflow-hidden;
     }
-    .froala-content pre {
+    .tiptap-content pre {
         @apply bg-[#0d1117] rounded-xl p-2 my-3 overflow-x-auto max-w-full;
     }
-    .froala-content pre code {
+    .tiptap-content pre code {
         @apply block text-sm font-mono text-gray-100 bg-transparent p-0 whitespace-pre;
     }
-    .froala-content code:not(pre code) {
+    .tiptap-content code:not(pre code) {
         @apply bg-billmora-2 text-billmora-primary-600 text-sm font-mono px-1.5 py-0.5 rounded whitespace-normal;
     }
+    .tiptap-content a { @apply text-billmora-primary-500 underline; }
+    .tiptap-content h1 { @apply text-2xl font-bold my-2; }
+    .tiptap-content h2 { @apply text-xl font-bold my-2; }
+    .tiptap-content h3 { @apply text-lg font-semibold my-2; }
+    .tiptap-content ul { @apply list-disc pl-5 my-1; }
+    .tiptap-content ol { @apply list-decimal pl-5 my-1; }
+    .tiptap-content blockquote {
+        @apply border-l-4 border-billmora-primary-400 pl-4 my-2 text-slate-500 italic;
+    }
+    .tiptap-content table { @apply w-full border-collapse my-2 text-sm; }
+    .tiptap-content th,
+    .tiptap-content td { @apply border border-billmora-3 px-2 py-1 text-left; }
+    .tiptap-content th { @apply bg-billmora-1 font-semibold; }
 }

@@ -25,7 +25,7 @@
                                         @endif
                                     </span>
                                 </div>
-                                <div class="froala-content">{!! $message->message !!}</div>
+                                <div class="tiptap-content">{!! $message->message !!}</div>
                                 @if ($message->attachments->isNotEmpty())
                                     <div class="flex flex-wrap gap-2">
                                         @foreach ($message->attachments as $attachment)
@@ -75,7 +75,7 @@
                                         Client
                                     </span>
                                 </div>
-                                <div class="froala-content">{!! $message->message !!}</div>
+                                <div class="tiptap-content">{!! $message->message !!}</div>
                                 @if ($message->attachments->isNotEmpty())
                                     <div class="flex flex-wrap gap-2">
                                         @foreach ($message->attachments as $attachment)
