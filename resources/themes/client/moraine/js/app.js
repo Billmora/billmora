@@ -1,4 +1,5 @@
 import Alpine from "alpinejs";
+import "./editor.js";
 
 document.addEventListener("alpine:init", () => {
     Alpine.store("modal", {
