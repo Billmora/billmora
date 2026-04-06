@@ -16,6 +16,20 @@
         "vite": "^7.3.1"
     },
     "dependencies": {
-        "alpinejs": "^3.14.9"
+        "@tiptap/core": "^2.27.2",
+        "@tiptap/extension-code-block-lowlight": "^2.27.2",
+        "@tiptap/extension-color": "^2.27.2",
+        "@tiptap/extension-image": "^2.27.2",
+        "@tiptap/extension-link": "^2.27.2",
+        "@tiptap/extension-table": "^2.27.2",
+        "@tiptap/extension-table-cell": "^2.27.2",
+        "@tiptap/extension-table-header": "^2.27.2",
+        "@tiptap/extension-table-row": "^2.27.2",
+        "@tiptap/extension-text-align": "^2.27.2",
+        "@tiptap/extension-text-style": "^2.27.2",
+        "@tiptap/extension-underline": "^2.27.2",
+        "@tiptap/starter-kit": "^2.27.2",
+        "alpinejs": "^3.14.9",
+        "lowlight": "^2.9.0"
     }
 }
