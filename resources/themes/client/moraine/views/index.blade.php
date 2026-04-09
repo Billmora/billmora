@@ -100,7 +100,7 @@
                                     <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-800">{{ $service->service_number }}</td>
                                     <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-800">{{ $service->package->catalog->name }}</td>
                                     <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-800">{{ $service->name }}</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-800">{{ $service->next_due_date->format(Billmora::getGeneral('company_date_format')) }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-slate-800">{{ $service->next_due_date?->format(Billmora::getGeneral('company_date_format')) }}</td>
                                     <td class="px-4 py-3 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                         <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600">{{ __('common.manage') }}</a>
                                     </td>
