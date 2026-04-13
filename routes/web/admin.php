@@ -245,6 +245,54 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     });
 
     /**
+     * Admin TLDs interface routes.
+     *
+     * Prefix: /admin/tlds
+     */
+    Route::group(['prefix' => 'tlds'], function () {
+        Route::get('/', [Admin\TldsController::class, 'index'])->name('admin.tlds');
+        Route::get('/create', [Admin\TldsController::class, 'create'])->name('admin.tlds.create');
+        Route::post('/create', [Admin\TldsController::class, 'store'])->name('admin.tlds.store');
+        Route::get('/{tld}/edit', [Admin\TldsController::class, 'edit'])->name('admin.tlds.edit');
+        Route::put('/{tld}/edit', [Admin\TldsController::class, 'update'])->name('admin.tlds.update');
+        Route::delete('/{tld}', [Admin\TldsController::class, 'destroy'])->name('admin.tlds.destroy');
+    });
+
+    /**
+     * Admin registrants (domain orders) interface routes.
+     *
+     * Prefix: /admin/registrants
+     */
+    Route::group(['prefix' => 'registrants'], function () {
+        Route::get('/', [Admin\RegistrantsController::class, 'index'])->name('admin.registrants');
+        Route::get('/create', [Admin\RegistrantsController::class, 'create'])->name('admin.registrants.create_manual');
+        Route::post('/create', [Admin\RegistrantsController::class, 'store'])->name('admin.registrants.store');
+        Route::get('/{registrant}/edit', [Admin\RegistrantsController::class, 'edit'])->name('admin.registrants.edit');
+        Route::put('/{registrant}/edit', [Admin\RegistrantsController::class, 'update'])->name('admin.registrants.update');
+        Route::delete('/{registrant}', [Admin\RegistrantsController::class, 'destroy'])->name('admin.registrants.destroy');
+
+        Route::post('/{registrant}/registrar/create', [Admin\Registrants\RegistrarController::class, 'create'])->name('admin.registrants.registrar.create');
+        Route::post('/{registrant}/registrar/transfer', [Admin\Registrants\RegistrarController::class, 'transfer'])->name('admin.registrants.registrar.transfer');
+        Route::post('/{registrant}/registrar/renew', [Admin\Registrants\RegistrarController::class, 'renew'])->name('admin.registrants.registrar.renew');
+        Route::post('/{registrant}/registrar/sync', [Admin\Registrants\RegistrarController::class, 'sync'])->name('admin.registrants.registrar.sync');
+    });
+
+    /**
+     * Admin registrars (plugin) interface routes.
+     *
+     * Prefix: /admin/registrars
+     */
+    Route::group(['prefix' => 'registrars'], function () {
+        Route::get('/', [Admin\RegistrarsController::class, 'index'])->name('admin.registrars');
+        Route::get('/create', [Admin\RegistrarsController::class, 'create'])->name('admin.registrars.create');
+        Route::post('/create', [Admin\RegistrarsController::class, 'store'])->name('admin.registrars.store');
+        Route::get('/{registrar}/edit', [Admin\RegistrarsController::class, 'edit'])->name('admin.registrars.edit');
+        Route::put('/{registrar}/edit', [Admin\RegistrarsController::class, 'update'])->name('admin.registrars.update');
+        Route::post('/{registrar}/test', [Admin\RegistrarsController::class, 'testConnection'])->name('admin.registrars.test');
+        Route::delete('/{registrar}', [Admin\RegistrarsController::class, 'destroy'])->name('admin.registrars.destroy');
+    });
+
+    /**
      * Admin gateways interface routes.
      *
      * Prefix: /admin/gateways
@@ -292,6 +340,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
             Route::patch('/ordering', [Settings\General\OrderingController::class, 'update'])->name('admin.settings.general.ordering.update');
             Route::get('/service', [Settings\General\ServiceController::class, 'index'])->name('admin.settings.general.service');
             Route::patch('/service', [Settings\General\ServiceController::class, 'update'])->name('admin.settings.general.service.update');
+            Route::get('/domain', [Settings\General\DomainController::class, 'index'])->name('admin.settings.general.domain');
+            Route::patch('/domain', [Settings\General\DomainController::class, 'update'])->name('admin.settings.general.domain.update');
             Route::get('/invoice', [Settings\General\InvoiceController::class, 'index'])->name('admin.settings.general.invoice');
             Route::patch('/invoice', [Settings\General\InvoiceController::class, 'update'])->name('admin.settings.general.invoice.update');
             Route::get('/credit', [Settings\General\CreditController::class, 'index'])->name('admin.settings.general.credit');
