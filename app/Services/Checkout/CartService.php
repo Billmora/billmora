@@ -5,6 +5,7 @@ namespace App\Services\Checkout;
 use App\Models\Package;
 use App\Models\PackagePrice;
 use App\Models\Tax;
+use App\Models\Tld;
 use App\OrderItemType;
 use Illuminate\Support\Facades\Session;
 
@@ -45,7 +46,7 @@ class CartService
                 $newQuantity = $cart[$cartItemId]['quantity'] + $quantity;
                 Session::put("{$this->sessionKey}.{$cartItemId}.quantity", $newQuantity);
             }
-            
+
             return $cartItemId;
         }
 
@@ -77,6 +78,63 @@ class CartService
     }
 
     /**
+     * Add a domain registration or transfer to the cart session.
+     *
+     * @param  \App\Models\Tld  $tld
+     * @param  string  $domainName
+     * @param  string  $registrationType  'register' or 'transfer'
+     * @param  int  $years
+     * @param  float  $resolvedTotalPrice
+     * @param  string|null  $eppCode
+     * @return string
+     */
+    public function addDomain(Tld $tld, string $domainName, string $registrationType, int $years, float $resolvedTotalPrice, ?string $eppCode = null): string
+    {
+        if ($registrationType === 'register' && !\Billmora::getGeneral('domain_registration_enabled')) {
+            throw new \Exception(__('client/store.domain_disabled'));
+        }
+
+        if ($registrationType === 'transfer' && !\Billmora::getGeneral('domain_transfer_enabled')) {
+            throw new \Exception(__('client/store.domain_disabled'));
+        }
+
+        $cartItemId = md5('domain_' . $domainName . '_' . $registrationType);
+
+        $cart = $this->getItems();
+
+
+        if (isset($cart[$cartItemId])) {
+            return $cartItemId;
+        }
+
+        $itemData = [
+            'id' => $cartItemId,
+            'type' => OrderItemType::Domain->value,
+            'tld_id' => $tld->id,
+            'description' => ucfirst($registrationType) . ' Domain - ' . $domainName,
+            'cycle_name' => $years . ' Year' . ($years > 1 ? 's' : ''),
+            'billing_type' => 'onetime',
+            'billing_interval' => null,
+            'billing_period' => null,
+            'unit_price' => $resolvedTotalPrice,
+            'setup_fee' => 0,
+            'quantity' => 1,
+            'allow_quantity' => 'single',
+            'config_options' => [
+                'domain' => $domainName,
+                'type' => $registrationType,
+                'years' => $years,
+                'epp_code' => $eppCode,
+            ],
+            'variant_selections' => [],
+        ];
+
+        Session::put("{$this->sessionKey}.{$cartItemId}", $itemData);
+
+        return $cartItemId;
+    }
+
+    /**
      * Update the quantity of a specific cart item by its cart item ID.
      *
      * @param  string  $cartItemId
@@ -86,7 +144,7 @@ class CartService
     public function updateQuantity(string $cartItemId, int $quantity): bool
     {
         $cart = $this->getItems();
-        
+
         if (isset($cart[$cartItemId])) {
             if ($cart[$cartItemId]['allow_quantity'] === 'single') {
                 Session::put("{$this->sessionKey}.{$cartItemId}.quantity", 1);
@@ -95,7 +153,7 @@ class CartService
             }
             return true;
         }
-        
+
         return false;
     }
 
@@ -108,7 +166,7 @@ class CartService
     public function removeItem(string $cartItemId): void
     {
         Session::forget("{$this->sessionKey}.{$cartItemId}");
-        
+
         if (empty($this->getItems())) {
             Session::forget('applied_coupon');
         }
@@ -172,7 +230,7 @@ class CartService
         if ($country) {
             $taxModel = Tax::where('country', strtoupper($country))->first();
         }
-        
+
         if (!$taxModel) {
             $taxModel = Tax::whereNull('country')->orWhere('country', '')->first();
         }
@@ -206,7 +264,7 @@ class CartService
     public function updateItemPrices(string $cartItemId, float $unitPrice, float $setupFee): void
     {
         $cart = $this->getItems();
-        
+
         if (isset($cart[$cartItemId])) {
             Session::put("{$this->sessionKey}.{$cartItemId}.unit_price", $unitPrice);
             Session::put("{$this->sessionKey}.{$cartItemId}.setup_fee", $setupFee);

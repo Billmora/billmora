@@ -9,6 +9,8 @@ use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\CouponUsage;
 use App\Models\Package;
+use App\Models\Registrant;
+use App\Models\Tld;
 use App\OrderItemType;
 use App\Traits\AuditsSystem;
 use Billmora;
@@ -65,7 +67,7 @@ class OrderService
                 $orderItem = OrderItem::create([
                     'order_id' => $order->id,
                     'item_type' => OrderItemType::tryFrom($item['type']),
-                    'item_id' => $item['package_id'],
+                    'item_id' => $item['package_id'] ?? $item['tld_id'] ?? null,
                     'description' => $item['description'],
                     'quantity' => $item['quantity'],
                     'billing_type' => $item['billing_type'],
@@ -78,31 +80,59 @@ class OrderService
                     'variant_selections' => $item['variant_selections'],
                 ]);
 
-                $package = Package::find($item['package_id']);
-                $initialDueDate = ($item['billing_type'] === 'recurring') ? now() : null;
+                if ($item['type'] === OrderItemType::Domain->value) {
+                    $domainName = $item['config_options']['domain'] ?? '';
+                    $tldId = $item['tld_id'] ?? null;
+                    $regType = $item['config_options']['type'] ?? 'register';
+                    $years = $item['config_options']['years'] ?? 1;
+                    $eppCode = $item['config_options']['epp_code'] ?? null;
+                    $tldModel = Tld::find($tldId);
 
-                for ($i = 0; $i < $item['quantity']; $i++) {
-                    $service = Service::create([
-                        'user_id' => $userId,
-                        'order_id' => $order->id,
-                        'order_item_id' => $orderItem->id,
-                        'package_id' => $item['package_id'],
-                        'package_price_id' => $item['package_price_id'],
-                        'plugin_id' => $package->plugin_id ?? null,
-                        'name' => $item['description'],
-                        'status' => 'pending',
-                        'currency' => $currency,
-                        'billing_type' => $item['billing_type'],
-                        'billing_interval' => $item['billing_interval'],
-                        'billing_period' => $item['billing_period'],
-                        'price' => $item['unit_price'],
-                        'setup_fee' => $item['setup_fee'],
-                        'next_due_date' => $initialDueDate,
-                        'configuration' => $item['config_options'],
-                        'variant_selections' => $item['variant_selections'],
-                    ]);
+                    for ($i = 0; $i < $item['quantity']; $i++) {
+                        $registrant = Registrant::create([
+                            'user_id' => $userId,
+                            'order_id' => $order->id,
+                            'order_item_id' => $orderItem->id,
+                            'tld_id' => $tldId,
+                            'plugin_id' => $tldModel->plugin_id ?? null,
+                            'domain' => $domainName,
+                            'status' => 'pending',
+                            'registration_type' => $regType,
+                            'years' => $years,
+                            'currency' => $currency,
+                            'price' => $item['unit_price'],
+                            'epp_code' => $eppCode,
+                        ]);
 
-                    $this->recordCreate('service.created', $service->toArray());
+                        $this->recordCreate('registrant.created', $registrant->toArray());
+                    }
+                } else {
+                    $package = Package::find($item['package_id']);
+                    $initialDueDate = ($item['billing_type'] === 'recurring') ? now() : null;
+
+                    for ($i = 0; $i < $item['quantity']; $i++) {
+                        $service = Service::create([
+                            'user_id' => $userId,
+                            'order_id' => $order->id,
+                            'order_item_id' => $orderItem->id,
+                            'package_id' => $item['package_id'],
+                            'package_price_id' => $item['package_price_id'],
+                            'plugin_id' => $package->plugin_id ?? null,
+                            'name' => $item['description'],
+                            'status' => 'pending',
+                            'currency' => $currency,
+                            'billing_type' => $item['billing_type'],
+                            'billing_interval' => $item['billing_interval'],
+                            'billing_period' => $item['billing_period'],
+                            'price' => $item['unit_price'],
+                            'setup_fee' => $item['setup_fee'],
+                            'next_due_date' => $initialDueDate,
+                            'configuration' => $item['config_options'],
+                            'variant_selections' => $item['variant_selections'],
+                        ]);
+
+                        $this->recordCreate('service.created', $service->toArray());
+                    }
                 }
             }
 
