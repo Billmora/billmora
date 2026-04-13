@@ -34,4 +34,16 @@ return [
     ],
 
     'unavailable_currency' => 'Unavailable in this currency.',
+
+    'domain_search_label' => 'Search Domain',
+    'domain_search_placeholder' => 'Find your perfect domain name...',
+    'domain_register_tab' => 'Register',
+    'domain_transfer_tab' => 'Transfer',
+    'domain_available' => 'Available!',
+    'domain_unavailable' => 'Taken or Unavailable',
+    'domain_add_to_cart' => 'Add to Cart',
+    'domain_epp_code_label' => 'EPP / Authorization Code',
+    'domain_epp_code_helper' => 'Required for domain transfer. Get it from your current registrar.',
+    'domain_years_label' => 'Registration Period',
+    'domain_disabled' => 'Domain registration and transfer are currently unavailable.',
 ];
