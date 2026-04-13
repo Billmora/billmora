@@ -45,6 +45,26 @@ class OrderItem extends Model
     }
 
     /**
+     * Get the services created from this order item.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function services()
+    {
+        return $this->hasMany(Service::class);
+    }
+
+    /**
+     * Get the registrants (domains) created from this order item.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function registrants()
+    {
+        return $this->hasMany(Registrant::class);
+    }
+
+    /**
      * Get human-readable billing cycle label with internationalization support.
      *
      * @return string|null
