@@ -1,9 +1,9 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Credit Settings - General')
+@section('title', 'Domain Settings - General')
 
 @section('body')
-<form action="{{ route('admin.settings.general.credit.update') }}" method="POST" class="flex flex-col gap-5">
+<form action="{{ route('admin.settings.general.domain.update') }}" method="POST" class="flex flex-col gap-5">
     @csrf
     @method('PATCH')
     <x-admin::tabs 
@@ -22,7 +22,8 @@
                 'route' => route('admin.settings.general.service'),
                 'icon' => 'lucide-scan-text',
                 'label' => __('admin/settings/general.tabs.service'),
-            ],            [
+            ],
+            [
                 'route' => route('admin.settings.general.domain'),
                 'icon' => 'lucide-globe',
                 'label' => __('admin/settings/general.tabs.domain'),
@@ -55,35 +56,42 @@
         ]" 
         active="{{ request()->url() }}" />
     <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
-        <x-admin::toggle name="credit_use" label="{{ __('admin/settings/general.credit_use_label') }}" helper="{{ __('admin/settings/general.credit_use_helper') }}" :checked="Billmora::getGeneral('credit_use')" />
+        <x-admin::toggle 
+            name="domain_registration_enabled"
+            label="{{ __('admin/settings/general.domain_registration_enabled_label') }}"
+            helper="{{ __('admin/settings/general.domain_registration_enabled_helper') }}"
+            :checked="Billmora::getGeneral('domain_registration_enabled')"
+        />
+        <x-admin::toggle 
+            name="domain_transfer_enabled"
+            label="{{ __('admin/settings/general.domain_transfer_enabled_label') }}"
+            helper="{{ __('admin/settings/general.domain_transfer_enabled_helper') }}"
+            :checked="Billmora::getGeneral('domain_transfer_enabled')"
+        />
         <x-admin::input 
-            type="number" 
-            min="1" 
-            step="0.01"
-            name="credit_min_deposit" 
-            label="{{ __('admin/settings/general.credit_min_deposit_label') }}" 
-            helper="{{ __('admin/settings/general.credit_min_deposit_helper') }}" 
-            value="{{ old('credit_min_deposit', Billmora::getGeneral('credit_min_deposit')) }}" 
+            name="domain_number_increment"
+            label="{{ __('admin/settings/general.domain_number_increment_label') }}"
+            helper="{{ __('admin/settings/general.domain_number_increment_helper') }}"
+            type="number"
+            :value="Billmora::getGeneral('domain_number_increment')"
+            min="1"
             required
         />
         <x-admin::input 
-            type="number" 
-            min="1" 
-            step="0.01"
-            name="credit_max_deposit" 
-            label="{{ __('admin/settings/general.credit_max_deposit_label') }}" 
-            helper="{{ __('admin/settings/general.credit_max_deposit_helper') }}" 
-            value="{{ old('credit_max_deposit', Billmora::getGeneral('credit_max_deposit')) }}" 
+            name="domain_number_padding"
+            label="{{ __('admin/settings/general.domain_number_padding_label') }}"
+            helper="{{ __('admin/settings/general.domain_number_padding_helper') }}"
+            type="number"
+            :value="Billmora::getGeneral('domain_number_padding')"
+            min="1"
             required
         />
         <x-admin::input 
-            type="number" 
-            min="1" 
-            step="0.01"
-            name="credit_max" 
-            label="{{ __('admin/settings/general.credit_max_label') }}" 
-            helper="{{ __('admin/settings/general.credit_max_helper') }}" 
-            value="{{ old('credit_max', Billmora::getGeneral('credit_max')) }}" 
+            name="domain_number_format"
+            label="{{ __('admin/settings/general.domain_number_format_label') }}"
+            helper="{{ __('admin/settings/general.domain_number_format_helper') }}"
+            type="text"
+            :value="Billmora::getGeneral('domain_number_format')"
             required
         />
     </div>

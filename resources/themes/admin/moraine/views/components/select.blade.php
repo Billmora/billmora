@@ -50,7 +50,7 @@
             ])
             {{ $attributes }}
         >
-            <option value="" class="text-slate-500" selected disabled>
+            <option value="" class="text-slate-500" {{ !isset($attributes['wire:model']) ? 'selected' : '' }} {{ $required ? 'disabled' : '' }}>
                 {{ __('common.choose_option') }}
             </option>
             {{ $slot }}

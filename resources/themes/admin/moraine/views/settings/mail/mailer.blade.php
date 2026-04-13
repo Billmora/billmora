@@ -113,7 +113,6 @@
                 >
                     <option value="tls" {{ old('mailer_smtp_encryption', config('mail.mailers.smtp.encryption')) == 'tls' ? 'selected' : '' }}>TLS</option>
                     <option value="ssl" {{ old('mailer_smtp_encryption', config('mail.mailers.smtp.encryption')) == 'ssl' ? 'selected' : '' }}>SSL</option>
-                    <option value="" {{ old('mailer_smtp_encryption', config('mail.mailers.smtp.encryption')) == '' ? 'selected' : '' }}>{{ __('admin/common.none') }}</option>
                 </x-admin::select>
             </div>
             <div class="grid md:grid-cols-2 gap-4">
