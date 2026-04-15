@@ -42,13 +42,15 @@
             :selected="old('tld_id')"
         />
 
-        <x-admin::singleselect
+        <x-admin::select
             name="plugin_id"
             label="{{ __('admin/registrants.registrar_label') }}"
             helper="{{ __('admin/registrants.registrar_helper') }}"
-            :options="$registrars"
-            :selected="old('plugin_id')"
-        />
+        >
+            @foreach($registrars as $registrar)
+                <option value="{{ $registrar->id }}" {{ old('plugin_id') === $registrar->id ? 'selected' : '' }}>{{ $registrar->name }}</option>
+            @endforeach
+        </x-admin::select>
         
         <x-admin::select
             name="status"

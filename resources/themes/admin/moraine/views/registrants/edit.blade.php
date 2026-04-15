@@ -46,9 +46,15 @@
                         </option>
                     @endforeach
                 </x-admin::select>
-                <x-admin::singleselect name="plugin_id" label="{{ __('admin/registrants.registrar_label') }}"
-                    helper="{{ __('admin/registrants.registrar_helper') }}" :options="$registrars"
-                    :selected="old('plugin_id', $registrant->plugin_id)" />
+                <x-admin::select
+                    name="plugin_id"
+                    label="{{ __('admin/registrants.registrar_label') }}"
+                    helper="{{ __('admin/registrants.registrar_helper') }}"
+                >
+                    @foreach($registrars as $registrar)
+                        <option value="{{ $registrar->id }}" {{ old('plugin_id', $registrant->plugin_id) === $registrar->id ? 'selected' : '' }}>{{ $registrar->name }}</option>
+                    @endforeach
+                </x-admin::select>
                 <x-admin::input name="expires_at" type="date" label="{{ __('admin/registrants.expires_label') }}"
                     helper="{{ __('admin/registrants.expires_helper') }}"
                     value="{{ old('expires_at', $registrant->expires_at?->format('Y-m-d')) }}" required />

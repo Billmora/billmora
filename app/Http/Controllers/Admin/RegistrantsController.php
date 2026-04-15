@@ -72,14 +72,11 @@ class RegistrantsController extends Controller
             'title' => $u->first_name . ' ' . $u->last_name,
             'subtitle' => $u->email,
         ]);
-        $tlds = Tld::select('id', 'tld')->where('status', 'active')->get()->map(fn($t) => [
+        $tlds = Tld::select('id', 'tld')->where('status', 'visible')->get()->map(fn($t) => [
             'value' => $t->id,
             'title' => $t->tld,
         ]);
-        $registrars = Plugin::where('type', 'registrar')->where('is_active', true)->get()->map(fn($p) => [
-            'value' => $p->id,
-            'title' => $p->name,
-        ]);
+        $registrars = Plugin::where('type', 'registrar')->where('is_active', true)->get();
 
         return view('admin::registrants.create', compact('users', 'tlds', 'registrars'));
     }
@@ -131,10 +128,7 @@ class RegistrantsController extends Controller
     public function edit(Registrant $registrant)
     {
         $registrant->load(['user', 'tld', 'plugin', 'order']);
-        $registrars = Plugin::where('type', 'registrar')->where('is_active', true)->get()->map(fn($p) => [
-            'value' => $p->id,
-            'title' => $p->name,
-        ]);
+        $registrars = Plugin::where('type', 'registrar')->where('is_active', true)->get();
 
         return view('admin::registrants.edit', compact('registrant', 'registrars'));
     }
