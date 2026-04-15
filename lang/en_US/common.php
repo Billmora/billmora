@@ -130,6 +130,7 @@ return [
 
     'back_to' => 'Back to :page',
 
+    'search' => 'Search',
     'name' => 'Name',
     'description' => 'Description',
 
