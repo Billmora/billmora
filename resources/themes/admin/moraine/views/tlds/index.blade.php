@@ -51,12 +51,9 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800 font-semibold">{{ $tld->tld }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
-                                        {{ $tld->plugin->name ?? '-' }}</td>
+                                        {{ $tld->plugin->name }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
-                                        <span
-                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $tld->status === 'visible' ? 'bg-green-100 text-green-800' : 'bg-slate-100 text-slate-600' }}">
-                                            {{ ucfirst($tld->status) }}
-                                        </span>
+                                        {{ $tld->status }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
                                         {{ $tld->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
