@@ -37,8 +37,6 @@
                         </span>
                     </div>
                 </div>
-                <x-lucide-search
-                    class="absolute -bottom-4 right-8 w-40 h-40 text-white/5 -rotate-12 transition-transform duration-500 pointer-events-none hidden md:block" />
             </a>
         </div>
     @endif
