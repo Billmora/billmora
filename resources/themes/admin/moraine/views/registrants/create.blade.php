@@ -48,7 +48,7 @@
             helper="{{ __('admin/registrants.registrar_helper') }}"
         >
             @foreach($registrars as $registrar)
-                <option value="{{ $registrar->id }}" {{ old('plugin_id') === $registrar->id ? 'selected' : '' }}>{{ $registrar->name }}</option>
+                <option value="{{ $registrar->id }}" {{ old('plugin_id') == $registrar->id ? 'selected' : '' }}>{{ $registrar->name }}</option>
             @endforeach
         </x-admin::select>
         

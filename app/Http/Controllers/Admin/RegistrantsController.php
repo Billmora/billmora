@@ -24,6 +24,7 @@ class RegistrantsController extends Controller
     public function __construct()
     {
         $this->middleware('permission:registrants.view')->only(['index']);
+        $this->middleware('permission:registrants.create')->only(['create', 'store']);
         $this->middleware('permission:registrants.update')->only(['edit', 'update']);
         $this->middleware('permission:registrants.delete')->only(['destroy']);
     }
