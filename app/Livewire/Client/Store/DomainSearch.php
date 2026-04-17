@@ -79,7 +79,7 @@ class DomainSearch extends Component
         
         $this->domainName = strtolower(trim($this->domain));
         $dotPos = strpos($this->domainName, '.');
-        $tldString = substr($this->domainName, $dotPos);
+        $tldString = ltrim(substr($this->domainName, $dotPos), '.');
         
         $this->tld = Tld::where('tld', $tldString)->where('status', 'visible')->first();
         
@@ -145,6 +145,22 @@ class DomainSearch extends Component
     {
         if (!$this->available || !$this->tld || !$this->tldPrice) {
             return;
+        }
+        
+        if ($this->type === 'register') {
+            try {
+                [$plugin, $config] = $this->registrarService->bootPluginForTld($this->tld);
+                $result = $plugin->checkAvailability($this->domainName);
+                if (!isset($result['available']) || !$result['available']) {
+                    $this->available = false;
+                    $this->addError('domain', __('client/store.domain_unavailable'));
+                    return;
+                }
+            } catch (Exception $e) {
+                $this->available = false;
+                $this->addError('domain', $e->getMessage());
+                return;
+            }
         }
         
         $price = $this->type === 'register' ? $this->tldPrice->register_price : $this->tldPrice->transfer_price;

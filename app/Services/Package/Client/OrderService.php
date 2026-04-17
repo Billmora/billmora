@@ -63,7 +63,9 @@ class OrderService
 
             $this->recordCreate('order.created', $order->toArray());
 
-            foreach ($cartItems as $item) {
+            $createdEntities = [];
+
+            foreach ($cartItems as $cartItemId => $item) {
                 $orderItem = OrderItem::create([
                     'order_id' => $order->id,
                     'item_type' => OrderItemType::tryFrom($item['type']),
@@ -105,6 +107,10 @@ class OrderService
                         ]);
 
                         $this->recordCreate('registrant.created', $registrant->toArray());
+                        
+                        if ($i === 0) {
+                            $createdEntities[$cartItemId] = ['type' => 'registrant', 'id' => $registrant->id];
+                        }
                     }
                 } else {
                     $package = Package::find($item['package_id']);
@@ -132,6 +138,10 @@ class OrderService
                         ]);
 
                         $this->recordCreate('service.created', $service->toArray());
+                        
+                        if ($i === 0) {
+                            $createdEntities[$cartItemId] = ['type' => 'service', 'id' => $service->id];
+                        }
                     }
                 }
             }
@@ -154,7 +164,7 @@ class OrderService
 
             $this->recordCreate('invoice.created', $invoice->toArray());
 
-            $this->createInvoiceItems($invoice, $cartItems, $totals, $appliedCoupon);
+            $this->createInvoiceItems($invoice, $cartItems, $totals, $appliedCoupon, $createdEntities);
 
             if ($appliedCoupon) {
                 $couponUsage = CouponUsage::create([
@@ -180,10 +190,14 @@ class OrderService
      * @param  array|null  $appliedCoupon
      * @return void
      */
-    private function createInvoiceItems(Invoice $invoice, array $cartItems, array $totals, ?array $appliedCoupon): void
+    private function createInvoiceItems(Invoice $invoice, array $cartItems, array $totals, ?array $appliedCoupon, array $createdEntities = []): void
     {
-        foreach ($cartItems as $item) {
+        foreach ($cartItems as $cartItemId => $item) {
             $description = $item['description'];
+            
+            $entity = $createdEntities[$cartItemId] ?? null;
+            $serviceId = $entity && $entity['type'] === 'service' ? $entity['id'] : null;
+            $registrantId = $entity && $entity['type'] === 'registrant' ? $entity['id'] : null;
 
             if ($item['billing_type'] === 'recurring') {
                 $startDate = now();
@@ -209,7 +223,8 @@ class OrderService
 
             InvoiceItem::create([
                 'invoice_id' => $invoice->id,
-                'service_id' => null,
+                'service_id' => $serviceId,
+                'registrant_id' => $registrantId,
                 'description' => $description,
                 'quantity' => $item['quantity'],
                 'unit_price' => $item['unit_price'],
@@ -219,7 +234,8 @@ class OrderService
             if ($item['setup_fee'] > 0) {
                 InvoiceItem::create([
                     'invoice_id' => $invoice->id,
-                    'service_id' => null,
+                    'service_id' => $serviceId,
+                    'registrant_id' => $registrantId,
                     'description' => "Setup Fee - {$item['description']}",
                     'quantity' => $item['quantity'],
                     'unit_price' => $item['setup_fee'],

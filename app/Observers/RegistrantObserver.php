@@ -29,25 +29,30 @@ class RegistrantObserver
      */
     public function updated(Registrant $registrant)
     {
-        $changes = $registrant->getChanges();
-        
-        $loggableChanges = collect($changes)
-            ->except(['updated_at'])
-            ->toArray();
-
-        if (!empty($loggableChanges)) {
-            $this->recordUpdate('registrant.updated', $loggableChanges, $registrant->toArray());
-        }
+        // Audit logging is handled explicitly in controllers/services
     }
 
     /**
-     * Handle the Registrant "deleted" event.
-     *
-     * @param  \App\Models\Registrant  $registrant
-     * @return void
+     * Handle the Order "deleted" event.
      */
-    public function deleted(Registrant $registrant)
+    public function deleted(Registrant $registrant): void
     {
-        $this->recordDelete('registrant.deleted', $registrant->toArray());
+        //
+    }
+
+    /**
+     * Handle the Order "restored" event.
+     */
+    public function restored(Registrant $registrant): void
+    {
+        //
+    }
+
+    /**
+     * Handle the Order "force deleted" event.
+     */
+    public function forceDeleted(Registrant $registrant): void
+    {
+        //
     }
 }
