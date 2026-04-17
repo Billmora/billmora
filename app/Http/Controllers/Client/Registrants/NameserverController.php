@@ -18,17 +18,21 @@ class NameserverController extends Controller
         }
 
         $nameservers = [];
+        $clientActions = [];
 
         if ($registrant->status === 'active' && $registrant->plugin_id) {
             try {
                 [$plugin] = $registrarService->bootPluginFor($registrant);
                 $nameservers = $plugin->getNameservers($registrant);
+                if (method_exists($plugin, 'getClientAction')) {
+                    $clientActions = $plugin->getClientAction($registrant);
+                }
             } catch (Exception $e) {
                 session()->now('error', __('client/registrants.nameservers.failed', ['message' => $e->getMessage()]));
             }
         }
 
-        return view('client::registrants.workspaces.nameservers', compact('registrant', 'nameservers'));
+        return view('client::registrants.workspaces.nameservers', compact('registrant', 'nameservers', 'clientActions'));
     }
 
     public function update(Request $request, Registrant $registrant, RegistrarService $registrarService)
@@ -39,7 +43,10 @@ class NameserverController extends Controller
 
         $validated = $request->validate([
             'nameservers' => 'required|array|max:4',
-            'nameservers.*' => 'nullable|string',
+            'nameservers.0' => 'required|string|max:253',
+            'nameservers.1' => 'required|string|max:253',
+            'nameservers.2' => 'nullable|string|max:253',
+            'nameservers.3' => 'nullable|string|max:253',
         ]);
 
         $nameservers = array_filter(array_values($validated['nameservers']));

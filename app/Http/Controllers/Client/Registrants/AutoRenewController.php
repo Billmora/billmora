@@ -15,7 +15,20 @@ class AutoRenewController extends Controller
             abort(404);
         }
 
-        return view('client::registrants.workspaces.autorenew', compact('registrant'));
+        $clientActions = [];
+        if ($registrant->status === 'active' && $registrant->plugin_id) {
+            try {
+                $registrarService = app(\App\Services\RegistrarService::class);
+                [$plugin] = $registrarService->bootPluginFor($registrant);
+                if (method_exists($plugin, 'getClientAction')) {
+                    $clientActions = $plugin->getClientAction($registrant);
+                }
+            } catch (\Exception $e) {
+                //
+            }
+        }
+
+        return view('client::registrants.workspaces.autorenew', compact('registrant', 'clientActions'));
     }
 
     public function update(Request $request, Registrant $registrant)

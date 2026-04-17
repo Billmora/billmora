@@ -47,7 +47,7 @@ class RegistrantsController extends Controller
             abort(404);
         }
 
-        $registrant->load('tld');
+        $registrant->load(['tld', 'plugin']);
         $clientActions = [];
 
         if ($registrant->status === 'active' && $registrant->plugin_id) {
