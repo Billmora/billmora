@@ -94,7 +94,6 @@ class Registrant extends Model
         return [
             'price' => 'decimal:2',
             'auto_renew' => 'boolean',
-            'whois_privacy' => 'boolean',
             'nameservers' => 'array',
             'configuration' => 'array',
             'registered_at' => 'datetime',
@@ -102,6 +101,59 @@ class Registrant extends Model
             'suspended_at' => 'datetime',
             'cancelled_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Activate the domain registration.
+     */
+    public function activate(?int $years = null): void
+    {
+        $this->update([
+            'status' => 'active',
+            'registered_at' => $this->registered_at ?? now(),
+            'expires_at' => now()->addYears($years ?? $this->years),
+        ]);
+    }
+
+    /**
+     * Mark the domain as suspended.
+     */
+    public function suspend(): void
+    {
+        $this->update([
+            'status' => 'suspended',
+            'suspended_at' => now(),
+        ]);
+    }
+
+    /**
+     * Unsuspend (reactivate) the domain.
+     */
+    public function unsuspend(): void
+    {
+        $this->update([
+            'status' => 'active',
+            'suspended_at' => null,
+        ]);
+    }
+
+    /**
+     * Mark the domain as expired.
+     */
+    public function expire(): void
+    {
+        $this->update(['status' => 'expired']);
+    }
+
+    /**
+     * Cancel the domain registration.
+     */
+    public function cancel(): void
+    {
+        $this->update([
+            'status' => 'cancelled',
+            'cancelled_at' => now(),
+        ]);
     }
 
     /**

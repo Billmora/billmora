@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Admin\Registrants;
 
+use App\Facades\Audit;
 use App\Http\Controllers\Controller;
 use App\Models\Registrant;
 use App\Services\RegistrarService;
-use App\Traits\AuditsSystem;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class RegistrarController extends Controller
 {
-    use AuditsSystem;
-
     public function __construct()
     {
         $this->middleware('permission:registrants.update');
@@ -18,28 +18,23 @@ class RegistrarController extends Controller
 
     /**
      * Trigger domain registration via registrar API.
-     *
-     * @param \App\Models\Registrant $registrant
-     * @param \App\Services\RegistrarService $service
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function create(Registrant $registrant, RegistrarService $service)
+    public function create(Registrant $registrant, RegistrarService $service): RedirectResponse
     {
         if (!in_array($registrant->status, ['pending', 'terminated'])) {
             return back()->with('error', __('admin/registrants.registrar.create.invalid_status'));
         }
 
         try {
-            [$plugin, $config] = $service->bootPluginFor($registrant);
+            [$plugin] = $service->bootPluginFor($registrant);
             $plugin->create($registrant);
+            $registrant->activate();
 
-            $registrant->update([
-                'status' => 'active',
-                'registered_at' => now(),
-                'expires_at' => now()->addYears($registrant->years),
+            Audit::system(Auth::user()->id, 'registrant.registrar.create', [
+                'registrant_id' => $registrant->id,
+                'domain'        => $registrant->domain,
+                'status'        => 'success',
             ]);
-
-            $this->recordCreate('registrant.registrar.create', ['domain' => $registrant->domain]);
 
             return back()->with('success', __('admin/registrants.registrar.create.success'));
         } catch (\Exception $e) {
@@ -49,22 +44,26 @@ class RegistrarController extends Controller
 
     /**
      * Trigger domain transfer via registrar API.
-     *
-     * @param \App\Models\Registrant $registrant
-     * @param \App\Services\RegistrarService $service
-     * @return \Illuminate\Http\RedirectResponse
+     * EPP code is read from the original order item config options.
      */
-    public function transfer(Registrant $registrant, RegistrarService $service)
+    public function transfer(Registrant $registrant, RegistrarService $service): RedirectResponse
     {
         if ($registrant->status !== 'pending_transfer') {
             return back()->with('error', __('admin/registrants.registrar.transfer.invalid_status'));
         }
 
         try {
-            [$plugin, $config] = $service->bootPluginFor($registrant);
-            $plugin->transfer($registrant, $registrant->epp_code ?? '');
+            [$plugin] = $service->bootPluginFor($registrant);
+            $eppCode = $registrant->orderItem?->config_options['epp_code'] ?? '';
+            $plugin->transfer($registrant, $eppCode);
 
-            $this->recordCreate('registrant.registrar.transfer', ['domain' => $registrant->domain]);
+            $registrant->update(['status' => 'pending_transfer', 'registered_at' => now()]);
+
+            Audit::system(Auth::user()->id, 'registrant.registrar.transfer', [
+                'registrant_id' => $registrant->id,
+                'domain'        => $registrant->domain,
+                'status'        => 'success',
+            ]);
 
             return back()->with('success', __('admin/registrants.registrar.transfer.success'));
         } catch (\Exception $e) {
@@ -74,27 +73,27 @@ class RegistrarController extends Controller
 
     /**
      * Trigger domain renewal via registrar API.
-     *
-     * @param \App\Models\Registrant $registrant
-     * @param \App\Services\RegistrarService $service
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function renew(Registrant $registrant, RegistrarService $service)
+    public function renew(Registrant $registrant, RegistrarService $service): RedirectResponse
     {
         if (!in_array($registrant->status, ['active', 'expired'])) {
             return back()->with('error', __('admin/registrants.registrar.renew.invalid_status'));
         }
 
         try {
-            [$plugin, $config] = $service->bootPluginFor($registrant);
+            [$plugin] = $service->bootPluginFor($registrant);
             $plugin->renew($registrant, $registrant->years);
 
             $registrant->update([
-                'status' => 'active',
+                'status'     => 'active',
                 'expires_at' => ($registrant->expires_at ?? now())->addYears($registrant->years),
             ]);
 
-            $this->recordCreate('registrant.registrar.renew', ['domain' => $registrant->domain]);
+            Audit::system(Auth::user()->id, 'registrant.registrar.renew', [
+                'registrant_id' => $registrant->id,
+                'domain'        => $registrant->domain,
+                'status'        => 'success',
+            ]);
 
             return back()->with('success', __('admin/registrants.registrar.renew.success'));
         } catch (\Exception $e) {
@@ -103,21 +102,83 @@ class RegistrarController extends Controller
     }
 
     /**
-     * Sync domain status from registrar API.
-     *
-     * @param \App\Models\Registrant $registrant
-     * @param \App\Services\RegistrarService $service
-     * @return \Illuminate\Http\RedirectResponse
+     * Suspend the domain on the registrar.
      */
-    public function sync(Registrant $registrant, RegistrarService $service)
+    public function suspend(Registrant $registrant, RegistrarService $service): RedirectResponse
+    {
+        if ($registrant->status !== 'active') {
+            return back()->with('error', __('admin/registrants.registrar.suspend.invalid_status'));
+        }
+
+        try {
+            [$plugin] = $service->bootPluginFor($registrant);
+
+            if (method_exists($plugin, 'suspend')) {
+                $plugin->suspend($registrant);
+            }
+
+            $registrant->suspend();
+
+            Audit::system(Auth::user()->id, 'registrant.registrar.suspend', [
+                'registrant_id' => $registrant->id,
+                'domain'        => $registrant->domain,
+                'status'        => 'success',
+            ]);
+
+            return back()->with('success', __('admin/registrants.registrar.suspend.success'));
+        } catch (\Exception $e) {
+            return back()->with('error', __('admin/registrants.registrar.suspend.failed', ['message' => $e->getMessage()]));
+        }
+    }
+
+    /**
+     * Unsuspend the domain on the registrar.
+     */
+    public function unsuspend(Registrant $registrant, RegistrarService $service): RedirectResponse
+    {
+        if ($registrant->status !== 'suspended') {
+            return back()->with('error', __('admin/registrants.registrar.unsuspend.invalid_status'));
+        }
+
+        try {
+            [$plugin] = $service->bootPluginFor($registrant);
+
+            if (method_exists($plugin, 'unsuspend')) {
+                $plugin->unsuspend($registrant);
+            }
+
+            $registrant->unsuspend();
+
+            Audit::system(Auth::user()->id, 'registrant.registrar.unsuspend', [
+                'registrant_id' => $registrant->id,
+                'domain'        => $registrant->domain,
+                'status'        => 'success',
+            ]);
+
+            return back()->with('success', __('admin/registrants.registrar.unsuspend.success'));
+        } catch (\Exception $e) {
+            return back()->with('error', __('admin/registrants.registrar.unsuspend.failed', ['message' => $e->getMessage()]));
+        }
+    }
+
+    /**
+     * Sync domain status from registrar API.
+     */
+    public function sync(Registrant $registrant, RegistrarService $service): RedirectResponse
     {
         try {
-            [$plugin, $config] = $service->bootPluginFor($registrant);
+            [$plugin] = $service->bootPluginFor($registrant);
             $result = $plugin->syncStatus($registrant);
 
             $registrant->update([
-                'status' => $result['status'] ?? $registrant->status,
+                'status'     => $result['status'] ?? $registrant->status,
                 'expires_at' => $result['expires_at'] ?? $registrant->expires_at,
+            ]);
+
+            Audit::system(Auth::user()->id, 'registrant.registrar.sync', [
+                'registrant_id' => $registrant->id,
+                'domain'        => $registrant->domain,
+                'status'        => 'success',
             ]);
 
             return back()->with('success', __('admin/registrants.registrar.sync.success'));

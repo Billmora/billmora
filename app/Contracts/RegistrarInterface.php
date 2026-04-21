@@ -53,23 +53,6 @@ interface RegistrarInterface extends PluginInterface
     public function setNameservers(Registrant $registrant, array $nameservers): void;
 
     /**
-     * Get EPP/authorization code for domain transfer out.
-     */
-    public function getEPPCode(Registrant $registrant): string;
-
-    /**
-     * Get WHOIS information for domain.
-     *
-     * @return array<string, mixed>
-     */
-    public function getWhoisInfo(Registrant $registrant): array;
-
-    /**
-     * Enable or disable WHOIS privacy protection.
-     */
-    public function setWhoisPrivacy(Registrant $registrant, bool $enabled): void;
-
-    /**
      * Sync domain status from registrar (for cron/scheduled task).
      *
      * @return array{status: string, expires_at: ?string}

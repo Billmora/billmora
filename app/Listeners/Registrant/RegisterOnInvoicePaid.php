@@ -30,7 +30,7 @@ class RegisterOnInvoicePaid implements ShouldQueue
     {
         $invoice = $event->invoice;
 
-        $invoice->loadMissing('order.items.registrants');
+        $invoice->loadMissing('order.items.registrants.orderItem');
 
         $order = $invoice->order;
         if (!$order) {
@@ -54,11 +54,7 @@ class RegisterOnInvoicePaid implements ShouldQueue
 
             if (!$registrant->plugin_id) {
 
-                $registrant->update([
-                    'status' => 'active', 
-                    'registered_at' => now(),
-                    'expires_at' => now()->addYears($registrant->years)
-                ]);
+                $registrant->activate();
                 event(new RegistrantEvents\RegistrationCompleted($registrant));
                 continue;
             }
@@ -67,16 +63,17 @@ class RegisterOnInvoicePaid implements ShouldQueue
                 [$plugin] = $this->registrarService->bootPluginFor($registrant);
 
                 if ($registrant->registration_type === 'register') {
-                    $plugin->registerDomain($registrant);
+                    $plugin->create($registrant);
                 } elseif ($registrant->registration_type === 'transfer') {
-                    $plugin->transferDomain($registrant);
+                    $eppCode = $registrant->orderItem->config_options['epp_code'] ?? '';
+                    $plugin->transfer($registrant, $eppCode);
                 }
 
-                $registrant->update([
-                    'status' => $registrant->registration_type === 'transfer' ? 'pending_transfer' : 'active',
-                    'registered_at' => now(),
-                    'expires_at' => now()->addYears($registrant->years)
-                ]);
+                if ($registrant->registration_type === 'transfer') {
+                    $registrant->update(['status' => 'pending_transfer', 'registered_at' => now()]);
+                } else {
+                    $registrant->activate();
+                }
 
                 event(new RegistrantEvents\RegistrationCompleted($registrant));
 

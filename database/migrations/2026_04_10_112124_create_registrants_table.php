@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('registrant_number')->unique();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('order_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('order_item_id')->nullable()->constrained('order_items')->nullOnDelete();
             $table->foreignId('tld_id')->constrained('tlds');
             $table->foreignId('plugin_id')->nullable()->constrained('plugins')->nullOnDelete();
@@ -33,8 +33,6 @@ return new class extends Migration
             $table->decimal('price', 15, 2);
             
             $table->boolean('auto_renew')->default(true);
-            $table->boolean('whois_privacy')->default(false);
-            $table->string('epp_code')->nullable();
             $table->json('nameservers')->nullable();
             $table->json('configuration')->nullable();
             
@@ -44,7 +42,6 @@ return new class extends Migration
             $table->timestamp('cancelled_at')->nullable();
             $table->timestamps();
             
-            $table->unique('domain');
             $table->index(['user_id', 'status']);
             $table->index('expires_at');
         });
