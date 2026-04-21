@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\Package;
+use App\Models\Tld;
 use App\Models\User;
 use App\Services\Package\PricingService;
 use App\Services\Package\Admin\OrderService;
@@ -74,7 +75,7 @@ class OrdersController extends Controller
     }
 
     /**
-     * Store a newly created order with validation, pricing, configuration, and auditing.
+     * Store a newly created order with multi-item validation, pricing, configuration, and auditing.
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Services\Package\Admin\OrderService $orderService
@@ -85,51 +86,102 @@ class OrdersController extends Controller
     public function store(Request $request, OrderService $orderService, OrderValidationService $validationService, PluginManager $pluginManager)
     {
         $validated = $request->validate([
-            'order_user' => ['required', Rule::exists('users', 'id')],
+            'order_user'     => ['required', Rule::exists('users', 'id')],
             'order_currency' => ['required', Rule::exists('currencies', 'code')],
-            'order_coupon' => ['nullable', Rule::exists('coupons', 'code')],
-            'order_status' => ['required', Rule::in(['pending', 'processing', 'completed', 'cancelled', 'failed'])],
-            'order_package' => ['required', Rule::exists('packages', 'id')],
-            'order_package_billing' => ['required', Rule::exists('package_prices', 'id')],
-            'variant_options' => ['nullable', 'array'],
+            'order_coupon'   => ['nullable', Rule::exists('coupons', 'code')],
+            'order_status'   => ['required', Rule::in(['pending', 'processing', 'completed', 'cancelled', 'failed'])],
+
+            // Package items (0..N)
+            'package_items'                     => ['nullable', 'array'],
+            'package_items.*.package_id'        => ['required', Rule::exists('packages', 'id')],
+            'package_items.*.billing_id'        => ['required', Rule::exists('package_prices', 'id')],
+            'package_items.*.quantity'          => ['nullable', 'integer', 'min:1'],
+            'package_items.*.variant_options'   => ['nullable', 'array'],
+            'package_items.*.configuration'     => ['nullable', 'array'],
+
+            // Domain items (0..N)
+            'domain_items'              => ['nullable', 'array'],
+            'domain_items.*.type'       => ['required', Rule::in(['register', 'transfer'])],
+            'domain_items.*.domain'     => ['required', 'string', 'max:255'],
+            'domain_items.*.tld_id'     => ['required', Rule::exists('tlds', 'id')],
+            'domain_items.*.years'      => ['required', 'integer', 'min:1'],
+            'domain_items.*.epp_code'   => ['nullable', 'string'],
         ]);
 
+        // At least 1 item required
+        if (empty($validated['package_items']) && empty($validated['domain_items'])) {
+            return back()->withInput()->with('error', __('admin/orders.at_least_one_item'));
+        }
+
         try {
-            $package = Package::with(['prices', 'variants.options.prices', 'catalog', 'plugin'])->findOrFail($validated['order_package']);
-            $packagePrice = $package->prices->firstWhere('id', $validated['order_package_billing']);
+            $coupon = $validated['order_coupon']
+                ? Coupon::where('code', $validated['order_coupon'])->first()
+                : null;
 
-            if (!$packagePrice) {
-                return back()->withInput()->with('error', __('client/store.order.cycle_mismatch'));
-            }
+            // Build resolved package items
+            $packageItems = [];
+            foreach ($validated['package_items'] ?? [] as $rawPkg) {
+                $package = Package::with(['prices', 'variants.options.prices', 'catalog', 'plugin'])->findOrFail($rawPkg['package_id']);
+                $packagePrice = $package->prices->firstWhere('id', $rawPkg['billing_id']);
 
-            $variantSelections = $validationService->buildVariantSelections($validated['variant_options'] ?? []);
-            $validation = $validationService->validateConfiguration($package, $packagePrice, $variantSelections, $validated['order_currency']);
-            if (!$validation['valid']) {
-                return back()->withInput()->with('error', $validation['message']);
-            }
+                if (!$packagePrice) {
+                    return back()->withInput()->with('error', __('client/store.order.cycle_mismatch'));
+                }
 
-            $configuration = [];
-            if ($package->plugin) {
-                $instance = $pluginManager->bootInstance($package->plugin);
-                if ($instance && method_exists($instance, 'getCheckoutSchema')) {
-                    $schema = $instance->getCheckoutSchema();
-                    if (!empty($schema)) {
-                        $configRules = []; $configAttributes = [];
-                        foreach ($schema as $key => $field) {
-                            $configRules["configuration.{$key}"] = is_array($field['rules'] ?? null) ? $field['rules'] : explode('|', $field['rules'] ?? 'nullable');
-                            $configAttributes["configuration.{$key}"] = $field['label'] ?? $key;
+                $variantSelections = $validationService->buildVariantSelections($rawPkg['variant_options'] ?? []);
+                $validation = $validationService->validateConfiguration($package, $packagePrice, $variantSelections, $validated['order_currency']);
+                if (!$validation['valid']) {
+                    return back()->withInput()->with('error', $validation['message']);
+                }
+
+                $configuration = [];
+                if ($package->plugin) {
+                    $instance = $pluginManager->bootInstance($package->plugin);
+                    if ($instance && method_exists($instance, 'getCheckoutSchema')) {
+                        $schema = $instance->getCheckoutSchema();
+                        if (!empty($schema)) {
+                            $configRules = [];
+                            $configAttributes = [];
+                            foreach ($schema as $key => $field) {
+                                $configRules["configuration.{$key}"] = is_array($field['rules'] ?? null) ? $field['rules'] : explode('|', $field['rules'] ?? 'nullable');
+                                $configAttributes["configuration.{$key}"] = $field['label'] ?? $key;
+                            }
+                            $configValidated = $request->validate($configRules, [], $configAttributes);
+                            $configuration = $configValidated['configuration'] ?? [];
                         }
-                        $configValidated = $request->validate($configRules, [], $configAttributes);
-                        $configuration = $configValidated['configuration'] ?? [];
                     }
                 }
+
+                $packageItems[] = [
+                    'package' => $package,
+                    'price' => $packagePrice,
+                    'variants' => $variantSelections,
+                    'config' => $configuration,
+                    'quantity' => $rawPkg['quantity'] ?? 1,
+                ];
             }
 
-            $coupon = $validated['order_coupon'] ? Coupon::where('code', $validated['order_coupon'])->first() : null;
+            // Build resolved domain items
+            $domainItems = [];
+            foreach ($validated['domain_items'] ?? [] as $rawDom) {
+                $tld = Tld::with('prices')->findOrFail($rawDom['tld_id']);
+
+                $domainItems[] = [
+                    'tld' => $tld,
+                    'type' => $rawDom['type'],
+                    'domain' => $rawDom['domain'],
+                    'years' => $rawDom['years'],
+                    'epp_code' => $rawDom['epp_code'] ?? null,
+                ];
+            }
 
             $result = $orderService->createOrder(
-                $validated['order_user'], $package, $packagePrice, $variantSelections, $coupon,
-                $validated['order_currency'], $validated['order_status'], $configuration
+                $validated['order_user'],
+                $packageItems,
+                $domainItems,
+                $coupon,
+                $validated['order_currency'],
+                $validated['order_status']
             );
 
             $this->recordCreate('order.create', $result['order']->toArray());
@@ -148,7 +200,7 @@ class OrdersController extends Controller
      */
     public function edit(Order $order)
     {
-        $order->load(['user', 'items', 'services']);
+        $order->load(['user', 'items', 'services', 'registrants']);
 
         return view('admin::orders.edit', compact('order'));
     }

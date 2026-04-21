@@ -92,18 +92,17 @@ class OrderService
 
                     for ($i = 0; $i < $item['quantity']; $i++) {
                         $registrant = Registrant::create([
-                            'user_id' => $userId,
-                            'order_id' => $order->id,
-                            'order_item_id' => $orderItem->id,
-                            'tld_id' => $tldId,
-                            'plugin_id' => $tldModel->plugin_id ?? null,
-                            'domain' => $domainName,
-                            'status' => 'pending',
+                            'user_id'           => $userId,
+                            'order_id'          => $order->id,
+                            'order_item_id'     => $orderItem->id,
+                            'tld_id'            => $tldId,
+                            'plugin_id'         => $tldModel->plugin_id ?? null,
+                            'domain'            => $domainName,
+                            'status'            => 'pending',
                             'registration_type' => $regType,
-                            'years' => $years,
-                            'currency' => $currency,
-                            'price' => $item['unit_price'],
-                            'epp_code' => $eppCode,
+                            'years'             => $years,
+                            'currency'          => $currency,
+                            'price'             => $item['unit_price'],
                         ]);
 
                         $this->recordCreate('registrant.created', $registrant->toArray());
