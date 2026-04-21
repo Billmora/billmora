@@ -17,12 +17,7 @@
     $resolvedError = $error ?? $errors->first($errorKey);
 @endphp
 
-<div 
-    x-data="{
-        hasError: {{ $resolvedError ? 'true' : 'false' }},
-    }" 
-    class="w-full"
->
+<div class="w-full">
     @if ($label)
         <div class="flex gap-1 mb-1">
             <label 
@@ -41,16 +36,16 @@
         <select
             name="{{ $name }}"
             id="{{ $name }}"
-            x-on:change="hasError = false"
-            :class="hasError ? 'border-red-400' : ''"
             @class([
-                'w-full text-slate-700 rounded-lg px-3 py-2.5 border-2 border-billmora-2 outline-none focus:ring-2 ring-billmora-primary-500 appearance-none',
+                'w-full text-slate-700 rounded-lg px-3 py-2.5 border-2 outline-none focus:ring-2 ring-billmora-primary-500 appearance-none',
+                'border-red-400' => $resolvedError,
+                'border-billmora-2' => !$resolvedError,
                 'bg-billmora-1 cursor-not-allowed' => $attributes->has('disabled') && $attributes->get('disabled') !== false,
                 'cursor-pointer' => !$attributes->has('disabled') || $attributes->get('disabled') === false,
             ])
             {{ $attributes }}
         >
-            <option value="" class="text-slate-500" {{ !isset($attributes['wire:model']) ? 'selected' : '' }} {{ $required ? 'disabled' : '' }}>
+            <option value="" class="text-slate-500" {{ $required ? 'disabled' : '' }}>
                 {{ __('common.choose_option') }}
             </option>
             {{ $slot }}
@@ -59,13 +54,13 @@
     </div>
 
     @if ($resolvedError)
-        <p class="mt-1 text-sm text-red-400 font-semibold" x-show="hasError">
+        <p class="mt-1 text-sm text-red-400 font-semibold">
             {{ $resolvedError }}
         </p>
     @endif
 
-    @if ($helper)
-        <p class="mt-1 text-sm text-slate-500" x-show="!hasError">
+    @if ($helper && !$resolvedError)
+        <p class="mt-1 text-sm text-slate-500">
             {{ $helper }}
         </p>
     @endif
