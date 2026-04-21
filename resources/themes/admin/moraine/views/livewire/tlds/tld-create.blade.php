@@ -59,12 +59,6 @@
             value="{{ old('redemption_period_days', 0) }}"
             required 
         />
-        <x-admin::toggle
-            name="whois_privacy"
-            label="{{ __('admin/tlds.whois_privacy_label') }}"
-            helper="{{ __('admin/tlds.whois_privacy_helper') }}"
-            :checked="(bool)old('whois_privacy', false)"
-        />
         <x-admin::select
             name="status"
             label="{{ __('admin/tlds.status_label') }}"
@@ -93,6 +87,7 @@
                     name="prices[{{ $currency->code }}][currency]"
                     type="text"
                     label="{{ __('admin/tlds.currency_code_label') }}"
+                    helper="{{ __('admin/tlds.currency_code_helper') }}"
                     value="{{ $currency->code }}"
                     readonly
                     required
@@ -105,6 +100,7 @@
                     step="0.01"
                     min="0"
                     label="{{ __('admin/tlds.register_price_label') }}"
+                    helper="{{ __('admin/tlds.register_price_helper') }}"
                 />
                 <x-admin::input
                     name="prices[{{ $currency->code }}][transfer_price]"
@@ -114,6 +110,7 @@
                     step="0.01"
                     min="0"
                     label="{{ __('admin/tlds.transfer_price_label') }}"
+                    helper="{{ __('admin/tlds.transfer_price_helper') }}"
                 />
                 <x-admin::input
                     name="prices[{{ $currency->code }}][renew_price]"
@@ -123,6 +120,7 @@
                     step="0.01"
                     min="0"
                     label="{{ __('admin/tlds.renew_price_label') }}"
+                    helper="{{ __('admin/tlds.renew_price_helper') }}"
                 />
                 @if (!$currency->is_default)
                     <x-admin::toggle

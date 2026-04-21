@@ -51,7 +51,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800 font-semibold">{{ $tld->tld }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
-                                        {{ $tld->plugin->name }}</td>
+                                        {{ $tld->plugin?->name }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
                                         {{ $tld->status }}
                                     </td>

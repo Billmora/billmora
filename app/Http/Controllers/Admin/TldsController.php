@@ -77,7 +77,6 @@ class TldsController extends Controller
             'max_years' => ['required', 'integer', 'min:1', 'max:10', 'gte:min_years'],
             'grace_period_days' => ['required', 'integer', 'min:0'],
             'redemption_period_days' => ['required', 'integer', 'min:0'],
-            'whois_privacy' => ['boolean'],
             'status' => ['required', Rule::in(['visible', 'hidden'])],
             'prices' => ['required', 'array'],
             'prices.*.currency' => ['required', 'string', 'size:3'],
@@ -94,7 +93,6 @@ class TldsController extends Controller
             'max_years' => $validated['max_years'],
             'grace_period_days' => $validated['grace_period_days'],
             'redemption_period_days' => $validated['redemption_period_days'],
-            'whois_privacy' => (bool) ($validated['whois_privacy'] ?? false),
             'status' => $validated['status'],
         ]);
 
@@ -145,7 +143,7 @@ class TldsController extends Controller
             'max_years' => ['required', 'integer', 'min:1', 'max:10', 'gte:min_years'],
             'grace_period_days' => ['required', 'integer', 'min:0'],
             'redemption_period_days' => ['required', 'integer', 'min:0'],
-            'whois_privacy' => ['boolean'],
+
             'status' => ['required', Rule::in(['visible', 'hidden'])],
             'prices' => ['required', 'array'],
             'prices.*.currency' => ['required', 'string', 'size:3'],
@@ -164,7 +162,7 @@ class TldsController extends Controller
             'max_years' => $validated['max_years'],
             'grace_period_days' => $validated['grace_period_days'],
             'redemption_period_days' => $validated['redemption_period_days'],
-            'whois_privacy' => (bool) ($validated['whois_privacy'] ?? false),
+
             'status' => $validated['status'],
         ]);
 
