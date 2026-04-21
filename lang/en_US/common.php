@@ -131,6 +131,7 @@ return [
     'back_to' => 'Back to :page',
 
     'search' => 'Search',
+    'none' => 'None',
     'name' => 'Name',
     'description' => 'Description',
 
