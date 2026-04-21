@@ -53,6 +53,16 @@ return [
             'failed' => 'Renewal failed: :message',
             'invalid_status' => 'Only active or expired domains can be renewed.',
         ],
+        'suspend' => [
+            'success' => 'Domain suspended successfully.',
+            'failed' => 'Suspension failed: :message',
+            'invalid_status' => 'Domain must be active to be suspended.',
+        ],
+        'unsuspend' => [
+            'success' => 'Domain unsuspended successfully.',
+            'failed' => 'Unsuspension failed: :message',
+            'invalid_status' => 'Domain must be suspended to be unsuspended.',
+        ],
         'sync' => [
             'success' => 'Domain status synced from registrar.',
             'failed' => 'Sync failed: :message',
