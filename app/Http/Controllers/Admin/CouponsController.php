@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Coupon;
 use App\Models\Package;
 use App\Models\PackagePrice;
+use App\Models\Tld;
 use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -72,8 +73,18 @@ class CouponsController extends Controller
             ])
             ->values()
             ->toArray();
+
+        $tldOptions = Tld::select('id', 'tld')
+            ->orderBy('tld')
+            ->get()
+            ->map(fn ($t) => [
+                'value' => $t->id,
+                'title' => $t->tld,
+            ])
+            ->values()
+            ->toArray();
         
-        return view('admin::coupons.create', compact('packageOptions', 'billingCycleOptions'));
+        return view('admin::coupons.create', compact('packageOptions', 'billingCycleOptions', 'tldOptions'));
     }
 
     /**
@@ -101,6 +112,8 @@ class CouponsController extends Controller
             'coupon_expires_date' => ['nullable', 'date', 'after_or_equal:coupon_start_date'],
             'coupon_packages' => ['nullable', 'array'],
             'coupon_packages.*' => [Rule::exists('packages', 'id')],
+            'coupon_tlds' => ['nullable', 'array'],
+            'coupon_tlds.*' => [Rule::exists('tlds', 'id')],
         ]);
 
         $coupon = Coupon::create([
@@ -118,6 +131,10 @@ class CouponsController extends Controller
             $coupon->packages()->attach($validated['coupon_packages']);
         }
 
+        if (!empty($validated['coupon_tlds'])) {
+            $coupon->tlds()->attach($validated['coupon_tlds']);
+        }
+
         $this->recordCreate('coupon.create', $coupon->toArray());
 
         return redirect()->route('admin.coupons')->with('success',  __('common.create_success', ['attribute' => $coupon->code]));
@@ -131,7 +148,7 @@ class CouponsController extends Controller
      */
     public function edit(Coupon $coupon)
     {
-        $coupon->load('packages');
+        $coupon->load(['packages', 'tlds']);
     
         $packageOptions = Package::query()
             ->select(['id', 'name', 'catalog_id'])
@@ -157,8 +174,18 @@ class CouponsController extends Controller
             ])
             ->values()
             ->toArray();
+
+        $tldOptions = Tld::select('id', 'tld')
+            ->orderBy('tld')
+            ->get()
+            ->map(fn ($t) => [
+                'value' => $t->id,
+                'title' => $t->tld,
+            ])
+            ->values()
+            ->toArray();
         
-        return view('admin::coupons.edit', compact('coupon', 'packageOptions', 'billingCycleOptions'));
+        return view('admin::coupons.edit', compact('coupon', 'packageOptions', 'billingCycleOptions', 'tldOptions'));
     }
 
     /**
@@ -188,10 +215,13 @@ class CouponsController extends Controller
             'coupon_expires_date' => ['nullable', 'date', 'after_or_equal:coupon_start_date'],
             'coupon_packages' => ['nullable', 'array'],
             'coupon_packages.*' => [Rule::exists('packages', 'id')],
+            'coupon_tlds' => ['nullable', 'array'],
+            'coupon_tlds.*' => [Rule::exists('tlds', 'id')],
         ]);
 
         $couponOld = $coupon->getOriginal();
         $packagesOld = $coupon->packages()->pluck('packages.id')->sort()->values()->all();
+        $tldsOld = $coupon->tlds()->pluck('tlds.id')->sort()->values()->all();
 
         $coupon->update([
             'code' => $validated['coupon_code'],
@@ -210,6 +240,12 @@ class CouponsController extends Controller
             $coupon->packages()->detach();
         }
 
+        if (isset($validated['coupon_tlds'])) {
+            $coupon->tlds()->sync($validated['coupon_tlds']);
+        } else {
+            $coupon->tlds()->detach();
+        }
+
         $changes = $coupon->getChanges();
 
         $packagesNew = collect($validated['coupon_packages'] ?? [])
@@ -220,6 +256,16 @@ class CouponsController extends Controller
         if ($packagesOld !== $packagesNew) {
             $changes['package_ids'] = $packagesNew;
             $couponOld['package_ids'] = $packagesOld;
+        }
+
+        $tldsNew = collect($validated['coupon_tlds'] ?? [])
+            ->sort()
+            ->values()
+            ->all();
+
+        if ($tldsOld !== $tldsNew) {
+            $changes['tld_ids'] = $tldsNew;
+            $couponOld['tld_ids'] = $tldsOld;
         }
 
         $this->recordUpdate('coupon.update', $couponOld, $changes);
