@@ -265,8 +265,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
      */
     Route::group(['prefix' => 'registrants'], function () {
         Route::get('/', [Admin\RegistrantsController::class, 'index'])->name('admin.registrants');
-        Route::get('/create', [Admin\RegistrantsController::class, 'create'])->name('admin.registrants.create_manual');
-        Route::post('/create', [Admin\RegistrantsController::class, 'store'])->name('admin.registrants.store');
         Route::get('/{registrant}/edit', [Admin\RegistrantsController::class, 'edit'])->name('admin.registrants.edit');
         Route::put('/{registrant}/edit', [Admin\RegistrantsController::class, 'update'])->name('admin.registrants.update');
         Route::delete('/{registrant}', [Admin\RegistrantsController::class, 'destroy'])->name('admin.registrants.destroy');
@@ -274,6 +272,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::post('/{registrant}/registrar/create', [Admin\Registrants\RegistrarController::class, 'create'])->name('admin.registrants.registrar.create');
         Route::post('/{registrant}/registrar/transfer', [Admin\Registrants\RegistrarController::class, 'transfer'])->name('admin.registrants.registrar.transfer');
         Route::post('/{registrant}/registrar/renew', [Admin\Registrants\RegistrarController::class, 'renew'])->name('admin.registrants.registrar.renew');
+        Route::post('/{registrant}/registrar/suspend', [Admin\Registrants\RegistrarController::class, 'suspend'])->name('admin.registrants.registrar.suspend');
+        Route::post('/{registrant}/registrar/unsuspend', [Admin\Registrants\RegistrarController::class, 'unsuspend'])->name('admin.registrants.registrar.unsuspend');
         Route::post('/{registrant}/registrar/sync', [Admin\Registrants\RegistrarController::class, 'sync'])->name('admin.registrants.registrar.sync');
     });
 

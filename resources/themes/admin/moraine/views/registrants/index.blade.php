@@ -20,16 +20,9 @@
                     </div>
                 </form>
             </div>
-            @can('registrants.create')
-                <a href="{{ route('admin.registrants.create_manual') }}"
-                    class="flex items-center gap-2 bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white font-semibold rounded-lg transition-colors cursor-pointer shrink-0">
-                    <x-lucide-plus class="w-5 h-auto" />
-                    {{ __('common.create') }}
-                </a>
-            @elsecan('registrants.update')
-                <a href="{{ route('admin.registrants.create_manual') }}"
-                    class="flex items-center gap-2 bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white font-semibold rounded-lg transition-colors cursor-pointer shrink-0">
-                    <x-lucide-plus class="w-5 h-auto" />
+            @can('orders.create')
+                <a href="{{ route('admin.orders.create') }}" class="flex gap-1 items-center bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                    <x-lucide-plus class="w-auto h-5" />
                     {{ __('common.create') }}
                 </a>
             @endcan
