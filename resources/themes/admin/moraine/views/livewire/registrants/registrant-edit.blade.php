@@ -1,8 +1,6 @@
 <form action="{{ route('admin.registrants.update', ['registrant' => $registrant->id]) }}" method="POST" class="w-full lg:w-5/7 flex flex-col gap-5">
     @csrf
     @method('PUT')
-
-    {{-- Domain Overview --}}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <x-admin::input
             name="domain_display"
@@ -18,7 +16,6 @@
             value="{{ $registrant->registrant_number }}"
             disabled
         />
-        {{-- User Field with link --}}
         <div class="w-full">
             <label class="flex text-slate-600 font-semibold mb-1">
                 {{ __('admin/registrants.user_label') }}
@@ -50,29 +47,6 @@
             value="{{ ucfirst(str_replace('_', ' ', $registrant->registration_type)) }}"
             disabled
         />
-        @if($registrant->order_id)
-            <div class="w-full">
-                <label class="flex text-slate-600 font-semibold mb-1">
-                    {{ __('admin/registrants.order_label') }}
-                </label>
-                <a href="{{ route('admin.orders.edit', ['order' => $registrant->order_id]) }}"
-                   target="_blank"
-                   class="inline-flex items-center gap-2 bg-billmora-1 border-2 border-billmora-2 hover:bg-billmora-primary-50 px-3 py-2 text-slate-600 rounded-xl text-sm transition duration-200">
-                    <x-lucide-receipt class="w-4 h-4" />
-                    {{ $registrant->order->order_number ?? '#' . $registrant->order_id }}
-                </a>
-            </div>
-        @endif
-    </div>
-
-    {{-- Domain Configuration --}}
-    <div>
-        <h4 class="text-lg font-semibold text-slate-600">{{ __('admin/registrants.domain_configuration_label') }}</h4>
-        <span class="text-slate-500">{{ __('admin/registrants.domain_configuration_helper') }}</span>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
-
-        {{-- Registrar --}}
         <div wire:key="bridge-plugin" x-on:change="$wire.set('plugin_id', $event.target.value)">
             <x-admin::select
                 wire:key="select-plugin"
@@ -89,8 +63,6 @@
                 @endforeach
             </x-admin::select>
         </div>
-
-        {{-- Status --}}
         <x-admin::select name="status" label="{{ __('admin/registrants.status_label') }}" helper="{{ __('admin/registrants.status_helper') }}" required>
             @foreach(['pending', 'active', 'expired', 'suspended', 'pending_transfer', 'transferred_away', 'cancelled', 'redemption', 'terminated'] as $status)
                 <option value="{{ $status }}" {{ old('status', $registrant->status) === $status ? 'selected' : '' }}>
@@ -98,8 +70,6 @@
                 </option>
             @endforeach
         </x-admin::select>
-
-        {{-- Dates --}}
         <x-admin::input
             name="registered_at"
             type="date"
@@ -114,8 +84,6 @@
             helper="{{ __('admin/registrants.expires_helper') }}"
             value="{{ old('expires_at', $registrant->expires_at?->format('Y-m-d')) }}"
         />
-
-        {{-- Billing --}}
         <x-admin::input
             name="years"
             type="number"
@@ -132,19 +100,13 @@
             helper="{{ __('admin/registrants.price_helper') }}"
             value="{{ old('price', $registrant->price) }}"
         />
-
-        {{-- Flags --}}
-        <div class="md:col-span-2 flex flex-col gap-4">
-            <x-admin::toggle
-                name="auto_renew"
-                label="{{ __('admin/registrants.auto_renew_label') }}"
-                helper="{{ __('admin/registrants.auto_renew_helper') }}"
-                :checked="(bool) old('auto_renew', $registrant->auto_renew)"
-            />
-        </div>
+        <x-admin::toggle
+            name="auto_renew"
+            label="{{ __('admin/registrants.auto_renew_label') }}"
+            helper="{{ __('admin/registrants.auto_renew_helper') }}"
+            :checked="(bool) old('auto_renew', $registrant->auto_renew)"
+        />
     </div>
-
-    {{-- Nameservers --}}
     <div>
         <h4 class="text-lg font-semibold text-slate-600">{{ __('admin/registrants.nameservers_label') }}</h4>
         <span class="text-slate-500">{{ __('admin/registrants.nameservers_helper') }}</span>
@@ -160,8 +122,6 @@
             />
         @endfor
     </div>
-
-    {{-- Actions --}}
     <div class="flex gap-4 ml-auto">
         <a href="{{ route('admin.registrants') }}"
             class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
