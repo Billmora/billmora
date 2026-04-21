@@ -2,15 +2,20 @@
 
 namespace App\Models;
 
+use App\Contracts\BrowseInterface;
 use App\Observers\RegistrantObserver;
+use App\Traits\BrowseTrait;
 use Billmora;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 #[ObservedBy(RegistrantObserver::class)]
-class Registrant extends Model
+class Registrant extends Model implements BrowseInterface
 {
+    use BrowseTrait;
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -216,5 +221,22 @@ class Registrant extends Model
             'amount'
         ])
         ->withTimestamps();
+    }
+
+    /**
+     * Return a collection of registrant records formatted as browse items for quick search indexing.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public static function toBrowseItems(): Collection
+    {
+        return static::select('id', 'registrant_number')
+            ->limit(50)
+            ->get()
+            ->map(fn($item) => [
+                'title' => "{$item->registrant_number}",
+                'category' => 'registrant',
+                'url' => route('admin.registrants.edit', ['registrant' => $item->id]),
+            ]);
     }
 }

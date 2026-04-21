@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Contracts\BrowseInterface;
+use App\Traits\BrowseTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
-class Tld extends Model
+class Tld extends Model implements BrowseInterface
 {
+    use BrowseTrait;
     /**
      * The attributes that aren't mass assignable.
      *
@@ -51,5 +55,22 @@ class Tld extends Model
     public function registrants()
     {
         return $this->hasMany(Registrant::class);
+    }
+
+    /**
+     * Return a collection of TLD records formatted as browse items for quick search indexing.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public static function toBrowseItems(): Collection
+    {
+        return static::select('id', 'tld')
+            ->limit(50)
+            ->get()
+            ->map(fn($item) => [
+                'title' => "{$item->tld}",
+                'category' => 'tld',
+                'url' => route('admin.tlds.edit', ['tld' => $item->id]),
+            ]);
     }
 }
