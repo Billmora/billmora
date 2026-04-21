@@ -20,6 +20,7 @@
             label="{{ __('admin/tlds.registrar_label') }}"
             helper="{{ __('admin/tlds.registrar_helper') }}"
         >
+            <option value="">{{ __('common.none') }}</option>
             @foreach($this->registrars as $registrar)
                 <option value="{{ $registrar->id }}" {{ old('plugin_id', $tld->plugin_id) == $registrar->id ? 'selected' : '' }}>
                     {{ $registrar->name }}
@@ -101,6 +102,7 @@
                     min="0"
                     label="{{ __('admin/tlds.register_price_label') }}"
                     helper="{{ __('admin/tlds.register_price_helper') }}"
+                    :required="$currency->is_default"
                 />
                 <x-admin::input
                     name="prices[{{ $currency->code }}][transfer_price]"
@@ -111,6 +113,7 @@
                     min="0"
                     label="{{ __('admin/tlds.transfer_price_label') }}"
                     helper="{{ __('admin/tlds.transfer_price_helper') }}"
+                    :required="$currency->is_default"
                 />
                 <x-admin::input
                     name="prices[{{ $currency->code }}][renew_price]"
@@ -121,6 +124,7 @@
                     min="0"
                     label="{{ __('admin/tlds.renew_price_label') }}"
                     helper="{{ __('admin/tlds.renew_price_helper') }}"
+                    :required="$currency->is_default"
                 />
                 @if (!$currency->is_default)
                     <x-admin::toggle

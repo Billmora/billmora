@@ -91,8 +91,8 @@ class RegistrantsController extends Controller
             'auto_renew' => ['boolean'],
             'expires_at' => ['nullable', 'date'],
             'registered_at' => ['nullable', 'date'],
-            'years'      => ['nullable', 'integer', 'min:1'],
-            'price'      => ['nullable', 'numeric', 'min:0'],
+            'years'      => ['required', 'integer', 'min:1'],
+            'price'      => ['required', 'numeric', 'min:0'],
             'nameservers'   => ['nullable', 'array'],
             'nameservers.*' => ['nullable', 'string'],
         ]);

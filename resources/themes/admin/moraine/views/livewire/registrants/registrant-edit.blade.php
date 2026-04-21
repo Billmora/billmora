@@ -91,6 +91,7 @@
             helper="{{ __('admin/registrants.years_helper') }}"
             value="{{ old('years', $registrant->years) }}"
             min="1"
+            required
         />
         <x-admin::input
             name="price"
@@ -99,6 +100,7 @@
             label="{{ __('admin/registrants.price_label') }}"
             helper="{{ __('admin/registrants.price_helper') }}"
             value="{{ old('price', $registrant->price) }}"
+            required
         />
         <x-admin::toggle
             name="auto_renew"
