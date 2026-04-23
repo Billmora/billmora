@@ -41,6 +41,7 @@ Route::group(['prefix' => 'store', 'middleware' => ['maintenance']], function ()
     
     Route::group(['prefix' => 'domains', 'middleware' => [\App\Http\Middleware\DomainEnabled::class]], function () {
         Route::get('/', [Client\Store\DomainController::class, 'index'])->name('client.store.domains');
+        Route::get('/{domain_name}', [Client\Store\DomainController::class, 'show'])->name('client.store.domains.show');
     });
 
     Route::get('/{catalog:slug}', [Client\Store\CatalogController::class, 'index'])->name('client.store.catalog');
