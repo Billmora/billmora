@@ -25,12 +25,7 @@
     }
 @endphp
 
-<div
-    x-data="{
-        hasError: {{ $resolvedError ? 'true' : 'false' }},
-    }"
-    class="w-full"
->
+<div class="w-full">
     @if ($label)
         <div class="flex gap-1 mb-1">
             <label for="{{ $name }}" class="text-slate-600 font-semibold">
@@ -48,10 +43,10 @@
         id="{{ $name }}"
         placeholder="{{ $placeholder }}"
         value="{{ $resolvedValue }}"
-        x-on:input="hasError = false"
-        :class="hasError ? 'border-red-400' : ''"
         @class([
-            'w-full px-3 py-2 rounded-lg border-2 border-billmora-2 outline-none text-slate-700 placeholder:text-slate-500 focus:ring-2 ring-billmora-primary-500',
+            'w-full px-3 py-2 rounded-lg border-2 outline-none text-slate-700 placeholder:text-slate-500 focus:ring-2 ring-billmora-primary-500',
+            'border-red-400' => $resolvedError,
+            'border-billmora-2' => !$resolvedError,
             'bg-billmora-1 cursor-not-allowed' => $attributes->has('disabled') && $attributes->get('disabled') !== false,
             'cursor-pointer' => ($type === 'file') && (!$attributes->has('disabled') || $attributes->get('disabled') === false),
             'cursor-text' => ($type !== 'file') && (!$attributes->has('disabled') || $attributes->get('disabled') === false),
@@ -60,13 +55,13 @@
     />
 
     @if ($resolvedError)
-        <p class="mt-1 text-sm text-red-400 font-semibold" x-show="hasError">
+        <p class="mt-1 text-sm text-red-400 font-semibold">
             {{ $resolvedError }}
         </p>
     @endif
 
-    @if ($helper)
-        <p class="mt-1 text-sm text-slate-500" x-show="!hasError">
+    @if ($helper && !$resolvedError)
+        <p class="mt-1 text-sm text-slate-500">
             {{ $helper }}
         </p>
     @endif

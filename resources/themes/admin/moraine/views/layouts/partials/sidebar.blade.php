@@ -12,14 +12,14 @@
                 {{ Billmora::getGeneral('company_name') }}
             </h3>
         </a>
-        {{-- Sidebar close toggle --}}
+        
         <div id="closeSidebar" role="button"
             class="absolute top-14 right-0 xl:hidden bg-white hover:bg-billmora-primary-500 border-2 border-billmora-2 text-slate-600 hover:text-white shadow p-2 rounded-full cursor-pointer transition">
             <x-lucide-x class="w-auto h-5" />
         </div>
         <hr class="border-t-2 border-billmora-2 my-7">
         <div class="space-y-2 overflow-y-auto" id="sidemenu">
-            {{-- Sidebar content --}}
+            
             <a href="{{ route('admin.dashboard') }}"
                 class="flex gap-2 items-center {{ request()->routeIs('admin.dashboard') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
                 <x-lucide-layout-grid class="w-5 h-auto" />
@@ -47,6 +47,13 @@
                 <x-lucide-scan-text class="w-5 h-auto" />
                 <span class="font-semibold">{{ __('admin/navigation.services') }}</span>
             </a>
+            @endcan
+            @can('registrants.view')
+                <a href="{{ route('admin.registrants') }}"
+                    class="flex gap-2 items-center {{ request()->routeIs('admin.registrants*') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+                    <x-lucide-globe class="w-5 h-auto" />
+                    <span class="font-semibold">{{ __('admin/navigation.registrants') }}</span>
+                </a>
             @endcan
             @can('invoices.view')
                 <a href="{{ route('admin.invoices') }}"
@@ -97,6 +104,13 @@
                     class="flex gap-2 items-center {{ request()->routeIs('admin.variants*') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
                     <x-lucide-boxes class="w-5 h-auto" />
                     <span class="font-semibold">{{ __('admin/navigation.variants') }}</span>
+                </a>
+            @endcan
+            @can('tlds.view')
+                <a href="{{ route('admin.tlds') }}"
+                    class="flex gap-2 items-center {{ request()->routeIs('admin.tlds*') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+                    <x-lucide-earth class="w-5 h-auto" />
+                    <span class="font-semibold">{{ __('admin/navigation.tlds') }}</span>
                 </a>
             @endcan
             @can('coupons.view')
@@ -176,6 +190,13 @@
                     class="flex gap-2 items-center {{ request()->routeIs('admin.provisionings*') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
                     <x-lucide-plug class="w-5 h-auto" />
                     <span class="font-semibold">{{ __('admin/navigation.provisionings') }}</span>
+                </a>
+            @endcan
+            @can('registrars.view')
+                <a href="{{ route('admin.registrars') }}"
+                    class="flex gap-2 items-center {{ request()->routeIs('admin.registrars*') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+                    <x-lucide-cable class="w-5 h-auto" />
+                    <span class="font-semibold">{{ __('admin/navigation.registrars') }}</span>
                 </a>
             @endcan
             @can('gateways.view')

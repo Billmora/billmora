@@ -23,7 +23,7 @@ class CartController extends Controller
 
     public function __construct(protected CartService $cartService)
     {
-        // 
+
     }
 
     /**
@@ -36,11 +36,44 @@ class CartController extends Controller
     {
         $cartItems = $this->cartService->getItems();
         $currencyCode = Session::get('currency');
-        
+
         $removedItems = false;
         $pricesUpdated = false;
 
         foreach ($cartItems as $key => $item) {
+            if (($item['type'] ?? 'service') === 'domain') {
+
+                $tld = \App\Models\Tld::find($item['tld_id'] ?? null);
+                if (!$tld || $tld->status !== 'visible') {
+                    $this->cartService->removeItem($key);
+                    $removedItems = true;
+                    continue;
+                }
+
+                $tldPrice = \App\Models\TldPrice::where('tld_id', $tld->id)
+                    ->where('currency', $currencyCode)
+                    ->first();
+
+                if (!$tldPrice) {
+                    $this->cartService->removeItem($key);
+                    $removedItems = true;
+                    continue;
+                }
+
+                $years = $item['config_options']['years'] ?? 1;
+                $registrationType = $item['config_options']['type'] ?? 'register';
+                
+                $basePrice = $registrationType === 'register' ? $tldPrice->register_price : $tldPrice->transfer_price;
+                $expectedPrice = $basePrice * $years;
+
+                if ($item['unit_price'] != $expectedPrice) {
+                    $this->cartService->updateItemPrices($key, $expectedPrice, 0);
+                    $pricesUpdated = true;
+                }
+
+                continue;
+            }
+
             $packagePrice = PackagePrice::find($item['package_price_id']);
             $isValid = true;
 
@@ -107,7 +140,7 @@ class CartController extends Controller
 
         return view('client::checkout.cart', compact('cartItems', 'totals', 'currencyCode', 'appliedCoupon', 'gateways'));
     }
-    
+
     /**
      * Validate, calculate pricing, and add a package item into the cart session.
      *
@@ -131,7 +164,7 @@ class CartController extends Controller
 
         $currencyCode = Session::get('currency');
         $packagePrice = PackagePrice::with('package.plugin')->findOrFail($validated['price_id']);
-        
+
         $variantSelections = $validationService->buildVariantSelections(
             ($validated['variants'] ?? []) + ($validated['variants_multi'] ?? [])
         );
@@ -175,7 +208,7 @@ class CartController extends Controller
         );
 
         $quantity = $validated['quantity'] ?? 1;
-        
+
         $this->cartService->addService(
             $packagePrice->package,
             $packagePrice,
@@ -207,7 +240,7 @@ class CartController extends Controller
                 ->route('client.checkout.cart')
                 ->with('error', $validator->errors()->first('quantity'));
         }
-        
+
         $success = $this->cartService->updateQuantity($id, $request->quantity);
 
         if (!$success) {
@@ -240,7 +273,7 @@ class CartController extends Controller
     private function loadVariantsDetails(array $variantSelections): array
     {
         if (empty($variantSelections)) return [];
-        
+
         $options = VariantOption::with('variant')
             ->whereIn('id', collect($variantSelections)->flatten())
             ->get()

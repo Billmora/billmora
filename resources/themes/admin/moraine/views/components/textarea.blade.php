@@ -21,10 +21,7 @@
     $resolvedValue = old($errorKey, $value);
 @endphp
 
-<div 
-    x-data="{ errorVisible: {{ $resolvedError ? 'true' : 'false' }} }" 
-    class="w-full"
->
+<div class="w-full">
     @if ($label)
         <div class="flex gap-1">
             <label for="{{ $name }}" class="block text-slate-600 font-semibold mb-0.5">
@@ -41,7 +38,6 @@
             name="{{ $name }}"
             id="{{ $name }}"
             placeholder="{{ $placeholder }}"
-            x-on:input="errorVisible = false"
             @class([
                 'w-full text-slate-700 rounded-lg px-3 py-2 border-2 outline-none focus:ring-2 ring-billmora-primary-500 placeholder:text-slate-500',
                 'bg-billmora-1 cursor-not-allowed' => $attributes->has('disabled'),
@@ -52,8 +48,9 @@
             {{ $attributes }}
         >{{ $resolvedValue ?? $slot }}</textarea>
     </div>
+
     @if ($resolvedError)
-        <p class="mt-1 text-sm text-red-400 font-semibold" x-show="errorVisible">
+        <p class="mt-1 text-sm text-red-400 font-semibold">
             {{ $resolvedError }}
         </p>
     @elseif ($helper)

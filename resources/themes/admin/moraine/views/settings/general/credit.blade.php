@@ -22,6 +22,10 @@
                 'route' => route('admin.settings.general.service'),
                 'icon' => 'lucide-scan-text',
                 'label' => __('admin/settings/general.tabs.service'),
+            ],            [
+                'route' => route('admin.settings.general.domain'),
+                'icon' => 'lucide-globe',
+                'label' => __('admin/settings/general.tabs.domain'),
             ],
             [
                 'route' => route('admin.settings.general.invoice'),

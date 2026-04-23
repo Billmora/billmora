@@ -43,6 +43,11 @@ class BrowseController extends Controller
                 'url' => route('admin.services')
             ],
             [
+                'title' => 'Registrants',
+                'category' => 'management',
+                'url' => route('admin.registrants')
+            ],
+            [
                 'title' => 'Invoices',
                 'category' => 'management',
                 'url' => route('admin.invoices')
@@ -76,6 +81,11 @@ class BrowseController extends Controller
                 'title' => 'Variants',
                 'category' => 'product',
                 'url' => route('admin.variants')
+            ],
+            [
+                'title' => 'TLDs',
+                'category' => 'product',
+                'url' => route('admin.tlds')
             ],
             [
                 'title' => 'Coupons',
@@ -176,6 +186,11 @@ class BrowseController extends Controller
                 'title' => 'Provisionings',
                 'category' => 'plugins',
                 'url' => route('admin.provisionings')
+            ],
+            [
+                'title' => 'Registrars',
+                'category' => 'plugins',
+                'url' => route('admin.registrars')
             ],
             [
                 'title' => 'Gateways',

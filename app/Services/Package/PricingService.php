@@ -2,11 +2,12 @@
 
 namespace App\Services\Package;
 
-use App\Models\Package;
-use App\Models\PackagePrice;
-use App\Models\VariantOption;
 use App\Models\Coupon;
 use App\Models\Currency;
+use App\Models\Package;
+use App\Models\PackagePrice;
+use App\Models\Tld;
+use App\Models\VariantOption;
 use Illuminate\Support\Collection;
 
 class PricingService
@@ -418,13 +419,54 @@ class PricingService
     }
 
     /**
+     * Calculate comprehensive pricing for a domain registration/transfer.
+     *
+     * @param  \App\Models\Tld  $tld
+     * @param  string  $type  'register' or 'transfer'
+     * @param  int  $years
+     * @param  \App\Models\Coupon|null  $coupon
+     * @param  string  $currencyCode
+     * @return array{unit_price: float, years: int, subtotal: float, discount: float, total: float}
+     */
+    public function calculateDomainPricing(
+        Tld $tld,
+        string $type,
+        int $years,
+        ?Coupon $coupon,
+        string $currencyCode
+    ): array {
+        $tldPrice = $tld->prices()->where('currency', $currencyCode)->first();
+
+        $unitPrice = match ($type) {
+            'register' => (float) ($tldPrice->register_price ?? 0),
+            'transfer' => (float) ($tldPrice->transfer_price ?? 0),
+            default    => 0,
+        };
+
+        $subtotal = $unitPrice * $years;
+
+        $discount = 0;
+        if ($coupon && $coupon->isValidForTld($tld->id)) {
+            $discount = $this->calculateDiscount($coupon, $subtotal);
+        }
+
+        return [
+            'unit_price' => $unitPrice,
+            'years'      => $years,
+            'subtotal'   => $subtotal,
+            'discount'   => $discount,
+            'total'      => max(0, $subtotal - $discount),
+        ];
+    }
+
+    /**
      * Calculate discount amount based on coupon type and subtotal.
      *
      * @param \App\Models\Coupon $coupon
      * @param float $subtotal
      * @return float
      */
-    private function calculateDiscount(Coupon $coupon, float $subtotal): float
+    protected function calculateDiscount(Coupon $coupon, float $subtotal): float
     {
         if (strtolower($coupon->type) === 'percentage') {
             return ($subtotal * $coupon->value) / 100;

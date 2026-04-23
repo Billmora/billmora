@@ -60,6 +60,22 @@
                         @endforeach
                     </div>
                 </div>
+                <hr class="border-t-2 border-billmora-2 border-dashed">
+                <div class="grid gap-4">
+                    <h3 class="text-lg font-bold text-slate-700">{{ __('admin/orders.domains_label') }}</h3>
+                    <div class="grid gap-2">
+                        @foreach ($order->registrants as $registrant)
+                            <div class="flex justify-between items-center p-3 bg-white border-2 border-billmora-2 rounded-lg">
+                                <a href="{{ route('admin.registrants.edit', ['registrant' => $registrant->id]) }}" class="text-billmora-primary-500 font-semibold hover:underline">
+                                    {{ $registrant->domain }}
+                                </a>
+                                <span class="px-2 py-1 text-sm text-slate-600 font-semibold rounded-md">
+                                    {{ ucfirst(str_replace('_', ' ', $registrant->status)) }}
+                                </span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
         </form>
         <div class="w-full lg:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl lg:sticky top-28 shrink-0">

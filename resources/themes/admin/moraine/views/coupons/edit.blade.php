@@ -49,6 +49,13 @@
             :options="$packageOptions"
             :selected="old('coupon_packages', $coupon->packages->pluck('id')->toArray())"
         />
+        <x-admin::multiselect
+            name="coupon_tlds"
+            label="{{ __('admin/coupons.tlds_label') }}"
+            helper="{{ __('admin/coupons.tlds_helper') }}"
+            :options="$tldOptions"
+            :selected="old('coupon_tlds', $coupon->tlds->pluck('id')->toArray())"
+        />
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <x-admin::input
                 name="coupon_max_uses"

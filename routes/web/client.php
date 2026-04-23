@@ -38,6 +38,12 @@ Route::group(['middleware' => ['auth', 'maintenance', '2fa']], function () {
  */
 Route::group(['prefix' => 'store', 'middleware' => ['maintenance']], function () {
     Route::get('/', [Client\StoreController::class, 'index'])->name('client.store');
+    
+    Route::group(['prefix' => 'domains', 'middleware' => [\App\Http\Middleware\DomainEnabled::class]], function () {
+        Route::get('/', [Client\Store\DomainController::class, 'index'])->name('client.store.domains');
+        Route::get('/{domain_name}', [Client\Store\DomainController::class, 'show'])->name('client.store.domains.show');
+    });
+
     Route::get('/{catalog:slug}', [Client\Store\CatalogController::class, 'index'])->name('client.store.catalog');
     Route::get('/{catalog:slug}/{package:slug}', [Client\Store\PackageController::class, 'show'])->name('client.store.catalog.package');
 });
@@ -77,6 +83,24 @@ Route::group(['prefix' => 'services', 'middleware' => ['auth', 'maintenance', '2
 
     Route::get('/{service:service_number}/provisioning/{slug}', [Client\Services\ProvisioningController::class, 'show'])->name('client.services.provisioning.show');
     Route::any('/{service:service_number}/provisioning/{slug}/handle', [Client\Services\ProvisioningController::class, 'handle'])->name('client.services.provisioning.handle');
+});
+
+/**
+ * Client registrants (domain management) routes.
+ * 
+ * Prefix: /registrants
+ */
+Route::group(['prefix' => 'registrants', 'middleware' => ['auth', 'maintenance', '2fa', \App\Http\Middleware\DomainEnabled::class]], function () {
+    Route::get('/', [Client\RegistrantsController::class, 'index'])->name('client.registrants');
+    Route::get('/{registrant:registrant_number}', [Client\RegistrantsController::class, 'show'])->name('client.registrants.show');
+
+    Route::get('/{registrant:registrant_number}/nameservers', [Client\Registrants\NameserverController::class, 'show'])->name('client.registrants.nameservers.show');
+    Route::put('/{registrant:registrant_number}/nameservers', [Client\Registrants\NameserverController::class, 'update'])->name('client.registrants.nameservers.update');
+    Route::get('/{registrant:registrant_number}/auto-renew', [Client\Registrants\AutoRenewController::class, 'show'])->name('client.registrants.autorenew.show');
+    Route::put('/{registrant:registrant_number}/auto-renew', [Client\Registrants\AutoRenewController::class, 'update'])->name('client.registrants.autorenew.update');
+
+    Route::get('/{registrant:registrant_number}/registrar/{slug}', [Client\Registrants\RegistrarController::class, 'show'])->name('client.registrants.registrar.show');
+    Route::any('/{registrant:registrant_number}/registrar/{slug}/handle', [Client\Registrants\RegistrarController::class, 'handle'])->name('client.registrants.registrar.handle');
 });
 
 /**

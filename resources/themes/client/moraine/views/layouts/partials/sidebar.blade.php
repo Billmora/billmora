@@ -9,20 +9,20 @@
       <img src="{{ Billmora::getGeneral('company_logo') }}" alt="billmora logo" class="w-auto h-9 rounded-lg">
       <h3 class="text-xl font-extrabold uppercase text-billmora-primary-500">{{ Billmora::getGeneral('company_name') }}</h3>
     </a>
-    {{-- Sidebar close toggle --}}
+    
     <div id="closeSidebar" role="button" class="absolute top-14 right-0 xl:hidden bg-billmora-bg hover:bg-billmora-primary-500 border-2 border-billmora-2 text-slate-600 hover:text-white shadow p-2 rounded-full cursor-pointer transition">
       <x-lucide-x class="w-auto h-5" />
     </div>
     <hr class="border-t-2 border-billmora-2 my-7">
     <div class="space-y-2 overflow-y-auto" id="sidemenu">
-      {{-- Sidebar content --}}
+      
       @auth
         <a href="{{ route('client.dashboard') }}" class="flex gap-2 items-center {{ request()->routeIs('client.dashboard') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
           <x-lucide-layout-grid class="w-5 h-auto" />
           <span class="font-semibold">{{ __('client/navigation.dashboard') }}</span>
         </a>
       @endauth
-      <a href="{{ route('client.store') }}" class="flex gap-2 items-center {{ request()->routeIs('client.store*') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+      <a href="{{ route('client.store') }}" class="flex gap-2 items-center {{ request()->routeIs('client.store') || request()->routeIs('client.store.catalog*') || request()->routeIs('client.store.domains*') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
         <x-lucide-store class="w-5 h-auto" />
         <span class="font-semibold">{{ __('client/navigation.store') }}</span>
       </a>
@@ -31,6 +31,12 @@
           <x-lucide-scan-text class="w-5 h-auto" />
           <span class="font-semibold">{{ __('client/navigation.services') }}</span>
         </a>
+        @if(Billmora::getGeneral('domain_registration_enabled') || Billmora::getGeneral('domain_transfer_enabled'))
+        <a href="{{ route('client.registrants') }}" class="flex gap-2 items-center {{ request()->routeIs('client.registrants*') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+          <x-lucide-globe class="w-5 h-auto" />
+          <span class="font-semibold">{{ __('client/navigation.registrants') }}</span>
+        </a>
+        @endif
         <a href="{{ route('client.invoices') }}" class="flex gap-2 items-center {{ request()->routeIs('client.invoices*') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
           <x-lucide-receipt-text class="w-5 h-auto" />
           <span class="font-semibold">{{ __('client/navigation.invoices') }}</span>

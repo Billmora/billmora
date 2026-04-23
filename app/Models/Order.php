@@ -148,6 +148,16 @@ class Order extends Model implements BrowseInterface
     }
 
     /**
+     * Get the registrants (domains) created from this order.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function registrants()
+    {
+        return $this->hasMany(Registrant::class);
+    }
+
+    /**
      * Get the invoices for this order.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

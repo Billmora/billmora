@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Tld;
 use Illuminate\Database\Eloquent\Model;
 
 class Coupon extends Model
@@ -40,6 +41,16 @@ class Coupon extends Model
     public function packages()
     {
         return $this->belongsToMany(Package::class);
+    }
+
+    /**
+     * TLDs that this coupon is applicable to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tlds()
+    {
+        return $this->belongsToMany(Tld::class);
     }
 
     /**
@@ -120,6 +131,23 @@ class Coupon extends Model
     }
 
     /**
+     * Check whether the coupon is valid for a specific TLD.
+     *
+     * @param  int  $tldId
+     * @return bool
+     */
+    public function isValidForTld($tldId)
+    {
+        $linkedTlds = $this->tlds()->count();
+        
+        if ($linkedTlds === 0) {
+            return true;
+        }
+        
+        return $this->tlds()->where('tld_id', $tldId)->exists();
+    }
+
+    /**
      * Check whether the coupon is valid for a billing cycle.
      *
      * @param  string  $pricingName
@@ -142,7 +170,7 @@ class Coupon extends Model
      * @param  string|null            $pricingName
      * @return bool
      */
-    public function isValid(User $user, $packageId = null, $pricingName = null)
+    public function isValid(User $user, $packageId = null, $pricingName = null, $tldId = null)
     {
         if (!$this->isActive()) {
             return false;
@@ -161,6 +189,10 @@ class Coupon extends Model
         }
 
         if ($pricingName && !$this->isValidForBillingCycle($pricingName)) {
+            return false;
+        }
+
+        if ($tldId && !$this->isValidForTld($tldId)) {
             return false;
         }
         
