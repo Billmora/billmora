@@ -41,7 +41,7 @@
 
         <form wire:submit.prevent="search" class="flex flex-col md:flex-row gap-3 relative">
             <input type="text" wire:model.defer="domain" placeholder="{{ __('client/store.domain_search_placeholder') }}" class="w-full px-6 py-4 bg-white text-slate-700 placeholder:text-slate-500 border-2 border-billmora-2 rounded-xl focus:border-billmora-primary-500 outline-none transition-colors text-lg font-medium">
-            <button type="submit" class="px-8 py-4 bg-billmora-primary-500 hover:bg-billmora-primary-600 text-white rounded-xl font-bold text-lg transition-colors shadow cursor-pointer">
+            <button type="submit" class="w-full md:w-auto px-8 py-4 bg-billmora-primary-500 hover:bg-billmora-primary-600 text-white rounded-xl font-bold text-lg transition-colors shadow cursor-pointer">
                 <span wire:loading.remove wire:target="search">{{ __('common.search') }}</span>
                 <span wire:loading wire:target="search">...</span>
             </button>
@@ -50,52 +50,95 @@
             <p class="text-red-500 mt-2 text-sm font-semibold">{{ $message }}</p>
         @enderror
 
-        @if($type === 'transfer')
-            <div class="mt-4">
-                <label class="block text-slate-600 font-semibold mb-2">{{ __('client/store.domain_epp_code_label') }}</label>
-                <input type="text" wire:model.defer="eppCode" class="w-full px-4 py-3 bg-white text-slate-700 placeholder:text-slate-500 border-2 border-billmora-2 rounded-lg focus:border-billmora-primary-500 outline-none transition-colors" placeholder="e.g. ABCDEFGHIJK">
-                <p class="text-slate-400 text-sm mt-1">{{ __('client/store.domain_epp_code_helper') }}</p>
-                @error('eppCode')
-                    <p class="text-red-500 mt-1 text-sm font-semibold">{{ $message }}</p>
-                @enderror
-            </div>
-        @endif
-
         @endif 
     </div>
 
-    @if($searched && $available)
-        <div class="bg-billmora-bg p-8 border-2 border-billmora-primary-500 rounded-2xl">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-                <div>
-                    <h2 class="text-xl font-bold text-slate-700 mb-1">{{ $domainName }}</h2>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-bold">
-                        <x-lucide-check-circle class="w-4 h-4" />
-                        {{ __('client/store.domain_available') }}
-                    </span>
-                    @if($checkPrice !== null)
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-sm font-bold ml-2">
-                            Premium: {{ Currency::format($checkPrice) }}
-                        </span>
-                    @endif
+    @if($searched && $tld)
+        <div class="bg-billmora-bg p-6 md:p-8 border-2 {{ $available ? 'border-billmora-primary-500' : 'border-red-500' }} rounded-2xl mb-5">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+                <div class="w-full md:w-auto overflow-hidden">
+                    <h2 class="text-xl font-bold text-slate-700 mb-2 md:mb-1 truncate">{{ $domainName }}</h2>
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-2">
+                        @if($available)
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-bold">
+                                <x-lucide-check-circle class="w-4 h-4" />
+                                {{ __('client/store.domain_available') }}
+                            </span>
+                            @if($checkPrice !== null)
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-sm font-bold">
+                                    Premium: {{ Currency::format($checkPrice) }}
+                                </span>
+                            @elseif($tldPrice)
+                                @php
+                                    $basePrice = $type === 'register' ? $tldPrice->register_price : $tldPrice->transfer_price;
+                                    $minYears = $tld->min_years;
+                                    $totalBasePrice = $basePrice * $minYears;
+                                @endphp
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-bold">
+                                    {{ Currency::format($totalBasePrice) }} / {{ $minYears }} {{ $minYears > 1 ? 'Years' : 'Year' }}
+                                </span>
+                            @endif
+                        @else
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-700 text-sm font-bold">
+                                <x-lucide-x-circle class="w-4 h-4" />
+                                {{ __('client/store.domain_unavailable') }}
+                            </span>
+                        @endif
+                    </div>
                 </div>
 
-                <div class="flex items-center gap-4 w-full md:w-auto">
-                    <div class="flex-grow">
-                        <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase">{{ __('client/store.domain_years_label') }}</label>
-                        <select wire:model.live="selectedYears" class="w-full md:w-48 px-4 py-2 bg-white border-2 border-billmora-2 rounded-lg font-semibold text-slate-700 outline-none focus:border-billmora-primary-500 cursor-pointer">
-                            @foreach($yearOptions as $opt)
-                                <option value="{{ $opt['years'] }}">{{ $opt['label'] }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <button wire:click="addToCart" class="mt-5 px-6 py-2.5 bg-billmora-primary-500 hover:bg-billmora-primary-600 text-white rounded-lg font-bold transition-colors whitespace-nowrap shadow flex items-center gap-2 cursor-pointer">
-                        <x-lucide-shopping-cart class="w-5 h-5" />
-                        {{ __('client/store.domain_add_to_cart') }}
-                    </button>
+                <div class="w-full md:w-auto mt-2 md:mt-0">
+                    @if($available)
+                        <a href="{{ route('client.store.domains.show', ['domain_name' => $domainName, 'type' => $type]) }}" class="w-full md:w-auto px-6 py-3 md:py-2.5 bg-billmora-primary-500 hover:bg-billmora-primary-600 text-white rounded-lg font-bold transition-colors whitespace-nowrap shadow flex items-center justify-center gap-2 cursor-pointer">
+                            {{ __('common.configure') }}
+                            <x-lucide-arrow-right class="w-5 h-5" />
+                        </a>
+                    @else
+                        <button disabled class="w-full md:w-auto px-6 py-3 md:py-2.5 bg-slate-300 text-slate-500 rounded-lg font-bold whitespace-nowrap flex items-center justify-center gap-2 cursor-not-allowed">
+                            Taken
+                        </button>
+                    @endif
                 </div>
             </div>
         </div>
+
+        @if($loadingSuggestions)
+        <div wire:init="loadSuggestions" class="bg-white p-6 border-2 border-billmora-2 rounded-2xl animate-pulse">
+            <div class="h-6 bg-slate-200 rounded w-1/3 md:w-1/4 mb-5 mx-auto md:mx-0"></div>
+            <div class="flex flex-col gap-3">
+                @for($i = 0; $i < 3; $i++)
+                <div class="h-[72px] md:h-16 bg-slate-50 rounded-xl border border-slate-200 w-full"></div>
+                @endfor
+            </div>
+        </div>
+        @elseif(count($alternativeNames) > 0 || count($suggestions) > 0)
+        <div class="bg-white p-6 border-2 border-billmora-2 rounded-2xl">
+            <h3 class="text-lg font-bold text-slate-700 mb-4">Recommendations</h3>
+            <div class="flex flex-col gap-3">
+                @foreach(array_merge($alternativeNames, $suggestions) as $suggest)
+                <div class="flex flex-col md:flex-row justify-between items-center gap-2 bg-slate-50 p-4 rounded-xl border border-slate-200 hover:border-billmora-primary-500 transition-colors">
+                    <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 text-center md:text-left">
+                        <span class="font-bold text-slate-700 text-lg truncate">{{ $suggest['domain'] }}</span>
+                        <div class="flex justify-center md:justify-start">
+                            @if($suggest['premium'] ?? false)
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-sm font-bold w-fit">
+                                    Premium: {{ Currency::format($suggest['price']) }}
+                                </span>
+                            @else
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-bold w-fit">
+                                    {{ Currency::format($suggest['price']) }} / {{ $suggest['min_years'] }} {{ $suggest['min_years'] > 1 ? 'Years' : 'Year' }}
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                    <a href="{{ route('client.store.domains.show', ['domain_name' => $suggest['domain'], 'type' => $type]) }}" class="mt-3 md:mt-0 px-5 py-2.5 bg-billmora-primary-500 hover:bg-billmora-primary-600 text-white rounded-lg font-bold transition-colors cursor-pointer whitespace-nowrap w-full md:w-auto text-center shadow flex items-center justify-center gap-1">
+                        {{ __('client/store.order_now') }}
+                        <x-lucide-arrow-right class="w-4 h-4" />
+                    </a>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
     @endif
 </div>

@@ -16,19 +16,17 @@ class DomainSearch extends Component
 {
     public string $domain = '';
     public string $type = 'register'; 
-    public ?string $eppCode = null;
-    
     public bool $searched = false;
     public bool $available = false;
     public ?float $checkPrice = null;
-    public ?int $selectedYears = 1;
     
     public ?Tld $tld = null;
     public ?TldPrice $tldPrice = null;
     public string $domainName = '';
     public string $currencyCode = '';
-    
-    public array $yearOptions = [];
+    public array $suggestions = [];
+    public array $alternativeNames = [];
+    public bool $loadingSuggestions = false;
 
     protected RegistrarService $registrarService;
     protected CartService $cartService;
@@ -72,7 +70,6 @@ class DomainSearch extends Component
     {
         $this->validate([
             'domain' => 'required|string|regex:/^[a-z0-9][a-z0-9\-]*[a-z0-9]\.[a-z]+(\.[a-z]+)?$/i',
-            'eppCode' => 'nullable|string|required_if:type,transfer',
         ]);
 
         $this->searched = true;
@@ -82,6 +79,7 @@ class DomainSearch extends Component
         $tldString = ltrim(substr($this->domainName, $dotPos), '.');
         
         $this->tld = Tld::where('tld', $tldString)->where('status', 'visible')->first();
+        $this->suggestions = [];
         
         if (!$this->tld) {
             $this->addError('domain', __('client/store.domain_unavailable'));
@@ -112,72 +110,110 @@ class DomainSearch extends Component
             }
             
             if (!$this->available) {
-                $this->addError('domain', __('client/store.domain_unavailable'));
+                // Do not add error to 'domain' so the result box can be shown
+                $this->resetErrorBag('domain');
             }
         } else {
             $this->available = true;
         }
 
-        if ($this->available) {
-            $this->buildYearOptions();
-            $this->resetErrorBag('domain');
-        }
+        $this->resetErrorBag('domain');
+        $this->loadingSuggestions = true;
     }
 
-    protected function buildYearOptions()
+    public function loadSuggestions()
     {
-        $this->yearOptions = [];
-        $min = $this->tld->min_years;
-        $max = $this->tld->max_years;
-        $price = $this->type === 'register' ? $this->tldPrice->register_price : $this->tldPrice->transfer_price;
-        
-        for ($i = $min; $i <= $max; $i++) {
-            $this->yearOptions[$i] = [
-                'years' => $i,
-                'price' => $price * $i,
-                'label' => $i . ' Year' . ($i > 1 ? 's' : '') . ' - ' . Currency::format($price * $i, $this->currencyCode),
-            ];
-        }
-        $this->selectedYears = $min;
+        if (!$this->loadingSuggestions) return;
+        $this->generateSuggestions();
+        $this->loadingSuggestions = false;
     }
 
-    public function addToCart()
+    protected function generateSuggestions()
     {
-        if (!$this->available || !$this->tld || !$this->tldPrice) {
-            return;
-        }
+        $this->suggestions = [];
+        $this->alternativeNames = [];
         
-        if ($this->type === 'register') {
+        if ($this->type !== 'register') return;
+
+        $dotPos = strpos($this->domainName, '.');
+        if ($dotPos === false) return;
+        
+        $sld = substr($this->domainName, 0, $dotPos);
+        $currentTld = ltrim(substr($this->domainName, $dotPos), '.');
+
+        // 1. Alternative Names (same TLD)
+        $suffixes = ['online', 'app', 'hq', 'store', 'shop', 'site', 'web', 'tech', 'digital', 'hub'];
+        $prefixes = ['get', 'the', 'my', 'go', 'we', 'hello', 'try'];
+        
+        $variations = [];
+        $selectedPrefixes = (array) array_rand(array_flip($prefixes), 2);
+        foreach($selectedPrefixes as $prefix) {
+            $variations[] = $prefix . $sld;
+        }
+        $selectedSuffixes = (array) array_rand(array_flip($suffixes), 3);
+        foreach($selectedSuffixes as $suffix) {
+            $variations[] = $sld . $suffix;
+        }
+
+        try {
+            [$plugin, $config] = $this->registrarService->bootPluginForTld($this->tld);
+            foreach ($variations as $varSld) {
+                $altDomain = $varSld . '.' . $currentTld;
+                $result = $plugin->checkAvailability($altDomain);
+                if (isset($result['available']) && $result['available']) {
+                    $this->alternativeNames[] = [
+                        'domain' => $altDomain,
+                        'price' => $result['price'] ?? ($this->tldPrice->register_price * $this->tld->min_years),
+                        'min_years' => $this->tld->min_years,
+                        'premium' => isset($result['price']),
+                    ];
+                }
+            }
+        } catch (Exception $e) {
+            // Ignore if plugin fails
+        }
+
+        // 2. Alternative TLDs
+        $alternativeTlds = Tld::where('status', 'visible')
+            ->where('tld', '!=', $currentTld)
+            ->with(['prices' => function($q) {
+                $q->where('currency', $this->currencyCode);
+            }])
+            ->inRandomOrder()
+            ->take(5)
+            ->get();
+
+        foreach ($alternativeTlds as $altTld) {
+            $priceModel = $altTld->prices->first();
+            if (!$priceModel) continue;
+
+            $altDomain = $sld . '.' . $altTld->tld;
+            
             try {
-                [$plugin, $config] = $this->registrarService->bootPluginForTld($this->tld);
-                $result = $plugin->checkAvailability($this->domainName);
-                if (!isset($result['available']) || !$result['available']) {
-                    $this->available = false;
-                    $this->addError('domain', __('client/store.domain_unavailable'));
-                    return;
+                [$altPlugin, $altConfig] = $this->registrarService->bootPluginForTld($altTld);
+                $result = $altPlugin->checkAvailability($altDomain);
+                
+                if (isset($result['available']) && $result['available']) {
+                    $this->suggestions[] = [
+                        'domain' => $altDomain,
+                        'price' => $result['price'] ?? ($priceModel->register_price * $altTld->min_years),
+                        'min_years' => $altTld->min_years,
+                        'premium' => isset($result['price']),
+                    ];
                 }
             } catch (Exception $e) {
-                $this->available = false;
-                $this->addError('domain', $e->getMessage());
-                return;
+                // Ignore if plugin fails for this TLD
             }
         }
-        
-        $price = $this->type === 'register' ? $this->tldPrice->register_price : $this->tldPrice->transfer_price;
-        $totalPrice = $price * $this->selectedYears;
-
-        $this->cartService->addDomain(
-            $this->tld,
-            $this->domainName,
-            $this->type,
-            $this->selectedYears,
-            $totalPrice,
-            $this->eppCode
-        );
-
-        return redirect()->route('client.checkout.cart')
-            ->with('success', __('client/checkout.cart.item_added'));
     }
+
+    public function searchSuggestion(string $domain)
+    {
+        $this->domain = $domain;
+        $this->search();
+    }
+
+
 
     public function render()
     {

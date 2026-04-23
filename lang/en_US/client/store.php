@@ -46,4 +46,5 @@ return [
     'domain_epp_code_helper' => 'Required for domain transfer. Get it from your current registrar.',
     'domain_years_label' => 'Registration Period',
     'domain_disabled' => 'Domain registration and transfer are currently unavailable.',
+    'domain_configure_helper' => 'Please configure your domain below. You can specify custom nameservers or use our default ones.',
 ];
