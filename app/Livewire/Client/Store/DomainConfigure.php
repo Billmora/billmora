@@ -69,7 +69,7 @@ class DomainConfigure extends Component
             $this->yearOptions[(string)$i] = [
                 'years' => (string)$i,
                 'price' => $price * $i,
-                'label' => $i . ' Year' . ($i > 1 ? 's' : '') . ' - ' . Currency::format($price * $i, $this->currencyCode),
+                'label' => trans_choice('client/store.domain_year_option', $i, ['count' => $i]) . ' - ' . Currency::format($price * $i, $this->currencyCode),
             ];
         }
         

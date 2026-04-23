@@ -2,7 +2,7 @@
 <div class="w-full lg:w-2/3 h-fit grid gap-4">
     <div class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
         <h1 class="text-2xl font-bold text-slate-700 mb-2">{{ __('common.configure') }} - {{ $domainName }}</h1>
-        <p class="text-slate-500">{{ __('client/store.domain_configure_helper') ?? 'Please configure your domain registration below.' }}</p>
+        <p class="text-slate-500">{{ __('client/store.domain_configure_helper') }}</p>
     </div>
 
     <form wire:submit.prevent="addToCart" id="domainConfigureForm" class="flex flex-col gap-4">
@@ -33,15 +33,15 @@
         @endif
 
         <div class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
-            <h2 class="text-xl text-slate-600 font-semibold mb-1">Nameservers</h2>
-            <p class="text-slate-500 text-sm mb-4">If you want to use custom nameservers then enter them below. By default, new domains will use our nameservers for hosting on our network.</p>
+            <h2 class="text-xl text-slate-600 font-semibold mb-1">{{ __('client/store.domain_nameservers_label') }}</h2>
+            <p class="text-slate-500 text-sm mb-4">{{ __('client/store.domain_nameservers_helper') }}</p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 @for ($i = 1; $i <= 5; $i++)
                     <x-client::input 
                         name="nameservers.{{ $i - 1 }}"
                         wire:model.defer="nameservers.{{ $i - 1 }}"
-                        label="Nameserver {{ $i }}"
+                        label="{{ __('client/store.domain_nameserver_label', ['number' => $i]) }}"
                         placeholder="ns{{ $i }}.example.com"
                         :value="$nameservers[$i - 1] ?? ''"
                     />
@@ -67,7 +67,7 @@
             <span>{{ \App\Facades\Currency::format($totalPrice) }}</span>
         </div>
         <div class="flex justify-between text-slate-500 text-sm font-medium">
-            <span>{{ $selectedYears }} {{ $selectedYears > 1 ? 'Years' : 'Year' }} {{ ucfirst($type) }}</span>
+            <span>{{ trans_choice('client/store.domain_year_option', (int)$selectedYears, ['count' => (int)$selectedYears]) }} {{ ucfirst($type) }}</span>
             <span>-</span>
         </div>
     </div>

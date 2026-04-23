@@ -66,7 +66,7 @@
                             </span>
                             @if($checkPrice !== null)
                                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-sm font-bold">
-                                    Premium: {{ Currency::format($checkPrice) }}
+                                    {{ __('client/store.domain_premium') }}: {{ Currency::format($checkPrice) }}
                                 </span>
                             @elseif($tldPrice)
                                 @php
@@ -75,7 +75,7 @@
                                     $totalBasePrice = $basePrice * $minYears;
                                 @endphp
                                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-bold">
-                                    {{ Currency::format($totalBasePrice) }} / {{ $minYears }} {{ $minYears > 1 ? 'Years' : 'Year' }}
+                                    {{ Currency::format($totalBasePrice) }} / {{ trans_choice('client/store.domain_year_option', $minYears, ['count' => $minYears]) }}
                                 </span>
                             @endif
                         @else
@@ -95,7 +95,7 @@
                         </a>
                     @else
                         <button disabled class="w-full md:w-auto px-6 py-3 md:py-2.5 bg-slate-300 text-slate-500 rounded-lg font-bold whitespace-nowrap flex items-center justify-center gap-2 cursor-not-allowed">
-                            Taken
+                            {{ __('client/store.domain_taken') }}
                         </button>
                     @endif
                 </div>
@@ -113,7 +113,7 @@
         </div>
         @elseif(count($alternativeNames) > 0 || count($suggestions) > 0)
         <div class="bg-white p-6 border-2 border-billmora-2 rounded-2xl">
-            <h3 class="text-lg font-bold text-slate-700 mb-4">Recommendations</h3>
+            <h3 class="text-lg font-bold text-slate-700 mb-4">{{ __('client/store.domain_recommendations') }}</h3>
             <div class="flex flex-col gap-3">
                 @foreach(array_merge($alternativeNames, $suggestions) as $suggest)
                 <div class="flex flex-col md:flex-row justify-between items-center gap-2 bg-slate-50 p-4 rounded-xl border border-slate-200 hover:border-billmora-primary-500 transition-colors">
@@ -122,11 +122,11 @@
                         <div class="flex justify-center md:justify-start">
                             @if($suggest['premium'] ?? false)
                                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-sm font-bold w-fit">
-                                    Premium: {{ Currency::format($suggest['price']) }}
+                                    {{ __('client/store.domain_premium') }}: {{ Currency::format($suggest['price']) }}
                                 </span>
                             @else
                                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-bold w-fit">
-                                    {{ Currency::format($suggest['price']) }} / {{ $suggest['min_years'] }} {{ $suggest['min_years'] > 1 ? 'Years' : 'Year' }}
+                                    {{ Currency::format($suggest['price']) }} / {{ trans_choice('client/store.domain_year_option', $suggest['min_years'], ['count' => $suggest['min_years']]) }}
                                 </span>
                             @endif
                         </div>
