@@ -86,9 +86,10 @@ class CartService
      * @param  int  $years
      * @param  float  $resolvedTotalPrice
      * @param  string|null  $eppCode
+     * @param  array  $nameservers
      * @return string
      */
-    public function addDomain(Tld $tld, string $domainName, string $registrationType, int $years, float $resolvedTotalPrice, ?string $eppCode = null): string
+    public function addDomain(Tld $tld, string $domainName, string $registrationType, int $years, float $resolvedTotalPrice, ?string $eppCode = null, array $nameservers = []): string
     {
         if ($registrationType === 'register' && !\Billmora::getGeneral('domain_registration_enabled')) {
             throw new \Exception(__('client/store.domain_disabled'));
@@ -125,6 +126,7 @@ class CartService
                 'type' => $registrationType,
                 'years' => $years,
                 'epp_code' => $eppCode,
+                'nameservers' => $nameservers,
             ],
             'variant_selections' => [],
         ];

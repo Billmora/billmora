@@ -88,6 +88,7 @@ class OrderService
                     $regType = $item['config_options']['type'] ?? 'register';
                     $years = $item['config_options']['years'] ?? 1;
                     $eppCode = $item['config_options']['epp_code'] ?? null;
+                    $nameservers = $item['config_options']['nameservers'] ?? [];
                     $tldModel = Tld::find($tldId);
 
                     for ($i = 0; $i < $item['quantity']; $i++) {
@@ -103,6 +104,7 @@ class OrderService
                             'years'             => $years,
                             'currency'          => $currency,
                             'price'             => $item['unit_price'],
+                            'nameservers'       => $nameservers,
                         ]);
 
                         $this->recordCreate('registrant.created', $registrant->toArray());
