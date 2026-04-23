@@ -14,7 +14,7 @@
                 wire:model.live="selectedYears"
             >
                 @foreach($yearOptions as $opt)
-                    <option value="{{ $opt['years'] }}" @selected($selectedYears == $opt['years'])>{{ $opt['label'] }}</option>
+                    <option value="{{ $opt['years'] }}">{{ $opt['label'] }}</option>
                 @endforeach
             </x-client::select>
             @error('selectedYears')
@@ -60,9 +60,13 @@
     </h2>
     
     <div class="grid gap-2">
+        @php
+            $basePrice = $type === 'register' ? $tldPrice->register_price : $tldPrice->transfer_price;
+            $totalPrice = $basePrice * (int)$selectedYears;
+        @endphp
         <div class="flex justify-between font-semibold text-slate-600">
             <span>{{ $domainName }}</span>
-            <span>{{ \App\Facades\Currency::format($yearOptions[$selectedYears]['price'] ?? 0) }}</span>
+            <span>{{ \App\Facades\Currency::format($totalPrice) }}</span>
         </div>
         <div class="flex justify-between text-slate-500 text-sm font-medium">
             <span>{{ $selectedYears }} {{ $selectedYears > 1 ? 'Years' : 'Year' }} {{ ucfirst($type) }}</span>
@@ -74,7 +78,7 @@
     
     <div class="flex justify-between font-semibold text-slate-600">
         <span>{{ __('client/store.package.subtotal') }}</span>
-        <span>{{ \App\Facades\Currency::format($yearOptions[$selectedYears]['price'] ?? 0) }}</span>
+        <span>{{ \App\Facades\Currency::format($totalPrice) }}</span>
     </div>
     
     <hr class="border-t-2 border-billmora-2">
@@ -84,7 +88,7 @@
             {{ __('client/store.package.due_today') }}
         </span>
         <span class="text-2xl text-billmora-primary-500 font-bold">
-            {{ \App\Facades\Currency::format($yearOptions[$selectedYears]['price'] ?? 0) }}
+            {{ \App\Facades\Currency::format($totalPrice) }}
         </span>
     </div>
     
