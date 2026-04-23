@@ -47,6 +47,28 @@ class CartController extends Controller
                 if (!$tld || $tld->status !== 'visible') {
                     $this->cartService->removeItem($key);
                     $removedItems = true;
+                    continue;
+                }
+
+                $tldPrice = \App\Models\TldPrice::where('tld_id', $tld->id)
+                    ->where('currency', $currencyCode)
+                    ->first();
+
+                if (!$tldPrice) {
+                    $this->cartService->removeItem($key);
+                    $removedItems = true;
+                    continue;
+                }
+
+                $years = $item['config_options']['years'] ?? 1;
+                $registrationType = $item['config_options']['type'] ?? 'register';
+                
+                $basePrice = $registrationType === 'register' ? $tldPrice->register_price : $tldPrice->transfer_price;
+                $expectedPrice = $basePrice * $years;
+
+                if ($item['unit_price'] != $expectedPrice) {
+                    $this->cartService->updateItemPrices($key, $expectedPrice, 0);
+                    $pricesUpdated = true;
                 }
 
                 continue;
