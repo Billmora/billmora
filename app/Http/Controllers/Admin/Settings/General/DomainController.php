@@ -58,6 +58,11 @@ class DomainController extends Controller
                 'regex:/\{number\}/',
                 'regex:/^[^{}]*(\{(number|day|month|year)\}[^{}]*)*$/',
             ],
+            'domain_nameserver_1' => ['nullable', 'string', 'max:255'],
+            'domain_nameserver_2' => ['nullable', 'string', 'max:255'],
+            'domain_nameserver_3' => ['nullable', 'string', 'max:255'],
+            'domain_nameserver_4' => ['nullable', 'string', 'max:255'],
+            'domain_nameserver_5' => ['nullable', 'string', 'max:255'],
         ]);
 
         $this->updateSettings('general', $validated);

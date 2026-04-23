@@ -75,6 +75,8 @@ return [
     'domain_number_padding_helper' => 'Set the number of digits to pad domain numbers with leading zeros.',
     'domain_number_format_label' => 'Domain Number Format',
     'domain_number_format_helper' => 'Define the format for domain numbers using {number} as a required placeholder. Optional placeholders: {day}, {month}, {year}.',
+    'domain_nameserver_label' => 'Default Nameserver :number',
+    'domain_nameserver_helper' => 'Default nameserver :number assigned to newly registered or transferred domains.',
 
     'invoice_pdf_label' => 'Invoice PDF',
     'invoice_pdf_helper' => 'Allow clients to download invoices as PDF from the client area and receive them via email.',
