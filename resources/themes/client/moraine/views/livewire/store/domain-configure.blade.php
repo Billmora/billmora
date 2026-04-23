@@ -12,14 +12,12 @@
             <x-client::select 
                 name="selectedYears" 
                 wire:model.live="selectedYears"
+                required
             >
                 @foreach($yearOptions as $opt)
                     <option value="{{ $opt['years'] }}">{{ $opt['label'] }}</option>
                 @endforeach
             </x-client::select>
-            @error('selectedYears')
-                <p class="text-red-500 mt-2 text-sm font-semibold">{{ $message }}</p>
-            @enderror
         </div>
 
         @if($type === 'transfer')
