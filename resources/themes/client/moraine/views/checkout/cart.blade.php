@@ -14,7 +14,7 @@
 @else
     <form id="coupon-check-form" action="{{ route('client.checkout.coupon.check') }}" method="POST" class="hidden">
         @csrf
-        <input type="hidden" name="coupon_code" id="coupon_code_hidden" value="">
+        <input type="hidden" name="coupon_code" id="coupon_code_hidden" value="{{ old('coupon_code', $appliedCoupon['code'] ?? '') }}">
     </form>
     <form id="coupon-remove-form" action="{{ route('client.checkout.coupon.remove') }}" method="POST" class="hidden">
         @csrf
@@ -80,6 +80,7 @@
                             class="w-full bg-billmora-bg px-3 py-2 rounded-lg border-2 border-billmora-2 outline-none text-slate-700 placeholder:text-slate-500 focus:ring-2 ring-billmora-primary-500 {{ !empty($appliedCoupon) ? 'bg-gray-100' : '' }}"
                             value="{{ old('coupon_code', $appliedCoupon['code'] ?? '') }}"
                             {{ !empty($appliedCoupon) ? 'readonly' : '' }}
+                            oninput="document.getElementById('coupon_code_hidden').value = this.value;"
                         />
                         @if(!empty($appliedCoupon))
                             <button
