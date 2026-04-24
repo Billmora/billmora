@@ -62,4 +62,8 @@ return [
         'instance_helper' => 'Select the provisioning instance to link with this package.',
         'unavailable_schema' => 'This provisioning instance has no schema options for packages.',
     ],
+
+    'delete' => [
+        'has_services' => 'Cannot delete package that has active services.',
+    ],
 ];

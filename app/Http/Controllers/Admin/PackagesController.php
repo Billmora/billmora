@@ -209,6 +209,10 @@ class PackagesController extends Controller
      */
     public function destroy(Package $package)
     {
+        if ($package->services()->where('status', 'active')->exists()) {
+            return redirect()->route('admin.packages')->with('error', __('admin/packages.delete.has_services'));
+        }
+
         $package->delete();
         
         $this->recordDelete('package.delete', $package->toArray());
