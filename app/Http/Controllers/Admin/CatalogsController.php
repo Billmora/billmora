@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Catalog;
 use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class CatalogsController extends Controller
@@ -111,8 +112,17 @@ class CatalogsController extends Controller
             'catalog_status' => ['required', 'in:visible,hidden'],
         ]);
 
+        $icon = $catalog->icon;
+
+        if ($request->input('remove_catalog_icon')) {
+            if ($catalog->icon) {
+                Storage::disk('public')->delete($catalog->icon);
+            }
+            $icon = null;
+        }
+
         if ($request->hasFile('catalog_icon')) {
-            $iconPath = $request->file('catalog_icon')->store('catalogs', 'public');
+            $icon = $request->file('catalog_icon')->store('catalogs', 'public');
         }
 
         $oldCatalog = $catalog->getOriginal();
@@ -121,7 +131,7 @@ class CatalogsController extends Controller
             'name' => $validated['catalog_name'],
             'slug' => $validated['catalog_slug'],
             'description' => $validated['catalog_description'],
-            'icon' => $iconPath ?? $catalog->icon,
+            'icon' => $icon,
             'status' => $validated['catalog_status'],
         ]);
 

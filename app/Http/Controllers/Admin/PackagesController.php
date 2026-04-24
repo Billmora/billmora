@@ -9,6 +9,7 @@ use App\Models\Currency;
 use App\Models\Package;
 use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class PackagesController extends Controller
@@ -177,8 +178,17 @@ class PackagesController extends Controller
             'package_status' => ['required', 'in:visible,hidden'],
         ]);
 
+        $icon = $package->icon;
+
+        if ($request->input('remove_package_icon')) {
+            if ($package->icon) {
+                Storage::disk('public')->delete($package->icon);
+            }
+            $icon = null;
+        }
+
         if ($request->package_icon) {
-            $iconPath = $request->file('package_icon')->store('packages', 'public');
+            $icon = $request->file('package_icon')->store('packages', 'public');
         }
 
         $oldPackage = $package->getOriginal();
@@ -188,7 +198,7 @@ class PackagesController extends Controller
             'name' => $validated['package_name'],
             'slug' => $validated['package_slug'],
             'description' => $validated['package_description'],
-            'icon' => $iconPath ?? $package->icon,
+            'icon' => $icon,
             'stock' => $validated['package_stock'],
             'per_user_limit' => $validated['package_per_user_limit'],
             'allow_cancellation' => $validated['package_allow_cancellation'],

@@ -68,12 +68,42 @@
             >{{ old('catalog_description', $catalog->description) }}</x-admin::textarea>
         </div>
         <div class="w-full lg:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
-            <x-admin::input
-                type="file"
-                name="catalog_icon"
-                label="{{ __('admin/catalogs.icon_label') }}"
-                helper="{{ __('admin/catalogs.icon_helper') }}"
-            />
+            <div x-data="{ removed: false }">
+                @if ($catalog->icon)
+                    <div x-show="!removed" class="grid gap-2 mb-4">
+                        <label class="text-slate-600 font-semibold text-sm">{{ __('admin/catalogs.icon_label') }}</label>
+                        <div class="grid gap-3 p-3 bg-billmora-bg border-2 border-billmora-2 rounded-xl">
+                            <div class="flex items-center gap-3">
+                                <img
+                                    src="{{ Storage::url($catalog->icon) }}"
+                                    alt="{{ $catalog->name }}"
+                                    class="w-14 h-14 object-contain rounded-lg bg-white p-1 border border-billmora-2 shrink-0"
+                                >
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-slate-700 truncate">{{ basename($catalog->icon) }}</p>
+                                    <p class="text-xs text-slate-500 mt-0.5">{{ __('admin/catalogs.icon_helper') }}</p>
+                                </div>
+                            </div>
+                            <button type="button" x-on:click="removed = true"
+                                class="w-full flex items-center justify-center gap-2 p-2 text-red-600 bg-red-50 hover:bg-red-100 border border-red-100 rounded-lg transition-colors duration-150 text-sm font-semibold cursor-pointer"
+                            >
+                                <x-lucide-trash-2 class="w-4 h-4" />
+                                {{ __('common.delete') }}
+                            </button>
+                            <input type="hidden" name="remove_catalog_icon" x-bind:value="removed ? 1 : 0">
+                        </div>
+                    </div>
+                @endif
+                <div x-show="removed || !{{ $catalog->icon ? 'true' : 'false' }}">
+                    <x-admin::input
+                        type="file"
+                        name="catalog_icon"
+                        label="{{ __('admin/catalogs.icon_label') }}{{ $catalog->icon ? ' (' . __('common.update') . ')' : '' }}"
+                        helper="{{ __('admin/catalogs.icon_helper') }}"
+                    />
+                </div>
+            </div>
+
             <x-admin::radio.group 
                 name="catalog_status"
                 label="{{ __('admin/catalogs.status_label') }}"
