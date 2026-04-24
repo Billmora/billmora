@@ -28,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'maintenance' => \App\Http\Middleware\MaintenanceMiddleware::class,
             '2fa' => \App\Http\Middleware\TwoFactorMiddleware::class,
+            'portal_enabled' => \App\Http\Middleware\PortalEnabled::class,
         ]);
         $middleware->redirectGuestsTo(fn () => route('client.login'));
         $middleware->redirectUsersTo(fn () => route('client.dashboard'));
