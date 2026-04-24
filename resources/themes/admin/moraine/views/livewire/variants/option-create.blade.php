@@ -2,6 +2,7 @@
     action="{{ route('admin.variants.options.store', ['variant' => $variant->id]) }}" 
     method="POST" 
     class="flex flex-col gap-5"
+    novalidate
 >
     @csrf
     <div class="w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl space-y-4">
@@ -136,7 +137,7 @@
                                         value="{{ $pricing['rates'][$currency->code]['price'] ?? '' }}"
                                         type="number"
                                         step="0.01"
-                                        min="0"
+                                        min="0.01"
                                         label="{{ __('admin/variants.options.pricing.price_label') }}"
                                         helper="{{ __('admin/variants.options.pricing.price_helper') }}"
                                     />

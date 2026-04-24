@@ -3,7 +3,7 @@
 @section('title', "Package Pricing - Create")
 
 @section('body')
-<form action="{{ route('admin.packages.pricing.store', ['package' => $package->id]) }}" method="POST" class="flex flex-col gap-5" x-data="{ pricingType: '{{ old('pricing_type', 'free') }}' }">
+<form action="{{ route('admin.packages.pricing.store', ['package' => $package->id]) }}" method="POST" class="flex flex-col gap-5" x-data="{ pricingType: '{{ old('pricing_type', 'free') }}' }" novalidate>
     @csrf
     <div class="flex flex-col gap-5">
         <div class="w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
@@ -70,7 +70,7 @@
                             name="rates[{{ $currency->code }}][price]"
                             type="number"
                             step="0.01"
-                            min="1"
+                            min="0.01"
                             label="{{ __('admin/packages.pricing.price_label') }}"
                             helper="{{ __('admin/packages.pricing.price_helper') }}"
                             value="{{ old('rates.' . $currency->code . '.price') }}"

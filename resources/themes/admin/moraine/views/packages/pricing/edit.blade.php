@@ -3,7 +3,7 @@
 @section('title', "Package Pricing - Edit")
 
 @section('body')
-<form action="{{ route('admin.packages.pricing.update', ['package' => $package->id, 'pricing' => $pricing->id]) }}" method="POST" class="flex flex-col gap-5" x-data="{ pricingType: '{{ old('pricing_type', $pricing->type) }}' }">
+<form action="{{ route('admin.packages.pricing.update', ['package' => $package->id, 'pricing' => $pricing->id]) }}" method="POST" class="flex flex-col gap-5" x-data="{ pricingType: '{{ old('pricing_type', $pricing->type) }}' }" novalidate>
     @csrf
     @method('PUT')
     <div class="flex flex-col gap-5">
@@ -77,7 +77,7 @@
                             name="rates[{{ $code }}][price]"
                             type="number"
                             step="0.01"
-                            min="1"
+                            min="0.01"
                             label="{{ __('admin/packages.pricing.price_label') }}"
                             helper="{{ __('admin/packages.pricing.price_helper') }}"
                             :value="$oldPrice"

@@ -66,7 +66,7 @@ class PricingRequest extends FormRequest
                 'string',
                 Rule::exists('currencies', 'code')
             ],
-            'rates.*.price' => ['nullable', 'numeric', 'min:1'],
+            'rates.*.price' => ['nullable', 'numeric', 'min:0.01'],
             'rates.*.setup_fee' => ['nullable', 'numeric', 'min:0'],
             'rates.*.enabled' => ['boolean'],
         ];

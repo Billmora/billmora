@@ -80,9 +80,9 @@ class TldsController extends Controller
             'status' => ['required', Rule::in(['visible', 'hidden'])],
             'prices' => ['required', 'array'],
             'prices.*.currency' => ['required', 'string', 'size:3'],
-            'prices.*.register_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0'],
-            'prices.*.transfer_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0'],
-            'prices.*.renew_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0'],
+            'prices.*.register_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0.01'],
+            'prices.*.transfer_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0.01'],
+            'prices.*.renew_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0.01'],
             'prices.*.enabled' => ['nullable'],
         ]);
 
@@ -147,9 +147,9 @@ class TldsController extends Controller
             'status' => ['required', Rule::in(['visible', 'hidden'])],
             'prices' => ['required', 'array'],
             'prices.*.currency' => ['required', 'string', 'size:3'],
-            'prices.*.register_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0'],
-            'prices.*.transfer_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0'],
-            'prices.*.renew_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0'],
+            'prices.*.register_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0.01'],
+            'prices.*.transfer_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0.01'],
+            'prices.*.renew_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0.01'],
             'prices.*.enabled' => ['nullable'],
         ]);
 

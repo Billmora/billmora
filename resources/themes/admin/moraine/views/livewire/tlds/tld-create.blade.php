@@ -2,6 +2,7 @@
     action="{{ route('admin.tlds.store') }}" 
     method="POST" 
     class="flex flex-col gap-5"
+    novalidate
 >
     @csrf
     
@@ -99,7 +100,7 @@
                     value="{{ $prices[$currency->code]['register_price'] ?? '' }}"
                     type="number"
                     step="0.01"
-                    min="0"
+                    min="0.01"
                     label="{{ __('admin/tlds.register_price_label') }}"
                     helper="{{ __('admin/tlds.register_price_helper') }}"
                     :required="$currency->is_default"
@@ -110,7 +111,7 @@
                     value="{{ $prices[$currency->code]['transfer_price'] ?? '' }}"
                     type="number"
                     step="0.01"
-                    min="0"
+                    min="0.01"
                     label="{{ __('admin/tlds.transfer_price_label') }}"
                     helper="{{ __('admin/tlds.transfer_price_helper') }}"
                     :required="$currency->is_default"
@@ -121,7 +122,7 @@
                     value="{{ $prices[$currency->code]['renew_price'] ?? '' }}"
                     type="number"
                     step="0.01"
-                    min="0"
+                    min="0.01"
                     label="{{ __('admin/tlds.renew_price_label') }}"
                     helper="{{ __('admin/tlds.renew_price_helper') }}"
                     :required="$currency->is_default"

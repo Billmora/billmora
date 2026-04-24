@@ -80,7 +80,7 @@ class OptionRequest extends FormRequest
             'pricings.*.billing_period' => ['nullable', Rule::in(['daily', 'weekly', 'monthly', 'yearly'])],
             'pricings.*.rates' => ['nullable', 'array'],
             'pricings.*.rates.*.currency' => ['required', 'string', Rule::exists('currencies', 'code')],
-            'pricings.*.rates.*.price' => ['nullable', 'numeric', 'min:0'],
+            'pricings.*.rates.*.price' => ['nullable', 'numeric', 'min:0.01'],
             'pricings.*.rates.*.setup_fee' => ['nullable', 'numeric', 'min:0'],
             'pricings.*.rates.*.enabled' => ['boolean'],
         ];
