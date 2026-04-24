@@ -26,12 +26,13 @@
         @foreach ($packages as $package)
             @php
                 $isFree = $package->prices->contains(fn ($p) => $p->type === 'free');
-                $hasPrice = $package->prices->contains(fn ($p) =>
+                $availablePrice = $package->prices->first(fn ($p) =>
                     $p->type !== 'free'
                     && isset($p->rates[$currencyActive['code']])
                     && ($p->rates[$currencyActive['code']]['enabled'] ?? false)
                     && ($p->rates[$currencyActive['code']]['price'] ?? null) !== null
                 );
+                $hasPrice = $availablePrice !== null;
                 $isAvailable = $isFree || $hasPrice;
                 $isOrderable = $isAvailable && $package->stock !== 0;
             @endphp
@@ -67,12 +68,12 @@
                             <div class="grid">
                                 <span class="text-2xl text-slate-700 font-bold">
                                     {{ Currency::format(
-                                        $package->primaryPrice->rates[$currencyActive['code']]['price'],
+                                        $availablePrice->rates[$currencyActive['code']]['price'],
                                         $currencyActive['code']
                                     ) }}
                                 </span>
                                 <span class="text-sm text-slate-400 font-semibold">
-                                    {{ $package->primaryPrice->name }}
+                                    {{ $availablePrice->name }}
                                 </span>
                             </div>
                         @else
