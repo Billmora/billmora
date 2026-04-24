@@ -11,7 +11,7 @@
             type="text"
             label="{{ __('admin/tlds.tld_label') }}"
             helper="{{ __('admin/tlds.tld_helper') }}"
-            placeholder=".com"
+            placeholder="com"
             value="{{ old('tld') }}"
             required 
         />

@@ -2,7 +2,7 @@
 
 return [
     'tld_label' => 'TLD',
-    'tld_helper' => 'Top-level domain extension (e.g. .com, .net).',
+    'tld_helper' => 'Top-level domain extension (e.g. com, net).',
     'register_price_label' => 'Register Price',
     'register_price_helper' => 'Price to register a new domain.',
     'transfer_price_label' => 'Transfer Price',

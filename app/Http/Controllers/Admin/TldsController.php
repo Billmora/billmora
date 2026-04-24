@@ -71,7 +71,7 @@ class TldsController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'tld' => ['required', 'string', 'max:255', 'unique:tlds,tld'],
+            'tld' => ['required', 'string', 'max:255', 'unique:tlds,tld', 'regex:/^[a-zA-Z0-9]/'],
             'plugin_id' => ['nullable', 'exists:plugins,id'],
             'min_years' => ['required', 'integer', 'min:1', 'max:10'],
             'max_years' => ['required', 'integer', 'min:1', 'max:10', 'gte:min_years'],
@@ -137,7 +137,7 @@ class TldsController extends Controller
     public function update(Request $request, Tld $tld)
     {
         $validated = $request->validate([
-            'tld' => ['required', 'string', 'max:255', Rule::unique('tlds', 'tld')->ignore($tld->id)],
+            'tld' => ['required', 'string', 'max:255', Rule::unique('tlds', 'tld')->ignore($tld->id), 'regex:/^[a-zA-Z0-9]/'],
             'plugin_id' => ['nullable', 'exists:plugins,id'],
             'min_years' => ['required', 'integer', 'min:1', 'max:10'],
             'max_years' => ['required', 'integer', 'min:1', 'max:10', 'gte:min_years'],
