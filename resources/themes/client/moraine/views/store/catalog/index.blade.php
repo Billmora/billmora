@@ -82,7 +82,7 @@
                             </span>
                         @endif
 
-                        <p class="text-slate-500 text-sm leading-relaxed line-clamp-3">{!! $package->description !!}</p>
+                        <p class="text-slate-500 text-sm leading-relaxed">{!! $package->description !!}</p>
                     </div>
                     <div class="mt-auto pt-4 border-t-2 border-billmora-2 grid gap-2">
                         @if ($isOrderable)
