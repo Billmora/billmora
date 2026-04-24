@@ -11,14 +11,14 @@ class PortalEnabled
 {
     /**
      * Handle an incoming request.
-     * Aborts with 404 if the company portal is disabled.
+     * Redirects to the client area if the company portal is disabled.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
         if (!(bool) Billmora::getGeneral('company_portal')) {
-            abort(404);
+            return redirect()->route('client.dashboard');
         }
 
         return $next($request);
