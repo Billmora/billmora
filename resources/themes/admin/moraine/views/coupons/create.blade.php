@@ -7,13 +7,15 @@
     @csrf
     <div class="flex flex-col gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <x-admin::input 
-                name="coupon_code"
-                type="text"
-                label="{{ __('admin/coupons.code_label') }}"
-                helper="{{ __('admin/coupons.code_helper') }}"
-                required 
-            />
+            <div class="md:col-span-2">
+                <x-admin::input 
+                    name="coupon_code"
+                    type="text"
+                    label="{{ __('admin/coupons.code_label') }}"
+                    helper="{{ __('admin/coupons.code_helper') }}"
+                    required 
+                />
+            </div>
             <x-admin::select 
                 name="coupon_type"
                 label="{{ __('admin/coupons.type_label') }}"
@@ -30,20 +32,28 @@
                 helper="{{ __('admin/coupons.value_helper') }}"
                 required 
             />
-            <x-admin::multiselect
-                name="coupon_billing_cycles"
-                label="{{ __('admin/coupons.billing_cycles_label') }}"
-                helper="{{ __('admin/coupons.billing_cycles_helper') }}"
-                :options="$billingCycleOptions"
-                :selected="old('coupon_billing_cycles', [])"
-            />
         </div>
+        
+        <x-admin::multiselect
+            name="coupon_billing_cycles"
+            label="Package Cycles"
+            helper="Select the package billing cycles this coupon is valid for."
+            :options="$billingCycleOptions"
+            :selected="old('coupon_billing_cycles', [])"
+        />
         <x-admin::multiselect
             name="coupon_packages"
             label="{{ __('admin/coupons.packages_label') }}"
             helper="{{ __('admin/coupons.packages_helper') }}"
             :options="$packageOptions"
             :selected="old('coupon_packages', [])"
+        />
+        <x-admin::multiselect
+            name="coupon_tld_cycles"
+            label="TLD Periods"
+            helper="Select the domain registration periods this coupon is valid for."
+            :options="$tldCycleOptions"
+            :selected="old('coupon_tld_cycles', [])"
         />
         <x-admin::multiselect
             name="coupon_tlds"

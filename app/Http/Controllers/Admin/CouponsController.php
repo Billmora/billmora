@@ -84,7 +84,12 @@ class CouponsController extends Controller
             ->values()
             ->toArray();
         
-        return view('admin::coupons.create', compact('packageOptions', 'billingCycleOptions', 'tldOptions'));
+        $tldCycleOptions = collect(range(1, 10))->map(fn ($i) => [
+            'value' => $i . ' Year' . ($i > 1 ? 's' : ''),
+            'title' => $i . ' Year' . ($i > 1 ? 's' : ''),
+        ])->toArray();
+        
+        return view('admin::coupons.create', compact('packageOptions', 'billingCycleOptions', 'tldOptions', 'tldCycleOptions'));
     }
 
     /**
@@ -106,6 +111,8 @@ class CouponsController extends Controller
             'coupon_value' => ['required', 'numeric', 'min:0'],
             'coupon_billing_cycles' => ['nullable', 'array'],
             'coupon_billing_cycles.*' => ['string', Rule::in($availableBillingCycles)],
+            'coupon_tld_cycles' => ['nullable', 'array'],
+            'coupon_tld_cycles.*' => ['string', 'regex:/^[0-9]+ Year(s)?$/'],
             'coupon_max_uses' => ['nullable', 'integer', 'min:1'],
             'coupon_max_uses_per_user' => ['nullable', 'integer', 'min:1'],
             'coupon_start_date' => ['nullable', 'date'],
@@ -116,11 +123,13 @@ class CouponsController extends Controller
             'coupon_tlds.*' => [Rule::exists('tlds', 'id')],
         ]);
 
+        $mergedCycles = array_merge($validated['coupon_billing_cycles'] ?? [], $validated['coupon_tld_cycles'] ?? []);
+
         $coupon = Coupon::create([
             'code' => $validated['coupon_code'],
             'type' => $validated['coupon_type'],
             'value' => $validated['coupon_value'],
-            'billing_cycles' => !empty($validated['coupon_billing_cycles']) ? $validated['coupon_billing_cycles'] : null,
+            'billing_cycles' => !empty($mergedCycles) ? $mergedCycles : null,
             'max_uses' => $validated['coupon_max_uses'] ?? null,
             'max_uses_per_user' => $validated['coupon_max_uses_per_user'] ?? null,
             'start_at' => $validated['coupon_start_date'] ?? null,
@@ -185,7 +194,16 @@ class CouponsController extends Controller
             ->values()
             ->toArray();
         
-        return view('admin::coupons.edit', compact('coupon', 'packageOptions', 'billingCycleOptions', 'tldOptions'));
+        $tldCycleOptions = collect(range(1, 10))->map(fn ($i) => [
+            'value' => $i . ' Year' . ($i > 1 ? 's' : ''),
+            'title' => $i . ' Year' . ($i > 1 ? 's' : ''),
+        ])->toArray();
+        
+        $availableBillingCycles = array_column($billingCycleOptions, 'value');
+        $couponBillingCycles = is_array($coupon->billing_cycles) ? array_values(array_filter($coupon->billing_cycles, fn($c) => in_array($c, $availableBillingCycles))) : [];
+        $couponTldCycles = is_array($coupon->billing_cycles) ? array_values(array_filter($coupon->billing_cycles, fn($c) => preg_match('/^[0-9]+ Year(s)?$/', $c))) : [];
+        
+        return view('admin::coupons.edit', compact('coupon', 'packageOptions', 'billingCycleOptions', 'tldOptions', 'tldCycleOptions', 'couponBillingCycles', 'couponTldCycles'));
     }
 
     /**
@@ -209,6 +227,8 @@ class CouponsController extends Controller
             'coupon_value' => ['required', 'numeric', 'min:0'],
             'coupon_billing_cycles' => ['nullable', 'array'],
             'coupon_billing_cycles.*' => ['string', Rule::in($availableBillingCycles)],
+            'coupon_tld_cycles' => ['nullable', 'array'],
+            'coupon_tld_cycles.*' => ['string', 'regex:/^[0-9]+ Year(s)?$/'],
             'coupon_max_uses' => ['nullable', 'integer', 'min:1'],
             'coupon_max_uses_per_user' => ['nullable', 'integer', 'min:1'],
             'coupon_start_date' => ['nullable', 'date'],
@@ -223,11 +243,13 @@ class CouponsController extends Controller
         $packagesOld = $coupon->packages()->pluck('packages.id')->sort()->values()->all();
         $tldsOld = $coupon->tlds()->pluck('tlds.id')->sort()->values()->all();
 
+        $mergedCycles = array_merge($validated['coupon_billing_cycles'] ?? [], $validated['coupon_tld_cycles'] ?? []);
+
         $coupon->update([
             'code' => $validated['coupon_code'],
             'type' => $validated['coupon_type'],
             'value' => $validated['coupon_value'],
-            'billing_cycles' => !empty($validated['coupon_billing_cycles']) ? $validated['coupon_billing_cycles'] : null,
+            'billing_cycles' => !empty($mergedCycles) ? $mergedCycles : null,
             'max_uses' => $validated['coupon_max_uses'] ?? null,
             'max_uses_per_user' => $validated['coupon_max_uses_per_user'] ?? null,
             'start_at' => $validated['coupon_start_date'] ?? null,
