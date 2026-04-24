@@ -38,7 +38,7 @@ class CouponController extends Controller
         $user = Auth::user();
 
         try {
-            $coupon = Coupon::with('packages')->where('code', $request->coupon_code)
+            $coupon = Coupon::with(['packages', 'tlds'])->where('code', $request->coupon_code)
                 ->where(function ($q) {
                     $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
                 })
@@ -63,14 +63,46 @@ class CouponController extends Controller
             }
 
             $allowedPackages = $coupon->packages->pluck('id')->toArray();
+            $allowedTlds = $coupon->tlds->pluck('id')->toArray();
             $allowedCycles = $coupon->billing_cycles ?? [];
 
             $isCartEligible = false;
-            foreach ($cartItems as $item) {
-                $packageMatch = empty($allowedPackages) || in_array($item['package_id'], $allowedPackages);
-                $cycleMatch = empty($allowedCycles) || in_array($item['cycle_name'], $allowedCycles);
+            $hasPackages = !empty($allowedPackages);
+            $hasTlds = !empty($allowedTlds);
 
-                if ($packageMatch && $cycleMatch) {
+            foreach ($cartItems as $item) {
+                $isDomain = isset($item['type']) && $item['type'] === \App\OrderItemType::Domain->value;
+
+                if ($isDomain) {
+                    if ($hasPackages && !$hasTlds) {
+                        $itemMatch = false;
+                    } else {
+                        $itemMatch = !$hasTlds || in_array($item['tld_id'] ?? null, $allowedTlds);
+                    }
+                    
+                    $hasDomainCycle = false;
+                    foreach ($allowedCycles as $cycle) {
+                        if (str_contains(strtolower($cycle), 'year')) {
+                            $hasDomainCycle = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!empty($allowedCycles) && $hasDomainCycle) {
+                        $cycleMatch = in_array($item['cycle_name'], $allowedCycles);
+                    } else {
+                        $cycleMatch = true;
+                    }
+                } else {
+                    if ($hasTlds && !$hasPackages) {
+                        $itemMatch = false;
+                    } else {
+                        $itemMatch = !$hasPackages || in_array($item['package_id'] ?? null, $allowedPackages);
+                    }
+                    $cycleMatch = empty($allowedCycles) || in_array($item['cycle_name'], $allowedCycles);
+                }
+
+                if ($itemMatch && $cycleMatch) {
                     $isCartEligible = true;
                     break;
                 }
@@ -86,6 +118,7 @@ class CouponController extends Controller
                 'type' => $coupon->type,
                 'value' => $coupon->value,
                 'allowed_packages' => $allowedPackages,
+                'allowed_tlds' => $allowedTlds,
                 'allowed_cycles' => $allowedCycles,
             ]);
 

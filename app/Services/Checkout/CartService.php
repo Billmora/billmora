@@ -209,10 +209,41 @@ class CartService
             $setupFee += $itemSetupFee;
 
             if ($appliedCoupon) {
-                $isPackageEligible = empty($appliedCoupon['allowed_packages']) || in_array($item['package_id'], $appliedCoupon['allowed_packages']);
-                $isCycleEligible = empty($appliedCoupon['allowed_cycles']) || in_array($item['cycle_name'], $appliedCoupon['allowed_cycles']);
+                $isDomain = isset($item['type']) && $item['type'] === \App\OrderItemType::Domain->value;
+                $hasPackages = !empty($appliedCoupon['allowed_packages']);
+                $hasTlds = !empty($appliedCoupon['allowed_tlds'] ?? []);
+                $allowedCycles = $appliedCoupon['allowed_cycles'] ?? [];
 
-                if ($isPackageEligible && $isCycleEligible) {
+                if ($isDomain) {
+                    if ($hasPackages && !$hasTlds) {
+                        $itemEligible = false;
+                    } else {
+                        $itemEligible = !$hasTlds || in_array($item['tld_id'] ?? null, $appliedCoupon['allowed_tlds'] ?? []);
+                    }
+                    
+                    $hasDomainCycle = false;
+                    foreach ($allowedCycles as $cycle) {
+                        if (str_contains(strtolower($cycle), 'year')) {
+                            $hasDomainCycle = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!empty($allowedCycles) && $hasDomainCycle) {
+                        $isCycleEligible = in_array($item['cycle_name'], $allowedCycles);
+                    } else {
+                        $isCycleEligible = true;
+                    }
+                } else {
+                    if ($hasTlds && !$hasPackages) {
+                        $itemEligible = false;
+                    } else {
+                        $itemEligible = !$hasPackages || in_array($item['package_id'] ?? null, $appliedCoupon['allowed_packages']);
+                    }
+                    $isCycleEligible = empty($allowedCycles) || in_array($item['cycle_name'], $allowedCycles);
+                }
+
+                if ($itemEligible && $isCycleEligible) {
                     $eligibleForDiscountSubtotal += $itemTotalBeforeDiscount;
                 }
             }
