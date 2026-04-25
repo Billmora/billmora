@@ -10,6 +10,13 @@ use Illuminate\Support\Collection;
 class Tld extends Model implements BrowseInterface
 {
     use BrowseTrait;
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var list<string>
+     */
+    protected $with = ['plugin'];
     /**
      * The attributes that aren't mass assignable.
      *
