@@ -35,7 +35,7 @@ class SendDomainUnsuspended implements ShouldQueue
             'company_name' => Billmora::getGeneral('company_name'),
             'domain_name'  => $registrant->domain,
             'expires_at'   => $expiresAt,
-            'domain_url'   => route('client.domains.show', ['registrant' => $registrant->registrant_number]),
+            'domain_url'   => route('client.registrants.show', ['registrant' => $registrant->registrant_number]),
         ];
 
         NotificationJob::dispatch(

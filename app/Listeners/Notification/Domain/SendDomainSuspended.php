@@ -30,7 +30,7 @@ class SendDomainSuspended implements ShouldQueue
             'client_name'  => $client->fullname,
             'company_name' => Billmora::getGeneral('company_name'),
             'domain_name'  => $registrant->domain,
-            'domain_url'   => route('client.domains.show', ['registrant' => $registrant->registrant_number]),
+            'domain_url'   => route('client.registrants.show', ['registrant' => $registrant->registrant_number]),
         ];
 
         NotificationJob::dispatch(

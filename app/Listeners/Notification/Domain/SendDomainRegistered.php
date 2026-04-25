@@ -36,7 +36,7 @@ class SendDomainRegistered implements ShouldQueue
             'domain_name'     => $registrant->domain,
             'registration_type' => ucfirst($registrant->registration_type),
             'expires_at'      => $expiresAt,
-            'domain_url'      => route('client.domains.show', ['registrant' => $registrant->registrant_number]),
+            'domain_url'      => route('client.registrants.show', ['registrant' => $registrant->registrant_number]),
         ];
 
         NotificationJob::dispatch(
