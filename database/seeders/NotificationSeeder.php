@@ -1197,6 +1197,278 @@ class NotificationSeeder extends Seeder
                     ],
                 ],
             ],
+            [
+                'key' => 'domain_registered',
+                'name' => 'Domain Registered',
+                'placeholder' => [
+                    'client_name'       => 'Client Name',
+                    'company_name'      => 'Company Name',
+                    'domain_name'       => 'The registered domain name',
+                    'registration_type' => 'Register or Transfer',
+                    'expires_at'        => 'Domain expiry date',
+                    'domain_url'        => 'Direct link to manage the domain',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Domain {registration_type} Successful - {domain_name}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-success">
+                                <p>Great news! Your domain <strong>{domain_name}</strong> has been successfully {registration_type}ed and is now active.</p>
+                            </div>
+                            <br />
+
+                            <table>
+                                <tr>
+                                    <td>Domain Name</td>
+                                    <td>{domain_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>Type</td>
+                                    <td>{registration_type}</td>
+                                </tr>
+                                <tr>
+                                    <td>Expires At</td>
+                                    <td>{expires_at}</td>
+                                </tr>
+                            </table>
+                            <br />
+
+                            <p>You can manage your domain by logging into your client area:</p>
+                            <br />
+
+                            <div class="text-center">
+                                <a href="{domain_url}" target="_blank" class="btn btn-primary">Manage Domain</a>
+                            </div>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'domain_registration_failed',
+                'name' => 'Domain Registration Failed',
+                'placeholder' => [
+                    'client_name'       => 'Client Name',
+                    'company_name'      => 'Company Name',
+                    'domain_name'       => 'The domain name',
+                    'registration_type' => 'Register or Transfer',
+                    'error_message'     => 'Technical error message',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Domain {registration_type} Update - {domain_name}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-warning">
+                                <p>We encountered an issue while processing the {registration_type} for your domain <strong>{domain_name}</strong>. Our technical team has been notified and is working to resolve this.</p>
+                            </div>
+                            <br />
+
+                            <table>
+                                <tr>
+                                    <td>Domain Name</td>
+                                    <td>{domain_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>Type</td>
+                                    <td>{registration_type}</td>
+                                </tr>
+                            </table>
+                            <br />
+
+                            <p><strong>You do not need to take any action at this time.</strong> If the issue persists, please contact our support team.</p>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'domain_renewed',
+                'name' => 'Domain Renewed',
+                'placeholder' => [
+                    'client_name'  => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'domain_name'  => 'The domain name',
+                    'expires_at'   => 'New domain expiry date',
+                    'domain_url'   => 'Direct link to manage the domain',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Domain Renewed - {domain_name}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-success">
+                                <p>Your domain <strong>{domain_name}</strong> has been successfully renewed.</p>
+                            </div>
+                            <br />
+
+                            <table>
+                                <tr>
+                                    <td>Domain Name</td>
+                                    <td>{domain_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>New Expiry Date</td>
+                                    <td>{expires_at}</td>
+                                </tr>
+                            </table>
+                            <br />
+
+                            <div class="text-center">
+                                <a href="{domain_url}" target="_blank" class="btn btn-primary">Manage Domain</a>
+                            </div>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'domain_suspended',
+                'name' => 'Domain Suspended',
+                'placeholder' => [
+                    'client_name'  => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'domain_name'  => 'The domain name',
+                    'domain_url'   => 'Direct link to manage the domain',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Domain Suspended - {domain_name}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-danger">
+                                <p>Your domain <strong>{domain_name}</strong> has been suspended.</p>
+                            </div>
+                            <br />
+
+                            <table>
+                                <tr>
+                                    <td>Domain Name</td>
+                                    <td>{domain_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td style="color: #e74c3c;">Suspended</td>
+                                </tr>
+                            </table>
+                            <br />
+
+                            <p>This is usually due to an overdue invoice. To reactivate your domain, please log in and settle any pending balances.</p>
+                            <br />
+
+                            <div class="text-center">
+                                <a href="{domain_url}" target="_blank" class="btn btn-primary">Manage Domain</a>
+                            </div>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'domain_unsuspended',
+                'name' => 'Domain Reactivated (Unsuspended)',
+                'placeholder' => [
+                    'client_name'  => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'domain_name'  => 'The domain name',
+                    'expires_at'   => 'Domain expiry date',
+                    'domain_url'   => 'Direct link to manage the domain',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Domain Reactivated - {domain_name}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-success">
+                                <p>Your domain <strong>{domain_name}</strong> has been successfully reactivated and is now fully operational.</p>
+                            </div>
+                            <br />
+
+                            <table>
+                                <tr>
+                                    <td>Domain Name</td>
+                                    <td>{domain_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td style="color: #2ecc71;">Active</td>
+                                </tr>
+                                <tr>
+                                    <td>Expires At</td>
+                                    <td>{expires_at}</td>
+                                </tr>
+                            </table>
+                            <br />
+
+                            <div class="text-center">
+                                <a href="{domain_url}" target="_blank" class="btn btn-primary">Manage Domain</a>
+                            </div>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
+            [
+                'key' => 'domain_expired',
+                'name' => 'Domain Expired',
+                'placeholder' => [
+                    'client_name'  => 'Client Name',
+                    'company_name' => 'Company Name',
+                    'domain_name'  => 'The domain name',
+                    'domain_url'   => 'Direct link to manage the domain',
+                ],
+                'translations' => [
+                    'en_US' => [
+                        'subject' => 'Domain Expired - {domain_name}',
+                        'body' => <<<HTML
+                            <p>Hello, <strong>{client_name}</strong>!</p>
+                            <br />
+                            <div class="alert alert-danger">
+                                <p>This is a notification that your domain <strong>{domain_name}</strong> has expired.</p>
+                            </div>
+                            <br />
+
+                            <table>
+                                <tr>
+                                    <td>Domain Name</td>
+                                    <td>{domain_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td style="color: #c0392b;">Expired</td>
+                                </tr>
+                            </table>
+                            <br />
+
+                            <p>Please renew your domain as soon as possible to avoid permanent loss.</p>
+                            <br />
+
+                            <div class="text-center">
+                                <a href="{domain_url}" target="_blank" class="btn btn-primary">Renew Domain</a>
+                            </div>
+                            <br />
+                            <p>Best Regards,</p>
+                            <p>{company_name}</p>
+                        HTML,
+                    ],
+                ],
+            ],
         ];
 
         foreach ($notifications as $notification) {
