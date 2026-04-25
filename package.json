@@ -30,6 +30,6 @@
         "@tiptap/extension-underline": "^2.27.2",
         "@tiptap/starter-kit": "^2.27.2",
         "alpinejs": "^3.14.9",
-        "lowlight": "^2.9.0"
+        "lowlight": "^3.3.0"
     }
 }
