@@ -2,7 +2,7 @@
 
 namespace App\Events\User;
 
-use App\Models\UserPasswordReset;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -18,7 +18,7 @@ class PasswordResetRequested
     /**
      * Create a new event instance.
      */
-    public function __construct(public UserPasswordReset $user, public string $token)
+    public function __construct(public User $user, public string $token)
     {
         //
     }
