@@ -4,6 +4,7 @@ namespace App\Listeners\Registrant;
 
 use App\Events\Invoice as InvoiceEvents;
 use App\Events\Registrant as RegistrantEvents;
+use App\Events\Domain as DomainEvents;
 use App\Services\RegistrarService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -56,6 +57,7 @@ class RegisterOnInvoicePaid implements ShouldQueue
 
                 $registrant->activate();
                 event(new RegistrantEvents\RegistrationCompleted($registrant));
+                event(new DomainEvents\Registered($registrant));
                 continue;
             }
 
@@ -76,9 +78,11 @@ class RegisterOnInvoicePaid implements ShouldQueue
                 }
 
                 event(new RegistrantEvents\RegistrationCompleted($registrant));
+                event(new DomainEvents\Registered($registrant));
 
             } catch (\Throwable $e) {
                 event(new RegistrantEvents\RegistrationFailed($registrant, $e->getMessage()));
+                event(new DomainEvents\RegistrationFailed($registrant, $e->getMessage()));
                 $this->fail($e);
             }
         }
