@@ -24,6 +24,7 @@ export default defineConfig({
     build: {
         outDir: finalOutDir,
         emptyOutDir: true,
+        chunkSizeWarningLimit: 600,
         rollupOptions: {
             input: {
                 style: path.resolve(__dirname, "css/app.css"),
