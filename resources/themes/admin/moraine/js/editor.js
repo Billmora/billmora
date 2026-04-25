@@ -11,37 +11,73 @@ import TextAlign from '@tiptap/extension-text-align';
 import TextStyle from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
-import { lowlight } from 'lowlight';
+import { createLowlight } from 'lowlight';
+import javascript from 'highlight.js/lib/languages/javascript';
+import typescript from 'highlight.js/lib/languages/typescript';
+import php from 'highlight.js/lib/languages/php';
+import xml from 'highlight.js/lib/languages/xml';
+import css from 'highlight.js/lib/languages/css';
+import json from 'highlight.js/lib/languages/json';
+import sql from 'highlight.js/lib/languages/sql';
+import bash from 'highlight.js/lib/languages/bash';
+import python from 'highlight.js/lib/languages/python';
+import nginx from 'highlight.js/lib/languages/nginx';
+import yaml from 'highlight.js/lib/languages/yaml';
+import go from 'highlight.js/lib/languages/go';
+import dockerfile from 'highlight.js/lib/languages/dockerfile';
+import apache from 'highlight.js/lib/languages/apache';
+import ini from 'highlight.js/lib/languages/ini';
+import powershell from 'highlight.js/lib/languages/powershell';
+import ruby from 'highlight.js/lib/languages/ruby';
+
+const lowlight = createLowlight();
+lowlight.register('javascript', javascript);
+lowlight.register('typescript', typescript);
+lowlight.register('php', php);
+lowlight.register('html', xml);
+lowlight.register('css', css);
+lowlight.register('json', json);
+lowlight.register('sql', sql);
+lowlight.register('bash', bash);
+lowlight.register('python', python);
+lowlight.register('nginx', nginx);
+lowlight.register('yaml', yaml);
+lowlight.register('go', go);
+lowlight.register('dockerfile', dockerfile);
+lowlight.register('apache', apache);
+lowlight.register('ini', ini);
+lowlight.register('powershell', powershell);
+lowlight.register('ruby', ruby);
 
 // ─────────────────────────────────────────────
 // Toolbar button helpers
 // ─────────────────────────────────────────────
 const ICON = {
-    bold:        '<i class="fa-solid fa-bold"></i>',
-    italic:      '<i class="fa-solid fa-italic"></i>',
-    underline:   '<i class="fa-solid fa-underline"></i>',
-    strike:      '<i class="fa-solid fa-strikethrough"></i>',
-    h1:          '<span class="tiptap-tb-text">H1</span>',
-    h2:          '<span class="tiptap-tb-text">H2</span>',
-    h3:          '<span class="tiptap-tb-text">H3</span>',
-    p:           '<span class="tiptap-tb-text">¶</span>',
-    alignLeft:   '<i class="fa-solid fa-align-left"></i>',
+    bold: '<i class="fa-solid fa-bold"></i>',
+    italic: '<i class="fa-solid fa-italic"></i>',
+    underline: '<i class="fa-solid fa-underline"></i>',
+    strike: '<i class="fa-solid fa-strikethrough"></i>',
+    h1: '<span class="tiptap-tb-text">H1</span>',
+    h2: '<span class="tiptap-tb-text">H2</span>',
+    h3: '<span class="tiptap-tb-text">H3</span>',
+    p: '<span class="tiptap-tb-text">¶</span>',
+    alignLeft: '<i class="fa-solid fa-align-left"></i>',
     alignCenter: '<i class="fa-solid fa-align-center"></i>',
-    alignRight:  '<i class="fa-solid fa-align-right"></i>',
-    alignJustify:'<i class="fa-solid fa-align-justify"></i>',
-    ul:          '<i class="fa-solid fa-list-ul"></i>',
-    ol:          '<i class="fa-solid fa-list-ol"></i>',
-    outdent:     '<i class="fa-solid fa-outdent"></i>',
-    indent:      '<i class="fa-solid fa-indent"></i>',
-    link:        '<i class="fa-solid fa-link"></i>',
-    image:       '<i class="fa-solid fa-image"></i>',
-    table:       '<i class="fa-solid fa-table"></i>',
-    hr:          '<i class="fa-solid fa-minus"></i>',
-    code:        '<i class="fa-solid fa-code"></i>',
-    blockquote:  '<i class="fa-solid fa-quote-left"></i>',
-    undo:        '<i class="fa-solid fa-rotate-left"></i>',
-    redo:        '<i class="fa-solid fa-rotate-right"></i>',
-    fullscreen:  '<i class="fa-solid fa-expand"></i>',
+    alignRight: '<i class="fa-solid fa-align-right"></i>',
+    alignJustify: '<i class="fa-solid fa-align-justify"></i>',
+    ul: '<i class="fa-solid fa-list-ul"></i>',
+    ol: '<i class="fa-solid fa-list-ol"></i>',
+    outdent: '<i class="fa-solid fa-outdent"></i>',
+    indent: '<i class="fa-solid fa-indent"></i>',
+    link: '<i class="fa-solid fa-link"></i>',
+    image: '<i class="fa-solid fa-image"></i>',
+    table: '<i class="fa-solid fa-table"></i>',
+    hr: '<i class="fa-solid fa-minus"></i>',
+    code: '<i class="fa-solid fa-code"></i>',
+    blockquote: '<i class="fa-solid fa-quote-left"></i>',
+    undo: '<i class="fa-solid fa-rotate-left"></i>',
+    redo: '<i class="fa-solid fa-rotate-right"></i>',
+    fullscreen: '<i class="fa-solid fa-expand"></i>',
     exitFullscreen: '<i class="fa-solid fa-compress"></i>',
 };
 
@@ -102,10 +138,10 @@ function makeTableBtn(editor) {
     drop.innerHTML = `
         <div class="tiptap-tb-grid" id="tiptap-table-grid-${Math.random().toString(36).slice(2)}">
             ${Array.from({ length: 25 }, (_, i) => {
-                const r = Math.floor(i / 5) + 1;
-                const c = (i % 5) + 1;
-                return `<div class="tiptap-table-cell" data-row="${r}" data-col="${c}"></div>`;
-            }).join('')}
+        const r = Math.floor(i / 5) + 1;
+        const c = (i % 5) + 1;
+        return `<div class="tiptap-table-cell" data-row="${r}" data-col="${c}"></div>`;
+    }).join('')}
         </div>
         <p class="tiptap-table-hint">0 × 0</p>
     `;
@@ -146,18 +182,24 @@ function makeTableBtn(editor) {
 // Code block language dropdown
 // ─────────────────────────────────────────────
 const CODE_LANGUAGES = [
-    { value: 'auto',       label: 'Auto Detect' },
+    { value: 'auto', label: 'Auto Detect' },
     { value: 'javascript', label: 'JavaScript' },
     { value: 'typescript', label: 'TypeScript' },
-    { value: 'php',        label: 'PHP' },
-    { value: 'html',       label: 'HTML' },
-    { value: 'css',        label: 'CSS' },
-    { value: 'json',       label: 'JSON' },
-    { value: 'sql',        label: 'SQL' },
-    { value: 'bash',       label: 'Bash / Shell' },
-    { value: 'python',     label: 'Python' },
-    { value: 'nginx',      label: 'Nginx' },
-    { value: 'yaml',       label: 'YAML' },
+    { value: 'php', label: 'PHP' },
+    { value: 'python', label: 'Python' },
+    { value: 'go', label: 'Go' },
+    { value: 'ruby', label: 'Ruby' },
+    { value: 'html', label: 'HTML' },
+    { value: 'css', label: 'CSS' },
+    { value: 'json', label: 'JSON' },
+    { value: 'sql', label: 'SQL' },
+    { value: 'bash', label: 'Bash / Shell' },
+    { value: 'powershell', label: 'PowerShell' },
+    { value: 'nginx', label: 'Nginx' },
+    { value: 'apache', label: 'Apache' },
+    { value: 'dockerfile', label: 'Dockerfile' },
+    { value: 'yaml', label: 'YAML' },
+    { value: 'ini', label: 'INI / Config' },
 ];
 
 function makeCodeBlockBtn(editor) {
@@ -208,38 +250,38 @@ function buildToolbar(editor, container) {
     const groups = [
         // Group 1: inline styles
         [
-            makeBtn(editor, 'Bold',       ICON.bold,      ed => ed.chain().focus().toggleBold().run(),      ed => ed.isActive('bold')),
-            makeBtn(editor, 'Italic',     ICON.italic,    ed => ed.chain().focus().toggleItalic().run(),    ed => ed.isActive('italic')),
-            makeBtn(editor, 'Underline',  ICON.underline, ed => ed.chain().focus().toggleUnderline().run(), ed => ed.isActive('underline')),
-            makeBtn(editor, 'Strikethrough', ICON.strike, ed => ed.chain().focus().toggleStrike().run(),    ed => ed.isActive('strike')),
+            makeBtn(editor, 'Bold', ICON.bold, ed => ed.chain().focus().toggleBold().run(), ed => ed.isActive('bold')),
+            makeBtn(editor, 'Italic', ICON.italic, ed => ed.chain().focus().toggleItalic().run(), ed => ed.isActive('italic')),
+            makeBtn(editor, 'Underline', ICON.underline, ed => ed.chain().focus().toggleUnderline().run(), ed => ed.isActive('underline')),
+            makeBtn(editor, 'Strikethrough', ICON.strike, ed => ed.chain().focus().toggleStrike().run(), ed => ed.isActive('strike')),
         ],
         // Group 2: headings + paragraph
         [
             makeBtn(editor, 'Heading 1', ICON.h1, ed => ed.chain().focus().toggleHeading({ level: 1 }).run(), ed => ed.isActive('heading', { level: 1 })),
             makeBtn(editor, 'Heading 2', ICON.h2, ed => ed.chain().focus().toggleHeading({ level: 2 }).run(), ed => ed.isActive('heading', { level: 2 })),
             makeBtn(editor, 'Heading 3', ICON.h3, ed => ed.chain().focus().toggleHeading({ level: 3 }).run(), ed => ed.isActive('heading', { level: 3 })),
-            makeBtn(editor, 'Paragraph', ICON.p,  ed => ed.chain().focus().setParagraph().run(),             ed => ed.isActive('paragraph')),
+            makeBtn(editor, 'Paragraph', ICON.p, ed => ed.chain().focus().setParagraph().run(), ed => ed.isActive('paragraph')),
         ],
         // Group 3: alignment
         [
-            makeBtn(editor, 'Align Left',    ICON.alignLeft,    ed => ed.chain().focus().setTextAlign('left').run(),    ed => ed.isActive({ textAlign: 'left' })),
-            makeBtn(editor, 'Align Center',  ICON.alignCenter,  ed => ed.chain().focus().setTextAlign('center').run(),  ed => ed.isActive({ textAlign: 'center' })),
-            makeBtn(editor, 'Align Right',   ICON.alignRight,   ed => ed.chain().focus().setTextAlign('right').run(),   ed => ed.isActive({ textAlign: 'right' })),
-            makeBtn(editor, 'Justify',       ICON.alignJustify, ed => ed.chain().focus().setTextAlign('justify').run(), ed => ed.isActive({ textAlign: 'justify' })),
+            makeBtn(editor, 'Align Left', ICON.alignLeft, ed => ed.chain().focus().setTextAlign('left').run(), ed => ed.isActive({ textAlign: 'left' })),
+            makeBtn(editor, 'Align Center', ICON.alignCenter, ed => ed.chain().focus().setTextAlign('center').run(), ed => ed.isActive({ textAlign: 'center' })),
+            makeBtn(editor, 'Align Right', ICON.alignRight, ed => ed.chain().focus().setTextAlign('right').run(), ed => ed.isActive({ textAlign: 'right' })),
+            makeBtn(editor, 'Justify', ICON.alignJustify, ed => ed.chain().focus().setTextAlign('justify').run(), ed => ed.isActive({ textAlign: 'justify' })),
         ],
         // Group 4: lists
         [
-            makeBtn(editor, 'Bullet List',   ICON.ul,      ed => ed.chain().focus().toggleBulletList().run(),  ed => ed.isActive('bulletList')),
-            makeBtn(editor, 'Ordered List',  ICON.ol,      ed => ed.chain().focus().toggleOrderedList().run(), ed => ed.isActive('orderedList')),
-            makeBtn(editor, 'Outdent',       ICON.outdent, ed => ed.chain().focus().liftListItem('listItem').run(), null),
-            makeBtn(editor, 'Indent',        ICON.indent,  ed => ed.chain().focus().sinkListItem('listItem').run(), null),
+            makeBtn(editor, 'Bullet List', ICON.ul, ed => ed.chain().focus().toggleBulletList().run(), ed => ed.isActive('bulletList')),
+            makeBtn(editor, 'Ordered List', ICON.ol, ed => ed.chain().focus().toggleOrderedList().run(), ed => ed.isActive('orderedList')),
+            makeBtn(editor, 'Outdent', ICON.outdent, ed => ed.chain().focus().liftListItem('listItem').run(), null),
+            makeBtn(editor, 'Indent', ICON.indent, ed => ed.chain().focus().sinkListItem('listItem').run(), null),
         ],
         // Group 5: insert
         [
-            makeBtn(editor, 'Link',       ICON.link,       ed => promptLink(ed),  ed => ed.isActive('link')),
-            makeBtn(editor, 'Image',      ICON.image,      ed => promptImage(ed), null),
+            makeBtn(editor, 'Link', ICON.link, ed => promptLink(ed), ed => ed.isActive('link')),
+            makeBtn(editor, 'Image', ICON.image, ed => promptImage(ed), null),
             makeTableBtn(editor),
-            makeBtn(editor, 'Horizontal Rule', ICON.hr,   ed => ed.chain().focus().setHorizontalRule().run(), null),
+            makeBtn(editor, 'Horizontal Rule', ICON.hr, ed => ed.chain().focus().setHorizontalRule().run(), null),
             makeCodeBlockBtn(editor),
             makeBtn(editor, 'Blockquote', ICON.blockquote, ed => ed.chain().focus().toggleBlockquote().run(), ed => ed.isActive('blockquote')),
         ],
@@ -281,7 +323,7 @@ function buildToolbar(editor, container) {
 
     // Update active states on selection change
     editor.on('selectionUpdate', () => syncActive(allBtns, editor));
-    editor.on('transaction',     () => syncActive(allBtns, editor));
+    editor.on('transaction', () => syncActive(allBtns, editor));
 
     return toolbar;
 }
@@ -338,3 +380,42 @@ export function initTiptap(inputId, options = {}) {
 }
 
 window.initTiptap = initTiptap;
+
+// Highlight static .tiptap-content code blocks
+function highlightStaticContent() {
+    document.querySelectorAll('.tiptap-content pre code').forEach((block) => {
+        // Detect language from class e.g. "language-javascript"
+        const langClass = Array.from(block.classList).find(c => c.startsWith('language-'));
+        const lang = langClass ? langClass.replace('language-', '') : null;
+
+        let result;
+        try {
+            result = lang && lowlight.registered(lang)
+                ? lowlight.highlight(lang, block.textContent)
+                : lowlight.highlightAuto(block.textContent);
+        } catch {
+            return; // skip if language not registered
+        }
+
+        // Convert hast to HTML string
+        function hastToHtml(node) {
+            if (node.type === 'text') {
+                return node.value
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
+            }
+            if (node.type === 'element') {
+                const cls = node.properties?.className?.join(' ') ?? '';
+                const attrs = cls ? ` class="${cls}"` : '';
+                const children = (node.children ?? []).map(hastToHtml).join('');
+                return `<span${attrs}>${children}</span>`;
+            }
+            return '';
+        }
+
+        block.innerHTML = result.children.map(hastToHtml).join('');
+    });
+}
+
+document.addEventListener('DOMContentLoaded', highlightStaticContent);
