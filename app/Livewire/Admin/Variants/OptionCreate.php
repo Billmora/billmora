@@ -53,7 +53,7 @@ class OptionCreate extends Component
      */
     private function getEmptyPricingStructure()
     {
-        $currenciesList = Currency::select(['code', 'is_default'])->get();
+        $currenciesList = \Illuminate\Support\Facades\View::shared('currencies');
         $rates = [];
 
         foreach ($currenciesList as $currency) {

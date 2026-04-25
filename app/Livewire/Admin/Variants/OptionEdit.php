@@ -30,7 +30,7 @@ class OptionEdit extends Component
         $this->variant = $variant;
         $this->option = $option;
 
-        $currenciesList = Currency::select(['code', 'is_default'])->get();
+        $currenciesList = \Illuminate\Support\Facades\View::shared('currencies');
 
         $option->load(['prices' => fn($q) => $q->orderBy('id')]);
 
@@ -91,7 +91,7 @@ class OptionEdit extends Component
      */
     private function getEmptyPricingStructure()
     {
-        $currenciesList = Currency::select(['code', 'is_default'])->get();
+        $currenciesList = \Illuminate\Support\Facades\View::shared('currencies');
         $rates = [];
 
         foreach ($currenciesList as $currency) {

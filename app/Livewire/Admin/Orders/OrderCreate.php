@@ -127,7 +127,7 @@ class OrderCreate extends Component
     #[Computed(persist: true)]
     public function currencies()
     {
-        return Currency::orderBy('code')->get();
+        return \Illuminate\Support\Facades\View::shared('currencies')->sortBy('code')->values();
     }
 
     #[Computed(persist: true)]

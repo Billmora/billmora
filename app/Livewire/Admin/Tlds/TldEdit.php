@@ -43,7 +43,7 @@ class TldEdit extends Component
     private function buildPricesFromTld(): array
     {
         $prices = [];
-        $currencies = Currency::select(['code', 'is_default'])->get();
+        $currencies = \Illuminate\Support\Facades\View::shared('currencies');
         $existingPrices = $this->tld->prices->keyBy('currency');
 
         foreach ($currencies as $currency) {
@@ -80,7 +80,7 @@ class TldEdit extends Component
     #[Computed(persist: true)]
     public function currencies()
     {
-        return Currency::all();
+        return \Illuminate\Support\Facades\View::shared('currencies');
     }
 
     /**

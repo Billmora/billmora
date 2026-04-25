@@ -38,7 +38,7 @@ class TldCreate extends Component
     private function buildEmptyPrices(): array
     {
         $prices = [];
-        $currencies = Currency::select(['code', 'is_default'])->get();
+        $currencies = \Illuminate\Support\Facades\View::shared('currencies');
 
         foreach ($currencies as $currency) {
             $prices[$currency->code] = [
@@ -72,7 +72,7 @@ class TldCreate extends Component
     #[Computed(persist: true)]
     public function currencies()
     {
-        return Currency::all();
+        return \Illuminate\Support\Facades\View::shared('currencies');
     }
 
     /**
