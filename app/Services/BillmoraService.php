@@ -40,13 +40,15 @@ class BillmoraService
      */
     public static function getSetting(string $category, string $key, mixed $default = null): mixed
     {
-        $cacheKey = self::CACHE_PREFIX . $category . '_' . $key;
+        $cacheKey = self::CACHE_PREFIX . $category;
 
-        return Cache::remember($cacheKey, self::CACHE_TTL, function() use ($category, $key, $default) {
+        $settings = Cache::remember($cacheKey, self::CACHE_TTL, function() use ($category) {
             return Setting::where('category', $category)
-                ->where('key', $key)
-                ->value('value') ?? $default;
+                ->pluck('value', 'key')
+                ->toArray();
         });
+
+        return $settings[$key] ?? $default;
     }
 
     /**
@@ -66,9 +68,9 @@ class BillmoraService
                 ['category' => $category, 'key' => $key],
                 ['value' => $value]
             );
-            
-            Cache::forget(self::CACHE_PREFIX . $category . '_' . $key);
         }
+        
+        Cache::forget(self::CACHE_PREFIX . $category);
     }
 
     /**
