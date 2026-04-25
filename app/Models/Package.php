@@ -172,4 +172,14 @@ class Package extends Model implements BrowseInterface
                 'url' => route('admin.packages.edit', ['package' => $item->id]),
             ]);
     }
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::addGlobalScope('order', function (\Illuminate\Database\Eloquent\Builder $builder) {
+            $builder->orderBy('sort_order', 'asc')->orderBy('id', 'asc');
+        });
+    }
 }

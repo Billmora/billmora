@@ -57,4 +57,14 @@ class Catalog extends Model implements BrowseInterface
                 'url' => route('admin.catalogs.edit', ['catalog' => $item->id]),
             ]);
     }
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::addGlobalScope('order', function (\Illuminate\Database\Eloquent\Builder $builder) {
+            $builder->orderBy('sort_order', 'asc')->orderBy('id', 'asc');
+        });
+    }
 }
