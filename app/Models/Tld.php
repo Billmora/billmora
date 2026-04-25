@@ -80,7 +80,8 @@ class Tld extends Model implements BrowseInterface
     protected static function booted(): void
     {
         static::addGlobalScope('order', function (\Illuminate\Database\Eloquent\Builder $builder) {
-            $builder->orderBy('sort_order', 'asc')->orderBy('id', 'asc');
+            $table = $builder->getModel()->getTable();
+            $builder->orderBy($table . '.sort_order', 'asc')->orderBy($table . '.id', 'asc');
         });
     }
 }
