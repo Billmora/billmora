@@ -37,7 +37,7 @@ class PackagesController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Package::select('id', 'catalog_id', 'name', 'slug', 'status', 'created_at')
+        $query = Package::select('id', 'catalog_id', 'name', 'slug', 'status', 'icon', 'created_at')
             ->with(['catalog:id,name,slug']);
 
         if ($search = $request->input('search')) {
@@ -51,9 +51,10 @@ class PackagesController extends Controller
             });
         }
 
-        $packages = $query->paginate(Billmora::getGeneral('misc_admin_pagination'));
+        $packages = $query->get();
+        $groupedPackages = $packages->groupBy(fn ($package) => $package->catalog ? $package->catalog->name : 'Uncategorized');
 
-        return view('admin::packages.index', compact('packages'));
+        return view('admin::packages.index', compact('groupedPackages', 'packages'));
     }
 
     /**

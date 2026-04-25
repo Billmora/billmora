@@ -12,13 +12,13 @@
             </a>
         @endcan
     </div>
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto" data-sortable-wrapper>
         <div class="min-w-full inline-block align-middle">
             <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
                 <table class="min-w-full divide-y divide-billmora-2">
                     <thead class="bg-billmora-2">
                         <tr>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">#</th>
+                            <th scope="col" class="w-10 px-4 py-4"></th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/variants.name_label') }}</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/variants.description_label') }}</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/variants.status_label') }}</th>
@@ -26,10 +26,12 @@
                             <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y-2 divide-billmora-2 bg-white">
+                    <tbody class="divide-y-2 divide-billmora-2 bg-white" data-sortable="Variant">
                         @forelse ($variants as $variant)
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $loop->iteration }}</td>
+                        <tr data-id="{{ $variant->id }}">
+                            <td class="px-4 py-4 whitespace-nowrap text-slate-300">
+                                <x-lucide-grip-vertical class="w-5 h-5 drag-handle" />
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $variant->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $variant->description }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $variant->status }}</td>

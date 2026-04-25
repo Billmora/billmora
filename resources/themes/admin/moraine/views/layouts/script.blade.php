@@ -76,5 +76,83 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/blade.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/nginx.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script>
+  function initSortableTable(tbodyEl, model) {
+    if (typeof Sortable === 'undefined') return;
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+    Sortable.create(tbodyEl, {
+      animation: 200,
+      handle: '.drag-handle',
+      ghostClass: 'bm-sortable-ghost',
+      chosenClass: 'bm-sortable-chosen',
+      onStart: function (evt) {
+        evt.item.style.opacity = '0.5';
+      },
+      onEnd: async function (evt) {
+        evt.item.style.opacity = '';
+
+        const items = [];
+        Array.from(tbodyEl.children).forEach(function (child, index) {
+          if (child.dataset.id) {
+            items.push({ id: parseInt(child.dataset.id), order: index });
+          }
+        });
+
+        if (items.length === 0) return;
+
+        const wrapper = tbodyEl.closest('[data-sortable-wrapper]');
+        const saveIndicator = wrapper ? wrapper.querySelector('[data-save-indicator]') : null;
+        if (saveIndicator) saveIndicator.classList.remove('opacity-0');
+
+        try {
+          await fetch('{{ route('admin.reorder') }}', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': csrfToken,
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({ model: model, items: items }),
+          });
+        } catch (e) {
+          console.error('Reorder failed', e);
+        } finally {
+          if (saveIndicator) setTimeout(function () { saveIndicator.classList.add('opacity-0'); }, 1200);
+        }
+      }
+    });
+  }
+
+  function initAllSortables() {
+    document.querySelectorAll('[data-sortable]').forEach(function (el) {
+      initSortableTable(el, el.dataset.sortable);
+    });
+  }
+
+  // Use 'load' event to ensure CDN SortableJS script is fully executed first.
+  window.addEventListener('load', initAllSortables);
+</script>
+<style>
+  .bm-sortable-ghost {
+    opacity: 0.35;
+    background-color: #eff6ff !important;
+  }
+
+  .bm-sortable-chosen {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+  }
+
+  .drag-handle {
+    cursor: grab;
+    user-select: none;
+  }
+
+  .drag-handle:active {
+    cursor: grabbing;
+  }
+</style>
 
 @stack('scripts')

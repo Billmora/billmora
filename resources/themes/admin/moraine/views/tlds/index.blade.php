@@ -27,12 +27,13 @@
                 </a>
             @endcan
         </div>
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto" data-sortable-wrapper>
             <div class="min-w-full inline-block align-middle">
                 <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
                     <table class="min-w-full divide-y divide-billmora-2">
                         <thead class="bg-billmora-2">
                             <tr>
+                                <th scope="col" class="w-10 px-4 py-4"></th>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">
                                     {{ __('admin/tlds.tld_label') }}</th>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">
@@ -45,11 +46,13 @@
                                     {{ __('common.action') }}</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y-2 divide-billmora-2 bg-white">
+                        <tbody class="divide-y-2 divide-billmora-2 bg-white" data-sortable="Tld">
                             @forelse ($tlds as $tld)
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800 font-semibold">{{ $tld->tld }}
+                                <tr data-id="{{ $tld->id }}">
+                                    <td class="px-4 py-4 whitespace-nowrap text-slate-300">
+                                        <x-lucide-grip-vertical class="w-5 h-5 drag-handle" />
                                     </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800 font-semibold">{{ $tld->tld }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
                                         {{ $tld->plugin?->name }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
@@ -74,7 +77,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="px-6 py-8 text-center text-sm text-slate-400">
+                                    <td colspan="6" class="px-6 py-8 text-center text-sm text-slate-400">
                                         {{ __('common.no_data') }}</td>
                                 </tr>
                             @endforelse
