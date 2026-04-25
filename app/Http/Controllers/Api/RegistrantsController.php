@@ -32,12 +32,46 @@ class RegistrantsController extends Controller
      * Display the specified registrant.
      *
      * @param  \App\Models\Registrant  $registrant
-     * @return \Illuminate\Http\JsonResponse
+     * @return \App\Http\Resources\RegistrantResource
      */
     public function show(Registrant $registrant)
     {
         $registrant->load(['user', 'tld']);
 
         return new RegistrantResource($registrant);
+    }
+
+    /**
+     * Update the specified registrant (nameservers, auto-renew, status).
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Registrant  $registrant
+     * @return \App\Http\Resources\RegistrantResource
+     */
+    public function update(Request $request, Registrant $registrant)
+    {
+        $validated = $request->validate([
+            'status'      => ['sometimes', 'string', 'in:pending,pending_transfer,active,suspended,expired,cancelled'],
+            'auto_renew'  => ['sometimes', 'boolean'],
+            'nameservers' => ['sometimes', 'array', 'min:1', 'max:5'],
+            'nameservers.*' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $registrant->update($validated);
+
+        return new RegistrantResource($registrant->fresh()->load(['user', 'tld']));
+    }
+
+    /**
+     * Remove the specified registrant.
+     *
+     * @param  \App\Models\Registrant  $registrant
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Registrant $registrant)
+    {
+        $registrant->delete();
+
+        return response()->json(['message' => 'Registrant deleted successfully.'], 200);
     }
 }

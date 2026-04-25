@@ -26,6 +26,9 @@ class ApiController extends Controller
         'services.view',
         'services.update',
         'services.delete',
+        'registrants.view',
+        'registrants.update',
+        'registrants.delete',
         'invoices.view',
         'invoices.create',
         'invoices.update',
@@ -48,6 +51,10 @@ class ApiController extends Controller
         'variants.create',
         'variants.update',
         'variants.delete',
+        'tlds.view',
+        'tlds.create',
+        'tlds.update',
+        'tlds.delete',
     ];
 
     /**

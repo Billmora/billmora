@@ -89,10 +89,15 @@ Route::prefix('v1')->middleware(['auth:sanctum', CheckApiWhitelistIp::class, Api
         Route::get('/registrants', [Api\RegistrantsController::class, 'index'])->name('api.v1.registrants.index');
         Route::get('/registrants/{registrant}', [Api\RegistrantsController::class, 'show'])->name('api.v1.registrants.show');
     });
+    Route::put('/registrants/{registrant}', [Api\RegistrantsController::class, 'update'])->middleware(CheckApiTokenAbility::class . ':registrants.update')->name('api.v1.registrants.update');
+    Route::delete('/registrants/{registrant}', [Api\RegistrantsController::class, 'destroy'])->middleware(CheckApiTokenAbility::class . ':registrants.delete')->name('api.v1.registrants.delete');
 
 
     Route::middleware(CheckApiTokenAbility::class . ':tlds.view')->group(function () {
         Route::get('/tlds', [Api\TldsController::class, 'index'])->name('api.v1.tlds.index');
         Route::get('/tlds/{tld}', [Api\TldsController::class, 'show'])->name('api.v1.tlds.show');
     });
+    Route::post('/tlds', [Api\TldsController::class, 'store'])->middleware(CheckApiTokenAbility::class . ':tlds.create')->name('api.v1.tlds.store');
+    Route::put('/tlds/{tld}', [Api\TldsController::class, 'update'])->middleware(CheckApiTokenAbility::class . ':tlds.update')->name('api.v1.tlds.update');
+    Route::delete('/tlds/{tld}', [Api\TldsController::class, 'destroy'])->middleware(CheckApiTokenAbility::class . ':tlds.delete')->name('api.v1.tlds.delete');
 });
