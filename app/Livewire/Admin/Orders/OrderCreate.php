@@ -24,6 +24,8 @@ class OrderCreate extends Component
 
     protected PricingService $pricingService;
     protected PluginManager $pluginManager;
+    protected array $resolvedPackagesCache = [];
+    protected ?\Illuminate\Support\Collection $availablePackagesCache = null;
 
     public function boot(PricingService $pricingService, PluginManager $pluginManager)
     {
@@ -163,7 +165,11 @@ class OrderCreate extends Component
     {
         if (empty($this->order_currency)) return collect();
 
-        return Package::with(['catalog:id,name', 'prices'])
+        if ($this->availablePackagesCache !== null) {
+            return $this->availablePackagesCache;
+        }
+
+        return $this->availablePackagesCache = Package::with(['catalog:id,name', 'prices'])
             ->get()
             ->filter(fn ($package) => $this->pricingService->getAvailablePackagePrices($package, $this->order_currency)->isNotEmpty());
     }
@@ -176,7 +182,11 @@ class OrderCreate extends Component
         $pkgId = $this->packageItems[$index]['package_id'] ?? '';
         if (empty($pkgId)) return null;
 
-        return Package::with([
+        if (array_key_exists($pkgId, $this->resolvedPackagesCache)) {
+            return $this->resolvedPackagesCache[$pkgId];
+        }
+
+        return $this->resolvedPackagesCache[$pkgId] = Package::with([
             'prices',
             'variants' => fn($q) => $q->where('status', 'visible'),
             'variants.options.prices',
