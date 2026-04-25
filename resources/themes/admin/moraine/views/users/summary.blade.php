@@ -76,42 +76,42 @@
                         <span
                             class="text-slate-100 font-semibold text-start break-all">{{ __('common.phone_number') }}</span>
                         <span
-                            class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->phone_number }}</span>
+                            class="text-slate-200 font-semibold text-end break-all">{{ $user->billing?->phone_number }}</span>
                     </div>
                     <div class="flex gap-3 justify-between">
                         <span
                             class="text-slate-100 font-semibold text-start break-all">{{ __('common.company_name') }}</span>
                         <span
-                            class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->company_name }}</span>
+                            class="text-slate-200 font-semibold text-end break-all">{{ $user->billing?->company_name }}</span>
                     </div>
                     <div class="flex gap-3 justify-between">
                         <span
                             class="text-slate-100 font-semibold text-start break-all">{{ __('common.street_address_1') }}</span>
                         <span
-                            class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->street_address_1 }}</span>
+                            class="text-slate-200 font-semibold text-end break-all">{{ $user->billing?->street_address_1 }}</span>
                     </div>
                     <div class="flex gap-3 justify-between">
                         <span
                             class="text-slate-100 font-semibold text-start break-all">{{ __('common.street_address_2') }}</span>
                         <span
-                            class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->street_address_2 }}</span>
+                            class="text-slate-200 font-semibold text-end break-all">{{ $user->billing?->street_address_2 }}</span>
                     </div>
                     <div class="flex gap-3 justify-between">
                         <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.city') }}</span>
-                        <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->city }}</span>
+                        <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing?->city }}</span>
                     </div>
                     <div class="flex gap-3 justify-between">
                         <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.state') }}</span>
-                        <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->state }}</span>
+                        <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing?->state }}</span>
                     </div>
                     <div class="flex gap-3 justify-between">
                         <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.postcode') }}</span>
-                        <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing->postcode }}</span>
+                        <span class="text-slate-200 font-semibold text-end break-all">{{ $user->billing?->postcode }}</span>
                     </div>
                     <div class="flex gap-3 justify-between">
                         <span class="text-slate-100 font-semibold text-start break-all">{{ __('common.country') }}</span>
                         <span
-                            class="text-slate-200 font-semibold text-end break-all">{{ config('utils.countries')[$user->billing->country] ?? $user->billing->country }}</span>
+                            class="text-slate-200 font-semibold text-end break-all">{{ $user->billing ? (config('utils.countries')[$user->billing->country] ?? $user->billing->country) : '' }}</span>
                     </div>
                 </div>
                 @if (Auth::id() !== $user->id)
