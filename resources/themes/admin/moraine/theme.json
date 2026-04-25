@@ -1,10 +1,10 @@
 {
     "provider": "moraine",
     "name": "Moraine",
-    "type": "client",
+    "type": "admin",
     "version": "1.0.0",
     "author": "Billmora",
     "url": "https://billmora.com",
-    "assets": "/themes/client/moraine",
+    "assets": "/themes/admin/moraine",
     "preview": "https://media.billmora.com/image/admin-dashboard.png"
 }
