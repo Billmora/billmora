@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\RegistrantResource;
 use App\Models\Registrant;
 use Illuminate\Http\Request;
 
@@ -24,7 +25,7 @@ class RegistrantsController extends Controller
             ->latest()
             ->paginate($request->input('per_page', 15));
 
-        return response()->json($registrants);
+        return RegistrantResource::collection($registrants);
     }
 
     /**
@@ -37,6 +38,6 @@ class RegistrantsController extends Controller
     {
         $registrant->load(['user', 'tld']);
 
-        return response()->json($registrant);
+        return new RegistrantResource($registrant);
     }
 }

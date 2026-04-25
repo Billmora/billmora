@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TldResource;
 use App\Models\Tld;
 use Illuminate\Http\Request;
 
@@ -22,7 +23,7 @@ class TldsController extends Controller
             ->latest()
             ->paginate($request->input('per_page', 15));
 
-        return response()->json($tlds);
+        return TldResource::collection($tlds);
     }
 
     /**
@@ -35,6 +36,6 @@ class TldsController extends Controller
     {
         $tld->load(['plugin', 'prices']);
 
-        return response()->json($tld);
+        return new TldResource($tld);
     }
 }
