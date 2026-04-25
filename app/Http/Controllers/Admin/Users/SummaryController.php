@@ -39,11 +39,12 @@ class SummaryController extends Controller
 
         $baseQuery = Order::where('user_id', $user->id);
 
-        $ordersTotal = (clone $baseQuery)->count();
         $ordersActive = (clone $baseQuery)->where('status', 'active')->count();
         $ordersCancelled = (clone $baseQuery)->where('status', 'cancelled')->count();
 
         $orders = (clone $baseQuery)->latest()->paginate(Billmora::getGeneral('misc_admin_pagination'));
+        
+        $ordersTotal = $orders->total();
 
         return view('admin::users.summary', compact('user', 'ordersTotal', 'ordersActive', 'ordersCancelled', 'orders'));
     }

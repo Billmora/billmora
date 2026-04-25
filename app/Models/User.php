@@ -120,8 +120,17 @@ class User extends Authenticatable implements BrowseInterface
      */
     public function getCreditWallet(string $currencyCode)
     {
-        return $this->credits
-            ->firstWhere('currency', $currencyCode) ?? $this->credits()->firstOrCreate(['currency' => $currencyCode]);
+        $wallet = $this->credits->firstWhere('currency', $currencyCode);
+
+        if (! $wallet) {
+            $wallet = $this->credits()->firstOrCreate(['currency' => $currencyCode]);
+            
+            if ($this->relationLoaded('credits')) {
+                $this->credits->push($wallet);
+            }
+        }
+
+        return $wallet;
     }
 
     /**
@@ -205,7 +214,7 @@ class User extends Authenticatable implements BrowseInterface
             return true;
         }
 
-        return $this->permissions()->exists() || $this->roles()->whereHas('permissions')->exists();
+        return $this->getAllPermissions()->isNotEmpty();
     }
 
     /**
@@ -234,7 +243,7 @@ class User extends Authenticatable implements BrowseInterface
             return false;
         }
 
-        return !$this->permissions()->exists() && !$this->roles()->whereHas('permissions')->exists();
+        return $this->getAllPermissions()->isEmpty();
     }
 
     /**
