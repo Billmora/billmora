@@ -83,13 +83,29 @@ class User extends Authenticatable implements BrowseInterface
     }
 
     /**
-     * Accessor for the user's avatar URL. Generates a Gravatar URL based on the user's email address.
+     * Accessor for the user's avatar URL. Generates an avatar URL based on the user's email address
+     * and the configured avatar provider from the general settings.
+     *
+     * The URL pattern is defined in config/utils.php under 'avatar_providers'.
+     * Supported placeholders: {seed} = lowercase email, {md5} = md5-hashed email, {name} = url-encoded fullname.
      *
      * @return string
      */
-    public function getAvatarAttribute()
+    public function getAvatarAttribute(): string
     {
-        return 'https://www.gravatar.com/avatar/' . md5(strtolower($this->email));
+        $provider  = \Billmora::getGeneral('misc_avatar_provider');
+        $providers = config('utils.avatar_providers', []);
+        $email     = strtolower($this->email);
+
+        $urlPattern = $providers[$provider]['url']
+            ?? $providers['dicebear-thumbs']['url']
+            ?? 'https://api.dicebear.com/9.x/thumbs/svg?seed={seed}';
+
+        return str_replace(
+            ['{seed}', '{md5}', '{name}'],
+            [$email,   md5($email), urlencode($this->fullname)],
+            $urlPattern
+        );
     }
 
     /**

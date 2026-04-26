@@ -73,6 +73,16 @@
             value="{{ Billmora::getGeneral('misc_client_pagination') }}" 
             required 
         />
+        <x-admin::select 
+            name="misc_avatar_provider"
+            label="{{ __('admin/settings/general.misc_avatar_provider_label') }}"
+            helper="{{ __('admin/settings/general.misc_avatar_provider_helper') }}"
+            required 
+        >
+            @foreach (config('utils.avatar_providers') as $value => $provider)
+                <option value="{{ $value }}" {{ Billmora::getGeneral('misc_avatar_provider') == $value ? 'selected' : '' }}>{{ $provider['label'] }}</option>
+            @endforeach
+        </x-admin::select>
         <x-admin::toggle 
             name="misc_debug"
             label="{{ __('admin/settings/general.misc_debug_label') }}"

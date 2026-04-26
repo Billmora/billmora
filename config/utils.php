@@ -715,4 +715,124 @@ return [
         'Pacific/Tongatapu' => '(UTC+13) Pacific/Tongatapu',
         'Pacific/Kiritimati' => '(UTC+14) Pacific/Kiritimati',
     ],
+
+    /**
+     * Available avatar provider options.
+     *
+     * Each entry contains:
+     *   - label       : Human-readable name shown in the admin dropdown.
+     *   - url         : URL pattern. Use {seed} for the user's email (consistent),
+     *                   {md5} for md5-hashed email, and {name} for URL-encoded fullname.
+     *   - manage_url  : (optional) External URL users can visit to manage/change their avatar.
+     *                   If null, the "Change Avatar" button is hidden on the client settings page.
+     *
+     * @var array<string, array>
+     */
+    'avatar_providers' => [
+        'gravatar' => [
+            'label'      => 'Gravatar',
+            'url'        => 'https://www.gravatar.com/avatar/{md5}?s=128&d=mp',
+            'manage_url' => 'https://gravatar.com/emails',
+        ],
+        'ui-avatars' => [
+            'label'      => 'UI Avatars (Initials)',
+            'url'        => 'https://ui-avatars.com/api/?name={name}&background=random&size=128',
+            'manage_url' => null,
+        ],
+        'dicebear-fun-emoji' => [
+            'label'      => 'DiceBear Fun Emoji',
+            'url'        => 'https://api.dicebear.com/9.x/fun-emoji/svg?seed={seed}',
+            'manage_url' => null,
+        ],
+        'dicebear-thumbs' => [
+            'label'      => 'DiceBear Thumbs',
+            'url'        => 'https://api.dicebear.com/9.x/thumbs/svg?seed={seed}',
+            'manage_url' => null,
+        ],
+        'dicebear-bottts' => [
+            'label'      => 'DiceBear Bottts (Robots)',
+            'url'        => 'https://api.dicebear.com/9.x/bottts/svg?seed={seed}',
+            'manage_url' => null,
+        ],
+        'dicebear-bottts-neutral' => [
+            'label'      => 'DiceBear Bottts Neutral',
+            'url'        => 'https://api.dicebear.com/9.x/bottts-neutral/svg?seed={seed}',
+            'manage_url' => null,
+        ],
+        'robohash' => [
+            'label'      => 'Robohash (Monsters/Robots)',
+            'url'        => 'https://robohash.org/{md5}?set=set1&size=128x128',
+            'manage_url' => null,
+        ],
+        'robohash-monsters' => [
+            'label'      => 'Robohash Monsters',
+            'url'        => 'https://robohash.org/{md5}?set=set2&size=128x128',
+            'manage_url' => null,
+        ],
+        'dicebear-identicon' => [
+            'label'      => 'DiceBear Identicon',
+            'url'        => 'https://api.dicebear.com/9.x/identicon/svg?seed={seed}',
+            'manage_url' => null,
+        ],
+        'dicebear-shapes' => [
+            'label'      => 'DiceBear Shapes',
+            'url'        => 'https://api.dicebear.com/9.x/shapes/svg?seed={seed}',
+            'manage_url' => null,
+        ],
+        'dicebear-rings' => [
+            'label'      => 'DiceBear Rings',
+            'url'        => 'https://api.dicebear.com/9.x/rings/svg?seed={seed}',
+            'manage_url' => null,
+        ],
+        'dicebear-glass' => [
+            'label'      => 'DiceBear Glass',
+            'url'        => 'https://api.dicebear.com/9.x/glass/svg?seed={seed}',
+            'manage_url' => null,
+        ],
+        'dicebear-croodles' => [
+            'label'      => 'DiceBear Croodles (Doodles)',
+            'url'        => 'https://api.dicebear.com/9.x/croodles/svg?seed={seed}',
+            'manage_url' => null,
+        ],
+        'dicebear-croodles-neutral' => [
+            'label'      => 'DiceBear Croodles Neutral',
+            'url'        => 'https://api.dicebear.com/9.x/croodles-neutral/svg?seed={seed}',
+            'manage_url' => null,
+        ],
+        'dicebear-notionists' => [
+            'label'      => 'DiceBear Notionists',
+            'url'        => 'https://api.dicebear.com/9.x/notionists/svg?seed={seed}',
+            'manage_url' => null,
+        ],
+        'dicebear-notionists-neutral' => [
+            'label'      => 'DiceBear Notionists Neutral',
+            'url'        => 'https://api.dicebear.com/9.x/notionists-neutral/svg?seed={seed}',
+            'manage_url' => null,
+        ],
+        'dicebear-pixel-art' => [
+            'label'      => 'DiceBear Pixel Art',
+            'url'        => 'https://api.dicebear.com/9.x/pixel-art/svg?seed={seed}',
+            'manage_url' => null,
+        ],
+        'dicebear-pixel-art-neutral' => [
+            'label'      => 'DiceBear Pixel Art Neutral',
+            'url'        => 'https://api.dicebear.com/9.x/pixel-art-neutral/svg?seed={seed}',
+            'manage_url' => null,
+        ],
+        'dicebear-lorelei' => [
+            'label'      => 'DiceBear Lorelei',
+            'url'        => 'https://api.dicebear.com/9.x/lorelei/svg?seed={seed}',
+            'manage_url' => null,
+        ],
+        'dicebear-micah' => [
+            'label'      => 'DiceBear Micah',
+            'url'        => 'https://api.dicebear.com/9.x/micah/svg?seed={seed}',
+            'manage_url' => null,
+        ],
+        'dicebear-avataaars' => [
+            'label'      => 'DiceBear Avataaars',
+            'url'        => 'https://api.dicebear.com/9.x/avataaars/svg?seed={seed}',
+            'manage_url' => null,
+        ],
+    ],
 ];

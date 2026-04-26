@@ -6,15 +6,21 @@
 <div class="grid gap-5">
     <div class="flex flex-col lg:flex-row gap-5">
         <div class="w-full lg:w-1/4 h-fit flex flex-col gap-6 items-center bg-billmora-bg p-8 text-center border-2 border-billmora-2 rounded-xl">
-            <img src="{{ $user->avatar }}?s=128" alt="user avatar" class="rounded-full w-32 h-auto">
+            <img src="{{ $user->avatar }}" alt="user avatar" class="rounded-full w-32 h-auto">
             <div class="flex flex-col">
                 <span class="text-xl text-slate-600 font-bold break-all">{{ $user->fullname }}</span>
                 <span class="text-md text-slate-500 font-semibold break-all">{{ $user->email }}</span>
             </div>
-            <a href="https://gravatar.com/emails" target="_blank" class="w-full flex gap-2 justify-center items-center bg-billmora-primary-500 hover:bg-billmora-primary-500 px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300">
-                <x-lucide-external-link class="w-auto h-5" />
-                Change Avatar
-            </a>
+            @php
+                $avatarProvider = Billmora::getGeneral('misc_avatar_provider', 'dicebear-lorelei');
+                $manageUrl = config("utils.avatar_providers.{$avatarProvider}.manage_url");
+            @endphp
+            @if ($manageUrl)
+                <a href="{{ $manageUrl }}" target="_blank" class="w-full flex gap-2 justify-center items-center bg-billmora-primary-500 hover:bg-billmora-primary-500 px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300">
+                    <x-lucide-external-link class="w-auto h-5" />
+                    Change Avatar
+                </a>
+            @endif
         </div>
         <form action="{{ route('client.account.settings.update') }}" method="POST" class="w-full lg:w-3/4 bg-billmora-bg p-8 border-2 border-billmora-2 rounded-xl">
             @csrf

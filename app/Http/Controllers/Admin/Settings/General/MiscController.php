@@ -47,6 +47,7 @@ class MiscController extends Controller
             'misc_debug' => ['boolean'],
             'misc_admin_pagination' => ['required', 'integer', 'min:1'],
             'misc_client_pagination' => ['required', 'integer', 'min:1'],
+            'misc_avatar_provider' => ['required', 'string', 'in:' . implode(',', array_keys(config('utils.avatar_providers', [])))],
         ]);
 
         $this->updateSettings('general', $validated);

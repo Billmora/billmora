@@ -148,4 +148,6 @@ return [
     'misc_admin_pagination_helper' => 'Set the default number of items to display per page in the admin area.',
     'misc_client_pagination_label' => 'Misc Client Pagination',
     'misc_client_pagination_helper' => 'Set the default number of items to display per page in the client area.',
+    'misc_avatar_provider_label' => 'Avatar Provider',
+    'misc_avatar_provider_helper' => 'Choose the default avatar provider for users.',
 ];
