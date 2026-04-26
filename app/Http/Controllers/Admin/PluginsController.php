@@ -35,7 +35,7 @@ class PluginsController extends Controller
     public function index(Request $request)
     {
         $plugins = [];
-        $types = ['Gateways', 'Provisionings', 'Modules'];
+        $types = ['Gateways', 'Provisionings', 'Modules', 'Registrars'];
 
         foreach ($types as $typeFolder) {
             $path = base_path("plugin/{$typeFolder}");
