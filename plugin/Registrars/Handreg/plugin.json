@@ -1,0 +1,8 @@
+{
+    "name": "Handreg",
+    "provider": "Handreg",
+    "type": "registrar",
+    "version": "1.0.0",
+    "description": "Offline domain registration plugin. Performs real WHOIS availability checks, but registration, transfer, and renewal must be processed manually by the administrator.",
+    "author": "Billmora Team"
+}

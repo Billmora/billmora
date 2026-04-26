@@ -1,13 +1,13 @@
 <?php
 
-namespace Plugins\Registrars\Manual;
+namespace Plugins\Registrars\Handreg;
 
 use App\Contracts\RegistrarInterface;
 use App\Models\Registrant;
 use App\Support\AbstractPlugin;
 use Illuminate\Support\Facades\Cache;
 
-class ManualRegistrar extends AbstractPlugin implements RegistrarInterface
+class HandregRegistrar extends AbstractPlugin implements RegistrarInterface
 {
     /**
      * Get global configuration schema for admin panel.
@@ -189,7 +189,7 @@ class ManualRegistrar extends AbstractPlugin implements RegistrarInterface
      */
     public function create(Registrant $registrant): void
     {
-        app('log')->info("Manual Registrar: Manual registration triggered for {$registrant->domain}");
+        app('log')->info("Handreg Registrar: Manual registration triggered for {$registrant->domain}");
     }
 
     /**
@@ -197,7 +197,7 @@ class ManualRegistrar extends AbstractPlugin implements RegistrarInterface
      */
     public function transfer(Registrant $registrant, string $eppCode): void
     {
-        app('log')->info("Manual Registrar: Manual transfer triggered for {$registrant->domain} with EPP {$eppCode}");
+        app('log')->info("Handreg Registrar: Manual transfer triggered for {$registrant->domain} with EPP {$eppCode}");
     }
 
     /**
@@ -205,7 +205,7 @@ class ManualRegistrar extends AbstractPlugin implements RegistrarInterface
      */
     public function renew(Registrant $registrant, int $years = 1): void
     {
-        app('log')->info("Manual Registrar: Manual renewal triggered for {$registrant->domain} for {$years} years");
+        app('log')->info("Handreg Registrar: Manual renewal triggered for {$registrant->domain} for {$years} years");
     }
 
     /**
@@ -222,7 +222,7 @@ class ManualRegistrar extends AbstractPlugin implements RegistrarInterface
      */
     public function setNameservers(Registrant $registrant, array $nameservers): void
     {
-        app('log')->info("Manual Registrar: Saved nameservers locally for {$registrant->domain}", $nameservers);
+        app('log')->info("Handreg Registrar: Saved nameservers locally for {$registrant->domain}", $nameservers);
         
         $configuration = $registrant->configuration ?? [];
         $configuration['nameservers'] = $nameservers;
@@ -237,7 +237,7 @@ class ManualRegistrar extends AbstractPlugin implements RegistrarInterface
      */
     public function getEPPCode(Registrant $registrant): string
     {
-        return "MANUAL-" . strtoupper(substr(md5($registrant->domain), 0, 8));
+        return "HANDREG-" . strtoupper(substr(md5($registrant->domain), 0, 8));
     }
 
     /**
@@ -246,7 +246,7 @@ class ManualRegistrar extends AbstractPlugin implements RegistrarInterface
     public function getWhoisInfo(Registrant $registrant): array
     {
         return [
-            'registrar' => 'Manual Registration',
+            'registrar' => 'Handreg',
             'creation_date' => $registrant->registered_at ? $registrant->registered_at->toDateString() : now()->toDateString(),
             'expiration_date' => $registrant->expires_at ? $registrant->expires_at->toDateString() : now()->addYear()->toDateString(),
         ];
@@ -257,7 +257,7 @@ class ManualRegistrar extends AbstractPlugin implements RegistrarInterface
      */
     public function setWhoisPrivacy(Registrant $registrant, bool $enabled): void
     {
-        app('log')->info("Manual Registrar: Saved WHOIS Privacy status locally for {$registrant->domain}");
+        app('log')->info("Handreg Registrar: Saved WHOIS Privacy status locally for {$registrant->domain}");
         $registrant->update([
             'whois_privacy' => $enabled
         ]);
