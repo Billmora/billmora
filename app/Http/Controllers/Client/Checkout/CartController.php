@@ -8,6 +8,7 @@ use App\Models\VariantOption;
 use App\Services\Checkout\CartService;
 use App\Services\Package\PricingService;
 use App\Services\Package\OrderValidationService;
+use App\Services\PluginManager;
 use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
