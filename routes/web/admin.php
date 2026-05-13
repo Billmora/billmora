@@ -15,6 +15,17 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/health', [Admin\HealthController::class, 'index'])->name('admin.health');
     Route::post('/reorder', [Admin\ReorderController::class, 'update'])->name('admin.reorder');
+
+    /**
+     * Admin system update interface routes.
+     *
+     * Prefix: /admin/update
+     */
+    Route::group(['prefix' => 'update'], function () {
+        Route::get('/', [Admin\UpdateController::class, 'index'])->name('admin.update');
+        Route::post('/check', [Admin\UpdateController::class, 'check'])->name('admin.update.check');
+        Route::post('/execute', [Admin\UpdateController::class, 'execute'])->name('admin.update.execute');
+    });
     
     /**
      * Admin users interface routes.
