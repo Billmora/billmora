@@ -50,8 +50,8 @@ class CreditService
 
         $wallet = $user->getCreditWallet($invoice->currency);
 
-        // Guard: user must have positive credit balance
-        if ($wallet->balance <= 0) {
+        // Guard: user must have sufficient credit balance to fully cover the invoice
+        if ($wallet->balance < $invoice->amount_due) {
             return false;
         }
 
