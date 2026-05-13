@@ -42,6 +42,7 @@ class SettingsController extends Controller
             'first_name' => ['required', 'string', 'min:3', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'language' => ['required', 'string', Rule::in(array_map('basename', File::directories(lang_path())))],
+            'auto_credit_payment' => ['nullable', 'boolean'],
             'phone_number' => [
                 Rule::requiredIf(Billmora::hasAuth('user_billing_required_inputs', 'phone_number')),
                 Rule::prohibitedIf(Billmora::hasAuth('user_registration_disabled_inputs', 'phone_number')),
@@ -86,18 +87,25 @@ class SettingsController extends Controller
         ]);
 
         $oldUser = array_merge(
-            $user->only(['first_name', 'last_name', 'language']),
+            $user->only(['first_name', 'last_name', 'language', 'auto_credit_payment']),
             $user->billing?->only([
                 'phone_number', 'company_name', 'street_address_1', 'street_address_2',
                 'city', 'state', 'postcode', 'country',
             ]) ?? []
         );
 
-        $user->update([
+        $userUpdateData = [
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
             'language' => $validated['language'],
-        ]);
+        ];
+
+        // Only update auto_credit_payment if the admin feature is enabled
+        if ((bool) Billmora::getGeneral('credit_auto_payment')) {
+            $userUpdateData['auto_credit_payment'] = $request->boolean('auto_credit_payment');
+        }
+
+        $user->update($userUpdateData);
 
         $user->billing()->updateOrCreate(
             ['user_id' => $user->id],
@@ -114,7 +122,7 @@ class SettingsController extends Controller
         );
 
         $newUser = array_merge(
-            $user->fresh()->only(['first_name', 'last_name', 'language']),
+            $user->fresh()->only(['first_name', 'last_name', 'language', 'auto_credit_payment']),
             $user->fresh()->billing?->only([
                 'phone_number', 'company_name', 'street_address_1', 'street_address_2',
                 'city', 'state', 'postcode', 'country',

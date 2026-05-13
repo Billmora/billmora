@@ -44,5 +44,7 @@ return [
         'fully_settled' => 'Your invoice has been fully settled using your credit balance.',
         'partially_applied' => 'Credit balance applied. Please pay the remaining amount due.',
         'transaction_description' => 'Credit Balance Applied',
+        'auto_credit_payment_description' => 'Auto Credit Payment Applied',
+        'auto_pay_active' => 'Auto credit payment is enabled. New invoices will be automatically settled from your credit balance.',
     ],
 ];

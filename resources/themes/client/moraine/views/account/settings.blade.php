@@ -70,6 +70,19 @@
                         @endforeach
                     </x-client::select>
                 </div>
+                @if((bool) Billmora::getGeneral('credit_auto_payment'))
+                    <div class="grid gap-4">
+                        <h4 class="text-xl font-semibold text-slate-700">{{ __('client/account.auto_credit_payment.title') }}</h4>
+                        <div class="p-4 bg-billmora-1 border-2 border-billmora-2 rounded-xl">
+                            <x-client::toggle
+                                name="auto_credit_payment"
+                                label="{{ __('client/account.auto_credit_payment.label') }}"
+                                helper="{{ __('client/account.auto_credit_payment.helper') }}"
+                                :checked="(bool) old('auto_credit_payment', $user->auto_credit_payment)"
+                            />
+                        </div>
+                    </div>
+                @endif
                 <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 ml-auto px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.save') }}</button>
             </div>
         </form>

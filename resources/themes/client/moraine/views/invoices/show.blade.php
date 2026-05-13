@@ -105,7 +105,14 @@
         @if ($invoice->status === 'unpaid')
             @php
                 $isCreditDeposit = $invoice->items()->where('description', 'like', 'Credit Deposit%')->exists();
+                $isAutoPayActive = (bool) Billmora::getGeneral('credit_auto_payment') && Auth::user()->auto_credit_payment;
             @endphp
+            @if($isAutoPayActive && !$isCreditDeposit)
+                <div class="m-6 mb-0 p-4 bg-green-50 border-2 border-green-200 rounded-xl flex gap-3 items-start">
+                    <x-lucide-zap class="w-5 h-auto text-green-600 shrink-0 mt-0.5" />
+                    <span class="text-sm font-medium text-green-700">{{ __('client/invoices.credit.auto_pay_active') }}</span>
+                </div>
+            @endif
             @if(!$isCreditDeposit && $creditBalance > 0 && $invoice->amount_due > 0)
                 <div class="m-6 mb-0 p-4 bg-billmora-bg border-2 border-billmora-2 rounded-xl">
                     <span class="block text-sm font-semibold text-slate-600 mb-2">

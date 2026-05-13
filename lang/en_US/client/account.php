@@ -21,6 +21,12 @@ return [
         'deposit_exceeds_max_balance' => 'This deposit exceeds your maximum allowed wallet balance of :max_balance.',
     ],
 
+    'auto_credit_payment' => [
+        'title' => 'Payment Preferences',
+        'label' => 'Auto Credit Payment',
+        'helper' => 'Automatically pay new invoices using your available credit balance. When enabled, invoices will be settled from your credit wallet upon generation.',
+    ],
+
     'sessions' => [
         'title' => 'Active Sessions',
         'description' => 'Manage and revoke your active sessions across devices. If necessary, you may revoke all of your other sessions.',
