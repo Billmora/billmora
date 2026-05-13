@@ -144,6 +144,8 @@ class PermissionSeeder extends Seeder
             'audit.system.logs.export',
             'audit.system.logs.delete',
             'health.view',
+            'update.view',
+            'update.execute',
         ];
 
         /**

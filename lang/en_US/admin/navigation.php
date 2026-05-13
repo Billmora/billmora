@@ -26,6 +26,7 @@ return [
     'tasks' => 'Tasks',
     'audits' => 'Audits',
     'health' => 'Health',
+    'update' => 'Update',
     'group' => [
         'management' => 'Management',
         'product' => 'Product',

@@ -148,6 +148,15 @@
                             </span>
                         </div>
                     </div>
+                    @if($health['version']['latest'] && isset($isUpToDate) && !$isUpToDate)
+                        @can('update.view')
+                            <a href="{{ route('admin.update') }}"
+                                class="flex items-center gap-2 bg-billmora-primary-500 hover:bg-billmora-primary-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-colors duration-300 shrink-0">
+                                <x-lucide-download class="w-4 h-4" />
+                                {{ __('admin/health.view_update') }}
+                            </a>
+                        @endcan
+                    @endif
                 </div>
             </div>
         </div>

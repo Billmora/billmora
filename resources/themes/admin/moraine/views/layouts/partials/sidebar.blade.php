@@ -183,6 +183,13 @@
                     <span class="font-semibold">{{ __('admin/navigation.health') }}</span>
                 </a>
             @endcan
+            @can('update.view')
+                <a href="{{ route('admin.update') }}"
+                    class="flex gap-2 items-center {{ request()->routeIs('admin.update*') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+                    <x-lucide-download class="w-5 h-auto" />
+                    <span class="font-semibold">{{ __('admin/navigation.update') }}</span>
+                </a>
+            @endcan
             <span
                 class="mt-4 block text-slate-600 font-semibold text-md">{{ __('admin/navigation.group.plugin') }}</span>
             @can('provisionings.view')

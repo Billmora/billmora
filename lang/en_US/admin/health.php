@@ -28,5 +28,6 @@ return [
         'version_desc' => 'Real-time version comparison with official repository.',
         'php_desc' => 'Runtime engine version for PHP.',
         'laravel_desc' => 'Current version of the Laravel framework.',
-    ]
+    ],
+    'view_update' => 'View Update',
 ];
