@@ -56,6 +56,7 @@
         active="{{ request()->url() }}" />
     <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
         <x-admin::toggle name="credit_use" label="{{ __('admin/settings/general.credit_use_label') }}" helper="{{ __('admin/settings/general.credit_use_helper') }}" :checked="Billmora::getGeneral('credit_use')" />
+        <x-admin::toggle name="credit_auto_payment" label="{{ __('admin/settings/general.credit_auto_payment_label') }}" helper="{{ __('admin/settings/general.credit_auto_payment_helper') }}" :checked="Billmora::getGeneral('credit_auto_payment')" />
         <x-admin::input 
             type="number" 
             min="1" 
