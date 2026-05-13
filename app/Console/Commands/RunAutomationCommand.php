@@ -42,31 +42,34 @@ class RunAutomationCommand extends Command
         $this->comment('1. Dispatching Invoice Generation...');
         AutomationJobs\GenerateRecurringInvoices::dispatch();
 
-        $this->comment('2. Dispatching Invoice Reminders...');
+        $this->comment('2. Dispatching Auto Credit Payments...');
+        AutomationJobs\ProcessAutoCreditPayments::dispatch();
+
+        $this->comment('3. Dispatching Invoice Reminders...');
         AutomationJobs\SendInvoiceReminders::dispatch();
 
-        $this->comment('3. Dispatching Service Suspensions...');
+        $this->comment('4. Dispatching Service Suspensions...');
         AutomationJobs\ProcessServiceSuspensions::dispatch();
 
-        $this->comment('4. Dispatching Service Terminations...');
+        $this->comment('5. Dispatching Service Terminations...');
         AutomationJobs\ProcessServiceTerminations::dispatch();
 
-        $this->comment('5. Dispatching Auto Cancellations...');
+        $this->comment('6. Dispatching Auto Cancellations...');
         AutomationJobs\ProcessCancellations::dispatch();
 
-        $this->comment('6. Dispatching Ticket Auto-Close...');
+        $this->comment('7. Dispatching Ticket Auto-Close...');
         AutomationJobs\CloseInactiveTickets::dispatch();
 
-        $this->comment('7. Dispatching Domain Renewals...');
+        $this->comment('8. Dispatching Domain Renewals...');
         AutomationJobs\ProcessDomainRenewals::dispatch();
 
-        $this->comment('8. Dispatching Data Pruning...');
+        $this->comment('9. Dispatching Data Pruning...');
         AutomationJobs\PruneSystemData::dispatch();
 
-        $this->comment('9. Dispatching User Auto-Inactive...');
+        $this->comment('10. Dispatching User Auto-Inactive...');
         AutomationJobs\ProcessInactiveUsers::dispatch();
 
-        $this->comment('10. Dispatching Expired Punishments...');
+        $this->comment('11. Dispatching Expired Punishments...');
         AutomationJobs\ProcessExpiredPunishments::dispatch();
 
         $this->info('Automation dispatch completed successfully!');

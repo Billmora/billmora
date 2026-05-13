@@ -4,11 +4,19 @@ namespace App\Observers;
 
 use App\Events\Invoice as InvoiceEvents;
 use App\Models\Invoice;
+use App\Services\CreditService;
 use Billmora;
 use Illuminate\Support\Facades\DB;
 
 class InvoiceObserver
 {
+    /**
+     * Create a new observer instance.
+     */
+    public function __construct(
+        protected CreditService $creditService
+    ) {}
+
     /**
      * Handle the Invoice "created" event.
      */
@@ -24,6 +32,15 @@ class InvoiceObserver
         }
         
         event(new InvoiceEvents\Created($invoice, $invoice->sendEmailNotification));
+
+        // Attempt automatic credit payment after the transaction is committed
+        DB::afterCommit(function () use ($invoice) {
+            $invoice->refresh();
+
+            if ($invoice->status === 'unpaid') {
+                $this->creditService->attemptAutoPayment($invoice);
+            }
+        });
     }
 
     /**
