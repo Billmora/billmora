@@ -64,7 +64,6 @@
             >
                 <x-admin::radio.option name="ordering_redirect" label="{{ __('admin/settings/general.ordering_redirect_option.complete') }}" value="complete" :checked="Billmora::getGeneral('ordering_redirect') === 'complete'" />
                 <x-admin::radio.option name="ordering_redirect" label="{{ __('admin/settings/general.ordering_redirect_option.invoice') }}" value="invoice" :checked="Billmora::getGeneral('ordering_redirect') === 'invoice'" />
-                <x-admin::radio.option name="ordering_redirect" label="{{ __('admin/settings/general.ordering_redirect_option.payment') }}" value="payment" :checked="Billmora::getGeneral('ordering_redirect') === 'payment'" />
             </x-admin::radio.group>
             <x-admin::toggle name="ordering_tos" label="{{ __('admin/settings/general.ordering_tos_label') }}" helper="{{ __('admin/settings/general.ordering_tos_helper') }}" :checked="Billmora::getGeneral('ordering_tos')" required />
             <x-admin::toggle name="ordering_notes" label="{{ __('admin/settings/general.ordering_notes_label') }}" helper="{{ __('admin/settings/general.ordering_notes_helper') }}" :checked="Billmora::getGeneral('ordering_notes')" required />

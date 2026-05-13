@@ -42,8 +42,7 @@ return [
     'ordering_redirect_helper' => 'Choose where customers are redirected after placing an order.',
     'ordering_redirect_option' => [
         'complete' => 'Just show the order completed page (no payment redirect)',
-        'invoice' => 'Automatically take the user to the invoice',
-        'payment' => 'Automatically forward the user to the payment gateway',
+        'invoice' => 'Automatically take the user to the invoice to complete payment',
     ],
     'ordering_tos_label' => 'Ordering Tos',
     'ordering_tos_helper' => 'Require customers to agree to the Terms of Service before placing an order.',
@@ -97,6 +96,8 @@ return [
     'credit_max_deposit_helper' => 'Maximum amount customers can deposit per transaction. Defined in the default currency and automatically converted to other currencies using the configured base rate.',
     'credit_max_label' => 'Credit Max Balance',
     'credit_max_helper' => 'Maximum credit balance a customer is allowed to hold in their wallet. Defined in the default currency and automatically converted to other currencies using the configured base rate.',
+    'credit_auto_payment_label' => 'Auto Credit Payment',
+    'credit_auto_payment_helper' => 'Allow clients to enable automatic invoice payment using their available credit balance. When enabled, invoices will be automatically settled upon generation.',
 
     'term_tos_label' => 'Term Tos',
     'term_tos_helper' => 'Enable to display and enforce your Terms of Service for customers.',

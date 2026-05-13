@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class OrderingController extends Controller
 {
@@ -45,7 +46,7 @@ class OrderingController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate( [
-            'ordering_redirect' => ['required', 'string'],
+            'ordering_redirect' => ['required', 'string', Rule::in(['complete', 'invoice'])],
             'ordering_tos' => ['required', 'boolean'],
             'ordering_notes' => ['required', 'boolean'],
             'ordering_max_quantity' => ['required', 'integer', 'min:1'],

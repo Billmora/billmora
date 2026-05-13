@@ -27,13 +27,8 @@ class OrderRedirectService
                 return redirect()->route('client.checkout.complete');
                 
             case 'invoice':
-                return redirect()->route('client.invoices.show', $invoice->invoice_number);
-                
-            case 'payment':
-                return redirect()->route('client.invoices.pay', $invoice->invoice_number);
-            
             default:
-                return redirect()->route('client.dashboard');
+                return redirect()->route('client.invoices.show', $invoice->invoice_number);
         }
     }
 }
