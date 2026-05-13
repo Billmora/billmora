@@ -13,7 +13,6 @@ use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Validation\Rule;
 
 class CheckoutController extends Controller
 {
@@ -40,14 +39,7 @@ class CheckoutController extends Controller
                 ->with('error', __('client/checkout.cart.empty'));
         }
 
-        $rules = [
-            'payment_method' => [
-                'required', 
-                Rule::exists('plugins', 'id')
-                    ->where('type', 'gateway')
-                    ->where('is_active', true)
-            ],
-        ];
+        $rules = [];
         
         if (Billmora::getGeneral('ordering_notes')) {
             $rules['notes'] = ['nullable', 'string', 'max:1000'];

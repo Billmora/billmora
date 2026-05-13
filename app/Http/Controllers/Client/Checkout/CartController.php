@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers\Client\Checkout;
 
-use App\Contracts\GatewayInterface;
 use App\Http\Controllers\Controller;
 use App\Models\PackagePrice;
-use App\Models\Plugin;
 use App\Models\VariantOption;
 use App\Services\Checkout\CartService;
 use App\Services\Package\PricingService;
 use App\Services\Package\OrderValidationService;
-use App\Services\PluginManager;
 use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,12 +24,13 @@ class CartController extends Controller
     }
 
     /**
-     * Display the cart page with items, totals, applied coupon, and applicable payment gateways.
+     * Display the cart page with items, totals, and applied coupon.
      *
-     * @param  \App\Services\PluginManager  $pluginManager
+     * @param  \App\Services\Package\OrderValidationService  $validationService
+     * @param  \App\Services\Package\PricingService  $pricingService
      * @return \Illuminate\View\View
      */
-    public function index(PluginManager $pluginManager, OrderValidationService $validationService, PricingService $pricingService) 
+    public function index(OrderValidationService $validationService, PricingService $pricingService) 
     {
         $cartItems = $this->cartService->getItems();
         $currencyCode = Session::get('currency');
@@ -126,19 +124,7 @@ class CartController extends Controller
         }
         unset($item);
 
-        $activeGateways = Plugin::where('type', 'gateway')->where('is_active', true)->get();
-        $gateways = collect();
-
-        foreach ($activeGateways as $gatewayRecord) {
-            $instance = $pluginManager->bootInstance($gatewayRecord);
-            if ($instance instanceof GatewayInterface) {
-                if ($instance->isApplicable((float) $totals['total'], $currencyCode)) {
-                    $gateways->push($gatewayRecord);
-                }
-            }
-        }
-
-        return view('client::checkout.cart', compact('cartItems', 'totals', 'currencyCode', 'appliedCoupon', 'gateways'));
+        return view('client::checkout.cart', compact('cartItems', 'totals', 'currencyCode', 'appliedCoupon'));
     }
 
     /**

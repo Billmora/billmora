@@ -152,7 +152,6 @@ class OrderService
             $invoice = Invoice::create([
                 'user_id' => $userId,
                 'order_id' => $order->id,
-                'plugin_id' => $checkoutData['payment_method'] ?? null,
                 'status' => 'unpaid',
                 'currency' => $currency,
                 'subtotal' => $totals['subtotal'],
