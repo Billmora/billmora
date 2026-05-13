@@ -44,16 +44,18 @@ class MiscController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'misc_debug' => ['boolean'],
             'misc_admin_pagination' => ['required', 'integer', 'min:1'],
             'misc_client_pagination' => ['required', 'integer', 'min:1'],
             'misc_avatar_provider' => ['required', 'string', 'in:' . implode(',', array_keys(config('utils.avatar_providers', [])))],
         ]);
 
+        // Checkbox might not be present in request if unchecked
+        $validated['misc_debug'] = $request->boolean('misc_debug');
+
         $this->updateSettings('general', $validated);
 
         Billmora::setEnv([
-            'APP_DEBUG' => $validated['misc_debug'],
+            'APP_DEBUG' => $validated['misc_debug'] ? 'true' : 'false',
         ]);
 
         Billmora::setGeneral($validated);
