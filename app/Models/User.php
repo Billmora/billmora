@@ -36,6 +36,7 @@ class User extends Authenticatable implements BrowseInterface
         'currency',
         'language',
         'department',
+        'auto_credit_payment',
         'email_verified_at',
         'oauth_provider',
         'oauth_provider_id',
@@ -69,6 +70,7 @@ class User extends Authenticatable implements BrowseInterface
     protected $casts = [
         'password' => 'hashed',
         'is_root_admin' => 'boolean',
+        'auto_credit_payment' => 'boolean',
         'email_verified_at' => 'datetime',
     ];
 
