@@ -40,7 +40,10 @@ class CartController extends Controller
         $pricesUpdated = false;
 
         foreach ($cartItems as $key => $item) {
-            if (($item['type'] ?? 'service') === 'domain') {
+            $itemType = $item['type'] ?? null;
+            $isDomain = $itemType === \App\OrderItemType::Domain->value;
+
+            if ($isDomain) {
 
                 $tld = \App\Models\Tld::find($item['tld_id'] ?? null);
                 if (!$tld || $tld->status !== 'visible') {
@@ -70,6 +73,11 @@ class CartController extends Controller
                     $pricesUpdated = true;
                 }
 
+                continue;
+            }
+
+            // Service item validation — skip if type is not explicitly 'service'
+            if ($itemType !== \App\OrderItemType::Service->value) {
                 continue;
             }
 
