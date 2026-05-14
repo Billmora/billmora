@@ -6,6 +6,7 @@ use App\Services\BillmoraService;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\PhpExecutableFinder;
@@ -31,6 +32,16 @@ class UpdateService
      * Cache TTL for release data (24 hours in seconds).
      */
     protected const CACHE_TTL = 86400;
+
+    /**
+     * File path for persisting update logs (survives cache clears).
+     */
+    public const LOG_FILE = 'update-progress.json';
+
+    /**
+     * File path for persisting update status (survives cache clears).
+     */
+    public const STATUS_FILE = 'update-status.json';
 
     /**
      * Temporary storage path for update files.
@@ -128,33 +139,33 @@ class UpdateService
 
         return [
             'php_version' => [
-                'label' => 'PHP Version',
+                'label' => __('admin/update.requirements.items.php_version'),
                 'required' => '≥ 8.2',
                 'current' => PHP_VERSION,
                 'satisfied' => version_compare(PHP_VERSION, '8.2.0', '>='),
             ],
             'phar_extension' => [
-                'label' => 'Phar Extension',
-                'required' => 'Enabled',
-                'current' => class_exists('PharData') ? 'Enabled' : 'Disabled',
+                'label' => __('admin/update.requirements.items.phar_extension'),
+                'required' => __('admin/update.requirements.values.enabled'),
+                'current' => class_exists('PharData') ? __('admin/update.requirements.values.enabled') : __('admin/update.requirements.values.disabled'),
                 'satisfied' => class_exists('PharData'),
             ],
             'composer' => [
-                'label' => 'Composer',
-                'required' => 'Available',
-                'current' => $composerBinary ? 'Available' : 'Not Found',
+                'label' => __('admin/update.requirements.items.composer'),
+                'required' => __('admin/update.requirements.values.available'),
+                'current' => $composerBinary ? __('admin/update.requirements.values.available') : __('admin/update.requirements.values.not_found'),
                 'satisfied' => (bool) $composerBinary,
             ],
             'disk_space' => [
-                'label' => 'Available Disk Space',
+                'label' => __('admin/update.requirements.items.disk_space'),
                 'required' => '≥ 100 MB',
                 'current' => $this->formatBytes(disk_free_space(base_path())),
                 'satisfied' => disk_free_space(base_path()) >= 104857600,
             ],
             'writable' => [
-                'label' => 'Application Directory',
-                'required' => 'Writable',
-                'current' => is_writable(base_path()) ? 'Writable' : 'Read Only',
+                'label' => __('admin/update.requirements.items.writable'),
+                'required' => __('admin/update.requirements.values.writable'),
+                'current' => is_writable(base_path()) ? __('admin/update.requirements.values.writable') : __('admin/update.requirements.values.read_only'),
                 'satisfied' => is_writable(base_path()),
             ],
         ];
@@ -166,93 +177,105 @@ class UpdateService
      * @param callable|null $onLog  Optional callback to receive log entries in real-time.
      * @return array{success: bool, logs: array, version: string|null}
      */
-    public function executeUpdate(?callable $onLog = null): array
+    public function executeUpdate(?callable $onLog = null, bool $dryRun = false): array
     {
         $release = $this->getLatestRelease();
 
-        if (!$release || !$this->isUpdateAvailable()) {
-            return ['success' => false, 'logs' => [['time' => now()->format('H:i:s'), 'message' => 'No update available.', 'status' => 'error']], 'version' => null];
+        if (!$dryRun && (!$release || !$this->isUpdateAvailable())) {
+            return ['success' => false, 'logs' => [['time' => now()->format('H:i:s'), 'message' => __('admin/update.steps.no_update'), 'status' => 'error']], 'version' => null];
         }
 
-        $newVersion = ltrim($release['tag_name'], 'vV');
+        $newVersion = $release ? ltrim($release['tag_name'], 'vV') : 'testing';
 
         set_time_limit(0);
         ignore_user_abort(true);
 
         try {
             // Step 1: Enable maintenance mode
-            $this->log('Enabling maintenance mode...', 'running', $onLog);
-            $this->enableMaintenance();
-            $this->log('Maintenance mode enabled.', 'success', $onLog);
+            $this->log(__('admin/update.steps.maintenance_enabling'), 'running', $onLog);
+            if (!$dryRun) $this->enableMaintenance();
+            if ($dryRun) sleep(1);
+            $this->log(__('admin/update.steps.maintenance_enabled'), 'success', $onLog);
 
             // Step 2: Download release archive
-            $this->log("Downloading release v{$newVersion}...", 'running', $onLog);
-            $archivePath = $this->downloadRelease($release['tarball_url'], $release['asset_size']);
-            $this->log('Download complete.', 'success', $onLog);
+            $this->log(__('admin/update.steps.downloading', ['version' => $newVersion]), 'running', $onLog);
+            if (!$dryRun) $archivePath = $this->downloadRelease($release['tarball_url'], $release['asset_size']);
+            if ($dryRun) sleep(2);
+            $this->log(__('admin/update.steps.download_complete'), 'success', $onLog);
 
             // Step 3: Extract and overwrite files
-            $this->log('Extracting files...', 'running', $onLog);
-            $this->extractRelease($archivePath);
-            $this->log('Files extracted and applied.', 'success', $onLog);
+            $this->log(__('admin/update.steps.extracting'), 'running', $onLog);
+            if (!$dryRun) $this->extractRelease($archivePath);
+            if ($dryRun) sleep(1);
+            $this->log(__('admin/update.steps.extracted'), 'success', $onLog);
 
             // Step 4: Run composer install
-            $this->log('Installing dependencies (composer install)...', 'running', $onLog);
-            $this->runComposerInstall();
-            $this->log('Dependencies installed.', 'success', $onLog);
+            $this->log(__('admin/update.steps.composer_installing'), 'running', $onLog);
+            if (!$dryRun) $this->runComposerInstall();
+            if ($dryRun) sleep(3);
+            $this->log(__('admin/update.steps.composer_installed'), 'success', $onLog);
 
             // Step 5: Run database migrations
-            $this->log('Running database migrations...', 'running', $onLog);
-            $this->runMigrations();
-            $this->log('Migrations complete.', 'success', $onLog);
+            $this->log(__('admin/update.steps.migrations_running'), 'running', $onLog);
+            if (!$dryRun) $this->runMigrations();
+            if ($dryRun) sleep(2);
+            $this->log(__('admin/update.steps.migrations_complete'), 'success', $onLog);
 
             // Step 6: Clear and rebuild cache
-            $this->log('Clearing application cache...', 'running', $onLog);
-            $this->clearCache();
-            $this->log('Cache cleared.', 'success', $onLog);
+            $this->log(__('admin/update.steps.cache_clearing'), 'running', $onLog);
+            if (!$dryRun) $this->clearCache();
+            if ($dryRun) sleep(1);
+            $this->log(__('admin/update.steps.cache_cleared'), 'success', $onLog);
 
-            $this->log('Optimizing application...', 'running', $onLog);
-            $this->optimizeApplication();
-            $this->log('Optimization complete.', 'success', $onLog);
+            $this->log(__('admin/update.steps.optimizing'), 'running', $onLog);
+            if (!$dryRun) $this->optimizeApplication();
+            if ($dryRun) sleep(1);
+            $this->log(__('admin/update.steps.optimized'), 'success', $onLog);
 
             // Step 7: Restart queue workers
-            $this->log('Restarting queue workers...', 'running', $onLog);
-            $this->restartQueues();
-            $this->log('Queue workers restarted.', 'success', $onLog);
+            $this->log(__('admin/update.steps.queue_restarting'), 'running', $onLog);
+            if (!$dryRun) $this->restartQueues();
+            if ($dryRun) sleep(1);
+            $this->log(__('admin/update.steps.queue_restarted'), 'success', $onLog);
 
             // Step 8: Disable maintenance mode
-            $this->log('Disabling maintenance mode...', 'running', $onLog);
-            $this->disableMaintenance();
-            $this->log('Maintenance mode disabled.', 'success', $onLog);
+            $this->log(__('admin/update.steps.maintenance_disabling'), 'running', $onLog);
+            if (!$dryRun) $this->disableMaintenance();
+            if ($dryRun) sleep(1);
+            $this->log(__('admin/update.steps.maintenance_disabled'), 'success', $onLog);
 
             // Step 9: Cleanup
-            $this->log('Cleaning up temporary files...', 'running', $onLog);
-            $this->cleanup();
-            $this->log('Cleanup complete.', 'success', $onLog);
+            $this->log(__('admin/update.steps.cleanup'), 'running', $onLog);
+            if (!$dryRun) $this->cleanup();
+            if ($dryRun) sleep(1);
+            $this->log(__('admin/update.steps.cleanup_complete'), 'success', $onLog);
 
             // Clear version cache so it reflects the new version
-            Cache::forget(self::CACHE_KEY);
-            Cache::forget('billmora_latest_version');
+            if (!$dryRun) {
+                Cache::forget(self::CACHE_KEY);
+                Cache::forget('billmora_latest_version');
+            }
 
-            $this->log("Update to v{$newVersion} completed successfully!", 'success', $onLog);
+            $this->log(__('admin/update.steps.completed', ['version' => $newVersion]), 'success', $onLog);
 
             return ['success' => true, 'logs' => $this->logs, 'version' => $newVersion];
 
         } catch (\Exception $e) {
-            $this->log("Error: {$e->getMessage()}", 'error', $onLog);
+            $this->log(__('admin/update.steps.error', ['message' => $e->getMessage()]), 'error', $onLog);
 
             // Ensure maintenance mode is disabled on failure
-            try {
-                $this->disableMaintenance();
-                $this->log('Maintenance mode disabled after error.', 'warning', $onLog);
-            } catch (\Exception $ex) {
-                // Ignore if maintenance mode disable also fails
-            }
-
-            // Cleanup temp files on failure
-            try {
-                $this->cleanup();
-            } catch (\Exception $ex) {
-                // Ignore cleanup failures
+            if (!$dryRun) {
+                try {
+                    $this->disableMaintenance();
+                    $this->log(__('admin/update.steps.maintenance_disabled_after_error'), 'warning', $onLog);
+                } catch (\Exception $ex) {
+                    // Ignore
+                }
+                try {
+                    $this->cleanup();
+                } catch (\Exception $ex) {
+                    // Ignore
+                }
             }
 
             return ['success' => false, 'logs' => $this->logs, 'version' => null];
@@ -429,7 +452,7 @@ class UpdateService
     {
         BillmoraService::setSetting('general', [
             'company_maintenance' => true,
-            'company_maintenance_message' => 'System is being updated. Please check back shortly.',
+            'company_maintenance_message' => __('admin/update.maintenance_message'),
         ]);
     }
 
@@ -571,8 +594,78 @@ class UpdateService
 
         $this->logs[] = $entry;
 
+        // Persist to file for real-time polling (survives cache clears)
+        $this->persistLogsToFile();
+
+        // Write to Laravel log channel for debugging/tracking
+        $logLevel = match ($status) {
+            'error' => 'error',
+            'warning' => 'warning',
+            'success' => 'info',
+            default => 'debug',
+        };
+        Log::channel('single')->{$logLevel}('[SystemUpdate] ' . $message);
+
         if ($onLog) {
             $onLog($entry);
         }
+    }
+
+    /**
+     * Persist all collected logs to a JSON file for real-time frontend polling.
+     *
+     * @return void
+     */
+    protected function persistLogsToFile(): void
+    {
+        $path = storage_path('app/' . self::LOG_FILE);
+        File::ensureDirectoryExists(dirname($path));
+        File::put($path, json_encode($this->logs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    }
+
+    /**
+     * Write the current update status to a JSON file.
+     *
+     * @param string      $state    The process state (running, completed, failed).
+     * @param string|null $version  The target version.
+     * @return void
+     */
+    public function writeStatus(string $state, ?string $version = null): void
+    {
+        $path = storage_path('app/' . self::STATUS_FILE);
+        File::ensureDirectoryExists(dirname($path));
+        File::put($path, json_encode([
+            'state' => $state,
+            'version' => $version,
+            'updated_at' => now()->toIso8601String(),
+        ], JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * Read the current update status from file.
+     *
+     * @return array
+     */
+    public static function readStatus(): array
+    {
+        $path = storage_path('app/' . self::STATUS_FILE);
+        if (File::exists($path)) {
+            return json_decode(File::get($path), true) ?? ['state' => 'idle'];
+        }
+        return ['state' => 'idle'];
+    }
+
+    /**
+     * Read the current update logs from file.
+     *
+     * @return array
+     */
+    public static function readLogs(): array
+    {
+        $path = storage_path('app/' . self::LOG_FILE);
+        if (File::exists($path)) {
+            return json_decode(File::get($path), true) ?? [];
+        }
+        return [];
     }
 }
