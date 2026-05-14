@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\PhpExecutableFinder;
-use Symfony\Component\Process\Process;
 
 class UpdateController extends Controller
 {
@@ -21,7 +20,9 @@ class UpdateController extends Controller
     public function __construct()
     {
         $this->middleware('permission:update.view')->only(['index', 'check']);
-        $this->middleware('permission:update.execute')->only(['execute']);
+
+        // progress() and status() require execute permission as they expose internal update state
+        $this->middleware('permission:update.execute')->only(['execute', 'progress', 'status']);
     }
 
     /**
@@ -71,10 +72,6 @@ class UpdateController extends Controller
      */
     public function execute(Request $request, UpdateService $updateService)
     {
-        if (!auth()->user()->can('update.execute')) {
-            abort(403);
-        }
-
         // Prevent duplicate execution if already running
         $status = UpdateService::readStatus();
         if ($status['state'] === 'running') {
@@ -102,7 +99,7 @@ class UpdateController extends Controller
             'to_version' => $release['tag_name'] ?? 'unknown',
         ]);
 
-        // Spawn the artisan command as a background process
+        // Spawn the artisan command as a truly detached background process
         $this->spawnUpdateProcess(dryRun: false);
 
         return redirect()->route('admin.update.progress');
@@ -115,10 +112,6 @@ class UpdateController extends Controller
      */
     public function progress()
     {
-        if (!auth()->user()->can('update.execute')) {
-            abort(403);
-        }
-
         return view('admin::update.progress');
     }
 
@@ -127,24 +120,34 @@ class UpdateController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function status()
+    public function status(UpdateService $updateService)
     {
-        if (!auth()->user()->can('update.execute')) {
-            abort(403);
+        $status = UpdateService::readStatus();
+        $logs = UpdateService::readLogs();
+
+        // Auto-cleanup: remove progress/status files after 1 hour in a terminal state
+        // so the progress page starts fresh on the next update cycle.
+        if (in_array($status['state'], ['completed', 'failed', 'idle']) && isset($status['updated_at'])) {
+            $finishedAt = \Carbon\Carbon::parse($status['updated_at']);
+            if ($finishedAt->diffInHours(now()) >= 1) {
+                $updateService->cleanupUpdateState();
+            }
         }
 
         return response()->json([
-            'status' => UpdateService::readStatus(),
-            'logs' => UpdateService::readLogs(),
+            'status' => $status,
+            'logs' => $logs,
         ]);
     }
 
     /**
-     * Spawn the update artisan command as an independent background process.
-     * Works on both Windows and Unix systems, independent of queue workers.
+     * Spawn the update artisan command as a truly detached background process
+     * using proc_open, which properly detaches on both Windows and Unix.
      *
-     * @param bool     $dryRun
-     * @param int|null $userId
+     * Unlike Symfony\Process::start(), proc_open with NUL/dev-null descriptors
+     * ensures the child process is not terminated when the HTTP connection closes.
+     *
+     * @param bool $dryRun
      * @return void
      */
     private function spawnUpdateProcess(bool $dryRun): void
@@ -158,19 +161,31 @@ class UpdateController extends Controller
             $command[] = '--dry-run';
         }
 
-        $process = new Process($command);
-        $process->setWorkingDirectory(base_path());
-        $process->setTimeout(null);
-        $process->disableOutput();
+        $isWindows = PHP_OS_FAMILY === 'Windows';
+        $null = $isWindows ? 'NUL' : '/dev/null';
 
-        // Start the process without waiting for it to complete
-        $process->start();
+        // Redirect all stdio to null so the process is fully detached
+        $descriptors = [
+            0 => ['file', $null, 'r'],   // stdin
+            1 => ['file', $null, 'w'],   // stdout
+            2 => ['file', $null, 'w'],   // stderr
+        ];
 
-        // Detach immediately so the HTTP response is not blocked
-        // The process continues running in the background
-        Log::channel('single')->info('[SystemUpdate] Background process spawned', [
-            'command' => implode(' ', $command),
-            'pid' => $process->getPid(),
-        ]);
+        $commandString = implode(' ', array_map('escapeshellarg', $command));
+
+        $proc = proc_open($commandString, $descriptors, $pipes, base_path());
+
+        if (is_resource($proc)) {
+            Log::channel('single')->info('[SystemUpdate] Detached background process spawned', [
+                'command' => $commandString,
+            ]);
+
+            // Immediately release — the process continues independently
+            proc_close($proc);
+        } else {
+            Log::channel('single')->error('[SystemUpdate] Failed to spawn background process', [
+                'command' => $commandString,
+            ]);
+        }
     }
 }
