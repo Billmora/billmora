@@ -410,7 +410,13 @@ class UpdateService
      */
     protected function runMigrations(): void
     {
-        Artisan::call('migrate', ['--force' => true]);
+        $exitCode = Artisan::call('migrate', ['--force' => true]);
+
+        if ($exitCode !== 0) {
+            throw new \RuntimeException(
+                'Database migration failed: ' . trim(Artisan::output())
+            );
+        }
     }
 
     /**
@@ -477,6 +483,26 @@ class UpdateService
     {
         if (File::exists($this->tempPath)) {
             File::deleteDirectory($this->tempPath);
+        }
+    }
+
+    /**
+     * Remove the update progress and status JSON files.
+     * Called after update is completed so stale state is not shown on next visit.
+     *
+     * @return void
+     */
+    public function cleanupUpdateState(): void
+    {
+        $logPath = storage_path('app/' . self::LOG_FILE);
+        $statusPath = storage_path('app/' . self::STATUS_FILE);
+
+        if (File::exists($logPath)) {
+            File::delete($logPath);
+        }
+
+        if (File::exists($statusPath)) {
+            File::delete($statusPath);
         }
     }
 
@@ -634,11 +660,19 @@ class UpdateService
     {
         $path = storage_path('app/' . self::STATUS_FILE);
         File::ensureDirectoryExists(dirname($path));
-        File::put($path, json_encode([
+
+        $payload = [
             'state' => $state,
             'version' => $version,
             'updated_at' => now()->toIso8601String(),
-        ], JSON_PRETTY_PRINT));
+        ];
+
+        // Store start time so we can detect stale running states
+        if ($state === 'running') {
+            $payload['started_at'] = now()->toIso8601String();
+        }
+
+        File::put($path, json_encode($payload, JSON_PRETTY_PRINT));
     }
 
     /**
@@ -649,10 +683,23 @@ class UpdateService
     public static function readStatus(): array
     {
         $path = storage_path('app/' . self::STATUS_FILE);
-        if (File::exists($path)) {
-            return json_decode(File::get($path), true) ?? ['state' => 'idle'];
+
+        if (!File::exists($path)) {
+            return ['state' => 'idle'];
         }
-        return ['state' => 'idle'];
+
+        $data = json_decode(File::get($path), true) ?? ['state' => 'idle'];
+
+        // Auto-expire stale 'running' state after 15 minutes to prevent permanent lock
+        // in case the background process crashed before writing the final status.
+        if ($data['state'] === 'running' && isset($data['started_at'])) {
+            $startedAt = \Carbon\Carbon::parse($data['started_at']);
+            if ($startedAt->diffInMinutes(now()) > 15) {
+                return ['state' => 'failed', 'version' => null, 'stale' => true];
+            }
+        }
+
+        return $data;
     }
 
     /**
