@@ -25,17 +25,17 @@
                 <div class="flex justify-between items-start text-sm font-medium">
                     <div class="flex flex-col">
                         <span class="text-slate-600">
-                            {{ $item->name }} 
+                            {{ $item->description }}
                             @if($item->quantity > 1)
                                 <span class="inline-block text-xs bg-billmora-2 text-billmora-primary-500 font-bold px-2 py-0.5 rounded-md ml-1">
                                     x{{ $item->quantity }}
                                 </span>
                             @endif
                         </span>
-                        <span class="text-slate-400 text-xs mt-0.5">{{ ucfirst($item->billing_type) }}</span>
+                        <span class="text-slate-400 text-xs mt-0.5">{{ $item->cycle_label }}</span>
                     </div>
                     <span class="text-slate-700 font-semibold">
-                        {{ Currency::format(($item->price + $item->setup_fee) * $item->quantity, $order->currency) }}
+                        {{ Currency::format($item->amount, $order->currency) }}
                     </span>
                 </div>
             @endforeach
