@@ -128,6 +128,11 @@ class BrowseController extends Controller
                 'url' => route('admin.health')
             ],
             [
+                'title' => 'Update',
+                'category' => 'system',
+                'url' => route('admin.update')
+            ],
+            [
                 'title' => 'General Settings',
                 'category' => 'settings',
                 'url' => route('admin.settings.general.company')
