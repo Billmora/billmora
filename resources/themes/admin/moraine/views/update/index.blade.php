@@ -139,34 +139,30 @@
                         </a>
                     @endif
                 </div>
-                <div class="prose prose-sm prose-slate max-w-none bg-billmora-2 rounded-xl p-4 sm:p-5 overflow-x-auto break-words">
-                    @if($release['body'])
-                        {!! Str::markdown($release['body']) !!}
-                    @else
-                        <p class="text-slate-400 italic">{{ __('admin/update.release.no_notes') }}</p>
-                    @endif
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 sm:p-5 overflow-x-auto break-words">
+                    <div class="text-sm text-slate-600 leading-relaxed [&_p]:mb-3 [&_p:last-child]:mb-0 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-3 [&_li]:mb-1 [&_h1]:font-bold [&_h1]:text-slate-800 [&_h1]:text-lg [&_h1]:mb-2 [&_h1]:mt-4 [&_h1:first-child]:mt-0 [&_h2]:font-bold [&_h2]:text-slate-800 [&_h2]:text-base [&_h2]:mb-2 [&_h2]:mt-4 [&_h2:first-child]:mt-0 [&_h3]:font-bold [&_h3]:text-slate-800 [&_h3]:mb-2 [&_h3]:mt-4 [&_h3:first-child]:mt-0 [&_a]:text-indigo-600 [&_a]:underline hover:[&_a]:text-indigo-700 [&_code]:bg-slate-200 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded-md [&_code]:text-xs [&_code]:font-mono [&_strong]:font-bold [&_strong]:text-slate-700">
+                        @if($release['body'])
+                            {!! Str::markdown($release['body']) !!}
+                        @else
+                            <p class="text-slate-400 italic">{{ __('admin/update.release.no_notes') }}</p>
+                        @endif
+                    </div>
                 </div>
             </div>
 
             {{-- Warning --}}
-            <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 sm:p-6">
-                <div class="flex items-start gap-3">
-                    <div class="p-2 rounded-full bg-amber-100 text-amber-600 mt-0.5 shrink-0">
-                        <x-lucide-triangle-alert class="w-5 h-5" />
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-amber-800 text-sm sm:text-base">{{ __('admin/update.warning.title') }}</h4>
-                        <p class="text-xs sm:text-sm text-amber-700 mt-1">{{ __('admin/update.warning.backup') }}</p>
-                    </div>
-                </div>
-            </div>
+            <x-admin::alert variant="warning" title="{{ __('admin/update.warning.title') }}">
+                <p class="text-sm">{{ __('admin/update.warning.backup') }}</p>
+            </x-admin::alert>
 
             {{-- Update Button --}}
             @can('update.execute')
                 <div class="flex justify-center sm:justify-end">
                     <button type="button" id="updateBtn"
+                        x-data
+                        x-on:click="$store.modal.open = 'updateConfirmationModal'"
                         @if(!$allRequirementsMet) disabled @endif
-                        class="flex items-center gap-2 bg-billmora-primary-500 hover:bg-billmora-primary-600 disabled:bg-slate-300 disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl font-bold text-sm transition-colors duration-300 w-full sm:w-auto justify-center">
+                        class="flex items-center gap-2 bg-billmora-primary-500 hover:bg-billmora-primary-600 disabled:bg-slate-300 disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl font-bold text-sm transition-colors duration-300 w-full sm:w-auto justify-center cursor-pointer">
                         <x-lucide-download class="w-5 h-5" />
                         {{ __('admin/update.actions.update', ['version' => $release['tag_name']]) }}
                     </button>
@@ -177,48 +173,28 @@
 
     {{-- Confirmation Modal --}}
     @if($isUpdateAvailable && $release)
-        <div id="updateModal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm hidden p-0 sm:p-4">
-            <div class="bg-white rounded-t-2xl sm:rounded-2xl p-6 sm:p-8 max-w-md w-full sm:mx-4 shadow-xl">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="p-3 rounded-full bg-blue-100 text-blue-600 shrink-0">
-                        <x-lucide-download class="w-6 h-6" />
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-600">{{ __('admin/update.actions.confirm_title') }}</h3>
-                </div>
-                <p class="text-sm text-slate-500 mb-6">
-                    {{ __('admin/update.actions.confirm_message', ['version' => $release['tag_name']]) }}
-                </p>
-                <div class="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
-                    <button type="button" id="cancelUpdateBtn"
-                        class="px-5 py-2.5 rounded-xl font-semibold text-sm text-slate-600 bg-billmora-2 hover:bg-slate-200 transition-colors text-center">
-                        {{ __('admin/update.actions.cancel_button') }}
+        <x-admin::modal.content 
+            modal="updateConfirmationModal" 
+            size="lg" 
+            variant="warning" 
+            position="simple" 
+            title="{{ __('admin/update.actions.confirm_title') }}" 
+            description="{{ __('admin/update.actions.confirm_message', ['version' => $release['tag_name']]) }}">
+            
+            <div class="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end mt-4">
+                <button type="button" x-on:click="$store.modal.close()"
+                    class="px-5 py-2.5 rounded-xl font-semibold text-sm text-slate-600 bg-billmora-2 hover:bg-slate-200 transition-colors text-center w-full sm:w-auto">
+                    {{ __('admin/update.actions.cancel_button') }}
+                </button>
+                <form action="{{ route('admin.update.execute') }}" method="POST" class="w-full sm:w-auto m-0">
+                    @csrf
+                    <button type="submit"
+                        class="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white bg-billmora-primary-500 hover:bg-billmora-primary-600 transition-colors w-full sm:w-auto justify-center">
+                        <x-lucide-zap class="w-4 h-4" />
+                        {{ __('admin/update.actions.confirm_button') }}
                     </button>
-                    <form action="{{ route('admin.update.execute') }}" method="POST" class="w-full sm:w-auto">
-                        @csrf
-                        <button type="submit"
-                            class="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white bg-billmora-primary-500 hover:bg-billmora-primary-600 transition-colors w-full sm:w-auto justify-center">
-                            <x-lucide-zap class="w-4 h-4" />
-                            {{ __('admin/update.actions.confirm_button') }}
-                        </button>
-                    </form>
-                </div>
+                </form>
             </div>
-        </div>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const btn = document.getElementById('updateBtn');
-                const modal = document.getElementById('updateModal');
-                const cancelBtn = document.getElementById('cancelUpdateBtn');
-
-                if (btn && modal) {
-                    btn.addEventListener('click', () => modal.classList.remove('hidden'));
-                    cancelBtn.addEventListener('click', () => modal.classList.add('hidden'));
-                    modal.addEventListener('click', (e) => {
-                        if (e.target === modal) modal.classList.add('hidden');
-                    });
-                }
-            });
-        </script>
+        </x-admin::modal.content>
     @endif
 @endsection
