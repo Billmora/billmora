@@ -19,7 +19,7 @@
                         {{ __('admin/update.progress.completed') }}
                     </span>
                 </template>
-                <template x-if="state === 'failed'">
+                <template x-if="state === 'failed' || state === 'stale'">
                     <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase bg-red-100 text-red-600">
                         {{ __('admin/update.progress.failed') }}
                     </span>
@@ -79,6 +79,13 @@
             </x-admin::alert>
         </template>
 
+        {{-- Result Alert: Stale (process crashed without writing final status) --}}
+        <template x-if="state === 'stale'">
+            <x-admin::alert variant="danger" title="{{ __('admin/update.progress.stale_title') }}">
+                <p class="text-sm">{{ __('admin/update.progress.stale_message') }}</p>
+            </x-admin::alert>
+        </template>
+
         {{-- Back Button (always visible) --}}
         <div class="flex justify-start">
             <a href="{{ route('admin.update') }}"
@@ -123,7 +130,7 @@
                         });
 
                         // Stop polling when done
-                        if (this.state === 'completed' || this.state === 'failed') {
+                        if (this.state === 'completed' || this.state === 'failed' || this.state === 'stale') {
                             clearInterval(this.pollInterval);
                         }
                     } catch (e) {

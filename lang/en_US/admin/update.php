@@ -108,5 +108,7 @@ return [
         'success_message' => 'The system has been successfully updated to v:version.',
         'failed_title' => 'Update Failed',
         'failed_message' => 'The update process encountered an error. Maintenance mode has been disabled automatically. Please check the logs above for details.',
+        'stale_title' => 'Update Process Unresponsive',
+        'stale_message' => 'The update process has been running for more than 15 minutes without responding. It may have crashed. Please check storage/logs/laravel.log for details, verify the server state, and try again if necessary.',
     ],
 ];
