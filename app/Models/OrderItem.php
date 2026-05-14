@@ -71,7 +71,7 @@ class OrderItem extends Model
      */
     public function getCycleLabelAttribute()
     {
-        if ($this->billing_type === 'free' || (float) $this->price == 0) {
+        if ($this->billing_type === 'free' || (float) $this->unit_price == 0) {
             return __('billing.cycles.free');
         }
 
