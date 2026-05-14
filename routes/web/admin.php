@@ -25,6 +25,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/', [Admin\UpdateController::class, 'index'])->name('admin.update');
         Route::post('/check', [Admin\UpdateController::class, 'check'])->name('admin.update.check');
         Route::post('/execute', [Admin\UpdateController::class, 'execute'])->name('admin.update.execute');
+        Route::get('/progress', [Admin\UpdateController::class, 'progress'])->name('admin.update.progress');
+        Route::get('/status', [Admin\UpdateController::class, 'status'])->name('admin.update.status');
     });
     
     /**
