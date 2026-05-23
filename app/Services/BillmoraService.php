@@ -15,11 +15,6 @@ class BillmoraService
 {
 
     /**
-     * Application version.
-     */
-    public const VERSION = '0.7.0';
-
-    /**
      * Cache key prefix for settings.
      */
     protected const CACHE_PREFIX = 'setting_';

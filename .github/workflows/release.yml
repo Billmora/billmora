@@ -15,6 +15,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Inject version into config
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          sed -i "s/'version' => 'dev-latest'/'version' => '${VERSION}'/g" config/app.php
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:

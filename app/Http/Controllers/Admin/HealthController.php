@@ -34,7 +34,7 @@ class HealthController extends Controller
             'environment' => App::environment(),
             'debug' => config('app.debug'),
             'version' => [
-                'current' => BillmoraService::VERSION,
+                'current' => config('app.version'),
                 'latest' => $this->getLatestVersion(),
             ],
             'php_version' => PHP_VERSION,

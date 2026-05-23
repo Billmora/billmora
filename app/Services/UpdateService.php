@@ -112,7 +112,7 @@ class UpdateService
         }
 
         $latest = ltrim($release['tag_name'], 'vV');
-        $current = BillmoraService::VERSION;
+        $current = config('app.version');
 
         return version_compare($latest, $current, '>');
     }
@@ -124,7 +124,7 @@ class UpdateService
      */
     public function getCurrentVersion(): string
     {
-        return BillmoraService::VERSION;
+        return config('app.version');
     }
 
     /**

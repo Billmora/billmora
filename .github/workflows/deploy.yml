@@ -22,6 +22,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Inject version into config
+        run: |
+          if [[ $GITHUB_REF == refs/tags/v* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/v}
+            sed -i "s/'version' => 'dev-latest'/'version' => '${VERSION}'/g" config/app.php
+          fi
+
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
