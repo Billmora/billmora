@@ -3,6 +3,7 @@
 @section('title', 'Registered Domains')
 
 @section('body')
+<div class="flex flex-col gap-4">
     <div class="overflow-x-auto">
         <div class="min-w-full inline-block align-middle">
             <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
@@ -52,7 +53,8 @@
             </div>
         </div>
     </div>
-    <div class="mt-4">
+    <div>
         {{ $registrants->links('client::layouts.partials.pagination') }}
     </div>
+</div>
 @endsection

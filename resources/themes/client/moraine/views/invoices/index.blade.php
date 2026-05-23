@@ -3,7 +3,8 @@
 @section('title', 'Invoices')
 
 @section('body')
-<div class="overflow-x-auto">
+<div class="flex flex-col gap-4">
+    <div class="overflow-x-auto">
     <div class="min-w-full inline-block align-middle">
         <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
             <table class="min-w-full divide-y divide-billmora-2">
@@ -41,7 +42,8 @@
         </div>
     </div>
 </div>
-<div>
-    {{ $invoices->links('client::layouts.partials.pagination') }}
+    <div>
+        {{ $invoices->links('client::layouts.partials.pagination') }}
+    </div>
 </div>
 @endsection
