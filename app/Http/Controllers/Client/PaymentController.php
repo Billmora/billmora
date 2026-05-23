@@ -112,20 +112,30 @@ class PaymentController extends Controller
         }
 
         DB::transaction(function () use ($invoice, $wallet, $request) {
-            
-            $currentAmountDue = $invoice->amount_due;
-            
-            $amountToApply = min($wallet->balance, $currentAmountDue);
+            $lockedWallet = \App\Models\UserCredit::where('id', $wallet->id)->lockForUpdate()->first();
+            $lockedInvoice = \App\Models\Invoice::where('id', $invoice->id)->lockForUpdate()->first();
 
-            $wallet->removeCredit($amountToApply);
+            if (!$lockedWallet || $lockedWallet->balance <= 0 || !$lockedInvoice || $lockedInvoice->status !== 'unpaid') {
+                return;
+            }
+
+            $currentAmountDue = $lockedInvoice->amount_due;
+            
+            $amountToApply = min($lockedWallet->balance, $currentAmountDue);
+
+            if ($amountToApply <= 0) {
+                return;
+            }
+
+            $lockedWallet->removeCredit($amountToApply);
 
             $transaction = Transaction::create([
-                'user_id' => $invoice->user_id,
-                'invoice_id' => $invoice->id,
+                'user_id' => $lockedInvoice->user_id,
+                'invoice_id' => $lockedInvoice->id,
                 'plugin_id' => null, 
                 'reference' => 'CREDIT-' . strtoupper(Str::random(10)),
                 'description' => __('client/invoices.credit.transaction_description'),
-                'currency' => $invoice->currency,
+                'currency' => $lockedInvoice->currency,
                 'amount' => $amountToApply,
                 'fee' => 0,
             ]);
@@ -135,11 +145,11 @@ class PaymentController extends Controller
             $remainingDue = $currentAmountDue - $amountToApply;
 
             if ($remainingDue <= 0) {
-                $invoice->status = 'paid';
-                $invoice->paid_at = now();
-                $invoice->save();
+                $lockedInvoice->status = 'paid';
+                $lockedInvoice->paid_at = now();
+                $lockedInvoice->save();
 
-                $this->recordSystem('invoice.paid', $invoice->toArray(), 'credit');
+                $this->recordSystem('invoice.paid', $lockedInvoice->toArray(), 'credit');
             }
         });
 

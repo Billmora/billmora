@@ -55,8 +55,7 @@ class UserCredit extends Model
     {
         if ($amount <= 0) return $this;
 
-        $this->balance += $amount;
-        $this->save();
+        $this->increment('balance', $amount);
 
         return $this;
     }
@@ -79,8 +78,7 @@ class UserCredit extends Model
             ]));
         }
 
-        $this->balance -= $amount;
-        $this->save();
+        $this->decrement('balance', $amount);
 
         return $this;
     }
