@@ -59,7 +59,12 @@ class TicketsController extends Controller
         $validated = $request->validate([
             'ticket_priority' => ['required', Rule::in('low', 'normal', 'medium', 'high')],
             'ticket_department' => ['required', Rule::in(Billmora::getTicket('ticketing_departments'))],
-            'ticket_service_id' => ['nullable', Rule::exists('services', 'id')],
+            'ticket_service_id' => [
+                'nullable', 
+                Rule::exists('services', 'id')->where(function ($query) {
+                    $query->where('user_id', Auth::id());
+                }),
+            ],
             'ticket_subject' => ['required', 'string', 'max:255'],
             'ticket_message'=> ['required', 'string'],
             'ticket_attachments' => ['nullable', 'array'],
