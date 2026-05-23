@@ -31,7 +31,7 @@ class DashboardController extends Controller
             ->unpaid()
             ->count();
 
-        $openTicketsCount = Ticket::where('status', 'open')->count();
+        $openTicketsCount = Ticket::where('user_id', $user->id)->where('status', 'open')->count();
 
         $activeServices = Service::where('user_id', $user->id)
             ->active()
@@ -47,7 +47,8 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        $openTickets = Ticket::where('status', 'open')
+        $openTickets = Ticket::where('user_id', $user->id)
+            ->where('status', 'open')
             ->limit(5)
             ->get();
 
