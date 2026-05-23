@@ -137,7 +137,7 @@
                                         value="{{ $pricing['rates'][$currency->code]['price'] ?? '' }}"
                                         type="number"
                                         step="0.01"
-                                        min="0.01"
+                                        min="0"
                                         label="{{ __('admin/variants.options.pricing.price_label') }}"
                                         helper="{{ __('admin/variants.options.pricing.price_helper') }}"
                                     />

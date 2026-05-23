@@ -77,7 +77,7 @@
                             name="rates[{{ $code }}][price]"
                             type="number"
                             step="0.01"
-                            min="0.01"
+                            min="0"
                             label="{{ __('admin/packages.pricing.price_label') }}"
                             helper="{{ __('admin/packages.pricing.price_helper') }}"
                             :value="$oldPrice"

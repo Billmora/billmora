@@ -70,7 +70,7 @@ class TldsController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'tld' => ['required', 'string', 'max:255', 'unique:tlds,tld', 'regex:/^[a-zA-Z0-9]/'],
             'plugin_id' => ['nullable', 'exists:plugins,id'],
             'min_years' => ['required', 'integer', 'min:1', 'max:10'],
@@ -80,11 +80,31 @@ class TldsController extends Controller
             'status' => ['required', Rule::in(['visible', 'hidden'])],
             'prices' => ['required', 'array'],
             'prices.*.currency' => ['required', 'string', 'size:3'],
-            'prices.*.register_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0.01'],
-            'prices.*.transfer_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0.01'],
-            'prices.*.renew_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0.01'],
+            'prices.*.register_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0'],
+            'prices.*.transfer_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0'],
+            'prices.*.renew_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0'],
             'prices.*.enabled' => ['nullable'],
         ]);
+
+        $validator->after(function ($validator) use ($request) {
+            foreach ($request->input('prices', []) as $code => $priceData) {
+                if (!empty($priceData['enabled'])) {
+                    foreach (['register_price', 'transfer_price', 'renew_price'] as $field) {
+                        if (isset($priceData[$field]) && is_numeric($priceData[$field]) && $priceData[$field] < 0.01) {
+                            $validator->errors()->add(
+                                "prices.$code.$field",
+                                __('validation.min.numeric', [
+                                    'attribute' => __('admin/tlds.'.$field.'_label'),
+                                    'min' => '0.01',
+                                ])
+                            );
+                        }
+                    }
+                }
+            }
+        });
+
+        $validated = $validator->validate();
 
         $tld = Tld::create([
             'tld' => $validated['tld'],
@@ -136,7 +156,7 @@ class TldsController extends Controller
      */
     public function update(Request $request, Tld $tld)
     {
-        $validated = $request->validate([
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'tld' => ['required', 'string', 'max:255', Rule::unique('tlds', 'tld')->ignore($tld->id), 'regex:/^[a-zA-Z0-9]/'],
             'plugin_id' => ['nullable', 'exists:plugins,id'],
             'min_years' => ['required', 'integer', 'min:1', 'max:10'],
@@ -147,11 +167,31 @@ class TldsController extends Controller
             'status' => ['required', Rule::in(['visible', 'hidden'])],
             'prices' => ['required', 'array'],
             'prices.*.currency' => ['required', 'string', 'size:3'],
-            'prices.*.register_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0.01'],
-            'prices.*.transfer_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0.01'],
-            'prices.*.renew_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0.01'],
+            'prices.*.register_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0'],
+            'prices.*.transfer_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0'],
+            'prices.*.renew_price' => ['required_if:prices.*.enabled,1', 'nullable', 'numeric', 'min:0'],
             'prices.*.enabled' => ['nullable'],
         ]);
+
+        $validator->after(function ($validator) use ($request) {
+            foreach ($request->input('prices', []) as $code => $priceData) {
+                if (!empty($priceData['enabled'])) {
+                    foreach (['register_price', 'transfer_price', 'renew_price'] as $field) {
+                        if (isset($priceData[$field]) && is_numeric($priceData[$field]) && $priceData[$field] < 0.01) {
+                            $validator->errors()->add(
+                                "prices.$code.$field",
+                                __('validation.min.numeric', [
+                                    'attribute' => __('admin/tlds.'.$field.'_label'),
+                                    'min' => '0.01',
+                                ])
+                            );
+                        }
+                    }
+                }
+            }
+        });
+
+        $validated = $validator->validate();
 
         $oldTld = $tld->getOriginal();
 

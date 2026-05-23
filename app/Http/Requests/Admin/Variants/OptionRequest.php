@@ -80,7 +80,7 @@ class OptionRequest extends FormRequest
             'pricings.*.billing_period' => ['nullable', Rule::in(['daily', 'weekly', 'monthly', 'yearly'])],
             'pricings.*.rates' => ['nullable', 'array'],
             'pricings.*.rates.*.currency' => ['required', 'string', Rule::exists('currencies', 'code')],
-            'pricings.*.rates.*.price' => ['nullable', 'numeric', 'min:0.01'],
+            'pricings.*.rates.*.price' => ['nullable', 'numeric', 'min:0'],
             'pricings.*.rates.*.setup_fee' => ['nullable', 'numeric', 'min:0'],
             'pricings.*.rates.*.enabled' => ['boolean'],
         ];
@@ -135,13 +135,21 @@ class OptionRequest extends FormRequest
                             continue;
                         }
 
-                        if (empty($rate['price']) || $rate['price'] <= 0) {
+                        if (!isset($rate['price']) || $rate['price'] === '' || $rate['price'] === null) {
                             $validator->errors()->add(
                                 "pricings.$pIndex.rates.$code.price",
                                 __('validation.required_if', [
                                     'attribute' => __('admin/variants.options.pricing.price_label'),
                                     'other' => __('common.enable'),
                                     'value' => 'true',
+                                ])
+                            );
+                        } elseif (is_numeric($rate['price']) && $rate['price'] < 0.01) {
+                            $validator->errors()->add(
+                                "pricings.$pIndex.rates.$code.price",
+                                __('validation.min.numeric', [
+                                    'attribute' => __('admin/variants.options.pricing.price_label'),
+                                    'min' => '0.01',
                                 ])
                             );
                         }

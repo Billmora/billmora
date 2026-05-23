@@ -66,7 +66,7 @@ class PricingRequest extends FormRequest
                 'string',
                 Rule::exists('currencies', 'code')
             ],
-            'rates.*.price' => ['nullable', 'numeric', 'min:0.01'],
+            'rates.*.price' => ['nullable', 'numeric', 'min:0'],
             'rates.*.setup_fee' => ['nullable', 'numeric', 'min:0'],
             'rates.*.enabled' => ['boolean'],
         ];
@@ -117,13 +117,21 @@ class PricingRequest extends FormRequest
                 continue;
             }
 
-            if (!isset($rate['price']) || $rate['price'] === '' || $rate['price'] === null || $rate['price'] <= 0) {
+            if (!isset($rate['price']) || $rate['price'] === '' || $rate['price'] === null) {
                 $validator->errors()->add(
                     "rates.$code.price",
                     __('validation.required_if', [
                         'attribute' => __('admin/packages.pricing.price_label'),
                         'other' => __('common.enable'),
                         'value' => 'true',
+                    ])
+                );
+            } elseif (is_numeric($rate['price']) && $rate['price'] < 0.01) {
+                $validator->errors()->add(
+                    "rates.$code.price",
+                    __('validation.min.numeric', [
+                        'attribute' => __('admin/packages.pricing.price_label'),
+                        'min' => '0.01',
                     ])
                 );
             }
