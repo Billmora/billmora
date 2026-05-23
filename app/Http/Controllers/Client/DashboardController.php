@@ -25,9 +25,7 @@ class DashboardController extends Controller
             ->active()
             ->count();
 
-        $unpaidInvoicesCount = Invoice::whereHas('order', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })
+        $unpaidInvoicesCount = Invoice::where('user_id', $user->id)
             ->unpaid()
             ->count();
 
@@ -39,9 +37,7 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        $unpaidInvoices = Invoice::whereHas('order', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })
+        $unpaidInvoices = Invoice::where('user_id', $user->id)
             ->unpaid()
             ->with(['items'])
             ->limit(5)
