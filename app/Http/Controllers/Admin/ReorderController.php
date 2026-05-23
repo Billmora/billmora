@@ -22,6 +22,7 @@ class ReorderController extends Controller
         $modelClass = match($validated['model']) {
             'Catalog' => \App\Models\Catalog::class,
             'Package' => \App\Models\Package::class,
+            'PackagePrice' => \App\Models\PackagePrice::class,
             'Variant' => \App\Models\Variant::class,
             'Tld' => \App\Models\Tld::class,
             default => null,

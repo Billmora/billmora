@@ -71,7 +71,7 @@ class Package extends Model implements BrowseInterface
      */
     protected function primaryPrice(): Attribute
     {
-        return Attribute::make(fn() => $this->prices->sortBy('id')->first());
+        return Attribute::make(fn() => $this->prices->sortBy('sort_order')->first());
     }
 
     /**
