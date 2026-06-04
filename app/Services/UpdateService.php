@@ -140,9 +140,9 @@ class UpdateService
         return [
             'php_version' => [
                 'label' => __('admin/update.requirements.items.php_version'),
-                'required' => '≥ 8.2',
+                'required' => '≥ 8.3',
                 'current' => PHP_VERSION,
-                'satisfied' => version_compare(PHP_VERSION, '8.2.0', '>='),
+                'satisfied' => version_compare(PHP_VERSION, '8.3.0', '>='),
             ],
             'phar_extension' => [
                 'label' => __('admin/update.requirements.items.phar_extension'),
