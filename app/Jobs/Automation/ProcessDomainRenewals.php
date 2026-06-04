@@ -11,6 +11,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProcessDomainRenewals implements ShouldQueue
 {
@@ -35,26 +37,32 @@ class ProcessDomainRenewals implements ShouldQueue
             ->get();
 
         foreach ($registrantsToInvoice as $registrant) {
-            $invoice = Invoice::create([
-                'user_id' => $registrant->user_id,
-                'status' => 'unpaid',
-                'currency' => $registrant->currency,
-                'subtotal' => $registrant->price,
-                'total' => $registrant->price,
-                'due_date' => $registrant->expires_at, 
-            ]);
+            try {
+                DB::transaction(function () use ($registrant) {
+                    $invoice = Invoice::create([
+                        'user_id' => $registrant->user_id,
+                        'status' => 'unpaid',
+                        'currency' => $registrant->currency,
+                        'subtotal' => $registrant->price,
+                        'total' => $registrant->price,
+                        'due_date' => $registrant->expires_at, 
+                    ]);
 
-            InvoiceItem::create([
-                'invoice_id' => $invoice->id,
-                'registrant_id' => $registrant->id,
-                'description' => "Domain Renewal - {$registrant->domain} ({$registrant->years} Year(s))",
-                'quantity' => 1,
-                'unit_price' => $registrant->price,
-                'amount' => $registrant->price,
-            ]);
+                    InvoiceItem::create([
+                        'invoice_id' => $invoice->id,
+                        'registrant_id' => $registrant->id,
+                        'description' => "Domain Renewal - {$registrant->domain} ({$registrant->years} Year(s))",
+                        'quantity' => 1,
+                        'unit_price' => $registrant->price,
+                        'amount' => $registrant->price,
+                    ]);
+                });
 
+                Log::info("Automation: Generated renewal invoice for Registrant ID {$registrant->id} ({$registrant->domain}).");
 
-
+            } catch (\Throwable $e) {
+                Log::error("Automation: Failed to generate renewal invoice for Registrant ID {$registrant->id} ({$registrant->domain}). Error: " . $e->getMessage());
+            }
         }
 
 
