@@ -107,7 +107,7 @@ class InvoicesController extends Controller
 
             $total = $subtotal - $discount;
 
-            $invoice = Invoice::create([
+            $invoice = new Invoice([
                 'user_id' => $validated['invoice_user'],
                 'status' => $validated['invoice_status'],
                 'invoice_number' => Invoice::generateInvoiceNumber(),
@@ -121,6 +121,9 @@ class InvoicesController extends Controller
                 'updated_at' => $validated['invoice_date'],
             ]);
 
+            $invoice->sendEmailNotification = $request->boolean('invoice_email');
+            $invoice->save();
+
             if (!empty($validated['invoice_items'])) {
                 foreach ($validated['invoice_items'] as $item) {
                     $invoice->items()->create([
@@ -130,10 +133,6 @@ class InvoicesController extends Controller
                         'amount' => $item['quantity'] * $item['unit_price'],
                     ]);
                 }
-            }
-
-            if ($request->boolean('invoice_email')) {
-                $invoice->sendEmailNotification = $request->boolean('invoice_email');
             }
 
             DB::commit();
