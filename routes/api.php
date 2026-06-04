@@ -46,6 +46,8 @@ Route::prefix('v1')->middleware(['auth:sanctum', CheckApiWhitelistIp::class, Api
         Route::get('/orders', [Api\OrdersController::class, 'index'])->name('api.v1.orders.index');
         Route::get('/orders/{order}', [Api\OrdersController::class, 'show'])->name('api.v1.orders.show');
     });
+    Route::post('/orders', [Api\OrdersController::class, 'store'])->middleware(CheckApiTokenAbility::class . ':orders.create')->name('api.v1.orders.store');
+    Route::put('/orders/{order}', [Api\OrdersController::class, 'update'])->middleware(CheckApiTokenAbility::class . ':orders.update')->name('api.v1.orders.update');
     Route::delete('/orders/{order}', [Api\OrdersController::class, 'destroy'])->middleware(CheckApiTokenAbility::class . ':orders.delete')->name('api.v1.orders.delete');
 
 
