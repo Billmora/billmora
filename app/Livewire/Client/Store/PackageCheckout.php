@@ -8,6 +8,7 @@ use App\Services\Package\PricingService;
 use App\Services\PluginManager;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use App\Facades\Currency;
 
@@ -16,8 +17,12 @@ class PackageCheckout extends Component
     public Package $package;
     public string $currencyCode;
 
+    #[Url(as: 'billing', history: true)]
     public $selectedBillingId;
+
+    #[Url(as: 'variants', history: true)]
     public array $variantSelections = [];
+
     public array $sliderIndexes = [];
 
     protected PricingService $pricingService;
@@ -39,10 +44,8 @@ class PackageCheckout extends Component
 
     /**
      * Initialize the checkout component for the given package.
-     * Restores the billing cycle and variant selections from old input,
-     * merging both single and multi-select variant values. Falls back to
-     * the first available price when no prior billing selection exists,
-     * then validates all selections against the active billing cycle.
+     * Restores selections from URL query params (via #[Url]) first,
+     * then from old input, and finally falls back to defaults.
      *
      * @param  \App\Models\Package  $package
      * @return void
@@ -52,13 +55,19 @@ class PackageCheckout extends Component
         $this->package = $package;
         $this->currencyCode = Session::get('currency');
 
-        $this->selectedBillingId = old('price_id');
-        
-        $oldVariants = old('variants', []);
-        $oldMultiVariants = old('variants_multi', []);
-        
-        foreach (array_replace($oldVariants, $oldMultiVariants) as $key => $val) {
-            $this->variantSelections[$key] = $val;
+        // If no billing ID was provided via URL, try old() form input
+        if (!$this->selectedBillingId) {
+            $this->selectedBillingId = old('price_id');
+        }
+
+        // If no variant selections were provided via URL, try old() form input
+        if (empty($this->variantSelections)) {
+            $oldVariants = old('variants', []);
+            $oldMultiVariants = old('variants_multi', []);
+
+            foreach (array_replace($oldVariants, $oldMultiVariants) as $key => $val) {
+                $this->variantSelections[$key] = $val;
+            }
         }
 
         if (!$this->selectedBillingId && !empty($this->availablePrices)) {
