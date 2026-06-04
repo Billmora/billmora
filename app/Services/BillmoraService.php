@@ -316,8 +316,11 @@ class BillmoraService
         foreach ($validated as $key => $value) {
             $formattedValue = self::formatEnv($value);
 
-            if (preg_match("/^{$key}=.*/m", $env)) {
-                $env = preg_replace("/^{$key}=.*/m", "{$key}={$formattedValue}", $env);
+            // Escape the key so characters like "." are treated literally in the regex.
+            $escapedKey = preg_quote($key, '/');
+
+            if (preg_match("/^{$escapedKey}=.*/m", $env)) {
+                $env = preg_replace("/^{$escapedKey}=.*/m", "{$key}={$formattedValue}", $env);
             } else {
                 $env .= "\n{$key}={$formattedValue}";
             }
@@ -339,7 +342,9 @@ class BillmoraService
      */
     private static function formatEnv(mixed $value): string
     {
-        if (empty($value)) {
+        // Use strict checks instead of empty() so that false, 0, and "0"
+        // are not incorrectly serialized as an empty string.
+        if ($value === null || $value === '') {
             return '';
         }
     
