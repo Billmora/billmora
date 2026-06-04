@@ -408,7 +408,7 @@ class OrderService
             if ($order->invoice) {
                 $invoiceStatus = match($newStatus) {
                     'completed' => 'paid',
-                    'cancelled' => 'cancelled',
+                    'cancelled', 'failed' => 'cancelled',
                     default => 'unpaid'
                 };
                 
