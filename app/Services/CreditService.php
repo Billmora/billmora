@@ -50,7 +50,7 @@ class CreditService
 
         $wallet = $user->getCreditWallet($invoice->currency);
 
-        // Guard: user must have sufficient credit balance to fully cover the invoice
+        // Guard: optimistic early-exit — re-checked inside the transaction after locking.
         if ($wallet->balance < $invoice->amount_due) {
             return false;
         }
@@ -58,18 +58,34 @@ class CreditService
         $settled = false;
 
         DB::transaction(function () use ($invoice, $wallet, &$settled) {
-            $currentAmountDue = $invoice->amount_due;
-            $amountToApply = min($wallet->balance, $currentAmountDue);
+            // Re-acquire both rows with exclusive locks to prevent double-debit
+            // when a concurrent request (e.g. manual settle) runs at the same time.
+            $lockedWallet  = \App\Models\UserCredit::where('id', $wallet->id)->lockForUpdate()->first();
+            $lockedInvoice = \App\Models\Invoice::where('id', $invoice->id)->lockForUpdate()->first();
 
-            $wallet->removeCredit($amountToApply);
+            // Abort if rows are gone or the invoice was already settled by a concurrent request.
+            if (!$lockedWallet || !$lockedInvoice || $lockedInvoice->status !== 'unpaid') {
+                return;
+            }
+
+            $currentAmountDue = $lockedInvoice->amount_due;
+
+            // Re-validate balance with the locked, up-to-date wallet value.
+            if ($lockedWallet->balance < $currentAmountDue) {
+                return;
+            }
+
+            $amountToApply = min($lockedWallet->balance, $currentAmountDue);
+
+            $lockedWallet->removeCredit($amountToApply);
 
             $transaction = Transaction::create([
-                'user_id'     => $invoice->user_id,
-                'invoice_id'  => $invoice->id,
+                'user_id'     => $lockedInvoice->user_id,
+                'invoice_id'  => $lockedInvoice->id,
                 'plugin_id'   => null,
                 'reference'   => 'AUTOCREDIT-' . strtoupper(Str::random(10)),
                 'description' => 'Auto Credit Payment Applied',
-                'currency'    => $invoice->currency,
+                'currency'    => $lockedInvoice->currency,
                 'amount'      => $amountToApply,
                 'fee'         => 0,
             ]);
@@ -79,11 +95,11 @@ class CreditService
             $remainingDue = $currentAmountDue - $amountToApply;
 
             if ($remainingDue <= 0) {
-                $invoice->status = 'paid';
-                $invoice->paid_at = now();
-                $invoice->save();
+                $lockedInvoice->status  = 'paid';
+                $lockedInvoice->paid_at = now();
+                $lockedInvoice->save();
 
-                $this->recordSystem('invoice.paid', $invoice->toArray(), 'auto_credit');
+                $this->recordSystem('invoice.paid', $lockedInvoice->toArray(), 'auto_credit');
 
                 $settled = true;
             }
@@ -92,7 +108,7 @@ class CreditService
         if ($settled) {
             Log::info("AutoCreditPayment: Invoice {$invoice->invoice_number} fully settled for User ID {$invoice->user_id}");
         } else {
-            Log::info("AutoCreditPayment: Partial credit applied to Invoice {$invoice->invoice_number} for User ID {$invoice->user_id}");
+            Log::info("AutoCreditPayment: Insufficient balance or already settled — skipped Invoice {$invoice->invoice_number} for User ID {$invoice->user_id}");
         }
 
         return $settled;

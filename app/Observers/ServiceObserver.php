@@ -28,16 +28,20 @@ class ServiceObserver
                 if ($oldStatus === 'suspended') {
                     event(new ServiceEvents\ProvisioningUnsuspended($service));
                 } else {
+                    // Use an atomic conditional UPDATE to prevent oversell under concurrent activations.
+                    // The WHERE stock > 0 ensures we never decrement below zero without a separate lock.
                     if ($service->package && $service->package->stock > 0) {
-                        $service->package->decrement('stock');
+                        \App\Models\Package::where('id', $service->package_id)
+                            ->where('stock', '>', 0)
+                            ->decrement('stock');
                     }
-                    
+
                     event(new ServiceEvents\ProvisioningActivated($service));
                 }
 
                 if ($service->order && $service->order->status !== 'completed') {
                     $uncompletedServicesCount = $service->order->services()->where('status', '!=', 'active')->count();
-                    
+
                     if ($uncompletedServicesCount === 0) {
                         $service->order->markAsCompleted();
                     }
@@ -45,10 +49,13 @@ class ServiceObserver
             } elseif ($newStatus === 'suspended') {
                 event(new ServiceEvents\ProvisioningSuspended($service));
             } elseif (in_array($newStatus, ['terminated', 'cancelled'])) {
+                // Only restore stock for packages with finite stock (stock >= 0 means finite; -1 means unlimited).
                 if ($service->package && $service->package->stock >= 0) {
-                    $service->package->increment('stock');
+                    \App\Models\Package::where('id', $service->package_id)
+                        ->where('stock', '>=', 0)
+                        ->increment('stock');
                 }
-                
+
                 event(new ServiceEvents\ProvisioningTerminated($service));
             }
         }
