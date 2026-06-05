@@ -8,8 +8,8 @@ maintained and should not be used in any environment.
 
 | Version        | Supported          |
 | -------------- | ------------------ |
-| 0.6.x (latest) | :white_check_mark: |
-| < 0.6.0        | :x:                |
+| 0.8.x (latest) | :white_check_mark: |
+| < 0.8.0        | :x:                |
 
 > Once Billmora reaches a stable release, this policy will be updated
 > to reflect long-term supported versions.
