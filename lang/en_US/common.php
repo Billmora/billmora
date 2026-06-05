@@ -80,6 +80,8 @@ return [
     'next' => 'Next',
     'back' => 'Back',
 
+    'saved' => 'Changes saved successfully.',
+
     'send_success' => ':attribute has been sent.',
     'send_failed' => 'Failed to send :attribute.',
     'save_success' => ':attribute has been saved.',

@@ -16,6 +16,9 @@ return [
         'nameservers' => 'Nameservers',
         'epp_code' => 'EPP Code',
         'whois_privacy' => 'WHOIS Privacy',
+        'failed' => 'Action failed: :message',
+        'invalid_type' => 'Invalid action type configured for rendering.',
+        'unavailable' => 'This action is not available for this domain.',
     ],
 
     'nameservers' => [

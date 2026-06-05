@@ -46,6 +46,7 @@ return [
     ],
 
     'session' => [
+        'expired' => 'Your checkout session has expired. Please add items to your cart and try again.',
         'missing_data' => 'No checkout data found. Please select a package first.',
         'currency_mismatch' => 'The selected configuration is not available for the current currency. Please select again.',
     ],

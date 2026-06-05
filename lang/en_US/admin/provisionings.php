@@ -19,6 +19,8 @@ return [
     'provider' => [
         'missing' => 'No provisioning provider assigned to this service.',
         'class_missing' => 'provider class for :provider not found.',
+        'driver_missing' => 'No provisioning provider assigned to this service.',
+        'driver_class_missing' => 'Provider class for :driver not found.',
     ],
 
     'delete' => [

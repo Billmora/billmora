@@ -22,6 +22,7 @@ return [
         'overview' => 'Overview',
         'scale' => 'Scale',
         'cancel' => 'Cancel',
+        'form_title' => 'Action',
 
         'unavailable' => 'Page not found or action does not require input.',
         'invalid_type' => 'Invalid action type configured for rendering.',
