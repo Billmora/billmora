@@ -17,7 +17,7 @@ class MaintenanceMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Billmora::getGeneral('company_maintenance') && !Auth::user()->isAdmin()) {
+        if (Billmora::getGeneral('company_maintenance') && !Auth::user()?->isAdmin()) {
             $maintenanceUrl = Billmora::getGeneral('company_maintenance_url');
             $maintenanceMsg = Billmora::getGeneral('company_maintenance_message');
             
