@@ -23,7 +23,7 @@ class TwoFactorMiddleware
             return redirect()->route('client.two-factor.setup')->with('warning', __('auth.2fa.required'));
         }
 
-        if ($user->twoFactor?->isActive() && !session()->get('2fa_passed')) {
+        if ($user?->twoFactor?->isActive() && !session()->get('2fa_passed')) {
             return redirect()->route('client.two-factor.verify');
         }
 
