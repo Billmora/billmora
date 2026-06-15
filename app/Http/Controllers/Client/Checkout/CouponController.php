@@ -8,6 +8,7 @@ use App\Models\CouponUsage;
 use App\Services\Checkout\CartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class CouponController extends Controller
@@ -38,29 +39,34 @@ class CouponController extends Controller
         $user = Auth::user();
 
         try {
-            $coupon = Coupon::with(['packages', 'tlds'])->where('code', $request->coupon_code)
-                ->where(function ($q) {
-                    $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
-                })
-                ->where(function ($q) {
-                    $q->whereNull('start_at')->orWhere('start_at', '<=', now());
-                })
-                ->first();
+            $coupon = DB::transaction(function () use ($request, $user, $cartItems) {
+                $coupon = Coupon::with(['packages', 'tlds'])->where('code', $request->coupon_code)
+                    ->where(function ($q) {
+                        $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
+                    })
+                    ->where(function ($q) {
+                        $q->whereNull('start_at')->orWhere('start_at', '<=', now());
+                    })
+                    ->lockForUpdate()
+                    ->first();
 
-            if (!$coupon) {
-                throw new \RuntimeException(__('client/checkout.coupon.invalid'));
-            }
-
-            if ($coupon->max_uses && $coupon->total_uses >= $coupon->max_uses) {
-                throw new \RuntimeException(__('client/checkout.coupon.limit_reached'));
-            }
-
-            if ($user && $coupon->max_uses_per_user) {
-                $userUsage = CouponUsage::where('coupon_id', $coupon->id)->where('user_id', $user->id)->count();
-                if ($userUsage >= $coupon->max_uses_per_user) {
-                    throw new \RuntimeException(__('client/checkout.coupon.user_limit_reached'));
+                if (!$coupon) {
+                    throw new \RuntimeException(__('client/checkout.coupon.invalid'));
                 }
-            }
+
+                if ($coupon->max_uses && $coupon->total_uses >= $coupon->max_uses) {
+                    throw new \RuntimeException(__('client/checkout.coupon.limit_reached'));
+                }
+
+                if ($user && $coupon->max_uses_per_user) {
+                    $userUsage = CouponUsage::where('coupon_id', $coupon->id)->where('user_id', $user->id)->count();
+                    if ($userUsage >= $coupon->max_uses_per_user) {
+                        throw new \RuntimeException(__('client/checkout.coupon.user_limit_reached'));
+                    }
+                }
+
+                return $coupon;
+            });
 
             $allowedPackages = $coupon->packages->pluck('id')->toArray();
             $allowedTlds = $coupon->tlds->pluck('id')->toArray();
