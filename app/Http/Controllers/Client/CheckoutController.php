@@ -92,8 +92,8 @@ class CheckoutController extends Controller
 
         $sessionData = Session::pull('completed_order_data');
 
-        $order = Order::with('items')->findOrfail($sessionData['order_id']);
-        $invoice = Invoice::findOrfail($sessionData['invoice_id']);
+        $order = Order::with('items')->findOrFail($sessionData['order_id']);
+        $invoice = Invoice::findOrFail($sessionData['invoice_id']);
 
         return view('client::checkout.complete', compact('order', 'invoice'));
     }
