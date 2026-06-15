@@ -235,6 +235,10 @@ class UsersController extends Controller
                 ->latest()
                 ->first();
 
+        if (!$verification) {
+            return redirect()->back()->with('error', __('admin/users.email_verification_not_found'));
+        }
+
         $verification->update([
             'verified_at' => now(),
         ]);

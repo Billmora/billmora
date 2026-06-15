@@ -18,6 +18,7 @@ return [
     'email_verification_alert_label' => 'Pending Email Verification',
     'email_verification_alert_helper' => 'This user\'s email address has not been verified yet. You may verify it manually if needed.',
     'email_verification_alert_success' => 'Email address has been successfully verified.',
+    'email_verification_not_found' => 'No pending email verification found for this user.',
     'marked_as_verified' => 'Marked as Verified',
 
     'login_as_user' => 'Sign In as User',
