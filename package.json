@@ -9,11 +9,11 @@
     "devDependencies": {
         "@tailwindcss/vite": "^4.1.11",
         "axios": "^1.16.0",
-        "concurrently": "^9.0.1",
+        "concurrently": "^10.0.3",
         "cross-env": "^10.1.0",
-        "laravel-vite-plugin": "^2.0.0",
+        "laravel-vite-plugin": "^3.1.0",
         "tailwindcss": "^4.1.11",
-        "vite": "^7.3.2"
+        "vite": "^8.0.16"
     },
     "dependencies": {
         "@tiptap/core": "^2.27.2",
@@ -30,6 +30,7 @@
         "@tiptap/extension-underline": "^2.27.2",
         "@tiptap/starter-kit": "^2.27.2",
         "alpinejs": "^3.14.9",
+        "esbuild": "^0.28.1",
         "lowlight": "^3.3.0"
     }
 }
