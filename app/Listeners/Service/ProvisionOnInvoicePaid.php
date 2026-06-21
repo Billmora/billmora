@@ -44,6 +44,10 @@ class ProvisionOnInvoicePaid implements ShouldQueue
                 continue;
             }
 
+            if (!$service->package->auto_provision) {
+                continue;
+            }
+
             if (!$service->provisioning) {
                 $service->activate();
                 continue;

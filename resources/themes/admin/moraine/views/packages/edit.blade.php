@@ -150,6 +150,12 @@
                     helper="{{ __('admin/packages.allow_cancellation_helper') }}"
                     :checked="old('package_allow_cancellation', $package->allow_cancellation)"
                 />
+                <x-admin::toggle
+                    name="package_auto_provision"
+                    label="{{ __('admin/packages.auto_provision_label') }}"
+                    helper="{{ __('admin/packages.auto_provision_helper') }}"
+                    :checked="old('package_auto_provision', $package->auto_provision)"
+                />
                 <x-admin::select
                     name="package_allow_quantity"
                     label="{{ __('admin/packages.allow_quantity_label') }}"

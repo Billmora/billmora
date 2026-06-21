@@ -31,6 +31,7 @@ class Package extends Model implements BrowseInterface
     protected $casts = [
         'status' => 'string',
         'allow_cancellation' => 'boolean',
+        'auto_provision' => 'boolean',
         'provisioning_config' => 'array',
     ];
 

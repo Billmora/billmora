@@ -92,6 +92,7 @@ class PackagesController extends Controller
             'package_per_user_limit' => ['required', 'integer', 'min:-1'],
             'package_allow_cancellation' => ['required', 'boolean'],
             'package_allow_quantity' => ['required', Rule::in(['single', 'multiple'])],
+            'package_auto_provision' => ['required', 'boolean'],
             'package_status' => ['required', 'in:visible,hidden'],
         ]);
 
@@ -109,6 +110,7 @@ class PackagesController extends Controller
             'per_user_limit' => $validated['package_per_user_limit'],
             'allow_cancellation' => $validated['package_allow_cancellation'],
             'allow_quantity' => $validated['package_allow_quantity'],
+            'auto_provision' => $validated['package_auto_provision'],
             'status' => $validated['package_status'],
         ]);
 
@@ -176,6 +178,7 @@ class PackagesController extends Controller
             'package_per_user_limit' => ['required', 'integer', 'min:-1'],
             'package_allow_cancellation' => ['required', 'boolean'],
             'package_allow_quantity' => ['required', Rule::in(['single', 'multiple'])],
+            'package_auto_provision' => ['required', 'boolean'],
             'package_status' => ['required', 'in:visible,hidden'],
         ]);
 
@@ -204,6 +207,7 @@ class PackagesController extends Controller
             'per_user_limit' => $validated['package_per_user_limit'],
             'allow_cancellation' => $validated['package_allow_cancellation'],
             'allow_quantity' => $validated['package_allow_quantity'],
+            'auto_provision' => $validated['package_auto_provision'],
             'status' => $validated['package_status'],
         ]);
 

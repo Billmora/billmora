@@ -26,6 +26,8 @@ return [
     'allow_cancellation_helper' => 'Enable to let customers request service cancellation for this package.',
     'allow_quantity_label' => 'Allow Quantity',
     'allow_quantity_helper' => 'Enable to let customers purchase multiple or single quantities of this package.',
+    'auto_provision_label' => 'Auto Provisioning',
+    'auto_provision_helper' => 'Enable to automatically run provisioning and activate the service upon invoice payment.',
     'status_label' => 'Status',
     'status_helper' => 'Set the status of the package to visible or hidden.',
     'status_options' => [
