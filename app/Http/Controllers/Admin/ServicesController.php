@@ -118,6 +118,7 @@ class ServicesController extends Controller
                 })
             ],
             'variant_selections' => ['nullable', 'array'],
+            'service_admin_notes' => ['nullable', 'string'],
         ]);
 
 
@@ -211,6 +212,7 @@ class ServicesController extends Controller
             'next_due_date' => $validated['service_next_due_date'],
             'plugin_id' => $pluginId,
             'configuration' => $configuration,
+            'admin_notes' => $validated['service_admin_notes'] ?? null,
         ]);
 
         $this->recordUpdate('service.update', $oldService, $service->getChanges());

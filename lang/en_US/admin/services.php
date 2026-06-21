@@ -36,6 +36,8 @@ return [
     'variant_option_helper' => 'Select additional variants that are available for the chosen package.',
     'additional_configuration_label' => 'Additional Configuration',
     'additional_configuration_helper' => 'Provide any additional configuration required for provisioning this service.',
+    'admin_notes_label' => 'Admin Notes',
+    'admin_notes_helper' => 'Internal notes for staff. Visible only to administrators.',
 
     'cancellation_service_label' => 'Service',
     'cancellation_reviewed_by_label' => 'Reviewed By',

@@ -283,6 +283,18 @@
             </div>
         </div>
     @endif
+    <div>
+        <h4 class="text-lg font-semibold text-slate-600">{{ __('admin/services.admin_notes_label') }}</h4>
+        <span class="text-slate-500">{{ __('admin/services.admin_notes_helper') }}</span>
+    </div>
+    <div class="grid w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+        <x-admin::textarea 
+            name="service_admin_notes" 
+            label="{{ __('admin/services.admin_notes_label') }}" 
+            helper="{{ __('admin/services.admin_notes_helper') }}" 
+            rows="4"
+        >{{ old('service_admin_notes', $service->admin_notes) }}</x-admin::textarea>
+    </div>
     <div class="flex gap-4 ml-auto">
         <a href="{{ route('admin.services') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
             {{ __('common.cancel') }}
