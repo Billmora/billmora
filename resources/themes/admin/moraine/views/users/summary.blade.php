@@ -116,14 +116,11 @@
                 </div>
                 @if (Auth::id() !== $user->id)
                     @can('users.impersonate')
-                        <form action="{{ route('admin.users.impersonate', ['user' => $user->id]) }}" method="POST">
-                            @csrf
-                            <button type="submit"
-                                class="w-full flex gap-2 justify-center items-center bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
-                                <x-lucide-user class="w-auto h-5" />
-                                {{ __('admin/users.login_as_user') }}
-                            </button>
-                        </form>
+                        <x-admin::modal.trigger modal="impersonateModal-{{ $user->id }}" variant="open"
+                            class="w-full flex gap-2 justify-center items-center bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-3 text-white font-semibold rounded-lg transition-colors duration-300 cursor-pointer">
+                            <x-lucide-user class="w-auto h-5" />
+                            {{ __('admin/users.impersonate_confirm_title') }}
+                        </x-admin::modal.trigger>
                     @endcan
                     @can('delete', $user)
                         <x-admin::modal.trigger modal="deleteModal-{{ $user->id }}" variant="open"
@@ -247,5 +244,22 @@
                 </x-admin::modal.content>
             @endcan
         @endif
+        @can('users.impersonate')
+            @if (Auth::id() !== $user->id)
+                <x-admin::modal.content modal="impersonateModal-{{ $user->id }}" variant="info" size="xl" position="centered"
+                    title="{{ __('admin/users.impersonate_confirm_title') }}"
+                    description="{{ __('admin/users.impersonate_confirm_description', ['name' => $user->fullname, 'email' => $user->email]) }}">
+                    <form action="{{ route('admin.users.impersonate', ['user' => $user->id]) }}" method="POST">
+                        @csrf
+                        <div class="flex justify-end gap-2 mt-4">
+                            <x-admin::modal.trigger type="button" variant="close"
+                                class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                            <button type="submit"
+                                class="bg-billmora-primary-500 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('admin/users.impersonate_confirm_title') }}</button>
+                        </div>
+                    </form>
+                </x-admin::modal.content>
+            @endif
+        @endcan
     </div>
 @endsection

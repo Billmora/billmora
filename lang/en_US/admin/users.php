@@ -21,9 +21,15 @@ return [
     'email_verification_not_found' => 'No pending email verification found for this user.',
     'marked_as_verified' => 'Marked as Verified',
 
-    'login_as_user' => 'Sign In as User',
-    'login_as_user_success' => 'You are now signed in as the user :email.',
-    'login_as_user_error' => 'You cannot sign in as the same user you are currently signed in as.',
+    'impersonate_self_error'    => 'You cannot sign in as the same user you are currently signed in as.',
+    'impersonate_admin_error'   => 'You cannot impersonate an administrator or staff member.',
+    'impersonate_start_success' => 'You are now viewing as :email. Use the banner to exit.',
+    'impersonate_exit_success'  => 'You have exited impersonation and returned to your admin account.',
+    'impersonate_exit_error'    => 'No active impersonation session found.',
+    'impersonate_banner_text'   => 'You are in impersonation mode. Admin account: :admin',
+    'impersonate_exit_button'   => 'Exit Impersonate',
+    'impersonate_confirm_title' => 'Sign In as User',
+    'impersonate_confirm_description' => 'You are about to sign in as :name (:email). You can exit impersonation at any time using the banner in the client area.',
 
     'self_delete_error' => 'You cannot delete your own account.',
 

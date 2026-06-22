@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Admin\Users;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class SummaryController extends Controller
 {
+    use AuditsSystem;
 
     /**
      * Applies permission-based middleware for accessing users management.
@@ -62,15 +64,32 @@ class SummaryController extends Controller
      */
     public function impersonate(Request $request, User $user)
     {
-
         if ($user->id === Auth::id()) {
-            return redirect()->back()->with('error', __('admin/users.login_as_user_error'));
+            return redirect()->back()->with('error', __('admin/users.impersonate_self_error'));
         }
 
-        Auth::logout();
-        $request->session()->flush();
-        Auth::login($user, true);
+        if ($user->isAdmin()) {
+            return redirect()->back()->with('error', __('admin/users.impersonate_admin_error'));
+        }
 
-        return redirect()->route('client.dashboard')->with('success', __('admin/users.login_as_user_success', ['email' => $user->email]));
+        $adminId = Auth::id();
+        $adminEmail = Auth::user()->email;
+
+        Auth::login($user, false);
+
+        session(['impersonating' => [
+            'admin_id'    => $adminId,
+            'admin_email' => $adminEmail,
+            'user_id'     => $user->id,
+        ]]);
+
+        $this->recordCreate('user.impersonate.start', [
+            'admin_id'    => $adminId,
+            'admin_email' => $adminEmail,
+            'user_id'     => $user->id,
+            'user_email'  => $user->email,
+        ]);
+
+        return redirect()->route('client.dashboard')->with('success', __('admin/users.impersonate_start_success', ['email' => $user->email]));
     }
 }

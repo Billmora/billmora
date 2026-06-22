@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth;
 use App\Http\Controllers\Client;
 use App\Http\Controllers\Client\Account;
+use App\Http\Controllers\Admin\Users\ImpersonateController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Route;
  */
 Route::group(['middleware' => ['auth', 'maintenance', '2fa']], function () {
     Route::get('/dashboard', [Client\DashboardController::class, 'index'])->name('client.dashboard');
+    Route::post('/exit-impersonate', [ImpersonateController::class, 'exit'])->name('client.impersonate.exit');
 
     /**
      * Client account routes.
