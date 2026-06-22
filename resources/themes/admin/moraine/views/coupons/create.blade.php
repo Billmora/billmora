@@ -75,6 +75,17 @@
                 label="{{ __('admin/coupons.max_uses_per_user_label') }}"
                 helper="{{ __('admin/coupons.max_uses_per_user_helper') }}"
             />
+            <div class="md:col-span-2">
+                <x-admin::select 
+                    name="coupon_client_restriction" 
+                    label="{{ __('admin/coupons.client_restriction_label') }}" 
+                    helper="{{ __('admin/coupons.client_restriction_helper') }}" 
+                >
+                    <option value="" {{ old('coupon_client_restriction') === '' ? 'selected' : '' }}>None</option>
+                    <option value="new_client" {{ old('coupon_client_restriction') === 'new_client' ? 'selected' : '' }}>New Clients Only</option>
+                    <option value="existing_client" {{ old('coupon_client_restriction') === 'existing_client' ? 'selected' : '' }}>Existing Clients Only</option>
+                </x-admin::select>
+            </div>
             <x-admin::input
                 name="coupon_start_date"
                 type="date"

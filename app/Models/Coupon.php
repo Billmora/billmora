@@ -28,6 +28,7 @@ class Coupon extends Model
         'billing_cycles' => 'array',
         'max_uses' => 'integer',
         'max_uses_per_user' => 'integer',
+        'client_restriction' => 'string',
         'total_uses' => 'integer',
         'start_at' => 'datetime',
         'expires_at' => 'datetime',

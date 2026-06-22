@@ -115,6 +115,7 @@ class CouponsController extends Controller
             'coupon_tld_cycles.*' => ['string', 'regex:/^[0-9]+ Year(s)?$/'],
             'coupon_max_uses' => ['nullable', 'integer', 'min:1'],
             'coupon_max_uses_per_user' => ['nullable', 'integer', 'min:1'],
+            'coupon_client_restriction' => ['nullable', 'string', Rule::in(['new_client', 'existing_client'])],
             'coupon_start_date' => ['nullable', 'date'],
             'coupon_expires_date' => ['nullable', 'date', 'after_or_equal:coupon_start_date'],
             'coupon_packages' => ['nullable', 'array'],
@@ -132,6 +133,7 @@ class CouponsController extends Controller
             'billing_cycles' => !empty($mergedCycles) ? $mergedCycles : null,
             'max_uses' => $validated['coupon_max_uses'] ?? null,
             'max_uses_per_user' => $validated['coupon_max_uses_per_user'] ?? null,
+            'client_restriction' => $request->input('coupon_client_restriction'),
             'start_at' => $validated['coupon_start_date'] ?? null,
             'expires_at' => $validated['coupon_expires_date'] ?? null,
         ]);
@@ -231,6 +233,7 @@ class CouponsController extends Controller
             'coupon_tld_cycles.*' => ['string', 'regex:/^[0-9]+ Year(s)?$/'],
             'coupon_max_uses' => ['nullable', 'integer', 'min:1'],
             'coupon_max_uses_per_user' => ['nullable', 'integer', 'min:1'],
+            'coupon_client_restriction' => ['nullable', 'string', Rule::in(['new_client', 'existing_client'])],
             'coupon_start_date' => ['nullable', 'date'],
             'coupon_expires_date' => ['nullable', 'date', 'after_or_equal:coupon_start_date'],
             'coupon_packages' => ['nullable', 'array'],
@@ -252,6 +255,7 @@ class CouponsController extends Controller
             'billing_cycles' => !empty($mergedCycles) ? $mergedCycles : null,
             'max_uses' => $validated['coupon_max_uses'] ?? null,
             'max_uses_per_user' => $validated['coupon_max_uses_per_user'] ?? null,
+            'client_restriction' => $request->input('coupon_client_restriction'),
             'start_at' => $validated['coupon_start_date'] ?? null,
             'expires_at' => $validated['coupon_expires_date'] ?? null,
         ]);

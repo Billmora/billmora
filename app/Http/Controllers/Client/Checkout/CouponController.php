@@ -65,6 +65,18 @@ class CouponController extends Controller
                     }
                 }
 
+                if ($coupon->client_restriction) {
+                    $hasOrders = $user ? \App\Models\Order::where('user_id', $user->id)->exists() : false;
+                    
+                    if ($coupon->client_restriction === 'new_client' && $hasOrders) {
+                        throw new \RuntimeException(__('client/checkout.coupon.new_client_only'));
+                    }
+                    
+                    if ($coupon->client_restriction === 'existing_client' && !$hasOrders) {
+                        throw new \RuntimeException(__('client/checkout.coupon.existing_client_only'));
+                    }
+                }
+
                 return $coupon;
             });
 

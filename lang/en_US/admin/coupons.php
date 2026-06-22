@@ -13,6 +13,8 @@ return [
     'max_uses_helper' => 'Set the maximum number of times this coupon can be used. Leave blank for unlimited uses.',
     'max_uses_per_user_label' => 'Maximum Uses Per User',
     'max_uses_per_user_helper' => 'Set the maximum number of times a single user can use this coupon. Leave blank for unlimited uses.',
+    'client_restriction_label' => 'Client Restriction',
+    'client_restriction_helper' => 'Restrict this coupon to only new clients (first order) or existing clients.',
     'start_at_label' => 'Start Date',
     'start_at_helper' => 'Select the date and time when the coupon becomes valid. Leave blank for immediate validity.',
     'expires_at_label' => 'Expiration Date',

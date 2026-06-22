@@ -32,6 +32,8 @@ return [
         'cart_mismatch' => 'This coupon is not applicable to any items in your cart.',
         'limit_reached' => 'This coupon has reached its usage limit.',
         'user_limit_reached' => 'You have reached the usage limit for this coupon.',
+        'new_client_only' => 'This coupon is only valid for new clients with no previous orders.',
+        'existing_client_only' => 'This coupon is only valid for existing clients with previous orders.',
         'applied' => 'Coupon applied successfully!',
         'removed' => 'Coupon removed successfully.',
     ],
