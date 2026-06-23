@@ -1,0 +1,8 @@
+{
+    "name": "Affiliate",
+    "provider": "Affiliate",
+    "type": "module",
+    "version": "1.0.0",
+    "description": "Built-in affiliate and referral program for Billmora.",
+    "author": "Billmora Team"
+}
