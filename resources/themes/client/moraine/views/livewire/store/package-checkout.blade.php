@@ -216,10 +216,21 @@
                 @endforeach
             </div>
             <hr class="border-t-2 border-billmora-2">
-            <div class="flex justify-between font-semibold text-slate-600">
-                <span>{{ __('client/store.package.subtotal') }}</span>
-                <span>{{ Currency::format($this->pricingSummary['subtotal']) }}</span>
-            </div>
+            @if(isset($this->pricingSummary['prorata']) && $this->pricingSummary['prorata'])
+                <div class="flex justify-between font-semibold text-slate-600">
+                    <span>{{ __('client/store.package.subtotal') }} ({{ __('client/store.package.prorated') }})</span>
+                    <span>{{ Currency::format($this->pricingSummary['prorata']['prorated_amount']) }}</span>
+                </div>
+                <div class="flex justify-between font-semibold text-slate-600 mt-1">
+                    <span>{{ __('client/store.package.subtotal') }} ({{ __('client/store.package.first_full_cycle') }})</span>
+                    <span>{{ Currency::format($this->pricingSummary['prorata']['full_period_amount']) }}</span>
+                </div>
+            @else
+                <div class="flex justify-between font-semibold text-slate-600">
+                    <span>{{ __('client/store.package.subtotal') }}</span>
+                    <span>{{ Currency::format($this->pricingSummary['subtotal']) }}</span>
+                </div>
+            @endif
             <div class="flex justify-between text-slate-500 font-semibold">
                 <span>{{ __('client/store.package.setup_fee') }}</span>
                 <span>{{ Currency::format($this->pricingSummary['setup_fee_total']) }}</span>
@@ -230,10 +241,20 @@
                     {{ __('client/store.package.due_today') }}
                 </span>
                 <span class="text-2xl text-billmora-primary-500 font-bold">
-                    {{ Currency::format($this->pricingSummary['total']) }}
+                    {{ Currency::format($this->pricingSummary['total_due_today'] ?? $this->pricingSummary['total']) }}
                 </span>
             </div>
-            @if($this->pricingSummary['setup_fee_total'] > 0)
+            @if(isset($this->pricingSummary['prorata']) && $this->pricingSummary['prorata'])
+                <div class="mt-2 p-2 bg-billmora-1 rounded-lg text-sm font-medium text-slate-500 border border-slate-100">
+                    <p>
+                        {{ __('client/store.package.prorata_covers_until', ['date' => $this->pricingSummary['prorata']['first_next_due_date']->format('d M Y')]) }}
+                    </p>
+                    <p class="mt-1">
+                        {{ __('client/store.package.next_billing') }}:
+                        <span class="font-semibold text-slate-600">{{ Currency::format($this->pricingSummary['subtotal']) }}</span>
+                    </p>
+                </div>
+            @elseif($this->pricingSummary['setup_fee_total'] > 0)
                 <div class="mt-2 p-2 bg-billmora-1 rounded-lg text-sm font-medium text-slate-500 border border-slate-100">
                     <p>
                         {{ __('client/store.package.next_billing') }}:

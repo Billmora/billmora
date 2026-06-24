@@ -14,13 +14,33 @@ class CartService
     protected string $sessionKey = 'billmora_cart';
 
     /**
-     * Retrieve all current items stored in the cart session.
+     * Retrieve all current items stored in the cart session, enriching them with pro-rata data if applicable.
      *
      * @return array
      */
     public function getItems(): array
     {
-        return Session::get($this->sessionKey, []);
+        $items = Session::get($this->sessionKey, []);
+        $prorataService = null;
+        
+        foreach ($items as &$item) {
+            if (isset($item['package_id']) && isset($item['package_price_id']) && $item['billing_type'] === 'recurring') {
+                $package = Package::find($item['package_id']);
+                $packagePrice = PackagePrice::find($item['package_price_id']);
+                
+                if ($package && $packagePrice) {
+                    if (!$prorataService) {
+                        $prorataService = app(\App\Services\Package\ProrataService::class);
+                    }
+                    $prorata = $prorataService->calculate($package, $packagePrice, $item['unit_price']);
+                    if ($prorata) {
+                        $item['prorata'] = $prorata;
+                    }
+                }
+            }
+        }
+        
+        return $items;
     }
 
     /**
@@ -201,7 +221,8 @@ class CartService
         $appliedCoupon = Session::get('applied_coupon');
 
         foreach ($items as $item) {
-            $itemSubtotal = $item['unit_price'] * $item['quantity']; 
+            $unitPrice = isset($item['prorata']) && $item['prorata'] ? $item['prorata']['first_invoice_total'] : $item['unit_price'];
+            $itemSubtotal = $unitPrice * $item['quantity']; 
             $itemSetupFee = $item['setup_fee'] * $item['quantity'];
             $itemTotalBeforeDiscount = $itemSubtotal + $itemSetupFee;
 

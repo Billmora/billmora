@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Contracts\BrowseInterface;
 use App\Observers\ServiceObserver;
+use App\Services\Package\ProrataService;
 use App\Traits\BrowseTrait;
 use Billmora;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -314,30 +316,50 @@ class Service extends Model implements BrowseInterface
     }
 
     /**
-     * Calculate the next due date based on billing period and interval.
+     * Calculate the next due date based on billing period, interval, and (optionally) the
+     * package's fixed prorata_day.
      *
-     * @return \Illuminate\Support\Carbon|null
+     * When a prorata_day is configured on the package and the period supports pro-rata
+     * (monthly or yearly), the next due date is "snapped" to that day-of-month rather
+     * than naively adding an interval to the current due date.  This ensures all renewals
+     * consistently fall on the same calendar day.
+     *
+     * @return \Carbon\Carbon|null
      */
-    public function calculateNextDueDate()
+    public function calculateNextDueDate(): ?Carbon
     {
         if ($this->billing_type !== 'recurring') {
             return null;
         }
 
-        $date = $this->next_due_date ? $this->next_due_date->copy() : ($this->activated_at ? $this->activated_at->copy() : now());
-        
-        switch ($this->billing_period) {
-            case 'daily':
-                return $date->addDays($this->billing_interval);
-            case 'weekly':
-                return $date->addWeeks($this->billing_interval);
-            case 'monthly':
-                return $date->addMonths($this->billing_interval);
-            case 'yearly':
-                return $date->addYears($this->billing_interval);
-            default:
-                return null;
+        $date     = $this->next_due_date
+            ? $this->next_due_date->copy()
+            : ($this->activated_at ? $this->activated_at->copy() : now());
+
+        $interval = (int) ($this->billing_interval ?? 1);
+        $period   = $this->billing_period;
+
+        // If the package has a prorata_day and the period supports it, snap to prorata_day.
+        $prorataDay = $this->package?->prorata_day;
+
+        if ($prorataDay && in_array($period, ['monthly', 'yearly'], true)) {
+            /** @var ProrataService $prorataService */
+            $prorataService = app(ProrataService::class);
+
+            return $prorataService->advanceByInterval(
+                $date->startOfDay()->day($prorataDay),
+                $period,
+                $interval
+            );
         }
+
+        return match ($period) {
+            'daily'   => $date->addDays($interval),
+            'weekly'  => $date->addWeeks($interval),
+            'monthly' => $date->addMonthsNoOverflow($interval),
+            'yearly'  => $date->addYears($interval),
+            default   => null,
+        };
     }
 
     /**

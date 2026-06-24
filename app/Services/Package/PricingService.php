@@ -8,6 +8,7 @@ use App\Models\Package;
 use App\Models\PackagePrice;
 use App\Models\Tld;
 use App\Models\VariantOption;
+use App\Services\Package\ProrataService;
 use Illuminate\Support\Collection;
 
 class PricingService
@@ -86,6 +87,25 @@ class PricingService
         }
 
         $total = max(0, $amountBeforeDiscount - $discount);
+
+        $totalDueToday = $total;
+        
+        $prorataService = app(ProrataService::class);
+        $prorata = null;
+        if ($packagePrice->package_id) {
+            $package = $packagePrice->package;
+            if ($package) {
+                $prorata = $prorataService->calculate($package, $packagePrice, $recurringTotal);
+                if ($prorata) {
+                    $amountBeforeDiscountProrated = $prorata['first_invoice_total'] + $setupFeeTotal;
+                    $discountProrated = 0;
+                    if ($coupon) {
+                        $discountProrated = $this->calculateDiscount($coupon, $amountBeforeDiscountProrated);
+                    }
+                    $totalDueToday = max(0, $amountBeforeDiscountProrated - $discountProrated);
+                }
+            }
+        }
         
         return [
             'base_price' => $basePrice,
@@ -98,6 +118,8 @@ class PricingService
             'subtotal' => $subtotal,
             'discount' => $discount,
             'total' => $total,
+            'prorata' => $prorata,
+            'total_due_today' => $totalDueToday,
         ];
     }
 

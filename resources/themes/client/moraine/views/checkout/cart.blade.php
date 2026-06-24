@@ -35,6 +35,11 @@
                             <div class="flex-1">
                                 <h2 class="text-xl font-semibold text-slate-600">{{ $item['description'] }}</h2>
                                 <p class="text-slate-500 font-medium">{{ $item['cycle_name'] }}</p>
+                                @if(isset($item['prorata']) && $item['prorata'])
+                                    <p class="text-xs text-billmora-primary-500 font-semibold mt-1">
+                                        {{ __('client/store.package.prorata_covers_until', ['date' => $item['prorata']['first_next_due_date']->format('d M Y')]) }}
+                                    </p>
+                                @endif
                                 @if(!empty($item['variant_details']))
                                     <div class="mt-4 space-y-2">
                                         @foreach ($item['variant_details'] as $variant)
@@ -54,7 +59,10 @@
                             </div>
                             <div class="flex flex-col items-end justify-between gap-4">
                                 <div class="text-right">
-                                    <span class="text-xl font-bold text-slate-700">{{ Currency::format($item['unit_price'] * $item['quantity']) }}</span>
+                                    @php
+                                        $displayPrice = isset($item['prorata']) && $item['prorata'] ? $item['prorata']['first_invoice_total'] : $item['unit_price'];
+                                    @endphp
+                                    <span class="text-xl font-bold text-slate-700">{{ Currency::format($displayPrice * $item['quantity']) }}</span>
                                     @if($item['setup_fee'] > 0)
                                         <p class="text-sm font-medium text-slate-500">+ {{ Currency::format($item['setup_fee'] * $item['quantity']) }} {{ __('client/checkout.setup_fee') }}</p>
                                     @endif
