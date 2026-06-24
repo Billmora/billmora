@@ -24,6 +24,8 @@ return [
     'per_user_limit_helper' => 'Set the maximum number of this package a single user can purchase. Use -1 for no limit.',
     'allow_cancellation_label' => 'Allow Cancellation',
     'allow_cancellation_helper' => 'Enable to let customers request service cancellation for this package.',
+    'prorata_day_label' => 'Prorata Day',
+    'prorata_day_helper' => 'Enter a day (1-28) to enable pro-rata billing, or leave empty to disable.',
     'allow_quantity_label' => 'Allow Quantity',
     'allow_quantity_helper' => 'Enable to let customers purchase multiple or single quantities of this package.',
     'auto_provision_label' => 'Auto Provisioning',

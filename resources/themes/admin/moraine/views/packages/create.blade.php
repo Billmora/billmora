@@ -94,6 +94,15 @@
                 helper="{{ __('admin/packages.allow_cancellation_helper') }}"
                 :checked="old('package_allow_cancellation')"
             />
+            <x-admin::input
+                type="number"
+                min="1"
+                max="28"
+                name="package_prorata_day"
+                label="{{ __('admin/packages.prorata_day_label') }}"
+                helper="{{ __('admin/packages.prorata_day_helper') }}"
+                value="{{ old('package_prorata_day') }}"
+            />
             <x-admin::toggle
                 name="package_auto_provision"
                 label="{{ __('admin/packages.auto_provision_label') }}"

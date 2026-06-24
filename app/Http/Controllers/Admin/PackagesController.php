@@ -91,9 +91,10 @@ class PackagesController extends Controller
             'package_stock' => ['required', 'integer', 'min:-1'],
             'package_per_user_limit' => ['required', 'integer', 'min:-1'],
             'package_allow_cancellation' => ['required', 'boolean'],
-            'package_allow_quantity' => ['required', Rule::in(['single', 'multiple'])],
-            'package_auto_provision' => ['required', 'boolean'],
-            'package_status' => ['required', 'in:visible,hidden'],
+            'package_allow_quantity'      => ['required', Rule::in(['single', 'multiple'])],
+            'package_auto_provision'      => ['required', 'boolean'],
+            'package_status'              => ['required', 'in:visible,hidden'],
+            'package_prorata_day'         => ['nullable', 'integer', 'min:1', 'max:28'],
         ]);
 
         if ($request->package_icon) {
@@ -109,9 +110,10 @@ class PackagesController extends Controller
             'stock' => $validated['package_stock'],
             'per_user_limit' => $validated['package_per_user_limit'],
             'allow_cancellation' => $validated['package_allow_cancellation'],
-            'allow_quantity' => $validated['package_allow_quantity'],
-            'auto_provision' => $validated['package_auto_provision'],
-            'status' => $validated['package_status'],
+            'allow_quantity'      => $validated['package_allow_quantity'],
+            'auto_provision'      => $validated['package_auto_provision'],
+            'prorata_day'         => $validated['package_prorata_day'] ?: null,
+            'status'              => $validated['package_status'],
         ]);
 
         $currencies = Currency::select('code')->get();
@@ -177,9 +179,10 @@ class PackagesController extends Controller
             'package_stock' => ['required', 'integer', 'min:-1'],
             'package_per_user_limit' => ['required', 'integer', 'min:-1'],
             'package_allow_cancellation' => ['required', 'boolean'],
-            'package_allow_quantity' => ['required', Rule::in(['single', 'multiple'])],
-            'package_auto_provision' => ['required', 'boolean'],
-            'package_status' => ['required', 'in:visible,hidden'],
+            'package_allow_quantity'      => ['required', Rule::in(['single', 'multiple'])],
+            'package_auto_provision'      => ['required', 'boolean'],
+            'package_status'              => ['required', 'in:visible,hidden'],
+            'package_prorata_day'         => ['nullable', 'integer', 'min:1', 'max:28'],
         ]);
 
         $icon = $package->icon;
@@ -206,9 +209,10 @@ class PackagesController extends Controller
             'stock' => $validated['package_stock'],
             'per_user_limit' => $validated['package_per_user_limit'],
             'allow_cancellation' => $validated['package_allow_cancellation'],
-            'allow_quantity' => $validated['package_allow_quantity'],
-            'auto_provision' => $validated['package_auto_provision'],
-            'status' => $validated['package_status'],
+            'allow_quantity'      => $validated['package_allow_quantity'],
+            'auto_provision'      => $validated['package_auto_provision'],
+            'prorata_day'         => $validated['package_prorata_day'] ?: null,
+            'status'              => $validated['package_status'],
         ]);
 
         $this->recordUpdate('package.update', $oldPackage, $package->getChanges());

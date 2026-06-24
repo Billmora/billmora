@@ -29,10 +29,11 @@ class Package extends Model implements BrowseInterface
      * @var list<string>
      */
     protected $casts = [
-        'status' => 'string',
+        'status'             => 'string',
         'allow_cancellation' => 'boolean',
-        'auto_provision' => 'boolean',
-        'provisioning_config' => 'array',
+        'auto_provision'     => 'boolean',
+        'provisioning_config'=> 'array',
+        'prorata_day'        => 'integer',
     ];
 
     /**
