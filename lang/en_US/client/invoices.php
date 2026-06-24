@@ -22,6 +22,7 @@ return [
     'discount_label' => 'Discount',
     'total_due_label' => 'Total Due',
     'currency_label' => 'Currency',
+    'prorated_item' => ':item - Prorated (:start – :end)',
     'status' => [
         'unpaid' => 'Unpaid',
         'paid' => 'Paid',

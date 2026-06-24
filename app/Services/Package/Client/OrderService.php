@@ -9,9 +9,11 @@ use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\CouponUsage;
 use App\Models\Package;
+use App\Models\PackagePrice;
 use App\Models\Registrant;
 use App\Models\Tld;
 use App\OrderItemType;
+use App\Services\Package\ProrataService;
 use App\Traits\AuditsSystem;
 use Billmora;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +21,8 @@ use Illuminate\Support\Facades\DB;
 class OrderService
 {
     use AuditsSystem;
+
+    public function __construct(protected ProrataService $prorataService) {}
 
     /**
      * Create a new master order, order items, services, and invoice from cart data.
@@ -115,33 +119,50 @@ class OrderService
                     }
                 } else {
                     $package = Package::find($item['package_id']);
-                    $initialDueDate = ($item['billing_type'] === 'recurring') ? now() : null;
+                    $packagePrice = PackagePrice::find($item['package_price_id']);
+                    $recurringTotal = $item['unit_price'];
+
+                    // Calculate pro-rata for first billing cycle if applicable.
+                    $prorata = ($item['billing_type'] === 'recurring' && $package && $packagePrice)
+                        ? $this->prorataService->calculate($package, $packagePrice, $recurringTotal)
+                        : null;
+
+                    // When pro-rata applies, the service's initial next_due_date becomes the
+                    // end of the first full period (prorata_day_date + interval), NOT now().
+                    // When not applicable, keep the existing behaviour (now() for recurring).
+                    $initialDueDate = $prorata
+                        ? $prorata['first_next_due_date']
+                        : (($item['billing_type'] === 'recurring') ? now() : null);
 
                     for ($i = 0; $i < $item['quantity']; $i++) {
                         $service = Service::create([
-                            'user_id' => $userId,
-                            'order_id' => $order->id,
-                            'order_item_id' => $orderItem->id,
-                            'package_id' => $item['package_id'],
-                            'package_price_id' => $item['package_price_id'],
-                            'plugin_id' => $package->plugin_id ?? null,
-                            'name' => $item['description'],
-                            'status' => 'pending',
-                            'currency' => $currency,
-                            'billing_type' => $item['billing_type'],
-                            'billing_interval' => $item['billing_interval'],
-                            'billing_period' => $item['billing_period'],
-                            'price' => $item['unit_price'],
-                            'setup_fee' => $item['setup_fee'],
-                            'next_due_date' => $initialDueDate,
-                            'configuration' => $item['config_options'],
+                            'user_id'            => $userId,
+                            'order_id'           => $order->id,
+                            'order_item_id'      => $orderItem->id,
+                            'package_id'         => $item['package_id'],
+                            'package_price_id'   => $item['package_price_id'],
+                            'plugin_id'          => $package->plugin_id ?? null,
+                            'name'               => $item['description'],
+                            'status'             => 'pending',
+                            'currency'           => $currency,
+                            'billing_type'       => $item['billing_type'],
+                            'billing_interval'   => $item['billing_interval'],
+                            'billing_period'     => $item['billing_period'],
+                            'price'              => $item['unit_price'],
+                            'setup_fee'          => $item['setup_fee'],
+                            'next_due_date'      => $initialDueDate,
+                            'configuration'      => $item['config_options'],
                             'variant_selections' => $item['variant_selections'],
                         ]);
 
                         $this->recordCreate('service.created', $service->toArray());
-                        
+
                         if ($i === 0) {
-                            $createdEntities[$cartItemId] = ['type' => 'service', 'id' => $service->id];
+                            $createdEntities[$cartItemId] = [
+                                'type'    => 'service',
+                                'id'      => $service->id,
+                                'prorata' => $prorata,
+                            ];
                         }
                     }
                 }
@@ -150,16 +171,16 @@ class OrderService
             $invoiceDueDate = (int) Billmora::getAutomation('invoice_generation_days');
 
             $invoice = Invoice::create([
-                'user_id' => $userId,
-                'order_id' => $order->id,
-                'status' => 'unpaid',
-                'currency' => $currency,
-                'subtotal' => $totals['subtotal'],
-                'discount' => $totals['discount'],
+                'user_id'   => $userId,
+                'order_id'  => $order->id,
+                'status'    => 'unpaid',
+                'currency'  => $currency,
+                'subtotal'  => $totals['subtotal'],
+                'discount'  => $totals['discount'],
                 'setup_fee' => $totals['setup_fee'],
-                'tax' => $totals['tax'] ?? 0,
-                'total' => $totals['total'],
-                'due_date' => now()->addDays($invoiceDueDate),
+                'tax'       => $totals['tax'] ?? 0,
+                'total'     => $totals['total'],
+                'due_date'  => now()->addDays($invoiceDueDate),
             ]);
 
             $this->recordCreate('invoice.created', $invoice->toArray());
@@ -194,52 +215,84 @@ class OrderService
     {
         foreach ($cartItems as $cartItemId => $item) {
             $description = $item['description'];
-            
-            $entity = $createdEntities[$cartItemId] ?? null;
-            $serviceId = $entity && $entity['type'] === 'service' ? $entity['id'] : null;
-            $registrantId = $entity && $entity['type'] === 'registrant' ? $entity['id'] : null;
 
-            if ($item['billing_type'] === 'recurring') {
-                $startDate = now();
-                $endDate = $startDate->copy();
-                
-                switch ($item['billing_period']) {
-                    case 'daily':
-                        $endDate->addDays($item['billing_interval']);
-                        break;
-                    case 'weekly':
-                        $endDate->addWeeks($item['billing_interval']);
-                        break;
-                    case 'monthly':
-                        $endDate->addMonths($item['billing_interval']);
-                        break;
-                    case 'yearly':
-                        $endDate->addYears($item['billing_interval']);
-                        break;
+            $entity       = $createdEntities[$cartItemId] ?? null;
+            $serviceId    = $entity && $entity['type'] === 'service'     ? $entity['id'] : null;
+            $registrantId = $entity && $entity['type'] === 'registrant'  ? $entity['id'] : null;
+            $prorata      = $entity['prorata'] ?? null;
+
+            if ($prorata) {
+                // --- Pro-rata first invoice: two line items ---
+                $prorataDayDate  = $prorata['prorata_day_date'];
+                $firstNextDue    = $prorata['first_next_due_date'];
+                $fmt             = 'd M Y';
+
+                // 1. Prorated line item (partial period)
+                InvoiceItem::create([
+                    'invoice_id'    => $invoice->id,
+                    'service_id'    => $serviceId,
+                    'registrant_id' => $registrantId,
+                    'description'   => __('client/invoices.prorated_item', [
+                        'item' => $description,
+                        'start' => now()->format($fmt),
+                        'end' => $prorataDayDate->format($fmt)
+                    ]),
+                    'quantity'      => $item['quantity'],
+                    'unit_price'    => $prorata['prorated_amount'],
+                    'amount'        => $prorata['prorated_amount'] * $item['quantity'],
+                ]);
+
+                // 2. Full-period line item
+                InvoiceItem::create([
+                    'invoice_id'    => $invoice->id,
+                    'service_id'    => $serviceId,
+                    'registrant_id' => $registrantId,
+                    'description'   => sprintf(
+                        '%s (%s – %s)',
+                        $description,
+                        $prorataDayDate->format($fmt),
+                        $firstNextDue->format($fmt)
+                    ),
+                    'quantity'      => $item['quantity'],
+                    'unit_price'    => $prorata['full_period_amount'],
+                    'amount'        => $prorata['full_period_amount'] * $item['quantity'],
+                ]);
+            } else {
+                if ($item['billing_type'] === 'recurring') {
+                    $startDate = now();
+                    $endDate   = $startDate->copy();
+
+                    match ($item['billing_period']) {
+                        'daily'   => $endDate->addDays($item['billing_interval']),
+                        'weekly'  => $endDate->addWeeks($item['billing_interval']),
+                        'monthly' => $endDate->addMonthsNoOverflow($item['billing_interval']),
+                        'yearly'  => $endDate->addYears($item['billing_interval']),
+                        default   => null,
+                    };
+
+                    $description .= ' (' . $startDate->format('d/m/Y') . ' - ' . $endDate->format('d/m/Y') . ')';
                 }
 
-                $description .= " (" . $startDate->format('d/m/Y') . " - " . $endDate->format('d/m/Y') . ")";
+                InvoiceItem::create([
+                    'invoice_id'    => $invoice->id,
+                    'service_id'    => $serviceId,
+                    'registrant_id' => $registrantId,
+                    'description'   => $description,
+                    'quantity'      => $item['quantity'],
+                    'unit_price'    => $item['unit_price'],
+                    'amount'        => $item['unit_price'] * $item['quantity'],
+                ]);
             }
-
-            InvoiceItem::create([
-                'invoice_id' => $invoice->id,
-                'service_id' => $serviceId,
-                'registrant_id' => $registrantId,
-                'description' => $description,
-                'quantity' => $item['quantity'],
-                'unit_price' => $item['unit_price'],
-                'amount' => $item['unit_price'] * $item['quantity'],
-            ]);
 
             if ($item['setup_fee'] > 0) {
                 InvoiceItem::create([
-                    'invoice_id' => $invoice->id,
-                    'service_id' => $serviceId,
+                    'invoice_id'    => $invoice->id,
+                    'service_id'    => $serviceId,
                     'registrant_id' => $registrantId,
-                    'description' => "Setup Fee - {$item['description']}",
-                    'quantity' => $item['quantity'],
-                    'unit_price' => $item['setup_fee'],
-                    'amount' => $item['setup_fee'] * $item['quantity'],
+                    'description'   => "Setup Fee - {$item['description']}",
+                    'quantity'      => $item['quantity'],
+                    'unit_price'    => $item['setup_fee'],
+                    'amount'        => $item['setup_fee'] * $item['quantity'],
                 ]);
             }
         }

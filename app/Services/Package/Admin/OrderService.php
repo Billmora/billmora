@@ -16,13 +16,16 @@ use App\Models\Tld;
 use App\Models\VariantOption;
 use App\OrderItemType;
 use App\Services\Package\PricingService;
+use App\Services\Package\ProrataService;
 use Illuminate\Support\Facades\DB;
 use Billmora;
 
 class OrderService
 {
-    public function __construct(protected PricingService $pricingService)
-    {
+    public function __construct(
+        protected PricingService $pricingService,
+        protected ProrataService $prorataService
+    ) {
         // 
     }
 
@@ -98,7 +101,7 @@ class OrderService
                 'subtotal' => $grandSubtotal,
                 'discount' => $grandDiscount,
                 'setup_fee' => $grandSetupFee,
-                'total' => $grandTotal,
+                'total' => $grandTotal, // Will be recalculated at the end if there are prorated additions
                 'terms_accepted' => true,
                 'completed_at' => $status === 'completed' ? now() : null,
                 'cancelled_at' => in_array($status, ['cancelled', 'failed']) ? now() : null,
@@ -107,6 +110,7 @@ class OrderService
             $services = [];
             $registrants = [];
             $invoiceItems = [];
+            $totalProrataAdditions = 0;
 
             // 2. Process Package Items
             foreach ($packageItems as $i => $item) {
@@ -142,18 +146,31 @@ class OrderService
                 $activatedAt = null;
                 $nextDueDate = null;
 
+                $prorata = ($packagePrice->type === 'recurring')
+                    ? $this->prorataService->calculate($package, $packagePrice, $pricing['recurring_total'])
+                    : null;
+
                 if ($packagePrice->type === 'recurring' && $serviceStatus === 'active') {
                     $activatedAt = now();
                     $date = now();
-                    $nextDueDate = match ($packagePrice->billing_period) {
-                        'daily' => $date->copy()->addDays($packagePrice->time_interval),
-                        'weekly' => $date->copy()->addWeeks($packagePrice->time_interval),
-                        'monthly' => $date->copy()->addMonths($packagePrice->time_interval),
-                        'yearly' => $date->copy()->addYears($packagePrice->time_interval),
-                        default => null,
-                    };
+                    
+                    if ($prorata) {
+                        $nextDueDate = $prorata['first_next_due_date'];
+                    } else {
+                        $nextDueDate = match ($packagePrice->billing_period) {
+                            'daily' => $date->copy()->addDays($packagePrice->time_interval),
+                            'weekly' => $date->copy()->addWeeks($packagePrice->time_interval),
+                            'monthly' => $date->copy()->addMonthsNoOverflow($packagePrice->time_interval),
+                            'yearly' => $date->copy()->addYears($packagePrice->time_interval),
+                            default => null,
+                        };
+                    }
                 } elseif ($serviceStatus === 'pending') {
-                    $nextDueDate = now();
+                    if ($prorata) {
+                        $nextDueDate = $prorata['first_next_due_date'];
+                    } else {
+                        $nextDueDate = now();
+                    }
                 }
 
                 $finalConfig = $this->resolveServiceConfiguration($package, $variantSelections, $configuration);
@@ -183,21 +200,51 @@ class OrderService
                 }
 
                 // Build invoice items for this package
-                $invoiceItems[] = [
-                    'description' => $this->buildPackageDescription($package, $packagePrice),
-                    'quantity' => $quantity,
-                    'unit_price' => $pricing['base_price'],
-                    'amount' => $pricing['base_price'] * $quantity,
-                ];
+                if ($prorata) {
+                    $fmt = 'd M Y';
+                    $totalProrataAdditions += $prorata['prorated_amount'] * $quantity;
 
-                foreach ($pricing['variant_items'] as $variantItem) {
-                    if ($variantItem['price'] <= 0) continue;
+                    // 1. Prorated part
                     $invoiceItems[] = [
-                        'description' => $variantItem['description'],
+                        'description' => __('client/invoices.prorated_item', [
+                            'item' => $this->buildPackageDescription($package, $packagePrice),
+                            'start' => now()->format($fmt),
+                            'end' => $prorata['prorata_day_date']->format($fmt)
+                        ]),
                         'quantity' => $quantity,
-                        'unit_price' => $variantItem['price'],
-                        'amount' => $variantItem['price'] * $quantity,
+                        'unit_price' => $prorata['prorated_amount'],
+                        'amount' => $prorata['prorated_amount'] * $quantity,
                     ];
+
+                    // 2. Full period part
+                    $invoiceItems[] = [
+                        'description' => sprintf(
+                            '%s (%s – %s)',
+                            $this->buildPackageDescription($package, $packagePrice),
+                            $prorata['prorata_day_date']->format($fmt),
+                            $prorata['first_next_due_date']->format($fmt)
+                        ),
+                        'quantity' => $quantity,
+                        'unit_price' => $prorata['full_period_amount'],
+                        'amount' => $prorata['full_period_amount'] * $quantity,
+                    ];
+                } else {
+                    $invoiceItems[] = [
+                        'description' => $this->buildPackageDescription($package, $packagePrice),
+                        'quantity' => $quantity,
+                        'unit_price' => $pricing['base_price'],
+                        'amount' => $pricing['base_price'] * $quantity,
+                    ];
+
+                    foreach ($pricing['variant_items'] as $variantItem) {
+                        if ($variantItem['price'] <= 0) continue;
+                        $invoiceItems[] = [
+                            'description' => $variantItem['description'],
+                            'quantity' => $quantity,
+                            'unit_price' => $variantItem['price'],
+                            'amount' => $variantItem['price'] * $quantity,
+                        ];
+                    }
                 }
 
                 if ($pricing['setup_fee_package'] > 0) {
@@ -306,18 +353,24 @@ class OrderService
 
             $invoiceDays = (int) (Billmora::getAutomation('invoice_generation_days') ?? 7);
 
+            if ($totalProrataAdditions > 0) {
+                $order->subtotal += $totalProrataAdditions;
+                $order->total += $totalProrataAdditions;
+                $order->save();
+            }
+
             $invoice = Invoice::create([
                 'user_id' => $userId,
                 'order_id' => $order->id,
                 'status' => $invoiceStatus,
                 'currency' => $currency,
-                'subtotal' => $grandSubtotal,
+                'subtotal' => $grandSubtotal + $totalProrataAdditions,
                 'discount' => $grandDiscount,
-                'total' => $grandTotal,
+                'setup_fee' => $grandSetupFee,
+                'total' => max(0, $grandTotal + $totalProrataAdditions),
                 'due_date' => now()->addDays($invoiceDays),
-                'paid_at' => $status === 'completed' ? now() : null,
+                'paid_at' => $invoiceStatus === 'paid' ? now() : null,
             ]);
-
             // 6. Create Invoice Items
             foreach ($invoiceItems as $invItem) {
                 InvoiceItem::create([
