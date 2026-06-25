@@ -14,7 +14,6 @@ class PackageField extends Model
         'helper',
         'default',
         'required',
-        'admin_only',
         'visible_on_order',
         'visible_on_invoice',
         'options',
@@ -30,7 +29,6 @@ class PackageField extends Model
     {
         return [
             'required' => 'boolean',
-            'admin_only' => 'boolean',
             'visible_on_order' => 'boolean',
             'visible_on_invoice' => 'boolean',
             'options' => 'array',

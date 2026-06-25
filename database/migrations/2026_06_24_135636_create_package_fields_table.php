@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('helper')->nullable();
             $table->string('default')->nullable();
             $table->boolean('required')->default(false);
-            $table->boolean('admin_only')->default(false);
             $table->boolean('visible_on_order')->default(true);
             $table->boolean('visible_on_invoice')->default(false);
             $table->json('options')->nullable();

@@ -57,7 +57,6 @@ class PackageCheckout extends Component
         $this->package = $package;
         $this->currencyCode = Session::get('currency');
         $this->packageFields = $package->fields()
-            ->where('admin_only', false)
             ->where('visible_on_order', true)
             ->orderBy('sort_order', 'asc')
             ->get()

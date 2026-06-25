@@ -210,7 +210,7 @@ class CartController extends Controller
             $fieldAttributes = [];
 
             foreach ($packagePrice->package->fields as $field) {
-                if ($field->admin_only || !$field->visible_on_order) {
+                if (!$field->visible_on_order) {
                     continue;
                 }
 
