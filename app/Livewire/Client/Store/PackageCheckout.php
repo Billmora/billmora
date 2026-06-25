@@ -23,6 +23,8 @@ class PackageCheckout extends Component
     #[Url(as: 'variants', history: true)]
     public array $variantSelections = [];
 
+    public array $packageFields = [];
+
     public array $sliderIndexes = [];
 
     protected PricingService $pricingService;
@@ -54,6 +56,12 @@ class PackageCheckout extends Component
     {
         $this->package = $package;
         $this->currencyCode = Session::get('currency');
+        $this->packageFields = $package->fields()
+            ->where('admin_only', false)
+            ->where('visible_on_order', true)
+            ->orderBy('sort_order', 'asc')
+            ->get()
+            ->toArray();
 
         // If no billing ID was provided via URL, try old() form input
         if (!$this->selectedBillingId) {

@@ -55,9 +55,9 @@ class CartService
      * @param  int  $quantity
      * @return string
      */
-    public function addService(Package $package, PackagePrice $price, float $resolvedPrice, float $resolvedSetupFee = 0, array $config = [], array $variants = [], int $quantity = 1): string
+    public function addService(Package $package, PackagePrice $price, float $resolvedPrice, float $resolvedSetupFee = 0, array $config = [], array $variants = [], int $quantity = 1, array $fields = []): string
     {
-        $cartItemId = md5((string) $package->id . '_' . $price->id . '_' . json_encode($config) . '_' . json_encode($variants));
+        $cartItemId = md5((string) $package->id . '_' . $price->id . '_' . json_encode($config) . '_' . json_encode($variants) . '_' . json_encode($fields));
 
         $cart = $this->getItems();
 
@@ -90,6 +90,7 @@ class CartService
             'allow_quantity' => $package->allow_quantity,
             'config_options' => $config,
             'variant_selections' => $variants,
+            'fields' => $fields,
         ];
 
         Session::put("{$this->sessionKey}.{$cartItemId}", $itemData);

@@ -128,6 +128,67 @@
                 </div>
             @endif
         @endif
+        @if (!empty($this->packageFields))
+            <div class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
+                <span class="text-xl text-slate-600 font-semibold">
+                    {{ __('client/store.package.fields') }}
+                </span>
+                <div class="mt-4 grid gap-4">
+                    @foreach ($this->packageFields as $field)
+                        <div wire:key="field-{{ $field['id'] }}">
+                            @if (in_array($field['type'], ['text', 'email', 'url', 'number', 'password']))
+                                <x-client::input 
+                                    name="fields[{{ $field['name'] }}]" 
+                                    label="{{ $field['label'] }}" 
+                                    helper="{{ $field['helper'] ?? '' }}" 
+                                    type="{{ $field['type'] }}" 
+                                    placeholder="{{ $field['placeholder'] ?? '' }}" 
+                                    :required="(bool) $field['required']" 
+                                    :value="old('fields.' . $field['name'], $field['default'] ?? '')" 
+                                />
+                            @elseif ($field['type'] === 'textarea')
+                                <x-client::textarea 
+                                    name="fields[{{ $field['name'] }}]" 
+                                    label="{{ $field['label'] }}" 
+                                    helper="{{ $field['helper'] ?? '' }}" 
+                                    placeholder="{{ $field['placeholder'] ?? '' }}" 
+                                    :required="(bool) $field['required']"
+                                    >{{ old('fields.' . $field['name'], $field['default'] ?? '') }}</x-client::textarea>
+                            @elseif ($field['type'] === 'toggle')
+                                <x-client::toggle 
+                                    name="fields[{{ $field['name'] }}]" 
+                                    label="{{ $field['label'] }}" 
+                                    helper="{{ $field['helper'] ?? '' }}" 
+                                    :checked="(bool) old('fields.' . $field['name'], $field['default'] ?? false)" 
+                                />
+                            @elseif ($field['type'] === 'select')
+                                <x-client::select 
+                                    name="fields[{{ $field['name'] }}]" 
+                                    label="{{ $field['label'] }}" 
+                                    helper="{{ $field['helper'] ?? '' }}" 
+                                    :required="(bool) $field['required']"
+                                >
+                                    @foreach ($field['options'] ?? [] as $optValue => $optLabel)
+                                        <option value="{{ $optValue }}" @selected(old('fields.' . $field['name'], $field['default'] ?? '') == $optValue)>{{ $optLabel }}</option>
+                                    @endforeach
+                                </x-client::select>
+                            @elseif ($field['type'] === 'radio')
+                                <x-client::radio.group 
+                                    name="fields[{{ $field['name'] }}]" 
+                                    label="{{ $field['label'] }}" 
+                                    helper="{{ $field['helper'] ?? '' }}" 
+                                    :required="(bool) $field['required']"
+                                >
+                                    @foreach ($field['options'] ?? [] as $optVal => $optLabel)
+                                        <x-client::radio.option name="fields[{{ $field['name'] }}]" value="{{ $optVal }}" label="{{ $optLabel }}" :checked="old('fields.' . $field['name'], $field['default'] ?? '') == $optVal" />
+                                    @endforeach
+                                </x-client::radio.group>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
         @if (!empty($this->checkoutSchema))
             <div wire:ignore class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
                 <span class="text-xl text-slate-600 font-semibold">

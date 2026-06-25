@@ -24,6 +24,7 @@ return [
         'next_billing' => 'Price that will be charged on the next billing cycle',
         'add_to_cart' => 'Add to Cart',
         'checkout' => 'Checkout',
+        'fields' => 'Additional Information',
     ],
 
     'order' => [

@@ -204,6 +204,45 @@ class CartController extends Controller
 
         $quantity = $validated['quantity'] ?? 1;
 
+        $fields = [];
+        if ($packagePrice->package->fields->isNotEmpty()) {
+            $fieldRules = [];
+            $fieldAttributes = [];
+
+            foreach ($packagePrice->package->fields as $field) {
+                if ($field->admin_only || !$field->visible_on_order) {
+                    continue;
+                }
+
+                $rules = [];
+                if ($field->required) {
+                    $rules[] = 'required';
+                } else {
+                    $rules[] = 'nullable';
+                }
+
+                if (in_array($field->type, ['text', 'textarea', 'password'])) {
+                    $rules[] = 'string';
+                } elseif ($field->type === 'email') {
+                    $rules[] = 'email';
+                } elseif ($field->type === 'url') {
+                    $rules[] = 'url';
+                } elseif ($field->type === 'number') {
+                    $rules[] = 'numeric';
+                } elseif ($field->type === 'toggle') {
+                    $rules[] = 'boolean';
+                } elseif (in_array($field->type, ['select', 'radio'])) {
+                    $rules[] = Rule::in(array_keys($field->options ?? []));
+                }
+
+                $fieldRules["fields.{$field->name}"] = $rules;
+                $fieldAttributes["fields.{$field->name}"] = $field->label;
+            }
+
+            $fieldsValidated = $request->validate($fieldRules, [], $fieldAttributes);
+            $fields = $fieldsValidated['fields'] ?? [];
+        }
+
         $this->cartService->addService(
             $packagePrice->package,
             $packagePrice,
@@ -211,7 +250,8 @@ class CartController extends Controller
             $pricing['setup_fee_total'],
             $configuration,
             $variantSelections,
-            $quantity
+            $quantity,
+            $fields
         );
 
         return redirect()->route('client.checkout.cart')->with('success', __('client/checkout.cart.item_added'));
