@@ -50,6 +50,14 @@
                             <span class="font-semibold text-slate-600">{{ $service->next_due_date?->format(Billmora::getGeneral('company_date_format')) }}</span>
                         </div>
                     @endif
+                    @if (!empty($service->fields))
+                        @foreach ($service->fields as $key => $value)
+                            <div class="grid">
+                                <span class="text-sm font-semibold text-slate-500">{{ Str::title(str_replace('_', ' ', $key)) }}</span>
+                                <span class="font-semibold text-slate-600">{{ is_array($value) ? implode(', ', $value) : $value }}</span>
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
             </div>
             @yield('workspaces')

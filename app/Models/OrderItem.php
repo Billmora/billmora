@@ -32,6 +32,7 @@ class OrderItem extends Model
         'setup_fee' => 'decimal:2',
         'config_options' => 'array',
         'variant_selections' => 'array',
+        'fields' => 'array',
     ];
 
     /**

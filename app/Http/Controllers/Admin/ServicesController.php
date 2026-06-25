@@ -187,6 +187,41 @@ class ServicesController extends Controller
             }
         }
 
+        $fields = $service->fields ?? [];
+        if ($package->fields->isNotEmpty()) {
+            $fieldRules = [];
+            $fieldAttributes = [];
+
+            foreach ($package->fields as $field) {
+                $rules = [];
+                if ($field->required) {
+                    $rules[] = 'required';
+                } else {
+                    $rules[] = 'nullable';
+                }
+
+                if (in_array($field->type, ['text', 'textarea', 'password'])) {
+                    $rules[] = 'string';
+                } elseif ($field->type === 'email') {
+                    $rules[] = 'email';
+                } elseif ($field->type === 'url') {
+                    $rules[] = 'url';
+                } elseif ($field->type === 'number') {
+                    $rules[] = 'numeric';
+                } elseif ($field->type === 'toggle') {
+                    $rules[] = 'boolean';
+                } elseif (in_array($field->type, ['select', 'radio'])) {
+                    $rules[] = Rule::in(array_keys($field->options ?? []));
+                }
+
+                $fieldRules["fields.{$field->name}"] = $rules;
+                $fieldAttributes["fields.{$field->name}"] = $field->label;
+            }
+
+            $fieldsValidated = $request->validate($fieldRules, [], $fieldAttributes);
+            $fields = $fieldsValidated['fields'] ?? [];
+        }
+
         $price = $validated['service_price'] ?? 0;
         $setupFee = $validated['service_setup_fee'] ?? 0;
 
@@ -212,6 +247,7 @@ class ServicesController extends Controller
             'next_due_date' => $validated['service_next_due_date'],
             'plugin_id' => $pluginId,
             'configuration' => $configuration,
+            'fields' => $fields,
             'admin_notes' => $validated['service_admin_notes'] ?? null,
         ]);
 

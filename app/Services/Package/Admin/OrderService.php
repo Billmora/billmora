@@ -135,6 +135,7 @@ class OrderService
                     'amount' => ($pricing['recurring_total'] * $quantity) + ($pricing['setup_fee_total'] * $quantity),
                     'config_options' => $configuration,
                     'variant_selections' => $variantSelections,
+                    'fields' => $item['fields'] ?? [],
                 ]);
 
                 $serviceStatus = match ($status) {
@@ -193,6 +194,7 @@ class OrderService
                         'setup_fee' => $pricing['setup_fee_total'],
                         'configuration' => $finalConfig,
                         'variant_selections' => $variantSelections,
+                        'fields' => $item['fields'] ?? [],
                         'activated_at' => $activatedAt,
                         'next_due_date' => $nextDueDate,
                         'cancelled_at' => $serviceStatus === 'cancelled' ? now() : null,

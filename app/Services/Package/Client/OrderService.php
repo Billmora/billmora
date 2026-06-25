@@ -84,6 +84,7 @@ class OrderService
                     'amount' => ($item['unit_price'] * $item['quantity']) + ($item['setup_fee'] * $item['quantity']),
                     'config_options' => $item['config_options'],
                     'variant_selections' => $item['variant_selections'],
+                    'fields' => $item['fields'] ?? [],
                 ]);
 
                 if ($item['type'] === OrderItemType::Domain->value) {
@@ -153,6 +154,7 @@ class OrderService
                             'next_due_date'      => $initialDueDate,
                             'configuration'      => $item['config_options'],
                             'variant_selections' => $item['variant_selections'],
+                            'fields'             => $item['fields'] ?? [],
                         ]);
 
                         $this->recordCreate('service.created', $service->toArray());

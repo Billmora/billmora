@@ -45,6 +45,7 @@ class Service extends Model implements BrowseInterface
         'cancelled_at' => 'datetime',
         'price' => 'decimal:2',
         'setup_fee' => 'decimal:2',
+        'fields' => 'array',
     ];
 
     /**

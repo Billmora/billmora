@@ -204,6 +204,75 @@
             </div>
         </div>
     @endif
+    @if (!empty($this->packageFields))
+        <div class="space-y-2">
+            <div>
+                <h4 class="text-lg font-semibold text-slate-600">{{ __('admin/packages.tabs.fields') ?? 'Fields' }}</h4>
+                <span class="text-slate-500">Additional information for this service</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+                @foreach ($this->packageFields as $field)
+                    <div wire:key="sch-field-{{ $field['id'] }}-{{ $package_id }}">
+                        @if (in_array($field['type'], ['text', 'email', 'url', 'number', 'password']))
+                            <x-admin::input 
+                                name="fields[{{ $field['name'] }}]" 
+                                label="{{ $field['label'] }}" 
+                                helper="{{ $field['helper'] ?? '' }}" 
+                                type="{{ $field['type'] }}" 
+                                placeholder="{{ $field['placeholder'] ?? '' }}" 
+                                :required="(bool) $field['required']" 
+                                :value="old('fields.' . $field['name'], $service->fields[$field['name']] ?? $field['default'] ?? '')" 
+                            />
+                        @elseif ($field['type'] === 'textarea')
+                            <x-admin::textarea 
+                                name="fields[{{ $field['name'] }}]" 
+                                label="{{ $field['label'] }}" 
+                                helper="{{ $field['helper'] ?? '' }}" 
+                                placeholder="{{ $field['placeholder'] ?? '' }}" 
+                                :required="(bool) $field['required']"
+                            >
+                                {{ old('fields.' . $field['name'], $service->fields[$field['name']] ?? $field['default'] ?? '') }}
+                            </x-admin::textarea>
+                        @elseif ($field['type'] === 'toggle')
+                            <x-admin::toggle 
+                                name="fields[{{ $field['name'] }}]" 
+                                label="{{ $field['label'] }}" 
+                                helper="{{ $field['helper'] ?? '' }}" 
+                                :checked="(bool) old('fields.' . $field['name'], $service->fields[$field['name']] ?? $field['default'] ?? false)" 
+                            />
+                        @elseif ($field['type'] === 'select')
+                            <x-admin::select 
+                                name="fields[{{ $field['name'] }}]" 
+                                label="{{ $field['label'] }}" 
+                                helper="{{ $field['helper'] ?? '' }}" 
+                                :required="(bool) $field['required']"
+                            >
+                                @foreach ($field['options'] ?? [] as $optValue => $optLabel)
+                                    <option value="{{ $optValue }}" @selected(old('fields.' . $field['name'], $service->fields[$field['name']] ?? $field['default'] ?? '') == $optValue)>{{ $optLabel }}</option>
+                                @endforeach
+                            </x-admin::select>
+                        @elseif ($field['type'] === 'radio')
+                            <x-admin::radio.group 
+                                name="fields[{{ $field['name'] }}]" 
+                                label="{{ $field['label'] }}" 
+                                helper="{{ $field['helper'] ?? '' }}" 
+                                :required="(bool) $field['required']"
+                            >
+                                @foreach ($field['options'] ?? [] as $optVal => $optLabel)
+                                    <x-admin::radio.option 
+                                        name="fields[{{ $field['name'] }}]" 
+                                        value="{{ $optVal }}" 
+                                        label="{{ $optLabel }}" 
+                                        :checked="old('fields.' . $field['name'], $service->fields[$field['name']] ?? $field['default'] ?? '') == $optVal" 
+                                    />
+                                @endforeach
+                            </x-admin::radio.group>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
     @if (!empty($this->checkoutSchema))
         <div class="space-y-2">
             <div>

@@ -33,11 +33,21 @@
                     <h3 class="text-lg font-bold text-slate-600">{{ __('admin/orders.items_label') }}</h3>
                     @foreach ($order->items as $item)
                         <div class="flex justify-between p-4 bg-white border-2 border-billmora-2 rounded-xl">
-                            <div class="grid text-start">
+                            <div class="grid text-start gap-1">
                                 <span class="text-billmora-primary-500 font-bold">{{ $item->description }}</span>
                                 <span class="text-slate-500 font-medium">x{{ $item->quantity }}</span>
+                                @if(!empty($item->fields))
+                                    <div class="mt-2 text-sm text-slate-500 bg-slate-50 p-2 rounded border border-slate-100">
+                                        @foreach($item->fields as $key => $value)
+                                            <div class="flex gap-2">
+                                                <span class="font-semibold">{{ Str::title(str_replace('_', ' ', $key)) }}:</span>
+                                                <span>{{ is_array($value) ? implode(', ', $value) : $value }}</span>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
-                            <div class="grid text-end">
+                            <div class="grid text-end h-fit">
                                 <span class="text-billmora-primary-500 font-bold">{{ Currency::format($item->unit_price, $order->currency) }}</span>
                                 <span class="text-slate-500 font-medium">{{ $item->cycle_label }}</span>
                             </div>

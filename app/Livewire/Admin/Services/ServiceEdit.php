@@ -166,6 +166,20 @@ class ServiceEdit extends Component
     }
 
     /**
+     * Retrieve the fields for the selected package.
+     * Returns an empty array if no package is selected.
+     *
+     * @return array
+     */
+    #[Computed]
+    public function packageFields()
+    {
+        if (!$this->selectedPackageModel) return [];
+
+        return $this->selectedPackageModel->fields()->orderBy('sort_order', 'asc')->get()->toArray();
+    }
+
+    /**
      * Render the service edit Livewire component view.
      *
      * @return \Illuminate\View\View
