@@ -22,8 +22,6 @@ return [
         'default_helper' => 'Optional default value to pre-fill the field.',
         'required' => 'Required',
         'required_helper' => 'Check if the user must fill out this field before checkout.',
-        'admin_only' => 'Admin Only',
-        'admin_only_helper' => 'Only visible to admin. Will not be shown to client or on order forms.',
         'visible_on_order' => 'Show on Order Form',
         'visible_on_order_helper' => 'Show this field to customers during the checkout process.',
         'visible_on_invoice' => 'Show on Invoice',

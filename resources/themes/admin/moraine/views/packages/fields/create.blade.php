@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Package Field Create')
+@section('title', "Package Field Create")
 
 @section('body')
     <form action="{{ route('admin.packages.fields.store', ['package' => $package->id]) }}" method="POST"
@@ -49,10 +49,8 @@ value2|Label 2" helper="{{ __('admin/packages.fields.options_helper') }}"
                 <div class="flex flex-col gap-4 mt-2">
                     <x-admin::toggle name="required" label="{{ __('admin/packages.fields.required') }}"
                         helper="{{ __('admin/packages.fields.required_helper') }}" :checked="(bool) old('required')" />
-                    <x-admin::toggle name="admin_only" label="{{ __('admin/packages.fields.admin_only') }}"
-                        helper="{{ __('admin/packages.fields.admin_only_helper') }}" :checked="(bool) old('admin_only')" />
                     <x-admin::toggle name="visible_on_order" label="{{ __('admin/packages.fields.visible_on_order') }}"
-                        helper="{{ __('admin/packages.fields.visible_on_order_helper') }}" :checked="(bool) old('visible_on_order', true)" />
+                        helper="{{ __('admin/packages.fields.visible_on_order_helper') }}" :checked="old('visible_on_order') !== null ? (bool) old('visible_on_order') : true" />
                     <x-admin::toggle name="visible_on_invoice" label="{{ __('admin/packages.fields.visible_on_invoice') }}"
                         helper="{{ __('admin/packages.fields.visible_on_invoice_helper') }}" :checked="(bool) old('visible_on_invoice')" />
                 </div>
