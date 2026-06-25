@@ -159,6 +159,16 @@ class Package extends Model implements BrowseInterface
     }
 
     /**
+     * Get the fields associated with this package.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function fields()
+    {
+        return $this->hasMany(PackageField::class)->orderBy('sort_order', 'asc');
+    }
+
+    /**
      * Return a collection of package records formatted as browse items for quick search indexing.
      *
      * @return \Illuminate\Support\Collection

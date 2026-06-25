@@ -17,9 +17,14 @@
                 'label' => __('admin/packages.tabs.pricing'),
             ],
             [
+                'route' => route('admin.packages.fields', ['package' => $package->id]),
+                'icon' => 'lucide-list-todo',
+                'label' => __('admin/packages.tabs.fields'),
+            ],
+            [
                 'route' => route('admin.packages.provisioning', ['package' => $package->id]),
                 'icon' => 'lucide-plug',
-                'label' => __('admin/packages.tabs.provisioning'),
+                'label' => 'Provisioning',
             ],
             [
                 'route' => route('admin.packages.scaling', ['package' => $package->id]),

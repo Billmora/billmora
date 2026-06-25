@@ -206,6 +206,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/{package}/scaling', [Admin\Packages\ScalingController::class, 'index'])->name('admin.packages.scaling');
         Route::put('/{package}/scaling', [Admin\Packages\ScalingController::class, 'update'])->name('admin.packages.scaling.update');
 
+        Route::get('/{package}/fields', [Admin\Packages\FieldsController::class, 'index'])->name('admin.packages.fields');
+        Route::get('/{package}/fields/create', [Admin\Packages\FieldsController::class, 'create'])->name('admin.packages.fields.create');
+        Route::post('/{package}/fields/create', [Admin\Packages\FieldsController::class, 'store'])->name('admin.packages.fields.store');
+        Route::get('/{package}/fields/{field}/edit', [Admin\Packages\FieldsController::class, 'edit'])->name('admin.packages.fields.edit');
+        Route::put('/{package}/fields/{field}/edit', [Admin\Packages\FieldsController::class, 'update'])->name('admin.packages.fields.update');
+        Route::delete('/{package}/fields/{field}', [Admin\Packages\FieldsController::class, 'destroy'])->name('admin.packages.fields.destroy');
         Route::delete('/{package}', [Admin\PackagesController::class, 'destroy'])->name('admin.packages.destroy');
     });
 
