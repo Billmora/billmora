@@ -254,7 +254,7 @@ class ServicesController extends Controller
         $this->recordUpdate('service.update', $oldService, $service->getChanges());
 
         return redirect()->route('admin.services.edit', $service->id)
-            ->with('success', __('common.update_success', ['attribute' => $service->name]));
+            ->with('success', __('common.update_success', ['attribute' => $service->service_number]));
     }
 
     /**
@@ -278,6 +278,6 @@ class ServicesController extends Controller
         $this->recordDelete('service.delete', $service->toArray());
 
         return redirect()->route('admin.services')
-            ->with('success', __('common.delete_success', ['attribute' => $service->name]));
+            ->with('success', __('common.delete_success', ['attribute' => $service->service_number]));
     }
 }

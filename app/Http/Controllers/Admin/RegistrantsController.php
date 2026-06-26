@@ -113,7 +113,7 @@ class RegistrantsController extends Controller
         $this->recordUpdate('registrant.update', $oldRegistrant, $registrant->getChanges());
 
         return redirect()->route('admin.registrants.edit', $registrant)
-            ->with('success', __('common.update_success', ['attribute' => $registrant->domain]));
+            ->with('success', __('common.update_success', ['attribute' => $registrant->registrant_number]));
     }
 
     /**
@@ -133,6 +133,6 @@ class RegistrantsController extends Controller
         $this->recordDelete('registrant.delete', $registrant->toArray());
 
         return redirect()->route('admin.registrants')
-            ->with('success', __('common.delete_success', ['attribute' => $registrant->domain]));
+            ->with('success', __('common.delete_success', ['attribute' => $registrant->registrant_number]));
     }
 }
