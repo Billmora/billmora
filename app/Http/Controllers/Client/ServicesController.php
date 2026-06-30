@@ -86,11 +86,16 @@ class ServicesController extends Controller
 
                     foreach ($schemaFields as $key => $field) {
                         if (array_key_exists($key, $config)) {
+                            if (!empty($field['condition']) && !$service->meetsCondition($field['condition'])) {
+                                continue;
+                            }
+                            
                             $checkoutData[] = [
                                 'key' => $key,
                                 'label' => $field['label'] ?? $key,
                                 'value' => $config[$key],
                                 'type' => $field['type'],
+                                'options' => $field['options'] ?? [],
                             ];
                         }
                     }

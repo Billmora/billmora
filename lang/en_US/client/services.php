@@ -11,6 +11,7 @@ return [
     'expires_label' => 'Expires At',
     'variant_label' => 'Variant Options',
     'configuration_label' => 'Additional Configuration',
+    'additional_information_label' => 'Additional Information',
     'cancel_label' => 'Cancellation Request',
     'scale_label' => 'Scaling Service',
     'scale_package_helper' => 'Choose a package you want to scale to',
