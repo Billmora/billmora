@@ -27,9 +27,13 @@
                                 <div class="flex flex-col">
                                     <h4 class="text-sm font-semibold text-slate-600">{{ $p['name'] }}</h4>
                                     <span class="text-sm font-semibold text-slate-500">
-                                        {{ Currency::format($p['price']) }}
-                                        @if ($p['setup_fee'] > 0)
-                                            + {{ Currency::format($p['setup_fee']) }} {{ __('client/store.package.setup_fee') }}
+                                        @if (strtolower($p['type']) === 'free')
+                                            {{ __('billing.cycles.free') }}
+                                        @else
+                                            {{ Currency::format($p['price']) }}
+                                            @if ($p['setup_fee'] > 0)
+                                                + {{ Currency::format($p['setup_fee']) }} {{ __('client/store.package.setup_fee') }}
+                                            @endif
                                         @endif
                                     </span>
                                 </div>
