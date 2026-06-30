@@ -86,6 +86,7 @@ class FieldsController extends Controller
             'helper' => $validated['helper'] ?? null,
             'default' => $validated['default'] ?? null,
             'options' => $options,
+            'condition' => $this->buildCondition($validated),
             'sort_order' => $maxSort + 1,
         ]);
 
@@ -145,7 +146,7 @@ class FieldsController extends Controller
             }
             $options = $parsedOptions;
         }
-
+        
         $field->update([
             'label' => $validated['label'],
             'name' => $name,
@@ -156,6 +157,7 @@ class FieldsController extends Controller
             'helper' => $validated['helper'] ?? null,
             'default' => $validated['default'] ?? null,
             'options' => $options,
+            'condition' => $this->buildCondition($validated),
         ]);
 
         return redirect()

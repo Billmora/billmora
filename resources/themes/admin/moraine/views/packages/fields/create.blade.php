@@ -30,6 +30,31 @@
                     placeholder="value|Label
 value2|Label 2" helper="{{ __('admin/packages.fields.options_helper') }}"
                     rows="4">{{ old('options') }}</x-admin::textarea>
+
+                <div x-data="{ conditionTarget: '{{ old('condition_target') }}' }" class="grid gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <x-admin::select name="condition_target" label="{{ __('admin/packages.fields.condition_target') }}" helper="{{ __('admin/packages.fields.condition_target_helper') }}" x-model="conditionTarget">
+                            <option value="configuration" @selected(old('condition_target') == 'configuration')>Additional Configuration</option>
+                            <option value="fields" @selected(old('condition_target') == 'fields')>Package Fields</option>
+                        </x-admin::select>
+                        
+                        <x-admin::input name="condition_field" label="{{ __('admin/packages.fields.condition_field') }}"
+                            placeholder="E.g. os" helper="{{ __('admin/packages.fields.condition_field_helper') }}" value="{{ old('condition_field') }}" />
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <x-admin::select name="condition_operator" label="{{ __('admin/packages.fields.condition_operator') }}" helper="{{ __('admin/packages.fields.condition_operator_helper') }}">
+                            <option value="=" @selected(old('condition_operator') == '=')>Equals (=)</option>
+                            <option value="!=" @selected(old('condition_operator') == '!=')>Not Equals (!=)</option>
+                            <option value="in" @selected(old('condition_operator') == 'in')>In List (in)</option>
+                            <option value="not_in" @selected(old('condition_operator') == 'not_in')>Not In List (not_in)</option>
+                            <option value="truthy" @selected(old('condition_operator') == 'truthy')>Truthy (Has Value)</option>
+                        </x-admin::select>
+
+                        <x-admin::input name="condition_value" label="{{ __('admin/packages.fields.condition_value') }}"
+                            placeholder="E.g. windows (comma separate for in/not_in)" helper="{{ __('admin/packages.fields.condition_value_helper') }}" value="{{ old('condition_value') }}" />
+                    </div>
+                </div>
             </div>
 
             <div class="w-full lg:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">

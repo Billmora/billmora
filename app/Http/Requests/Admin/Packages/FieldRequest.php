@@ -33,6 +33,10 @@ class FieldRequest extends FormRequest
             'helper' => 'nullable|string|max:255',
             'default' => 'nullable|string|max:255',
             'options' => 'nullable|string',
+            'condition_target' => 'nullable|string|in:configuration,fields',
+            'condition_field' => 'nullable|string|required_with:condition_target',
+            'condition_operator' => 'nullable|string|in:=,!=,in,not_in,truthy|required_with:condition_target',
+            'condition_value' => 'nullable|string',
         ];
     }
     
@@ -53,6 +57,10 @@ class FieldRequest extends FormRequest
             'helper' => __('admin/packages.fields.helper'),
             'default' => __('admin/packages.fields.default'),
             'options' => __('admin/packages.fields.options'),
+            'condition_target' => __('admin/packages.fields.condition_target'),
+            'condition_field' => __('admin/packages.fields.condition_field'),
+            'condition_operator' => __('admin/packages.fields.condition_operator'),
+            'condition_value' => __('admin/packages.fields.condition_value'),
         ];
     }
 }
