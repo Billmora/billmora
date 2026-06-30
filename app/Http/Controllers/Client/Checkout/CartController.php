@@ -282,6 +282,21 @@ class CartController extends Controller
             $fields = $fieldsValidated['fields'] ?? [];
         }
 
+        // Run optional plugin pre-cart validation hook
+        if ($packagePrice->package->plugin) {
+            $instance = $pluginManager->bootInstance($packagePrice->package->plugin);
+            if ($instance && method_exists($instance, 'validateBeforeCart')) {
+                try {
+                    $error = $instance->validateBeforeCart($configuration, $fields);
+                    if ($error !== null) {
+                        return redirect()->back()->with('error', $error);
+                    }
+                } catch (\Exception $e) {
+                    return redirect()->back()->with('error', __('client/checkout.validation_unavailable'));
+                }
+            }
+        }
+
         $this->cartService->addService(
             $packagePrice->package,
             $packagePrice,

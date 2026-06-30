@@ -5,6 +5,7 @@ namespace App\Livewire\Client\Store;
 use App\Models\Tld;
 use App\Models\TldPrice;
 use App\Services\Checkout\CartService;
+use App\Services\RegistrarService;
 use App\Facades\Currency;
 use Billmora;
 use Illuminate\Support\Facades\Session;
@@ -26,10 +27,12 @@ class DomainConfigure extends Component
     public array $nameservers = [];
 
     protected CartService $cartService;
+    protected RegistrarService $registrarService;
 
-    public function boot(CartService $cartService)
+    public function boot(CartService $cartService, RegistrarService $registrarService)
     {
         $this->cartService = $cartService;
+        $this->registrarService = $registrarService;
         $this->currencyCode = Session::get('currency', 'USD');
     }
 
@@ -94,6 +97,23 @@ class DomainConfigure extends Component
         $filteredNameservers = array_values(array_filter($this->nameservers, function($ns) {
             return !empty(trim($ns));
         }));
+
+        // Run optional registrar plugin pre-cart validation hook
+        try {
+            $error = $this->registrarService->validateBeforeCart(
+                $this->tld,
+                $this->domainName,
+                $this->type,
+                $this->eppCode
+            );
+            if ($error !== null) {
+                session()->flash('error', $error);
+                return;
+            }
+        } catch (\Exception $e) {
+            session()->flash('error', __('client/checkout.validation_unavailable'));
+            return;
+        }
 
         $this->cartService->addDomain(
             $this->tld,

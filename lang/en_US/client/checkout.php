@@ -52,4 +52,6 @@ return [
         'missing_data' => 'No checkout data found. Please select a package first.',
         'currency_mismatch' => 'The selected configuration is not available for the current currency. Please select again.',
     ],
+
+    'validation_unavailable' => 'Validation service is currently unavailable. Please try again.',
 ];

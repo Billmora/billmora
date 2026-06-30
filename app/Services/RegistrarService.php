@@ -78,4 +78,24 @@ class RegistrarService
 
         return [$plugin, $instanceConfig];
     }
+
+    /**
+     * Run the optional pre-cart validation hook on the registrar plugin for the given TLD.
+     *
+     * @param  \App\Models\Tld  $tld
+     * @param  string  $domain
+     * @param  string  $type  'register' or 'transfer'
+     * @param  string|null  $eppCode
+     * @return string|null
+     */
+    public function validateBeforeCart(Tld $tld, string $domain, string $type, ?string $eppCode): ?string
+    {
+        [$plugin] = $this->bootPluginForTld($tld);
+
+        if (method_exists($plugin, 'validateBeforeCart')) {
+            return $plugin->validateBeforeCart($domain, $type, $eppCode);
+        }
+
+        return null;
+    }
 }
