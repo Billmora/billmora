@@ -248,6 +248,17 @@ class OrderCreate extends Component
             : [];
     }
 
+    /**
+     * Get package fields for a specific package item.
+     */
+    public function getPackageFieldsFor(string $index): array
+    {
+        $package = $this->getSelectedPackageFor($index);
+        if (!$package) return [];
+
+        return $package->fields()->orderBy('sort_order', 'asc')->get()->toArray();
+    }
+
     // ─── Domain Item Helpers ───────────────────────────────
 
     /**

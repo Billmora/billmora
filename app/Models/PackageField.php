@@ -18,6 +18,7 @@ class PackageField extends Model
         'visible_on_invoice',
         'options',
         'sort_order',
+        'condition',
     ];
 
     /**
@@ -32,6 +33,7 @@ class PackageField extends Model
             'visible_on_order' => 'boolean',
             'visible_on_invoice' => 'boolean',
             'options' => 'array',
+            'condition' => 'array',
         ];
     }
 

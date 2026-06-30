@@ -128,6 +128,24 @@
                 </div>
             @endif
         @endif
+        @if (!empty($this->packageFields) || !empty($this->checkoutSchema))
+        <div class="grid gap-4" x-data="{
+            configuration: @js(old('configuration', [])),
+            fields: @js(old('fields', [])),
+            checkCondition(cond) {
+                if (!cond) return true;
+                let targetData = (cond.target === 'configuration') ? this.configuration : this.fields;
+                let val = targetData[cond.field] ?? null;
+                switch(cond.operator) {
+                    case '=': return val == cond.value;
+                    case '!=': return val != cond.value;
+                    case 'in': return Array.isArray(cond.value) && cond.value.includes(val);
+                    case 'not_in': return Array.isArray(cond.value) && !cond.value.includes(val);
+                    case 'truthy': return !!val;
+                    default: return true;
+                }
+            }
+        }">
         @if (!empty($this->packageFields))
             <div class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
                 <span class="text-xl text-slate-600 font-semibold">
@@ -135,7 +153,12 @@
                 </span>
                 <div class="mt-4 grid gap-4">
                     @foreach ($this->packageFields as $field)
-                        <div wire:key="field-{{ $field['id'] }}">
+                        <div wire:key="field-{{ $field['id'] }}"
+                            @if(!empty($field['condition']))
+                                x-show="checkCondition(@js($field['condition']))"
+                            @endif
+                        >
+                            @php $modelAttr = "fields.{$field['name']}"; @endphp
                             @if (in_array($field['type'], ['text', 'email', 'url', 'number', 'password']))
                                 <x-client::input 
                                     name="fields[{{ $field['name'] }}]" 
@@ -144,7 +167,8 @@
                                     type="{{ $field['type'] }}" 
                                     placeholder="{{ $field['placeholder'] ?? '' }}" 
                                     :required="(bool) $field['required']" 
-                                    :value="old('fields.' . $field['name'], $field['default'] ?? '')" 
+                                    x-model="{{ $modelAttr }}"
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                 />
                             @elseif ($field['type'] === 'textarea')
                                 <x-client::textarea 
@@ -153,13 +177,16 @@
                                     helper="{{ $field['helper'] ?? '' }}" 
                                     placeholder="{{ $field['placeholder'] ?? '' }}" 
                                     :required="(bool) $field['required']"
-                                    >{{ old('fields.' . $field['name'], $field['default'] ?? '') }}</x-client::textarea>
+                                    x-model="{{ $modelAttr }}"
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                    ></x-client::textarea>
                             @elseif ($field['type'] === 'toggle')
                                 <x-client::toggle 
                                     name="fields[{{ $field['name'] }}]" 
                                     label="{{ $field['label'] }}" 
                                     helper="{{ $field['helper'] ?? '' }}" 
-                                    :checked="(bool) old('fields.' . $field['name'], $field['default'] ?? false)" 
+                                    x-model="{{ $modelAttr }}"
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                 />
                             @elseif ($field['type'] === 'select')
                                 <x-client::select 
@@ -167,9 +194,11 @@
                                     label="{{ $field['label'] }}" 
                                     helper="{{ $field['helper'] ?? '' }}" 
                                     :required="(bool) $field['required']"
+                                    x-model="{{ $modelAttr }}"
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                 >
                                     @foreach ($field['options'] ?? [] as $optValue => $optLabel)
-                                        <option value="{{ $optValue }}" @selected(old('fields.' . $field['name'], $field['default'] ?? '') == $optValue)>{{ $optLabel }}</option>
+                                        <option value="{{ $optValue }}">{{ $optLabel }}</option>
                                     @endforeach
                                 </x-client::select>
                             @elseif ($field['type'] === 'radio')
@@ -178,6 +207,8 @@
                                     label="{{ $field['label'] }}" 
                                     helper="{{ $field['helper'] ?? '' }}" 
                                     :required="(bool) $field['required']"
+                                    x-model="{{ $modelAttr }}"
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                 >
                                     @foreach ($field['options'] ?? [] as $optVal => $optLabel)
                                         <x-client::radio.option name="fields[{{ $field['name'] }}]" value="{{ $optVal }}" label="{{ $optLabel }}" :checked="old('fields.' . $field['name'], $field['default'] ?? '') == $optVal" />
@@ -196,7 +227,12 @@
                 </span>
                 <div class="mt-4 grid gap-4">
                     @foreach ($this->checkoutSchema as $key => $field)
-                        <div wire:key="schema-{{ $key }}">
+                        <div wire:key="schema-{{ $key }}"
+                            @if(!empty($field['condition']))
+                                x-show="checkCondition(@js($field['condition']))"
+                            @endif
+                        >
+                            @php $modelAttr = "configuration.{$key}"; @endphp
                             @if (in_array($field['type'], ['text', 'email', 'url', 'number', 'password']))
                                 <x-client::input 
                                     name="configuration[{{$key}}]" 
@@ -205,7 +241,8 @@
                                     type="{{ $field['type'] }}" 
                                     placeholder="{{ $field['placeholder'] ?? '' }}" 
                                     :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')" 
-                                    :value="old('configuration.' . $key, $field['default'] ?? '')" 
+                                    x-model="{{ $modelAttr }}"
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                 />
                             @elseif ($field['type'] === 'textarea')
                                 <x-client::textarea 
@@ -214,13 +251,16 @@
                                     helper="{{ $field['helper'] ?? '' }}" 
                                     placeholder="{{ $field['placeholder'] ?? '' }}" 
                                     :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')"
-                                    >{{ old('configuration.' . $key, $field['default'] ?? '') }}</x-client::textarea>
+                                    x-model="{{ $modelAttr }}"
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                    ></x-client::textarea>
                             @elseif ($field['type'] === 'toggle')
                                 <x-client::toggle 
                                     name="configuration[{{$key}}]" 
                                     label="{{ $field['label'] }}" 
                                     helper="{{ $field['helper'] ?? '' }}" 
-                                    :checked="(bool) old('configuration.' . $key, $field['default'] ?? false)" 
+                                    x-model="{{ $modelAttr }}"
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                 />
                             @elseif ($field['type'] === 'select')
                                 <x-client::select 
@@ -228,9 +268,11 @@
                                     label="{{ $field['label'] }}" 
                                     helper="{{ $field['helper'] ?? '' }}" 
                                     :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')"
+                                    x-model="{{ $modelAttr }}"
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                 >
                                     @foreach ($field['options'] ?? [] as $optValue => $optLabel)
-                                        <option value="{{ $optValue }}" @selected(old('configuration.' . $key, $field['default'] ?? '') == $optValue)>{{ $optLabel }}</option>
+                                        <option value="{{ $optValue }}">{{ $optLabel }}</option>
                                     @endforeach
                                 </x-client::select>
                             @elseif ($field['type'] === 'radio')
@@ -239,6 +281,8 @@
                                     label="{{ $field['label'] }}" 
                                     helper="{{ $field['helper'] ?? '' }}" 
                                     :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')"
+                                    x-model="{{ $modelAttr }}"
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                 >
                                     @foreach ($field['options'] ?? [] as $optVal => $optLabel)
                                         <x-client::radio.option name="configuration[{{$key}}]" value="{{ $optVal }}" label="{{ $optLabel }}" :checked="old('configuration.' . $key, $field['default'] ?? '') == $optVal" />
@@ -257,6 +301,8 @@
                     @endforeach
                 </div>
             </div>
+        @endif
+        </div>
         @endif
     </div>
     <div class="w-full lg:w-1/3 h-fit bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl space-y-4 relative overflow-hidden">

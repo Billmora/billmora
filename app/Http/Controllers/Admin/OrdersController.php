@@ -98,6 +98,7 @@ class OrdersController extends Controller
             'package_items.*.quantity'          => ['nullable', 'integer', 'min:1'],
             'package_items.*.variant_options'   => ['nullable', 'array'],
             'package_items.*.configuration'     => ['nullable', 'array'],
+            'package_items.*.fields'            => ['nullable', 'array'],
 
             // Domain items (0..N)
             'domain_items'              => ['nullable', 'array'],
@@ -143,13 +144,78 @@ class OrdersController extends Controller
                             $configRules = [];
                             $configAttributes = [];
                             foreach ($schema as $key => $field) {
-                                $configRules["configuration.{$key}"] = is_array($field['rules'] ?? null) ? $field['rules'] : explode('|', $field['rules'] ?? 'nullable');
+                                $rules = is_array($field['rules'] ?? null) ? $field['rules'] : explode('|', $field['rules'] ?? 'nullable');
+                                
+                                // Apply condition logic
+                                if (!empty($field['condition'])) {
+                                    $cond = $field['condition'];
+                                    $targetData = ($cond['target'] ?? '') === 'configuration' ? ($rawPkg['configuration'] ?? []) : ($rawPkg['fields'] ?? []);
+                                    $val = $targetData[$cond['field']] ?? null;
+                                    
+                                    $condMet = match ($cond['operator'] ?? '=') {
+                                        '=' => $val == $cond['value'],
+                                        '!=' => $val != $cond['value'],
+                                        'in' => is_array($cond['value']) && in_array($val, $cond['value']),
+                                        'not_in' => is_array($cond['value']) && !in_array($val, $cond['value']),
+                                        'truthy' => !!$val,
+                                        default => true,
+                                    };
+                                    if (!$condMet) {
+                                        $rules = array_diff($rules, ['required']);
+                                        $rules[] = 'nullable';
+                                    }
+                                }
+
+                                $configRules["configuration.{$key}"] = $rules;
                                 $configAttributes["configuration.{$key}"] = $field['label'] ?? $key;
                             }
-                            $configValidated = $request->validate($configRules, [], $configAttributes);
+                            $validator = \Illuminate\Support\Facades\Validator::make($rawPkg, $configRules, [], $configAttributes);
+                            if ($validator->fails()) {
+                                return back()->withInput()->with('error', $validator->errors()->first());
+                            }
+                            $configValidated = $validator->validated();
                             $configuration = $configValidated['configuration'] ?? [];
                         }
                     }
+                }
+
+                $fieldsData = [];
+                $packageFields = $package->fields()->get();
+                if ($packageFields->isNotEmpty()) {
+                    $fieldRules = [];
+                    $fieldAttributes = [];
+                    foreach ($packageFields as $field) {
+                        $isFieldRequired = $field->required;
+                        // Apply condition logic
+                        if ($field->condition) {
+                            $cond = $field->condition;
+                            $targetData = ($cond['target'] ?? '') === 'configuration' ? ($rawPkg['configuration'] ?? []) : ($rawPkg['fields'] ?? []);
+                            $val = $targetData[$cond['field']] ?? null;
+                            
+                            $condMet = match ($cond['operator'] ?? '=') {
+                                '=' => $val == $cond['value'],
+                                '!=' => $val != $cond['value'],
+                                'in' => is_array($cond['value']) && in_array($val, $cond['value']),
+                                'not_in' => is_array($cond['value']) && !in_array($val, $cond['value']),
+                                'truthy' => !!$val,
+                                default => true,
+                            };
+                            if (!$condMet) $isFieldRequired = false;
+                        }
+
+                        if ($isFieldRequired) {
+                            $fieldRules["fields.{$field->name}"] = 'required';
+                        } else {
+                            $fieldRules["fields.{$field->name}"] = 'nullable';
+                        }
+                        $fieldAttributes["fields.{$field->name}"] = $field->label;
+                    }
+                    $validator = \Illuminate\Support\Facades\Validator::make($rawPkg, $fieldRules, [], $fieldAttributes);
+                    if ($validator->fails()) {
+                        return back()->withInput()->with('error', $validator->errors()->first());
+                    }
+                    $fieldsValidated = $validator->validated();
+                    $fieldsData = $fieldsValidated['fields'] ?? [];
                 }
 
                 $packageItems[] = [
@@ -157,6 +223,7 @@ class OrdersController extends Controller
                     'price' => $packagePrice,
                     'variants' => $variantSelections,
                     'config' => $configuration,
+                    'fields' => $fieldsData,
                     'quantity' => $rawPkg['quantity'] ?? 1,
                 ];
             }

@@ -204,6 +204,24 @@
             </div>
         </div>
     @endif
+    @if (!empty($this->packageFields) || !empty($this->checkoutSchema))
+    <div class="space-y-4" x-data="{
+        configuration: @js(old('configuration', $service->configuration ?? [])),
+        fields: @js(old('fields', $service->fields ?? [])),
+        checkCondition(cond) {
+            if (!cond) return true;
+            let targetData = (cond.target === 'configuration') ? this.configuration : this.fields;
+            let val = targetData[cond.field] ?? null;
+            switch(cond.operator) {
+                case '=': return val == cond.value;
+                case '!=': return val != cond.value;
+                case 'in': return Array.isArray(cond.value) && cond.value.includes(val);
+                case 'not_in': return Array.isArray(cond.value) && !cond.value.includes(val);
+                case 'truthy': return !!val;
+                default: return true;
+            }
+        }
+    }">
     @if (!empty($this->packageFields))
         <div class="space-y-2">
             <div>
@@ -212,58 +230,72 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
                 @foreach ($this->packageFields as $field)
-                    <div wire:key="sch-field-{{ $field['id'] }}-{{ $package_id }}">
+                    <div wire:key="sch-field-{{ $field['id'] }}-{{ $package_id }}"
+                        @if(!empty($field['condition']))
+                            x-show="checkCondition(@js($field['condition']))"
+                        @endif
+                    >
+                        @php
+                            $fName = $field['name'];
+                            $modelAttr = "fields.{$fName}";
+                        @endphp
                         @if (in_array($field['type'], ['text', 'email', 'url', 'number', 'password']))
                             <x-admin::input 
-                                name="fields[{{ $field['name'] }}]" 
+                                name="fields[{{ $fName }}]" 
                                 label="{{ $field['label'] }}" 
                                 helper="{{ $field['helper'] ?? '' }}" 
                                 type="{{ $field['type'] }}" 
                                 placeholder="{{ $field['placeholder'] ?? '' }}" 
                                 :required="(bool) $field['required']" 
-                                :value="old('fields.' . $field['name'], $service->fields[$field['name']] ?? $field['default'] ?? '')" 
+                                x-model="{{ $modelAttr }}"
+                                x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                             />
                         @elseif ($field['type'] === 'textarea')
                             <x-admin::textarea 
-                                name="fields[{{ $field['name'] }}]" 
+                                name="fields[{{ $fName }}]" 
                                 label="{{ $field['label'] }}" 
                                 helper="{{ $field['helper'] ?? '' }}" 
                                 placeholder="{{ $field['placeholder'] ?? '' }}" 
                                 :required="(bool) $field['required']"
-                            >
-                                {{ old('fields.' . $field['name'], $service->fields[$field['name']] ?? $field['default'] ?? '') }}
-                            </x-admin::textarea>
+                                x-model="{{ $modelAttr }}"
+                                x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                            ></x-admin::textarea>
                         @elseif ($field['type'] === 'toggle')
                             <x-admin::toggle 
-                                name="fields[{{ $field['name'] }}]" 
+                                name="fields[{{ $fName }}]" 
                                 label="{{ $field['label'] }}" 
                                 helper="{{ $field['helper'] ?? '' }}" 
-                                :checked="(bool) old('fields.' . $field['name'], $service->fields[$field['name']] ?? $field['default'] ?? false)" 
+                                x-model="{{ $modelAttr }}"
+                                x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                             />
                         @elseif ($field['type'] === 'select')
                             <x-admin::select 
-                                name="fields[{{ $field['name'] }}]" 
+                                name="fields[{{ $fName }}]" 
                                 label="{{ $field['label'] }}" 
                                 helper="{{ $field['helper'] ?? '' }}" 
                                 :required="(bool) $field['required']"
+                                x-model="{{ $modelAttr }}"
+                                x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                             >
                                 @foreach ($field['options'] ?? [] as $optValue => $optLabel)
-                                    <option value="{{ $optValue }}" @selected(old('fields.' . $field['name'], $service->fields[$field['name']] ?? $field['default'] ?? '') == $optValue)>{{ $optLabel }}</option>
+                                    <option value="{{ $optValue }}">{{ $optLabel }}</option>
                                 @endforeach
                             </x-admin::select>
                         @elseif ($field['type'] === 'radio')
                             <x-admin::radio.group 
-                                name="fields[{{ $field['name'] }}]" 
+                                name="fields[{{ $fName }}]" 
                                 label="{{ $field['label'] }}" 
                                 helper="{{ $field['helper'] ?? '' }}" 
                                 :required="(bool) $field['required']"
+                                x-model="{{ $modelAttr }}"
+                                x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                             >
                                 @foreach ($field['options'] ?? [] as $optVal => $optLabel)
                                     <x-admin::radio.option 
-                                        name="fields[{{ $field['name'] }}]" 
+                                        name="fields[{{ $fName }}]" 
                                         value="{{ $optVal }}" 
                                         label="{{ $optLabel }}" 
-                                        :checked="old('fields.' . $field['name'], $service->fields[$field['name']] ?? $field['default'] ?? '') == $optVal" 
+                                        :checked="old('fields.' . $fName, $service->fields[$fName] ?? $field['default'] ?? '') == $optVal" 
                                     />
                                 @endforeach
                             </x-admin::radio.group>
@@ -283,7 +315,12 @@
                 @foreach ($this->checkoutSchema as $key => $field)
                     @php $isRequired = str_contains(implode('|', (array)($field['rules'] ?? [])), 'required'); @endphp
                     
-                    <div wire:key="sch-{{ $key }}-{{ $package_id }}">
+                    <div wire:key="sch-{{ $key }}-{{ $package_id }}"
+                        @if(!empty($field['condition']))
+                            x-show="checkCondition(@js($field['condition']))"
+                        @endif
+                    >
+                        @php $modelAttr = "configuration.{$key}"; @endphp
                         @if (in_array($field['type'], ['text', 'email', 'url', 'number', 'password']))
                             <x-admin::input 
                                 name="configuration[{{$key}}]" 
@@ -292,7 +329,8 @@
                                 type="{{ $field['type'] }}" 
                                 placeholder="{{ $field['placeholder'] ?? '' }}" 
                                 :required="$isRequired" 
-                                :value="old('configuration.' . $key, $service->configuration[$key] ?? $field['default'] ?? '')" 
+                                x-model="{{ $modelAttr }}"
+                                x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                             />
                         @elseif ($field['type'] === 'textarea')
                             <x-admin::textarea 
@@ -301,15 +339,16 @@
                                 helper="{{ $field['helper'] ?? '' }}" 
                                 placeholder="{{ $field['placeholder'] ?? '' }}" 
                                 :required="$isRequired"
-                            >
-                                {{ old('configuration.' . $key, $service->configuration[$key] ?? $field['default'] ?? '') }}
-                            </x-admin::textarea>
+                                x-model="{{ $modelAttr }}"
+                                x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                            ></x-admin::textarea>
                         @elseif ($field['type'] === 'toggle')
                             <x-admin::toggle 
                                 name="configuration[{{$key}}]" 
                                 label="{{ $field['label'] }}" 
                                 helper="{{ $field['helper'] ?? '' }}" 
-                                :checked="(bool) old('configuration.' . $key, $service->configuration[$key] ?? $field['default'] ?? false)" 
+                                x-model="{{ $modelAttr }}"
+                                x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                             />
                         @elseif ($field['type'] === 'select')
                             <x-admin::select 
@@ -317,9 +356,11 @@
                                 label="{{ $field['label'] }}" 
                                 helper="{{ $field['helper'] ?? '' }}" 
                                 :required="$isRequired"
+                                x-model="{{ $modelAttr }}"
+                                x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                             >
                                 @foreach ($field['options'] ?? [] as $optValue => $optLabel)
-                                    <option value="{{ $optValue }}" @selected(old('configuration.' . $key, $service->configuration[$key] ?? $field['default'] ?? '') == $optValue)>{{ $optLabel }}</option>
+                                    <option value="{{ $optValue }}">{{ $optLabel }}</option>
                                 @endforeach
                             </x-admin::select>
                         @elseif ($field['type'] === 'radio')
@@ -328,6 +369,8 @@
                                 label="{{ $field['label'] }}" 
                                 helper="{{ $field['helper'] ?? '' }}" 
                                 :required="$isRequired"
+                                x-model="{{ $modelAttr }}"
+                                x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                             >
                                 @foreach ($field['options'] ?? [] as $optVal => $optLabel)
                                     <x-admin::radio.option 
@@ -351,6 +394,8 @@
                 @endforeach
             </div>
         </div>
+    @endif
+    </div>
     @endif
     <div>
         <h4 class="text-lg font-semibold text-slate-600">{{ __('admin/services.admin_notes_label') }}</h4>

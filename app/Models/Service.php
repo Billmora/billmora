@@ -413,4 +413,29 @@ class Service extends Model implements BrowseInterface
                 'url' => route('admin.services.edit', ['service' => $item->id]),
             ]);
     }
+
+    /**
+     * Evaluate a given condition against the service's configuration or fields.
+     *
+     * @param array|null $condition
+     * @return bool
+     */
+    public function meetsCondition(?array $condition): bool
+    {
+        if (empty($condition)) {
+            return true;
+        }
+
+        $targetData = ($condition['target'] ?? '') === 'configuration' ? ($this->configuration ?? []) : ($this->fields ?? []);
+        $val = $targetData[$condition['field'] ?? ''] ?? null;
+
+        switch ($condition['operator'] ?? '') {
+            case '=': return $val == $condition['value'];
+            case '!=': return $val != $condition['value'];
+            case 'in': return is_array($condition['value']) && in_array($val, $condition['value']);
+            case 'not_in': return is_array($condition['value']) && !in_array($val, $condition['value']);
+            case 'truthy': return (bool) $val;
+            default: return true;
+        }
+    }
 }
