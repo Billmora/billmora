@@ -14,13 +14,19 @@ class SendLoginDetected implements ShouldQueue
     use InteractsWithQueue;
 
     public bool $afterCommit = true;
-    
+
+    protected string $ipAddress;
+    protected string $userAgent;
+
     /**
      * Create the event listener.
+     * Capture request context immediately while still in HTTP scope,
+     * before the listener is serialized and dispatched to the queue.
      */
     public function __construct()
     {
-        //
+        $this->ipAddress = Request::ip() ?? '127.0.0.1';
+        $this->userAgent = Request::userAgent() ?? 'Unknown Device';
     }
 
     /**
@@ -33,8 +39,8 @@ class SendLoginDetected implements ShouldQueue
         $placeholder = [
             'client_name' => $user->fullname,
             'company_name' => Billmora::getGeneral('company_name'),
-            'ip_address' => Request::ip(),
-            'user_agent' => Request::userAgent() ?? 'Unknown Device',
+            'ip_address' => $this->ipAddress,
+            'user_agent' => $this->userAgent,
             'login_time' => now()->format('d M Y, H:i:s T'),
         ];
 
