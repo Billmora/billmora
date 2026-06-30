@@ -114,7 +114,7 @@
                     @foreach ($themes->where('type', $type) as $theme)
                         <option 
                             value="{{ $theme->id }}"
-                            {{ (string) (old("active_themes.{$type}") ?? $activeThemes->get($type)) === (string) $theme->id ? 'selected' : '' }}
+                            @selected(old("active_themes.{$type}", $activeThemes->get($type)) == $theme->id)
                         >
                             {{ $theme->name }} ({{ $theme->provider }})
                         </option>
