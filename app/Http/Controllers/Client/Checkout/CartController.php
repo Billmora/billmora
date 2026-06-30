@@ -185,7 +185,28 @@ class CartController extends Controller
                     $configAttributes = [];
 
                     foreach ($schema as $key => $field) {
-                        $configRules["configuration.{$key}"] = explode('|', $field['rules'] ?? 'nullable');
+                        $rules = explode('|', $field['rules'] ?? 'nullable');
+                        
+                        if (!empty($field['condition'])) {
+                            $cond = $field['condition'];
+                            $targetData = ($cond['target'] ?? '') === 'configuration' ? $request->input('configuration', []) : $request->input('fields', []);
+                            $val = $targetData[$cond['field']] ?? null;
+                            
+                            $condMet = match ($cond['operator'] ?? '=') {
+                                '=' => $val == $cond['value'],
+                                '!=' => $val != $cond['value'],
+                                'in' => is_array($cond['value']) && in_array($val, $cond['value']),
+                                'not_in' => is_array($cond['value']) && !in_array($val, $cond['value']),
+                                'truthy' => !!$val,
+                                default => true,
+                            };
+                            if (!$condMet) {
+                                $rules = array_diff($rules, ['required']);
+                                $rules[] = 'nullable';
+                            }
+                        }
+
+                        $configRules["configuration.{$key}"] = $rules;
                         $configAttributes["configuration.{$key}"] = $field['label'] ?? $key;
                     }
 
@@ -215,7 +236,25 @@ class CartController extends Controller
                 }
 
                 $rules = [];
-                if ($field->required) {
+                $isRequired = $field->required;
+
+                if ($field->condition) {
+                    $cond = $field->condition;
+                    $targetData = ($cond['target'] ?? '') === 'configuration' ? $request->input('configuration', []) : $request->input('fields', []);
+                    $val = $targetData[$cond['field']] ?? null;
+                    
+                    $condMet = match ($cond['operator'] ?? '=') {
+                        '=' => $val == $cond['value'],
+                        '!=' => $val != $cond['value'],
+                        'in' => is_array($cond['value']) && in_array($val, $cond['value']),
+                        'not_in' => is_array($cond['value']) && !in_array($val, $cond['value']),
+                        'truthy' => !!$val,
+                        default => true,
+                    };
+                    if (!$condMet) $isRequired = false;
+                }
+
+                if ($isRequired) {
                     $rules[] = 'required';
                 } else {
                     $rules[] = 'nullable';
