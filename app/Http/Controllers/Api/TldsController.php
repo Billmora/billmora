@@ -49,7 +49,7 @@ class TldsController extends Controller
     {
         $validated = $request->validate([
             'tld'           => ['required', 'string', 'max:20', 'unique:tlds,tld'],
-            'status'        => ['required', 'string', 'in:active,inactive'],
+            'status'        => ['required', 'string', 'in:visible,hidden'],
             'plugin_id'     => ['nullable', 'integer', 'exists:plugins,id'],
             'min_years'     => ['required', 'integer', 'min:1'],
             'max_years'     => ['required', 'integer', 'min:1'],
@@ -75,7 +75,7 @@ class TldsController extends Controller
     {
         $validated = $request->validate([
             'tld'           => ['sometimes', 'string', 'max:20', 'unique:tlds,tld,' . $tld->id],
-            'status'        => ['sometimes', 'string', 'in:active,inactive'],
+            'status'        => ['sometimes', 'string', 'in:visible,hidden'],
             'plugin_id'     => ['nullable', 'integer', 'exists:plugins,id'],
             'min_years'     => ['sometimes', 'integer', 'min:1'],
             'max_years'     => ['sometimes', 'integer', 'min:1'],

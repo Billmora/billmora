@@ -51,7 +51,7 @@ class PackagesController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'catalog_id' => ['required', 'exists:catalogs,id'],
-            'status' => ['nullable', 'string', 'in:active,inactive'],
+            'status' => ['nullable', 'string', 'in:visible,hidden'],
         ]);
 
         $package = Package::create($validated);
@@ -74,7 +74,7 @@ class PackagesController extends Controller
             'name' => ['sometimes', 'string', 'max:255'],
             'description' => ['sometimes', 'nullable', 'string'],
             'catalog_id' => ['sometimes', 'exists:catalogs,id'],
-            'status' => ['sometimes', 'string', 'in:active,inactive'],
+            'status' => ['sometimes', 'string', 'in:visible,hidden'],
         ]);
 
         $package->update($validated);
