@@ -48,13 +48,12 @@ class TldsController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'tld'           => ['required', 'string', 'max:20', 'unique:tlds,tld'],
-            'status'        => ['required', 'string', 'in:visible,hidden'],
-            'plugin_id'     => ['nullable', 'integer', 'exists:plugins,id'],
-            'min_years'     => ['required', 'integer', 'min:1'],
-            'max_years'     => ['required', 'integer', 'min:1'],
-            'whois_privacy' => ['boolean'],
-            'sort_order'    => ['nullable', 'integer'],
+            'tld'        => ['required', 'string', 'max:20', 'unique:tlds,tld'],
+            'status'     => ['required', 'string', 'in:visible,hidden'],
+            'plugin_id'  => ['nullable', 'integer', 'exists:plugins,id'],
+            'min_years'  => ['required', 'integer', 'min:1'],
+            'max_years'  => ['required', 'integer', 'min:1'],
+            'sort_order' => ['nullable', 'integer'],
         ]);
 
         $tld = Tld::create($validated);
@@ -74,13 +73,12 @@ class TldsController extends Controller
     public function update(Request $request, Tld $tld)
     {
         $validated = $request->validate([
-            'tld'           => ['sometimes', 'string', 'max:20', 'unique:tlds,tld,' . $tld->id],
-            'status'        => ['sometimes', 'string', 'in:visible,hidden'],
-            'plugin_id'     => ['nullable', 'integer', 'exists:plugins,id'],
-            'min_years'     => ['sometimes', 'integer', 'min:1'],
-            'max_years'     => ['sometimes', 'integer', 'min:1'],
-            'whois_privacy' => ['sometimes', 'boolean'],
-            'sort_order'    => ['nullable', 'integer'],
+            'tld'        => ['sometimes', 'string', 'max:20', 'unique:tlds,tld,' . $tld->id],
+            'status'     => ['sometimes', 'string', 'in:visible,hidden'],
+            'plugin_id'  => ['nullable', 'integer', 'exists:plugins,id'],
+            'min_years'  => ['sometimes', 'integer', 'min:1'],
+            'max_years'  => ['sometimes', 'integer', 'min:1'],
+            'sort_order' => ['nullable', 'integer'],
         ]);
 
         $tld->update($validated);

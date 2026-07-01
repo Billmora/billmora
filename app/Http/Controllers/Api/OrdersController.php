@@ -35,7 +35,7 @@ class OrdersController extends Controller
      */
     public function show(Order $order)
     {
-        $order->load(['user', 'items', 'services', 'registrants', 'invoice']);
+        $order->load(['user', 'items', 'services', 'registrants', 'invoices']);
 
         return new OrderResource($order);
     }
@@ -137,7 +137,7 @@ class OrdersController extends Controller
                 $validated['status']
             );
 
-            return (new OrderResource($result['order']->load(['user', 'items', 'services', 'registrants', 'invoice'])))
+            return (new OrderResource($result['order']->load(['user', 'items', 'services', 'registrants', 'invoices'])))
                 ->response()
                 ->setStatusCode(201);
 
@@ -162,7 +162,7 @@ class OrdersController extends Controller
 
         try {
             $updatedOrder = $orderService->updateOrderStatus($order, $validated['status']);
-            return new OrderResource($updatedOrder->load(['user', 'items', 'services', 'registrants', 'invoice']));
+            return new OrderResource($updatedOrder->load(['user', 'items', 'services', 'registrants', 'invoices']));
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to update order: ' . $e->getMessage()], 500);
         }
