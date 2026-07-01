@@ -35,9 +35,7 @@ class Tld extends Model implements BrowseInterface
      */
     protected function casts(): array
     {
-        return [
-            'whois_privacy' => 'boolean',
-        ];
+        return [];
     }
 
     /**
