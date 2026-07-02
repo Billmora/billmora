@@ -35,7 +35,7 @@
                             :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')"
                         />
                     @elseif(($field['type']) === 'toggle')
-                        <div class="flex items-center pt-6">
+                        <div class="flex items-center">
                             <x-client::toggle
                                 name="{{ $key }}"
                                 label="{{ $field['label'] }}"

@@ -107,7 +107,7 @@
                             @endforeach
                         </x-admin::select>
                     @elseif($field['type'] === 'toggle')
-                        <div class="flex items-center pt-6">
+                        <div class="flex items-center">
                             <x-admin::toggle
                                 name="provisioning_config[{{ $key }}]"
                                 label="{{ $field['label'] }}"
