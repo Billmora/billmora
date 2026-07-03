@@ -24,6 +24,7 @@ class ServiceScaling extends Model
      */
     protected $casts = [
         'variant_selections' => 'array',
+        'configuration' => 'array',
         'old_price' => 'decimal:2',
         'new_price' => 'decimal:2',
         'payable_amount' => 'decimal:2',

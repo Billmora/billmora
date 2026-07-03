@@ -165,8 +165,110 @@
                     <p class="text-slate-500">{{ __('client/services.scaling.no_variants') }}</p>
                 @endif
             </div>
+            
+            @if($this->targetPackage->fields->isNotEmpty())
+                </div>
+                
+                <div class="bg-billmora-1 px-6 py-4 border-y-2 border-billmora-2 flex justify-between items-center">
+                    <div>
+                        <h3 class="flex gap-2 items-center font-semibold text-slate-600">
+                            <x-lucide-list class="w-auto h-5" />
+                            {{ __('client/store.package.configuration') }}
+                        </h3>
+                        <p class="text-slate-500">{{ __('client/store.package.configuration_helper') }}</p>
+                    </div>
+                </div>
+                
+                <div class="grid gap-6 p-6 pb-2" x-data="{
+                    configuration: @entangle('configuration'),
+                    checkCondition(cond) {
+                        if (!cond) return true;
+                        let val = this.configuration[cond.field] ?? null;
+                        switch(cond.operator) {
+                            case '=': return val == cond.value;
+                            case '!=': return val != cond.value;
+                            case 'in': return Array.isArray(cond.value) && cond.value.includes(val);
+                            case 'not_in': return Array.isArray(cond.value) && !cond.value.includes(val);
+                            case 'truthy': return !!val;
+                            default: return true;
+                        }
+                    }
+                }">
+                    @foreach ($this->targetPackage->fields as $field)
+                        <div wire:key="field-{{ $field->id }}"
+                            @if(!empty($field->condition))
+                                x-show="checkCondition(@js($field->condition))"
+                            @endif
+                        >
+                            @php $modelAttr = "configuration.{$field->name}"; @endphp
+                            @if (in_array($field->type, ['text', 'email', 'url', 'number', 'password']))
+                                <x-client::input 
+                                    name="configuration[{{ $field->name }}]" 
+                                    label="{{ $field->label }}" 
+                                    helper="{{ $field->helper ?? '' }}" 
+                                    type="{{ $field->type }}" 
+                                    placeholder="{{ $field->placeholder ?? '' }}" 
+                                    :required="(bool) $field->required" 
+                                    x-model="{{ $modelAttr }}"
+                                    x-bind:disabled="{{ empty($field->condition) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ')' }}" x-bind:class="{{ empty($field->condition) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ') }' }}" 
+                                />
+                            @elseif ($field->type === 'textarea')
+                                <x-client::textarea 
+                                    name="configuration[{{ $field->name }}]" 
+                                    label="{{ $field->label }}" 
+                                    helper="{{ $field->helper ?? '' }}" 
+                                    placeholder="{{ $field->placeholder ?? '' }}" 
+                                    :required="(bool) $field->required"
+                                    x-model="{{ $modelAttr }}"
+                                    x-bind:disabled="{{ empty($field->condition) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ')' }}" x-bind:class="{{ empty($field->condition) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ') }' }}" 
+                                    ></x-client::textarea>
+                            @elseif ($field->type === 'toggle')
+                                <x-client::toggle 
+                                    name="configuration[{{ $field->name }}]" 
+                                    label="{{ $field->label }}" 
+                                    helper="{{ $field->helper ?? '' }}" 
+                                    x-model="{{ $modelAttr }}"
+                                    x-bind:disabled="{{ empty($field->condition) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ')' }}" x-bind:class="{{ empty($field->condition) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ') }' }}" 
+                                />
+                            @elseif ($field->type === 'select')
+                                <x-client::select 
+                                    name="configuration[{{ $field->name }}]" 
+                                    label="{{ $field->label }}" 
+                                    helper="{{ $field->helper ?? '' }}" 
+                                    :required="(bool) $field->required"
+                                    x-model="{{ $modelAttr }}"
+                                    x-bind:disabled="{{ empty($field->condition) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ')' }}" x-bind:class="{{ empty($field->condition) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ') }' }}" 
+                                >
+                                    @foreach ($field->options ?? [] as $optValue => $optLabel)
+                                        <option value="{{ $optValue }}">{{ $optLabel }}</option>
+                                    @endforeach
+                                </x-client::select>
+                            @elseif ($field->type === 'radio')
+                                <x-client::radio.group 
+                                    name="configuration[{{ $field->name }}]" 
+                                    label="{{ $field->label }}" 
+                                    helper="{{ $field->helper ?? '' }}" 
+                                    :required="(bool) $field->required"
+                                    x-model="{{ $modelAttr }}"
+                                    x-bind:disabled="{{ empty($field->condition) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ')' }}" x-bind:class="{{ empty($field->condition) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ') }' }}" 
+                                >
+                                    @foreach ($field->options ?? [] as $optVal => $optLabel)
+                                        <x-client::radio.option name="configuration[{{ $field->name }}]" value="{{ $optVal }}" label="{{ $optLabel }}" :checked="old('configuration.' . $field->name, $field->default ?? '') == $optVal" />
+                                    @endforeach
+                                </x-client::radio.group>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+            
+            @if($this->targetPackage->fields->isNotEmpty())
+                </div>
+                <div class="grid gap-6 px-6 pb-6 pt-0">
+            @endif
+
             @if(!empty($calculation) && !$errors->has('general'))
-                <div class="bg-billmora-1 border-2 border-billmora-2 rounded-xl p-5 mt-4">
+                <div class="bg-billmora-1 border-2 border-billmora-2 rounded-xl p-5 mt-2">
                     <h4 class="font-semibold text-slate-700 mb-3">{{ __('client/store.package.order_summary') }}</h4>
                     <div class="space-y-2 text-sm font-medium text-slate-500">
                         <div class="flex justify-between">

@@ -53,6 +53,7 @@ class ScaleOnInvoicePaid implements ShouldQueue
                     'package_price_id' => $scaling->new_package_price_id,
                     'price' => $scaling->new_price,
                     'variant_selections' => $scaling->variant_selections,
+                    'configuration' => array_merge($service->configuration ?? [], $scaling->configuration ?? []),
                 ]);
 
                 $scaling->update([

@@ -14,6 +14,7 @@ return [
     'package' => [
         'billing_cycle' => 'Billing cycle',
         'configuration' => 'Configuration',
+        'configuration_helper' => 'Configure additional details for this package.',
         'order_summary' => 'Order Summary',
         'subtotal' => 'Subtotal',
         'prorated' => 'Prorated',

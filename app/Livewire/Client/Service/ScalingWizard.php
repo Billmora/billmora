@@ -15,6 +15,7 @@ class ScalingWizard extends Component
     public int $step = 1;
     public $selectedPackageId = null;
     public array $variantSelections = [];
+    public array $configuration = [];
     public array $calculation = [];
 
     protected ScalingService $scalingService;
@@ -54,6 +55,7 @@ class ScalingWizard extends Component
 
         $this->selectedPackageId = old('package_id', $service->package_id);
         $this->variantSelections = old('variants', []);
+        $this->configuration = old('configuration', $service->configuration ?? []);
 
         if (old('package_id') && session()->has('errors')) {
             $this->step = 2;

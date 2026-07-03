@@ -218,11 +218,12 @@ class ScalingService
      * @param  \App\Models\Package  $targetPackage
      * @param  array  $calculation
      * @param  array  $selectedVariants
+     * @param  array  $newConfiguration
      * @return \App\Models\Invoice
      */
-    public function executeOrder(Service $service, Package $targetPackage, array $calculation, array $selectedVariants): Invoice
+    public function executeOrder(Service $service, Package $targetPackage, array $calculation, array $selectedVariants, array $newConfiguration = []): Invoice
     {
-        return DB::transaction(function () use ($service, $targetPackage, $calculation, $selectedVariants) {
+        return DB::transaction(function () use ($service, $targetPackage, $calculation, $selectedVariants, $newConfiguration) {
             
             $scaling = ServiceScaling::create([
                 'service_id' => $service->id,
@@ -231,6 +232,7 @@ class ScalingService
                 'old_package_price_id' => $service->package_price_id,
                 'new_package_price_id' => $calculation['new_package_price_id'],
                 'variant_selections' => $selectedVariants,
+                'configuration' => array_merge($service->configuration ?? [], $newConfiguration),
                 'currency' => $calculation['currency'],
                 'old_price' => $calculation['old_recurring'],
                 'new_price' => $calculation['new_recurring'],

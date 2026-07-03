@@ -54,7 +54,10 @@ class ScalingController extends Controller
             return back()->withInput()->with('error', __('client/services.scaling.invalid_package'));
         }
 
-        $rules = ['variants' => 'nullable|array'];
+        $rules = [
+            'variants' => 'nullable|array',
+            'configuration' => 'nullable|array'
+        ];
         $customAttributes = [];
 
         foreach ($targetPackage->variants as $variant) {
@@ -74,8 +77,37 @@ class ScalingController extends Controller
             $customAttributes[$field] = $variant->name; 
         }
 
+        foreach ($targetPackage->fields as $fieldDef) {
+            $field = "configuration.{$fieldDef->name}";
+            $fieldRules = [];
+
+            if ($fieldDef->required) {
+                $fieldRules[] = 'required';
+            } else {
+                $fieldRules[] = 'nullable';
+            }
+
+            if (in_array($fieldDef->type, ['text', 'textarea', 'email', 'url', 'password', 'select', 'radio'])) {
+                $fieldRules[] = 'string';
+                if ($fieldDef->type === 'email') $fieldRules[] = 'email';
+                if ($fieldDef->type === 'url') $fieldRules[] = 'url';
+            } elseif ($fieldDef->type === 'number') {
+                $fieldRules[] = 'numeric';
+            } elseif ($fieldDef->type === 'toggle') {
+                $fieldRules[] = 'boolean';
+            }
+
+            if (in_array($fieldDef->type, ['select', 'radio']) && $fieldDef->options) {
+                $fieldRules[] = Rule::in(array_keys($fieldDef->options));
+            }
+
+            $rules[$field] = $fieldRules;
+            $customAttributes[$field] = $fieldDef->label;
+        }
+
         $validated = $request->validate($rules, [], $customAttributes);
         $cleanVariants = $validated['variants'] ?? [];
+        $cleanConfiguration = $validated['configuration'] ?? [];
 
         $isSamePackage = $targetPackage->id === $service->package_id;
         
@@ -84,7 +116,12 @@ class ScalingController extends Controller
             ksort($currentVariants);
             ksort($cleanVariants);
             
-            if (json_encode($currentVariants) === json_encode($cleanVariants)) {
+            $currentConfig = $service->configuration ?? [];
+            $mergedConfig = array_merge($currentConfig, $cleanConfiguration);
+            ksort($currentConfig);
+            ksort($mergedConfig);
+            
+            if (json_encode($currentVariants) === json_encode($cleanVariants) && json_encode($currentConfig) === json_encode($mergedConfig)) {
                 return back()->withInput()->with('error', __('client/services.scaling.no_variant_changes'));
             }
         }
@@ -92,7 +129,7 @@ class ScalingController extends Controller
         try {
             $calculation = $this->scalingService->calculateProrata($service, $targetPackage, $cleanVariants);
             
-            $invoice = $this->scalingService->executeOrder($service, $targetPackage, $calculation, $cleanVariants);
+            $invoice = $this->scalingService->executeOrder($service, $targetPackage, $calculation, $cleanVariants, $cleanConfiguration);
 
             $msg = $calculation['is_downgrade']
                 ? __('client/services.scaling.downgrade_success')
