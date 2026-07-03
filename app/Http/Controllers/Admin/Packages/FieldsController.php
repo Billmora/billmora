@@ -184,4 +184,24 @@ class FieldsController extends Controller
             ->route('admin.packages.fields', ['package' => $package->id])
             ->with('success', __('common.delete_success', ['attribute' => $field->label]));
     }
+
+    /**
+     * Build the condition array from validated input.
+     *
+     * @param  array  $validated
+     * @return array|null
+     */
+    private function buildCondition(array $validated): ?array
+    {
+        if (empty($validated['condition_target']) || empty($validated['condition_field']) || empty($validated['condition_operator'])) {
+            return null;
+        }
+
+        return [
+            'target' => $validated['condition_target'],
+            'field' => $validated['condition_field'],
+            'operator' => $validated['condition_operator'],
+            'value' => $validated['condition_value'] ?? null,
+        ];
+    }
 }
