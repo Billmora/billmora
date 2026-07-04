@@ -41,7 +41,7 @@ class ProvisioningController extends Controller
         try {
             [$plugin, $instanceConfig] = $provisioningService->bootPluginFor($service);
 
-            $plugin->create($service, $instanceConfig);
+            $plugin->create($service);
 
             $service->activate();
 
@@ -75,7 +75,7 @@ class ProvisioningController extends Controller
         try {
             [$plugin, $instanceConfig] = $provisioningService->bootPluginFor($service);
 
-            $plugin->suspend($service, $instanceConfig);
+            $plugin->suspend($service);
 
             $service->suspend();
 
@@ -109,7 +109,7 @@ class ProvisioningController extends Controller
         try {
             [$plugin, $instanceConfig] = $provisioningService->bootPluginFor($service);
 
-            $plugin->unsuspend($service, $instanceConfig);
+            $plugin->unsuspend($service);
 
             $service->unsuspend();
 
@@ -143,7 +143,7 @@ class ProvisioningController extends Controller
         try {
             [$plugin, $instanceConfig] = $provisioningService->bootPluginFor($service);
 
-            $plugin->terminate($service, $instanceConfig);
+            $plugin->terminate($service);
 
             $service->terminate();
 
@@ -177,7 +177,7 @@ class ProvisioningController extends Controller
         try {
             [$plugin, $instanceConfig] = $provisioningService->bootPluginFor($service);
 
-            $plugin->renew($service, $instanceConfig);
+            $plugin->renew($service);
 
             Audit::system(Auth::user()->id, 'service.provisioning.renew', [
                 'service_id' => $service->id,
@@ -211,11 +211,7 @@ class ProvisioningController extends Controller
         try {
             [$plugin, $instanceConfig] = $provisioningService->bootPluginFor($service);
 
-            $oldPackage = $service->getOriginal('package_id') 
-                ? Package::find($service->getOriginal('package_id')) 
-                : $service->package;
-
-            $plugin->scale($service, $instanceConfig, $oldPackage);
+            $plugin->scale($service, $service->package->provisioning_config ?? []);
 
             Audit::system(Auth::user()->id, 'service.provisioning.scale', [
                 'service_id' => $service->id,

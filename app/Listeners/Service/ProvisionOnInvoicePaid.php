@@ -56,7 +56,7 @@ class ProvisionOnInvoicePaid implements ShouldQueue
             try {
                 [$plugin, $instanceConfig] = $this->provisioningService->bootPluginFor($service);
 
-                $plugin->create($service, $instanceConfig);
+                $plugin->create($service);
 
                 $service->activate();
 

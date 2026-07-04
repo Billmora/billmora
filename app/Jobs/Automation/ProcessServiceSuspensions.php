@@ -52,7 +52,7 @@ class ProcessServiceSuspensions implements ShouldQueue
 
                         if ($service->provisioning) {
                             [$plugin, $instanceConfig] = $provisioningService->bootPluginFor($service);
-                            $plugin->suspend($service, $instanceConfig);
+                            $plugin->suspend($service);
                         }
 
                         $service->suspend(); 

@@ -70,7 +70,7 @@ class ProcessCancellations implements ShouldQueue
                             DB::transaction(function () use ($cancellation, $service, $provisioningService) {
                                 if ($service->provisioning) {
                                     [$plugin, $instanceConfig] = $provisioningService->bootPluginFor($service);
-                                    $plugin->terminate($service, $instanceConfig);
+                                    $plugin->terminate($service);
                                 }
 
                                 $service->invoices()->unpaid()->update([
