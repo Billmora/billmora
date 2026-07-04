@@ -49,8 +49,11 @@ class CatalogsController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'slug' => ['nullable', 'string', 'max:255', 'unique:catalogs,slug'],
             'description' => ['nullable', 'string'],
+            'icon' => ['nullable', 'string', 'max:255'],
             'status' => ['nullable', 'string', 'in:visible,hidden'],
+            'sort_order' => ['nullable', 'integer'],
         ]);
 
         $catalog = Catalog::create($validated);
@@ -71,8 +74,11 @@ class CatalogsController extends Controller
     {
         $validated = $request->validate([
             'name' => ['sometimes', 'string', 'max:255'],
+            'slug' => ['sometimes', 'nullable', 'string', 'max:255', 'unique:catalogs,slug,' . $catalog->id],
             'description' => ['sometimes', 'nullable', 'string'],
+            'icon' => ['sometimes', 'nullable', 'string', 'max:255'],
             'status' => ['sometimes', 'string', 'in:visible,hidden'],
+            'sort_order' => ['sometimes', 'nullable', 'integer'],
         ]);
 
         $catalog->update($validated);

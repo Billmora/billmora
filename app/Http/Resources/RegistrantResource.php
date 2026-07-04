@@ -25,6 +25,7 @@ class RegistrantResource extends JsonResource
             'currency'          => $this->currency,
             'auto_renew'        => $this->auto_renew,
             'nameservers'       => $this->nameservers,
+            'configuration'     => $this->configuration,
             'registered_at'     => $this->registered_at,
             'expires_at'        => $this->expires_at,
             'suspended_at'      => $this->suspended_at,
