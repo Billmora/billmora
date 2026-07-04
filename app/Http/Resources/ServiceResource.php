@@ -31,8 +31,12 @@ class ServiceResource extends JsonResource
             'suspended_at' => $this->suspended_at,
             'terminated_at' => $this->terminated_at,
             'cancelled_at' => $this->cancelled_at,
+            'plugin_id' => $this->plugin_id,
+            'variant_selections' => $this->variant_selections,
+            'configuration' => $this->configuration,
             'user' => new UserResource($this->whenLoaded('user')),
             'package' => new PackageResource($this->whenLoaded('package')),
+            'scalings' => ServiceScalingResource::collection($this->whenLoaded('scalings')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

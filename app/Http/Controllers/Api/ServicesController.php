@@ -17,7 +17,7 @@ class ServicesController extends Controller
      */
     public function index(Request $request)
     {
-        $services = Service::with(['user', 'package'])
+        $services = Service::with(['user', 'package', 'scalings'])
             ->when($request->status, fn($q, $status) => $q->where('status', $status))
             ->when($request->user_id, fn($q, $userId) => $q->where('user_id', $userId))
             ->when($request->search, fn($q, $search) => $q->where('service_number', 'like', "%{$search}%")
@@ -36,7 +36,7 @@ class ServicesController extends Controller
      */
     public function show(Service $service)
     {
-        $service->load(['user', 'package']);
+        $service->load(['user', 'package', 'scalings']);
 
         return new ServiceResource($service);
     }
@@ -54,11 +54,14 @@ class ServicesController extends Controller
             'status' => ['sometimes', 'string', 'in:active,suspended,terminated,cancelled,pending'],
             'name' => ['sometimes', 'string', 'max:255'],
             'next_due_date' => ['sometimes', 'date'],
+            'plugin_id' => ['sometimes', 'nullable', 'exists:plugins,id'],
+            'variant_selections' => ['sometimes', 'nullable', 'array'],
+            'configuration' => ['sometimes', 'nullable', 'array'],
         ]);
 
         $service->update($validated);
 
-        return new ServiceResource($service->fresh()->load(['user', 'package']));
+        return new ServiceResource($service->fresh()->load(['user', 'package', 'scalings']));
     }
 
     /**

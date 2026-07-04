@@ -49,9 +49,20 @@ class PackagesController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'slug' => ['nullable', 'string', 'max:255', 'unique:packages,slug'],
             'description' => ['nullable', 'string'],
             'catalog_id' => ['required', 'exists:catalogs,id'],
             'status' => ['nullable', 'string', 'in:visible,hidden'],
+            'icon' => ['nullable', 'string', 'max:255'],
+            'stock' => ['nullable', 'integer', 'min:-1'],
+            'per_user_limit' => ['nullable', 'integer', 'min:-1'],
+            'allow_cancellation' => ['nullable', 'boolean'],
+            'allow_quantity' => ['nullable', 'string', 'in:single,multiple'],
+            'prorata_day' => ['nullable', 'integer', 'min:0', 'max:31'],
+            'auto_provision' => ['nullable', 'boolean'],
+            'sort_order' => ['nullable', 'integer'],
+            'plugin_id' => ['nullable', 'exists:plugins,id'],
+            'provisioning_config' => ['nullable', 'array'],
         ]);
 
         $package = Package::create($validated);
@@ -72,9 +83,20 @@ class PackagesController extends Controller
     {
         $validated = $request->validate([
             'name' => ['sometimes', 'string', 'max:255'],
+            'slug' => ['sometimes', 'nullable', 'string', 'max:255', 'unique:packages,slug,' . $package->id],
             'description' => ['sometimes', 'nullable', 'string'],
             'catalog_id' => ['sometimes', 'exists:catalogs,id'],
             'status' => ['sometimes', 'string', 'in:visible,hidden'],
+            'icon' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'stock' => ['sometimes', 'nullable', 'integer', 'min:-1'],
+            'per_user_limit' => ['sometimes', 'nullable', 'integer', 'min:-1'],
+            'allow_cancellation' => ['sometimes', 'nullable', 'boolean'],
+            'allow_quantity' => ['sometimes', 'nullable', 'string', 'in:single,multiple'],
+            'prorata_day' => ['sometimes', 'nullable', 'integer', 'min:0', 'max:31'],
+            'auto_provision' => ['sometimes', 'nullable', 'boolean'],
+            'sort_order' => ['sometimes', 'nullable', 'integer'],
+            'plugin_id' => ['sometimes', 'nullable', 'exists:plugins,id'],
+            'provisioning_config' => ['sometimes', 'nullable', 'array'],
         ]);
 
         $package->update($validated);
