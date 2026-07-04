@@ -62,6 +62,8 @@ class ScaleOnInvoicePaid implements ShouldQueue
                 ]);
             });
 
+            $service->refresh();
+
             if ($service->provisioning) {
                 [$plugin, $instanceConfig] = $this->provisioningService->bootPluginFor($service);
                 
