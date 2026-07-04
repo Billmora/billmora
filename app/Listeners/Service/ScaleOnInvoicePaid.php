@@ -66,7 +66,7 @@ class ScaleOnInvoicePaid implements ShouldQueue
                 [$plugin, $instanceConfig] = $this->provisioningService->bootPluginFor($service);
                 
                 if (method_exists($plugin, 'scale')) {
-                    $plugin->scale($service, $instanceConfig);
+                    $plugin->scale($service, $service->package->provisioning_config ?? []);
                 }
             }
 
