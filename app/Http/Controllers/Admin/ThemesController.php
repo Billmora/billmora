@@ -61,19 +61,39 @@ class ThemesController extends Controller
     public function activate(Request $request)
     {
         $validated = $request->validate([
-            'active_themes' => ['required', 'array', 'size:5'],
-            'active_themes.admin' => ['required', Rule::exists('themes', 'id')],
-            'active_themes.client' => ['required', Rule::exists('themes', 'id')],
-            'active_themes.portal' => ['required', Rule::exists('themes', 'id')],
-            'active_themes.email' => ['required', Rule::exists('themes', 'id')],
-            'active_themes.invoice' => ['required', Rule::exists('themes', 'id')],
+            'active_themes' => ['required', 'array'],
+            'active_themes.admin' => ['nullable', Rule::exists('themes', 'id')],
+            'active_themes.client' => ['nullable', Rule::exists('themes', 'id')],
+            'active_themes.portal' => ['nullable', Rule::exists('themes', 'id')],
+            'active_themes.email' => ['nullable', Rule::exists('themes', 'id')],
+            'active_themes.invoice' => ['nullable', Rule::exists('themes', 'id')],
         ]);
 
+        $auditData = [];
+
         DB::transaction(function () use ($validated, &$auditData) {
-            foreach ($validated['active_themes'] as $type => $themeId) {
+            foreach (['admin', 'client', 'portal', 'email', 'invoice'] as $type) {
+                $themeId = $validated['active_themes'][$type] ?? null;
+                $previousTheme = Theme::where('type', $type)->where('is_active', true)->first();
+
+                if (!$themeId) {
+                    if ($previousTheme) {
+                        Theme::where('type', $type)->update(['is_active' => false]);
+                        Cache::forget("theme_config_{$type}");
+                        Cache::forget("active_theme_model_{$type}");
+                        $auditData[$type] = [
+                            'old' => $previousTheme->only('id', 'name', 'provider'),
+                            'new' => null,
+                        ];
+                    }
+                    continue;
+                }
+
                 $theme = Theme::where('id', $themeId)->where('type', $type)->firstOrFail();
 
-                $previousTheme = Theme::where('type', $type)->where('is_active', true)->first();
+                if ($previousTheme && $previousTheme->id == $theme->id) {
+                    continue;
+                }
 
                 Theme::where('type', $type)->update(['is_active' => false]);
                 $theme->update(['is_active' => true]);
