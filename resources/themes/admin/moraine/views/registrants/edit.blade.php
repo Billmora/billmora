@@ -6,8 +6,8 @@
 <div class="flex flex-col-reverse lg:flex-row gap-5">
     @livewire('admin.registrants.registrant-edit', ['registrant' => $registrant])
     <div class="w-full lg:w-2/7 h-fit grid gap-5">
-        <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl h-fit">
-            <h3 class="text-lg font-semibold text-slate-600 border-b-2 border-billmora-2 pb-4 mb-2">
+        <div class="grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl h-fit">
+            <h3 class="text-lg font-semibold text-slate-600 border-b-2 border-billmora-neutral-100 pb-4 mb-2">
                 {{ __('admin/registrants.registrar_actions_label') }}
             </h3>
             @if(in_array($registrant->status, ['pending', 'terminated', 'cancelled']))
@@ -76,7 +76,7 @@
             @csrf
             <div class="flex justify-end gap-2 mt-4">
                 <x-admin::modal.trigger type="button" variant="close"
-                    class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                    class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     {{ __('common.cancel') }}
                 </x-admin::modal.trigger>
                 <button type="submit"

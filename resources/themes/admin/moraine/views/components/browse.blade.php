@@ -33,11 +33,11 @@
                     x-on:keydown.arrow-up.prevent="moveSelection(-1)"
                     x-on:keydown.arrow-down.prevent="moveSelection(1)"
                     x-on:keydown.enter.prevent="selectItem()"
-                    class="w-full bg-billmora-1 p-2 pl-9 text-slate-700 placeholder:text-slate-500 rounded-lg outline-none focus:ring-2 ring-billmora-primary-500" 
+                    class="w-full bg-billmora-neutral-50 p-2 pl-9 text-slate-700 placeholder:text-slate-500 rounded-lg outline-none focus:ring-2 ring-billmora-primary-500" 
                 />
                 <button 
                     type="button"
-                    class="block bg-billmora-1 hover:bg-billmora-primary-500 p-2.5 text-slate-600 hover:text-white rounded-full transition-colors duration-300 cursor-pointer"
+                    class="block bg-billmora-neutral-50 hover:bg-billmora-primary-500 p-2.5 text-slate-600 hover:text-white rounded-full transition-colors duration-300 cursor-pointer"
                     x-on:click="close()"
                 >
                     <x-lucide-x class="w-auto h-5" />
@@ -85,20 +85,20 @@
             <!-- Helper shortcuts -->
             <div class="hidden md:flex gap-6">
                 <div class="flex gap-2 items-center">
-                    <div class="bg-billmora-1 p-1 text-sm text-slate-600 font-semibold rounded-lg">
+                    <div class="bg-billmora-neutral-50 p-1 text-sm text-slate-600 font-semibold rounded-lg">
                         <x-lucide-arrow-up class="w-auto h-5" />
                     </div>
-                    <div class="bg-billmora-1 p-1 text-sm text-slate-600 font-semibold rounded-lg">
+                    <div class="bg-billmora-neutral-50 p-1 text-sm text-slate-600 font-semibold rounded-lg">
                         <x-lucide-arrow-down class="w-auto h-5" />
                     </div>
                     <span class="font-semibold text-slate-600">{{ __('admin/common.browse_navigate') }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
-                    <span class="bg-billmora-1 p-1 text-sm text-slate-600 font-semibold rounded-lg uppercase">enter</span>
+                    <span class="bg-billmora-neutral-50 p-1 text-sm text-slate-600 font-semibold rounded-lg uppercase">enter</span>
                     <span class="font-semibold text-slate-600">{{ __('admin/common.browse_select') }}</span>
                 </div>
                 <div class="flex gap-2 items-center">
-                    <span class="bg-billmora-1 p-1 text-sm text-slate-600 font-semibold rounded-lg uppercase">esc</span>
+                    <span class="bg-billmora-neutral-50 p-1 text-sm text-slate-600 font-semibold rounded-lg uppercase">esc</span>
                     <span class="font-semibold text-slate-600">{{ __('admin/common.browse_close') }}</span>
                 </div>
             </div>

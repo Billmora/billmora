@@ -9,7 +9,7 @@
 </div>
 <div class="grid grid-cols-1 gap-6">
     <div 
-        class="bg-billmora-bg rounded-2xl max-w-80"
+        class="bg-white rounded-2xl max-w-80"
         x-data="{ base: '{{ route('client.store.catalog', $catalog) }}'.replace('{{ $catalog->slug }}', '') }"
         x-on:change="window.location.href = base + $event.target.value"
     >
@@ -36,7 +36,7 @@
                 $isAvailable = $isFree || $hasPrice;
                 $isOrderable = $isAvailable && $package->stock !== 0;
             @endphp
-            <div class="relative flex flex-col h-full bg-billmora-bg border-2 border-billmora-2 rounded-2xl overflow-hidden hover:border-billmora-primary-500 transition-all duration-200">
+            <div class="relative flex flex-col h-full bg-white border-2 border-billmora-neutral-100 rounded-2xl overflow-hidden hover:border-billmora-primary-500 transition-all duration-200">
                 @if ($isAvailable && $package->stock === 0)
                     <span class="absolute top-0 right-0 bg-slate-400 text-white text-xs uppercase tracking-wider font-bold px-3 py-1 rounded-bl-xl rounded-tr-2xl z-10">
                         {{ __('client/store.order_out_of_stock') }}
@@ -84,7 +84,7 @@
 
                         <p class="text-slate-500 text-sm leading-relaxed">{!! $package->description !!}</p>
                     </div>
-                    <div class="mt-auto pt-4 border-t-2 border-billmora-2 grid gap-2">
+                    <div class="mt-auto pt-4 border-t-2 border-billmora-neutral-100 grid gap-2">
                         @if ($isOrderable)
                             <a 
                                 href="{{ route('client.store.catalog.package', ['catalog' => $package->catalog->slug, 'package' => $package->slug]) }}"
@@ -98,7 +98,7 @@
                                 </span>
                             @endif
                         @else
-                            <span class="w-full text-center bg-billmora-2 text-slate-400 text-sm font-semibold px-4 py-2.5 rounded-lg cursor-not-allowed">
+                            <span class="w-full text-center bg-billmora-neutral-100 text-slate-400 text-sm font-semibold px-4 py-2.5 rounded-lg cursor-not-allowed">
                                 {{ $package->stock === 0 ? __('client/store.order_out_of_stock') : __('client/store.order_unavailable') }}
                             </span>
                         @endif

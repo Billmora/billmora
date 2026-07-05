@@ -26,9 +26,9 @@
     </div>
     <div class="overflow-x-auto">
         <div class="min-w-full inline-block align-middle">
-            <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
-                <table class="min-w-full divide-y divide-billmora-2">
-                    <thead class="bg-billmora-2">
+            <div class="border-2 border-billmora-neutral-100 rounded-2xl overflow-hidden">
+                <table class="min-w-full divide-y divide-billmora-neutral-100">
+                    <thead class="bg-billmora-neutral-100">
                         <tr>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">#</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/variants.options.name_label') }}</th>
@@ -37,7 +37,7 @@
                             <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y-2 divide-billmora-2 bg-white">
+                    <tbody class="divide-y-2 divide-billmora-neutral-100 bg-white">
                         @forelse ($options as $option)
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $loop->iteration }}</td>
@@ -76,7 +76,7 @@
                 @csrf
                 @method('DELETE')
                 <div class="flex justify-end gap-2 mt-4">
-                    <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                    <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
                     <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
                 </div>
             </form>

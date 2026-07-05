@@ -21,7 +21,7 @@
                         .replace(/-+/g, '-');
                 }
             }"
-            class="w-full lg:w-2/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl"
+            class="w-full lg:w-2/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl"
         >
             <x-admin::input 
                 type="text"
@@ -67,17 +67,17 @@
                 required
             >{{ old('catalog_description', $catalog->description) }}</x-admin::textarea>
         </div>
-        <div class="w-full lg:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+        <div class="w-full lg:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
             <div x-data="{ removed: false }">
                 @if ($catalog->icon)
                     <div x-show="!removed" class="grid gap-2 mb-4">
                         <label class="text-slate-600 font-semibold text-sm">{{ __('admin/catalogs.icon_label') }}</label>
-                        <div class="grid gap-3 p-3 bg-billmora-bg border-2 border-billmora-2 rounded-xl">
+                        <div class="grid gap-3 p-3 bg-white border-2 border-billmora-neutral-100 rounded-xl">
                             <div class="flex items-center gap-3">
                                 <img
                                     src="{{ Storage::url($catalog->icon) }}"
                                     alt="{{ $catalog->name }}"
-                                    class="w-14 h-14 object-contain rounded-lg bg-white p-1 border border-billmora-2 shrink-0"
+                                    class="w-14 h-14 object-contain rounded-lg bg-white p-1 border border-billmora-neutral-100 shrink-0"
                                 >
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-medium text-slate-700 truncate">{{ basename($catalog->icon) }}</p>
@@ -125,7 +125,7 @@
     </div>
     <div class="flex gap-4 ml-auto">
         <a href="{{ route('admin.catalogs') }}" 
-            class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 
+            class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 
                    px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors 
                    ease-in-out duration-150 cursor-pointer">
             {{ __('common.cancel') }}

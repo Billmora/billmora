@@ -37,7 +37,7 @@
     <x-admin::alert variant="primary" title="{{ __('admin/settings/mail.mailer_alert_label') }}">
         {{ __('admin/settings/mail.mailer_alert_helper') }}
     </x-admin::alert>
-    <div class="grid lg:grid-cols-3 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid lg:grid-cols-3 gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <div x-on:change="selectedDriver = $event.target.value">
             <x-admin::radio.group
                 name="mailer_driver"
@@ -85,7 +85,7 @@
         @endcan
         <!-- SMTP Configuration -->
         <div 
-            class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl"
+            class="grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl"
             x-show="selectedDriver === 'smtp'"
         >
             <div class="grid md:grid-cols-3 gap-4">
@@ -136,7 +136,7 @@
         </div>
         <!-- Mailgun Configuration -->
         <div 
-            class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl"
+            class="grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl"
             x-show="selectedDriver === 'mailgun'"
         >
             <x-admin::input 
@@ -188,7 +188,7 @@
                 <x-admin::modal.trigger 
                     type="button" 
                     variant="close" 
-                    class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
+                    class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
                 >
                     {{ __('common.cancel') }}
                 </x-admin::modal.trigger>

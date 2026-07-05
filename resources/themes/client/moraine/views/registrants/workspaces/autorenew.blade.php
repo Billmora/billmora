@@ -1,7 +1,7 @@
 @extends('client::registrants.show')
 
 @section('workspaces')
-    <div class="bg-billmora-bg border-2 border-billmora-2 rounded-2xl overflow-hidden p-8">
+    <div class="bg-white border-2 border-billmora-neutral-100 rounded-2xl overflow-hidden p-8">
         <h2 class="text-xl font-bold text-slate-700 mb-4">{{ __('client/registrants.auto_renew_label') }}</h2>
         <form action="{{ route('client.registrants.autorenew.update', $registrant->registrant_number) }}" method="POST"
             class="grid gap-6 w-full">

@@ -4,16 +4,16 @@
 @endphp
 
 <nav id="sidebar" class="fixed z-100 xl:sticky top-0 left-0 xl:block shrink-0 p-5 xl:pr-0 w-[300px] xl:w-[320px] h-dvh -translate-x-full xl:translate-x-0 transition-transform duration-300 ease-in-out">
-  <div class="bg-billmora-bg flex flex-col w-full h-full border-2 border-billmora-2 rounded-2xl p-6">
+  <div class="bg-white flex flex-col w-full h-full border-2 border-billmora-neutral-100 rounded-2xl p-6">
     <a href="{{ route('client.dashboard') }}" class="relative flex gap-3 items-center">
       <img src="{{ Billmora::getGeneral('company_logo') }}" alt="billmora logo" class="w-auto h-9 rounded-lg">
       <h3 class="text-xl font-extrabold uppercase text-billmora-primary-500">{{ Billmora::getGeneral('company_name') }}</h3>
     </a>
     
-    <div id="closeSidebar" role="button" class="absolute top-14 right-0 xl:hidden bg-billmora-bg hover:bg-billmora-primary-500 border-2 border-billmora-2 text-slate-600 hover:text-white shadow p-2 rounded-full cursor-pointer transition">
+    <div id="closeSidebar" role="button" class="absolute top-14 right-0 xl:hidden bg-white hover:bg-billmora-primary-500 border-2 border-billmora-neutral-100 text-slate-600 hover:text-white shadow p-2 rounded-full cursor-pointer transition">
       <x-lucide-x class="w-auto h-5" />
     </div>
-    <hr class="border-t-2 border-billmora-2 my-7">
+    <hr class="border-t-2 border-billmora-neutral-100 my-7">
     <div class="space-y-2 overflow-y-auto" id="sidemenu">
       
       @auth
@@ -65,7 +65,7 @@
     </div>
     @guest
       <div class="grid sm:hidden grid-cols-2 gap-4 mt-auto pt-4">
-        <a href="{{ route('client.login') }}" class="flex justify-center gap-1 bg-billmora-2 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white not-hover:font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+        <a href="{{ route('client.login') }}" class="flex justify-center gap-1 bg-billmora-neutral-100 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white not-hover:font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
             {{ __('common.login') }}
         </a>
         <a href="{{ route('client.register') }}" class="flex justify-center gap-1 bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">

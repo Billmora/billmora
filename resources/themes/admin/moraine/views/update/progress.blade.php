@@ -28,7 +28,7 @@
         </div>
 
         {{-- Log Terminal Card --}}
-        <div class="bg-white rounded-2xl p-5 sm:p-6 border-2 border-billmora-2">
+        <div class="bg-white rounded-2xl p-5 sm:p-6 border-2 border-billmora-neutral-100">
             <div class="flex items-start sm:items-center gap-3 mb-4">
                 <div class="p-3 rounded-full bg-blue-100 text-blue-500 shrink-0">
                     <x-lucide-terminal class="w-6 h-6" />

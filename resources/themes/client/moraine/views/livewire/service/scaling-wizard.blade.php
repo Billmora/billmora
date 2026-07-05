@@ -1,8 +1,8 @@
-<form action="{{ route('client.services.scaling.store', ['service' => $service->service_number]) }}" method="POST" class="bg-billmora-bg border-2 border-billmora-2 rounded-2xl overflow-hidden relative">
+<form action="{{ route('client.services.scaling.store', ['service' => $service->service_number]) }}" method="POST" class="bg-white border-2 border-billmora-neutral-100 rounded-2xl overflow-hidden relative">
     @csrf
     <input type="hidden" name="package_id" value="{{ $selectedPackageId }}">
     @if ($step == 1)
-        <div class="bg-billmora-1 px-6 py-4 border-b-2 border-billmora-2">
+        <div class="bg-billmora-neutral-50 px-6 py-4 border-b-2 border-billmora-neutral-100">
             <h3 class="flex gap-2 items-center font-semibold text-slate-600">
                 <x-lucide-arrow-up-down class="w-auto h-5" />
                 {{ __('client/services.scale_label') }}
@@ -29,7 +29,7 @@
                             value="{{ $package->id }}" 
                             class="peer hidden"
                         >
-                        <label for="package_id_{{ $package->id }}" class="flex flex-col h-full gap-4 p-6 border-2 rounded-2xl cursor-pointer transition-all duration-200 ease-in-out bg-billmora-bg border-billmora-2 hover:border-billmora-primary peer-checked:border-billmora-primary-500">
+                        <label for="package_id_{{ $package->id }}" class="flex flex-col h-full gap-4 p-6 border-2 rounded-2xl cursor-pointer transition-all duration-200 ease-in-out bg-white border-billmora-neutral-100 hover:border-billmora-primary peer-checked:border-billmora-primary-500">
                             @if($isCurrent)
                                 <span class="absolute top-0 right-0 bg-billmora-primary-500 text-white text-xs uppercase tracking-wider font-bold px-3 py-1 rounded-bl-xl rounded-tr-lg z-10">
                                     {{ __('client/services.scaling.current_label') }}
@@ -57,7 +57,7 @@
                                 <p class="text-slate-500 text-sm leading-relaxed line-clamp-3">{!! $package->description !!}</p>
                             </div>
                             @if ($package->stock >= 1 && !$isCurrent)
-                                <div class="mt-auto pt-4 border-t-2 border-billmora-2">
+                                <div class="mt-auto pt-4 border-t-2 border-billmora-neutral-100">
                                     <span class="block text-center text-xs text-emerald-600 font-semibold bg-emerald-50 py-1 rounded">
                                         {{ __('client/store.stock_available', ['item' => $package->stock]) }}
                                     </span>
@@ -68,7 +68,7 @@
                 @endforeach
             </div>
             <div class="flex justify-end gap-2 mt-4">
-                <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <a href="{{ route('client.services.show', ['service' => $service->service_number]) }}" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     {{ __('common.cancel') }}
                 </a>
                 <button type="button" wire:click="goToStep2" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-6 py-2 text-white font-medium rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
@@ -77,7 +77,7 @@
             </div>
         </div>
     @elseif ($step == 2)
-        <div class="bg-billmora-1 px-6 py-4 border-b-2 border-billmora-2 flex justify-between items-center">
+        <div class="bg-billmora-neutral-50 px-6 py-4 border-b-2 border-billmora-neutral-100 flex justify-between items-center">
             <div>
                 <h3 class="flex gap-2 items-center font-semibold text-slate-600">
                     <x-lucide-arrow-up-down class="w-auto h-5" />
@@ -169,7 +169,7 @@
             @if($this->targetPackage->fields->isNotEmpty())
                 </div>
                 
-                <div class="bg-billmora-1 px-6 py-4 border-y-2 border-billmora-2 flex justify-between items-center">
+                <div class="bg-billmora-neutral-50 px-6 py-4 border-y-2 border-billmora-neutral-100 flex justify-between items-center">
                     <div>
                         <h3 class="flex gap-2 items-center font-semibold text-slate-600">
                             <x-lucide-list class="w-auto h-5" />
@@ -210,7 +210,7 @@
                                     placeholder="{{ $field->placeholder ?? '' }}" 
                                     :required="(bool) $field->required" 
                                     x-model="{{ $modelAttr }}"
-                                    x-bind:disabled="{{ empty($field->condition) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ')' }}" x-bind:class="{{ empty($field->condition) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ') }' }}" 
+                                    x-bind:disabled="{{ empty($field->condition) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ')' }}" x-bind:class="{{ empty($field->condition) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ') }' }}" 
                                 />
                             @elseif ($field->type === 'textarea')
                                 <x-client::textarea 
@@ -220,7 +220,7 @@
                                     placeholder="{{ $field->placeholder ?? '' }}" 
                                     :required="(bool) $field->required"
                                     x-model="{{ $modelAttr }}"
-                                    x-bind:disabled="{{ empty($field->condition) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ')' }}" x-bind:class="{{ empty($field->condition) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ') }' }}" 
+                                    x-bind:disabled="{{ empty($field->condition) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ')' }}" x-bind:class="{{ empty($field->condition) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ') }' }}" 
                                     ></x-client::textarea>
                             @elseif ($field->type === 'toggle')
                                 <x-client::toggle 
@@ -228,7 +228,7 @@
                                     label="{{ $field->label }}" 
                                     helper="{{ $field->helper ?? '' }}" 
                                     x-model="{{ $modelAttr }}"
-                                    x-bind:disabled="{{ empty($field->condition) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ')' }}" x-bind:class="{{ empty($field->condition) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ') }' }}" 
+                                    x-bind:disabled="{{ empty($field->condition) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ')' }}" x-bind:class="{{ empty($field->condition) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ') }' }}" 
                                 />
                             @elseif ($field->type === 'select')
                                 <x-client::select 
@@ -237,7 +237,7 @@
                                     helper="{{ $field->helper ?? '' }}" 
                                     :required="(bool) $field->required"
                                     x-model="{{ $modelAttr }}"
-                                    x-bind:disabled="{{ empty($field->condition) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ')' }}" x-bind:class="{{ empty($field->condition) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ') }' }}" 
+                                    x-bind:disabled="{{ empty($field->condition) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ')' }}" x-bind:class="{{ empty($field->condition) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ') }' }}" 
                                 >
                                     @foreach ($field->options ?? [] as $optValue => $optLabel)
                                         <option value="{{ $optValue }}">{{ $optLabel }}</option>
@@ -250,7 +250,7 @@
                                     helper="{{ $field->helper ?? '' }}" 
                                     :required="(bool) $field->required"
                                     x-model="{{ $modelAttr }}"
-                                    x-bind:disabled="{{ empty($field->condition) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ')' }}" x-bind:class="{{ empty($field->condition) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ') }' }}" 
+                                    x-bind:disabled="{{ empty($field->condition) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ')' }}" x-bind:class="{{ empty($field->condition) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field->condition)) . ') }' }}" 
                                 >
                                     @foreach ($field->options ?? [] as $optVal => $optLabel)
                                         <x-client::radio.option name="configuration[{{ $field->name }}]" value="{{ $optVal }}" label="{{ $optLabel }}" :checked="old('configuration.' . $field->name, $field->default ?? '') == $optVal" />
@@ -268,7 +268,7 @@
             @endif
 
             @if(!empty($calculation) && !$errors->has('general'))
-                <div class="bg-billmora-1 border-2 border-billmora-2 rounded-xl p-5 mt-2">
+                <div class="bg-billmora-neutral-50 border-2 border-billmora-neutral-100 rounded-xl p-5 mt-2">
                     <h4 class="font-semibold text-slate-700 mb-3">{{ __('client/store.package.order_summary') }}</h4>
                     <div class="space-y-2 text-sm font-medium text-slate-500">
                         <div class="flex justify-between">
@@ -283,7 +283,7 @@
                             <span>{{ __('client/services.scaling.remaining_days_label') }}</span>
                             <span>{{ $calculation['remaining_days'] }} {{ __('billing.units.daily') }}</span>
                         </div>
-                        <hr class="border-t-2 border-billmora-2 my-2">
+                        <hr class="border-t-2 border-billmora-neutral-100 my-2">
                         <div class="flex justify-between items-center text-lg">
                             <span class="font-bold text-slate-700">{{ __('client/store.package.due_today') }}</span>
                             <span class="font-bold text-billmora-primary-500">
@@ -294,7 +294,7 @@
                 </div>
             @endif
             <div class="flex justify-end gap-2 mt-2">
-                <button type="button" wire:click="goToStep1" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                <button type="button" wire:click="goToStep1" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                     {{ __('common.back') }}
                 </button>
                 <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-6 py-2 text-white font-medium rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">

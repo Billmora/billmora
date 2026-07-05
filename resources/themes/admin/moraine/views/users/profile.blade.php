@@ -48,7 +48,7 @@
         @csrf
         @method('PUT')
         <div class="flex flex-col lg:flex-row gap-5">
-            <div class="w-full lg:w-2/3 h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+            <div class="w-full lg:w-2/3 h-fit bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
                 <div class="grid grid-cols-none md:grid-cols-2 gap-6">
                     <div class="flex flex-col gap-4">
                         <x-admin::input type="text" name="first_name" label="{{ __('common.first_name') }}" value="{{ old('first_name', $user->first_name) }}" required />
@@ -76,7 +76,7 @@
                 </div>
             </div>
             <div 
-                class="w-full lg:w-1/3 h-fit flex flex-col gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl"
+                class="w-full lg:w-1/3 h-fit flex flex-col gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl"
                 x-data="{ isClient: {{ (old('role', $user->isClient() ? 'client' : ($user->isRootAdmin() ? 'root' : ($user->roles->first()->name ?? 'client'))) === 'client') ? 'true' : 'false' }} }"
                 x-on:change="
                     const select = $event.target.closest('[name=role]') || $event.target;

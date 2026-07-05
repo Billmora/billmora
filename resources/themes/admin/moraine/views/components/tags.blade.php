@@ -41,7 +41,7 @@
         @class([
             'my-1 rounded-lg border-2 focus-within:ring-2 ring-billmora-primary-500',
             'border-red-400' => $error,
-            'border-billmora-2' => !$error,
+            'border-billmora-neutral-100' => !$error,
         ])
     >
         <input
@@ -53,10 +53,10 @@
         />
 
         <template x-if="tags.length > 0">
-            <div class="flex flex-wrap gap-2 border-t-2 border-billmora-2 px-3 py-3">
+            <div class="flex flex-wrap gap-2 border-t-2 border-billmora-neutral-100 px-3 py-3">
                 <template x-for="(tag, i) in tags" :key="i">
                     <span
-                        class="inline-flex items-center gap-1 bg-billmora-2 px-3 py-1 text-sm text-slate-600 font-semibold rounded-md break-all max-w-full"
+                        class="inline-flex items-center gap-1 bg-billmora-neutral-100 px-3 py-1 text-sm text-slate-600 font-semibold rounded-md break-all max-w-full"
                     >
                         <span x-text="tag"></span>
                         <button

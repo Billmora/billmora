@@ -10,7 +10,7 @@
 >
     @csrf
     @method('PUT')
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <x-admin::input 
             name="instance_name"
             type="text"
@@ -44,7 +44,7 @@
         <x-lucide-cable class="w-auto h-5" />
         {{ __('admin/registrars.test_connection') }}
     </x-admin::modal.trigger>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         @foreach($schema as $key => $field)
             @if(in_array($field['type'], ['text', 'email', 'url', 'number', 'password']))
                 <x-admin::input 
@@ -91,7 +91,7 @@
         @endforeach
     </div>
     <div class="flex gap-4 ml-auto">
-        <a href="{{ route('admin.registrars') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+        <a href="{{ route('admin.registrars') }}" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
             {{ __('common.cancel') }}
         </a>
         <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
@@ -113,7 +113,7 @@
                 <x-admin::modal.trigger 
                     type="button" 
                     variant="close" 
-                    class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
+                    class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
                 >
                     {{ __('common.cancel') }}
                 </x-admin::modal.trigger>

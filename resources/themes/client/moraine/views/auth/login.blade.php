@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @include('client::layouts.meta')
 </head>
-<body class="bg-billmora-bg">
+<body class="bg-white">
     <div class="flex flex-col lg:flex-row-reverse w-full min-h-dvh">
         <form action="{{ route('client.login.store') }}" method="POST" class="w-full lg:w-1/2 h-auto p-6">
             @csrf
@@ -52,19 +52,19 @@
                         </div>
                         <div class="flex gap-3">
                             @if (Billmora::getAuth('oauth_google_enabled'))
-                                <a href="{{ route('client.oauth.redirect', ['provider' => 'google']) }}" class="flex-1 flex items-center justify-center gap-2 px-3 py-2 border-2 border-billmora-2 rounded-lg text-slate-700 hover:bg-slate-50 transition duration-150">
+                                <a href="{{ route('client.oauth.redirect', ['provider' => 'google']) }}" class="flex-1 flex items-center justify-center gap-2 px-3 py-2 border-2 border-billmora-neutral-100 rounded-lg text-slate-700 hover:bg-slate-50 transition duration-150">
                                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="google icon" class="w-5 h-5">
                                     <span class="text-sm font-semibold">Google</span>
                                 </a>
                             @endif
                             @if (Billmora::getAuth('oauth_discord_enabled'))
-                                <a href="{{ route('client.oauth.redirect', ['provider' => 'discord']) }}" class="flex-1 flex items-center justify-center gap-2 px-3 py-2 border-2 border-billmora-2 rounded-lg text-slate-700 hover:bg-slate-50 transition duration-150">
+                                <a href="{{ route('client.oauth.redirect', ['provider' => 'discord']) }}" class="flex-1 flex items-center justify-center gap-2 px-3 py-2 border-2 border-billmora-neutral-100 rounded-lg text-slate-700 hover:bg-slate-50 transition duration-150">
                                     <img src="https://www.svgrepo.com/show/353655/discord-icon.svg" alt="google icon" class="w-5 h-5">
                                     <span class="text-sm font-semibold">Discord</span>
                                 </a>
                             @endif
                             @if (Billmora::getAuth('oauth_github_enabled'))
-                                <a href="{{ route('client.oauth.redirect', ['provider' => 'github']) }}" class="flex-1 flex items-center justify-center gap-2 px-3 py-2 border-2 border-billmora-2 rounded-lg text-slate-700 hover:bg-slate-50 transition duration-150">
+                                <a href="{{ route('client.oauth.redirect', ['provider' => 'github']) }}" class="flex-1 flex items-center justify-center gap-2 px-3 py-2 border-2 border-billmora-neutral-100 rounded-lg text-slate-700 hover:bg-slate-50 transition duration-150">
                                     <img src="https://www.svgrepo.com/show/394174/github.svg" alt="google icon" class="w-5 h-5">
                                     <span class="text-sm font-semibold">GitHub</span>
                                 </a>

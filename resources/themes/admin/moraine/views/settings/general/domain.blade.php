@@ -55,7 +55,7 @@
             ],
         ]" 
         active="{{ request()->url() }}" />
-    <div class="grid md:grid-cols-2 gap-8 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid md:grid-cols-2 gap-8 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <div class="flex flex-col gap-4">
             <x-admin::toggle 
                 name="domain_registration_enabled"

@@ -20,7 +20,7 @@
             ],
         ]" 
         active="{{ request()->url() }}" />
-    <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <x-admin::radio.group
             name="provider_type"
             label="{{ __('admin/settings/captcha.provider_type_label') }}"
@@ -33,7 +33,7 @@
             <x-admin::radio.option name="provider_type" label="hCaptcha" value="hcaptcha" :checked="Billmora::getCaptcha('provider_type') === 'hcaptcha'" />
         </x-admin::radio.group>
     </div>
-    <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <x-admin::input 
             type="text"
             name="provider_site_key"

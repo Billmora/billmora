@@ -54,7 +54,7 @@
             ],
         ]" 
         active="{{ request()->url() }}" />
-    <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <x-admin::input 
             type="number"
             name="misc_admin_pagination"

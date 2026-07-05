@@ -7,7 +7,7 @@
     @csrf
     @method('PUT')
     <div class="flex flex-col gap-5">
-        <div class="w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+        <div class="w-full h-fit bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
             <div class="grid grid-cols-none md:grid-cols-2 gap-5">
                 <x-admin::input 
                     name="pricing_name"
@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-        <div class="w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl" x-show="pricingType !== 'free'">
+        <div class="w-full h-fit bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl" x-show="pricingType !== 'free'">
             <div class="flex flex-col gap-6">
                 @foreach ($currencies as $code => $currency)
                     @php
@@ -63,7 +63,7 @@
                         $oldSetupFee = old('rates.' . $code . '.setup_fee', $rate['setup_fee'] ?? 0);
                         $oldEnabled = (bool) old('rates.' . $code . '.enabled', $rate['enabled'] ?? false);
                     @endphp
-                    <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-4 gap-5 border-2 border-billmora-2 p-4 rounded-xl">
+                    <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-4 gap-5 border-2 border-billmora-neutral-100 p-4 rounded-xl">
                         <x-admin::input
                             name="rates[{{ $code }}][currency]"
                             type="text"
@@ -109,7 +109,7 @@
         </div>
     </div>
     <div class="flex gap-4 ml-auto">
-        <a href="{{ route('admin.packages.pricing', ['package' => $package->id]) }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
+        <a href="{{ route('admin.packages.pricing', ['package' => $package->id]) }}" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
         <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.save') }}</button>
     </div>
 </form>

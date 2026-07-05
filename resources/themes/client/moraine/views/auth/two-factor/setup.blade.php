@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @include('client::layouts.meta')
 </head>
-<body class="bg-billmora-bg">
+<body class="bg-white">
     <div class="flex flex-col lg:flex-row-reverse w-full min-h-dvh">
         <div class="w-full lg:w-1/2 h-auto p-8">
             <div class="max-w-170 h-full flex flex-col justify-between mx-auto">
@@ -21,7 +21,7 @@
                     @if (session('error'))
                         <x-client::alert variant="danger" title="{{ session('error') }}" />
                     @endif
-                    <form action="{{ route('client.two-factor.setup.store') }}" method="POST" class="flex flex-col gap-4 bg-billmora-bg w-full p-8 rounded-xl border-2 border-billmora-2">
+                    <form action="{{ route('client.two-factor.setup.store') }}" method="POST" class="flex flex-col gap-4 bg-white w-full p-8 rounded-xl border-2 border-billmora-neutral-100">
                       @csrf
                       <div class="flex flex-col gap-2">
                         <h2 class="text-xl text-center text-slate-700 font-bold">{{ __('auth.2fa.setup.title') }}</h2>
@@ -38,7 +38,7 @@
                       </div>
                       <x-client::input type="text" name="totp" label="{{ __('auth.2fa.verify.totp') }}" autocomplete="off" required/>
                       <div class="flex gap-2 ml-auto mt-6">
-                        <a href="{{ route('client.account.security') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
+                        <a href="{{ route('client.account.security') }}" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
                         <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 ml-auto px-3 py-2 text-white font-semibold rounded-lg transition duration-150 cursor-pointer">{{ __('common.continue') }}</button>
                       </div>
                     </form>

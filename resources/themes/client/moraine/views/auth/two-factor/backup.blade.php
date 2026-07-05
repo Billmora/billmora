@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @include('client::layouts.meta')
 </head>
-<body class="bg-billmora-bg">
+<body class="bg-white">
     <div class="flex flex-col lg:flex-row-reverse w-full min-h-dvh">
         <div class="w-full lg:w-1/2 h-auto p-8">
             <div class="max-w-170 h-full flex flex-col justify-between mx-auto">
@@ -18,7 +18,7 @@
                     @if (session('error'))
                         <x-client::alert variant="danger" title="{{ session('error') }}" />
                     @endif
-                    <div class="flex flex-col gap-6 bg-billmora-bg w-full my-auto p-8 rounded-xl border-2 border-billmora-2">
+                    <div class="flex flex-col gap-6 bg-white w-full my-auto p-8 rounded-xl border-2 border-billmora-neutral-100">
                         <div class="flex flex-col gap-2">
                             <h2 class="text-xl text-center text-slate-700 font-bold">{{ __('auth.2fa.backup.title') }}</h2>
                             <p class="text-slate-500">{{ __('auth.2fa.backup.description') }}</p>
@@ -35,7 +35,7 @@
                             </form>
                             <form action="{{ route('client.two-factor.backup.store') }}" method="POST">
                                 @csrf
-                                <button type="submit" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.continue') }}</button>
+                                <button type="submit" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.continue') }}</button>
                             </form>
                         </div>
                     </div>

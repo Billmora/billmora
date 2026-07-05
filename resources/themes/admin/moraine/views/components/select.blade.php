@@ -39,8 +39,8 @@
             @class([
                 'w-full text-slate-700 rounded-lg px-3 py-2.5 border-2 outline-none focus:ring-2 ring-billmora-primary-500 appearance-none',
                 'border-red-400' => $resolvedError,
-                'border-billmora-2' => !$resolvedError,
-                'bg-billmora-1 cursor-not-allowed' => $attributes->has('disabled') && $attributes->get('disabled') !== false,
+                'border-billmora-neutral-100' => !$resolvedError,
+                'bg-billmora-neutral-50 cursor-not-allowed' => $attributes->has('disabled') && $attributes->get('disabled') !== false,
                 'cursor-pointer' => !$attributes->has('disabled') || $attributes->get('disabled') === false,
             ])
             {{ $attributes }}

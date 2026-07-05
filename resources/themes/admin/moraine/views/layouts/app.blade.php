@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   @include('admin::layouts.meta')
 </head>
-<body class="bg-billmora-1">
+<body class="bg-billmora-neutral-50">
   <div class="flex flex-row gap-5">
     <!-- Sidebar -->
     @include('admin::layouts.partials.sidebar')

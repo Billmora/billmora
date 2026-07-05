@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     @include('portal::layouts.meta')
 </head>
-<body class="bg-billmora-1">
+<body class="bg-billmora-neutral-50">
 	<div class="flex flex-col">
         {{-- Header --}}
 		@include('portal::layouts.partials.header')

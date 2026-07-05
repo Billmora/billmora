@@ -9,9 +9,9 @@
         </div>
         <div class="overflow-x-auto" data-sortable-wrapper>
             <div class="min-w-full inline-block align-middle">
-                <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
-                    <table class="min-w-full divide-y divide-billmora-2">
-                        <thead class="bg-billmora-2">
+                <div class="border-2 border-billmora-neutral-100 rounded-2xl overflow-hidden">
+                    <table class="min-w-full divide-y divide-billmora-neutral-100">
+                        <thead class="bg-billmora-neutral-100">
                             <tr>
                                 <th scope="col" class="w-10 px-4 py-4"></th>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/packages.fields.label') }}</th>
@@ -21,7 +21,7 @@
                                 <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y-2 divide-billmora-2 bg-white" data-sortable="PackageField">
+                        <tbody class="divide-y-2 divide-billmora-neutral-100 bg-white" data-sortable="PackageField">
                             @forelse ($fields as $field)
                                 <tr data-id="{{ $field['id'] }}">
                                     <td class="px-4 py-4 whitespace-nowrap text-slate-300">

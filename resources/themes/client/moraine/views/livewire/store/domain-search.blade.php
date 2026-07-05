@@ -4,7 +4,7 @@
     $anyEnabled = $registrationEnabled || $transferEnabled;
 @endphp
 <div class="flex flex-col gap-5 max-w-4xl mx-auto mt-10">
-    <div class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <h1 class="text-2xl font-bold text-slate-700 text-center mb-6">{{ __('client/store.domain_search_label') }}</h1>
 
         @if(!$anyEnabled)
@@ -16,7 +16,7 @@
 
         @if($registrationEnabled && $transferEnabled)
             <div class="flex justify-center mb-6">
-                <div class="flex bg-billmora-2 rounded-lg p-1">
+                <div class="flex bg-billmora-neutral-100 rounded-lg p-1">
                     <button wire:click="setType('register')" class="px-6 py-2 rounded-md font-semibold transition-colors outline-none cursor-pointer {{ $type === 'register' ? 'bg-white text-billmora-primary-500 shadow' : 'text-slate-500 hover:text-slate-700' }}">
                         {{ __('client/store.domain_register_tab') }}
                     </button>
@@ -27,20 +27,20 @@
             </div>
         @elseif($registrationEnabled)
             <div class="flex justify-center mb-6">
-                <span class="px-4 py-2 bg-billmora-2 rounded-lg text-billmora-primary-500 font-semibold text-sm">
+                <span class="px-4 py-2 bg-billmora-neutral-100 rounded-lg text-billmora-primary-500 font-semibold text-sm">
                     {{ __('client/store.domain_register_tab') }}
                 </span>
             </div>
         @elseif($transferEnabled)
             <div class="flex justify-center mb-6">
-                <span class="px-4 py-2 bg-billmora-2 rounded-lg text-billmora-primary-500 font-semibold text-sm">
+                <span class="px-4 py-2 bg-billmora-neutral-100 rounded-lg text-billmora-primary-500 font-semibold text-sm">
                     {{ __('client/store.domain_transfer_tab') }}
                 </span>
             </div>
         @endif
 
         <form wire:submit.prevent="search" class="flex flex-col md:flex-row gap-3 relative">
-            <input type="text" wire:model.defer="domain" placeholder="{{ __('client/store.domain_search_placeholder') }}" class="w-full px-6 py-4 bg-white text-slate-700 placeholder:text-slate-500 border-2 border-billmora-2 rounded-xl focus:border-billmora-primary-500 outline-none transition-colors text-lg font-medium">
+            <input type="text" wire:model.defer="domain" placeholder="{{ __('client/store.domain_search_placeholder') }}" class="w-full px-6 py-4 bg-white text-slate-700 placeholder:text-slate-500 border-2 border-billmora-neutral-100 rounded-xl focus:border-billmora-primary-500 outline-none transition-colors text-lg font-medium">
             <button type="submit" class="w-full md:w-auto px-8 py-4 bg-billmora-primary-500 hover:bg-billmora-primary-600 text-white rounded-xl font-bold text-lg transition-colors shadow cursor-pointer">
                 <span wire:loading.remove wire:target="search">{{ __('common.search') }}</span>
                 <span wire:loading wire:target="search">...</span>
@@ -54,7 +54,7 @@
     </div>
 
     @if($searched && $tld)
-        <div class="bg-billmora-bg p-6 md:p-8 border-2 {{ $available ? 'border-billmora-primary-500' : 'border-red-500' }} rounded-2xl mb-5">
+        <div class="bg-white p-6 md:p-8 border-2 {{ $available ? 'border-billmora-primary-500' : 'border-red-500' }} rounded-2xl mb-5">
             <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
                 <div class="w-full md:w-auto overflow-hidden">
                     <h2 class="text-xl font-bold text-slate-700 mb-2 md:mb-1 truncate">{{ $domainName }}</h2>
@@ -103,7 +103,7 @@
         </div>
 
         @if($loadingSuggestions)
-        <div wire:init="loadSuggestions" class="bg-white p-6 border-2 border-billmora-2 rounded-2xl animate-pulse">
+        <div wire:init="loadSuggestions" class="bg-white p-6 border-2 border-billmora-neutral-100 rounded-2xl animate-pulse">
             <div class="h-6 bg-slate-200 rounded w-1/3 md:w-1/4 mb-5 mx-auto md:mx-0"></div>
             <div class="flex flex-col gap-3">
                 @for($i = 0; $i < 3; $i++)
@@ -112,7 +112,7 @@
             </div>
         </div>
         @elseif(count($alternativeNames) > 0 || count($suggestions) > 0)
-        <div class="bg-white p-6 border-2 border-billmora-2 rounded-2xl">
+        <div class="bg-white p-6 border-2 border-billmora-neutral-100 rounded-2xl">
             <h3 class="text-lg font-bold text-slate-700 mb-4">{{ __('client/store.domain_recommendations') }}</h3>
             <div class="flex flex-col gap-3">
                 @foreach(array_merge($alternativeNames, $suggestions) as $suggest)

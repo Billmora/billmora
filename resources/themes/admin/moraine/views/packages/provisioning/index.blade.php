@@ -53,7 +53,7 @@
     >
         @csrf
         @method('PUT')
-        <div class="grid grid-cols-1 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
+        <div class="grid grid-cols-1 bg-white p-6 border-2 border-billmora-neutral-100 rounded-2xl">
             <x-admin::select
                 name="provisioning_id"
                 label="{{ __('admin/packages.provisioning.instance_label') }}"
@@ -70,7 +70,7 @@
             </x-admin::select>
         </div>
         @if($selectedId && !empty($schema))
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white p-6 border-2 border-billmora-neutral-100 rounded-2xl">
                 @foreach($schema as $key => $field)
                     @if(in_array($field['type'], ['text', 'email', 'url', 'number', 'password']))
                         <x-admin::input 
@@ -144,12 +144,12 @@
                 @endforeach
             </div>
         @elseif($selectedId && empty($schema))
-            <div class="bg-white text-slate-500 p-4 border-2 border-billmora-2 rounded-2xl">
+            <div class="bg-white text-slate-500 p-4 border-2 border-billmora-neutral-100 rounded-2xl">
                 {{ __('admin/packages.provisioning.unavailable_schema') }}
             </div>
         @endif
         <div class="flex gap-4 ml-auto">
-            <a href="{{ route('admin.packages') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+            <a href="{{ route('admin.packages') }}" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                 {{ __('common.cancel') }}
             </a>
             <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">

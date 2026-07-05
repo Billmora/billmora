@@ -46,10 +46,10 @@
                     @checked(in_array($value, $resolvedChecked))
                     @class([
                         'w-4 h-4 accent-billmora-primary-500 text-red border-2 outline-none focus:ring-2 ring-billmora-primary-500',
-                        'bg-billmora-1 cursor-not-allowed' => $attributes->has('disabled'),
+                        'bg-billmora-neutral-50 cursor-not-allowed' => $attributes->has('disabled'),
                         'cursor-pointer' => !$attributes->has('disabled'),
                         'border-red-400' => $resolvedError,
-                        'border-billmora-2' => !$resolvedError,
+                        'border-billmora-neutral-100' => !$resolvedError,
                     ])
                 />
     

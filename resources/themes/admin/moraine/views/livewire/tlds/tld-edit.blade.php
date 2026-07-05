@@ -7,7 +7,7 @@
     @csrf
     @method('PUT')
     
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <x-admin::input 
             name="tld"
             type="text"
@@ -83,7 +83,7 @@
         @foreach ($this->currencies as $currency)
             <div
                 wire:key="price-{{ $currency->code }}"
-                class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-4 gap-5 w-full bg-white p-8 border-2 border-billmora-2 rounded-2xl"
+                class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-4 gap-5 w-full bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl"
             >
                 <x-admin::input
                     name="prices[{{ $currency->code }}][currency]"
@@ -149,7 +149,7 @@
     <div class="flex gap-4 ml-auto">
         <a 
             href="{{ route('admin.tlds') }}" 
-            class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
+            class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer"
         >
             {{ __('common.cancel') }}
         </a>

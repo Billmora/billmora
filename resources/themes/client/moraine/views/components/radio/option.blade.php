@@ -24,7 +24,7 @@
             id="{{ $name }}-{{ $value }}"
             value="{{ $value }}"
             x-on:change="hasError = false"
-            class="peer h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-billmora-2 checked:border-billmora-primary-500 transition"
+            class="peer h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-billmora-neutral-100 checked:border-billmora-primary-500 transition"
             @checked($resolvedValue == $value)
         />
         <span

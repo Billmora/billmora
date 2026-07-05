@@ -76,7 +76,7 @@
 
       <div 
         x-on:click="$store.modal.close()"
-        class="absolute top-0 right-0 bg-billmora-1 hover:bg-billmora-primary-500 p-2.5 text-slate-600 hover:text-white rounded-full transition-colors duration-300 cursor-pointer">
+        class="absolute top-0 right-0 bg-billmora-neutral-50 hover:bg-billmora-primary-500 p-2.5 text-slate-600 hover:text-white rounded-full transition-colors duration-300 cursor-pointer">
         <x-lucide-x class="w-auto h-5"/>
       </div>
     </div>

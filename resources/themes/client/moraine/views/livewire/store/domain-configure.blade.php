@@ -1,13 +1,13 @@
 <div class="flex flex-col lg:flex-row gap-5">
 <div class="w-full lg:w-2/3 h-fit grid gap-4">
-    <div class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <h1 class="text-2xl font-bold text-slate-700 mb-2">{{ __('common.configure') }} - {{ $domainName }}</h1>
         <p class="text-slate-500">{{ __('client/store.domain_configure_helper') }}</p>
     </div>
 
     <form wire:submit.prevent="addToCart" id="domainConfigureForm" class="flex flex-col gap-4">
         
-        <div class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
+        <div class="bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
             <h2 class="text-xl text-slate-600 font-semibold mb-4">{{ __('client/store.domain_years_label') }}</h2>
             <x-client::select 
                 name="selectedYears" 
@@ -21,7 +21,7 @@
         </div>
 
         @if($type === 'transfer')
-        <div class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
+        <div class="bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
             <x-client::input 
                 name="eppCode"
                 wire:model.defer="eppCode"
@@ -32,7 +32,7 @@
         </div>
         @endif
 
-        <div class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
+        <div class="bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
             <h2 class="text-xl text-slate-600 font-semibold mb-1">{{ __('client/store.domain_nameservers_label') }}</h2>
             <p class="text-slate-500 text-sm mb-4">{{ __('client/store.domain_nameservers_helper') }}</p>
             
@@ -52,7 +52,7 @@
     </form>
 </div>
 
-<div class="w-full lg:w-1/3 h-fit bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl space-y-4 relative overflow-hidden">
+<div class="w-full lg:w-1/3 h-fit bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl space-y-4 relative overflow-hidden">
     <h2 class="text-xl font-semibold text-slate-600 mb-4">
         {{ __('client/store.package.order_summary') }}
     </h2>
@@ -72,14 +72,14 @@
         </div>
     </div>
     
-    <hr class="border-t-2 border-billmora-2">
+    <hr class="border-t-2 border-billmora-neutral-100">
     
     <div class="flex justify-between font-semibold text-slate-600">
         <span>{{ __('client/store.package.subtotal') }}</span>
         <span>{{ \App\Facades\Currency::format($totalPrice) }}</span>
     </div>
     
-    <hr class="border-t-2 border-billmora-2">
+    <hr class="border-t-2 border-billmora-neutral-100">
     
     <div class="flex flex-col">
         <span class="text-slate-600 font-semibold">

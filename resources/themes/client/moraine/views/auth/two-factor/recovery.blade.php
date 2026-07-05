@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @include('client::layouts.meta')
 </head>
-<body class="bg-billmora-bg">
+<body class="bg-white">
     <div class="flex flex-col lg:flex-row-reverse w-full min-h-dvh">
         <div class="w-full lg:w-1/2 h-auto p-8">
             <div class="max-w-170 h-full flex flex-col justify-between mx-auto">
@@ -18,7 +18,7 @@
                     @if (session('error'))
                         <x-client::alert variant="danger" title="{{ session('error') }}" />
                     @endif
-                    <form action="{{ route('client.two-factor.recovery.store') }}" method="POST" class="flex flex-col gap-4 bg-billmora-bg w-full p-8 rounded-xl border-2 border-billmora-2">
+                    <form action="{{ route('client.two-factor.recovery.store') }}" method="POST" class="flex flex-col gap-4 bg-white w-full p-8 rounded-xl border-2 border-billmora-neutral-100">
                         @csrf
                         <div class="flex flex-col gap-2">
                             <h2 class="text-xl text-center text-slate-700 font-bold">{{ __('auth.2fa.recovery.title') }}</h2>

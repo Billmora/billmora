@@ -24,7 +24,7 @@
                 <div class="absolute top-1/2 -translate-y-1/2 left-2.5 pointer-events-none">
                     <x-lucide-search class="w-5 h-auto text-slate-500 group-focus-within:text-billmora-primary-500" />
                 </div>
-                <input type="text" name="searchNotificationMail" id="searchNotificationMail" placeholder="{{ __('admin/common.search') }}" value="{{ request('searchNotificationMail') }}" class="w-full px-6 py-3 pl-10 bg-white text-slate-700 placeholder:text-slate-500 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary-500">
+                <input type="text" name="searchNotificationMail" id="searchNotificationMail" placeholder="{{ __('admin/common.search') }}" value="{{ request('searchNotificationMail') }}" class="w-full px-6 py-3 pl-10 bg-white text-slate-700 placeholder:text-slate-500 border-2 border-billmora-neutral-100 rounded-xl group-focus-within:outline-2 outline-billmora-primary-500">
                 <div class="absolute top-1/2 -translate-y-1/2 right-1.5">
                     <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">{{ __('common.submit') }}</button>
                 </div>
@@ -32,9 +32,9 @@
         </div>
         <div class="overflow-x-auto">
             <div class="min-w-full inline-block align-middle">
-                <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
+                <div class="border-2 border-billmora-neutral-100 rounded-2xl overflow-hidden">
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-billmora-2">
+                        <thead class="bg-billmora-neutral-100">
                             <tr>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.key') }}</th>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.name') }}</th>
@@ -42,7 +42,7 @@
                                 <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y-2 divide-billmora-2 bg-white">
+                        <tbody class="divide-y-2 divide-billmora-neutral-100 bg-white">
                             @forelse ($notifications as $notification)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $notification->key }}</td>

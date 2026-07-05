@@ -25,7 +25,7 @@
             ],
         ]" 
         active="{{ request()->url() }}" />
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <x-admin::toggle 
             name="notify_client_on_open"
             label="{{ __('admin/settings/ticket.notify_client_on_open_label') }}"

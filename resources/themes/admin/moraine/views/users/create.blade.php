@@ -7,7 +7,7 @@
     <form action="{{ route('admin.users.store') }}" method="POST" class="flex flex-col gap-5">
         @csrf
         <div class="flex flex-col lg:flex-row gap-5">
-            <div class="w-full lg:w-2/3 h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+            <div class="w-full lg:w-2/3 h-fit bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
                 <div class="grid grid-cols-none md:grid-cols-2 gap-6">
                     <div class="flex flex-col gap-4">
                         <x-admin::input type="text" name="first_name" label="{{ __('common.first_name') }}" value="{{ old('first_name') }}" required />
@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </div>
-            <div class="w-full lg:w-1/3 h-fit flex flex-col gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+            <div class="w-full lg:w-1/3 h-fit flex flex-col gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
                 <x-admin::select name="role" label="{{ __('common.role') }}" required>
                     @if (Auth::user()->isRootAdmin())
                         <option value="root" {{ old('role') === 'root' ? 'selected' : '' }}>
@@ -67,7 +67,7 @@
             </div>
         </div>
         <div class="flex gap-4 ml-auto">
-            <a href="{{ route('admin.users') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
+            <a href="{{ route('admin.users') }}" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
             <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.create') }}</button>
         </div>
     </form>

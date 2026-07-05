@@ -1,7 +1,7 @@
 @extends('portal::layouts.app')
 
 @section('body')
-<div class="absolute inset-0 h-full w-full bg-billmora-1 bg-[radial-gradient(#e5e7eb_1.5px,transparent_1.5px)] bg-size-[20px_20px] -z-10"></div>
+<div class="absolute inset-0 h-full w-full bg-billmora-neutral-50 bg-[radial-gradient(#e5e7eb_1.5px,transparent_1.5px)] bg-size-[20px_20px] -z-10"></div>
 <section class="max-w-7xl mx-auto">
     <div class="w-full min-h-dvh grid md:grid-cols-2 justify-around items-center px-4">
         <div class="grid gap-4">
@@ -18,7 +18,7 @@
         </div>
     </div>
 </section>
-<section class="bg-billmora-bg py-16">
+<section class="bg-white py-16">
     <div class="max-w-7xl mx-auto px-4 grid gap-10">
         <div class="grid text-center gap-1">
             <h3 class="text-2xl text-slate-700 font-semibold">{{ $portalThemeConfig['catalog_title'] }}</h3>
@@ -57,11 +57,11 @@
 					@foreach ($catalogs as $catalog)
 						<a
 							href="{{ route('client.store.catalog', ['catalog' => $catalog->slug]) }}"
-							class="flex-none bg-white border-2 border-billmora-2 rounded-2xl p-6 hover:border-billmora-primary-500 transition duration-200 grid gap-3"
+							class="flex-none bg-white border-2 border-billmora-neutral-100 rounded-2xl p-6 hover:border-billmora-primary-500 transition duration-200 grid gap-3"
 							:style="`width: calc(${100 / cols}% - ${16 * (cols - 1) / cols}px)`"
 						>
 							@if ($catalog->icon)
-								<div class="w-24 h-24 rounded-xl bg-billmora-2 flex items-center justify-center shrink-0 overflow-hidden">
+								<div class="w-24 h-24 rounded-xl bg-billmora-neutral-100 flex items-center justify-center shrink-0 overflow-hidden">
 									<img
 										src="{{ Storage::url($catalog->icon) }}"
 										alt="{{ $catalog->name }}"
@@ -87,7 +87,7 @@
 						type="button"
 						x-on:click="prev"
 						:disabled="current === 0"
-						class="p-2 rounded-full border-2 border-billmora-2 text-slate-500 hover:border-billmora-primary-500 hover:text-billmora-primary-500 disabled:opacity-30 disabled:cursor-not-allowed transition"
+						class="p-2 rounded-full border-2 border-billmora-neutral-100 text-slate-500 hover:border-billmora-primary-500 hover:text-billmora-primary-500 disabled:opacity-30 disabled:cursor-not-allowed transition"
 					>
 						<x-lucide-chevron-left class="w-5 h-5" />
 					</button>
@@ -97,7 +97,7 @@
 								type="button"
 								x-on:click="current = i - 1"
 								class="h-2 rounded-full transition-all duration-200"
-								:class="current === i - 1 ? 'bg-billmora-primary-500 w-4' : 'bg-billmora-2 w-2'"
+								:class="current === i - 1 ? 'bg-billmora-primary-500 w-4' : 'bg-billmora-neutral-100 w-2'"
 							></button>
 						</template>
 					</div>
@@ -105,7 +105,7 @@
 						type="button"
 						x-on:click="next"
 						:disabled="current >= maxIndex()"
-						class="p-2 rounded-full border-2 border-billmora-2 text-slate-500 hover:border-billmora-primary-500 hover:text-billmora-primary-500 disabled:opacity-30 disabled:cursor-not-allowed transition"
+						class="p-2 rounded-full border-2 border-billmora-neutral-100 text-slate-500 hover:border-billmora-primary-500 hover:text-billmora-primary-500 disabled:opacity-30 disabled:cursor-not-allowed transition"
 					>
 						<x-lucide-chevron-right class="w-5 h-5" />
 					</button>
@@ -124,14 +124,14 @@
         </div>
         <div class="relative flex justify-center gap-3 flex-wrap">
             @guest
-                <a href="{{ route('client.register') }}" class="bg-billmora-bg px-6 py-3 text-billmora-primary-500 font-semibold rounded-lg transition">
+                <a href="{{ route('client.register') }}" class="bg-white px-6 py-3 text-billmora-primary-500 font-semibold rounded-lg transition">
                     {{ __('common.sign_up') }}
                 </a>
-                <a href="{{ route('client.login') }}" class="bg-billmora-bg/20 px-6 py-3 text-white font-semibold rounded-lg transition">
+                <a href="{{ route('client.login') }}" class="bg-white/20 px-6 py-3 text-white font-semibold rounded-lg transition">
                     {{ __('common.sign_in') }}
                 </a>
             @else
-                <a href="{{ route('client.dashboard') }}" class="bg-billmora-bg px-6 py-3 text-billmora-primary-500 font-semibold rounded-lg transition">
+                <a href="{{ route('client.dashboard') }}" class="bg-white px-6 py-3 text-billmora-primary-500 font-semibold rounded-lg transition">
                     {{ __('portal.client_area') }}
                 </a>
             @endguest

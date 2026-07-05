@@ -1,7 +1,7 @@
 <form action="{{ route('admin.orders.store') }}" method="POST">
     @csrf
     <div class="grid gap-4">
-        <div wire:key="order-metadata" class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+        <div wire:key="order-metadata" class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
             <x-admin::singleselect 
                 wire:ignore
                 name="order_user" 
@@ -69,7 +69,7 @@
 
         <div wire:key="packages-container" class="grid gap-4">
             @foreach ($packageItems as $pi => $pkgItem)
-                <div wire:key="pkg-item-{{ $pi }}" class="w-full bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+                <div wire:key="pkg-item-{{ $pi }}" class="w-full bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
                     <div class="flex justify-end mb-4">
                         <button type="button" wire:click="removePackageItem('{{ $pi }}')" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-2 py-1 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                             {{ __('common.delete') }}
@@ -124,7 +124,7 @@
 
                     @php $variants = $this->getAvailableVariantsFor($pi); @endphp
                     @if ($variants->isNotEmpty())
-                        <div class="mt-4 pt-4 border-t border-billmora-2">
+                        <div class="mt-4 pt-4 border-t border-billmora-neutral-100">
                             <h5 class="text-sm font-semibold text-slate-500 mb-3">{{ __('admin/orders.variant_option_label') }}</h5>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 @foreach ($variants as $variant)
@@ -206,7 +206,7 @@
                             }
                         }">
                             @if (!empty($fields))
-                                <div class="mt-4 pt-4 border-t border-billmora-2">
+                                <div class="mt-4 pt-4 border-t border-billmora-neutral-100">
                                     <h5 class="text-sm font-semibold text-slate-500 mb-3">{{ __('admin/packages.tabs.fields') }}</h5>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         @foreach ($fields as $field)
@@ -233,7 +233,7 @@
                                                         type="{{ $fType }}" 
                                                         :required="$fReq"
                                                         x-model="{{ $modelAttr }}"
-                                                        x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                                        x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                                     />
                                                 @elseif ($fType === 'textarea')
                                                     <x-admin::textarea 
@@ -242,7 +242,7 @@
                                                         helper="{{ $fHelper }}" 
                                                         :required="$fReq"
                                                         x-model="{{ $modelAttr }}"
-                                                        x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                                        x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                                     ></x-admin::textarea>
                                                 @elseif ($fType === 'toggle')
                                                     <x-admin::toggle 
@@ -250,7 +250,7 @@
                                                         label="{{ $fLabel }}" 
                                                         helper="{{ $fHelper }}" 
                                                         x-model="{{ $modelAttr }}"
-                                                        x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                                        x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                                     />
                                                 @elseif (in_array($fType, ['select', 'radio']))
                                                     <x-admin::select 
@@ -259,7 +259,7 @@
                                                         helper="{{ $fHelper }}" 
                                                         :required="$fReq"
                                                         x-model="{{ $modelAttr }}"
-                                                        x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                                        x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                                     >
                                                         @foreach ($field['options'] ?? [] as $optValue => $optLabel)
                                                             <option value="{{ $optValue }}">{{ $optLabel }}</option>
@@ -273,7 +273,7 @@
                             @endif
 
                             @if (!empty($schema))
-                                <div class="mt-4 pt-4 border-t border-billmora-2">
+                                <div class="mt-4 pt-4 border-t border-billmora-neutral-100">
                                     <h5 class="text-sm font-semibold text-slate-500 mb-3">{{ __('admin/orders.additional_configuration_label') }}</h5>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         @foreach ($schema as $key => $field)
@@ -296,7 +296,7 @@
                                                         placeholder="{{ $field['placeholder'] ?? '' }}" 
                                                         :required="$isRequired" 
                                                         x-model="{{ $modelAttr }}"
-                                                        x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                                        x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                                     />
                                                 @elseif ($field['type'] === 'textarea')
                                                     <x-admin::textarea 
@@ -306,7 +306,7 @@
                                                         placeholder="{{ $field['placeholder'] ?? '' }}" 
                                                         :required="$isRequired"
                                                         x-model="{{ $modelAttr }}"
-                                                        x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                                        x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                                     ></x-admin::textarea>
                                                 @elseif ($field['type'] === 'toggle')
                                                     <x-admin::toggle 
@@ -314,7 +314,7 @@
                                                         label="{{ $field['label'] }}" 
                                                         helper="{{ $field['helper'] ?? '' }}" 
                                                         x-model="{{ $modelAttr }}"
-                                                        x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                                        x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                                     />
                                                 @elseif ($field['type'] === 'select')
                                                     <x-admin::select 
@@ -323,7 +323,7 @@
                                                         helper="{{ $field['helper'] ?? '' }}" 
                                                         :required="$isRequired"
                                                         x-model="{{ $modelAttr }}"
-                                                        x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                                        x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                                     >
                                                         @foreach ($field['options'] ?? [] as $optValue => $optLabel)
                                                             <option value="{{ $optValue }}">{{ $optLabel }}</option>
@@ -341,7 +341,7 @@
             @endforeach
 
             @if (empty($packageItems))
-                <div wire:key="empty-packages" class="w-full bg-white/50 p-6 border-2 border-dashed border-billmora-2 rounded-2xl text-center text-slate-400 text-sm">
+                <div wire:key="empty-packages" class="w-full bg-white/50 p-6 border-2 border-dashed border-billmora-neutral-100 rounded-2xl text-center text-slate-400 text-sm">
                     {{ __('admin/orders.no_package_items') }}
                 </div>
             @endif
@@ -365,7 +365,7 @@
 
         <div wire:key="domains-container" class="grid gap-4">
             @foreach ($domainItems as $di => $domItem)
-                <div wire:key="dom-item-{{ $di }}" class="w-full bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+                <div wire:key="dom-item-{{ $di }}" class="w-full bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
                     <div class="flex justify-end mb-4">
                         <button type="button" wire:click="removeDomainItem('{{ $di }}')" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-2 py-1 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                             {{ __('common.delete') }}
@@ -438,13 +438,13 @@
             @endforeach
 
             @if (empty($domainItems))
-                <div wire:key="empty-domains" class="w-full bg-white/50 p-6 border-2 border-dashed border-billmora-2 rounded-2xl text-center text-slate-400 text-sm">
+                <div wire:key="empty-domains" class="w-full bg-white/50 p-6 border-2 border-dashed border-billmora-neutral-100 rounded-2xl text-center text-slate-400 text-sm">
                     {{ __('admin/orders.no_domain_items') }}
                 </div>
             @endif
         </div>
         <div wire:key="form-actions" class="flex gap-4 ml-auto">
-            <a href="{{ route('admin.orders') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+            <a href="{{ route('admin.orders') }}" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                 {{ __('common.cancel') }}
             </a>
             <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">

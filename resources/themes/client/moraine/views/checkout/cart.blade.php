@@ -4,7 +4,7 @@
 
 @section('body')
 @if(empty($cartItems))
-    <div class="bg-billmora-bg p-12 border-2 border-billmora-2 rounded-2xl text-center">
+    <div class="bg-white p-12 border-2 border-billmora-neutral-100 rounded-2xl text-center">
         <h2 class="text-2xl font-bold text-slate-600 mb-4">{{ __('client/checkout.cart.empty') }}</h2>
         <p class="text-slate-500 mb-6">{{ __('client/checkout.cart.empty_message') }}</p>
         <a href="{{ route('client.store') }}" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-6 py-3 text-white font-semibold rounded-lg transition-colors">
@@ -30,7 +30,7 @@
                     </a>
                 </div>
                 @foreach($cartItems as $id => $item)
-                    <div class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
+                    <div class="bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
                         <div class="flex flex-col md:flex-row justify-between gap-6">
                             <div class="flex-1">
                                 <h2 class="text-xl font-semibold text-slate-600">{{ $item['description'] }}</h2>
@@ -47,7 +47,7 @@
                                                 <span class="text-slate-400 font-medium">{{ $variant['name'] }}:</span>
                                                 <div class="flex flex-wrap gap-2">
                                                     @foreach($variant['options'] as $option)
-                                                        <span class="inline-block px-3 py-1 text-sm bg-billmora-2 text-billmora-primary-500 font-medium rounded-full">
+                                                        <span class="inline-block px-3 py-1 text-sm bg-billmora-neutral-100 text-billmora-primary-500 font-medium rounded-full">
                                                             {{ $option['name'] }}
                                                         </span>
                                                     @endforeach
@@ -69,7 +69,7 @@
                                 </div>
                                 <div class="flex flex-col sm:flex-row gap-4">
                                     @if($item['allow_quantity'] === 'multiple')
-                                        <input type="number" form="update-qty-{{ $id }}" name="quantity" value="{{ $item['quantity'] }}" min="1" class="w-20 px-2 py-1 text-center bg-billmora-bg border-2 border-billmora-2 rounded-lg outline-none focus:ring-2 ring-billmora-primary-500 font-semibold text-slate-700" onchange="document.getElementById('update-qty-{{ $id }}').submit();">
+                                        <input type="number" form="update-qty-{{ $id }}" name="quantity" value="{{ $item['quantity'] }}" min="1" class="w-20 px-2 py-1 text-center bg-white border-2 border-billmora-neutral-100 rounded-lg outline-none focus:ring-2 ring-billmora-primary-500 font-semibold text-slate-700" onchange="document.getElementById('update-qty-{{ $id }}').submit();">
                                     @endif  
                                     <button type="submit" form="remove-item-{{ $id }}" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                                         {{ __('common.remove') }}
@@ -79,13 +79,13 @@
                         </div>
                     </div>
                 @endforeach
-                <div class="bg-billmora-primary-500 p-8 border-2 border-billmora-2 rounded-2xl">
+                <div class="bg-billmora-primary-500 p-8 border-2 border-billmora-neutral-100 rounded-2xl">
                     <label for="coupon_code_input" class="block text-white font-semibold mb-1">{{ __('client/checkout.coupon_label') }}</label>
                     <div class="flex gap-4">
                         <input
                             type="text"
                             id="coupon_code_input"
-                            class="w-full bg-billmora-bg px-3 py-2 rounded-lg border-2 border-billmora-2 outline-none text-slate-700 placeholder:text-slate-500 focus:ring-2 ring-billmora-primary-500 {{ !empty($appliedCoupon) ? 'bg-gray-100' : '' }}"
+                            class="w-full bg-white px-3 py-2 rounded-lg border-2 border-billmora-neutral-100 outline-none text-slate-700 placeholder:text-slate-500 focus:ring-2 ring-billmora-primary-500 {{ !empty($appliedCoupon) ? 'bg-gray-100' : '' }}"
                             value="{{ old('coupon_code', $appliedCoupon['code'] ?? '') }}"
                             {{ !empty($appliedCoupon) ? 'readonly' : '' }}
                             oninput="document.getElementById('coupon_code_hidden').value = this.value;"
@@ -115,7 +115,7 @@
                     @enderror
                 </div>
                 @if (Billmora::getGeneral('ordering_notes'))
-                <div class="bg-billmora-bg px-8 py-7 border-2 border-billmora-2 rounded-2xl">
+                <div class="bg-white px-8 py-7 border-2 border-billmora-neutral-100 rounded-2xl">
                         <label for="notes" class="block text-slate-600 font-semibold mb-1">
                             {{ __('client/checkout.notes_label') }}
                         </label>
@@ -123,7 +123,7 @@
                             name="notes"
                             id="notes"
                             rows="6"
-                            class="w-full bg-billmora-bg text-slate-700 rounded-lg px-3 py-2 border-2 border-billmora-2 outline-none focus:ring-2 ring-billmora-primary-500 placeholder:text-slate-500"
+                            class="w-full bg-white text-slate-700 rounded-lg px-3 py-2 border-2 border-billmora-neutral-100 outline-none focus:ring-2 ring-billmora-primary-500 placeholder:text-slate-500"
                         >{{ old('notes') }}</textarea>
                         @error('notes')
                             <span class="text-sm text-red-400 font-semibold">
@@ -134,7 +134,7 @@
                 @endif
             </div>
             <div class="w-full lg:w-1/3 h-fit flex flex-col gap-5 sticky top-5">
-                <div class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl space-y-5">
+                <div class="bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl space-y-5">
                     <h2 class="text-xl font-semibold text-slate-600 mb-4">{{ __('client/checkout.order_summary') }}</h2>
                     <div class="grid font-medium gap-3">
                         <div class="flex justify-between text-slate-500">
@@ -161,7 +161,7 @@
                                 <span class="text-slate-700 font-semibold">{{ Currency::format($totals['tax']) }}</span>
                             </div>
                         @endif
-                        <hr class="border-t-2 border-billmora-2">
+                        <hr class="border-t-2 border-billmora-neutral-100">
                         <div class="flex justify-between items-center">
                             <span class="text-slate-600 font-bold text-lg">{{ __('client/checkout.total_due') }}</span>
                             <span class="text-billmora-primary-500 font-bold text-2xl">

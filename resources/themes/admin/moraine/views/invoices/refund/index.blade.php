@@ -24,7 +24,7 @@
         ]" 
         active="{{ request()->url() }}"
     />
-    <form action="{{ route('admin.invoices.refund.store', ['invoice' => $invoice->id]) }}" method="POST" class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <form action="{{ route('admin.invoices.refund.store', ['invoice' => $invoice->id]) }}" method="POST" class="grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         @csrf
         <div 
             class="grid grid-cols-1 md:grid-cols-2 gap-4"

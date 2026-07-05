@@ -41,7 +41,7 @@
     >
         @csrf
         @method('PUT')
-        <div class="grid grid-cols-1 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
+        <div class="grid grid-cols-1 bg-white p-6 border-2 border-billmora-neutral-100 rounded-2xl">
             <x-admin::multiselect
                 name="scaling_target_packages"
                 label="{{ __('admin/packages.scaling.target_packages_label') }}"
@@ -51,7 +51,7 @@
             />
         </div>
         <div class="flex gap-4 ml-auto">
-            <a href="{{ route('admin.packages') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+            <a href="{{ route('admin.packages') }}" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                 {{ __('common.cancel') }}
             </a>
             <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">

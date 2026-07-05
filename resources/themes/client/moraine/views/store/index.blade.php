@@ -44,9 +44,9 @@
     <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-3 gap-5">
         @foreach ($catalogs as $catalog)
             <a href="{{ route('client.store.catalog', ['catalog' => $catalog->slug]) }}"
-                class="flex-none bg-white border-2 border-billmora-2 rounded-2xl p-6 hover:border-billmora-primary-500 transition duration-200 grid gap-3">
+                class="flex-none bg-white border-2 border-billmora-neutral-100 rounded-2xl p-6 hover:border-billmora-primary-500 transition duration-200 grid gap-3">
                 @if ($catalog->icon)
-                    <div class="w-24 h-24 rounded-xl bg-billmora-2 flex items-center justify-center shrink-0 overflow-hidden">
+                    <div class="w-24 h-24 rounded-xl bg-billmora-neutral-100 flex items-center justify-center shrink-0 overflow-hidden">
                         <img src="{{ Storage::url($catalog->icon) }}" alt="{{ $catalog->name }}"
                             class="w-full h-full object-contain p-3">
                     </div>

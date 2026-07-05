@@ -10,7 +10,7 @@
                 <div class="absolute top-1/2 -translate-y-1/2 left-2.5 pointer-events-none">
                     <x-lucide-search class="w-5 h-auto text-slate-500 group-focus-within:text-billmora-primary-500" />
                 </div>
-                <input type="text" name="search" id="search" placeholder="{{ __('admin/common.search') }}" value="{{ request('search') }}" class="w-full px-6 py-3 pl-10 bg-white text-slate-700 placeholder:text-slate-500 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary-500">
+                <input type="text" name="search" id="search" placeholder="{{ __('admin/common.search') }}" value="{{ request('search') }}" class="w-full px-6 py-3 pl-10 bg-white text-slate-700 placeholder:text-slate-500 border-2 border-billmora-neutral-100 rounded-xl group-focus-within:outline-2 outline-billmora-primary-500">
                 <div class="absolute top-1/2 -translate-y-1/2 right-1.5">
                     <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">{{ __('common.submit') }}</button>
                 </div>
@@ -28,8 +28,8 @@
     <div class="flex flex-col-reverse md:flex-row gap-5">
         <div class="w-full md:w-2/3 h-fit grid grid-cols-1 lg:grid-cols-2 gap-5">
             @foreach ($themes as $theme)
-                <div class="bg-white border-2 border-billmora-2 rounded-2xl flex flex-col overflow-hidden transition-all hover:border-billmora-primary-300">
-                    <div class="flex h-48 w-full bg-white relative border-b-2 border-billmora-2">
+                <div class="bg-white border-2 border-billmora-neutral-100 rounded-2xl flex flex-col overflow-hidden transition-all hover:border-billmora-primary-300">
+                    <div class="flex h-48 w-full bg-white relative border-b-2 border-billmora-neutral-100">
                         @if ($theme->manifest['preview'] ?? false)
                             <img src="{{ $theme->manifest['preview'] ?? '' }}" 
                                 alt="{{ $theme->name }} Preview" 
@@ -53,7 +53,7 @@
                     <div class="p-6 flex-1 flex flex-col">
                         <div class="flex items-center justify-between mb-3">
                             <h3 class="text-xl font-semibold text-slate-800">{{ $theme->name }}</h3>
-                            <span class="text-xs font-semibold text-billmora-primary-600 bg-billmora-2 px-2 py-1 rounded-md uppercase tracking-wide">
+                            <span class="text-xs font-semibold text-billmora-primary-600 bg-billmora-neutral-100 px-2 py-1 rounded-md uppercase tracking-wide">
                                 {{ $theme->type }}
                             </span>
                         </div>
@@ -79,8 +79,8 @@
                                 </code>
                             </p>
                         </div>
-                        <div class="border-t-2 border-dashed border-billmora-2 pt-4 flex items-center justify-between mt-auto">
-                            <a href="{{ route('admin.themes.config', ['theme' => $theme->id]) }}" class="bg-billmora-2 hover:bg-billmora-3 px-3 py-2 text-billmora-primary-600 rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                        <div class="border-t-2 border-dashed border-billmora-neutral-100 pt-4 flex items-center justify-between mt-auto">
+                            <a href="{{ route('admin.themes.config', ['theme' => $theme->id]) }}" class="bg-billmora-neutral-100 hover:bg-billmora-neutral-200 px-3 py-2 text-billmora-primary-600 rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                                 {{ __('common.configure') }}
                             </a>
                             <div class="flex items-center gap-2">
@@ -102,7 +102,7 @@
                 </div>
             @endforeach
         </div>
-        <form action="{{ route('admin.themes.activate') }}" method="POST" class="w-full md:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl md:sticky top-28 right-0 shrink-0">
+        <form action="{{ route('admin.themes.activate') }}" method="POST" class="w-full md:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl md:sticky top-28 right-0 shrink-0">
             @csrf
             <h3 class="text-xl font-semibold text-slate-600">{{ __('admin/themes.active_theme') }}</h3>
             @foreach (['admin', 'client', 'portal', 'email', 'invoice'] as $type)
@@ -141,7 +141,7 @@
                     @csrf
                     @method('DELETE')
                     <div class="flex justify-end gap-2 mt-4">
-                        <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                        <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
                         <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.uninstall') }}</button>
                     </div>
                 </form>
@@ -182,8 +182,8 @@
                             x-on:dragover.prevent="dragging = true"
                             x-on:dragleave="dragging = false"
                             x-on:drop.prevent="handleDrop($event)"
-                            :class="{ 'border-blue-500 bg-blue-50': dragging, 'border-billmora-2 bg-white': !dragging }"
-                            class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer hover:bg-billmora-1 transition-colors relative"
+                            :class="{ 'border-blue-500 bg-blue-50': dragging, 'border-billmora-neutral-100 bg-white': !dragging }"
+                            class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer hover:bg-billmora-neutral-50 transition-colors relative"
                         >
                             <div class="flex flex-col items-center justify-center pt-5 pb-6 px-4 text-center">
                                 <x-lucide-upload class="w-10 h-10 mb-3 text-gray-400" />
@@ -214,7 +214,7 @@
                         </label>
                     </div>
                     <div class="flex justify-end gap-2 mt-4">
-                        <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                        <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
                         <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.update') }}</button>
                     </div>
                 </form>
@@ -252,8 +252,8 @@
                         x-on:dragover.prevent="dragging = true"
                         x-on:dragleave="dragging = false"
                         x-on:drop.prevent="handleDrop($event)"
-                        :class="{ 'border-blue-500 bg-blue-50': dragging, 'border-billmora-2 bg-white': !dragging }"
-                        class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer hover:bg-billmora-1 transition-colors relative"
+                        :class="{ 'border-blue-500 bg-blue-50': dragging, 'border-billmora-neutral-100 bg-white': !dragging }"
+                        class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer hover:bg-billmora-neutral-50 transition-colors relative"
                     >
                         <div class="flex flex-col items-center justify-center pt-5 pb-6 px-4 text-center">
                             <x-lucide-upload class="w-10 h-10 mb-3 text-gray-400" />
@@ -284,7 +284,7 @@
                     </label>
                 </div>
                 <div class="flex justify-end gap-2 mt-4">
-                    <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                    <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
                     <button type="submit" class="bg-billmora-primary-500 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.install') }}</button>
                 </div>
             </form>

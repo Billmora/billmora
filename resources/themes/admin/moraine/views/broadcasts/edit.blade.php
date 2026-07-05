@@ -7,7 +7,7 @@
     @csrf
     @method('PUT')
     <x-admin::alert variant="warning" title="{{ __('admin/broadcasts.alert_label') }}">{{ __('admin/broadcasts.alert_helper') }}</x-admin::alert>
-    <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <x-admin::input type="text" name="broadcast_subject" label="{{ __('admin/broadcasts.subject_label') }}" helper="{{ __('admin/broadcasts.subject_helper') }}" value="{{ old('broadcast_subject', $broadcast->subject) }}" required />
         <x-admin::editor.text name="broadcast_body" label="{{ __('admin/broadcasts.body_label') }}" helper="{{ __('admin/broadcasts.body_helper') }}" required>{{ old('broadcast_body', $broadcast->body) }}</x-admin::editor.text>
         <div x-data="{ recipient_custom: '{{ old('broadcast_recipient_group', $broadcast->recipient_group) }}' }" class="grid gap-4">
@@ -40,22 +40,22 @@
             <label class="block text-slate-600 font-semibold mb-0.5">
                 {{ __('admin/broadcasts.placeholder_label') }}
             </label>
-            <div class="border-2 border-billmora-2 rounded-xl overflow-x-auto">
+            <div class="border-2 border-billmora-neutral-100 rounded-xl overflow-x-auto">
                 <table class="w-full border-collapse">
                     <thead>
                         <tr class="text-slate-600">
-                            <th class="bg-billmora-2 border-r-2 border-billmora-2 px-4 py-2">{{ __('admin/common.key') }}</th>
-                            <th class="bg-billmora-2 border-billmora-2 px-4 py-2">{{ __('admin/common.value') }}</th>
+                            <th class="bg-billmora-neutral-100 border-r-2 border-billmora-neutral-100 px-4 py-2">{{ __('admin/common.key') }}</th>
+                            <th class="bg-billmora-neutral-100 border-billmora-neutral-100 px-4 py-2">{{ __('admin/common.value') }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="text-slate-500">
-                            <td class="border-t-2 border-r-2 border-billmora-2 px-4 py-2"><pre>{client_name}</pre></td>
-                            <td class="border-t-2 border-billmora-2 px-4 py-2"><pre>Client name</pre></td>
+                            <td class="border-t-2 border-r-2 border-billmora-neutral-100 px-4 py-2"><pre>{client_name}</pre></td>
+                            <td class="border-t-2 border-billmora-neutral-100 px-4 py-2"><pre>Client name</pre></td>
                         </tr>
                         <tr class="text-slate-500">
-                            <td class="border-t-2 border-r-2 border-billmora-2 px-4 py-2"><pre>{company_name}</pre></td>
-                            <td class="border-t-2 border-billmora-2 px-4 py-2"><pre>Company name</pre></td>
+                            <td class="border-t-2 border-r-2 border-billmora-neutral-100 px-4 py-2"><pre>{company_name}</pre></td>
+                            <td class="border-t-2 border-billmora-neutral-100 px-4 py-2"><pre>Company name</pre></td>
                         </tr>
                     </tbody>
                 </table>
@@ -64,7 +64,7 @@
         </div>
     </div>
     <div class="flex gap-4 ml-auto">
-        <a href="{{ route('admin.broadcasts') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
+        <a href="{{ route('admin.broadcasts') }}" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
         <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.update') }}</button>
     </div>
 </form>

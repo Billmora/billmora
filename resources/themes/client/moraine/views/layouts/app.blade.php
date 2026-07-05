@@ -7,7 +7,7 @@
     @include('client::layouts.meta')
 </head>
 
-<body class="bg-billmora-1">
+<body class="bg-billmora-neutral-50">
     @if (session()->has('impersonating'))
         @php $impersonating = session('impersonating'); @endphp
         <div class="flex items-center justify-between gap-4 bg-amber-500 px-5 py-2.5 text-white text-sm font-semibold">

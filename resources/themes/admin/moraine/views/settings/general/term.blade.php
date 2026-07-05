@@ -54,21 +54,21 @@
             ],
         ]" 
         active="{{ request()->url() }}" />
-    <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <div class="grid md:grid-cols-2 gap-4">
             <x-admin::toggle name="term_tos" label="{{ __('admin/settings/general.term_tos_label') }}" helper="{{ __('admin/settings/general.term_tos_helper') }}" :checked="Billmora::getGeneral('term_tos')" />
             <x-admin::input type="url" name="term_tos_url" label="{{ __('admin/settings/general.term_tos_url_label') }}" helper="{{ __('admin/settings/general.term_tos_url_helper') }}" value="{{ old('term_tos_url', Billmora::getGeneral('term_tos_url')) }}"/>
         </div>
         <x-admin::editor.text name="term_tos_content" label="{{ __('admin/settings/general.term_tos_content_label') }}" helper="{{ __('admin/settings/general.term_tos_content_helper') }}">{{ old('term_tos_content', Billmora::getGeneral('term_tos_content')) }}</x-admin::editor.text>
     </div>
-    <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <div class="grid md:grid-cols-2 gap-4">
             <x-admin::toggle name="term_toc" label="{{ __('admin/settings/general.term_toc_label') }}" helper="{{ __('admin/settings/general.term_toc_helper') }}" :checked="Billmora::getGeneral('term_toc')" />
             <x-admin::input type="url" name="term_toc_url" label="{{ __('admin/settings/general.term_toc_url_label') }}" helper="{{ __('admin/settings/general.term_toc_url_helper') }}" value="{{ old('term_toc_url', Billmora::getGeneral('term_toc_url')) }}"/>
         </div>
         <x-admin::editor.text name="term_toc_content" label="{{ __('admin/settings/general.term_toc_content_label') }}" helper="{{ __('admin/settings/general.term_toc_content_helper') }}">{{ old('term_toc_content', Billmora::getGeneral('term_toc_content')) }}</x-admin::editor.text>
     </div>
-    <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <div class="grid md:grid-cols-2 gap-4">
             <x-admin::toggle name="term_privacy" label="{{ __('admin/settings/general.term_privacy_label') }}" helper="{{ __('admin/settings/general.term_privacy_helper') }}" :checked="Billmora::getGeneral('term_privacy')" />
             <x-admin::input type="url" name="term_privacy_url" label="{{ __('admin/settings/general.term_privacy_url_label') }}" helper="{{ __('admin/settings/general.term_privacy_url_helper') }}" value="{{ old('term_privacy_url', Billmora::getGeneral('term_privacy_url')) }}"/>

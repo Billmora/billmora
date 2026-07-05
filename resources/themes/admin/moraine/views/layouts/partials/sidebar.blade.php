@@ -5,7 +5,7 @@
 
 <nav id="sidebar"
     class="fixed z-100 xl:sticky top-0 left-0 xl:block shrink-0 p-5 xl:pr-0 w-[300px] xl:w-[320px] h-dvh -translate-x-full xl:translate-x-0 transition-transform duration-300 ease-in-out">
-    <div class="bg-white flex flex-col w-full h-full border-2 border-billmora-2 rounded-2xl p-6">
+    <div class="bg-white flex flex-col w-full h-full border-2 border-billmora-neutral-100 rounded-2xl p-6">
         <a href="{{ route('admin.dashboard') }}" class="relative flex gap-3 items-center">
             <img src="{{ Billmora::getGeneral('company_logo') }}" alt="billmora logo" class="w-auto h-9 rounded-lg">
             <h3 class="text-xl font-extrabold uppercase text-billmora-primary-500">
@@ -14,10 +14,10 @@
         </a>
         
         <div id="closeSidebar" role="button"
-            class="absolute top-14 right-0 xl:hidden bg-white hover:bg-billmora-primary-500 border-2 border-billmora-2 text-slate-600 hover:text-white shadow p-2 rounded-full cursor-pointer transition">
+            class="absolute top-14 right-0 xl:hidden bg-white hover:bg-billmora-primary-500 border-2 border-billmora-neutral-100 text-slate-600 hover:text-white shadow p-2 rounded-full cursor-pointer transition">
             <x-lucide-x class="w-auto h-5" />
         </div>
-        <hr class="border-t-2 border-billmora-2 my-7">
+        <hr class="border-t-2 border-billmora-neutral-100 my-7">
         <div class="space-y-2 overflow-y-auto" id="sidemenu">
             
             <a href="{{ route('admin.dashboard') }}"
@@ -223,12 +223,12 @@
         </div>
         <div class="w-full grid grid-cols-2 gap-4 mt-auto pt-4">
             <a href="https://billmora.com/docs/introduction" target="_blank"
-                class="flex justify-center gap-1 items-center bg-billmora-2 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                class="flex justify-center gap-1 items-center bg-billmora-neutral-100 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                 <x-lucide-book class="w-auto h-5" />
                 Docs
             </a>
             <a href="https://github.com/sponsors/Billmora" target="_blank"
-                class="flex justify-center gap-1 items-center bg-billmora-2 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                class="flex justify-center gap-1 items-center bg-billmora-neutral-100 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                 <x-lucide-heart-handshake class="w-auto h-5" />
                 Sponsor
             </a>

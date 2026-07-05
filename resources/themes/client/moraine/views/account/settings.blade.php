@@ -5,7 +5,7 @@
 @section('body')
 <div class="grid gap-5">
     <div class="flex flex-col lg:flex-row gap-5">
-        <div class="w-full lg:w-1/4 h-fit flex flex-col gap-6 items-center bg-billmora-bg p-8 text-center border-2 border-billmora-2 rounded-xl">
+        <div class="w-full lg:w-1/4 h-fit flex flex-col gap-6 items-center bg-white p-8 text-center border-2 border-billmora-neutral-100 rounded-xl">
             <img src="{{ $user->avatar }}" alt="user avatar" class="rounded-full w-32 h-auto">
             <div class="flex flex-col">
                 <span class="text-xl text-slate-600 font-bold break-all">{{ $user->fullname }}</span>
@@ -22,7 +22,7 @@
                 </a>
             @endif
         </div>
-        <form action="{{ route('client.account.settings.update') }}" method="POST" class="w-full lg:w-3/4 bg-billmora-bg p-8 border-2 border-billmora-2 rounded-xl">
+        <form action="{{ route('client.account.settings.update') }}" method="POST" class="w-full lg:w-3/4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-xl">
             @csrf
             @method('PUT')
             <div class="grid gap-6">
@@ -73,7 +73,7 @@
                 @if((bool) Billmora::getGeneral('credit_auto_payment'))
                     <div class="grid gap-4">
                         <h4 class="text-xl font-semibold text-slate-700">{{ __('client/account.auto_credit_payment.title') }}</h4>
-                        <div class="p-4 bg-billmora-1 border-2 border-billmora-2 rounded-xl">
+                        <div class="p-4 bg-billmora-neutral-50 border-2 border-billmora-neutral-100 rounded-xl">
                             <x-client::toggle
                                 name="auto_credit_payment"
                                 label="{{ __('client/account.auto_credit_payment.label') }}"

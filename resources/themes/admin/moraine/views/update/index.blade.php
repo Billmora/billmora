@@ -10,7 +10,7 @@
             <form action="{{ route('admin.update.check') }}" method="POST">
                 @csrf
                 <button type="submit"
-                    class="flex items-center gap-2 bg-billmora-2 hover:bg-billmora-primary-500 text-billmora-primary-500 hover:text-white px-4 py-2.5 rounded-xl font-semibold text-sm transition-colors duration-300 w-full sm:w-auto justify-center cursor-pointer">
+                    class="flex items-center gap-2 bg-billmora-neutral-100 hover:bg-billmora-primary-500 text-billmora-primary-500 hover:text-white px-4 py-2.5 rounded-xl font-semibold text-sm transition-colors duration-300 w-full sm:w-auto justify-center cursor-pointer">
                     <x-lucide-refresh-cw class="w-4 h-4" />
                     {{ __('admin/update.actions.check') }}
                 </button>
@@ -18,7 +18,7 @@
         </div>
 
         {{-- Version Comparison Card --}}
-        <div class="bg-white rounded-2xl p-5 sm:p-6 border-2 border-billmora-2">
+        <div class="bg-white rounded-2xl p-5 sm:p-6 border-2 border-billmora-neutral-100">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                 <div class="flex items-center gap-3">
                     <div class="p-3 rounded-full bg-emerald-100 text-emerald-600 shrink-0">
@@ -55,7 +55,7 @@
         </div>
 
         {{-- Requirements Card --}}
-        <div class="bg-white rounded-2xl p-5 sm:p-6 border-2 border-billmora-2">
+        <div class="bg-white rounded-2xl p-5 sm:p-6 border-2 border-billmora-neutral-100">
             <div class="flex items-start sm:items-center gap-3 mb-4">
                 <div class="p-3 rounded-full bg-blue-100 text-blue-500 shrink-0">
                     <x-lucide-shield class="w-6 h-6" />
@@ -114,7 +114,7 @@
 
         {{-- Release Notes Card --}}
         @if($isUpdateAvailable && $release)
-            <div class="bg-white rounded-2xl p-5 sm:p-6 border-2 border-billmora-2">
+            <div class="bg-white rounded-2xl p-5 sm:p-6 border-2 border-billmora-neutral-100">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                     <div class="flex items-start sm:items-center gap-3">
                         <div class="p-3 rounded-full bg-amber-100 text-amber-600 shrink-0">
@@ -183,7 +183,7 @@
             
             <div class="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end mt-4">
                 <button type="button" x-on:click="$store.modal.close()"
-                    class="px-5 py-2.5 rounded-xl font-semibold text-sm text-slate-600 bg-billmora-2 hover:bg-slate-200 transition-colors text-center w-full sm:w-auto">
+                    class="px-5 py-2.5 rounded-xl font-semibold text-sm text-slate-600 bg-billmora-neutral-100 hover:bg-slate-200 transition-colors text-center w-full sm:w-auto">
                     {{ __('admin/update.actions.cancel_button') }}
                 </button>
                 <form action="{{ route('admin.update.execute') }}" method="POST" class="w-full sm:w-auto m-0">

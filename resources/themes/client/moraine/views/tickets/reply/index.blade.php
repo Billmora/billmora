@@ -16,7 +16,7 @@
                         @if (!$message->is_staff_reply)
                             <div class="flex gap-4 ml-auto">
                                 <div
-                                    class="w-auto md:min-w-100 grid gap-2 bg-billmora-bg p-5 wrap-break-word border-2 border-billmora-2 rounded-2xl rounded-tr-none">
+                                    class="w-auto md:min-w-100 grid gap-2 bg-white p-5 wrap-break-word border-2 border-billmora-neutral-100 rounded-2xl rounded-tr-none">
                                     <div class="grid">
                                         <span class="text-slate-500 font-semibold">
                                             {{ $message->user->first_name }}
@@ -32,12 +32,12 @@
                                                 @if (str_starts_with($attachment->mime_type, 'image/'))
                                                     <a href="{{ Storage::url($attachment->file_path) }}" target="_blank" class="block">
                                                         <img src="{{ Storage::url($attachment->file_path) }}" alt="{{ $attachment->file_name }}"
-                                                            class="max-h-40 max-w-60 rounded-lg border-2 border-billmora-2 object-cover hover:opacity-80 transition">
+                                                            class="max-h-40 max-w-60 rounded-lg border-2 border-billmora-neutral-100 object-cover hover:opacity-80 transition">
                                                     </a>
                                                 @else
                                                     <a href="{{ Storage::url($attachment->file_path) }}" target="_blank"
                                                         download="{{ $attachment->file_name }}"
-                                                        class="flex items-center gap-2 bg-billmora-1 hover:bg-billmora-primary-500 border-2 border-billmora-2 hover:border-billmora-primary-500 px-3 py-2 rounded-lg transition group">
+                                                        class="flex items-center gap-2 bg-billmora-neutral-50 hover:bg-billmora-primary-500 border-2 border-billmora-neutral-100 hover:border-billmora-primary-500 px-3 py-2 rounded-lg transition group">
                                                         <x-lucide-link class="w-4 h-auto text-slate-500 group-hover:text-white shrink-0" />
                                                         <span
                                                             class="text-sm text-slate-600 group-hover:text-white font-medium truncate max-w-40">
@@ -61,7 +61,7 @@
                             <div class="flex gap-4 mr-auto">
                                 <img src="{{ $message->user->avatar }}" alt="User Avatar" class="w-10 h-10 rounded-full">
                                 <div
-                                    class="w-auto md:min-w-100 grid gap-2 bg-billmora-bg p-5 wrap-break-word border-2 border-billmora-2 rounded-2xl rounded-tl-none">
+                                    class="w-auto md:min-w-100 grid gap-2 bg-white p-5 wrap-break-word border-2 border-billmora-neutral-100 rounded-2xl rounded-tl-none">
                                     <div class="grid">
                                         <span class="text-slate-500 font-semibold">
                                             {{ $message->user->first_name }}
@@ -81,12 +81,12 @@
                                                 @if (str_starts_with($attachment->mime_type, 'image/'))
                                                     <a href="{{ Storage::url($attachment->file_path) }}" target="_blank" class="block">
                                                         <img src="{{ Storage::url($attachment->file_path) }}" alt="{{ $attachment->file_name }}"
-                                                            class="max-h-40 max-w-60 rounded-lg border-2 border-billmora-2 object-cover hover:opacity-80 transition">
+                                                            class="max-h-40 max-w-60 rounded-lg border-2 border-billmora-neutral-100 object-cover hover:opacity-80 transition">
                                                     </a>
                                                 @else
                                                     <a href="{{ Storage::url($attachment->file_path) }}" target="_blank"
                                                         download="{{ $attachment->file_name }}"
-                                                        class="flex items-center gap-2 bg-billmora-1 hover:bg-billmora-primary-500 border-2 border-billmora-2 hover:border-billmora-primary-500 px-3 py-2 rounded-lg transition group">
+                                                        class="flex items-center gap-2 bg-billmora-neutral-50 hover:bg-billmora-primary-500 border-2 border-billmora-neutral-100 hover:border-billmora-primary-500 px-3 py-2 rounded-lg transition group">
                                                         <x-lucide-link class="w-4 h-auto text-slate-500 group-hover:text-white shrink-0" />
                                                         <span
                                                             class="text-sm text-slate-600 group-hover:text-white font-medium truncate max-w-40">
@@ -110,7 +110,7 @@
                 </div>
                 <form action="{{ route('client.tickets.reply.send', ['ticket' => $ticket->ticket_number]) }}" method="POST"
                     enctype="multipart/form-data" id="formMessage"
-                    class="flex flex-col gap-4 bg-billmora-bg p-6 border-2 border-billmora-2 rounded-2xl" x-data="{
+                    class="flex flex-col gap-4 bg-white p-6 border-2 border-billmora-neutral-100 rounded-2xl" x-data="{
                         attachments: [{ id: 1 }],
                         nextId: 2,
                         add() {
@@ -156,13 +156,13 @@
                     <h3 class="text-lg text-slate-600 font-semibold">
                         {{ __('client/tickets.ticket_information') }}
                     </h3>
-                    <div class="bg-billmora-bg p-4 border-2 border-billmora-2 rounded-2xl">
+                    <div class="bg-white p-4 border-2 border-billmora-neutral-100 rounded-2xl">
                         <div class="grid">
                             <h4 class="text-sm text-slate-400 font-semibold">{{ __('client/tickets.ticket_subject_label') }}
                             </h4>
                             <span class="text-slate-500 font-medium">{{ $ticket->subject }}</span>
                         </div>
-                        <hr class="border-t-2 border-billmora-2 my-2">
+                        <hr class="border-t-2 border-billmora-neutral-100 my-2">
                         <div class="grid">
                             <h4 class="text-sm text-slate-400 font-semibold">{{ __('client/tickets.ticket_status_label') }}
                             </h4>
@@ -170,7 +170,7 @@
                                 class="text-slate-500 font-medium">{{ ucwords(str_replace('_', ' ', $ticket->status)) }}</span>
                         </div>
                         @if ($ticket->status === 'open')
-                            <hr class="border-t-2 border-billmora-2 my-2">
+                            <hr class="border-t-2 border-billmora-neutral-100 my-2">
                             <div class="grid">
                                 <h4 class="text-sm text-slate-400 font-semibold">
                                     {{ __('client/tickets.ticket_opened_at_label') }}</h4>
@@ -180,7 +180,7 @@
                                 </span>
                             </div>
                         @elseif ($ticket->status === 'closed')
-                            <hr class="border-t-2 border-billmora-2 my-2">
+                            <hr class="border-t-2 border-billmora-neutral-100 my-2">
                             <div class="grid">
                                 <h4 class="text-sm text-slate-400 font-semibold">
                                     {{ __('client/tickets.ticket_closed_at_label') }}</h4>
@@ -190,7 +190,7 @@
                                 </span>
                             </div>
                         @elseif ($ticket->status === 'replied')
-                            <hr class="border-t-2 border-billmora-2 my-2">
+                            <hr class="border-t-2 border-billmora-neutral-100 my-2">
                             <div class="grid">
                                 <h4 class="text-sm text-slate-400 font-semibold">
                                     {{ __('client/tickets.ticket_replied_at_label') }}</h4>
@@ -200,7 +200,7 @@
                                 </span>
                             </div>
                         @elseif ($ticket->status === 'answered')
-                            <hr class="border-t-2 border-billmora-2 my-2">
+                            <hr class="border-t-2 border-billmora-neutral-100 my-2">
                             <div class="grid">
                                 <h4 class="text-sm text-slate-400 font-semibold">
                                     {{ __('client/tickets.ticket_answered_at_label') }}</h4>
@@ -210,19 +210,19 @@
                                 </span>
                             </div>
                         @endif
-                        <hr class="border-t-2 border-billmora-2 my-2">
+                        <hr class="border-t-2 border-billmora-neutral-100 my-2">
                         <div class="grid">
                             <h4 class="text-sm text-slate-400 font-semibold">
                                 {{ __('client/tickets.ticket_priority_label') }}</h4>
                             <span class="text-slate-500 font-medium">{{ ucwords($ticket->priority) }}</span>
                         </div>
-                        <hr class="border-t-2 border-billmora-2 my-2">
+                        <hr class="border-t-2 border-billmora-neutral-100 my-2">
                         <div class="grid">
                             <h4 class="text-sm text-slate-400 font-semibold">
                                 {{ __('client/tickets.ticket_department_label') }}</h4>
                             <span class="text-slate-500 font-medium">{{ ucwords($ticket->department ?? '-') }}</span>
                         </div>
-                        <hr class="border-t-2 border-billmora-2 my-2">
+                        <hr class="border-t-2 border-billmora-neutral-100 my-2">
                         <div class="grid">
                             <h4 class="text-sm text-slate-400 font-semibold">{{ __('client/tickets.ticket_service_label') }}
                             </h4>
@@ -263,7 +263,7 @@
                     @foreach ($ticket->messages as $message)
                         @foreach ($message->attachments as $attachment)
                             <a href="{{ Storage::url($attachment->file_path) }}"
-                                class="flex items-center gap-2 bg-billmora-bg hover:bg-billmora-primary-500 border-2 border-billmora-2 hover:border-billmora-primary-500 px-3 py-2 rounded-lg transition group">
+                                class="flex items-center gap-2 bg-white hover:bg-billmora-primary-500 border-2 border-billmora-neutral-100 hover:border-billmora-primary-500 px-3 py-2 rounded-lg transition group">
                                 <x-lucide-download class="w-4 h-auto text-slate-500 group-hover:text-white" />
                                 <span class="text-slate-500 group-hover:text-white font-medium">
                                     {{ $attachment->file_name }}
@@ -283,7 +283,7 @@
                     @method('PATCH')
                     <div class="flex justify-end gap-2 mt-4">
                         <x-client::modal.trigger type="button" variant="close"
-                            class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                            class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                             {{ __('common.cancel') }}
                         </x-client::modal.trigger>
                         <button type="submit"

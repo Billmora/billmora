@@ -6,7 +6,7 @@
 <form action="{{ route('admin.settings.api.store') }}" method="POST" class="flex flex-col gap-5">
     @csrf
     <div class="grid md:grid-cols-2 gap-5">
-        <div class="flex flex-col gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+        <div class="flex flex-col gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
             <x-admin::input 
                 type="text" 
                 name="token_name"
@@ -26,7 +26,7 @@
                 required 
             />
         </div>
-        <div class="flex flex-col gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+        <div class="flex flex-col gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
             <x-admin::input 
                 type="datetime-local" 
                 name="token_expires_at"
@@ -42,7 +42,7 @@
             >{{ old('token_whitelist_ips') }}</x-admin::textarea>
         </div>
     </div>
-    <div class="bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <div
             id="token_permissions_list"
             x-data="{
@@ -78,7 +78,7 @@
         </div>
     </div>
     <div class="flex gap-4 ml-auto">
-        <a href="{{ route('admin.settings.api') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
+        <a href="{{ route('admin.settings.api') }}" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
         <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.create') }}</button>
     </div>
 </form>

@@ -6,7 +6,7 @@
 <form action="{{ route('admin.settings.roles.update', ['role' => $role->id]) }}" method="POST" class="flex flex-col gap-5">
     @csrf
     @method('PUT')
-    <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <x-admin::input type="text" name="role_name" label="{{ __('admin/settings/role.role_name_label') }}" helper="{{ __('admin/settings/role.role_name_helper') }}" value="{{ old('role_name', $role->name) }}" required />
         <div 
             id="role_permissions_list"
@@ -43,7 +43,7 @@
         </div>
     </div>
     <div class="flex gap-4 ml-auto">
-        <a href="{{ route('admin.settings.roles') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
+        <a href="{{ route('admin.settings.roles') }}" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
         <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.update') }}</button>
     </div>
 </form>

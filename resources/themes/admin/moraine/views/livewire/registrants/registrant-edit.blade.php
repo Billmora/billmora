@@ -1,7 +1,7 @@
 <form action="{{ route('admin.registrants.update', ['registrant' => $registrant->id]) }}" method="POST" class="w-full lg:w-5/7 flex flex-col gap-5">
     @csrf
     @method('PUT')
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <x-admin::input
             name="domain_display"
             label="{{ __('admin/registrants.domain_label') }}"
@@ -23,7 +23,7 @@
             <a href="{{ route('admin.users.summary', ['user' => $registrant->user_id]) }}"
                class="relative inline-block w-full group" target="_blank">
                 <input type="text" value="{{ $registrant->user->email }}"
-                    class="w-full px-3 py-2.25 bg-billmora-1 text-slate-700 border-2 border-billmora-2 rounded-xl cursor-not-allowed"
+                    class="w-full px-3 py-2.25 bg-billmora-neutral-50 text-slate-700 border-2 border-billmora-neutral-100 rounded-xl cursor-not-allowed"
                     disabled>
                 <div class="absolute top-1/2 -translate-y-1/2 right-1.5">
                     <span class="block bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-1.5 text-white text-sm rounded-lg transition duration-300 cursor-pointer">
@@ -113,7 +113,7 @@
         <h4 class="text-lg font-semibold text-slate-600">{{ __('admin/registrants.nameservers_label') }}</h4>
         <span class="text-slate-500">{{ __('admin/registrants.nameservers_helper') }}</span>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         @for ($i = 0; $i < 4; $i++)
             <x-admin::input
                 name="nameservers[{{ $i }}]"
@@ -126,7 +126,7 @@
     </div>
     <div class="flex gap-4 ml-auto">
         <a href="{{ route('admin.registrants') }}"
-            class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+            class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
             {{ __('common.cancel') }}
         </a>
         <button type="submit"

@@ -1,13 +1,13 @@
 <form action="{{ route('client.checkout.cart.add') }}" method="POST" class="flex flex-col lg:flex-row gap-5">
     @csrf
     <div class="w-full lg:w-2/3 h-fit grid gap-4">
-        <div class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
+        <div class="bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
             <h1 class="text-xl font-semibold text-slate-600">
                 {{ $package->catalog->name }} – {{ $package->name }}
             </h1>
             <p class="text-slate-500">{!! $package->description !!}</p>
         </div>
-        <div class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
+        <div class="bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
             <span class="text-xl text-slate-600 font-semibold">
                 {{ __('client/store.package.billing_cycle') }}
             </span>
@@ -21,7 +21,7 @@
                             value="{{ $p['id'] }}"
                             class="hidden"
                         >
-                        <div class="h-full bg-billmora-bg p-4 border-2 rounded-xl transition-all hover:border-billmora-primary-500 {{ $selectedBillingId == $p['id'] ? 'border-billmora-primary-500' : 'border-billmora-2' }}">
+                        <div class="h-full bg-white p-4 border-2 rounded-xl transition-all hover:border-billmora-primary-500 {{ $selectedBillingId == $p['id'] ? 'border-billmora-primary-500' : 'border-billmora-neutral-100' }}">
                             <div class="flex items-start gap-3">
                                 <div class="mt-1 h-4 w-4 rounded-full border-2 transition-all {{ $selectedBillingId == $p['id'] ? 'border-billmora-primary-500 bg-billmora-primary-500' : 'border-slate-500' }}"></div>
                                 <div class="flex flex-col">
@@ -48,7 +48,7 @@
                 $hasAvailableOptions = collect($this->availableVariants)->contains(fn($v) => count($this->getAvailableOptions($v)) > 0);
             @endphp
             @if($hasAvailableOptions)
-                <div class="bg-billmora-bg p-6 border-2 border-billmora-2 rounded-2xl grid gap-4">
+                <div class="bg-white p-6 border-2 border-billmora-neutral-100 rounded-2xl grid gap-4">
                     @foreach ($this->availableVariants as $variant)
                         @php $options = array_values($this->getAvailableOptions($variant)); @endphp
                         @if(count($options) > 0)
@@ -60,7 +60,7 @@
                                         @foreach($options as $option)
                                             <label class="group relative cursor-pointer" wire:key="var-radio-{{ $option['id'] }}">
                                                 <input type="radio" name="variants[{{ $variant['id'] }}]" wire:model.live="variantSelections.{{ $variant['id'] }}" value="{{ $option['id'] }}" class="hidden">
-                                                <div class="h-full bg-billmora-bg p-4 border-2 border-billmora-2 rounded-xl transition-all group-has-[:checked]:border-billmora-primary-500 hover:border-billmora-primary-500">
+                                                <div class="h-full bg-white p-4 border-2 border-billmora-neutral-100 rounded-xl transition-all group-has-[:checked]:border-billmora-primary-500 hover:border-billmora-primary-500">
                                                     <div class="flex items-start gap-3">
                                                         <div class="mt-1 h-4 w-4 rounded-full border-2 border-slate-500 group-has-[:checked]:border-billmora-primary-500 group-has-[:checked]:bg-billmora-primary-500 transition-all"></div>
                                                         <div class="flex flex-col">
@@ -74,7 +74,7 @@
                                     </div>
                                 @elseif ($variant['type'] === 'select')
                                     <div class="flex items-center w-full my-1 mt-4">
-                                        <select name="variants[{{ $variant['id'] }}]" wire:model.live="variantSelections.{{ $variant['id'] }}" class="w-full text-slate-700 rounded-lg px-3 py-2.5 border-2 border-billmora-2 outline-none focus:ring-2 ring-billmora-primary-500 appearance-none">
+                                        <select name="variants[{{ $variant['id'] }}]" wire:model.live="variantSelections.{{ $variant['id'] }}" class="w-full text-slate-700 rounded-lg px-3 py-2.5 border-2 border-billmora-neutral-100 outline-none focus:ring-2 ring-billmora-primary-500 appearance-none">
                                             <option class="text-slate-500" value="" disabled>{{ __('common.choose_option') }}</option>
                                             @foreach($options as $option)
                                                 <option value="{{ $option['id'] }}" wire:key="var-sel-{{ $option['id'] }}">
@@ -89,7 +89,7 @@
                                         @foreach($options as $option)
                                             <label class="group relative cursor-pointer" wire:key="var-check-{{ $option['id'] }}">
                                                 <input type="checkbox" name="variants_multi[{{ $variant['id'] }}][]" wire:model.live="variantSelections.{{ $variant['id'] }}" value="{{ $option['id'] }}" class="hidden">
-                                                <div class="h-full bg-billmora-bg p-4 border-2 border-billmora-2 rounded-xl transition-all group-has-[:checked]:border-billmora-primary-500 hover:border-billmora-primary-500">
+                                                <div class="h-full bg-white p-4 border-2 border-billmora-neutral-100 rounded-xl transition-all group-has-[:checked]:border-billmora-primary-500 hover:border-billmora-primary-500">
                                                     <div class="flex items-start gap-3">
                                                         <div class="mt-1 h-4 w-4 border-2 border-slate-500 rounded group-has-[:checked]:border-billmora-primary-500 group-has-[:checked]:bg-billmora-primary-500 transition-all"></div>
                                                         <div class="flex flex-col">
@@ -151,7 +151,7 @@
             }
         }">
         @if (!empty($this->packageFields))
-            <div class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
+            <div class="bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
                 <span class="text-xl text-slate-600 font-semibold">
                     {{ __('client/store.package.fields') }}
                 </span>
@@ -172,7 +172,7 @@
                                     placeholder="{{ $field['placeholder'] ?? '' }}" 
                                     :required="(bool) $field['required']" 
                                     x-model="{{ $modelAttr }}"
-                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                 />
                             @elseif ($field['type'] === 'textarea')
                                 <x-client::textarea 
@@ -182,7 +182,7 @@
                                     placeholder="{{ $field['placeholder'] ?? '' }}" 
                                     :required="(bool) $field['required']"
                                     x-model="{{ $modelAttr }}"
-                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                     ></x-client::textarea>
                             @elseif ($field['type'] === 'toggle')
                                 <x-client::toggle 
@@ -190,7 +190,7 @@
                                     label="{{ $field['label'] }}" 
                                     helper="{{ $field['helper'] ?? '' }}" 
                                     x-model="{{ $modelAttr }}"
-                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                 />
                             @elseif ($field['type'] === 'select')
                                 <x-client::select 
@@ -199,7 +199,7 @@
                                     helper="{{ $field['helper'] ?? '' }}" 
                                     :required="(bool) $field['required']"
                                     x-model="{{ $modelAttr }}"
-                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                 >
                                     @foreach ($field['options'] ?? [] as $optValue => $optLabel)
                                         <option value="{{ $optValue }}">{{ $optLabel }}</option>
@@ -212,7 +212,7 @@
                                     helper="{{ $field['helper'] ?? '' }}" 
                                     :required="(bool) $field['required']"
                                     x-model="{{ $modelAttr }}"
-                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                 >
                                     @foreach ($field['options'] ?? [] as $optVal => $optLabel)
                                         <x-client::radio.option name="fields[{{ $field['name'] }}]" value="{{ $optVal }}" label="{{ $optLabel }}" :checked="old('fields.' . $field['name'], $field['default'] ?? '') == $optVal" />
@@ -225,7 +225,7 @@
             </div>
         @endif
         @if (!empty($this->checkoutSchema))
-            <div wire:ignore class="bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
+            <div wire:ignore class="bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
                 <span class="text-xl text-slate-600 font-semibold">
                     {{ __('client/store.package.configuration') }}
                 </span>
@@ -246,7 +246,7 @@
                                     placeholder="{{ $field['placeholder'] ?? '' }}" 
                                     :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')" 
                                     x-model="{{ $modelAttr }}"
-                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                 />
                             @elseif ($field['type'] === 'textarea')
                                 <x-client::textarea 
@@ -256,7 +256,7 @@
                                     placeholder="{{ $field['placeholder'] ?? '' }}" 
                                     :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')"
                                     x-model="{{ $modelAttr }}"
-                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                     ></x-client::textarea>
                             @elseif ($field['type'] === 'toggle')
                                 <x-client::toggle 
@@ -264,7 +264,7 @@
                                     label="{{ $field['label'] }}" 
                                     helper="{{ $field['helper'] ?? '' }}" 
                                     x-model="{{ $modelAttr }}"
-                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                 />
                             @elseif ($field['type'] === 'select')
                                 <x-client::select 
@@ -273,7 +273,7 @@
                                     helper="{{ $field['helper'] ?? '' }}" 
                                     :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')"
                                     x-model="{{ $modelAttr }}"
-                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                 >
                                     @foreach ($field['options'] ?? [] as $optValue => $optLabel)
                                         <option value="{{ $optValue }}">{{ $optLabel }}</option>
@@ -286,7 +286,7 @@
                                     helper="{{ $field['helper'] ?? '' }}" 
                                     :required="str_contains(implode('|', (array)($field['rules'] ?? [])), 'required')"
                                     x-model="{{ $modelAttr }}"
-                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-1 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
+                                    x-bind:disabled="{{ empty($field['condition']) ? 'false' : '!checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ')' }}" x-bind:class="{{ empty($field['condition']) ? '{}' : '{ \'bg-billmora-neutral-50 cursor-not-allowed opacity-50\': !checkCondition(' . htmlspecialchars(json_encode($field['condition'])) . ') }' }}" 
                                 >
                                     @foreach ($field['options'] ?? [] as $optVal => $optLabel)
                                         <x-client::radio.option name="configuration[{{$key}}]" value="{{ $optVal }}" label="{{ $optLabel }}" :checked="old('configuration.' . $key, $field['default'] ?? '') == $optVal" />
@@ -309,7 +309,7 @@
         </div>
         @endif
     </div>
-    <div class="w-full lg:w-1/3 h-fit bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl space-y-4 relative overflow-hidden">
+    <div class="w-full lg:w-1/3 h-fit bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl space-y-4 relative overflow-hidden">
         <h2 class="text-xl font-semibold text-slate-600 mb-4">
             {{ __('client/store.package.order_summary') }}
         </h2>
@@ -326,7 +326,7 @@
                     </div>
                 @endforeach
             </div>
-            <hr class="border-t-2 border-billmora-2">
+            <hr class="border-t-2 border-billmora-neutral-100">
             @if(isset($this->pricingSummary['prorata']) && $this->pricingSummary['prorata'])
                 <div class="flex justify-between font-semibold text-slate-600">
                     <span>{{ __('client/store.package.subtotal') }} ({{ __('client/store.package.prorated') }})</span>
@@ -346,7 +346,7 @@
                 <span>{{ __('client/store.package.setup_fee') }}</span>
                 <span>{{ Currency::format($this->pricingSummary['setup_fee_total']) }}</span>
             </div>
-            <hr class="border-t-2 border-billmora-2">
+            <hr class="border-t-2 border-billmora-neutral-100">
             <div class="flex flex-col">
                 <span class="text-slate-600 font-semibold">
                     {{ __('client/store.package.due_today') }}
@@ -356,7 +356,7 @@
                 </span>
             </div>
             @if(isset($this->pricingSummary['prorata']) && $this->pricingSummary['prorata'])
-                <div class="mt-2 p-2 bg-billmora-1 rounded-lg text-sm font-medium text-slate-500 border border-slate-100">
+                <div class="mt-2 p-2 bg-billmora-neutral-50 rounded-lg text-sm font-medium text-slate-500 border border-slate-100">
                     <p>
                         {{ __('client/store.package.prorata_covers_until', ['date' => $this->pricingSummary['prorata']['first_next_due_date']->format('d M Y')]) }}
                     </p>
@@ -366,7 +366,7 @@
                     </p>
                 </div>
             @elseif($this->pricingSummary['setup_fee_total'] > 0)
-                <div class="mt-2 p-2 bg-billmora-1 rounded-lg text-sm font-medium text-slate-500 border border-slate-100">
+                <div class="mt-2 p-2 bg-billmora-neutral-50 rounded-lg text-sm font-medium text-slate-500 border border-slate-100">
                     <p>
                         {{ __('client/store.package.next_billing') }}:
                         <span class="font-semibold text-slate-600">{{ Currency::format($this->pricingSummary['subtotal']) }}</span>

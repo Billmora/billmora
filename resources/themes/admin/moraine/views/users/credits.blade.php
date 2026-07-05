@@ -46,7 +46,7 @@
     />
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
         @foreach ($currencies as $currency)
-            <form action="{{ route('admin.users.credits.update', ['user' => $user->id, 'currency' => $currency->id]) }}" method="POST" class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+            <form action="{{ route('admin.users.credits.update', ['user' => $user->id, 'currency' => $currency->id]) }}" method="POST" class="grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
                 @csrf
                 @method('PUT')
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

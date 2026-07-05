@@ -55,7 +55,7 @@
         @endcan
         <div class="flex flex-col lg:flex-row gap-5">
             <div
-                class="w-full lg:w-1/4 h-fit grid gap-6 items-center bg-white p-8 text-center border-2 border-billmora-2 rounded-2xl">
+                class="w-full lg:w-1/4 h-fit grid gap-6 items-center bg-white p-8 text-center border-2 border-billmora-neutral-100 rounded-2xl">
                 <img src="{{ $user->avatar }}?s=128" alt="user avatar" class="rounded-full w-32 h-auto mx-auto">
                 <div class="flex flex-col">
                     <span class="text-xl text-slate-600 font-bold break-all">{{ $user->fullname }}</span>
@@ -133,7 +133,7 @@
             </div>
             <div class="w-full lg:w-3/4 h-fit grid gap-5">
                 <div class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-3 gap-5">
-                    <div class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
+                    <div class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-neutral-100 rounded-2xl">
                         <div class="bg-green-200 p-3 text-green-500 rounded-full">
                             <x-lucide-badge-check class="w-auto h-10" />
                         </div>
@@ -143,7 +143,7 @@
                             <span class="text-2xl font-semibold text-slate-600">{{ $ordersActive }}</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
+                    <div class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-neutral-100 rounded-2xl">
                         <div class="bg-red-200 p-3 text-red-500 rounded-full">
                             <x-lucide-badge-x class="w-auto h-10" />
                         </div>
@@ -153,7 +153,7 @@
                             <span class="text-2xl font-semibold text-slate-600">{{ $ordersCancelled }}</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
+                    <div class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-neutral-100 rounded-2xl">
                         <div class="bg-violet-200 p-3 text-violet-500 rounded-full">
                             <x-lucide-badge-dollar-sign class="w-auto h-10" />
                         </div>
@@ -165,9 +165,9 @@
                 </div>
                 <div class="overflow-x-auto">
                     <div class="min-w-full inline-block align-middle">
-                        <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
-                            <table class="min-w-full divide-y divide-billmora-2">
-                                <thead class="bg-billmora-2">
+                        <div class="border-2 border-billmora-neutral-100 rounded-2xl overflow-hidden">
+                            <table class="min-w-full divide-y divide-billmora-neutral-100">
+                                <thead class="bg-billmora-neutral-100">
                                     <tr>
                                         <th scope="col"
                                             class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">ID
@@ -189,7 +189,7 @@
                                             {{ __('common.action') }}</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y-2 divide-billmora-2 bg-white">
+                                <tbody class="divide-y-2 divide-billmora-neutral-100 bg-white">
                                     @forelse ($orders as $order)
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $order->id }}</td>
@@ -236,7 +236,7 @@
                         @method('DELETE')
                         <div class="flex justify-end gap-2 mt-4">
                             <x-admin::modal.trigger type="button" variant="close"
-                                class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                                class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
                             <button type="submit"
                                 class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
                         </div>
@@ -253,7 +253,7 @@
                         @csrf
                         <div class="flex justify-end gap-2 mt-4">
                             <x-admin::modal.trigger type="button" variant="close"
-                                class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                                class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
                             <button type="submit"
                                 class="bg-billmora-primary-500 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('admin/users.impersonate_confirm_title') }}</button>
                         </div>

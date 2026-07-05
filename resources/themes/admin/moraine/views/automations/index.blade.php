@@ -45,7 +45,7 @@
         </div>
     </div>
     <div class="grid grid-cols-1">
-        <div class="bg-white border-2 border-billmora-2 rounded-2xl p-6">
+        <div class="bg-white border-2 border-billmora-neutral-100 rounded-2xl p-6">
             <h3 class="text-lg font-semibold text-slate-600 mb-4">{{ __('admin/automations.monthly_overview') }}</h3>
             <div class="relative h-80 w-full">
                 <canvas id="monthlyAutomationChart"></canvas>
@@ -54,37 +54,37 @@
     </div>
     <h3 class="text-lg font-semibold text-slate-600">{{ __('admin/automations.todays_executions') }}</h3>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div class="bg-white border-2 border-billmora-2 rounded-2xl p-5 flex justify-between items-center">
+        <div class="bg-white border-2 border-billmora-neutral-100 rounded-2xl p-5 flex justify-between items-center">
             <div>
                 <p class="text-sm text-slate-500 font-semibold uppercase">{{ __('admin/automations.invoices_generated') }}</p>
                 <h4 class="text-2xl font-bold text-slate-600 mt-1">{{ $stats['invoices_generated_today'] ?? 0 }}</h4>
             </div>
         </div>
-        <div class="bg-white border-2 border-billmora-2 rounded-2xl p-5 flex justify-between items-center">
+        <div class="bg-white border-2 border-billmora-neutral-100 rounded-2xl p-5 flex justify-between items-center">
             <div>
                 <p class="text-sm text-slate-500 font-semibold uppercase">{{ __('admin/automations.reminders_sent') }}</p>
                 <h4 class="text-2xl font-bold text-slate-600 mt-1">{{ $stats['reminders_sent_today'] ?? 0 }}</h4>
             </div>
         </div>
-        <div class="bg-white border-2 border-billmora-2 rounded-2xl p-5 flex justify-between items-center">
+        <div class="bg-white border-2 border-billmora-neutral-100 rounded-2xl p-5 flex justify-between items-center">
             <div>
                 <p class="text-sm text-slate-500 font-semibold uppercase">{{ __('admin/automations.tickets_auto_closed') }}</p>
                 <h4 class="text-2xl font-bold text-slate-600 mt-1">{{ $stats['tickets_closed_today'] ?? 0 }}</h4>
             </div>
         </div>
-        <div class="bg-white border-2 border-billmora-2 rounded-2xl p-5 flex justify-between items-center">
+        <div class="bg-white border-2 border-billmora-neutral-100 rounded-2xl p-5 flex justify-between items-center">
             <div>
                 <p class="text-sm text-slate-500 font-semibold uppercase">{{ __('admin/automations.services_suspended') }}</p>
                 <h4 class="text-2xl font-bold text-orange-500 mt-1">{{ $stats['services_suspended_today'] ?? 0 }}</h4>
             </div>
         </div>
-        <div class="bg-white border-2 border-billmora-2 rounded-2xl p-5 flex justify-between items-center">
+        <div class="bg-white border-2 border-billmora-neutral-100 rounded-2xl p-5 flex justify-between items-center">
             <div>
                 <p class="text-sm text-slate-500 font-semibold uppercase">{{ __('admin/automations.services_terminated') }}</p>
                 <h4 class="text-2xl font-bold text-red-500 mt-1">{{ $stats['services_terminated_today'] ?? 0 }}</h4>
             </div>
         </div>
-        <div class="bg-white border-2 border-billmora-2 rounded-2xl p-5 flex justify-between items-center">
+        <div class="bg-white border-2 border-billmora-neutral-100 rounded-2xl p-5 flex justify-between items-center">
             <div>
                 <p class="text-sm text-slate-500 font-semibold uppercase">{{ __('admin/automations.cancellations_processed') }}</p>
                 <h4 class="text-2xl font-bold text-slate-600 mt-1">{{ $stats['cancellations_processed_today'] ?? 0 }}</h4>

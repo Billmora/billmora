@@ -12,7 +12,7 @@
                     </div>
                     <input type="text" name="search" id="search" placeholder="{{ __('admin/common.search') }}"
                         value="{{ request('search') }}"
-                        class="w-full px-6 py-3 pl-10 bg-white text-slate-700 placeholder:text-slate-500 border-2 border-billmora-2 rounded-xl group-focus-within:outline-2 outline-billmora-primary-500">
+                        class="w-full px-6 py-3 pl-10 bg-white text-slate-700 placeholder:text-slate-500 border-2 border-billmora-neutral-100 rounded-xl group-focus-within:outline-2 outline-billmora-primary-500">
                     <div class="absolute top-1/2 -translate-y-1/2 right-1.5">
                         <button type="submit"
                             class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">{{ __('common.submit') }}</button>
@@ -29,9 +29,9 @@
         </div>
         <div class="overflow-x-auto" data-sortable-wrapper>
             <div class="min-w-full inline-block align-middle">
-                <div class="border-2 border-billmora-2 rounded-2xl overflow-hidden">
-                    <table class="min-w-full divide-y divide-billmora-2">
-                        <thead class="bg-billmora-2">
+                <div class="border-2 border-billmora-neutral-100 rounded-2xl overflow-hidden">
+                    <table class="min-w-full divide-y divide-billmora-neutral-100">
+                        <thead class="bg-billmora-neutral-100">
                             <tr>
                                 <th scope="col" class="w-10 px-4 py-4"></th>
                                 <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">
@@ -46,7 +46,7 @@
                                     {{ __('common.action') }}</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y-2 divide-billmora-2 bg-white" data-sortable="Tld">
+                        <tbody class="divide-y-2 divide-billmora-neutral-100 bg-white" data-sortable="Tld">
                             @forelse ($tlds as $tld)
                                 <tr data-id="{{ $tld->id }}">
                                     <td class="px-4 py-4 whitespace-nowrap text-slate-300">
@@ -99,7 +99,7 @@
                         @method('DELETE')
                         <div class="flex justify-end gap-2 mt-4">
                             <x-admin::modal.trigger type="button" variant="close"
-                                class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+                                class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                                 {{ __('common.cancel') }}
                             </x-admin::modal.trigger>
                             <button type="submit"

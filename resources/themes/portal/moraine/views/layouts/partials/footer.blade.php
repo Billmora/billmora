@@ -1,7 +1,7 @@
 @php
   $socials = ['discord', 'youtube', 'whatsapp', 'instagram', 'facebook', 'twitter', 'linkedin', 'github', 'reddit', 'skype', 'telegram'];
 @endphp
-<footer class="w-full bg-billmora-bg m-auto border-b-2 border-billmora-2">
+<footer class="w-full bg-white m-auto border-b-2 border-billmora-neutral-100">
     <div class="max-w-7xl py-12 px-4 flex flex-col gap-8 mx-auto">
         <div class="flex flex-col gap-4 lg:flex-row">
             <div class="lg:max-w-1/4">

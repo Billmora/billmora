@@ -3,7 +3,7 @@
 @section('title', 'Checkout Complete')
 
 @section('body')
-<div class="grid justify-center gap-4 bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
+<div class="grid justify-center gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
     <div class="flex flex-col items-center text-center gap-2">
         <div class="bg-green-200 p-4 rounded-full">
             <x-lucide-check class="w-auto h-8 text-green-500" />
@@ -16,7 +16,7 @@
         <p class="text-slate-500">{{ __('client/checkout.complete.message') }}</p>
         <p class="text-slate-500">{{ __('client/checkout.complete.information', ['order_number' => $order->order_number]) }}</p>
     </div>
-    <div class="grid gap-3 border-2 border-billmora-2 p-6 rounded-2xl mt-4 bg-slate-50">
+    <div class="grid gap-3 border-2 border-billmora-neutral-100 p-6 rounded-2xl mt-4 bg-slate-50">
         <h3 class="text-lg text-slate-700 font-bold border-b-2 border-slate-200 pb-3 mb-1">
             {{ __('client/checkout.order_summary') }}
         </h3>
@@ -27,7 +27,7 @@
                         <span class="text-slate-600">
                             {{ $item->description }}
                             @if($item->quantity > 1)
-                                <span class="inline-block text-xs bg-billmora-2 text-billmora-primary-500 font-bold px-2 py-0.5 rounded-md ml-1">
+                                <span class="inline-block text-xs bg-billmora-neutral-100 text-billmora-primary-500 font-bold px-2 py-0.5 rounded-md ml-1">
                                     x{{ $item->quantity }}
                                 </span>
                             @endif

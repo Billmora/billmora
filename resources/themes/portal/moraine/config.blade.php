@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     @include('portal::layouts.meta')
 </head>
-<body class="bg-billmora-1">
+<body class="bg-billmora-neutral-50">
 	<form action="{{ route('admin.themes.config.update', ['theme' => $theme->id]) }}" method="POST" class="grid gap-5 p-6">
         @csrf
         <div class="w-full h-fit grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <div class="grid gap-4 col-span-12 lg:col-span-1 bg-billmora-bg p-6 border-2 border-billmora-2 rounded-2xl h-fit">
-                <div class="border-b-2 border-billmora-2 pb-4">
+            <div class="grid gap-4 col-span-12 lg:col-span-1 bg-white p-6 border-2 border-billmora-neutral-100 rounded-2xl h-fit">
+                <div class="border-b-2 border-billmora-neutral-100 pb-4">
                     <h2 class="text-xl font-semibold text-slate-800">Portal Configuration</h2>
                     <p class="text-sm text-slate-500">Customize the section text of the Moraine portal theme in the home page.</p>
                 </div>
@@ -28,7 +28,7 @@
                         rows="4"
                         required
                     >{{ old('hero_description', $theme->config['hero_description'] ?? '') }}</x-portal::textarea>
-                    <hr class="border-t-2 border-billmora-2 my-2">
+                    <hr class="border-t-2 border-billmora-neutral-100 my-2">
                     <x-portal::input 
                         name="catalog_title"
                         label="Catalog Title"
@@ -41,7 +41,7 @@
                         rows="4"
                         required
                     >{{ old('catalog_description', $theme->config['catalog_description'] ?? '') }}</x-portal::textarea>
-                    <hr class="border-t-2 border-billmora-2 my-2">
+                    <hr class="border-t-2 border-billmora-neutral-100 my-2">
                     <x-portal::input 
                         name="cta_title"
                         label="Call to Action Title"
@@ -56,8 +56,8 @@
                     >{{ old('cta_description', $theme->config['cta_description'] ?? '') }}</x-portal::textarea>
                 </div>
             </div>
-            <div class="w-full h-fit grid gap-4 col-span-12 lg:col-span-2 bg-billmora-bg p-6 border-2 border-billmora-2 rounded-2xl">
-                <div class="border-b-2 border-billmora-2 pb-4">
+            <div class="w-full h-fit grid gap-4 col-span-12 lg:col-span-2 bg-white p-6 border-2 border-billmora-neutral-100 rounded-2xl">
+                <div class="border-b-2 border-billmora-neutral-100 pb-4">
                     <h2 class="text-xl font-semibold text-slate-800">Color Configuration</h2>
                     <p class="text-sm text-slate-500">Customize the global appearance and palette of the Moraine portal theme.</p>
                 </div>
@@ -92,7 +92,7 @@
                             <label class="block text-slate-600 font-semibold text-sm mb-1">{{ $config['label'] }}</label>
                             <div class="flex items-center gap-2">
                                 <div
-                                    class="w-10 h-10 rounded-lg border-2 border-billmora-2 shrink-0 cursor-pointer shadow-sm"
+                                    class="w-10 h-10 rounded-lg border-2 border-billmora-neutral-100 shrink-0 cursor-pointer shadow-sm"
                                     :style="'background-color: ' + color"
                                     x-on:click="$refs.picker_{{ $key }}.click()"
                                 ></div>
@@ -102,7 +102,7 @@
                                         name="{{ $key }}"
                                         maxlength="7"
                                         x-model="color"
-                                        class="w-full px-3 py-2 text-sm rounded-lg border-2 border-billmora-2 outline-none text-slate-700 placeholder:text-slate-500 focus:ring-2 ring-billmora-primary-500 transition-shadow"
+                                        class="w-full px-3 py-2 text-sm rounded-lg border-2 border-billmora-neutral-100 outline-none text-slate-700 placeholder:text-slate-500 focus:ring-2 ring-billmora-primary-500 transition-shadow"
                                         placeholder="{{ ltrim($config['default'], '#') }}"
                                     />
                                 </div>
@@ -114,7 +114,7 @@
             </div>
         </div>
         <div class="flex gap-4 ml-auto pt-4">
-            <a href="{{ route('admin.themes') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-5 py-2 text-billmora-primary-500 hover:text-white font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+            <a href="{{ route('admin.themes') }}" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-5 py-2 text-billmora-primary-500 hover:text-white font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
                 {{ __('common.cancel') }}
             </a>
             <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 border-2 border-billmora-primary-500 hover:border-billmora-primary-600 px-5 py-2 text-white font-semibold rounded-lg transition-colors ease-in-out duration-150 cursor-pointer shadow-sm">

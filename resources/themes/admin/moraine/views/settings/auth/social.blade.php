@@ -22,7 +22,7 @@
         active="{{ request()->url() }}" />
     <div class="grid gap-5">
         @foreach (['google', 'discord', 'github'] as $provider)
-            <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+            <div class="grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
                 <span class="text-lg font-semibold text-slate-700">{{ __("admin/settings/auth.social.{$provider}") }}</span>
                 <div class="grid gap-4">
                     <x-admin::toggle 

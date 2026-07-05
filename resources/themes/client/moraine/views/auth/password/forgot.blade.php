@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @include('client::layouts.meta')
 </head>
-<body class="bg-billmora-bg">
+<body class="bg-white">
     <div class="flex flex-col lg:flex-row-reverse w-full min-h-dvh">
         <form action="{{ route('client.password.forgot.store') }}" method="POST" class="w-full lg:w-1/2 h-auto p-8">
             @csrf

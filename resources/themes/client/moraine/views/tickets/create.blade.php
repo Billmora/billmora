@@ -19,7 +19,7 @@
     }"
 >
     @csrf
-    <div class="flex flex-col gap-4 w-full h-fit bg-billmora-bg p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="flex flex-col gap-4 w-full h-fit bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <x-client::select
                 name="ticket_priority"
@@ -93,7 +93,7 @@
         <x-client::captcha form="ticket_form" class="mt-4 mx-auto" />
     </div>
     <div class="flex gap-4 ml-auto">
-        <a href="{{ route('client.tickets') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
+        <a href="{{ route('client.tickets') }}" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
             {{ __('common.cancel') }}
         </a>
         <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">

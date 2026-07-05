@@ -21,7 +21,7 @@
         @csrf
         @method('PUT')
         <div class="flex flex-col lg:flex-row gap-5">
-            <div class="w-full lg:w-2/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+            <div class="w-full lg:w-2/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <x-admin::input name="label" label="{{ __('admin/packages.fields.label') }}"
                         helper="{{ __('admin/packages.fields.label_helper') }}" placeholder="E.g. Character Name"
@@ -71,7 +71,7 @@ value2|Label 2" helper="{{ __('admin/packages.fields.options_helper') }}"
                 </div>
             </div>
 
-            <div class="w-full lg:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+            <div class="w-full lg:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
                 <x-admin::select name="type" label="{{ __('admin/packages.fields.type') }}"
                     helper="{{ __('admin/packages.fields.type_helper') }}" required>
                     <option value="text" @selected(old('type', $field->type) == 'text')>Text</option>
@@ -98,7 +98,7 @@ value2|Label 2" helper="{{ __('admin/packages.fields.options_helper') }}"
 
         <div class="flex gap-4 ml-auto">
             <a href="{{ route('admin.packages.fields', ['package' => $package->id]) }}"
-                class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 
+                class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 
                    px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors 
                    ease-in-out duration-150 cursor-pointer">
                 {{ __('common.cancel') }}

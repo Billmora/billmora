@@ -13,21 +13,32 @@ html {
 }
 
 :root {
-    /* Background & Text default (Light) */
-    --b-bg: #ffffff;
-    --b-text: #0f172a;
-    
-    /* Billmora 1-6 (Light Mode) */
-    --b-1: #f4f7fe;
-    --b-2: #eceeff;
-    --b-3: #e0e2ff;
-    --b-4: #d6d9ff;
-    --b-5: #cdd0ff;
-    --b-6: #c3c6ff;
-}
+    /* Billmora Neutral Palette */
+    --billmora-neutral-50: #f4f7fe;
+    --billmora-neutral-100: #eceeff;
+    --billmora-neutral-200: #e0e2ff;
+    --billmora-neutral-300: #d6d9ff;
+    --billmora-neutral-400: #cdd0ff;
+    --billmora-neutral-500: #c3c6ff;
+    --billmora-neutral-600: #8c90eb;
+    --billmora-neutral-700: #6468cc;
+    --billmora-neutral-800: #4246a3;
+    --billmora-neutral-900: #292d7a;
+    --billmora-neutral-950: #14174d;
 
-/* Moraine not supported with dark mode by default, list same as :root */
-/* .dark {} */
+    /* Billmora Primary Palette */
+    --billmora-primary-50: #f0f0ff;
+    --billmora-primary-100: #e0e0ff;
+    --billmora-primary-200: #c2c2ff;
+    --billmora-primary-300: #9494ff;
+    --billmora-primary-400: #7b71f9;
+    --billmora-primary-500: #7267ef; /* Base Primary */
+    --billmora-primary-600: #6659e0; /* Hover Primary */
+    --billmora-primary-700: #5345cc;
+    --billmora-primary-800: #4338a8;
+    --billmora-primary-900: #383087;
+    --billmora-primary-950: #211c4d;
+}
 
 * {
     color-scheme: light dark;
@@ -35,35 +46,36 @@ html {
 }
 
 @theme {
-    /* Mapping Background & Text */
-    --color-billmora-bg: var(--b-bg);
-    --color-billmora-text: var(--b-text);
-
-    /* Mapping Billmora 1-6 dynamic */
-    --color-billmora-1: var(--b-1);
-    --color-billmora-2: var(--b-2);
-    --color-billmora-3: var(--b-3);
-    --color-billmora-4: var(--b-4);
-    --color-billmora-5: var(--b-5);
-    --color-billmora-6: var(--b-6);
+    /* Mapping Billmora Neutral */
+    --color-billmora-neutral-50: var(--billmora-neutral-50);
+    --color-billmora-neutral-100: var(--billmora-neutral-100);
+    --color-billmora-neutral-200: var(--billmora-neutral-200);
+    --color-billmora-neutral-300: var(--billmora-neutral-300);
+    --color-billmora-neutral-400: var(--billmora-neutral-400);
+    --color-billmora-neutral-500: var(--billmora-neutral-500);
+    --color-billmora-neutral-600: var(--billmora-neutral-600);
+    --color-billmora-neutral-700: var(--billmora-neutral-700);
+    --color-billmora-neutral-800: var(--billmora-neutral-800);
+    --color-billmora-neutral-900: var(--billmora-neutral-900);
+    --color-billmora-neutral-950: var(--billmora-neutral-950);
 
     /* Primary Palette */
-    --color-billmora-primary-50: #f0f0ff;
-    --color-billmora-primary-100: #e0e0ff;
-    --color-billmora-primary-200: #c2c2ff;
-    --color-billmora-primary-300: #9494ff;
-    --color-billmora-primary-400: #7b71f9;
-    --color-billmora-primary-500: #7267ef; /* Base Primary */
-    --color-billmora-primary-600: #6659e0; /* Hover Primary */
-    --color-billmora-primary-700: #5345cc;
-    --color-billmora-primary-800: #4338a8;
-    --color-billmora-primary-900: #383087;
-    --color-billmora-primary-950: #211c4d;
+    --color-billmora-primary-50: var(--billmora-primary-50);
+    --color-billmora-primary-100: var(--billmora-primary-100);
+    --color-billmora-primary-200: var(--billmora-primary-200);
+    --color-billmora-primary-300: var(--billmora-primary-300);
+    --color-billmora-primary-400: var(--billmora-primary-400);
+    --color-billmora-primary-500: var(--billmora-primary-500); /* Base Primary */
+    --color-billmora-primary-600: var(--billmora-primary-600); /* Hover Primary */
+    --color-billmora-primary-700: var(--billmora-primary-700);
+    --color-billmora-primary-800: var(--billmora-primary-800);
+    --color-billmora-primary-900: var(--billmora-primary-900);
+    --color-billmora-primary-950: var(--billmora-primary-950);
 }
 
 /* ── TipTap Editor Shell ── */
 .tiptap-editor {
-    @apply border-2 border-billmora-2 rounded-lg overflow-hidden;
+    @apply border-2 border-billmora-neutral-100 rounded-lg overflow-hidden;
     min-height: 500px;
     display: flex;
     flex-direction: column;
@@ -72,7 +84,7 @@ html {
     @apply border-red-400;
 }
 .tiptap-toolbar {
-    @apply flex flex-wrap items-center gap-0.5 p-1.5 border-b-2 border-billmora-2 bg-billmora-1;
+    @apply flex flex-wrap items-center gap-0.5 p-1.5 border-b-2 border-billmora-neutral-100 bg-billmora-neutral-50;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -90,7 +102,7 @@ html {
     line-height: 1;
 }
 .tiptap-tb-sep {
-    @apply w-px h-5 bg-billmora-3 mx-0.5;
+    @apply w-px h-5 bg-billmora-neutral-200 mx-0.5;
     display: inline-block;
 }
 /* Dropdowns */
@@ -104,7 +116,7 @@ html {
     top: calc(100% + 4px);
     left: 0;
     z-index: 50;
-    @apply bg-white border-2 border-billmora-2 rounded-lg shadow-lg;
+    @apply bg-white border-2 border-billmora-neutral-100 rounded-lg shadow-lg;
     min-width: 140px;
 }
 .tiptap-tb-dropdown.open {
@@ -114,7 +126,7 @@ html {
     @apply py-1;
 }
 .tiptap-tb-dropdown-item {
-    @apply w-full text-left px-3 py-1.5 text-sm text-slate-600 hover:bg-billmora-1 cursor-pointer;
+    @apply w-full text-left px-3 py-1.5 text-sm text-slate-600 hover:bg-billmora-neutral-50 cursor-pointer;
 }
 /* Table grid picker */
 .tiptap-tb-grid {
@@ -123,7 +135,7 @@ html {
     @apply gap-0.5 p-2;
 }
 .tiptap-table-cell {
-    @apply w-6 h-6 border border-billmora-3 rounded-sm cursor-pointer transition-colors;
+    @apply w-6 h-6 border border-billmora-neutral-200 rounded-sm cursor-pointer transition-colors;
 }
 .tiptap-table-cell.hover {
     @apply bg-billmora-primary-500 border-billmora-primary-500;
@@ -153,7 +165,7 @@ html {
     @apply border-l-4 border-billmora-primary-400 pl-4 my-2 text-slate-500 italic;
 }
 .tiptap-content-area .ProseMirror hr {
-    @apply border-t-2 border-billmora-2 my-3;
+    @apply border-t-2 border-billmora-neutral-100 my-3;
 }
 .tiptap-content-area .ProseMirror a {
     @apply text-billmora-primary-500 underline;
@@ -162,7 +174,7 @@ html {
     @apply max-w-full rounded;
 }
 .tiptap-content-area .ProseMirror code:not(pre code) {
-    @apply bg-billmora-2 text-billmora-primary-600 text-sm font-mono px-1.5 py-0.5 rounded;
+    @apply bg-billmora-neutral-100 text-billmora-primary-600 text-sm font-mono px-1.5 py-0.5 rounded;
 }
 .tiptap-content-area .ProseMirror pre {
     @apply bg-[#0d1117] rounded-xl p-3 my-2 overflow-x-auto;
@@ -176,13 +188,13 @@ html {
 }
 .tiptap-content-area .ProseMirror th,
 .tiptap-content-area .ProseMirror td {
-    @apply border border-billmora-3 px-2 py-1 text-left;
+    @apply border border-billmora-neutral-200 px-2 py-1 text-left;
 }
 .tiptap-content-area .ProseMirror th {
-    @apply bg-billmora-1 font-semibold;
+    @apply bg-billmora-neutral-50 font-semibold;
 }
 .tiptap-content-area .ProseMirror .selectedCell {
-    @apply bg-billmora-3;
+    @apply bg-billmora-neutral-200;
 }
 /* Fullscreen */
 .tiptap-fullscreen {
@@ -202,7 +214,7 @@ html {
     height: 8px;
 }
 ::-webkit-scrollbar-track {
-    background: var(--b-2);
+    background: var(--billmora-neutral-100);
 }
 ::-webkit-scrollbar-thumb {
     background-color: var(--color-billmora-primary-500);
@@ -210,7 +222,7 @@ html {
 }
 * {
     scrollbar-width: thin;
-    scrollbar-color: var(--color-billmora-primary-500) var(--b-2);
+    scrollbar-color: var(--color-billmora-primary-500) var(--billmora-neutral-100);
 }
 
 #sidemenu {
@@ -234,7 +246,7 @@ html {
 /* TipTap Rendered Content (ticket messages etc.) */
 @layer components {
     .tiptap-content {
-        @apply min-w-0 max-w-full overflow-hidden text-billmora-text;
+        @apply min-w-0 max-w-full overflow-hidden text-billmora-neutral-900;
     }
     .tiptap-content pre {
         @apply bg-[#0d1117] rounded-xl p-2 my-3 overflow-x-auto max-w-full;
@@ -243,7 +255,7 @@ html {
         @apply block text-sm font-mono text-gray-100 bg-transparent p-0 whitespace-pre;
     }
     .tiptap-content code:not(pre code) {
-        @apply bg-billmora-2 text-billmora-primary-600 text-sm font-mono px-1.5 py-0.5 rounded whitespace-normal;
+        @apply bg-billmora-neutral-100 text-billmora-primary-600 text-sm font-mono px-1.5 py-0.5 rounded whitespace-normal;
     }
     .tiptap-content a { @apply text-billmora-primary-500 underline; }
     .tiptap-content h1 { @apply text-2xl font-bold my-2; }
@@ -256,6 +268,6 @@ html {
     }
     .tiptap-content table { @apply w-full border-collapse my-2 text-sm; }
     .tiptap-content th,
-    .tiptap-content td { @apply border border-billmora-3 px-2 py-1 text-left; }
-    .tiptap-content th { @apply bg-billmora-1 font-semibold; }
+    .tiptap-content td { @apply border border-billmora-neutral-200 px-2 py-1 text-left; }
+    .tiptap-content th { @apply bg-billmora-neutral-50 font-semibold; }
 }

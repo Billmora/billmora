@@ -1,9 +1,9 @@
 @extends('client::services.show')
 
 @section('workspaces')
-<form action="{{ route('client.services.cancellation.store', ['service' => $service->service_number]) }}" method="POST" class="bg-billmora-bg border-2 border-billmora-2 rounded-2xl overflow-hidden">
+<form action="{{ route('client.services.cancellation.store', ['service' => $service->service_number]) }}" method="POST" class="bg-white border-2 border-billmora-neutral-100 rounded-2xl overflow-hidden">
     @csrf
-    <div class="bg-billmora-1 px-6 py-4 border-b-2 border-billmora-2">
+    <div class="bg-billmora-neutral-50 px-6 py-4 border-b-2 border-billmora-neutral-100">
         <h3 class="flex gap-2 items-center font-semibold text-slate-600">
             <x-lucide-ban class="w-auto h-5" />
             {{ __('client/services.cancel_label') }}

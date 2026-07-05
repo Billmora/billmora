@@ -21,7 +21,7 @@
     <form action="{{ route('admin.variants.update', ['variant' => $variant->id]) }}" method="POST" class="flex flex-col gap-5">
         @csrf
         @method('PUT')
-        <div class="w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl space-y-4">
+        <div class="w-full h-fit bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl space-y-4">
             <div class="grid grid-cols-none md:grid-cols-2 gap-5">
                 <x-admin::input 
                     name="variant_name"
@@ -91,7 +91,7 @@
             >{{ old('variant_description', $variant->description) }}</x-admin::textarea>
         </div>
         <div class="flex gap-4 ml-auto">
-            <a href="{{ route('admin.variants') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
+            <a href="{{ route('admin.variants') }}" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
             <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.save') }}</button>
         </div>
     </form>

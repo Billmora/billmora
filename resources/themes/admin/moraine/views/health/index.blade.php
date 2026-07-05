@@ -8,7 +8,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {{-- Database Health --}}
-            <div class="bg-white rounded-2xl p-6 border-2 border-billmora-2 flex flex-col gap-4">
+            <div class="bg-white rounded-2xl p-6 border-2 border-billmora-neutral-100 flex flex-col gap-4">
                 <div class="flex items-center justify-between">
                     <div class="p-3 rounded-full bg-blue-100 text-blue-500">
                         <x-lucide-database class="w-6 h-6" />
@@ -25,7 +25,7 @@
             </div>
 
             {{-- Cache Health --}}
-            <div class="bg-white rounded-2xl p-6 border-2 border-billmora-2 flex flex-col gap-4">
+            <div class="bg-white rounded-2xl p-6 border-2 border-billmora-neutral-100 flex flex-col gap-4">
                 <div class="flex items-center justify-between">
                     <div class="p-3 rounded-full bg-purple-100 text-purple-500">
                         <x-lucide-zap class="w-6 h-6" />
@@ -42,7 +42,7 @@
             </div>
 
             {{-- Environment --}}
-            <div class="bg-white rounded-2xl p-6 border-2 border-billmora-2 flex flex-col gap-4">
+            <div class="bg-white rounded-2xl p-6 border-2 border-billmora-neutral-100 flex flex-col gap-4">
                 <div class="flex items-center justify-between">
                     <div class="p-3 rounded-full bg-orange-100 text-orange-500">
                         <x-lucide-server class="w-6 h-6" />
@@ -58,7 +58,7 @@
             </div>
 
             {{-- Debug Mode --}}
-            <div class="bg-white rounded-2xl p-6 border-2 border-billmora-2 flex flex-col gap-4">
+            <div class="bg-white rounded-2xl p-6 border-2 border-billmora-neutral-100 flex flex-col gap-4">
                 <div class="flex items-center justify-between">
                     <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
                         <x-lucide-bug class="w-6 h-6" />
@@ -75,7 +75,7 @@
             </div>
 
             {{-- PHP Version --}}
-            <div class="bg-white rounded-2xl p-6 border-2 border-billmora-2 flex flex-col gap-4">
+            <div class="bg-white rounded-2xl p-6 border-2 border-billmora-neutral-100 flex flex-col gap-4">
                 <div class="flex items-center justify-between">
                     <div class="p-3 rounded-full bg-blue-50 text-blue-400">
                         <x-lucide-code-2 class="w-6 h-6" />
@@ -91,7 +91,7 @@
             </div>
 
             {{-- Laravel Version --}}
-            <div class="bg-white rounded-2xl p-6 border-2 border-billmora-2 flex flex-col gap-4">
+            <div class="bg-white rounded-2xl p-6 border-2 border-billmora-neutral-100 flex flex-col gap-4">
                 <div class="flex items-center justify-between">
                     <div class="p-3 rounded-full bg-red-50 text-red-400">
                         <x-lucide-layers class="w-6 h-6" />
@@ -108,7 +108,7 @@
 
             {{-- Version Comparison --}}
             <div
-                class="bg-white rounded-2xl p-6 border-2 border-billmora-2 flex flex-col gap-4 md:col-span-2 lg:col-span-3">
+                class="bg-white rounded-2xl p-6 border-2 border-billmora-neutral-100 flex flex-col gap-4 md:col-span-2 lg:col-span-3">
                 <div class="flex items-center justify-between">
                     <div class="p-3 rounded-full bg-emerald-100 text-emerald-600">
                         <x-lucide-git-branch class="w-6 h-6" />

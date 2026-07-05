@@ -20,7 +20,7 @@
                         .replace(/-+/g, '-');
                 }
             }"
-            class="w-full lg:w-2/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl"
+            class="w-full lg:w-2/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl"
         >
             <x-admin::select 
                 name="catalog_id"
@@ -63,7 +63,7 @@
                 required
             >{{ old('package_description') }}</x-admin::textarea>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t-2 border-billmora-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t-2 border-billmora-neutral-100">
                 <x-admin::input
                     type="number"
                     min="-1"
@@ -94,7 +94,7 @@
                 </x-admin::select>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t-2 border-billmora-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t-2 border-billmora-neutral-100">
                 <x-admin::input
                     type="number"
                     min="1"
@@ -115,7 +115,7 @@
                 />
             </div>
         </div>
-        <div class="w-full lg:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+        <div class="w-full lg:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
             <x-admin::input
                 type="file"
                 name="package_icon"
@@ -155,7 +155,7 @@
     </div>
     <div class="flex gap-4 ml-auto">
         <a href="{{ route('admin.packages') }}" 
-            class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 
+            class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 
                    px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors 
                    ease-in-out duration-150 cursor-pointer">
             {{ __('common.cancel') }}

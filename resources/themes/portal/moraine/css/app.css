@@ -13,16 +13,18 @@ html {
 }
 
 :root {
-    /* Background & Text default (Light) */
-    --billmora-bg: #ffffff;
-    
-    /* Billmora 1-6 (Light Mode) */
-    --billmora-1: #f4f7fe;
-    --billmora-2: #eceeff;
-    --billmora-3: #e0e2ff;
-    --billmora-4: #d6d9ff;
-    --billmora-5: #cdd0ff;
-    --billmora-6: #c3c6ff;
+    /* Billmora Neutral Palette */
+    --billmora-neutral-50: #f4f7fe;
+    --billmora-neutral-100: #eceeff;
+    --billmora-neutral-200: #e0e2ff;
+    --billmora-neutral-300: #d6d9ff;
+    --billmora-neutral-400: #cdd0ff;
+    --billmora-neutral-500: #c3c6ff;
+    --billmora-neutral-600: #8c90eb;
+    --billmora-neutral-700: #6468cc;
+    --billmora-neutral-800: #4246a3;
+    --billmora-neutral-900: #292d7a;
+    --billmora-neutral-950: #14174d;
 
     /* Billmora Primary Palette */
     --billmora-primary-50: #f0f0ff;
@@ -38,25 +40,24 @@ html {
     --billmora-primary-950: #211c4d;
 }
 
-/* Moraine not supported with dark mode by default, list same as :root */
-/* .dark {} */
-
 * {
     color-scheme: light;
     font-family: "Plus Jakarta Sans", sans-serif;
 }
 
 @theme {
-    /* Mapping Background & Text */
-    --color-billmora-bg: var(--billmora-bg);
-
-    /* Mapping Billmora 1-6 dynamic */
-    --color-billmora-1: var(--billmora-1);
-    --color-billmora-2: var(--billmora-2);
-    --color-billmora-3: var(--billmora-3);
-    --color-billmora-4: var(--billmora-4);
-    --color-billmora-5: var(--billmora-5);
-    --color-billmora-6: var(--billmora-6);
+    /* Mapping Billmora Neutral */
+    --color-billmora-neutral-50: var(--billmora-neutral-50);
+    --color-billmora-neutral-100: var(--billmora-neutral-100);
+    --color-billmora-neutral-200: var(--billmora-neutral-200);
+    --color-billmora-neutral-300: var(--billmora-neutral-300);
+    --color-billmora-neutral-400: var(--billmora-neutral-400);
+    --color-billmora-neutral-500: var(--billmora-neutral-500);
+    --color-billmora-neutral-600: var(--billmora-neutral-600);
+    --color-billmora-neutral-700: var(--billmora-neutral-700);
+    --color-billmora-neutral-800: var(--billmora-neutral-800);
+    --color-billmora-neutral-900: var(--billmora-neutral-900);
+    --color-billmora-neutral-950: var(--billmora-neutral-950);
 
     /* Primary Palette */
     --color-billmora-primary-50: var(--billmora-primary-50);
@@ -77,7 +78,7 @@ html {
     height: 8px;
 }
 ::-webkit-scrollbar-track {
-    background: var(--billmora-2);
+    background: var(--billmora-neutral-100);
 }
 ::-webkit-scrollbar-thumb {
     background-color: var(--color-billmora-primary-500);
@@ -85,5 +86,5 @@ html {
 }
 * {
     scrollbar-width: thin;
-    scrollbar-color: var(--color-billmora-primary-500) var(--billmora-2);
+    scrollbar-color: var(--color-billmora-primary-500) var(--billmora-neutral-100);
 }

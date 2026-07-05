@@ -51,7 +51,7 @@
                             .replace(/-+/g, '-');
                     }
                 }"
-                class="w-full lg:w-2/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl"
+                class="w-full lg:w-2/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl"
             >
                 <x-admin::select 
                     name="catalog_id"
@@ -94,7 +94,7 @@
                     required
                 >{{ old('package_description', $package->description) }}</x-admin::textarea>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t-2 border-billmora-2">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t-2 border-billmora-neutral-100">
                     <x-admin::input
                         type="number"
                         min="-1"
@@ -125,7 +125,7 @@
                     </x-admin::select>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t-2 border-billmora-2">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t-2 border-billmora-neutral-100">
                     <x-admin::input
                         type="number"
                         min="1"
@@ -146,17 +146,17 @@
                     />
                 </div>
             </div>
-            <div class="w-full lg:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+            <div class="w-full lg:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
                 <div x-data="{ removed: false }">
                     @if ($package->icon)
                         <div x-show="!removed" class="grid gap-2 mb-4">
                             <label class="text-slate-600 font-semibold text-sm">{{ __('admin/packages.icon_label') }}</label>
-                            <div class="grid gap-3 p-3 bg-billmora-bg border-2 border-billmora-2 rounded-xl">
+                            <div class="grid gap-3 p-3 bg-white border-2 border-billmora-neutral-100 rounded-xl">
                             <div class="flex items-center gap-3">
                                 <img
                                     src="{{ Storage::url($package->icon) }}"
                                     alt="{{ $package->name }}"
-                                    class="w-14 h-14 object-contain rounded-lg bg-white p-1 border border-billmora-2 shrink-0"
+                                    class="w-14 h-14 object-contain rounded-lg bg-white p-1 border border-billmora-neutral-100 shrink-0"
                                 >
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-medium text-slate-700 truncate">{{ basename($package->icon) }}</p>
@@ -218,7 +218,7 @@
         </div>
         <div class="flex gap-4 ml-auto">
             <a href="{{ route('admin.packages') }}" 
-                class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 
+                class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 
                        px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors 
                        ease-in-out duration-150 cursor-pointer">
                 {{ __('common.cancel') }}

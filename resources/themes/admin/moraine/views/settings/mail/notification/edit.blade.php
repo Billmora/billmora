@@ -9,7 +9,7 @@
     @if ($noTranslation)
         <x-admin::alert variant="warning" title="{{ __('admin/settings/mail.translation_missing_title') }}">{{ __('admin/settings/mail.translation_missing_desc', ['lang' => request()->query('lang', config('app.fallback_locale'))]) }}</x-admin::alert>
     @endif
-    <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <x-admin::select name="notification_language" label="{{ __('admin/settings/mail.notification_language_label') }}" onchange="window.location='{{ url()->current() }}?lang=' + this.value" required>
             @foreach ($langs as $lang)
                 <option value="{{ $lang['lang'] }}" @selected(request()->query('lang', config('app.fallback_locale')) === $lang['lang'])>
@@ -18,7 +18,7 @@
             @endforeach
         </x-admin::select>
     </div>
-    <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
+    <div class="grid gap-4 bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl">
         <div class="grid md:grid-cols-2 gap-4">
             <x-admin::input type="text" name="notification_key" label="{{ __('admin/settings/mail.notification_key_label') }}" helper="{{ __('admin/settings/mail.notification_key_helper') }}" value="{{ old('notification_key', $notification->key) }}" disabled required />
             <x-admin::input type="text" name="notification_name" label="{{ __('admin/settings/mail.notification_name_label') }}" helper="{{ __('admin/settings/mail.notification_name_helper') }}" value="{{ old('notification_name', $notification->name) }}" disabled required />
@@ -34,19 +34,19 @@
             <label class="block text-slate-600 font-semibold mb-0.5">
                 {{ __('admin/settings/mail.notification_placeholder_label') }}
             </label>
-            <div class="border-2 border-billmora-2 rounded-xl overflow-x-auto">
+            <div class="border-2 border-billmora-neutral-100 rounded-xl overflow-x-auto">
                 <table class="w-full border-collapse">
                     <thead>
                         <tr class="text-slate-600">
-                            <th class="bg-billmora-2 border-r-2 border-billmora-2 px-4 py-2">{{ __('admin/common.key') }}</th>
-                            <th class="bg-billmora-2 border-billmora-2 px-4 py-2">{{ __('admin/common.value') }}</th>
+                            <th class="bg-billmora-neutral-100 border-r-2 border-billmora-neutral-100 px-4 py-2">{{ __('admin/common.key') }}</th>
+                            <th class="bg-billmora-neutral-100 border-billmora-neutral-100 px-4 py-2">{{ __('admin/common.value') }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($notification->placeholder as $key => $desc)
                             <tr class="text-slate-500">
-                                <td class="border-t-2 border-r-2 border-billmora-2 px-4 py-2"><pre>{{ '{' . $key . '}' }}</pre></td>
-                                <td class="border-t-2 border-billmora-2 px-4 py-2"><pre>{{ $desc }}</pre></td>
+                                <td class="border-t-2 border-r-2 border-billmora-neutral-100 px-4 py-2"><pre>{{ '{' . $key . '}' }}</pre></td>
+                                <td class="border-t-2 border-billmora-neutral-100 px-4 py-2"><pre>{{ $desc }}</pre></td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -56,7 +56,7 @@
         </div>
     </div>
     <div class="flex gap-4 ml-auto">
-        <a href="{{ route('admin.settings.mail.notification') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
+        <a href="{{ route('admin.settings.mail.notification') }}" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>
         <button type="submit" class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.update') }}</button>
     </div>
 </form>

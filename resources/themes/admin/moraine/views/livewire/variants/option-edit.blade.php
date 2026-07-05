@@ -6,7 +6,7 @@
 >
     @csrf
     @method('PUT')
-    <div class="w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl space-y-4">
+    <div class="w-full h-fit bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl space-y-4">
         <div class="grid grid-cols-none md:grid-cols-2 gap-5">
             <x-admin::input
                 name="variant_options_name"
@@ -43,7 +43,7 @@
         @foreach($pricings as $index => $pricing)
             <div
                 wire:key="pricing-{{ $pricing['uid'] }}"
-                class="w-full h-fit bg-white p-8 border-2 border-billmora-2 rounded-2xl mb-5"
+                class="w-full h-fit bg-white p-8 border-2 border-billmora-neutral-100 rounded-2xl mb-5"
             >
                 <input type="hidden" name="pricings[{{ $index }}][uid]" value="{{ $pricing['uid'] }}" />
                 @if (!empty($pricing['id']))
@@ -125,7 +125,7 @@
                             @foreach ($currencies as $currency)
                                 <div
                                     wire:key="rate-{{ $pricing['uid'] }}-{{ $currency->code }}"
-                                    class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-4 gap-5 border-2 border-billmora-2 p-4 rounded-xl"
+                                    class="grid grid-cols-none md:grid-cols-2 lg:grid-cols-4 gap-5 border-2 border-billmora-neutral-100 p-4 rounded-xl"
                                 >
                                     <x-admin::input
                                         name="pricings[{{ $index }}][rates][{{ $currency->code }}][currency]"
@@ -182,7 +182,7 @@
     <div class="flex gap-4 ml-auto">
         <a
             href="{{ route('admin.variants.options', ['variant' => $variant->id]) }}"
-            class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors duration-150"
+            class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors duration-150"
         >
             {{ __('common.cancel') }}
         </a>

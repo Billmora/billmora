@@ -30,52 +30,52 @@
         </div>
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
-        <div class="h-fit bg-white border-2 border-billmora-2 rounded-2xl p-5 lg:col-span-2">
+        <div class="h-fit bg-white border-2 border-billmora-neutral-100 rounded-2xl p-5 lg:col-span-2">
             <h3 class="text-lg font-semibold text-slate-600 mb-4">{{ __('admin/dashboard.revenue_overview', ['year' => now()->year]) }}</h3>
             <div class="relative h-64 w-full">
                 <canvas id="revenueChart"></canvas>
             </div>
         </div>
         <div class="flex flex-col gap-5 lg:col-span-1">
-            <div class="bg-white border-2 border-billmora-2 rounded-2xl p-5">
+            <div class="bg-white border-2 border-billmora-neutral-100 rounded-2xl p-5">
                 <h3 class="text-lg font-semibold text-slate-600 mb-4">{{ __('admin/dashboard.billing_summary') }}</h3>
                 <ul>
                     <li class="flex justify-between items-center">
                         <span class="text-slate-500 text-sm font-medium uppercase">{{ __('admin/dashboard.billing_today') }}</span>
                         <span class="text-slate-600 font-bold">{{ $billingSummary['today'] }}</span>
                     </li>
-                    <hr class="border-t-2 border-billmora-2 my-3">
+                    <hr class="border-t-2 border-billmora-neutral-100 my-3">
                     <li class="flex justify-between items-center">
                         <span class="text-slate-500 text-sm font-medium uppercase">{{ __('admin/dashboard.billing_month') }}</span>
                         <span class="text-slate-600 font-bold">{{ $billingSummary['month'] }}</span>
                     </li>
-                    <hr class="border-t-2 border-billmora-2 my-3">
+                    <hr class="border-t-2 border-billmora-neutral-100 my-3">
                     <li class="flex justify-between items-center">
                         <span class="text-slate-500 text-sm font-medium uppercase">{{ __('admin/dashboard.billing_year') }}</span>
                         <span class="text-slate-600 font-bold">{{ $billingSummary['year'] }}</span>
                     </li>
-                    <hr class="border-t-2 border-billmora-2 my-3">
+                    <hr class="border-t-2 border-billmora-neutral-100 my-3">
                     <li class="flex justify-between items-center">
                         <span class="text-slate-500 font-semibold uppercase">{{ __('admin/dashboard.billing_all_time') }}</span>
                         <span class="text-billmora-primary-500 font-bold text-lg">{{ $billingSummary['all_time'] }}</span>
                     </li>
                 </ul>
             </div>
-            <div class="bg-white border-2 border-billmora-2 rounded-2xl p-5">
+            <div class="bg-white border-2 border-billmora-neutral-100 rounded-2xl p-5">
                 <h3 class="text-lg font-semibold text-slate-600 mb-4">{{ __('admin/dashboard.system_summary') }}</h3>
                 <ul>
                     <li class="flex justify-between items-center">
                         <span class="text-slate-600 font-medium">{{ __('admin/dashboard.total_clients') }}</span>
                         <span class="bg-blue-100 text-blue-800 py-1 px-3 rounded-full text-xs font-semibold">{{ $totalClients }}</span>
                     </li>
-                    <hr class="border-t-2 border-billmora-2 my-3">
+                    <hr class="border-t-2 border-billmora-neutral-100 my-3">
                     <li class="flex justify-between items-center">
                         <span class="text-slate-600 font-medium">{{ __('admin/dashboard.tasks') }}</span>
                         <a href="{{ route('admin.tasks') }}" class="bg-red-100 text-red-700 hover:bg-red-200 py-1 px-3 rounded-full text-xs font-semibold transition">
                             {{ __('admin/dashboard.view_queue') }}
                         </a>
                     </li>
-                    <hr class="border-t-2 border-billmora-2 my-3">
+                    <hr class="border-t-2 border-billmora-neutral-100 my-3">
                     <li class="flex justify-between items-center">
                         <span class="text-slate-600 font-medium">{{ __('admin/dashboard.automations') }}</span>
                         <a href="{{ route('admin.automations') }}" class="bg-green-100 text-green-700 hover:bg-green-200 py-1 px-3 rounded-full text-xs font-semibold transition">

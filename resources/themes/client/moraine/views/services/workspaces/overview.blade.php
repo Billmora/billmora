@@ -2,8 +2,8 @@
 
 @section('workspaces')
     @if($variantOptions->isNotEmpty())
-        <div class="bg-billmora-bg border-2 border-billmora-2 rounded-2xl overflow-hidden">
-            <div class="bg-billmora-1 px-6 py-4 border-b-2 border-billmora-2">
+        <div class="bg-white border-2 border-billmora-neutral-100 rounded-2xl overflow-hidden">
+            <div class="bg-billmora-neutral-50 px-6 py-4 border-b-2 border-billmora-neutral-100">
                 <h3 class="flex gap-2 items-center font-semibold text-slate-600">
                     <x-lucide-boxes class="w-auto h-5" />
                     {{ __('client/services.variant_label') }}
@@ -12,7 +12,7 @@
             <ul class="grid gap-4 p-6">
                 @foreach($variantOptions->groupBy('variant.name') as $variantName => $options)
                     @if(!$loop->first)
-                        <hr class="border-t-2 border-billmora-2">
+                        <hr class="border-t-2 border-billmora-neutral-100">
                     @endif
                     <li class="grid grid-cols-2 text-start">
                         <span class="text-slate-500 font-semibold">
@@ -27,8 +27,8 @@
         </div>
     @endif
     @if(!empty($service->fields))
-        <div class="bg-billmora-bg border-2 border-billmora-2 rounded-2xl overflow-hidden">
-            <div class="bg-billmora-1 px-6 py-4 border-b-2 border-billmora-2 flex justify-between items-center">
+        <div class="bg-white border-2 border-billmora-neutral-100 rounded-2xl overflow-hidden">
+            <div class="bg-billmora-neutral-50 px-6 py-4 border-b-2 border-billmora-neutral-100 flex justify-between items-center">
                 <h3 class="flex gap-2 items-center font-semibold text-slate-600">
                     <x-lucide-file-text class="w-auto h-5" />
                     {{ __('client/services.additional_information_label') ?? 'Additional Information' }}
@@ -44,7 +44,7 @@
                         }
                     @endphp
                     @if($hasOutput)
-                        <hr class="border-t-2 border-billmora-2">
+                        <hr class="border-t-2 border-billmora-neutral-100">
                     @endif
                     @php $hasOutput = true; @endphp
                     <li class="grid grid-cols-2 text-start items-center">
@@ -58,7 +58,7 @@
                                     <button type="button" 
                                         x-on:click="shown = !shown"
                                         :class="{ 'text-slate-400': !shown }"
-                                        class="text-sm px-2 py-1 bg-billmora-1 border border-billmora-2 rounded-md hover:bg-billmora-2 transition-colors cursor-pointer text-slate-500">
+                                        class="text-sm px-2 py-1 bg-billmora-neutral-50 border border-billmora-neutral-100 rounded-md hover:bg-billmora-neutral-100 transition-colors cursor-pointer text-slate-500">
                                         <span x-text="shown ? '{{ __('common.hide') }}' : '{{ __('common.show') }}'"></span>
                                     </button>
                                 </div>
@@ -84,8 +84,8 @@
         </div>
     @endif
     @if(!empty($checkoutData))
-        <div class="bg-billmora-bg border-2 border-billmora-2 rounded-2xl overflow-hidden">
-            <div class="bg-billmora-1 px-6 py-4 border-b-2 border-billmora-2 flex justify-between items-center">
+        <div class="bg-white border-2 border-billmora-neutral-100 rounded-2xl overflow-hidden">
+            <div class="bg-billmora-neutral-50 px-6 py-4 border-b-2 border-billmora-neutral-100 flex justify-between items-center">
                 <h3 class="flex gap-2 items-center font-semibold text-slate-600">
                     <x-lucide-server class="w-auto h-5" />
                     {{ __('client/services.configuration_label') }}
@@ -94,7 +94,7 @@
             <ul class="grid gap-4 p-6">
                 @foreach($checkoutData as $data)
                     @if(!$loop->first)
-                        <hr class="border-t-2 border-billmora-2">
+                        <hr class="border-t-2 border-billmora-neutral-100">
                     @endif
                     <li class="grid grid-cols-2 text-start items-center">
                         <span class="text-slate-500 font-semibold">
@@ -107,7 +107,7 @@
                                     <button type="button" 
                                         x-on:click="shown = !shown"
                                         :class="{ 'text-slate-400': !shown }"
-                                        class="text-sm px-2 py-1 bg-billmora-1 border border-billmora-2 rounded-md hover:bg-billmora-2 transition-colors cursor-pointer text-slate-500">
+                                        class="text-sm px-2 py-1 bg-billmora-neutral-50 border border-billmora-neutral-100 rounded-md hover:bg-billmora-neutral-100 transition-colors cursor-pointer text-slate-500">
                                         <span x-text="shown ? '{{ __('common.hide') }}' : '{{ __('common.show') }}'"></span>
                                     </button>
                                 </div>

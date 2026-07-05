@@ -64,7 +64,7 @@
             @class([
                 'cursor-pointer border-2 px-3 py-2 bg-white text-slate-700 rounded-lg focus-within:ring-2 ring-billmora-primary-500',
                 'border-red-400' => $error,
-                'border-billmora-2' => !$error,
+                'border-billmora-neutral-100' => !$error,
             ])
         >
             <template x-if="!selected">
@@ -72,7 +72,7 @@
             </template>
             <template x-if="selected">
                 <div class="flex items-center justify-between gap-2">
-                    <span class="inline-flex items-center gap-1 bg-billmora-2 px-2 py-1 text-sm text-slate-600 font-semibold rounded-md break-all max-w-full">
+                    <span class="inline-flex items-center gap-1 bg-billmora-neutral-100 px-2 py-1 text-sm text-slate-600 font-semibold rounded-md break-all max-w-full">
                         <span x-text="getSelectedTitle()"></span>
                     </span>
                     <button 
@@ -88,14 +88,14 @@
         <div 
             x-show="open"
             x-on:click.away="open = false"
-            class="absolute z-10 mt-1 w-full bg-white border-2 border-billmora-2 rounded-xl p-3"
+            class="absolute z-10 mt-1 w-full bg-white border-2 border-billmora-neutral-100 rounded-xl p-3"
         >
             <input 
                 type="text"
                 placeholder="{{ __('admin/common.search') }}"
                 x-model="search"
                 x-on:input="errorVisible = false"
-                class="w-full mb-2 text-slate-700 rounded-lg px-3 py-2 border-2 border-billmora-2 outline-none focus:ring-2 ring-billmora-primary-500 placeholder:text-slate-500"
+                class="w-full mb-2 text-slate-700 rounded-lg px-3 py-2 border-2 border-billmora-neutral-100 outline-none focus:ring-2 ring-billmora-primary-500 placeholder:text-slate-500"
             />
             <ul class="max-h-50 overflow-y-auto">
                 <template x-for="option in filteredOptions()" :key="option.value">
