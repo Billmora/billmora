@@ -95,6 +95,7 @@ class PackagesController extends Controller
             'package_auto_provision'      => ['required', 'boolean'],
             'package_status'              => ['required', 'in:visible,hidden'],
             'package_prorata_day'         => ['nullable', 'integer', 'min:1', 'max:28'],
+            'package_prorata_next_month_day' => ['nullable', 'integer', 'min:1', 'max:28'],
         ]);
 
         if ($request->package_icon) {
@@ -113,6 +114,7 @@ class PackagesController extends Controller
             'allow_quantity'      => $validated['package_allow_quantity'],
             'auto_provision'      => $validated['package_auto_provision'],
             'prorata_day'         => $validated['package_prorata_day'] ?: null,
+            'prorata_next_month_day' => $validated['package_prorata_next_month_day'] ?: null,
             'status'              => $validated['package_status'],
         ]);
 
@@ -183,6 +185,7 @@ class PackagesController extends Controller
             'package_auto_provision'      => ['required', 'boolean'],
             'package_status'              => ['required', 'in:visible,hidden'],
             'package_prorata_day'         => ['nullable', 'integer', 'min:1', 'max:28'],
+            'package_prorata_next_month_day' => ['nullable', 'integer', 'min:1', 'max:28'],
         ]);
 
         $icon = $package->icon;
@@ -212,6 +215,7 @@ class PackagesController extends Controller
             'allow_quantity'      => $validated['package_allow_quantity'],
             'auto_provision'      => $validated['package_auto_provision'],
             'prorata_day'         => $validated['package_prorata_day'] ?: null,
+            'prorata_next_month_day' => $validated['package_prorata_next_month_day'] ?: null,
             'status'              => $validated['package_status'],
         ]);
 

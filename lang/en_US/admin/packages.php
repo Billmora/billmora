@@ -56,6 +56,8 @@ return [
     'allow_cancellation_helper' => 'Enable to let customers request service cancellation for this package.',
     'prorata_day_label' => 'Prorata Day',
     'prorata_day_helper' => 'Enter a day (1-28) to enable pro-rata billing, or leave empty to disable.',
+    'prorata_next_month_day_label' => 'Charge Next Month',
+    'prorata_next_month_day_helper' => 'Charge for the next month if ordered on or after this day (1-28). Leave empty to disable.',
     'allow_quantity_label' => 'Allow Quantity',
     'allow_quantity_helper' => 'Enable to let customers purchase multiple or single quantities of this package.',
     'auto_provision_label' => 'Auto Provisioning',

@@ -93,6 +93,58 @@
                     rows="6"
                     required
                 >{{ old('package_description', $package->description) }}</x-admin::textarea>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t-2 border-billmora-2">
+                    <x-admin::input
+                        type="number"
+                        min="-1"
+                        name="package_stock"
+                        label="{{ __('admin/packages.stock_label') }}"
+                        helper="{{ __('admin/packages.stock_helper') }}"
+                        value="{{ old('package_stock', $package->stock) }}"
+                        required
+                    />
+                    <x-admin::input
+                        type="number"
+                        min="-1"
+                        name="package_per_user_limit"
+                        label="{{ __('admin/packages.per_user_limit_label') }}"
+                        helper="{{ __('admin/packages.per_user_limit_helper') }}"
+                        value="{{ old('package_per_user_limit', $package->per_user_limit) }}"
+                        required
+                    />
+                    <x-admin::select
+                        name="package_allow_quantity"
+                        label="{{ __('admin/packages.allow_quantity_label') }}"
+                        helper="{{ __('admin/packages.allow_quantity_helper') }}"
+                        required
+                    >
+                        @foreach (['single', 'multiple'] as $quantity)
+                            <option value="{{ $quantity }}" {{ old('package_allow_quantity', $package->allow_quantity) === $quantity ? 'selected' : '' }}>{{ ucwords($quantity) }}</option>
+                        @endforeach
+                    </x-admin::select>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t-2 border-billmora-2">
+                    <x-admin::input
+                        type="number"
+                        min="1"
+                        max="28"
+                        name="package_prorata_day"
+                        label="{{ __('admin/packages.prorata_day_label') }}"
+                        helper="{{ __('admin/packages.prorata_day_helper') }}"
+                        value="{{ old('package_prorata_day', $package->prorata_day) }}"
+                    />
+                    <x-admin::input
+                        type="number"
+                        min="1"
+                        max="28"
+                        name="package_prorata_next_month_day"
+                        label="{{ __('admin/packages.prorata_next_month_day_label') }}"
+                        helper="{{ __('admin/packages.prorata_next_month_day_helper') }}"
+                        value="{{ old('package_prorata_next_month_day', $package->prorata_next_month_day) }}"
+                    />
+                </div>
             </div>
             <div class="w-full lg:w-1/3 h-fit grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
                 <div x-data="{ removed: false }">
@@ -131,55 +183,6 @@
                     </div>
                 </div>
 
-                <x-admin::input
-                    type="number"
-                    min="-1"
-                    name="package_stock"
-                    label="{{ __('admin/packages.stock_label') }}"
-                    helper="{{ __('admin/packages.stock_helper') }}"
-                    value="{{ old('package_stock', $package->stock) }}"
-                    required
-                />
-                <x-admin::input
-                    type="number"
-                    min="-1"
-                    name="package_per_user_limit"
-                    label="{{ __('admin/packages.per_user_limit_label') }}"
-                    helper="{{ __('admin/packages.per_user_limit_helper') }}"
-                    value="{{ old('package_per_user_limit', $package->per_user_limit) }}"
-                    required
-                />
-                <x-admin::toggle
-                    name="package_allow_cancellation"
-                    label="{{ __('admin/packages.allow_cancellation_label') }}"
-                    helper="{{ __('admin/packages.allow_cancellation_helper') }}"
-                    :checked="old('package_allow_cancellation', $package->allow_cancellation)"
-                />
-                <x-admin::input
-                    type="number"
-                    min="1"
-                    max="28"
-                    name="package_prorata_day"
-                    label="{{ __('admin/packages.prorata_day_label') }}"
-                    helper="{{ __('admin/packages.prorata_day_helper') }}"
-                    value="{{ old('package_prorata_day', $package->prorata_day) }}"
-                />
-                <x-admin::toggle
-                    name="package_auto_provision"
-                    label="{{ __('admin/packages.auto_provision_label') }}"
-                    helper="{{ __('admin/packages.auto_provision_helper') }}"
-                    :checked="old('package_auto_provision', $package->auto_provision)"
-                />
-                <x-admin::select
-                    name="package_allow_quantity"
-                    label="{{ __('admin/packages.allow_quantity_label') }}"
-                    helper="{{ __('admin/packages.allow_quantity_helper') }}"
-                    required
-                >
-                    @foreach (['single', 'multiple'] as $quantity)
-                        <option value="{{ $quantity }}" {{ old('package_allow_quantity', $package->allow_quantity) === $quantity ? 'selected' : '' }}>{{ ucwords($quantity) }}</option>
-                    @endforeach
-                </x-admin::select>
                 <x-admin::radio.group 
                     name="package_status"
                     label="{{ __('admin/packages.status_label') }}"
@@ -197,6 +200,20 @@
                         label="{{ __('admin/packages.status_options.hidden') }}"
                         :checked="old('package_status', $package->status) === 'hidden'" />
                 </x-admin::radio.group>
+
+                <x-admin::toggle
+                    name="package_auto_provision"
+                    label="{{ __('admin/packages.auto_provision_label') }}"
+                    helper="{{ __('admin/packages.auto_provision_helper') }}"
+                    :checked="old('package_auto_provision', $package->auto_provision)"
+                />
+                
+                <x-admin::toggle
+                    name="package_allow_cancellation"
+                    label="{{ __('admin/packages.allow_cancellation_label') }}"
+                    helper="{{ __('admin/packages.allow_cancellation_helper') }}"
+                    :checked="old('package_allow_cancellation', $package->allow_cancellation)"
+                />
             </div>
         </div>
         <div class="flex gap-4 ml-auto">

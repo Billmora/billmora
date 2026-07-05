@@ -61,7 +61,20 @@ class ProrataService
         $proratedDays     = (int) $today->diffInDays($prorataDayDate);
         $daysInCycle      = $this->daysInCycle($prorataDayDate, $period, $packagePrice->time_interval ?? 1);
         $proratedAmount   = round(($recurringTotal / $daysInCycle) * $proratedDays, 2);
-        $firstNextDueDate = $this->advanceByInterval($prorataDayDate, $period, $packagePrice->time_interval ?? 1);
+        
+        $chargeNextMonth = false;
+        
+        if ($package->prorata_next_month_day && $today->day >= $package->prorata_next_month_day) {
+            $chargeNextMonth = true;
+        }
+
+        if ($chargeNextMonth) {
+            $firstInvoiceTotal = $proratedAmount + $recurringTotal;
+            $firstNextDueDate = $this->advanceByInterval($prorataDayDate, $period, $packagePrice->time_interval ?? 1);
+        } else {
+            $firstInvoiceTotal = $proratedAmount;
+            $firstNextDueDate = $prorataDayDate;
+        }
 
         return [
             'prorata_day_date'    => $prorataDayDate,
@@ -69,7 +82,7 @@ class ProrataService
             'days_in_cycle'       => $daysInCycle,
             'prorated_amount'     => $proratedAmount,
             'full_period_amount'  => $recurringTotal,
-            'first_invoice_total' => $proratedAmount + $recurringTotal,
+            'first_invoice_total' => $firstInvoiceTotal,
             'first_next_due_date' => $firstNextDueDate,
         ];
     }

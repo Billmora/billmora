@@ -34,6 +34,7 @@ class Package extends Model implements BrowseInterface
         'auto_provision'     => 'boolean',
         'provisioning_config'=> 'array',
         'prorata_day'        => 'integer',
+        'prorata_next_month_day' => 'integer',
     ];
 
     /**
