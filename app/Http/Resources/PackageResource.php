@@ -26,6 +26,7 @@ class PackageResource extends JsonResource
             'allow_cancellation' => $this->allow_cancellation,
             'allow_quantity' => $this->allow_quantity,
             'prorata_day' => $this->prorata_day,
+            'prorata_next_month_day' => $this->prorata_next_month_day,
             'auto_provision' => $this->auto_provision,
             'sort_order' => $this->sort_order,
             'plugin_id' => $this->plugin_id,
