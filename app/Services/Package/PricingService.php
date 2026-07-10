@@ -289,7 +289,9 @@ class PricingService
      */
     public function getAvailableVariants(Package $package, string $currencyCode): Collection
     {
-        return $package->variants->map(function ($variant) use ($currencyCode) {
+        return $package->variants->filter(function ($variant) {
+            return $variant->status === 'visible';
+        })->map(function ($variant) use ($currencyCode) {
             $filteredOptions = $variant->options->map(function ($option) use ($currencyCode) {
                 $filtered = $option->prices->filter(function ($price) use ($currencyCode) {
                     if (strtolower($price->type) === 'free') {

@@ -60,9 +60,10 @@ class OrderValidationService
         array $variantSelections,
         ?PackagePrice $packagePrice = null
     ): array {
-        $packageVariantIds = $package->variants->pluck('id')->toArray();
+        $visibleVariants = $package->variants->filter(fn($v) => $v->status === 'visible');
+        $packageVariantIds = $visibleVariants->pluck('id')->toArray();
 
-        foreach ($package->variants as $variant) {
+        foreach ($visibleVariants as $variant) {
             if ($variant->type !== 'checkbox' && empty($variantSelections[$variant->id])) {
                 return $this->error(__('validation.required', ['attribute' => $variant->name]));
             }
