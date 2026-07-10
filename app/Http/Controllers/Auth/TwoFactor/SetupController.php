@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth\TwoFactor;
 use App\Facades\Audit;
 use App\Http\Controllers\Controller;
 use App\Services\TwoFactorService;
+use App\Traits\AuditsUser;
 use Billmora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Crypt;
 
 class SetupController extends Controller
 {
+    use AuditsUser;
 
     /**
      * The Two-Factor Authentication service instance.
