@@ -42,13 +42,7 @@
                                             class="inline-flex items-center text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600 cursor-pointer">
                                             {{ __('common.edit') }}
                                         </a>
-                                        <form action="{{ route('admin.packages.fields.destroy', ['package' => $package->id, 'field' => $field['id']]) }}" method="POST" class="inline-block" onsubmit="return confirm('{{ __('common.delete_confirm') }}');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">
-                                                {{ __('common.delete') }}
-                                            </button>
-                                        </form>
+                                        <x-admin::modal.trigger modal="deleteFieldModal-{{ $field['id'] }}" variant="open" class="inline-flex items-center text-sm font-semibold text-red-400 hover:text-red-500 cursor-pointer">{{ __('common.delete') }}</x-admin::modal.trigger>
                                     </td>
                                 </tr>
                             @empty
@@ -64,6 +58,25 @@
             </div>
         </div>
     </div>
+
+    @foreach ($fields as $field)
+        <x-admin::modal.content
+            modal="deleteFieldModal-{{ $field['id'] }}"
+            variant="danger"
+            size="xl"
+            position="centered"
+            title="{{ __('common.delete_modal_title') }}"
+            description="{{ __('common.delete_modal_description', ['item' => $field['label']]) }}">
+            <form action="{{ route('admin.packages.fields.destroy', ['package' => $package->id, 'field' => $field['id']]) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="flex justify-end gap-2 mt-4">
+                    <x-admin::modal.trigger type="button" variant="close" class="bg-billmora-neutral-50 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</x-admin::modal.trigger>
+                    <button type="submit" class="bg-red-500 border-2 border-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.delete') }}</button>
+                </div>
+            </form>
+        </x-admin::modal.content>
+    @endforeach
 
 
     
