@@ -64,7 +64,9 @@ class PackagesController extends Controller
      */
     public function create()
     {
-        $catalogs = Catalog::select('id', 'name', 'slug')->get();
+        $catalogs = Catalog::select('id', 'name', 'slug')
+            ->where('status', 'visible')
+            ->get();
 
         return view('admin::packages.create', compact('catalogs'));
     }
@@ -152,7 +154,10 @@ class PackagesController extends Controller
      */
     public function edit(Package $package)
     {
-        $catalogs = Catalog::select('id', 'name', 'slug')->get();
+        $catalogs = Catalog::select('id', 'name', 'slug')
+            ->where('status', 'visible')
+            ->orWhere('id', $package->catalog_id)
+            ->get();
 
         return view('admin::packages.edit', compact('package', 'catalogs'));
     }
