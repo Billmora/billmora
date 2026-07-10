@@ -105,7 +105,7 @@ class PluginsController extends Controller
             }
 
             File::ensureDirectoryExists(base_path("plugin/{$typePlural}"));
-            File::moveDirectory($sourceDir, $targetDir);
+            File::copyDirectory($sourceDir, $targetDir);
             File::deleteDirectory($tmpPath);
 
             Audit::system(
@@ -163,7 +163,7 @@ class PluginsController extends Controller
             }
 
             File::deleteDirectory($targetDir);
-            File::moveDirectory($sourceDir, $targetDir);
+            File::copyDirectory($sourceDir, $targetDir);
             File::deleteDirectory($tmpPath);
 
             Audit::system(
