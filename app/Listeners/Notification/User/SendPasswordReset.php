@@ -32,7 +32,7 @@ class SendPasswordReset implements ShouldQueue
         $placeholder = [
             'client_name' => $user->fullname,
             'company_name' => Billmora::getGeneral('company_name'),
-            'verify_url' => route('client.password.reset', ['token' => $event->token]),
+            'reset_url' => route('client.password.reset', ['token' => $event->token]),
             'clientarea_url' => config('app.url'),
         ];
 
