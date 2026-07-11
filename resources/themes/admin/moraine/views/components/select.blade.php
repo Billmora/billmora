@@ -43,7 +43,7 @@
                 'bg-billmora-neutral-50 cursor-not-allowed' => $attributes->has('disabled') && $attributes->get('disabled') !== false,
                 'cursor-pointer' => !$attributes->has('disabled') || $attributes->get('disabled') === false,
             ])
-            {{ $attributes }}
+            {{ $attributes->except(['required', 'pattern']) }}
         >
             <option value="" class="text-slate-500" {{ $required ? 'disabled' : '' }}>
                 {{ __('common.choose_option') }}

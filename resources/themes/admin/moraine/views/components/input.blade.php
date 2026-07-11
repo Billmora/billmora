@@ -51,7 +51,7 @@
             'cursor-pointer' => ($type === 'file') && (!$attributes->has('disabled') || $attributes->get('disabled') === false),
             'cursor-text' => ($type !== 'file') && (!$attributes->has('disabled') || $attributes->get('disabled') === false),
         ])
-        {{ $attributes }}
+        {{ $attributes->except(['min', 'max', 'required', 'pattern', 'minlength', 'maxlength', 'step']) }}
     />
 
     @if ($resolvedError)

@@ -45,7 +45,7 @@
                 'border-red-400' => $resolvedError,
                 'border-billmora-neutral-100' => !$resolvedError,
             ])
-            {{ $attributes }}
+            {{ $attributes->except(['required', 'pattern', 'minlength', 'maxlength']) }}
         >{{ $resolvedValue ?? $slot }}</textarea>
     </div>
 
