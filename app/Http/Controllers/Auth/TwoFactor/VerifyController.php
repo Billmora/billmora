@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth\TwoFactor;
 
 use App\Facades\Audit;
 use App\Http\Controllers\Controller;
+use App\Listeners\Notification\User\SendLoginDetected;
 use App\Services\TwoFactorService;
 use App\Traits\AuditsUser;
 use Illuminate\Http\Request;
@@ -72,6 +73,11 @@ class VerifyController extends Controller
 
         if ($user->twoFactor->isActive()) {
             session()->put('2fa_passed', true);
+
+            $loginIp = session()->pull('login_ip', $request->ip());
+            $loginUserAgent = session()->pull('login_user_agent', $request->userAgent());
+
+            SendLoginDetected::dispatch($user, $loginIp, $loginUserAgent);
 
             return redirect()->route('client.dashboard');
         } else {

@@ -5,42 +5,24 @@ namespace App\Listeners\Notification\User;
 use App\Jobs\NotificationJob;
 use Billmora;
 use Illuminate\Auth\Events\Login;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Request;
 
-class SendLoginDetected implements ShouldQueue
+class SendLoginDetected
 {
-    use InteractsWithQueue;
-
-    public bool $afterCommit = true;
-
-    protected string $ipAddress;
-    protected string $userAgent;
-
     /**
-     * Create the event listener.
-     * Capture request context immediately while still in HTTP scope,
-     * before the listener is serialized and dispatched to the queue.
+     * Dispatch a login-detected notification email directly from the controller.
+     *
+     * @param  \App\Models\User  $user
+     * @param  string  $ipAddress
+     * @param  string  $userAgent
+     * @return void
      */
-    public function __construct()
+    public static function dispatch($user, string $ipAddress, string $userAgent): void
     {
-        $this->ipAddress = Request::ip() ?? '127.0.0.1';
-        $this->userAgent = Request::userAgent() ?? 'Unknown Device';
-    }
-
-    /**
-     * Handle the event.
-     */
-    public function handle(Login $event): void
-    {
-        $user = $event->user;
-
         $placeholder = [
             'client_name' => $user->fullname,
             'company_name' => Billmora::getGeneral('company_name'),
-            'ip_address' => $this->ipAddress,
-            'user_agent' => $this->userAgent,
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent,
             'login_time' => now()->format('d M Y, H:i:s T'),
         ];
 
@@ -52,4 +34,16 @@ class SendLoginDetected implements ShouldQueue
             $user->id
         );
     }
+
+    /**
+     * Handle the Login event (no-op to prevent auto-discovery errors).
+     * 
+     * @param  \Illuminate\Auth\Events\Login  $event
+     * @return void
+     */
+    public function handle(Login $event): void
+    {
+        // 
+    }
 }
+

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Listeners\Notification\User\SendLoginDetected;
 use App\Models\User;
 use App\Traits\AuditsUser;
 use Billmora;
@@ -104,10 +105,14 @@ class SocialiteController extends Controller
 
         if ($user->twoFactor?->isActive()) {
             session()->forget('2fa_passed');
+            session()->put('login_ip', $request->ip());
+            session()->put('login_user_agent', $request->userAgent());
             return redirect()->route('client.two-factor.verify');
         }
 
         $this->recordActivity('account.login', ['method' => 'oauth', 'provider' => $provider], $request);
+
+        SendLoginDetected::dispatch($user, $request->ip(), $request->userAgent());
 
         return redirect()->intended(route('client.dashboard'));
     }
