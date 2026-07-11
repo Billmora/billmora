@@ -29,13 +29,14 @@ class BroadcastJob implements ShouldQueue
     {
         switch ($this->broadcast->recipient_group) {
             case 'all_users':
-                $recipients = User::pluck('email')->toArray();
+                $users = User::lazy();
                 break;
             case 'custom_users':
-                $recipients = $this->broadcast->recipient_custom ?? [];
+                $userIds = $this->broadcast->recipient_custom ?? [];
+                $users = User::whereIn('id', $userIds)->get();
                 break;
             default:
-                $recipients = [];
+                $users = collect();
         }
 
         $auditEmail = Audit::email(
@@ -46,10 +47,8 @@ class BroadcastJob implements ShouldQueue
         );
 
         try {
-            foreach ($recipients as $recipient) {
-                $user = User::where('email', $recipient)->first();
-
-                Mail::to($recipient)
+            foreach ($users as $user) {
+                Mail::to($user->email)
                     ->cc($this->broadcast->cc ?? [])
                     ->bcc($this->broadcast->bcc ?? [])
                     ->send(new BroadcastMail(
