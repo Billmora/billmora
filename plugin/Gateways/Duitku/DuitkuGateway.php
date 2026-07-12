@@ -37,11 +37,6 @@ class DuitkuGateway extends AbstractPlugin implements GatewayInterface
 
     public function isApplicable(float $amount, string $currency): bool
     {
-        // IDR must be higher than 10K
-        if ($currency === 'IDR' && $amount < 10000) {
-            return false;
-        }
-
         // Only supported IDR
         if ($currency !== 'IDR') return false;
 
