@@ -83,7 +83,9 @@ abstract class AbstractPlugin extends ServiceProvider implements PluginInterface
         $viewNamespace = "{$typeSlug}.{$providerSlug}";
         $viewsPath = $this->pluginPath . '/resources/views';
 
-        View::addNamespace($viewNamespace, $viewsPath);
+        if (is_dir($viewsPath)) {
+            View::addNamespace($viewNamespace, $viewsPath);
+        }
     }
 
     /**
