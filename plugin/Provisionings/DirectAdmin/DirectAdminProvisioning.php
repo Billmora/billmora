@@ -217,30 +217,30 @@ class DirectAdminProvisioning extends AbstractPlugin implements ProvisioningInte
     {
         if ($slug === 'login') {
             $username = $this->_resolveUsername($service);
-            $randomKey = Str::password(32, true, true, false, false);
+            $host     = rtrim($this->getInstanceConfig('host'), '/');
 
-            $this->_request('POST', 'CMD_API_LOGIN_KEYS', [
-                'action'       => 'create',
-                'user'         => $username, 
-                'type'         => 'key',
-                'keyname'      => 'billmorasso' . Str::random(8),
-                'key'          => $randomKey,
-                'key2'         => $randomKey,
-                'expires'      => 'yes',
-                'expire_unit'  => 'minute',
-                'expire_value' => '5',
-                'max_uses'     => '1',
-                'clear_key'    => 'yes',
-                'allow_htm'    => 'yes',
-                'passwd'       => $this->getInstanceConfig('password'), 
-            ]);
+            // Impersonate the target client user using DirectAdmin's "reseller|username" Basic Auth syntax.
+            $resellerUsername = $this->getInstanceConfig('username');
+            $impersonatedUser = $resellerUsername . '|' . $username;
 
-            $host = rtrim($this->getInstanceConfig('host'), '/');
-            
-            $loginUrl = $host . '/CMD_LOGIN?' . http_build_query([
-                'username' => $username,
-                'password' => $randomKey,
-            ]);
+            // Create a one-time Login URL via DirectAdmin's built-in SSO mechanism.
+            $result = $this->_request('POST', 'CMD_API_LOGIN_KEYS', [
+                'action' => 'create',
+                'type'   => 'one_time_url',
+                'passwd' => $this->getInstanceConfig('password'),
+            ], $impersonatedUser);
+
+            // DA returns the login URL in the details field (or url field depending on JSON configuration)
+            $loginPath = $result['details'] ?? $result['url'] ?? null;
+
+            if (empty($loginPath)) {
+                throw new ProvisioningException('DirectAdmin did not return a login URL.', ['response' => $result]);
+            }
+
+            // Build the full login URL — path may or may not include the host.
+            $loginUrl = str_starts_with($loginPath, 'http')
+                ? $loginPath
+                : $host . '/' . ltrim($loginPath, '/');
 
             return redirect()->away($loginUrl);
         }
@@ -263,10 +263,11 @@ class DirectAdminProvisioning extends AbstractPlugin implements ProvisioningInte
      * @param string $method HTTP method (GET or POST)
      * @param string $command DA API command (e.g. CMD_API_ACCOUNT_USER)
      * @param array<string, mixed> $params Request parameters
+     * @param string|null $authUsername Optional username override for Basic Auth (e.g. for impersonation)
      * @return array<string, mixed> Parsed response
      * @throws \Exception
      */
-    private function _request(string $method, string $command, array $params = []): array
+    private function _request(string $method, string $command, array $params = [], ?string $authUsername = null): array
     {
         // Increase PHP execution time limit to prevent web requests from timing out
         // as DirectAdmin server creation / restoration operations can be time-consuming
@@ -275,7 +276,7 @@ class DirectAdminProvisioning extends AbstractPlugin implements ProvisioningInte
         $url = rtrim($this->getInstanceConfig('host'), '/') . '/' . $command;
 
         $http = Http::withBasicAuth(
-            $this->getInstanceConfig('username'),
+            $authUsername ?? $this->getInstanceConfig('username'),
             $this->getInstanceConfig('password')
         )->timeout(120)->asForm();
 
