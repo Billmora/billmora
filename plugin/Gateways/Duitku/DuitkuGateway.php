@@ -50,12 +50,13 @@ class DuitkuGateway extends AbstractPlugin implements GatewayInterface
         $environment = $this->getInstanceConfig('environment', 'sandbox');
 
         $baseUrl = $environment === 'production' 
-            ? 'https://passport.duitku.com/webapi/api/merchant/v2/inquiry' 
-            : 'https://sandbox.duitku.com/webapi/api/merchant/v2/inquiry';
+            ? 'https://api-prod.duitku.com/api/merchant/createInvoice' 
+            : 'https://api-sandbox.duitku.com/api/merchant/createInvoice';
 
         $paymentAmount = (int) $amount; 
         
-        $signature = md5($merchantCode . $invoiceNumber . $paymentAmount . $apiKey);
+        $timestamp = round(microtime(true) * 1000);
+        $signature = hash('sha256', $merchantCode . $timestamp . $apiKey);
 
         $originalItemsTotal = collect($options['items'] ?? [])->sum(function ($item) {
             return (int) round((float) $item['unit_price']) * (int) $item['quantity'];
@@ -91,17 +92,19 @@ class DuitkuGateway extends AbstractPlugin implements GatewayInterface
             'productDetails' => $options['description'],
             'itemDetails' => $itemDetails,
             'email' => $options['user']['email'],
-            'paymentMethod'  => 'VC',
             'customerVaName' => $options['user']['fullname'],
             'phoneNumber' => $options['user']['billing']['phone_number'],
             'returnUrl' => $options['return_url'],
             'callbackUrl' => route('api.gateways.webhook', ['plugin' => $this->getPluginModel()->id]), 
-            'signature' => $signature,
             'expiryPeriod' => 10,
         ];
 
         try {
-            $response = Http::post($baseUrl, $payload);
+            $response = Http::withHeaders([
+                'x-duitku-signature' => $signature,
+                'x-duitku-timestamp' => $timestamp,
+                'x-duitku-merchantcode' => $merchantCode,
+            ])->post($baseUrl, $payload);
             $result = $response->json();
 
             if ($response->successful() && isset($result['statusCode']) && $result['statusCode'] === '00') {
@@ -115,7 +118,7 @@ class DuitkuGateway extends AbstractPlugin implements GatewayInterface
 
             return [
                 'success' => false,
-                'message' => 'API Duitku Error: ' . ($result['Message']),
+                'message' => 'API Duitku Error: ' . ($result['Message'] ?? $result['statusMessage'] ?? 'Unknown Error'),
             ];
 
         } catch (\Exception $e) {
