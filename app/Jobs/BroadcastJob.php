@@ -48,6 +48,10 @@ class BroadcastJob implements ShouldQueue
 
         try {
             foreach ($users as $user) {
+                if (!$user || empty($user->email)) {
+                    continue;
+                }
+
                 Mail::to($user->email)
                     ->cc($this->broadcast->cc ?? [])
                     ->bcc($this->broadcast->bcc ?? [])
