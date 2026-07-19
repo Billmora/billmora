@@ -158,6 +158,26 @@ class Invoice extends Model implements BrowseInterface
     }
 
     /**
+     * Get the registrants associated with the invoice through invoice items.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function registrants()
+    {
+        return $this->belongsToMany(
+            Registrant::class, 
+            'invoice_items', 
+            'invoice_id', 
+            'registrant_id'
+        )->withPivot([
+            'description',
+            'quantity',
+            'unit_price',
+            'amount',
+        ]);
+    }
+
+    /**
      * Get the first service associated with the invoice as an attribute accessor.
      *
      * @return \App\Models\Service|null
