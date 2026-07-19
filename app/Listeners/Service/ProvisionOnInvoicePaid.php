@@ -12,6 +12,8 @@ class ProvisionOnInvoicePaid implements ShouldQueue
 {
     use InteractsWithQueue;
 
+    public bool $afterCommit = true;
+
     public int $timeout = 60;
 
     public int $tries = 3;
