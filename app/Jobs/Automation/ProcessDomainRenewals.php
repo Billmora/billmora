@@ -68,6 +68,9 @@ class ProcessDomainRenewals implements ShouldQueue
 
         $expiredRegistrants = Registrant::where('status', 'active')
             ->where('expires_at', '<', now())
+            ->whereDoesntHave('invoices', function ($query) {
+                $query->where('status', 'unpaid');
+            })
             ->get();
 
         foreach ($expiredRegistrants as $registrant) {
