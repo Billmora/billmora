@@ -2,7 +2,6 @@
 
 namespace App\Listeners;
 
-use App\Events\Invoice as InvoiceEvents;
 use App\Events\PaymentCaptured;
 use App\Models\Invoice;
 use App\Models\Transaction;
@@ -55,8 +54,6 @@ class ProcessSuccessfulPayment
             ]);
 
             $this->recordSystem('transaction.created', $transaction->toArray(), 'gateway');
-
-            event(new InvoiceEvents\Paid($lockedInvoice));
         });
     }
 }
