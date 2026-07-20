@@ -271,7 +271,7 @@ class Service extends Model implements BrowseInterface
         return $this->update([
             'status' => 'active',
             'activated_at' => now(),
-            'next_due_date' => $this->calculateNextDueDate(),
+            'next_due_date' => $this->next_due_date ?? $this->calculateNextDueDate(),
         ]);
     }
 
