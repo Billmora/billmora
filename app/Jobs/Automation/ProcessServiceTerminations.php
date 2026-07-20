@@ -35,7 +35,7 @@ class ProcessServiceTerminations implements ShouldQueue
     {
         $terminateDays = (int) Billmora::getAutomation('service_terminate_days');
 
-        if ($terminateDays <= 0) {
+        if ($terminateDays < 0) {
             return;
         }
 

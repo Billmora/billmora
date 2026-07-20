@@ -34,7 +34,7 @@ class ProcessServiceSuspensions implements ShouldQueue
     {
         $suspendDays = (int) Billmora::getAutomation('service_suspend_days');
 
-        if ($suspendDays <= 0) {
+        if ($suspendDays < 0) {
             return;
         }
 
