@@ -35,9 +35,9 @@ return [
     'invoice_auto_cancel_days_helper' => 'Cancel unpaid invoices automatically after this many days overdue (Leave 0 to disable).',
     
     'service_suspend_days_label' => 'Auto Suspension Days',
-    'service_suspend_days_helper' => 'Enter the number of days after the due payment date you want to wait before automatically suspending the service.',
+    'service_suspend_days_helper' => 'Number of days after the invoice due date to automatically suspend the service. Set to 0 to suspend immediately on the due date. Set to -1 to disable.',
     'service_terminate_days_label' => 'Auto Termination Days',
-    'service_terminate_days_helper' => 'Enter the number of days after the due payment date you want to wait before permanently terminating the service.',
+    'service_terminate_days_helper' => 'Number of days after the invoice due date to permanently terminate the service. Set to 0 to terminate immediately on the due date. Set to -1 to disable. Must be greater than or equal to the suspension days.',
     'auto_accept_cancellation_label' => 'Auto Accept Cancellation Requests',
     'auto_accept_cancellation_helper' => 'Automatically process cancellation requests. Immediate requests are terminated on the next cron run, while End of Period requests are terminated when their next due date is reached.',
     

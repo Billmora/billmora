@@ -41,8 +41,8 @@ class ServiceController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'service_suspend_days' => ['required', 'integer', 'min:0'],
-            'service_terminate_days' => ['required', 'integer', 'min:0', 'gte:service_suspend_days'],
+            'service_suspend_days' => ['required', 'integer', 'min:-1'],
+            'service_terminate_days' => ['required', 'integer', 'min:-1'],
             'auto_accept_cancellation' => ['required', 'boolean'],
         ]);
 
