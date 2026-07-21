@@ -33,6 +33,10 @@ class RenewOnInvoicePaid implements ShouldQueue
     {
         $invoice = $event->invoice;
 
+        if ($invoice->order_id) {
+            return;
+        }
+
         $invoice->loadMissing('services.package');
 
         $services = $invoice->services;
