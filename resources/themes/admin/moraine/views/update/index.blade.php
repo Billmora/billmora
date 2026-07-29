@@ -183,13 +183,13 @@
             
             <div class="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end mt-4">
                 <button type="button" x-on:click="$store.modal.close()"
-                    class="px-5 py-2.5 rounded-xl font-semibold text-sm text-slate-600 bg-billmora-neutral-100 hover:bg-slate-200 transition-colors text-center w-full sm:w-auto">
+                    class="px-5 py-2.5 rounded-xl font-semibold text-sm text-slate-600 bg-billmora-neutral-100 hover:bg-slate-200 transition-colors text-center w-full sm:w-auto cursor-pointer">
                     {{ __('admin/update.actions.cancel_button') }}
                 </button>
                 <form action="{{ route('admin.update.execute') }}" method="POST" class="w-full sm:w-auto m-0">
                     @csrf
                     <button type="submit"
-                        class="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white bg-billmora-primary-500 hover:bg-billmora-primary-600 transition-colors w-full sm:w-auto justify-center">
+                        class="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white bg-billmora-primary-500 hover:bg-billmora-primary-600 transition-colors w-full sm:w-auto justify-center cursor-pointer">
                         <x-lucide-zap class="w-4 h-4" />
                         {{ __('admin/update.actions.confirm_button') }}
                     </button>
