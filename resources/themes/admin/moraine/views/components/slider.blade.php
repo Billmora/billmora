@@ -62,11 +62,16 @@
             <span
                 class="absolute -bottom-10 flex flex-col gap-0.5"
                 :class="{
-                    'start-0 items-start': i === 0,
-                    'end-0 items-end': i === options.length - 1,
-                    'start-1/2 -translate-x-1/2 items-center': i > 0 && i < options.length - 1
+                    'items-start': i === 0,
+                    'items-end': i === options.length - 1,
+                    'items-center': i > 0 && i < options.length - 1
                 }"
-                x-show="i === 0 || i === options.length - 1 || options.length <= 3"
+                :style="
+                    i === 0
+                        ? 'left: 0'
+                        : i === options.length - 1
+                            ? 'right: 0'
+                            : 'left: ' + ((i / (options.length - 1)) * 100) + '%; transform: translateX(-50%)'"
             >
                 <span class="text-sm font-semibold text-slate-700" x-text="option.title"></span>
                 <span class="text-xs text-slate-500" x-text="option.subtitle" x-show="!!option.subtitle"></span>
