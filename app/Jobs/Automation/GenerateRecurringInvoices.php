@@ -80,6 +80,7 @@ class GenerateRecurringInvoices implements ShouldQueue
                     
                     $invoice = new Invoice([
                         'user_id' => $service->user_id,
+                        'source' => 'renewal',
                         'status' => 'unpaid',
                         'currency' => $service->currency,
                         'subtotal' => $service->price,

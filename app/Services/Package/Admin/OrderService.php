@@ -364,6 +364,7 @@ class OrderService
             $invoice = Invoice::create([
                 'user_id' => $userId,
                 'order_id' => $order->id,
+                'source' => 'order',
                 'status' => $invoiceStatus,
                 'currency' => $currency,
                 'subtotal' => $grandSubtotal + $totalProrataAdditions,

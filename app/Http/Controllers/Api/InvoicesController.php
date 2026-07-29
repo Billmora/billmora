@@ -80,6 +80,7 @@ class InvoicesController extends Controller
         \Illuminate\Support\Facades\DB::transaction(function () use ($validated, $subtotal, $discount, $total, $request, &$invoice) {
             $invoice = new Invoice([
                 'user_id' => $validated['user_id'],
+                'source' => 'manual',
                 'status' => $validated['status'] ?? 'unpaid',
                 'invoice_number' => Invoice::generateInvoiceNumber(),
                 'currency' => $validated['currency'] ?? \Billmora::getGeneral('currency_default', 'USD'),

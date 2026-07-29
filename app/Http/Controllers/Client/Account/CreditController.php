@@ -101,6 +101,7 @@ class CreditController extends Controller
             'user_id' => $user->id,
             'order_id' => null,
             'plugin_id' => $validated['credit_payment_method'],
+            'source' => 'manual',
             'status' => 'unpaid',
             'currency' => $validated['credit_currency'],
             'subtotal' => $validated['credit_amount'],

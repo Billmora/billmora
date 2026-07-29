@@ -244,6 +244,7 @@ class ScalingService
             $invoice = Invoice::create([
                 'user_id' => $service->user_id,
                 'plugin_id' => null,
+                'source' => 'scaling',
                 'status' => 'unpaid',
                 'currency' => $calculation['currency'],
                 'subtotal' => $calculation['payable_amount'],

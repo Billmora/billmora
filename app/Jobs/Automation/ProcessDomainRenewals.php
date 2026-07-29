@@ -41,6 +41,7 @@ class ProcessDomainRenewals implements ShouldQueue
                 DB::transaction(function () use ($registrant) {
                     $invoice = Invoice::create([
                         'user_id' => $registrant->user_id,
+                        'source' => 'renewal',
                         'status' => 'unpaid',
                         'currency' => $registrant->currency,
                         'subtotal' => $registrant->price,

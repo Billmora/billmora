@@ -109,6 +109,7 @@ class InvoicesController extends Controller
 
             $invoice = new Invoice([
                 'user_id' => $validated['invoice_user'],
+                'source' => 'manual',
                 'status' => $validated['invoice_status'],
                 'invoice_number' => Invoice::generateInvoiceNumber(),
                 'currency' => $validated['invoice_currency'],

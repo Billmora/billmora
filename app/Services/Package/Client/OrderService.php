@@ -175,6 +175,7 @@ class OrderService
             $invoice = Invoice::create([
                 'user_id'   => $userId,
                 'order_id'  => $order->id,
+                'source'    => 'order',
                 'status'    => 'unpaid',
                 'currency'  => $currency,
                 'subtotal'  => $totals['subtotal'],
