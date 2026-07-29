@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
  *
  * Prefix: /admin
  */
-Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', '2fa', 'admin']], function () {
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/health', [Admin\HealthController::class, 'index'])->name('admin.health');
     Route::post('/reorder', [Admin\ReorderController::class, 'update'])->name('admin.reorder');
