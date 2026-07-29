@@ -34,7 +34,7 @@ class RenewOnInvoicePaid implements ShouldQueue
     {
         $invoice = $event->invoice;
 
-        if ($invoice->order_id) {
+        if ($invoice->source !== 'renewal') {
             return;
         }
 
