@@ -194,21 +194,21 @@
                 class="mt-4 block text-slate-600 font-semibold text-md">{{ __('admin/navigation.group.plugin') }}</span>
             @can('provisionings.view')
                 <a href="{{ route('admin.provisionings') }}"
-                    class="flex gap-2 items-center {{ request()->routeIs('admin.provisionings*') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+                    class="flex gap-2 items-center {{ request()->routeIs(['admin.provisionings', 'admin.provisionings.create', 'admin.provisionings.edit']) ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
                     <x-lucide-plug class="w-5 h-auto" />
                     <span class="font-semibold">{{ __('admin/navigation.provisionings') }}</span>
                 </a>
             @endcan
             @can('registrars.view')
                 <a href="{{ route('admin.registrars') }}"
-                    class="flex gap-2 items-center {{ request()->routeIs('admin.registrars*') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+                    class="flex gap-2 items-center {{ request()->routeIs(['admin.registrars', 'admin.registrars.create', 'admin.registrars.edit']) ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
                     <x-lucide-cable class="w-5 h-auto" />
                     <span class="font-semibold">{{ __('admin/navigation.registrars') }}</span>
                 </a>
             @endcan
             @can('gateways.view')
                 <a href="{{ route('admin.gateways') }}"
-                    class="flex gap-2 items-center {{ request()->routeIs('admin.gateways*') ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
+                    class="flex gap-2 items-center {{ request()->routeIs(['admin.gateways', 'admin.gateways.create', 'admin.gateways.edit']) ? 'bg-billmora-primary-500 text-white' : 'hover:bg-billmora-primary-500' }} px-2.5 py-2.5 rounded-lg text-slate-600 hover:text-white transition-colors duration-300">
                     <x-lucide-credit-card class="w-5 h-auto" />
                     <span class="font-semibold">{{ __('admin/navigation.gateways') }}</span>
                 </a>
