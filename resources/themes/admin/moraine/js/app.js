@@ -11,6 +11,16 @@ document.addEventListener("alpine:init", () => {
             this.open = null;
         },
     });
+
+    Alpine.store("drawer", {
+        open: null,
+        show(name) {
+            this.open = name;
+        },
+        close() {
+            this.open = null;
+        },
+    });
 });
 
 Alpine.start();
