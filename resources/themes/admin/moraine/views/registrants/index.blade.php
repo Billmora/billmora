@@ -5,12 +5,19 @@
 @section('body')
     <div class="flex flex-col gap-5">
         <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
-            <div class="w-full md:w-100">
-                <form action="{{ route('admin.registrants') }}" method="GET"
-                    class="relative inline-block max-w-150 w-full group">
+            <div class="w-full md:w-auto flex gap-2 flex-1 max-w-150">
+                <form action="{{ route('admin.registrants') }}" method="GET" class="relative inline-block w-full group m-0">
                     <div class="absolute top-1/2 -translate-y-1/2 left-2.5 pointer-events-none">
                         <x-lucide-search class="w-5 h-auto text-slate-500 group-focus-within:text-billmora-primary-500" />
                     </div>
+                @foreach(request()->only(['sort', 'direction']) as $key => $value)
+                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                @endforeach
+                @foreach(request()->query() as $key => $value)
+                    @if(str_starts_with($key, 'filter_') && !is_null($value) && $value !== '')
+                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                    @endif
+                @endforeach
                     <input type="text" name="search" id="search" placeholder="{{ __('admin/common.search') }}"
                         value="{{ request('search') }}"
                         class="w-full px-6 py-3 pl-10 bg-white text-slate-700 placeholder:text-slate-500 border-2 border-billmora-neutral-100 rounded-xl group-focus-within:outline-2 outline-billmora-primary-500">
@@ -19,6 +26,13 @@
                             class="bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-1.5 text-white rounded-lg transition duration-300 cursor-pointer">{{ __('common.submit') }}</button>
                     </div>
                 </form>
+                
+                <x-admin::drawer.trigger drawer="registrantsFilter" type="button" class="relative flex items-center justify-center bg-white border-2 border-billmora-neutral-100 hover:border-billmora-primary-500 text-slate-600 px-3 py-2 rounded-xl transition duration-300 cursor-pointer shrink-0">
+                    <x-lucide-filter class="w-5 h-auto" />
+                    @if(collect($filters ?? [])->filter()->isNotEmpty())
+                        <span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+                    @endif
+                </x-admin::drawer.trigger>
             </div>
             @can('orders.create')
                 <a href="{{ route('admin.orders.create') }}" class="flex gap-1 items-center bg-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 ml-auto text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">
@@ -27,6 +41,85 @@
                 </a>
             @endcan
         </div>
+
+        {{-- Active Filters --}}
+        @if(collect($filters ?? [])->filter()->isNotEmpty())
+            <div class="flex flex-wrap gap-2 items-center">
+                <span class="text-sm text-slate-500 font-medium mr-1">{{ __('common.filter') ?? 'Filters' }}:</span>
+                
+                @if(!empty($filters['status']))
+                    <a href="{{ request()->fullUrlWithoutQuery('filter_status') }}" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-billmora-neutral-100 text-sm font-medium text-slate-700 hover:bg-billmora-neutral-200 transition-colors">
+                        Status: {{ ucfirst($filters['status']) }}
+                        <x-lucide-x class="w-3.5 h-3.5" />
+                    </a>
+                @endif
+                
+                @if(!empty($filters['type']))
+                    <a href="{{ request()->fullUrlWithoutQuery('filter_type') }}" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-billmora-neutral-100 text-sm font-medium text-slate-700 hover:bg-billmora-neutral-200 transition-colors">
+                        Type: {{ ucfirst($filters['type']) }}
+                        <x-lucide-x class="w-3.5 h-3.5" />
+                    </a>
+                @endif
+
+                @if(!empty($filters['tld_id']))
+                    <a href="{{ request()->fullUrlWithoutQuery('filter_tld_id') }}" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-billmora-neutral-100 text-sm font-medium text-slate-700 hover:bg-billmora-neutral-200 transition-colors">
+                        TLD ID: {{ $filters['tld_id'] }}
+                        <x-lucide-x class="w-3.5 h-3.5" />
+                    </a>
+                @endif
+                
+                @if(!empty($filters['date_from']))
+                    <a href="{{ request()->fullUrlWithoutQuery('filter_date_from') }}" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-billmora-neutral-100 text-sm font-medium text-slate-700 hover:bg-billmora-neutral-200 transition-colors">
+                        {{ __('admin/registrants.expires_label') }} ({{ __('common.date_from') ?? 'From' }}): {{ $filters['date_from'] }}
+                        <x-lucide-x class="w-3.5 h-3.5" />
+                    </a>
+                @endif
+                
+                @if(!empty($filters['date_to']))
+                    <a href="{{ request()->fullUrlWithoutQuery('filter_date_to') }}" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-billmora-neutral-100 text-sm font-medium text-slate-700 hover:bg-billmora-neutral-200 transition-colors">
+                        {{ __('admin/registrants.expires_label') }} ({{ __('common.date_to') ?? 'To' }}): {{ $filters['date_to'] }}
+                        <x-lucide-x class="w-3.5 h-3.5" />
+                    </a>
+                @endif
+
+                @if(!empty($filters['price_min']))
+                    <a href="{{ request()->fullUrlWithoutQuery('filter_price_min') }}" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-billmora-neutral-100 text-sm font-medium text-slate-700 hover:bg-billmora-neutral-200 transition-colors">
+                        {{ __('common.price') }} ({{ __('common.min') }}): {{ $filters['price_min'] }}
+                        <x-lucide-x class="w-3.5 h-3.5" />
+                    </a>
+                @endif
+
+                @if(!empty($filters['price_max']))
+                    <a href="{{ request()->fullUrlWithoutQuery('filter_price_max') }}" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-billmora-neutral-100 text-sm font-medium text-slate-700 hover:bg-billmora-neutral-200 transition-colors">
+                        {{ __('common.price') }} ({{ __('common.max') }}): {{ $filters['price_max'] }}
+                        <x-lucide-x class="w-3.5 h-3.5" />
+                    </a>
+                @endif
+
+                @if(!empty($filters['years']))
+                    <a href="{{ request()->fullUrlWithoutQuery('filter_years') }}" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-billmora-neutral-100 text-sm font-medium text-slate-700 hover:bg-billmora-neutral-200 transition-colors">
+                        {{ __('admin/registrants.years_label') }}: {{ $filters['years'] }}
+                        <x-lucide-x class="w-3.5 h-3.5" />
+                    </a>
+                @endif
+
+                @if(!empty($filters['registered_at_from']))
+                    <a href="{{ request()->fullUrlWithoutQuery('filter_registered_at_from') }}" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-billmora-neutral-100 text-sm font-medium text-slate-700 hover:bg-billmora-neutral-200 transition-colors">
+                        {{ __('admin/registrants.registered_label') }} ({{ __('common.date_from') ?? 'From' }}): {{ $filters['registered_at_from'] }}
+                        <x-lucide-x class="w-3.5 h-3.5" />
+                    </a>
+                @endif
+                
+                @if(!empty($filters['registered_at_to']))
+                    <a href="{{ request()->fullUrlWithoutQuery('filter_registered_at_to') }}" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-billmora-neutral-100 text-sm font-medium text-slate-700 hover:bg-billmora-neutral-200 transition-colors">
+                        {{ __('admin/registrants.registered_label') }} ({{ __('common.date_to') ?? 'To' }}): {{ $filters['registered_at_to'] }}
+                        <x-lucide-x class="w-3.5 h-3.5" />
+                    </a>
+                @endif
+                
+                <a href="{{ request()->url() }}" class="text-sm font-medium text-red-500 hover:text-red-600 ml-2">{{ __('common.clear_all') ?? 'Clear All' }}</a>
+            </div>
+        @endif
         <div class="overflow-x-auto">
             <div class="min-w-full inline-block align-middle">
                 <div class="border-2 border-billmora-neutral-100 rounded-2xl overflow-hidden">
@@ -114,4 +207,55 @@
             @endforeach
         @endcan
     </div>
+
+    <x-admin::drawer.content drawer="registrantsFilter" title="{{ __('common.filter_title', ['resource' => __('admin/navigation.registrants')]) }}" action="{{ request()->url() }}">
+        @if(request()->has('search'))
+            <input type="hidden" name="search" value="{{ request('search') }}">
+        @endif
+
+        <x-admin::select name="filter_status" label="{{ __('admin/registrants.filter.status_label') }}">
+            <option value="pending" @selected(request('filter_status') === 'pending')>{{ __('admin/registrants.filter.status_pending') }}</option>
+            <option value="active" @selected(request('filter_status') === 'active')>{{ __('admin/registrants.filter.status_active') }}</option>
+            <option value="suspended" @selected(request('filter_status') === 'suspended')>{{ __('admin/registrants.filter.status_suspended') }}</option>
+            <option value="expired" @selected(request('filter_status') === 'expired')>{{ __('admin/registrants.filter.status_expired') }}</option>
+            <option value="cancelled" @selected(request('filter_status') === 'cancelled')>{{ __('admin/registrants.filter.status_cancelled') }}</option>
+        </x-admin::select>
+
+        <x-admin::select name="filter_registration_type" label="{{ __('admin/registrants.filter.registration_type_label') }}">
+            <option value="register" @selected(request('filter_registration_type') === 'register')>{{ __('admin/registrants.filter.type_register') }}</option>
+            <option value="transfer" @selected(request('filter_registration_type') === 'transfer')>{{ __('admin/registrants.filter.type_transfer') }}</option>
+        </x-admin::select>
+
+        <div class="grid grid-cols-2 gap-4">
+            <x-admin::input name="filter_price_min" type="number"
+                label="{{ __('common.price') }} ({{ __('common.min') }})"
+                value="{{ request('filter_price_min') }}" step="0.01" />
+            <x-admin::input name="filter_price_max" type="number"
+                label="{{ __('common.price') }} ({{ __('common.max') }})"
+                value="{{ request('filter_price_max') }}" step="0.01" />
+        </div>
+
+        <x-admin::input name="filter_years" type="number"
+            label="{{ __('admin/registrants.years_label') }}"
+            value="{{ request('filter_years') }}" step="1" min="1" />
+
+        <div class="grid grid-cols-2 gap-4">
+            <x-admin::input name="filter_date_from" type="date"
+                label="{{ __('admin/registrants.filter.expires_from_label') }}"
+                value="{{ request('filter_date_from') }}" />
+            <x-admin::input name="filter_date_to" type="date"
+                label="{{ __('admin/registrants.filter.expires_to_label') }}"
+                value="{{ request('filter_date_to') }}" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <x-admin::input name="filter_registered_at_from" type="date"
+                label="{{ __('admin/registrants.registered_label') }} ({{ __('common.date_from') }})"
+                value="{{ request('filter_registered_at_from') }}" />
+            <x-admin::input name="filter_registered_at_to" type="date"
+                label="{{ __('admin/registrants.registered_label') }} ({{ __('common.date_to') }})"
+                value="{{ request('filter_registered_at_to') }}" />
+        </div>
+    </x-admin::drawer.content>
+
 @endsection
