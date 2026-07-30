@@ -5,7 +5,7 @@
 @section('body')
 <div class="flex flex-col lg:flex-row gap-5">
     <div class="w-full lg:w-1/4 h-fit grid gap-5 items-center bg-white p-6 text-center border-2 border-billmora-neutral-100 rounded-2xl">
-        <img src="{{ $user->avatar }}?s=128" alt="user avatar" class="rounded-full w-24 h-auto mx-auto">
+        <img src="{{ $user->avatar }}" alt="user avatar" class="rounded-full w-24 h-auto mx-auto">
         <div class="flex flex-col">
             <span class="text-xl text-slate-600 font-bold break-all">{{ $user->fullname }}</span>
             <span class="text-md text-slate-500 font-semibold break-all">{{ $user->email }}</span>
