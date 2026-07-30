@@ -12,7 +12,9 @@ class TicketMessageObserver
      */
     public function created(TicketMessage $ticketMessage): void
     {
-        event(new TicketEvents\Replied($ticketMessage->ticket, $ticketMessage));
+        if ($ticketMessage->ticket->messages()->count() > 1) {
+            event(new TicketEvents\Replied($ticketMessage->ticket, $ticketMessage));
+        }
     }
 
     /**
