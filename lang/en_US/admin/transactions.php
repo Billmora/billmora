@@ -16,4 +16,8 @@ return [
     'description_label' => 'Description',
     'description_helper' => 'Provide notes or details about this transaction.',
 
+    'filter' => [
+        'reference_label' => 'Reference Code',
+        'gateway_label' => 'Gateway',
+    ],
 ];

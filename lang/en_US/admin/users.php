@@ -37,4 +37,18 @@ return [
     'credit_formatted_label' => 'Formatted Balance',
     'credit_balance_label' => 'Credit Balance',
     'credit_balance_helper' => 'Enter the credit amount available for this currency.',
+
+    'filter' => [
+        'name_label' => 'Name',
+        'email_label' => 'Email',
+        'role_label' => 'Role',
+        'status_label' => 'Status',
+        'role_administrator' => 'Administrator',
+        'role_client' => 'Client',
+        'status_active' => 'Active',
+        'status_inactive' => 'Inactive',
+        'status_suspended' => 'Suspended',
+        'status_closed' => 'Closed',
+        'country_label' => 'Country',
+    ],
 ];

@@ -72,4 +72,21 @@ return [
     'delete' => [
         'active_registrant' => 'Cannot delete an active domain. Please terminate it first.',
     ],
+
+    'filter' => [
+        'domain_label' => 'Domain',
+        'status_label' => 'Status',
+        'registration_type_label' => 'Registration Type',
+        'expires_from_label' => 'Expires From',
+        'expires_to_label' => 'Expires To',
+        'status_pending' => 'Pending',
+        'status_pending_transfer' => 'Pending Transfer',
+        'status_active' => 'Active',
+        'status_expired' => 'Expired',
+        'status_suspended' => 'Suspended',
+        'status_cancelled' => 'Cancelled',
+        'type_register' => 'Register',
+        'type_transfer' => 'Transfer',
+    ],
 ];
+

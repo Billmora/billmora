@@ -18,4 +18,11 @@ return [
     'schedule_helper' => 'Set a date and time to schedule when the broadcast email will be sent. Leave empty to send immediately.',
     'placeholder_label' => 'Placeholders',
     'placeholder_helper' => 'List of available placeholders you can use in the email subject or body.',
+
+    'filter' => [
+        'subject_label' => 'Subject',
+        'recipient_group_label' => 'Recipient Group',
+        'group_all_users' => 'All Users',
+        'group_custom_users' => 'Custom Users',
+    ],
 ];

@@ -137,6 +137,12 @@ return [
     'name' => 'Name',
     'description' => 'Description',
 
+    'total' => 'Total',
+    'price' => 'Price',
+    'amount' => 'Amount',
+    'min' => 'Min',
+    'max' => 'Max',
+
     'created_at' => 'Created At',
     'updated_at' => 'Updated At',
     'completed_at' => 'Completed At',
@@ -152,4 +158,11 @@ return [
     'unauthorized_portal' => 'You do not have permission to access the portal area.',
 
     'no_data' => 'No records found',
+
+    'filter' => 'Filter',
+    'filter_title' => 'Filter :resource',
+    'filter_active' => 'Active Filters',
+    'clear_all' => 'Clear All',
+    'date_from' => 'Date From',
+    'date_to' => 'Date To',
 ];

@@ -24,4 +24,22 @@ return [
     'ticket_information' => 'Ticket Information',
     'ticket_attachments' => 'Ticket Attachments',
     'ticket_add_attachments' => 'Add new Attachments',
+
+    'filter' => [
+        'number_label' => 'Ticket Number',
+        'status_label' => 'Status',
+        'priority_label' => 'Priority',
+        'department_label' => 'Department',
+        'status_open' => 'Open',
+        'status_answered' => 'Answered',
+        'status_replied' => 'Replied',
+        'status_in_progress' => 'In Progress',
+        'status_on_hold' => 'On Hold',
+        'status_closed' => 'Closed',
+        'priority_low' => 'Low',
+        'priority_normal' => 'Normal',
+        'priority_medium' => 'Medium',
+        'priority_high' => 'High',
+        'last_reply_at_label' => 'Last Reply At',
+    ],
 ];

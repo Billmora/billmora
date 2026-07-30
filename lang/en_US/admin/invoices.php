@@ -53,4 +53,16 @@ return [
         'type_gateway' => 'Automatic via Gateway',
         'type_manual'  => 'Manual Process (External)',
     ],
+
+    'filter' => [
+        'number_label' => 'Invoice Number',
+        'status_label' => 'Status',
+        'status_draft' => 'Draft',
+        'status_unpaid' => 'Unpaid',
+        'status_paid' => 'Paid',
+        'status_cancelled' => 'Cancelled',
+        'status_refunded' => 'Refunded',
+        'source_label' => 'Source',
+        'paid_at_label' => 'Paid At',
+    ],
 ];

@@ -38,6 +38,7 @@ return [
     'additional_configuration_helper' => 'Provide any additional configuration required for provisioning this service.',
     'admin_notes_label' => 'Admin Notes',
     'admin_notes_helper' => 'Internal notes for staff. Visible only to administrators.',
+    'plugin_label' => 'Provisioning',
 
     'cancellation_service_label' => 'Service',
     'cancellation_reviewed_by_label' => 'Reviewed By',
@@ -101,5 +102,27 @@ return [
 
     'delete' => [
         'active_services' => 'Cannot delete an active service. Please terminate or cancel it first to ensure remote resources are cleaned up.',
+    ],
+
+    'filter' => [
+        'number_label' => 'Service Number',
+        'name_label' => 'Name',
+        'status_label' => 'Status',
+        'billing_type_label' => 'Billing Type',
+        'billing_period_label' => 'Billing Period',
+        'status_pending' => 'Pending',
+        'status_active' => 'Active',
+        'status_suspended' => 'Suspended',
+        'status_terminated' => 'Terminated',
+        'status_cancelled' => 'Cancelled',
+        'type_recurring' => 'Recurring',
+        'type_onetime' => 'One-time',
+        'type_free' => 'Free',
+        'period_monthly' => 'Monthly',
+        'period_quarterly' => 'Quarterly',
+        'period_semi_annually' => 'Semi Annually',
+        'period_annually' => 'Annually',
+        'period_biennially' => 'Biennially',
+        'period_triennially' => 'Triennially',
     ],
 ];

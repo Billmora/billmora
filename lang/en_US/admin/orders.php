@@ -54,4 +54,13 @@ return [
     'domain_price_label' => 'Domain Price',
     'no_domain_items' => 'No domain items added yet.',
     'at_least_one_item' => 'You must add at least one package or domain item to create an order.',
+
+    'filter' => [
+        'number_label' => 'Order Number',
+        'status_label' => 'Status',
+        'status_pending' => 'Pending',
+        'status_active' => 'Active',
+        'status_cancelled' => 'Cancelled',
+        'status_fraud' => 'Fraud',
+    ],
 ];
