@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Contracts\ModuleInterface;
 use App\Models\Plugin;
 use Illuminate\Support\ServiceProvider;
 use App\Services\PluginManager;
@@ -51,7 +50,7 @@ class PluginServiceProvider extends ServiceProvider
                 if ($instance) {
                     $this->app->register($instance);
 
-                    if ($instance instanceof ModuleInterface) {
+                    if (method_exists($instance, 'getSubscribedEvents')) {
                         $subscribedEvents = $instance->getSubscribedEvents();
 
                         foreach ($subscribedEvents as $eventClass => $methodName) {
