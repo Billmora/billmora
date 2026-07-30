@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Billmora;
 use App\Http\Controllers\Controller;
+use App\Models\Currency;
 use App\Models\Invoice;
 use App\Models\Plugin;
 use App\Models\Transaction;
@@ -37,7 +38,18 @@ class TransactionsController extends Controller
     {
         $query = Transaction::with(['user', 'invoice', 'plugin']);
 
-        if ($search = $request->input('search')) {
+        $search = $request->input('search');
+
+        $filters = [
+            'gateway' => $request->input('filter_gateway'),
+            'currency' => $request->input('filter_currency'),
+            'amount_min' => $request->input('filter_amount_min'),
+            'amount_max' => $request->input('filter_amount_max'),
+            'date_from' => $request->input('filter_date_from'),
+            'date_to' => $request->input('filter_date_to'),
+        ];
+
+        if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('reference', 'like', "%{$search}%")
                 ->orWhere('description', 'like', "%{$search}%")
@@ -52,9 +64,14 @@ class TransactionsController extends Controller
             });
         }
 
-        $transactions = $query->latest()->paginate(Billmora::getGeneral('misc_admin_pagination'));
+        $transactions = $this->filterTransaction($query, $filters)
+            ->latest('id')
+            ->paginate(Billmora::getGeneral('misc_admin_pagination'))
+            ->appends($request->all());
 
-        return view('admin::transactions.index', compact('transactions'));
+        $gateways = Plugin::where('type', 'gateway')->get();
+
+        return view('admin::transactions.index', compact('transactions', 'gateways', 'search', 'filters'));
     }
 
     /**
@@ -152,5 +169,42 @@ class TransactionsController extends Controller
         $this->recordDelete('transaction.delete', $transaction->toArray());
 
         return redirect()->route('admin.transactions')->with('success', __('common.delete_success', ['attribute' => $transaction->reference]));
+    }
+
+    /**
+     * Apply advanced filters to the transaction query.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $filters
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function filterTransaction(\Illuminate\Database\Eloquent\Builder $query, array $filters)
+    {
+        $query->when($filters['gateway'], function ($q, $gatewayId) {
+            $q->where('plugin_id', $gatewayId);
+        });
+
+        $query->when($filters['currency'], function ($q, $currency) {
+            $q->where('currency', $currency);
+        });
+
+        $query->when($filters['date_from'], function ($q, $dateFrom) {
+            $q->whereDate('created_at', '>=', $dateFrom);
+        });
+
+        $query->when($filters['date_to'], function ($q, $dateTo) {
+            $q->whereDate('created_at', '<=', $dateTo);
+        });
+
+        $query->when($filters['amount_min'], function ($q, $min) {
+            $q->where('amount', '>=', $min);
+        });
+
+        $query->when($filters['amount_max'], function ($q, $max) {
+            $q->where('amount', '<=', $max);
+        });
+
+        return $query;
     }
 }

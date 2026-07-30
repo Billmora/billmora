@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Billmora;
 use App\Http\Controllers\Controller;
 use App\Models\Coupon;
+use App\Models\Currency;
 use App\Models\Order;
 use App\Models\Package;
 use App\Models\Tld;
@@ -47,7 +48,20 @@ class OrdersController extends Controller
             'coupon:id,code,type,value'
         ]);
 
-        if ($search = $request->input('search')) {
+        $search = $request->input('search');
+
+        $filters = [
+            'status' => $request->input('filter_status'),
+            'currency' => $request->input('filter_currency'),
+            'total_min' => $request->input('filter_total_min'),
+            'total_max' => $request->input('filter_total_max'),
+            'date_from' => $request->input('filter_date_from'),
+            'date_to' => $request->input('filter_date_to'),
+            'updated_at_from' => $request->input('filter_updated_at_from'),
+            'updated_at_to' => $request->input('filter_updated_at_to'),
+        ];
+
+        if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('order_number', 'like', "%{$search}%")
                 ->orWhere('status', 'like', "%{$search}%")
@@ -59,9 +73,57 @@ class OrdersController extends Controller
             });
         }
 
-        $orders = $query->latest()->paginate(Billmora::getGeneral('misc_admin_pagination'));
+        $orders = $this->filterOrder($query, $filters)
+            ->latest()
+            ->paginate(Billmora::getGeneral('misc_admin_pagination'))
+            ->withQueryString();
 
-        return view('admin::orders.index', compact('orders'));
+        return view('admin::orders.index', compact('orders', 'search', 'filters'));
+    }
+
+    /**
+     * Apply advanced filters to the order query.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $filters
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function filterOrder(\Illuminate\Database\Eloquent\Builder $query, array $filters)
+    {
+        $query->when($filters['status'], function ($q, $status) {
+            $q->where('status', $status);
+        });
+
+        $query->when($filters['currency'], function ($q, $currency) {
+            $q->where('currency', $currency);
+        });
+
+        $query->when($filters['date_from'], function ($q, $dateFrom) {
+            $q->whereDate('created_at', '>=', $dateFrom);
+        });
+
+        $query->when($filters['date_to'], function ($q, $dateTo) {
+            $q->whereDate('created_at', '<=', $dateTo);
+        });
+
+        $query->when($filters['updated_at_from'], function ($q, $dateFrom) {
+            $q->whereDate('updated_at', '>=', $dateFrom);
+        });
+
+        $query->when($filters['updated_at_to'], function ($q, $dateTo) {
+            $q->whereDate('updated_at', '<=', $dateTo);
+        });
+
+        $query->when($filters['total_min'], function ($q, $min) {
+            $q->where('total', '>=', $min);
+        });
+
+        $query->when($filters['total_max'], function ($q, $max) {
+            $q->where('total', '<=', $max);
+        });
+
+        return $query;
     }
 
     /**

@@ -40,7 +40,19 @@ class TicketsController extends Controller
     {
         $query = Ticket::with('user', 'service');
 
-        if ($search = $request->input('search')) {
+        $search = $request->input('search');
+
+        $filters = [
+            'status' => $request->input('filter_status'),
+            'priority' => $request->input('filter_priority'),
+            'department' => $request->input('filter_department'),
+            'date_from' => $request->input('filter_date_from'),
+            'date_to' => $request->input('filter_date_to'),
+            'last_reply_at_from' => $request->input('filter_last_reply_at_from'),
+            'last_reply_at_to' => $request->input('filter_last_reply_at_to'),
+        ];
+
+        if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('ticket_number', 'like', "%{$search}%")
                   ->orWhere('subject', 'like', "%{$search}%")
@@ -52,11 +64,12 @@ class TicketsController extends Controller
             });
         }
 
-        $tickets = $query->orderByDesc('created_at')->paginate(Billmora::getGeneral('misc_admin_pagination'));
+        $tickets = $query->tap(fn ($q) => $this->filterTicket($q, $filters))
+                         ->orderByDesc('created_at')
+                         ->paginate(Billmora::getGeneral('misc_admin_pagination'))
+                         ->withQueryString();
 
-        $tickets->appends(['search' => $search]);
-
-        return view('admin::tickets.index', compact('tickets'));
+        return view('admin::tickets.index', compact('tickets', 'search', 'filters'));
     }
 
     /**
@@ -267,5 +280,46 @@ class TicketsController extends Controller
         return redirect()
             ->route('admin.tickets.reply', ['ticket' => $ticket->id])
             ->with('success', __('common.close_success', ['attribute' => $ticket->ticket_number]));
+    }
+
+    /**
+     * Apply advanced filters to the ticket query.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $filters
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function filterTicket(\Illuminate\Database\Eloquent\Builder $query, array $filters)
+    {
+        $query->when($filters['status'], function ($q, $status) {
+            $q->where('status', $status);
+        });
+
+        $query->when($filters['priority'], function ($q, $priority) {
+            $q->where('priority', $priority);
+        });
+
+        $query->when($filters['department'], function ($q, $department) {
+            $q->where('department', $department);
+        });
+
+        $query->when($filters['date_from'], function ($q, $dateFrom) {
+            $q->whereDate('created_at', '>=', $dateFrom);
+        });
+
+        $query->when($filters['date_to'], function ($q, $dateTo) {
+            $q->whereDate('created_at', '<=', $dateTo);
+        });
+
+        $query->when($filters['last_reply_at_from'], function ($q, $dateFrom) {
+            $q->whereDate('last_reply_at', '>=', $dateFrom);
+        });
+
+        $query->when($filters['last_reply_at_to'], function ($q, $dateTo) {
+            $q->whereDate('last_reply_at', '<=', $dateTo);
+        });
+
+        return $query;
     }
 }

@@ -56,7 +56,22 @@ class ServicesController extends Controller
             'provisioning:id,name'
         ]);
 
-        if ($search = $request->input('search')) {
+        $search = $request->input('search');
+
+        $filters = [
+            'status' => $request->input('filter_status'),
+            'billing_type' => $request->input('filter_billing_type'),
+            'billing_cycle' => $request->input('filter_billing_cycle'),
+            'plugin_id' => $request->input('filter_plugin_id'),
+            'price_min' => $request->input('filter_price_min'),
+            'price_max' => $request->input('filter_price_max'),
+            'date_from' => $request->input('filter_date_from'),
+            'date_to' => $request->input('filter_date_to'),
+            'created_at_from' => $request->input('filter_created_at_from'),
+            'created_at_to' => $request->input('filter_created_at_to'),
+        ];
+
+        if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                 ->orWhere('service_number', 'like', "%{$search}%")
@@ -69,9 +84,21 @@ class ServicesController extends Controller
             });
         }
 
-        $services = $query->latest()->paginate(Billmora::getGeneral('misc_admin_pagination'));
+        $sort = $request->input('sort', 'id');
+        $direction = $request->input('direction', 'desc');
 
-        return view('admin::services.index', compact('services'));
+        $services = $this->filterService($query, $filters)
+            ->orderBy($sort, $direction)
+            ->paginate(Billmora::getGeneral('misc_admin_pagination'))
+            ->appends($request->all());
+
+        $billingCycles = \App\Models\PackagePrice::where('type', 'recurring')
+            ->select('name')->distinct()->pluck('name', 'name');
+        
+        $provisionings = \App\Models\Plugin::where('type', 'provisioning')
+            ->pluck('name', 'id');
+
+        return view('admin::services.index', compact('services', 'billingCycles', 'provisionings', 'search', 'filters'));
     }
 
     /**
@@ -279,5 +306,60 @@ class ServicesController extends Controller
 
         return redirect()->route('admin.services')
             ->with('success', __('common.delete_success', ['attribute' => $service->service_number]));
+    }
+
+    /**
+     * Apply advanced filters to the service query.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $filters
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function filterService(\Illuminate\Database\Eloquent\Builder $query, array $filters)
+    {
+        $query->when($filters['status'], function ($q, $status) {
+            $q->where('status', $status);
+        });
+
+        $query->when($filters['billing_type'], function ($q, $type) {
+            $q->where('billing_type', $type);
+        });
+
+        $query->when($filters['billing_cycle'], function ($q, $cycle) {
+            $q->whereHas('packagePrice', function ($q2) use ($cycle) {
+                $q2->where('name', $cycle);
+            });
+        });
+
+        $query->when($filters['date_from'], function ($q, $dateFrom) {
+            $q->whereDate('next_due_date', '>=', $dateFrom);
+        });
+
+        $query->when($filters['date_to'], function ($q, $dateTo) {
+            $q->whereDate('next_due_date', '<=', $dateTo);
+        });
+
+        $query->when($filters['created_at_from'], function ($q, $dateFrom) {
+            $q->whereDate('created_at', '>=', $dateFrom);
+        });
+
+        $query->when($filters['created_at_to'], function ($q, $dateTo) {
+            $q->whereDate('created_at', '<=', $dateTo);
+        });
+
+        $query->when($filters['price_min'], function ($q, $min) {
+            $q->where('price', '>=', $min);
+        });
+
+        $query->when($filters['price_max'], function ($q, $max) {
+            $q->where('price', '<=', $max);
+        });
+
+        $query->when($filters['plugin_id'], function ($q, $pluginId) {
+            $q->where('plugin_id', $pluginId);
+        });
+
+        return $query;
     }
 }

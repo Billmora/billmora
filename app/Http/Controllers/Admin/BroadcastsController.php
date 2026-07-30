@@ -37,16 +37,25 @@ class BroadcastsController extends Controller
     {
         $search = $request->query('searchBroadcast');
 
+        $filters = [
+            'recipient_group' => $request->input('filter_recipient_group'),
+            'date_from' => $request->input('filter_date_from'),
+            'date_to' => $request->input('filter_date_to'),
+            'schedule_at_from' => $request->input('filter_schedule_at_from'),
+            'schedule_at_to' => $request->input('filter_schedule_at_to'),
+        ];
+
         $broadcasts = Broadcast::select('id', 'subject', 'recipient_group', 'schedule_at', 'created_at')
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('subject', 'like', "%{$search}%");
                 });
             })
+            ->tap(fn ($q) => $this->filterBroadcast($q, $filters))
             ->paginate(Billmora::getGeneral('misc_admin_pagination'))
             ->withQueryString();
 
-        return view('admin::broadcasts.index', compact('broadcasts'));
+        return view('admin::broadcasts.index', compact('broadcasts', 'search', 'filters'));
     }
 
     /**
@@ -235,5 +244,38 @@ class BroadcastsController extends Controller
         $broadcast->delete();
 
         return redirect()->route('admin.broadcasts')->with('success', __('common.delete_success', ['attribute' => __('admin/navigation.broadcasts')]));
+    }
+
+    /**
+     * Apply advanced filters to the broadcast query.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $filters
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function filterBroadcast(\Illuminate\Database\Eloquent\Builder $query, array $filters)
+    {
+        $query->when($filters['recipient_group'], function ($q, $group) {
+            $q->where('recipient_group', $group);
+        });
+
+        $query->when($filters['date_from'], function ($q, $dateFrom) {
+            $q->whereDate('created_at', '>=', $dateFrom);
+        });
+
+        $query->when($filters['date_to'], function ($q, $dateTo) {
+            $q->whereDate('created_at', '<=', $dateTo);
+        });
+
+        $query->when($filters['schedule_at_from'], function ($q, $dateFrom) {
+            $q->whereDate('schedule_at', '>=', $dateFrom);
+        });
+
+        $query->when($filters['schedule_at_to'], function ($q, $dateTo) {
+            $q->whereDate('schedule_at', '<=', $dateTo);
+        });
+
+        return $query;
     }
 }

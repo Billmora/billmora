@@ -48,16 +48,27 @@ class UsersController extends Controller
         $search = $request->input('searchUser');
         $sort = $request->input('sort', 'created_at');
         $direction = $request->input('direction', 'desc'); 
+        
+        $filters = [
+            'role' => $request->input('filter_role'),
+            'status' => $request->input('filter_status'),
+            'country' => $request->input('filter_country'),
+            'date_from' => $request->input('filter_date_from'),
+            'date_to' => $request->input('filter_date_to'),
+            'updated_at_from' => $request->input('filter_updated_at_from'),
+            'updated_at_to' => $request->input('filter_updated_at_to'),
+        ];
 
         $users = User::query()
-                    ->select(['id', 'first_name', 'last_name', 'email', 'is_root_admin', 'created_at'])
+                    ->select(['id', 'first_name', 'last_name', 'email', 'is_root_admin', 'status', 'created_at'])
                     ->with('roles:id,name')
                     ->when($search, fn ($query) => $this->searchUser($query, $search))
+                    ->tap(fn ($query) => $this->filterUser($query, $filters))
                     ->tap(fn ($query) => $this->sortUser($query, $sort, $direction))
                     ->paginate(Billmora::getGeneral('misc_admin_pagination'))
                     ->withQueryString();
         
-        return view('admin::users.index', compact('users', 'search', 'sort', 'direction'));
+        return view('admin::users.index', compact('users', 'search', 'sort', 'direction', 'filters'));
     }
 
     /**
@@ -275,6 +286,53 @@ class UsersController extends Controller
                 "%{$search}%"
             );
         });
+    }
+
+    /**
+     * Apply advanced filters to the user query.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $filters
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function filterUser(Builder $query, array $filters)
+    {
+        $query->when($filters['role'], function ($q, $role) {
+            if ($role === 'root') {
+                $q->where('is_root_admin', true);
+            } elseif ($role === 'client') {
+                $q->where('is_root_admin', false)->doesntHave('roles');
+            } else {
+                $q->whereHas('roles', fn ($q) => $q->where('name', $role));
+            }
+        });
+
+        $query->when($filters['status'], function ($q, $status) {
+            $q->where('status', $status);
+        });
+
+        $query->when($filters['date_from'], function ($q, $dateFrom) {
+            $q->whereDate('created_at', '>=', $dateFrom);
+        });
+
+        $query->when($filters['date_to'], function ($q, $dateTo) {
+            $q->whereDate('created_at', '<=', $dateTo);
+        });
+
+        $query->when($filters['updated_at_from'], function ($q, $dateFrom) {
+            $q->whereDate('updated_at', '>=', $dateFrom);
+        });
+
+        $query->when($filters['updated_at_to'], function ($q, $dateTo) {
+            $q->whereDate('updated_at', '<=', $dateTo);
+        });
+
+        $query->when($filters['country'], function ($q, $country) {
+            $q->whereHas('billing', fn ($q) => $q->where('country', $country));
+        });
+
+        return $query;
     }
 
     /**

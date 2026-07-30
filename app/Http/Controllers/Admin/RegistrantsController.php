@@ -39,7 +39,21 @@ class RegistrantsController extends Controller
             'plugin:id,name',
         ]);
 
-        if ($search = $request->input('search')) {
+        $search = $request->input('search');
+
+        $filters = [
+            'status' => $request->input('filter_status'),
+            'registration_type' => $request->input('filter_registration_type'),
+            'price_min' => $request->input('filter_price_min'),
+            'price_max' => $request->input('filter_price_max'),
+            'years' => $request->input('filter_years'),
+            'date_from' => $request->input('filter_date_from'),
+            'date_to' => $request->input('filter_date_to'),
+            'registered_at_from' => $request->input('filter_registered_at_from'),
+            'registered_at_to' => $request->input('filter_registered_at_to'),
+        ];
+
+        if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('domain', 'like', "%{$search}%")
                   ->orWhere('registrant_number', 'like', "%{$search}%")
@@ -52,9 +66,12 @@ class RegistrantsController extends Controller
             });
         }
 
-        $registrants = $query->latest()->paginate(Billmora::getGeneral('misc_admin_pagination'));
+        $registrants = $query->tap(fn ($q) => $this->filterRegistrant($q, $filters))
+                             ->latest()
+                             ->paginate(Billmora::getGeneral('misc_admin_pagination'))
+                             ->withQueryString();
 
-        return view('admin::registrants.index', compact('registrants'));
+        return view('admin::registrants.index', compact('registrants', 'search', 'filters'));
     }
 
     /**
@@ -134,5 +151,54 @@ class RegistrantsController extends Controller
 
         return redirect()->route('admin.registrants')
             ->with('success', __('common.delete_success', ['attribute' => $registrant->registrant_number]));
+    }
+
+    /**
+     * Apply advanced filters to the registrant query.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $filters
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function filterRegistrant(\Illuminate\Database\Eloquent\Builder $query, array $filters)
+    {
+        $query->when($filters['status'], function ($q, $status) {
+            $q->where('status', $status);
+        });
+
+        $query->when($filters['registration_type'], function ($q, $type) {
+            $q->where('registration_type', $type);
+        });
+
+        $query->when($filters['date_from'], function ($q, $dateFrom) {
+            $q->whereDate('expires_at', '>=', $dateFrom);
+        });
+
+        $query->when($filters['date_to'], function ($q, $dateTo) {
+            $q->whereDate('expires_at', '<=', $dateTo);
+        });
+
+        $query->when($filters['registered_at_from'], function ($q, $dateFrom) {
+            $q->whereDate('registered_at', '>=', $dateFrom);
+        });
+
+        $query->when($filters['registered_at_to'], function ($q, $dateTo) {
+            $q->whereDate('registered_at', '<=', $dateTo);
+        });
+
+        $query->when($filters['price_min'], function ($q, $min) {
+            $q->where('price', '>=', $min);
+        });
+
+        $query->when($filters['price_max'], function ($q, $max) {
+            $q->where('price', '<=', $max);
+        });
+
+        $query->when($filters['years'], function ($q, $years) {
+            $q->where('years', $years);
+        });
+
+        return $query;
     }
 }

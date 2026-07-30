@@ -39,7 +39,23 @@ class InvoicesController extends Controller
     {
         $query = Invoice::with(['order.items', 'user']);
 
-        if ($search = $request->input('search')) {
+        $search = $request->input('search');
+
+        $filters = [
+            'status' => $request->input('filter_status'),
+            'source' => $request->input('filter_source'),
+            'currency' => $request->input('filter_currency'),
+            'total_min' => $request->input('filter_total_min'),
+            'total_max' => $request->input('filter_total_max'),
+            'date_from' => $request->input('filter_date_from'),
+            'date_to' => $request->input('filter_date_to'),
+            'due_date_from' => $request->input('filter_due_date_from'),
+            'due_date_to' => $request->input('filter_due_date_to'),
+            'paid_at_from' => $request->input('filter_paid_at_from'),
+            'paid_at_to' => $request->input('filter_paid_at_to'),
+        ];
+
+        if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('invoice_number', 'like', "%{$search}%")
                 ->orWhere('status', 'like', "%{$search}%")
@@ -51,9 +67,12 @@ class InvoicesController extends Controller
             });
         }
 
-        $invoices = $query->latest('id')->paginate(Billmora::getGeneral('misc_admin_pagination'));
+        $invoices = $this->filterInvoice($query, $filters)
+            ->latest('id')
+            ->paginate(Billmora::getGeneral('misc_admin_pagination'))
+            ->withQueryString();
 
-        return view('admin::invoices.index', compact('invoices'));
+        return view('admin::invoices.index', compact('invoices', 'search', 'filters'));
     }
 
     /**
@@ -287,7 +306,65 @@ class InvoicesController extends Controller
 
         $this->recordDelete('invoice.delete', $tempInvoice->toArray());
 
-        return redirect()->route('admin.invoices')->with('success', __('common.delete_success', ['attribute' => $tempInvoice->invoice_number]));
+        return redirect()->route('admin.invoices')
+            ->with('success', __('common.delete_success', ['attribute' => $invoice->invoice_number]));
+    }
+
+    /**
+     * Apply advanced filters to the invoice query.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $filters
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function filterInvoice(\Illuminate\Database\Eloquent\Builder $query, array $filters)
+    {
+        $query->when($filters['status'], function ($q, $status) {
+            $q->where('status', $status);
+        });
+
+        $query->when($filters['source'], function ($q, $source) {
+            $q->where('source', $source);
+        });
+
+        $query->when($filters['currency'], function ($q, $currency) {
+            $q->where('currency', $currency);
+        });
+
+        $query->when($filters['date_from'], function ($q, $dateFrom) {
+            $q->whereDate('created_at', '>=', $dateFrom);
+        });
+
+        $query->when($filters['date_to'], function ($q, $dateTo) {
+            $q->whereDate('created_at', '<=', $dateTo);
+        });
+
+        $query->when($filters['due_date_from'], function ($q, $dateFrom) {
+            $q->whereDate('due_date', '>=', $dateFrom);
+        });
+
+        $query->when($filters['due_date_to'], function ($q, $dateTo) {
+            $q->whereDate('due_date', '<=', $dateTo);
+        });
+
+        $query->when($filters['paid_at_from'], function ($q, $dateFrom) {
+            $q->whereDate('paid_at', '>=', $dateFrom);
+        });
+
+        $query->when($filters['paid_at_to'], function ($q, $dateTo) {
+            $q->whereDate('paid_at', '<=', $dateTo);
+        });
+
+        $query->when($filters['total_min'], function ($q, $min) {
+            $q->where('total', '>=', $min);
+        });
+
+        $query->when($filters['total_max'], function ($q, $max) {
+            $q->where('total', '<=', $max);
+        });
+
+        return $query;
     }
 
     /**
