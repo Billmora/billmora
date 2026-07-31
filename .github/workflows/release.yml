@@ -27,6 +27,46 @@ jobs:
           extensions: bcmath, curl, gd, intl, mbstring, openssl, pdo, tokenizer, xml, zip
           tools: composer:v2
 
+      - name: Update SECURITY.md Supported Versions and Push to Main
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          MAJOR_VERSION=$(echo $VERSION | cut -d. -f1)
+          MINOR_VERSION=$(echo $VERSION | cut -d. -f2)
+          
+          # Configure Git
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # Fetch and checkout main branch
+          git fetch origin main
+          git checkout main
+          
+          # Rebuild SECURITY.md using PHP
+          php -r "
+          \$major = (int)'\$MAJOR_VERSION';
+          \$minor = (int)'\$MINOR_VERSION';
+          \$content = file_get_contents('SECURITY.md');
+          
+          \$table = \"| Version | Supported          |\n| ------- | ------------------ |\n\";
+          \$table .= \"| {\$major}.{\$minor}.x | :white_check_mark: |\n\";
+          \$table .= \"| < {\$major}.{\$minor}.0 | :x:                |\";
+          
+          \$content = preg_replace('/\| Version \| Supported.*?\| < \d+\.\d+(\.0)?\s*\| :x:\s*\|/s', \$table, \$content);
+          file_put_contents('SECURITY.md', \$content);
+          "
+          
+          # Commit and push if there are changes
+          if [[ -n $(git status -s SECURITY.md) ]]; then
+            git add SECURITY.md
+            git commit -m "docs: auto-update supported versions to $MAJOR_VERSION.$MINOR_VERSION.x [skip ci]"
+            git push origin main
+          else
+            echo "No changes needed in SECURITY.md"
+          fi
+          
+          # Return to the tagged commit for the rest of the build
+          git checkout $GITHUB_SHA
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
