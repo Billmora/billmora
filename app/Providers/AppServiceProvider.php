@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         View::composer('admin::components.browse', function ($view) {
-            $view->with('browseItems', app(BrowseController::class)->getItems());
+            $view->with('staticBrowseItems', app(BrowseController::class)->getItems());
         });
     }
 }

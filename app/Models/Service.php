@@ -409,15 +409,16 @@ class Service extends Model implements BrowseInterface
      *
      * @return \Illuminate\Support\Collection
      */
-    public static function toBrowseItems(): Collection
+    public static function searchBrowseItems(string $query): Collection
     {
         return static::select('id', 'service_number')
-            ->limit(50)
+            ->where('service_number', 'like', "%{$query}%")
+            ->limit(15)
             ->get()
             ->map(fn($item) => [
-                'title' => "{$item->service_number}",
+                'title'    => "{$item->service_number}",
                 'category' => 'service',
-                'url' => route('admin.services.edit', ['service' => $item->id]),
+                'url'      => route('admin.services.edit', ['service' => $item->id]),
             ]);
     }
 

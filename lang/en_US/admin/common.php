@@ -4,6 +4,7 @@ return [
     'search' => 'Search...',
     'browse' => 'Browse...',
     'browse_not_found' => 'No results found.',
+    'browse_searching' => 'Searching...',
     'browse_navigate' => 'to navigate',
     'browse_select' => 'to select',
     'browse_close' => 'to close',

@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Contracts\BrowseInterface;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 
 class BrowseController extends Controller
 {
-    protected const CACHE_KEY = 'admin.browse.items';
-    protected const CACHE_TTL = 300; // 5 minute
+    protected const CACHE_KEY = 'admin.browse.static_items';
+    protected const CACHE_TTL = 3600; // 1 hour — static items never change at runtime
 
     /**
      * Return a static list of predefined admin navigation items for quick search browsing.
@@ -238,31 +238,38 @@ class BrowseController extends Controller
     }
 
     /**
-     * Retrieve all browse items from cache, merging static items with discovered model items.
+     * Retrieve all browse items from cache, returning only static navigation items.
+     * Dynamic model records (services, invoices, etc.) are now searched live via search().
      *
      * @return \Illuminate\Support\Collection
      */
     public function getItems(): Collection
     {
-        return Cache::remember(self::CACHE_KEY, self::CACHE_TTL, function () {
-            $items = collect($this->staticItems());
-
-            $this->discoverSearchables()
-                ->each(function ($model) use (&$items) {
-                    $items = $items->merge($model::toBrowseItems());
-                });
-
-            return $items->values();
-        });
+        return collect($this->staticItems());
     }
 
     /**
-     * Invalidate the browse items cache to force a fresh re-index on next retrieval.
+     * Live search endpoint. Called via AJAX from the Browse modal when the user types.
+     * Merges static nav item results with live DB results from all searchable models.
      *
-     * @return void
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public static function clearCache(): void
+    public function search(Request $request): JsonResponse
     {
-        Cache::forget(self::CACHE_KEY);
+        $query = trim($request->input('q', ''));
+
+        if (strlen($query) < 2) {
+            return response()->json([]);
+        }
+
+        $results = collect();
+
+        $this->discoverSearchables()
+            ->each(function ($model) use ($query, &$results) {
+                $results = $results->merge($model::searchBrowseItems($query));
+            });
+
+        return response()->json($results->values()->take(20));
     }
 }

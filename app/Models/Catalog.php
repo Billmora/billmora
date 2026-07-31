@@ -46,15 +46,16 @@ class Catalog extends Model implements BrowseInterface
      *
      * @return \Illuminate\Support\Collection
      */
-    public static function toBrowseItems(): Collection
+    public static function searchBrowseItems(string $query): Collection
     {
         return static::select('id', 'name')
-            ->limit(50)
+            ->where('name', 'like', "%{$query}%")
+            ->limit(15)
             ->get()
             ->map(fn($item) => [
-                'title' => "{$item->name}",
+                'title'    => "{$item->name}",
                 'category' => 'catalog',
-                'url' => route('admin.catalogs.edit', ['catalog' => $item->id]),
+                'url'      => route('admin.catalogs.edit', ['catalog' => $item->id]),
             ]);
     }
 

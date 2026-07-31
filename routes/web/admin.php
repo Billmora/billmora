@@ -15,6 +15,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', '2fa', 'admin']], fu
     Route::get('/', [Admin\DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/health', [Admin\HealthController::class, 'index'])->name('admin.health');
     Route::post('/reorder', [Admin\ReorderController::class, 'update'])->name('admin.reorder');
+    Route::get('/browse', [Admin\BrowseController::class, 'search'])->name('admin.browse');
 
     /**
      * Admin system update interface routes.

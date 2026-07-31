@@ -67,15 +67,17 @@ class Tld extends Model implements BrowseInterface
      *
      * @return \Illuminate\Support\Collection
      */
-    public static function toBrowseItems(): Collection
+    public static function searchBrowseItems(string $query): Collection
     {
-        return static::select('id', 'tld')
-            ->limit(50)
+        return static::withoutGlobalScope('plugin')
+            ->select('id', 'tld')
+            ->where('tld', 'like', "%{$query}%")
+            ->limit(15)
             ->get()
             ->map(fn($item) => [
-                'title' => "{$item->tld}",
+                'title'    => "{$item->tld}",
                 'category' => 'tld',
-                'url' => route('admin.tlds.edit', ['tld' => $item->id]),
+                'url'      => route('admin.tlds.edit', ['tld' => $item->id]),
             ]);
     }
 

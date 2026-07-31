@@ -1,7 +1,7 @@
 <div 
-    x-data="globalSearch({{ Js::from($browseItems) }})" 
-    x-init="init()" 
+    x-data="browse({{ Js::from($staticBrowseItems) }})"
     x-cloak
+    data-search-url="{{ route('admin.browse') }}"
     x-on:keydown.window.ctrl.k.prevent="openModal()"
     x-on:keydown.window.meta.k.prevent="openModal()"
 >
@@ -73,9 +73,18 @@
                     </div>
                 </template>
 
+                <!-- Loading state -->
+                <div 
+                    x-show="loading" 
+                    class="flex items-center justify-center gap-2 text-slate-500"
+                >
+                    <x-lucide-loader-circle class="animate-spin w-5 h-5 text-billmora-primary-500" />
+                    <span>{{ __('admin/common.browse_searching') }}</span>
+                </div>
+
                 <!-- Empty state -->
                 <div 
-                    x-show="!results.length && query" 
+                    x-show="!results.length && query && !loading" 
                     class="text-center text-slate-500"
                 >
                     {{ __('admin/common.browse_not_found') }}
@@ -105,65 +114,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    function globalSearch(items) {
-        return {
-            open: false,
-            query: '',
-            list: items, // ← langsung dari View Composer, tidak perlu fetch
-            selectedIndex: -1,
-
-            init() {
-                window.addEventListener('openBrowse', this.openModal.bind(this));
-            },
-
-            openModal() {
-                this.open = true;
-                this.selectedIndex = -1;
-                this.$nextTick(() => this.$refs.input.focus());
-            },
-
-            close() {
-                this.open = false;
-                this.query = '';
-                this.selectedIndex = -1;
-            },
-
-            get results() {
-                if (!this.query) return [];
-                return this.list.filter(item =>
-                    (`${item.category}:${item.title}`).toLowerCase().includes(this.query.toLowerCase())
-                );
-            },
-
-            moveSelection(step) {
-                if (this.results.length === 0) {
-                    this.selectedIndex = -1;
-                    return;
-                }
-
-                if (this.selectedIndex === -1) {
-                    this.selectedIndex = step === 1 ? 0 : this.results.length - 1;
-                    return;
-                }
-
-                const newIndex = this.selectedIndex + step;
-                this.selectedIndex = Math.max(0, Math.min(newIndex, this.results.length - 1));
-
-                this.$nextTick(() => {
-                    const container = this.$refs.resultsContainer;
-                    const items = container.querySelectorAll('a');
-                    const selectedElement = items[this.selectedIndex];
-                    selectedElement?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-                });
-            },
-
-            selectItem() {
-                if (this.selectedIndex >= 0 && this.results[this.selectedIndex]) {
-                    window.location.href = this.results[this.selectedIndex].url;
-                }
-            }
-        }
-    }
-</script>

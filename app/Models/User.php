@@ -282,15 +282,20 @@ class User extends Authenticatable implements BrowseInterface
      *
      * @return \Illuminate\Support\Collection
      */
-    public static function toBrowseItems(): Collection
+    public static function searchBrowseItems(string $query): Collection
     {
         return static::select('id', 'email', 'first_name', 'last_name')
-            ->limit(50)
+            ->where(function ($q) use ($query) {
+                $q->where('email', 'like', "%{$query}%")
+                  ->orWhere('first_name', 'like', "%{$query}%")
+                  ->orWhere('last_name', 'like', "%{$query}%");
+            })
+            ->limit(15)
             ->get()
             ->map(fn($item) => [
-                'title' => "{$item->fullname} - {$item->email}",
+                'title'    => "{$item->fullname} - {$item->email}",
                 'category' => 'user',
-                'url' => route('admin.users.summary', ['user' => $item->id]),
+                'url'      => route('admin.users.summary', ['user' => $item->id]),
             ]);
     }
 }

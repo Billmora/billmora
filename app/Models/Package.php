@@ -174,15 +174,16 @@ class Package extends Model implements BrowseInterface
      *
      * @return \Illuminate\Support\Collection
      */
-    public static function toBrowseItems(): Collection
+    public static function searchBrowseItems(string $query): Collection
     {
         return static::select('id', 'name')
-            ->limit(50)
+            ->where('name', 'like', "%{$query}%")
+            ->limit(15)
             ->get()
             ->map(fn($item) => [
-                'title' => "{$item->name}",
+                'title'    => "{$item->name}",
                 'category' => 'package',
-                'url' => route('admin.packages.edit', ['package' => $item->id]),
+                'url'      => route('admin.packages.edit', ['package' => $item->id]),
             ]);
     }
 

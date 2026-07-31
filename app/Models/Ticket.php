@@ -156,15 +156,16 @@ class Ticket extends Model implements BrowseInterface
      *
      * @return \Illuminate\Support\Collection
      */ 
-    public static function toBrowseItems(): Collection
+    public static function searchBrowseItems(string $query): Collection
     {
         return static::select('id', 'ticket_number')
-            ->limit(50)
+            ->where('ticket_number', 'like', "%{$query}%")
+            ->limit(15)
             ->get()
             ->map(fn($item) => [
-                'title' => "{$item->ticket_number}",
+                'title'    => "{$item->ticket_number}",
                 'category' => 'ticket',
-                'url' => route('admin.tickets.edit', ['ticket' => $item->id]),
+                'url'      => route('admin.tickets.edit', ['ticket' => $item->id]),
             ]);
     }
 }

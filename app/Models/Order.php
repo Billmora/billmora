@@ -207,15 +207,16 @@ class Order extends Model implements BrowseInterface
      *
      * @return \Illuminate\Support\Collection
      */
-    public static function toBrowseItems(): Collection
+    public static function searchBrowseItems(string $query): Collection
     {
         return static::select('id', 'order_number')
-            ->limit(50)
+            ->where('order_number', 'like', "%{$query}%")
+            ->limit(15)
             ->get()
             ->map(fn($item) => [
-                'title' => "{$item->order_number}",
+                'title'    => "{$item->order_number}",
                 'category' => 'order',
-                'url' => route('admin.orders.edit', ['order' => $item->id]),
+                'url'      => route('admin.orders.edit', ['order' => $item->id]),
             ]);
     }
 }

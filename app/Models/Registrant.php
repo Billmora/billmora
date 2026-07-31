@@ -228,15 +228,16 @@ class Registrant extends Model implements BrowseInterface
      *
      * @return \Illuminate\Support\Collection
      */
-    public static function toBrowseItems(): Collection
+    public static function searchBrowseItems(string $query): Collection
     {
         return static::select('id', 'registrant_number')
-            ->limit(50)
+            ->where('registrant_number', 'like', "%{$query}%")
+            ->limit(15)
             ->get()
             ->map(fn($item) => [
-                'title' => "{$item->registrant_number}",
+                'title'    => "{$item->registrant_number}",
                 'category' => 'registrant',
-                'url' => route('admin.registrants.edit', ['registrant' => $item->id]),
+                'url'      => route('admin.registrants.edit', ['registrant' => $item->id]),
             ]);
     }
 }
