@@ -45,8 +45,8 @@ jobs:
           
           # Rebuild SECURITY.md using PHP
           php -r "
-          \$major = (int)'\$MAJOR_VERSION';
-          \$minor = (int)'\$MINOR_VERSION';
+          \$major = (int)'${MAJOR_VERSION}';
+          \$minor = (int)'${MINOR_VERSION}';
           \$content = file_get_contents('SECURITY.md');
           
           \$table = \"| Version | Supported          |\n| ------- | ------------------ |\n\";
@@ -78,7 +78,7 @@ jobs:
         run: composer install --no-dev --optimize-autoloader
 
       - name: Install Node dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build all theme assets
         run: |
