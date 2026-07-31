@@ -2,7 +2,7 @@
     "name": "Proxmox VE",
     "provider": "Proxmox",
     "type": "provisioning",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Automate VM provisioning on Proxmox VE via API Token authentication.",
     "author": "Billmora Team"
 }

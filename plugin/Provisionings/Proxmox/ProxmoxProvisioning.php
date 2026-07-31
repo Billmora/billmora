@@ -51,6 +51,21 @@ class ProxmoxProvisioning extends AbstractPlugin implements ProvisioningInterfac
             ->withOptions(['verify' => $verify]);
     }
 
+    public function getHttpClient(): \Illuminate\Http\Client\PendingRequest
+    {
+        return $this->_http();
+    }
+    
+    public function getHttpFormClient(): \Illuminate\Http\Client\PendingRequest
+    {
+        return $this->_httpForm();
+    }
+
+    public function getApiUrl(string $path): string
+    {
+        return $this->_url($path);
+    }
+
     /**
      * Resolve target node from package config, or auto-select the node with the most free memory.
      */
@@ -194,6 +209,66 @@ class ProxmoxProvisioning extends AbstractPlugin implements ProvisioningInterfac
         return $config;
     }
 
+    private function _allocateIp(Service $service): ?array
+    {
+        $config = $service->package->provisioning_config ?? [];
+        $mode = $config['ip_allocation_mode'] ?? 'ipv4_only';
+        
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($service, $mode) {
+            $allocated = [];
+
+            if (in_array($mode, ['ipv4_only', 'dual_stack'])) {
+                $ipv4 = \Plugins\Provisionings\Proxmox\Models\ProxmoxIpAddress::whereHas('pool', function($q) {
+                    $q->where('plugin_id', $this->pluginModel->id)
+                      ->where('is_active', true)
+                      ->where('ip_version', 'ipv4');
+                })->where('status', 'free')->orderBy('id')->lockForUpdate()->first();
+                
+                if ($ipv4) {
+                    $ipv4->update(['status' => 'used', 'service_id' => $service->id]);
+                    $allocated['ipv4_address'] = $ipv4->ip_address;
+                    $allocated['ipv4_netmask'] = $ipv4->pool->netmask;
+                    $allocated['ipv4_gateway'] = $ipv4->pool->gateway;
+                    $allocated['nameservers']  = $ipv4->pool->nameservers;
+                } elseif ($mode === 'ipv4_only') {
+                    return null; // Fail if strict IPv4 only and none available
+                }
+            }
+
+            if (in_array($mode, ['ipv6_only', 'dual_stack'])) {
+                $ipv6 = \Plugins\Provisionings\Proxmox\Models\ProxmoxIpAddress::whereHas('pool', function($q) {
+                    $q->where('plugin_id', $this->pluginModel->id)
+                      ->where('is_active', true)
+                      ->where('ip_version', 'ipv6');
+                })->where('status', 'free')->orderBy('id')->lockForUpdate()->first();
+                
+                if ($ipv6) {
+                    $ipv6->update(['status' => 'used', 'service_id' => $service->id]);
+                    $allocated['ipv6_address'] = $ipv6->ip_address;
+                    $allocated['ipv6_prefix']  = $ipv6->pool->prefix_length;
+                    $allocated['ipv6_gateway'] = $ipv6->pool->gateway;
+                    // Only set nameservers from IPv6 if not already set by IPv4
+                    if (empty($allocated['nameservers'])) {
+                        $allocated['nameservers'] = $ipv6->pool->nameservers;
+                    }
+                } elseif ($mode === 'ipv6_only') {
+                    return null; // Fail if strict IPv6 only and none available
+                }
+            }
+
+            return empty($allocated) ? null : $allocated;
+        });
+    }
+
+    private function _releaseIp(Service $service): void
+    {
+        \Plugins\Provisionings\Proxmox\Models\ProxmoxIpAddress::where('service_id', $service->id)
+            ->update([
+                'status' => 'free',
+                'service_id' => null
+            ]);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -254,6 +329,18 @@ class ProxmoxProvisioning extends AbstractPlugin implements ProvisioningInterfac
                 'placeholder' => 'local-lvm',
                 'helper'      => 'The storage where the cloned VM disk will be placed (e.g. local-lvm, ceph-pool).',
                 'rules'       => 'required|string|max:100',
+            ],
+            'ip_allocation_mode' => [
+                'type'    => 'select',
+                'label'   => 'IP Allocation Mode',
+                'options' => [
+                    'ipv4_only'  => 'IPv4 Only',
+                    'ipv6_only'  => 'IPv6 Only',
+                    'dual_stack' => 'Dual Stack (IPv4 + IPv6)'
+                ],
+                'default' => 'ipv4_only',
+                'helper'  => 'Determines which types of IP addresses should be auto-allocated to new VMs.',
+                'rules'   => 'required|in:ipv4_only,ipv6_only,dual_stack',
             ],
             'network_bridge' => [
                 'type'        => 'text',
@@ -325,7 +412,27 @@ class ProxmoxProvisioning extends AbstractPlugin implements ProvisioningInterfac
                 'helper'      => 'Optional. Hostname for your VM. Defaults to your service ID if left empty.',
                 'rules'       => 'nullable|string|max:63|regex:/^[a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?$/',
             ],
+            'ssh_public_key' => [
+                'type'        => 'textarea',
+                'label'       => 'SSH Public Key',
+                'helper'      => 'Optional. Paste your public key (e.g., ~/.ssh/id_rsa.pub) for passwordless access.',
+                'placeholder' => 'ssh-rsa AAAA...',
+                'rules'       => 'nullable|string|max:4096',
+            ],
         ];
+    }
+
+    public function validateBeforeCart(array $configuration, array $fields): ?string
+    {
+        $hasFreeIp = \Plugins\Provisionings\Proxmox\Models\ProxmoxIpAddress::whereHas('pool', function($q) {
+            $q->where('plugin_id', $this->pluginModel->id)->where('is_active', true);
+        })->where('status', 'free')->exists();
+
+        if (!$hasFreeIp) {
+            return 'No IP addresses are currently available for this provisioning instance. Please contact support.';
+        }
+
+        return null;
     }
 
     /**
@@ -421,20 +528,81 @@ class ProxmoxProvisioning extends AbstractPlugin implements ProvisioningInterfac
         $ipv4        = $clientInput['ipv4_address'] ?? null;
         $ipv4Netmask = $clientInput['ipv4_netmask'] ?? '24';
         $ipv4Gateway = $clientInput['ipv4_gateway'] ?? null;
+        
+        $ipv6        = $clientInput['ipv6_address'] ?? null;
+        $ipv6Prefix  = $clientInput['ipv6_prefix'] ?? '64';
+        $ipv6Gateway = $clientInput['ipv6_gateway'] ?? null;
+        
+        $nameservers = '1.1.1.1 8.8.8.8';
+
+        if (!$ipv4 && !$ipv6) {
+            $allocated = $this->_allocateIp($service);
+            if ($allocated) {
+                if (isset($allocated['ipv4_address'])) {
+                    $ipv4        = $allocated['ipv4_address'];
+                    $ipv4Netmask = $allocated['ipv4_netmask'] ?? '24';
+                    $ipv4Gateway = $allocated['ipv4_gateway'] ?? null;
+                    $configuration['allocated_ip'] = $ipv4; // Primary display IP
+                }
+                if (isset($allocated['ipv6_address'])) {
+                    $ipv6        = $allocated['ipv6_address'];
+                    $ipv6Prefix  = $allocated['ipv6_prefix'] ?? '64';
+                    $ipv6Gateway = $allocated['ipv6_gateway'] ?? null;
+                    $configuration['allocated_ipv6'] = $ipv6;
+                    
+                    if (!isset($configuration['allocated_ip'])) {
+                        $configuration['allocated_ip'] = $ipv6;
+                    }
+                }
+                
+                if (!empty($allocated['nameservers'])) {
+                    $nameservers = $allocated['nameservers'];
+                }
+
+                $service->update(['configuration' => $configuration]);
+            }
+        }
 
         if ($ipv4) {
             $ipconfig = "ip={$ipv4}/{$ipv4Netmask}";
             if ($ipv4Gateway) {
                 $ipconfig .= ",gw={$ipv4Gateway}";
             }
-            $configPayload['ipconfig0']  = $ipconfig;
-            $configPayload['nameserver'] = '1.1.1.1 8.8.8.8';
+            $configPayload['ipconfig0'] = $ipconfig;
         } else {
-            $configPayload['ipconfig0'] = 'ip=dhcp';
+            // Only set DHCP if no IPv6 is set either, or if explicitly desired
+            if (!$ipv6) {
+                $configPayload['ipconfig0'] = 'ip=dhcp';
+            }
+        }
+
+        if ($ipv6) {
+            $ipconfig6 = "ip6={$ipv6}/{$ipv6Prefix}";
+            if ($ipv6Gateway) {
+                $ipconfig6 .= ",gw6={$ipv6Gateway}";
+            }
+            // Use ipconfig1 for IPv6 or ipconfig0 if no IPv4
+            if (isset($configPayload['ipconfig0']) && $configPayload['ipconfig0'] !== 'ip=dhcp') {
+                $configPayload['ipconfig1'] = $ipconfig6;
+            } else {
+                $configPayload['ipconfig0'] = $ipconfig6; // Fallback to 0 if only IPv6
+            }
+        }
+        
+        // Nameservers
+        if ($ipv4 || $ipv6) {
+            $nsString = is_array($nameservers) ? implode(' ', $nameservers) : str_replace(',', ' ', $nameservers);
+            if (!empty($nsString)) {
+                $configPayload['nameserver'] = $nsString;
+            }
         }
 
         if (!empty($password)) {
             $configPayload['cipassword'] = $password;
+        }
+
+        if (!empty($clientInput['ssh_public_key'])) {
+            $configPayload['sshkeys'] = urlencode($clientInput['ssh_public_key']);
         }
 
         // Dispatch heavy setup work to a queue job to avoid a 504 Gateway Timeout.
@@ -517,6 +685,8 @@ class ProxmoxProvisioning extends AbstractPlugin implements ProvisioningInterfac
                 ['response' => $response->json() ?: $body]
             );
         }
+        
+        $this->_releaseIp($service);
     }
 
     /**
@@ -700,9 +870,10 @@ class ProxmoxProvisioning extends AbstractPlugin implements ProvisioningInterfac
             'agent'  => '1',
         ];
 
-        $ipv4        = $clientInput['ipv4_address'] ?? null;
+        $ipv4        = $clientInput['ipv4_address'] ?? $clientInput['allocated_ip'] ?? null;
         $ipv4Netmask = $clientInput['ipv4_netmask'] ?? '24';
         $ipv4Gateway = $clientInput['ipv4_gateway'] ?? null;
+        $nameservers = '1.1.1.1 8.8.8.8';
 
         if ($ipv4) {
             $ipconfig = "ip={$ipv4}/{$ipv4Netmask}";
@@ -710,13 +881,19 @@ class ProxmoxProvisioning extends AbstractPlugin implements ProvisioningInterfac
                 $ipconfig .= ",gw={$ipv4Gateway}";
             }
             $configPayload['ipconfig0']  = $ipconfig;
-            $configPayload['nameserver'] = '1.1.1.1 8.8.8.8';
+            
+            // if we have IP pool nameservers stored somewhere, use it. Otherwise default.
+            $configPayload['nameserver'] = $nameservers;
         } else {
             $configPayload['ipconfig0'] = 'ip=dhcp';
         }
 
         if (!empty($password)) {
             $configPayload['cipassword'] = $password;
+        }
+
+        if (!empty($clientInput['ssh_public_key'])) {
+            $configPayload['sshkeys'] = urlencode($clientInput['ssh_public_key']);
         }
 
         $this->_http()->post($this->_url("/nodes/{$node}/qemu/{$vmId}/config"), $configPayload);
@@ -768,6 +945,11 @@ class ProxmoxProvisioning extends AbstractPlugin implements ProvisioningInterfac
                 'icon'   => 'fa-solid fa-play',
                 'type'   => 'submit',
                 'method' => 'POST',
+            ],
+            'ssh_keys' => [
+                'label' => 'SSH Keys',
+                'icon'  => 'fa-solid fa-key',
+                'type'  => 'page',
             ],
             'change_password' => [
                 'label'  => 'Change Password',
@@ -864,7 +1046,15 @@ class ProxmoxProvisioning extends AbstractPlugin implements ProvisioningInterfac
             case 'console':
                 ['vmid' => $vmId, 'node' => $node] = $this->_resolveVmFromService($service);
                 $host = rtrim($this->getInstanceConfig('host'), '/');
-                return redirect()->away("{$host}/?console=kvm&novnc=1&node={$node}&vmid={$vmId}");
+                $response = $this->_httpForm()->post($this->_url("/nodes/{$node}/qemu/{$vmId}/vncproxy"));
+                if (!$response->successful()) {
+                    throw new ProvisioningException(
+                        "Failed to generate VNC ticket for VM {$vmId}.",
+                        ['response' => $response->json() ?: $response->body()]
+                    );
+                }
+                $ticket = urlencode($response->json('data.ticket'));
+                return redirect()->away("{$host}/?console=kvm&novnc=1&node={$node}&vmid={$vmId}&ticket={$ticket}");
 
             case 'reboot':
                 ['vmid' => $vmId, 'node' => $node] = $this->_resolveVmFromService($service);
@@ -937,6 +1127,71 @@ class ProxmoxProvisioning extends AbstractPlugin implements ProvisioningInterfac
 
                 return 'Password configuration updated. Note: Because the VM is off or the Guest Agent is not running, the password could not be applied instantly. It will apply on the next fresh install.';
 
+            case 'ssh_keys':
+                ['vmid' => $vmId, 'node' => $node] = $this->_resolveVmFromService($service);
+                $keys = [];
+                $error = null;
+                try {
+                    $output = $this->_guestExec($node, $vmId, '/bin/cat', ['/root/.ssh/authorized_keys']);
+                    if ($output) {
+                        $keys = array_filter(explode("\n", trim($output)));
+                    }
+                } catch (\Exception $e) {
+                    $error = 'Make sure the VM is running and the QEMU Guest Agent is installed to manage SSH keys.';
+                }
+
+                return view('provisioning.proxmox::client.ssh_keys', [
+                    'service' => $service,
+                    'keys'    => $keys,
+                    'error'   => $error,
+                    'clientActions' => $this->getClientAction($service),
+                ]);
+
+            case 'add_ssh_key':
+                ['vmid' => $vmId, 'node' => $node] = $this->_resolveVmFromService($service);
+                $newKey = trim($data['ssh_key'] ?? '');
+                if (empty($newKey)) {
+                    throw new ProvisioningException('SSH Key cannot be empty.');
+                }
+                
+                try {
+                    $command = '/bin/sh';
+                    $args = [
+                        '-c',
+                        "mkdir -p /root/.ssh && chmod 700 /root/.ssh && echo " . escapeshellarg($newKey) . " >> /root/.ssh/authorized_keys && chmod 600 /root/.ssh/authorized_keys"
+                    ];
+                    $this->_guestExec($node, $vmId, $command, $args);
+                    
+                    // Update Cloud-Init so it persists
+                    $this->_http()->post(
+                        $this->_url("/nodes/{$node}/qemu/{$vmId}/config"),
+                        ['sshkeys' => urlencode($newKey)]
+                    );
+                } catch (\Exception $e) {
+                    throw new ProvisioningException("Failed to add SSH key via Guest Agent.", ['error' => $e->getMessage()]);
+                }
+                return 'SSH Key has been successfully added.';
+
+            case 'remove_ssh_key':
+                ['vmid' => $vmId, 'node' => $node] = $this->_resolveVmFromService($service);
+                $keyToRemove = trim($data['ssh_key'] ?? '');
+                if (empty($keyToRemove)) {
+                    throw new ProvisioningException('SSH Key to remove cannot be empty.');
+                }
+
+                try {
+                    // Use grep -v to remove the exact key and overwrite authorized_keys
+                    $command = '/bin/sh';
+                    $args = [
+                        '-c',
+                        "grep -v -F " . escapeshellarg($keyToRemove) . " /root/.ssh/authorized_keys > /root/.ssh/authorized_keys.tmp || true; mv /root/.ssh/authorized_keys.tmp /root/.ssh/authorized_keys && chmod 600 /root/.ssh/authorized_keys"
+                    ];
+                    $this->_guestExec($node, $vmId, $command, $args);
+                } catch (\Exception $e) {
+                    throw new ProvisioningException("Failed to remove SSH key via Guest Agent.", ['error' => $e->getMessage()]);
+                }
+                return 'SSH Key has been successfully removed.';
+
             case 'reinstall':
                 $templateId    = (int) $data['template_vmid'];
                 $password      = $data['root_password'];
@@ -949,7 +1204,7 @@ class ProxmoxProvisioning extends AbstractPlugin implements ProvisioningInterfac
                     $hostname,
                     $password,
                     $startOnCreate,
-                    $this->getInstanceConfig()
+                    $this->instanceConfig
                 );
 
                 return 'Your VM is being reinstalled. This may take a few minutes.';
@@ -957,5 +1212,62 @@ class ProxmoxProvisioning extends AbstractPlugin implements ProvisioningInterfac
             default:
                 throw new \Exception("Unknown Proxmox client action requested: {$slug}");
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNavigationAdmin(): array
+    {
+        return [
+            'proxmox_dashboard' => [
+                'label'      => 'Proxmox',
+                'icon'       => 'lucide-server',
+                'route'      => route('admin.provisionings.proxmox.index'),
+                'permission' => 'provisionings.proxmox.manage',
+            ],
+        ];
+    }
+
+    /**
+     * Helper to execute a command inside the VM via QEMU Guest Agent and return the output.
+     */
+    private function _guestExec(string $node, int $vmId, string $command, array $args = []): ?string
+    {
+        $commandArray = array_merge([$command], $args);
+        
+        $response = $this->_http()->post(
+            $this->_url("/nodes/{$node}/qemu/{$vmId}/agent/exec"),
+            [
+                'command' => $commandArray
+            ]
+        );
+
+        if (!$response->successful()) {
+            throw new \Exception("Guest agent exec failed: " . $response->body());
+        }
+
+        $pid = $response->json('data.pid');
+        if (!$pid) {
+            return null;
+        }
+
+        // Poll for completion (up to 10 seconds)
+        for ($i = 0; $i < 10; $i++) {
+            sleep(1);
+            $statusResp = $this->_http()->get(
+                $this->_url("/nodes/{$node}/qemu/{$vmId}/agent/exec-status"),
+                ['pid' => $pid]
+            );
+
+            if ($statusResp->successful()) {
+                $data = $statusResp->json('data', []);
+                if (!empty($data['exited'])) {
+                    return $data['out-data'] ?? '';
+                }
+            }
+        }
+
+        return null; // Timeout
     }
 }

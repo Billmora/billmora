@@ -44,15 +44,22 @@ class ProxmoxSetupJob implements ShouldQueue
 
         $diskSize = (int) ($this->config['disk_size'] ?? 0);
 
-        $provisioning->waitForTaskPublic($this->node, $this->cloneUpid);
-        $provisioning->configureVmPublic($this->node, $this->vmId, $this->configPayload);
+        try {
+            $provisioning->waitForTaskPublic($this->node, $this->cloneUpid);
+            $provisioning->configureVmPublic($this->node, $this->vmId, $this->configPayload);
 
-        if ($diskSize > 0) {
-            $provisioning->resizeDiskPublic($this->node, $this->vmId, $diskSize);
-        }
+            if ($diskSize > 0) {
+                $provisioning->resizeDiskPublic($this->node, $this->vmId, $diskSize);
+            }
 
-        if ($this->startOnCreate) {
-            $provisioning->startVmPublic($this->node, $this->vmId);
+            if ($this->startOnCreate) {
+                $provisioning->startVmPublic($this->node, $this->vmId);
+            }
+        } catch (\Throwable $e) {
+            $properties = ($e instanceof \App\Exceptions\ProvisioningException) ? $e->getProperties() : [];
+            event(new \App\Events\Service\ProvisioningFailed($service, $e->getMessage(), 'create', $properties));
+            
+            $this->fail($e);
         }
     }
 }

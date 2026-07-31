@@ -7,26 +7,35 @@
     $disk           = (int) ($config['disk_size'] ?? 20);
     $bandwidthLimit = (int) ($config['bandwidth'] ?? 0);
 
-    $netIn        = $stats['netin'] ?? 0;
-    $netOut       = $stats['netout'] ?? 0;
+    $netIn        = $config['bandwidth_usage_in'] ?? ($stats['netin'] ?? 0);
+    $netOut       = $config['bandwidth_usage_out'] ?? ($stats['netout'] ?? 0);
     $usedBytes    = $netIn + $netOut;
     $usedGb       = round($usedBytes / (1024 ** 3), 2);
     $limitLabel   = $bandwidthLimit > 0 ? $bandwidthLimit . ' GB' : 'Unmetered';
     $pct          = ($bandwidthLimit > 0 && $usedGb > 0) ? min(100, round(($usedGb / $bandwidthLimit) * 100)) : 0;
     $memoryLabel  = $memory >= 1024 ? round($memory / 1024, 1) . ' GB' : $memory . ' MB';
 
-    $ipv4List = collect($ipAddresses ?? [])->where('type', 'IPV4')->pluck('ip');
-    $ipv6List = collect($ipAddresses ?? [])->where('type', 'IPV6')->pluck('ip');
+    $ipv4List = collect();
+    $ipv6List = collect();
+    
+    if (!empty($service->configuration['allocated_ip'])) {
+        $ipv4List->push($service->configuration['allocated_ip']);
+    }
+    
+    if (!empty($service->configuration['allocated_ipv6'])) {
+        $ipv6List->push($service->configuration['allocated_ipv6']);
+    }
+    
     $agentRunning = !empty($ipAddresses);
 @endphp
 
-<div class="bg-billmora-bg border-2 border-billmora-2 rounded-2xl overflow-hidden">
-    <div class="bg-billmora-1 px-6 py-4 border-b-2 border-billmora-2 flex items-center gap-2">
+<div class="bg-white border-2 border-billmora-neutral-100 rounded-2xl overflow-hidden">
+    <div class="bg-slate-50 px-6 py-4 border-b-2 border-billmora-neutral-100 flex items-center gap-2">
         <i class="fa-solid fa-circle-info text-billmora-primary-500"></i>
         <h3 class="font-semibold text-slate-600">Summary</h3>
     </div>
 
-    <div class="divide-y divide-billmora-2">
+    <div class="divide-y divide-billmora-neutral-100">
 
         {{-- IPv4 --}}
         <div class="flex items-start justify-between px-6 py-4">
@@ -38,7 +47,7 @@
                     @endforeach
                 @else
                     <p class="text-sm text-slate-400 italic">
-                        {{ $agentRunning ? 'No IPv4 found' : 'Install Guest Agent to display' }}
+                        Not allocated
                     </p>
                 @endif
             </div>
@@ -54,7 +63,7 @@
                     @endforeach
                 @else
                     <p class="text-sm text-slate-400 italic">
-                        {{ $agentRunning ? 'No IPv6 found' : 'Install Guest Agent to display' }}
+                        Not allocated
                     </p>
                 @endif
             </div>
@@ -85,7 +94,7 @@
                 <span class="text-sm font-semibold text-slate-700">{{ $usedGb }} GB / {{ $limitLabel }}</span>
             </div>
             @if($bandwidthLimit > 0)
-            <div class="w-full bg-billmora-2 rounded-full h-1.5">
+            <div class="w-full bg-slate-200 rounded-full h-1.5">
                 <div class="h-1.5 rounded-full {{ $pct > 90 ? 'bg-red-500' : ($pct > 75 ? 'bg-yellow-400' : 'bg-billmora-primary-500') }}"
                      style="width: {{ $pct }}%"></div>
             </div>
