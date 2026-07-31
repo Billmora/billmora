@@ -268,9 +268,16 @@ class Service extends Model implements BrowseInterface
      */
     public function activate()
     {
+        $this->activated_at = now();
+
+        // Only a pre-calculated pro-rata first_next_due_date (always a future date) should be preserved.
+        if ($this->next_due_date && !$this->next_due_date->isFuture()) {
+            $this->next_due_date = null;
+        }
+
         return $this->update([
-            'status' => 'active',
-            'activated_at' => now(),
+            'status'        => 'active',
+            'activated_at'  => $this->activated_at,
             'next_due_date' => $this->next_due_date ?? $this->calculateNextDueDate(),
         ]);
     }

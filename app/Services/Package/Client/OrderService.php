@@ -130,10 +130,10 @@ class OrderService
 
                     // When pro-rata applies, the service's initial next_due_date becomes the
                     // end of the first full period (prorata_day_date + interval), NOT now().
-                    // When not applicable, keep the existing behaviour (now() for recurring).
+                    // When not applicable, keep it null until the service is activated.
                     $initialDueDate = $prorata
                         ? $prorata['first_next_due_date']
-                        : (($item['billing_type'] === 'recurring') ? now() : null);
+                        : null;
 
                     for ($i = 0; $i < $item['quantity']; $i++) {
                         $service = Service::create([

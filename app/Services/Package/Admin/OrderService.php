@@ -170,7 +170,7 @@ class OrderService
                     if ($prorata) {
                         $nextDueDate = $prorata['first_next_due_date'];
                     } else {
-                        $nextDueDate = now();
+                        $nextDueDate = null;
                     }
                 }
 
