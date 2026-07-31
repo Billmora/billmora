@@ -3,7 +3,7 @@ FROM node:22-alpine AS asset-builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 COPY . .
 RUN npx vite build --config=resources/themes/admin/moraine/vite.config.js && \
