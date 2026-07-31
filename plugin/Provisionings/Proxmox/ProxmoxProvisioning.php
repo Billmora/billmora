@@ -536,30 +536,65 @@ class ProxmoxProvisioning extends AbstractPlugin implements ProvisioningInterfac
         $nameservers = '1.1.1.1 8.8.8.8';
 
         if (!$ipv4 && !$ipv6) {
-            $allocated = $this->_allocateIp($service);
-            if ($allocated) {
-                if (isset($allocated['ipv4_address'])) {
-                    $ipv4        = $allocated['ipv4_address'];
-                    $ipv4Netmask = $allocated['ipv4_netmask'] ?? '24';
-                    $ipv4Gateway = $allocated['ipv4_gateway'] ?? null;
-                    $configuration['allocated_ip'] = $ipv4; // Primary display IP
-                }
-                if (isset($allocated['ipv6_address'])) {
-                    $ipv6        = $allocated['ipv6_address'];
-                    $ipv6Prefix  = $allocated['ipv6_prefix'] ?? '64';
-                    $ipv6Gateway = $allocated['ipv6_gateway'] ?? null;
-                    $configuration['allocated_ipv6'] = $ipv6;
-                    
-                    if (!isset($configuration['allocated_ip'])) {
-                        $configuration['allocated_ip'] = $ipv6;
+            // Idempotency guard: if a previous create() attempt already allocated IPs for
+            // this service (e.g., the ProxmoxSetupJob failed and admin retried), re-use
+            // the existing allocation rather than grabbing new IPs and leaking the old ones.
+            $existingAllocations = \Plugins\Provisionings\Proxmox\Models\ProxmoxIpAddress
+                ::where('service_id', $service->id)
+                ->where('status', 'used')
+                ->with('pool')
+                ->get();
+
+            if ($existingAllocations->isNotEmpty()) {
+                foreach ($existingAllocations as $existing) {
+                    if ($existing->pool->ip_version === 'ipv4') {
+                        $ipv4        = $existing->ip_address;
+                        $ipv4Netmask = $existing->pool->netmask ?? '24';
+                        $ipv4Gateway = $existing->pool->gateway;
+                        $configuration['allocated_ip'] = $ipv4;
+                        if (!empty($existing->pool->nameservers)) {
+                            $nameservers = $existing->pool->nameservers;
+                        }
+                    } elseif ($existing->pool->ip_version === 'ipv6') {
+                        $ipv6        = $existing->ip_address;
+                        $ipv6Prefix  = $existing->pool->prefix_length ?? '64';
+                        $ipv6Gateway = $existing->pool->gateway;
+                        $configuration['allocated_ipv6'] = $ipv6;
+                        if (!isset($configuration['allocated_ip'])) {
+                            $configuration['allocated_ip'] = $ipv6;
+                        }
+                        if (empty($nameservers) && !empty($existing->pool->nameservers)) {
+                            $nameservers = $existing->pool->nameservers;
+                        }
                     }
                 }
-                
-                if (!empty($allocated['nameservers'])) {
-                    $nameservers = $allocated['nameservers'];
-                }
-
                 $service->update(['configuration' => $configuration]);
+            } else {
+                $allocated = $this->_allocateIp($service);
+                if ($allocated) {
+                    if (isset($allocated['ipv4_address'])) {
+                        $ipv4        = $allocated['ipv4_address'];
+                        $ipv4Netmask = $allocated['ipv4_netmask'] ?? '24';
+                        $ipv4Gateway = $allocated['ipv4_gateway'] ?? null;
+                        $configuration['allocated_ip'] = $ipv4; // Primary display IP
+                    }
+                    if (isset($allocated['ipv6_address'])) {
+                        $ipv6        = $allocated['ipv6_address'];
+                        $ipv6Prefix  = $allocated['ipv6_prefix'] ?? '64';
+                        $ipv6Gateway = $allocated['ipv6_gateway'] ?? null;
+                        $configuration['allocated_ipv6'] = $ipv6;
+
+                        if (!isset($configuration['allocated_ip'])) {
+                            $configuration['allocated_ip'] = $ipv6;
+                        }
+                    }
+
+                    if (!empty($allocated['nameservers'])) {
+                        $nameservers = $allocated['nameservers'];
+                    }
+
+                    $service->update(['configuration' => $configuration]);
+                }
             }
         }
 
