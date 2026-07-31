@@ -39,9 +39,8 @@ class OptionController extends Controller
     public function index(Variant $variant)
     {
         $options = $variant->options()
-            ->select(['id', 'variant_id', 'name', 'value', 'created_at'])
-            ->paginate(Billmora::getGeneral('misc_admin_pagination'))
-            ->withQueryString();
+            ->select(['id', 'variant_id', 'name', 'value', 'sort_order', 'created_at'])
+            ->get();
 
         return view('admin::variants.option.index', compact('variant', 'options'));
     }
@@ -73,9 +72,12 @@ class OptionController extends Controller
         $validated = $request->validated();
 
         $option = DB::transaction(function () use ($validated, $variant) {
+            $maxSort = $variant->options()->max('sort_order') ?? 0;
+
             $option = $variant->options()->create([
-                'name' => $validated['variant_options_name'],
-                'value' => $validated['variant_options_value'],
+                'name'       => $validated['variant_options_name'],
+                'value'      => $validated['variant_options_value'],
+                'sort_order' => $maxSort + 1,
             ]);
 
             foreach ($validated['pricings'] as $pricing) {

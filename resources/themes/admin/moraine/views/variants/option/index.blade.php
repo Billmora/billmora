@@ -24,23 +24,25 @@
             {{ __('common.create') }}
         </a>
     </div>
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto" data-sortable-wrapper>
         <div class="min-w-full inline-block align-middle">
             <div class="border-2 border-billmora-neutral-100 rounded-2xl overflow-hidden">
                 <table class="min-w-full divide-y divide-billmora-neutral-100">
                     <thead class="bg-billmora-neutral-100">
                         <tr>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">#</th>
+                            <th scope="col" class="w-10 px-4 py-4"></th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/variants.options.name_label') }}</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/variants.options.value_label') }}</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.created_at') }}</th>
                             <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y-2 divide-billmora-neutral-100 bg-white">
+                    <tbody class="divide-y-2 divide-billmora-neutral-100 bg-white" data-sortable="VariantOption">
                         @forelse ($options as $option)
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $loop->iteration }}</td>
+                        <tr data-id="{{ $option->id }}">
+                            <td class="px-4 py-4 whitespace-nowrap text-slate-300">
+                                <x-lucide-grip-vertical class="w-5 h-5 drag-handle" />
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $option->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $option->value }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $option->created_at->format(Billmora::getGeneral('company_date_format')) }}</td>
@@ -60,9 +62,6 @@
                 </table>
             </div>
         </div>
-    </div>
-    <div>
-        {{ $options->links('admin::layouts.partials.pagination') }}
     </div>
     @foreach ($options as $option)
         <x-admin::modal.content

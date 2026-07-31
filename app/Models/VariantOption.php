@@ -36,4 +36,15 @@ class VariantOption extends Model
     {
         return $this->belongsTo(Variant::class);
     }
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::addGlobalScope('order', function (\Illuminate\Database\Eloquent\Builder $builder) {
+            $table = $builder->getModel()->getTable();
+            $builder->orderBy($table . '.sort_order', 'asc')->orderBy($table . '.id', 'asc');
+        });
+    }
 }

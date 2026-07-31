@@ -24,6 +24,7 @@ class ReorderController extends Controller
             'Package' => \App\Models\Package::class,
             'PackagePrice' => \App\Models\PackagePrice::class,
             'Variant' => \App\Models\Variant::class,
+            'VariantOption' => \App\Models\VariantOption::class,
             'Tld' => \App\Models\Tld::class,
             default => null,
         };
