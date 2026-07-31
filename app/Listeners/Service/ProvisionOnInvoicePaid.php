@@ -4,6 +4,7 @@ namespace App\Listeners\Service;
 
 use App\Events\Invoice as InvoiceEvents;
 use App\Events\Service as ServiceEvents;
+use App\Facades\Audit;
 use App\Services\ProvisioningService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -61,6 +62,12 @@ class ProvisionOnInvoicePaid implements ShouldQueue
                 $plugin->create($service);
 
                 $service->activate();
+
+                Audit::system($invoice->user_id, 'service.provisioning.create', [
+                    'service_id' => $service->id,
+                    'status' => 'success',
+                    'trigger' => 'invoice_paid',
+                ]);
 
             } catch (\Throwable $e) {
                 event(new ServiceEvents\ProvisioningFailed($service, $e->getMessage(), 'create'));
