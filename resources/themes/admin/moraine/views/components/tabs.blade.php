@@ -8,7 +8,7 @@
         <a 
             href="{{ $tab['route'] }}"
             @class([
-                'flex items-center gap-2 px-3 py-2 rounded-lg transition ease-in-out duration-150',
+                'flex items-center whitespace-nowrap gap-2 px-3 py-2 rounded-lg transition ease-in-out duration-150',
                 'bg-billmora-primary-500 text-white' => $active === $tab['route'],
                 'text-slate-700 hover:bg-billmora-primary-500 hover:text-white' => $active !== $tab['route'],
             ])
