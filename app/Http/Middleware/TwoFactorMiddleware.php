@@ -24,7 +24,7 @@ class TwoFactorMiddleware
         }
 
         if ($user?->twoFactor?->isActive() && !session()->get('2fa_passed')) {
-            return redirect()->route('client.two-factor.verify');
+            return redirect()->guest(route('client.two-factor.verify'));
         }
 
         return $next($request);

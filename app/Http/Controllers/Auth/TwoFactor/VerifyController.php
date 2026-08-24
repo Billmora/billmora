@@ -79,7 +79,7 @@ class VerifyController extends Controller
 
             SendLoginDetected::dispatch($user, $loginIp, $loginUserAgent);
 
-            return redirect()->route('client.dashboard');
+            return redirect()->intended(route('client.dashboard'));
         } else {
             $user->twoFactor()->update([
                 'enabled_at' => now()
