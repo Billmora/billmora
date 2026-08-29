@@ -48,7 +48,6 @@
                 name="ticket_service_id"
                 label="{{ __('client/tickets.ticket_service_label') }}"
             >
-                <option value="" selected>None</option>
                 @foreach ($services as $service)
                     <option value="{{ $service->id }}">{{ $service->name }} - ({{ ucwords($service->status) }})</option>
                 @endforeach

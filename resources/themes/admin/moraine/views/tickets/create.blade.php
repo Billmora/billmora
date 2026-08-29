@@ -88,7 +88,6 @@
                 label="{{ __('admin/tickets.ticket_service_label') }}"
                 helper="{{ __('admin/tickets.ticket_service_helper') }}"
             >
-                <option value="" selected>None</option>
                 <template x-if="selectedUser && filteredServices().length > 0">
                     <template x-for="service in filteredServices()" :key="service.value">
                         <option
