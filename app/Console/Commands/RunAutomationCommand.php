@@ -54,22 +54,25 @@ class RunAutomationCommand extends Command
         $this->comment('5. Dispatching Service Terminations...');
         AutomationJobs\ProcessServiceTerminations::dispatch();
 
-        $this->comment('6. Dispatching Auto Cancellations...');
+        $this->comment('6. Dispatching Unpaid Invoice Cancellations...');
+        AutomationJobs\CancelUnpaidInvoices::dispatch();
+
+        $this->comment('7. Dispatching Auto Cancellations...');
         AutomationJobs\ProcessCancellations::dispatch();
 
-        $this->comment('7. Dispatching Ticket Auto-Close...');
+        $this->comment('8. Dispatching Ticket Auto-Close...');
         AutomationJobs\CloseInactiveTickets::dispatch();
 
-        $this->comment('8. Dispatching Domain Renewals...');
+        $this->comment('9. Dispatching Domain Renewals...');
         AutomationJobs\ProcessDomainRenewals::dispatch();
 
-        $this->comment('9. Dispatching Data Pruning...');
+        $this->comment('10. Dispatching Data Pruning...');
         AutomationJobs\PruneSystemData::dispatch();
 
-        $this->comment('10. Dispatching User Auto-Inactive...');
+        $this->comment('11. Dispatching User Auto-Inactive...');
         AutomationJobs\ProcessInactiveUsers::dispatch();
 
-        $this->comment('11. Dispatching Expired Punishments...');
+        $this->comment('12. Dispatching Expired Punishments...');
         AutomationJobs\ProcessExpiredPunishments::dispatch();
 
         $this->info('Automation dispatch completed successfully!');
