@@ -44,6 +44,7 @@ class ProcessServiceTerminations implements ShouldQueue
         Service::where('status', 'suspended')
             ->whereHas('invoices', function ($query) use ($targetTerminateDate) {
                 $query->where('status', 'unpaid')
+                      ->where('source', 'renewal')
                       ->whereDate('due_date', '<=', $targetTerminateDate);
             })
             ->chunk(100, function ($services) use ($provisioningService) {

@@ -43,6 +43,7 @@ class ProcessServiceSuspensions implements ShouldQueue
         Service::where('status', 'active')
             ->whereHas('invoices', function ($query) use ($targetSuspendDate) {
                 $query->where('status', 'unpaid')
+                      ->where('source', 'renewal')
                       ->whereDate('due_date', '<=', $targetSuspendDate);
             })
             ->chunk(100, function ($services) use ($provisioningService) {
