@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Affiliate Members')
+@section('title', __('admin/affiliate.members_title'))
 
 @section('body')
 <div class="flex flex-col gap-5">
@@ -8,22 +8,22 @@
         [
             'route' => route('admin.modules.affiliate.index'),
             'icon'  => 'lucide-layout-dashboard',
-            'label' => 'Overview',
+            'label' => __('admin/affiliate.tabs.overview'),
         ],
         [
             'route' => route('admin.modules.affiliate.members'),
             'icon'  => 'lucide-users',
-            'label' => 'Members',
+            'label' => __('admin/affiliate.tabs.members'),
         ],
         [
             'route' => route('admin.modules.affiliate.commissions'),
             'icon'  => 'lucide-coins',
-            'label' => 'Commissions',
+            'label' => __('admin/affiliate.tabs.commissions'),
         ],
         [
             'route' => route('admin.modules.affiliate.withdrawals'),
             'icon'  => 'lucide-wallet',
-            'label' => 'Withdrawals',
+            'label' => __('admin/affiliate.tabs.withdrawals'),
         ],
     ]" active="{{ request()->url() }}" />
 
@@ -46,11 +46,11 @@
                 <table class="min-w-full divide-y divide-billmora-2">
                     <thead class="bg-billmora-2">
                         <tr>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">User</th>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Referral Code</th>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Referrals</th>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Balance</th>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Total Earned</th>
+                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/affiliate.members.columns.user') }}</th>
+                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/affiliate.members.columns.referral_code') }}</th>
+                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/affiliate.members.columns.referrals') }}</th>
+                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/affiliate.members.columns.balance') }}</th>
+                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/affiliate.members.columns.total_earned') }}</th>
                             <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('common.status') }}</th>
                             <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('common.action') }}</th>
                         </tr>
@@ -67,21 +67,21 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ number_format($member->total_earned, 2) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 @if($member->status === 'active')
-                                    <span class="inline-flex items-center py-1 px-2 rounded-md text-xs font-medium bg-green-100 text-green-800">Active</span>
+                                    <span class="inline-flex items-center py-1 px-2 rounded-md text-xs font-medium bg-green-100 text-green-800">{{ __('admin/affiliate.members.status.active') }}</span>
                                 @else
-                                    <span class="inline-flex items-center py-1 px-2 rounded-md text-xs font-medium bg-red-100 text-red-800">Suspended</span>
+                                    <span class="inline-flex items-center py-1 px-2 rounded-md text-xs font-medium bg-red-100 text-red-800">{{ __('admin/affiliate.members.status.suspended') }}</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium space-x-2">
                                 @if($member->status === 'active')
                                     <form action="{{ route('admin.modules.affiliate.members.suspend', $member) }}" method="POST" class="inline">
                                         @csrf
-                                        <button type="submit" class="text-red-400 hover:text-red-500 font-semibold cursor-pointer">Suspend</button>
+                                        <button type="submit" class="text-red-400 hover:text-red-500 font-semibold cursor-pointer">{{ __('admin/affiliate.members.actions.suspend') }}</button>
                                     </form>
                                 @else
                                     <form action="{{ route('admin.modules.affiliate.members.activate', $member) }}" method="POST" class="inline">
                                         @csrf
-                                        <button type="submit" class="text-green-500 hover:text-green-600 font-semibold cursor-pointer">Activate</button>
+                                        <button type="submit" class="text-green-500 hover:text-green-600 font-semibold cursor-pointer">{{ __('admin/affiliate.members.actions.activate') }}</button>
                                     </form>
                                 @endif
                             </td>

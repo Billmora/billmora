@@ -1,22 +1,22 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Create Announcement')
+@section('title', __('admin/announcement.create_title'))
 
 @section('body')
 <div class="flex flex-col gap-4">
     <div class="w-full md:w-100">
-        <h1 class="text-2xl font-bold text-slate-800">Create Announcement</h1>
-        <p class="text-slate-500 text-sm">Publish a new announcement to your clients.</p>
+        <h1 class="text-2xl font-bold text-slate-800">{{ __('admin/announcement.create_title') }}</h1>
+        <p class="text-slate-500 text-sm">{{ __('admin/announcement.create_subtitle') }}</p>
     </div>
 
     <form action="{{ route('admin.modules.announcement.store') }}" method="POST" class="flex flex-col gap-5">
         @csrf
         <div class="grid gap-4 bg-white p-8 border-2 border-billmora-2 rounded-2xl">
-            <x-admin::input type="text" name="title" label="Title" helper="The title of the announcement." value="{{ old('title') }}" required />
+            <x-admin::input type="text" name="title" label="{{ __('admin/announcement.fields.title') }}" helper="{{ __('admin/announcement.helpers.title') }}" value="{{ old('title') }}" required />
             
-            <x-admin::editor.text name="content" label="Content" helper="The main body of the announcement." required>{{ old('content') }}</x-admin::editor.text>
+            <x-admin::editor.text name="content" label="{{ __('admin/announcement.fields.content') }}" helper="{{ __('admin/announcement.helpers.content') }}" required>{{ old('content') }}</x-admin::editor.text>
 
-            <x-admin::toggle name="is_published" label="Publish immediately" helper="If enabled, clients will see this immediately." :checked="old('is_published') ? true : false" />
+            <x-admin::toggle name="is_published" label="{{ __('admin/announcement.fields.publish_immediately') }}" helper="{{ __('admin/announcement.helpers.publish_immediately') }}" :checked="old('is_published') ? true : false" />
         </div>
         <div class="flex gap-4 ml-auto">
             <a href="{{ route('admin.modules.announcement.index') }}" class="bg-billmora-1 border-2 border-billmora-primary-500 hover:bg-billmora-primary-600 px-3 py-2 text-billmora-primary-500 hover:text-white rounded-lg transition-colors ease-in-out duration-150 cursor-pointer">{{ __('common.cancel') }}</a>

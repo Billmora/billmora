@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Announcements')
+@section('title', __('admin/announcement.title'))
 
 @section('body')
 <div class="flex flex-col gap-4">
@@ -29,11 +29,11 @@
                 <table class="min-w-full divide-y divide-billmora-2">
                     <thead class="bg-billmora-2">
                         <tr>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Title</th>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Status</th>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Published At</th>
-                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">Created At</th>
-                            <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">Action</th>
+                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/announcement.columns.title') }}</th>
+                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/announcement.columns.status') }}</th>
+                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/announcement.columns.published_at') }}</th>
+                            <th scope="col" class="px-6 py-4 text-start text-xs font-semibold text-slate-500 uppercase">{{ __('admin/announcement.columns.created_at') }}</th>
+                            <th scope="col" class="px-6 py-4 text-end text-xs font-semibold text-slate-500 uppercase">{{ __('admin/announcement.columns.action') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y-2 divide-billmora-2 bg-white">
@@ -42,9 +42,9 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $post->title }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 @if($post->is_published)
-                                    <span class="inline-flex items-center gap-1.5 py-1 px-2 rounded-md text-xs font-medium bg-green-100 text-green-800">Published</span>
+                                    <span class="inline-flex items-center gap-1.5 py-1 px-2 rounded-md text-xs font-medium bg-green-100 text-green-800">{{ __('admin/announcement.status.published') }}</span>
                                 @else
-                                    <span class="inline-flex items-center gap-1.5 py-1 px-2 rounded-md text-xs font-medium bg-slate-100 text-slate-800">Draft</span>
+                                    <span class="inline-flex items-center gap-1.5 py-1 px-2 rounded-md text-xs font-medium bg-slate-100 text-slate-800">{{ __('admin/announcement.status.draft') }}</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{{ $post->published_at?->format(Billmora::getGeneral('company_date_format')) ?? '-' }}</td>
@@ -60,7 +60,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 text-center">No announcements found.</td>
+                            <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 text-center">{{ __('admin/announcement.no_announcements') }}</td>
                         </tr>
                         @endforelse
                     </tbody>

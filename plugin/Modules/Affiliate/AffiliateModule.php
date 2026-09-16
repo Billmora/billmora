@@ -20,54 +20,66 @@ class AffiliateModule extends AbstractPlugin implements ModuleInterface
         return [
             'commission_type' => [
                 'type'    => 'select',
-                'label'   => 'Commission Type',
-                'helper'  => 'Percentage deducts a % from each paid invoice. Fixed Amount awards a flat ' . $defaultCurrency . ' value per referral.',
-                'options' => ['percentage' => 'Percentage (%)', 'fixed' => 'Fixed Amount (' . $defaultCurrency . ')'],
+                'label'   => __('admin/affiliate.config_schema.commission_type.label'),
+                'helper'  => __('admin/affiliate.config_schema.commission_type.helper', ['currency' => $defaultCurrency]),
+                'options' => [
+                    'percentage' => __('admin/affiliate.config_schema.commission_type.options.percentage'),
+                    'fixed'      => __('admin/affiliate.config_schema.commission_type.options.fixed', ['currency' => $defaultCurrency]),
+                ],
                 'rules'   => 'required|in:percentage,fixed',
                 'default' => 'percentage',
             ],
             'commission_value' => [
                 'type'    => 'text',
-                'label'   => 'Commission Value',
-                'helper'  => 'Percentage: 0-100 (e.g. 10 = 10% of invoice). Fixed Amount: flat value in ' . $defaultCurrency . ' (e.g. 50000).',
+                'label'   => __('admin/affiliate.config_schema.commission_value.label'),
+                'helper'  => __('admin/affiliate.config_schema.commission_value.helper', ['currency' => $defaultCurrency]),
                 'rules'   => 'required|numeric|min:0',
                 'default' => '10',
             ],
             'commission_trigger' => [
                 'type'    => 'select',
-                'label'   => 'Commission Trigger',
-                'helper'  => 'First Order Only gives a commission once per referral. Every Order gives a commission on each paid invoice.',
-                'options' => ['first_order' => 'First Order Only', 'every_order' => 'Every Order'],
+                'label'   => __('admin/affiliate.config_schema.commission_trigger.label'),
+                'helper'  => __('admin/affiliate.config_schema.commission_trigger.helper'),
+                'options' => [
+                    'first_order' => __('admin/affiliate.config_schema.commission_trigger.options.first_order'),
+                    'every_order' => __('admin/affiliate.config_schema.commission_trigger.options.every_order'),
+                ],
                 'rules'   => 'required|in:first_order,every_order',
                 'default' => 'first_order',
             ],
             'referral_scope' => [
                 'type'    => 'select',
-                'label'   => 'Referral Scope',
-                'helper'  => 'New Users Only tracks guests who register via referral link. All Users also tracks existing logged-in users.',
-                'options' => ['new_users_only' => 'New Users Only', 'all_users' => 'All Users'],
+                'label'   => __('admin/affiliate.config_schema.referral_scope.label'),
+                'helper'  => __('admin/affiliate.config_schema.referral_scope.helper'),
+                'options' => [
+                    'new_users_only' => __('admin/affiliate.config_schema.referral_scope.options.new_users_only'),
+                    'all_users'      => __('admin/affiliate.config_schema.referral_scope.options.all_users'),
+                ],
                 'rules'   => 'required|in:new_users_only,all_users',
                 'default' => 'new_users_only',
             ],
             'cookie_lifetime_days' => [
                 'type'    => 'text',
-                'label'   => 'Cookie Lifetime (days)',
-                'helper'  => 'Duration (in days) that the referral cookie stays active in the visitor browser.',
+                'label'   => __('admin/affiliate.config_schema.cookie_lifetime_days.label'),
+                'helper'  => __('admin/affiliate.config_schema.cookie_lifetime_days.helper'),
                 'rules'   => 'required|integer|min:1',
                 'default' => '30',
             ],
             'min_withdrawal' => [
                 'type'    => 'text',
-                'label'   => 'Minimum Withdrawal Amount',
-                'helper'  => 'Minimum balance in ' . $defaultCurrency . ' required before an affiliate can submit a withdrawal.',
+                'label'   => __('admin/affiliate.config_schema.min_withdrawal.label'),
+                'helper'  => __('admin/affiliate.config_schema.min_withdrawal.helper', ['currency' => $defaultCurrency]),
                 'rules'   => 'required|numeric|min:0',
                 'default' => '50000',
             ],
             'auto_approve_commission' => [
                 'type'    => 'select',
-                'label'   => 'Auto Approve Commissions',
-                'helper'  => 'If enabled, commissions are credited to the affiliate balance immediately after a qualifying invoice is paid.',
-                'options' => ['0' => 'No — Require manual approval', '1' => 'Yes — Approve automatically'],
+                'label'   => __('admin/affiliate.config_schema.auto_approve_commission.label'),
+                'helper'  => __('admin/affiliate.config_schema.auto_approve_commission.helper'),
+                'options' => [
+                    '0' => __('admin/affiliate.config_schema.auto_approve_commission.options.0'),
+                    '1' => __('admin/affiliate.config_schema.auto_approve_commission.options.1'),
+                ],
                 'rules'   => 'required|in:0,1',
                 'default' => '0',
             ],
@@ -86,7 +98,7 @@ class AffiliateModule extends AbstractPlugin implements ModuleInterface
     {
         return [
             'affiliate' => [
-                'label'      => 'Affiliate',
+                'label'      => __('admin/affiliate.title'),
                 'icon'       => 'lucide-handshake',
                 'route'      => route('admin.modules.affiliate.index'),
                 'permission' => 'modules.affiliate.manage',
@@ -98,7 +110,7 @@ class AffiliateModule extends AbstractPlugin implements ModuleInterface
     {
         return [
             'affiliate' => [
-                'label' => 'Affiliate',
+                'label' => __('client/affiliate.title'),
                 'icon'  => 'lucide-handshake',
                 'route' => route('client.modules.affiliate.index'),
                 'auth'  => true,
