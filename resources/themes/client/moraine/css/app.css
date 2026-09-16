@@ -208,7 +208,7 @@ html {
     z-index: 9999;
     border-radius: 0 !important;
     border: none !important;
-    background-color: var(--color-billmora-bg);
+    background-color: var(--color-billmora-neutral-50);
 }
 .tiptap-fullscreen .tiptap-content-area {
     min-height: calc(100dvh - 60px);
