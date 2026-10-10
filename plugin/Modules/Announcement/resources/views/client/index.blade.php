@@ -1,12 +1,12 @@
 @extends('client::layouts.app')
 
-@section('title', 'Announcements')
+@section('title', __('client/announcement.title'))
 
 @section('body')
 <div class="flex flex-col gap-6">
     <div class="grid gap-1">
-        <h1 class="text-2xl font-bold text-slate-700">Announcements</h1>
-        <p class="text-slate-500 text-sm">Stay up to date with the latest news and updates.</p>
+        <h1 class="text-2xl font-bold text-slate-700">{{ __('client/announcement.title') }}</h1>
+        <p class="text-slate-500 text-sm">{{ __('client/announcement.subtitle') }}</p>
     </div>
 
     <div class="grid gap-5">
@@ -27,7 +27,7 @@
                     </p>
                     <div class="mt-2">
                         <a href="{{ route('client.modules.announcement.show', $post->slug) }}" class="inline-flex items-center gap-1 text-sm font-semibold text-billmora-primary-500 hover:text-billmora-primary-600 transition-colors">
-                            Read More
+                            {{ __('client/announcement.read_more') }}
                             <x-lucide-arrow-right class="w-4 h-4" />
                         </a>
                     </div>
@@ -38,7 +38,7 @@
                 <div class="bg-slate-100 p-4 rounded-full text-slate-400">
                     <x-lucide-megaphone class="w-8 h-8" />
                 </div>
-                <p class="text-slate-500 font-medium">No announcements at this time.</p>
+                <p class="text-slate-500 font-medium">{{ __('client/announcement.no_announcements') }}</p>
             </div>
         @endforelse
     </div>

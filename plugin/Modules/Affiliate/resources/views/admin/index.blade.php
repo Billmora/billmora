@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Affiliate Overview')
+@section('title', __('admin/affiliate.overview_title'))
 
 @section('body')
 <div class="flex flex-col gap-5">
@@ -8,22 +8,22 @@
         [
             'route' => route('admin.modules.affiliate.index'),
             'icon'  => 'lucide-layout-dashboard',
-            'label' => 'Overview',
+            'label' => __('admin/affiliate.tabs.overview'),
         ],
         [
             'route' => route('admin.modules.affiliate.members'),
             'icon'  => 'lucide-users',
-            'label' => 'Members',
+            'label' => __('admin/affiliate.tabs.members'),
         ],
         [
             'route' => route('admin.modules.affiliate.commissions'),
             'icon'  => 'lucide-coins',
-            'label' => 'Commissions',
+            'label' => __('admin/affiliate.tabs.commissions'),
         ],
         [
             'route' => route('admin.modules.affiliate.withdrawals'),
             'icon'  => 'lucide-wallet',
-            'label' => 'Withdrawals',
+            'label' => __('admin/affiliate.tabs.withdrawals'),
         ],
     ]" active="{{ request()->url() }}" />
 
@@ -33,9 +33,9 @@
                 <x-lucide-users class="w-auto h-10" />
             </div>
             <div>
-                <h4 class="text-lg font-semibold text-slate-500">Total Members</h4>
+                <h4 class="text-lg font-semibold text-slate-500">{{ __('admin/affiliate.overview.total_members') }}</h4>
                 <span class="text-2xl font-semibold text-slate-600">{{ $totalMembers }}</span>
-                <span class="text-sm text-slate-400 ml-1">({{ $activeMembers }} active)</span>
+                <span class="text-sm text-slate-400 ml-1">{{ __('admin/affiliate.overview.active', ['count' => $activeMembers]) }}</span>
             </div>
         </div>
         <div class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
@@ -43,9 +43,9 @@
                 <x-lucide-user-plus class="w-auto h-10" />
             </div>
             <div>
-                <h4 class="text-lg font-semibold text-slate-500">Referrals</h4>
+                <h4 class="text-lg font-semibold text-slate-500">{{ __('admin/affiliate.overview.referrals') }}</h4>
                 <span class="text-2xl font-semibold text-slate-600">{{ $totalReferrals }}</span>
-                <span class="text-sm text-slate-400 ml-1">({{ $convertedReferrals }} converted)</span>
+                <span class="text-sm text-slate-400 ml-1">{{ __('admin/affiliate.overview.converted', ['count' => $convertedReferrals]) }}</span>
             </div>
         </div>
         <div class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
@@ -53,9 +53,9 @@
                 <x-lucide-coins class="w-auto h-10" />
             </div>
             <div>
-                <h4 class="text-lg font-semibold text-slate-500">Total Commissions</h4>
+                <h4 class="text-lg font-semibold text-slate-500">{{ __('admin/affiliate.overview.total_commissions') }}</h4>
                 <span class="text-2xl font-semibold text-slate-600">{{ number_format($totalCommissions, 2) }}</span>
-                <span class="text-sm text-slate-400 ml-1">({{ $pendingCommissions }} pending)</span>
+                <span class="text-sm text-slate-400 ml-1">{{ __('admin/affiliate.overview.pending', ['count' => $pendingCommissions]) }}</span>
             </div>
         </div>
         <div class="flex items-center gap-4 bg-white p-6 border-2 border-billmora-2 rounded-2xl">
@@ -63,7 +63,7 @@
                 <x-lucide-wallet class="w-auto h-10" />
             </div>
             <div>
-                <h4 class="text-lg font-semibold text-slate-500">Pending Withdrawals</h4>
+                <h4 class="text-lg font-semibold text-slate-500">{{ __('admin/affiliate.overview.pending_withdrawals') }}</h4>
                 <span class="text-2xl font-semibold text-slate-600">{{ $pendingWithdrawals }}</span>
             </div>
         </div>

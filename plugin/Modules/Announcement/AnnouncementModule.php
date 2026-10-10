@@ -19,7 +19,7 @@ class AnnouncementModule extends AbstractPlugin implements ModuleInterface
     {
         return [
             'announcements' => [
-                'label'      => 'Announcements',
+                'label'      => __('admin/announcement.title'),
                 'icon'       => 'lucide-megaphone',
                 'route'      => route('admin.modules.announcement.index'),
                 'permission' => 'modules.announcement.manage',
@@ -31,7 +31,7 @@ class AnnouncementModule extends AbstractPlugin implements ModuleInterface
     {
         return [
             'announcements' => [
-                'label' => 'Announcements',
+                'label' => __('client/announcement.title'),
                 'icon'  => 'lucide-megaphone',
                 'route' => route('client.modules.announcement.index'),
             ],
