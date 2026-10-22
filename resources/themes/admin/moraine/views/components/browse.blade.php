@@ -8,7 +8,7 @@
     <div 
         x-show="open" 
         x-transition.opacity 
-        class="fixed inset-0 z-110 flex items-start justify-center md:pt-28"
+        class="fixed inset-0 z-110 flex items-start justify-center p-4 md:pt-28 overflow-y-auto"
     >
         <!-- Backdrop -->
         <div 

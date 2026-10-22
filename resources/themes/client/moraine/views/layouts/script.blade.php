@@ -8,11 +8,13 @@
   function openSidebar() {
     sidebar.classList.remove('-translate-x-full');
     backdrop.classList.remove('opacity-0', 'pointer-events-none');
+    window.overlayManager?.open('sidebar');
   }
 
   function closeSidebar() {
     sidebar.classList.add('-translate-x-full');
     backdrop.classList.add('opacity-0', 'pointer-events-none');
+    window.overlayManager?.close('sidebar');
   }
 
   toggle.addEventListener('click', () => {

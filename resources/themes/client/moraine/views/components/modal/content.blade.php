@@ -14,15 +14,15 @@
   x-transition.opacity
   x-on:keydown.escape.window="$store.modal.close()"
   tabindex="0"
-  class="fixed inset-0 z-110 flex justify-center items-center"
+  class="fixed inset-0 z-110 flex justify-center items-center p-4 overflow-y-auto"
 >
-  <div class="fixed inset-0 bg-black/40"></div>
+  <div class="fixed inset-0 bg-black/40" x-on:click="$store.modal.close()" aria-hidden="true"></div>
 
   <div
     x-show="$store.modal.open === '{{ $modal }}'"
     x-transition
     @class([
-      "w-full h-auto mx-2 xl:mx-0 bg-white rounded-xl shadow-md p-6 z-51",
+      "w-full h-auto my-auto mx-2 xl:mx-0 bg-white rounded-xl shadow-md p-6 relative z-10",
       "max-w-sm" => $size === 'sm',
       "max-w-md" => $size === 'md',
       "max-w-lg" => $size === 'lg',

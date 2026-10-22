@@ -76,4 +76,4 @@
   </div>
 </nav>
 <!-- Backdrop -->
-<div id="backdrop" class="fixed inset-0 bg-black/25 z-99 xl:hidden opacity-0 pointer-events-none transition-opacity duration-300"></div>
+<div id="backdrop" class="fixed inset-0 bg-black/40 z-99 xl:hidden opacity-0 pointer-events-none transition-opacity duration-300"></div>
