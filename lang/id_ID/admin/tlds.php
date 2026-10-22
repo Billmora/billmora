@@ -31,6 +31,6 @@ return [
     'enabled_helper' => 'Toggle to enable pricing for this currency.',
 
     'delete' => [
-        'has_registrants' => 'Cannot delete TLD that has active registrants.',
+        'has_registrants' => 'Cannot delete TLD that has associated registrants.',
     ],
 ];
