@@ -51,6 +51,31 @@ class OrderService
             $checkoutData,
             $currency,
         ) {
+            // Aggregate and lock package stock to prevent race conditions and overselling
+            $packageQuantities = [];
+            foreach ($cartItems as $item) {
+                if (($item['type'] ?? '') !== OrderItemType::Domain->value && !empty($item['package_id'])) {
+                    $pkgId = $item['package_id'];
+                    $qty = (int) ($item['quantity'] ?? 1);
+                    $packageQuantities[$pkgId] = ($packageQuantities[$pkgId] ?? 0) + $qty;
+                }
+            }
+
+            foreach ($packageQuantities as $pkgId => $requiredQty) {
+                $lockedPackage = Package::where('id', $pkgId)->lockForUpdate()->first();
+                if (!$lockedPackage) {
+                    throw new \Exception(__('client/store.order.cycle_mismatch'));
+                }
+
+                if ($lockedPackage->stock !== -1) {
+                    if ($lockedPackage->stock < $requiredQty) {
+                        throw new \Exception(__('client/store.stock_unavailable', ['item' => $lockedPackage->name]));
+                    }
+
+                    $lockedPackage->decrement('stock', $requiredQty);
+                }
+            }
+
             $order = Order::create([
                 'user_id' => $userId,
                 'coupon_id' => $appliedCoupon['id'] ?? null,

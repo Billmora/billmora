@@ -92,6 +92,31 @@ class OrderService
             $userId, $packageItems, $domainItems, $packagePricingResults, $domainPricingResults,
             $coupon, $currency, $status, $grandSubtotal, $grandDiscount, $grandSetupFee, $grandTotal,
         ) {
+            // Validate and decrement stock atomically for non-cancelled orders
+            if (!in_array($status, ['cancelled', 'failed'])) {
+                $packageQuantities = [];
+                foreach ($packageItems as $item) {
+                    $pkg = $item['package'];
+                    $qty = (int) ($item['quantity'] ?? 1);
+                    $packageQuantities[$pkg->id] = ($packageQuantities[$pkg->id] ?? 0) + $qty;
+                }
+
+                foreach ($packageQuantities as $pkgId => $requiredQty) {
+                    $lockedPackage = Package::where('id', $pkgId)->lockForUpdate()->first();
+                    if (!$lockedPackage) {
+                        throw new \Exception(__('admin/orders.package_not_found'));
+                    }
+
+                    if ($lockedPackage->stock !== -1) {
+                        if ($lockedPackage->stock < $requiredQty) {
+                            throw new \Exception(__('client/store.stock_unavailable', ['item' => $lockedPackage->name]));
+                        }
+
+                        $lockedPackage->decrement('stock', $requiredQty);
+                    }
+                }
+            }
+
             // 1. Create Order
             $order = Order::create([
                 'user_id' => $userId,

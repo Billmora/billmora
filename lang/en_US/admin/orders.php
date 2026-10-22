@@ -54,6 +54,7 @@ return [
     'domain_price_label' => 'Domain Price',
     'no_domain_items' => 'No domain items added yet.',
     'at_least_one_item' => 'You must add at least one package or domain item to create an order.',
+    'package_not_found' => 'Package not found.',
 
     'filter' => [
         'number_label' => 'Order Number',

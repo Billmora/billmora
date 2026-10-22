@@ -28,12 +28,14 @@ class ServiceObserver
                 if ($oldStatus === 'suspended') {
                     event(new ServiceEvents\ProvisioningUnsuspended($service));
                 } else {
-                    // Use an atomic conditional UPDATE to prevent oversell under concurrent activations.
-                    // The WHERE stock > 0 ensures we never decrement below zero without a separate lock.
-                    if ($service->package && $service->package->stock > 0) {
-                        \App\Models\Package::where('id', $service->package_id)
-                            ->where('stock', '>', 0)
-                            ->decrement('stock');
+                    // Re-decrement stock only if reactivated from cancelled or terminated state.
+                    // Initial orders already decrement stock at creation time.
+                    if (in_array($oldStatus, ['cancelled', 'terminated'])) {
+                        if ($service->package && $service->package->stock > 0) {
+                            \App\Models\Package::where('id', $service->package_id)
+                                ->where('stock', '>', 0)
+                                ->decrement('stock');
+                        }
                     }
 
                     event(new ServiceEvents\ProvisioningActivated($service));
@@ -46,14 +48,25 @@ class ServiceObserver
                         $service->order->markAsCompleted();
                     }
                 }
+            } elseif ($newStatus === 'pending') {
+                // Re-decrement stock if restored from cancelled or terminated back to pending
+                if (in_array($oldStatus, ['cancelled', 'terminated'])) {
+                    if ($service->package && $service->package->stock > 0) {
+                        \App\Models\Package::where('id', $service->package_id)
+                            ->where('stock', '>', 0)
+                            ->decrement('stock');
+                    }
+                }
             } elseif ($newStatus === 'suspended') {
                 event(new ServiceEvents\ProvisioningSuspended($service));
             } elseif (in_array($newStatus, ['terminated', 'cancelled'])) {
-                // Only restore stock for packages with finite stock (stock >= 0 means finite; -1 means unlimited).
-                if ($service->package && $service->package->stock >= 0) {
-                    \App\Models\Package::where('id', $service->package_id)
-                        ->where('stock', '>=', 0)
-                        ->increment('stock');
+                // Only restore stock if not already cancelled or terminated
+                if (!in_array($oldStatus, ['terminated', 'cancelled'])) {
+                    if ($service->package && $service->package->stock >= 0) {
+                        \App\Models\Package::where('id', $service->package_id)
+                            ->where('stock', '>=', 0)
+                            ->increment('stock');
+                    }
                 }
 
                 event(new ServiceEvents\ProvisioningTerminated($service));
@@ -66,7 +79,14 @@ class ServiceObserver
      */
     public function deleted(Service $service): void
     {
-        //
+        // Restore stock if deleted while active, pending, or suspended
+        if (!in_array($service->status, ['terminated', 'cancelled'])) {
+            if ($service->package && $service->package->stock >= 0) {
+                \App\Models\Package::where('id', $service->package_id)
+                    ->where('stock', '>=', 0)
+                    ->increment('stock');
+            }
+        }
     }
 
     /**
