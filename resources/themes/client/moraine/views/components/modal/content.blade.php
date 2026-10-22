@@ -16,7 +16,7 @@
   tabindex="0"
   class="fixed inset-0 z-110 flex justify-center items-center"
 >
-  <div class="fixed inset-0 bg-black/25 backdrop-blur-sm"></div>
+  <div class="fixed inset-0 bg-black/40"></div>
 
   <div
     x-show="$store.modal.open === '{{ $modal }}'"

@@ -12,7 +12,7 @@
     >
         <!-- Backdrop -->
         <div 
-            class="fixed inset-0 bg-black/25 backdrop-blur-sm" 
+            class="fixed inset-0 bg-black/40" 
             x-on:click="close()" 
             aria-hidden="true"
         ></div>

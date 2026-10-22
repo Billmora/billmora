@@ -17,7 +17,7 @@
   x-transition:leave="transition ease-in duration-150"
   x-transition:leave-start="opacity-100"
   x-transition:leave-end="opacity-0"
-  class="fixed inset-0 bg-black/25 backdrop-blur-sm z-100"
+  class="fixed inset-0 bg-black/40 z-100"
   x-on:click="$store.drawer.close()"
   x-on:keydown.escape.window="$store.drawer.close()"
 ></div>
