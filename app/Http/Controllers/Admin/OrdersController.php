@@ -192,7 +192,8 @@ class OrdersController extends Controller
                 }
 
                 $variantSelections = $validationService->buildVariantSelections($rawPkg['variant_options'] ?? []);
-                $validation = $validationService->validateConfiguration($package, $packagePrice, $variantSelections, $validated['order_currency']);
+                $quantity = $rawPkg['quantity'] ?? 1;
+                $validation = $validationService->validateConfiguration($package, $packagePrice, $variantSelections, $validated['order_currency'], $quantity);
                 if (!$validation['valid']) {
                     return back()->withInput()->with('error', $validation['message']);
                 }

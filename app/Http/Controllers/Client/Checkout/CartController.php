@@ -81,13 +81,16 @@ class CartController extends Controller
                 continue;
             }
 
-            $packagePrice = PackagePrice::find($item['package_price_id']);
+            $packagePrice = PackagePrice::with('package')->find($item['package_price_id']);
             $isValid = true;
 
-            if (!$packagePrice) {
+            if (!$packagePrice || !$packagePrice->package) {
                 $isValid = false;
             } else {
-                if (!$validationService->isPriceAvailableForCurrency($packagePrice, $currencyCode)) {
+                $package = $packagePrice->package;
+                if ($package->stock !== -1 && $package->stock < ($item['quantity'] ?? 1)) {
+                    $isValid = false;
+                } elseif (!$validationService->isPriceAvailableForCurrency($packagePrice, $currencyCode)) {
                     $isValid = false;
                 } elseif (!empty($item['variant_selections'])) {
                     $variantValidation = $validationService->validateVariantPrices($item['variant_selections'], $currencyCode, $packagePrice->name);
@@ -159,16 +162,32 @@ class CartController extends Controller
 
         $currencyCode = Session::get('currency');
         $packagePrice = PackagePrice::with('package.plugin')->findOrFail($validated['price_id']);
+        $package = $packagePrice->package;
+        $quantity = $validated['quantity'] ?? 1;
+
+        if ($package->stock !== -1) {
+            $existingQty = 0;
+            foreach ($this->cartService->getItems() as $cartItem) {
+                if (($cartItem['type'] ?? '') === \App\OrderItemType::Service->value && ($cartItem['package_id'] ?? null) === $package->id) {
+                    $existingQty += (int) ($cartItem['quantity'] ?? 1);
+                }
+            }
+
+            if ($package->stock <= 0 || ($existingQty + $quantity) > $package->stock) {
+                return redirect()->back()->with('error', __('client/store.stock_unavailable', ['item' => $package->name]));
+            }
+        }
 
         $variantSelections = $validationService->buildVariantSelections(
             ($validated['variants'] ?? []) + ($validated['variants_multi'] ?? [])
         );
 
         $validation = $validationService->validateConfiguration(
-            $packagePrice->package,
+            $package,
             $packagePrice,
             $variantSelections,
-            $currencyCode
+            $currencyCode,
+            $quantity
         );
 
         if (!$validation['valid']) {
@@ -328,6 +347,17 @@ class CartController extends Controller
             return redirect()
                 ->route('client.checkout.cart')
                 ->with('error', $validator->errors()->first('quantity'));
+        }
+
+        $cartItems = $this->cartService->getItems();
+        $targetItem = $cartItems[$id] ?? null;
+        if ($targetItem && ($targetItem['type'] ?? '') === \App\OrderItemType::Service->value && !empty($targetItem['package_id'])) {
+            $package = \App\Models\Package::find($targetItem['package_id']);
+            if ($package && $package->stock !== -1 && (int) $request->quantity > $package->stock) {
+                return redirect()
+                    ->route('client.checkout.cart')
+                    ->with('error', __('client/store.stock_unavailable', ['item' => $package->name]));
+            }
         }
 
         $success = $this->cartService->updateQuantity($id, $request->quantity);

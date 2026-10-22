@@ -41,7 +41,7 @@ class PackageController extends Controller
 
         $package = $query->firstOrFail();
 
-        if ($package->stock === 0) {
+        if ($package->stock !== -1 && $package->stock <= 0) {
             abort(redirect()
                 ->route('client.store.catalog', $catalog->slug)
                 ->with('error', __('client/store.stock_unavailable', ['item' => $package->name]))

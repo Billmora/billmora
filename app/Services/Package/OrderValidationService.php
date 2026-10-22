@@ -15,14 +15,20 @@ class OrderValidationService
      * @param \App\Models\PackagePrice $packagePrice
      * @param array $variantSelections
      * @param string $currencyCode
+     * @param int $quantity
      * @return array
      */
     public function validateConfiguration(
         Package $package,
         PackagePrice $packagePrice,
         array $variantSelections,
-        string $currencyCode
+        string $currencyCode,
+        int $quantity = 1
     ): array {
+        if ($package->stock !== -1 && ($package->stock <= 0 || $package->stock < $quantity)) {
+            return $this->error(__('client/store.stock_unavailable', ['item' => $package->name]));
+        }
+
         if ($packagePrice->package_id !== $package->id) {
             return $this->error(__('client/store.order.cycle_mismatch'));
         }
