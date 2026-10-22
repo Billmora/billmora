@@ -10,6 +10,7 @@ use App\Models\Transaction;
 use App\Services\PluginManager;
 use App\Traits\AuditsSystem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Str;
@@ -30,6 +31,10 @@ class PaymentController extends Controller
      */
     public function process(Request $request, Invoice $invoice, PluginManager $pluginManager)
     {
+        if ($invoice->user_id !== Auth::id()) {
+            abort(404);
+        }
+
         if ($invoice->status !== 'unpaid') {
             return redirect()->route('client.invoices.show', ['invoice' => $invoice->invoice_number])
                 ->with('error', __('client/invoices.payment.already_processed'));
@@ -94,6 +99,10 @@ class PaymentController extends Controller
      */
     public function settle(Request $request, Invoice $invoice)
     {
+        if ($invoice->user_id !== Auth::id()) {
+            abort(404);
+        }
+
         if ($invoice->status !== 'unpaid') {
             return redirect()->route('client.invoices.show', ['invoice' => $invoice->invoice_number])
                 ->with('error', __('client/invoices.payment.already_processed'));
