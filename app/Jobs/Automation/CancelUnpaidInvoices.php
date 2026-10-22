@@ -48,6 +48,22 @@ class CancelUnpaidInvoices implements ShouldQueue
                             'status' => 'cancelled',
                         ]);
 
+                        if ($invoice->order && $invoice->order->status === 'pending') {
+                            $invoice->order->update([
+                                'status' => 'cancelled',
+                                'cancelled_at' => now(),
+                            ]);
+
+                            foreach ($invoice->order->services as $service) {
+                                if ($service->status === 'pending') {
+                                    $service->update([
+                                        'status' => 'cancelled',
+                                        'cancelled_at' => now(),
+                                    ]);
+                                }
+                            }
+                        }
+
                         $this->recordSystem('invoice.cancelled', [
                             'invoice_id' => $invoice->id,
                             'reason' => 'auto_cancel_unpaid',

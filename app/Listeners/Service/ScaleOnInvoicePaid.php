@@ -56,6 +56,18 @@ class ScaleOnInvoicePaid implements ShouldQueue
                     'configuration' => array_merge($service->configuration ?? [], $scaling->configuration ?? []),
                 ]);
 
+                if ($scaling->old_package_id !== $scaling->new_package_id) {
+                    $oldPkg = \App\Models\Package::find($scaling->old_package_id);
+                    if ($oldPkg && $oldPkg->stock >= 0) {
+                        $oldPkg->increment('stock');
+                    }
+
+                    $newPkg = \App\Models\Package::find($scaling->new_package_id);
+                    if ($newPkg && $newPkg->stock > 0) {
+                        $newPkg->decrement('stock');
+                    }
+                }
+
                 $scaling->update([
                     'status' => 'completed',
                     'completed_at' => now(),

@@ -245,6 +245,22 @@ class InvoicesController extends Controller
 
             $invoiceChanges = $invoice->getChanges();
 
+            if ($validated['invoice_status'] === 'cancelled' && $invoice->order && $invoice->order->status === 'pending') {
+                $invoice->order->update([
+                    'status' => 'cancelled',
+                    'cancelled_at' => now(),
+                ]);
+
+                foreach ($invoice->order->services as $service) {
+                    if ($service->status === 'pending') {
+                        $service->update([
+                            'status' => 'cancelled',
+                            'cancelled_at' => now(),
+                        ]);
+                    }
+                }
+            }
+
             $submittedIds = collect($validated['invoice_items'] ?? [])->pluck('id')->filter();
 
             $invoice->items()->whereNotIn('id', $submittedIds)->delete();
