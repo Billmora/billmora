@@ -114,6 +114,10 @@ class PackagesController extends Controller
      */
     public function destroy(Package $package)
     {
+        if ($package->services()->exists()) {
+            return response()->json(['message' => 'Cannot delete package that has associated services.'], 422);
+        }
+
         $package->delete();
 
         return response()->json(['message' => 'Package deleted successfully.'], 200);

@@ -100,6 +100,6 @@ return [
     ],
 
     'delete' => [
-        'has_services' => 'Cannot delete package that has active services.',
+        'has_services' => 'Cannot delete package that has associated services.',
     ],
 ];

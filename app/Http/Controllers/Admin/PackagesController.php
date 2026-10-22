@@ -237,7 +237,7 @@ class PackagesController extends Controller
      */
     public function destroy(Package $package)
     {
-        if ($package->services()->where('status', 'active')->exists()) {
+        if ($package->services()->exists()) {
             return redirect()->route('admin.packages')->with('error', __('admin/packages.delete.has_services'));
         }
 

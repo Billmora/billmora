@@ -232,7 +232,7 @@ class TldsController extends Controller
      */
     public function destroy(Tld $tld)
     {
-        if ($tld->registrants()->where('status', 'active')->exists()) {
+        if ($tld->registrants()->exists()) {
             return redirect()->route('admin.tlds')->with('error', __('admin/tlds.delete.has_registrants'));
         }
 
