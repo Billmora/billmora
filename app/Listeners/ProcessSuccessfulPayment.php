@@ -28,10 +28,26 @@ class ProcessSuccessfulPayment
             return;
         }
 
+        if ((float) $response->getAmount() + 0.00001 < (float) $invoice->total) {
+            $this->recordSystem('payment.failed', [
+                'invoice_id' => $invoice->id,
+                'invoice_number' => $invoice->invoice_number,
+                'reason' => 'amount_mismatch',
+                'expected' => (float) $invoice->total,
+                'received' => (float) $response->getAmount(),
+                'plugin' => $plugin->name,
+            ], 'gateway');
+            return;
+        }
+
         DB::transaction(function () use ($invoice, $response, $plugin) {
             $lockedInvoice = Invoice::where('id', $invoice->id)->lockForUpdate()->first();
 
             if (!$lockedInvoice || $lockedInvoice->status === 'paid') {
+                return;
+            }
+
+            if ((float) $response->getAmount() + 0.00001 < (float) $lockedInvoice->total) {
                 return;
             }
 

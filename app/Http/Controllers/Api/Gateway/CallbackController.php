@@ -54,7 +54,23 @@ class CallbackController extends Controller
                 return response()->json(['error' => 'Invoice not found.'], 404);
             }
 
+            if ($invoice->status === 'paid') {
+                return response()->json(['message' => 'Invoice already paid.'], 200);
+            }
+
             if ($response->isSuccess() === true) {
+                if ((float) $response->getAmount() + 0.00001 < (float) $invoice->total) {
+                    $this->recordSystem('gateway.webhook.underpaid', [
+                        'invoice_id' => $invoice->id,
+                        'invoice_number' => $invoice->invoice_number,
+                        'expected' => (float) $invoice->total,
+                        'received' => (float) $response->getAmount(),
+                        'plugin' => $plugin->name,
+                    ], 'gateway');
+
+                    return response()->json(['error' => 'Payment amount does not match invoice total.'], 400);
+                }
+
                 event(new PaymentCaptured($invoice, $plugin, $response));
                 return response()->json(['message' => 'Payment processed successfully'], 200);
             }
@@ -109,7 +125,23 @@ class CallbackController extends Controller
                 return redirect($redirectUrl)->with('error', 'Invoice not found.');
             }
 
+            if ($invoice->status === 'paid') {
+                return redirect($redirectUrl)->with('success', 'Payment processed successfully');
+            }
+
             if ($response->isSuccess() === true) {
+                if ((float) $response->getAmount() + 0.00001 < (float) $invoice->total) {
+                    $this->recordSystem('gateway.return.underpaid', [
+                        'invoice_id' => $invoice->id,
+                        'invoice_number' => $invoice->invoice_number,
+                        'expected' => (float) $invoice->total,
+                        'received' => (float) $response->getAmount(),
+                        'plugin' => $plugin->name,
+                    ], 'gateway');
+
+                    return redirect($redirectUrl)->with('error', 'Payment amount does not match invoice total.');
+                }
+
                 event(new PaymentCaptured($invoice, $plugin, $response));
                 return redirect($redirectUrl)->with('success', 'Payment processed successfully');
             }

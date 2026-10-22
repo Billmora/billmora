@@ -3,6 +3,7 @@
 namespace Plugins\Gateways\PayPal;
 
 use App\Contracts\GatewayInterface;
+use App\Models\Invoice;
 use App\Support\AbstractPlugin;
 use App\Support\GatewayCallbackResponse;
 use Illuminate\Http\Request;
@@ -164,15 +165,36 @@ class PayPalGateway extends AbstractPlugin implements GatewayInterface
                 );
             }
 
-            $captureUnit = $capture['purchase_units'][0]['payments']['captures'][0] ?? [];
+            $purchaseUnit = $capture['purchase_units'][0] ?? [];
+            $captureUnit = $purchaseUnit['payments']['captures'][0] ?? [];
+            $boundInvoice = $purchaseUnit['custom_id'] ?? $purchaseUnit['reference_id'] ?? null;
+
+            $invoice = Invoice::where('invoice_number', $invoiceNumber)->first();
+
+            $capturedAmount = (float) ($captureUnit['amount']['value'] ?? 0);
+            $capturedCurrency = strtoupper((string) ($captureUnit['amount']['currency_code'] ?? ''));
+
+            if (! $invoice
+                || $boundInvoice !== $invoiceNumber
+                || $capturedAmount + 0.00001 < (float) $invoice->total
+                || $capturedCurrency !== strtoupper((string) $invoice->currency)) {
+                return new GatewayCallbackResponse(
+                    isValid: true,
+                    isSuccess: false,
+                    orderNumber: $invoiceNumber,
+                    redirectUrl: route('client.invoices.show', $invoiceNumber)
+                );
+            }
+
+            $fee = (float) ($captureUnit['seller_payable_breakdown']['paypal_fee']['value'] ?? 0);
 
             return new GatewayCallbackResponse(
                 isValid: true,
                 isSuccess: true,
                 orderNumber: $invoiceNumber,
                 gatewayReference: $captureUnit['id'] ?? $paypalOrderId,
-                amount: (float) ($captureUnit['amount']['value'] ?? 0),
-                fee: 0,
+                amount: $capturedAmount,
+                fee: $fee,
                 redirectUrl: route('client.invoices.show', $invoiceNumber)
             );
 
