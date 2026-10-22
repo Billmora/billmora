@@ -230,6 +230,16 @@ html {
     scrollbar-color: var(--color-billmora-primary-500) var(--billmora-neutral-100);
 }
 
+html.has-overlay {
+    scrollbar-width: none !important;
+}
+html.has-overlay::-webkit-scrollbar,
+html.has-overlay body::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
 #sidemenu {
     scrollbar-gutter: stable;
 }

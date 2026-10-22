@@ -17,7 +17,7 @@
   x-transition:leave="transition ease-in duration-150"
   x-transition:leave-start="opacity-100"
   x-transition:leave-end="opacity-0"
-  class="fixed inset-0 bg-black/40 z-100"
+  class="fixed inset-0 bg-black/40 z-120"
   x-on:click="$store.drawer.close()"
   x-on:keydown.escape.window="$store.drawer.close()"
 ></div>
@@ -33,7 +33,7 @@
   x-transition:leave="transition ease-in duration-200 transform"
   x-transition:leave-start="translate-x-0"
   x-transition:leave-end="translate-x-full"
-  class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-xl flex flex-col z-110"
+  class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-xl flex flex-col z-130 overscroll-contain"
   x-on:keydown.escape.window="$store.drawer.close()"
 >
   {{-- Header --}}

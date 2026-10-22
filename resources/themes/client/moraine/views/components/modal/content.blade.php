@@ -14,7 +14,7 @@
   x-transition.opacity
   x-on:keydown.escape.window="$store.modal.close()"
   tabindex="0"
-  class="fixed inset-0 z-110 flex justify-center items-center p-4 overflow-y-auto"
+  class="fixed inset-0 z-110 flex justify-center items-center p-4 overflow-y-auto overscroll-contain"
 >
   <div class="fixed inset-0 bg-black/40" x-on:click="$store.modal.close()" aria-hidden="true"></div>
 
