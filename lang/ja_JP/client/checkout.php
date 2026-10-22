@@ -25,6 +25,7 @@ return [
         'item_added' => 'Item added to cart successfully.',
         'item_removed' => 'Item removed from cart successfully.',
         'items_removed_currency_mismatch' => 'One or more items in your cart are not supported by the selected currency and have been removed.',
+        'items_removed_out_of_stock' => 'One or more items in your cart are out of stock and have been removed.',
     ],
 
     'coupon' => [
@@ -32,6 +33,8 @@ return [
         'cart_mismatch' => 'This coupon is not applicable to any items in your cart.',
         'limit_reached' => 'This coupon has reached its usage limit.',
         'user_limit_reached' => 'You have reached the usage limit for this coupon.',
+        'new_client_only' => 'This coupon is only valid for new clients with no previous orders.',
+        'existing_client_only' => 'This coupon is only valid for existing clients with previous orders.',
         'applied' => 'Coupon applied successfully!',
         'removed' => 'Coupon removed successfully.',
     ],
@@ -46,7 +49,10 @@ return [
     ],
 
     'session' => [
+        'expired' => 'Your checkout session has expired. Please add items to your cart and try again.',
         'missing_data' => 'No checkout data found. Please select a package first.',
         'currency_mismatch' => 'The selected configuration is not available for the current currency. Please select again.',
     ],
+
+    'validation_unavailable' => 'Validation service is currently unavailable. Please try again.',
 ];
