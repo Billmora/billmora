@@ -36,7 +36,8 @@ class CartController extends Controller
         $cartItems = $this->cartService->getItems();
         $currencyCode = Session::get('currency');
 
-        $removedItems = false;
+        $removedForCurrency = false;
+        $removedForStock = false;
         $pricesUpdated = false;
 
         foreach ($cartItems as $key => $item) {
@@ -48,7 +49,7 @@ class CartController extends Controller
                 $tld = \App\Models\Tld::find($item['tld_id'] ?? null);
                 if (!$tld || $tld->status !== 'visible') {
                     $this->cartService->removeItem($key);
-                    $removedItems = true;
+                    $removedForCurrency = true;
                     continue;
                 }
 
@@ -58,7 +59,7 @@ class CartController extends Controller
 
                 if (!$tldPrice) {
                     $this->cartService->removeItem($key);
-                    $removedItems = true;
+                    $removedForCurrency = true;
                     continue;
                 }
 
@@ -86,23 +87,26 @@ class CartController extends Controller
 
             if (!$packagePrice || !$packagePrice->package) {
                 $isValid = false;
+                $removedForCurrency = true;
             } else {
                 $package = $packagePrice->package;
                 if ($package->stock !== -1 && $package->stock < ($item['quantity'] ?? 1)) {
                     $isValid = false;
+                    $removedForStock = true;
                 } elseif (!$validationService->isPriceAvailableForCurrency($packagePrice, $currencyCode)) {
                     $isValid = false;
+                    $removedForCurrency = true;
                 } elseif (!empty($item['variant_selections'])) {
                     $variantValidation = $validationService->validateVariantPrices($item['variant_selections'], $currencyCode, $packagePrice->name);
                     if (!$variantValidation['valid']) {
                         $isValid = false;
+                        $removedForCurrency = true;
                     }
                 }
             }
 
             if (!$isValid) {
                 $this->cartService->removeItem($key);
-                $removedItems = true;
             } else {
                 $pricing = $pricingService->calculatePricing(
                     $packagePrice,
@@ -118,7 +122,12 @@ class CartController extends Controller
             }
         }
 
-        if ($removedItems) {
+        if ($removedForStock) {
+            return redirect()->route('client.checkout.cart')
+                ->with('error', __('client/checkout.cart.items_removed_out_of_stock'));
+        }
+
+        if ($removedForCurrency) {
             return redirect()->route('client.checkout.cart')
                 ->with('error', __('client/checkout.cart.items_removed_currency_mismatch'));
         }
